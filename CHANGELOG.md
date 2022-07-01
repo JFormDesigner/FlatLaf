@@ -10,6 +10,8 @@ FlatLaf Change Log
 - TableHeader: Fixed exception when changing table structure (e.g. removing
   column) from a table header popup menu action. (issue #532)
 - `HiDPIUtils.paintAtScale1x()` now supports rotated graphics. (issue #557)
+- Typography: No longer use `Consolas` or `Courier New` as monospaced font on
+  Windows because they have bad vertically placement.
 
 
 ## 2.3

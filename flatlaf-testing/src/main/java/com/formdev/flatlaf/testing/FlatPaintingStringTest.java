@@ -68,9 +68,20 @@ public class FlatPaintingStringTest
 
 		// initialize font families combobox
 		String[] families = {
+			// regular
 			"Arial", "Cantarell", "DejaVu Sans",
-			"Dialog", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
-			"SansSerif", "Segoe UI", "Tahoma", "Ubuntu", "Verdana" };
+			"Dialog", "Helvetica Neue", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
+			"SansSerif", "Segoe UI", "Tahoma", "Ubuntu", "Verdana", ".SF NS Text",
+
+			// light, semibold
+			"Segoe UI Light", "Segoe UI Semibold",
+			"HelveticaNeue-Thin", "HelveticaNeue-Medium",
+			"Lato Light", "Ubuntu Light", "Cantarell Light",
+			"Lato Semibold", "Ubuntu Medium", "Montserrat SemiBold",
+
+			// monospaced
+			"Monospaced", "Consolas", "Courier New", "Menlo", "Liberation Mono", "Ubuntu Mono",
+		};
 		Arrays.sort( families, String.CASE_INSENSITIVE_ORDER );
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 		model.addElement( currentFamily );
