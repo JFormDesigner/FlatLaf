@@ -9,6 +9,7 @@ FlatLaf Change Log
   box in IntelliJ/Darcula themes.
 - TableHeader: Fixed exception when changing table structure (e.g. removing
   column) from a table header popup menu action. (issue #532)
+- `HiDPIUtils.paintAtScale1x()` now supports rotated graphics. (issue #557)
 
 
 ## 2.3

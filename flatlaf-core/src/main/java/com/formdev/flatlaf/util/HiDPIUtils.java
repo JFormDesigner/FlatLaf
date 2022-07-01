@@ -48,30 +48,55 @@ public class HiDPIUtils
 	 */
 	public static void paintAtScale1x( Graphics2D g, int x, int y, int width, int height, Painter painter ) {
 		// save original transform
-		AffineTransform transform = g.getTransform();
+		AffineTransform t = g.getTransform();
+
+		// get scale X/Y and shear X/Y
+		double scaleX = t.getScaleX();
+		double scaleY = t.getScaleY();
+		double shearX = t.getShearX();
+		double shearY = t.getShearY();
+
+		// check whether rotated
+		// (also check for negative scale X/Y because shear X/Y are zero for 180 degrees rotation)
+		boolean rotated = (shearX != 0 || shearY != 0 || scaleX <= 0 || scaleY <= 0);
+		if( rotated ) {
+			// resulting scale X/Y values are always positive
+			scaleX = Math.hypot( scaleX, shearX );
+			scaleY = Math.hypot( scaleY, shearY );
+		} else {
+			// make scale X/Y positive
+			scaleX = Math.abs( scaleX );
+			scaleY = Math.abs( scaleY );
+		}
 
 		// check whether scaled
-		if( transform.getScaleX() == 1 && transform.getScaleY() == 1 ) {
+		if( scaleX == 1 && scaleY == 1 ) {
 			painter.paint( g, x, y, width, height, 1 );
 			return;
 		}
 
 		// scale rectangle
-		Rectangle2D.Double scaledRect = scale( transform, x, y, width, height );
+		Rectangle2D.Double scaledRect = scale( scaleX, scaleY, t, x, y, width, height );
 
 		try {
-			// unscale to factor 1.0 and move origin (to whole numbers)
-			g.setTransform( new AffineTransform( 1, 0, 0, 1,
-				Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) ) );
+			// unscale to factor 1.0, keep rotation and move origin (to whole numbers)
+			AffineTransform t1x;
+			if( rotated ) {
+				t1x = new AffineTransform( t.getScaleX(), t.getShearY(), t.getShearX(), t.getScaleY(),
+					Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) );
+				t1x.scale( 1. / scaleX, 1. / scaleY );
+			} else
+				t1x = new AffineTransform( 1, 0, 0, 1, Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) );
+			g.setTransform( t1x );
 
 			int swidth = (int) scaledRect.width;
 			int sheight = (int) scaledRect.height;
 
 			// paint
-			painter.paint( g, 0, 0, swidth, sheight, transform.getScaleX() );
+			painter.paint( g, 0, 0, swidth, sheight, scaleX );
 		} finally {
 			// restore original transform
-			g.setTransform( transform );
+			g.setTransform( t );
 		}
 	}
 
@@ -80,12 +105,9 @@ public class HiDPIUtils
 	 * sun.java2d.pipe.PixelToParallelogramConverter.fillRectangle(),
 	 * which is used by Graphics.fillRect().
 	 */
-	private static Rectangle2D.Double scale( AffineTransform transform, int x, int y, int width, int height ) {
-		double scaleX = transform.getScaleX();
-		double scaleY = transform.getScaleY();
-
-		double px = (x * scaleX) + transform.getTranslateX();
-		double py = (y * scaleY) + transform.getTranslateY();
+	private static Rectangle2D.Double scale( double scaleX, double scaleY, AffineTransform t, int x, int y, int width, int height ) {
+		double px = (x * scaleX) + t.getTranslateX();
+		double py = (y * scaleY) + t.getTranslateY();
 
 		double newX = normalize( px );
 		double newY = normalize( py );
