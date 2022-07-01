@@ -42,11 +42,13 @@ import com.formdev.flatlaf.util.SystemInfo;
 public class FlatNativeWindowBorder
 {
 	// can use window decorations if:
-	// - on Windows 10
+	// - on Windows 10 or later
+	// - not if system property "sun.java2d.opengl" is true on Windows 10
 	// - not when running in JetBrains Projector, Webswing or WinPE
 	// - not disabled via system property
 	private static final boolean canUseWindowDecorations =
 		SystemInfo.isWindows_10_orLater &&
+		(SystemInfo.isWindows_11_orLater || !FlatSystemProperties.getBoolean( "sun.java2d.opengl", false )) &&
 		!SystemInfo.isProjector &&
 		!SystemInfo.isWebswing &&
 		!SystemInfo.isWinPE &&

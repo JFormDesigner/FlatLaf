@@ -12,6 +12,8 @@ FlatLaf Change Log
 - `HiDPIUtils.paintAtScale1x()` now supports rotated graphics. (issue #557)
 - Typography: No longer use `Consolas` or `Courier New` as monospaced font on
   Windows because they have bad vertically placement.
+- Native window decorations (Windows 10/11 only): Do not use window decorations
+  if system property `sun.java2d.opengl` is `true` on Windows 10. (issue #540)
 
 
 ## 2.3
