@@ -195,11 +195,13 @@ public class JBRCustomDecorations
 	{
 		private static JBRWindowTopBorder instance;
 
-		private final Color defaultActiveBorder = new Color( 0x707070 );
+		private final Color activeLightColor = new Color( 0x707070 );
+		private final Color activeDarkColor = new Color( 0x2D2E2F );
 		private final Color inactiveLightColor = new Color( 0xaaaaaa );
+		private final Color inactiveDarkColor = new Color( 0x494A4B );
 
 		private boolean colorizationAffectsBorders;
-		private Color activeColor = defaultActiveBorder;
+		private Color activeColor;
 
 		static JBRWindowTopBorder getInstance() {
 			if( instance == null )
@@ -250,7 +252,7 @@ public class JBRCustomDecorations
 
 		private Color calculateActiveBorderColor() {
 			if( !colorizationAffectsBorders )
-				return defaultActiveBorder;
+				return null;
 
 			Color colorizationColor = getColorizationColor();
 			if( colorizationColor != null ) {
@@ -285,15 +287,11 @@ public class JBRCustomDecorations
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			Window window = SwingUtilities.windowForComponent( c );
 			boolean active = window != null && window.isActive();
+			boolean dark = FlatLaf.isLafDark();
 
-			// paint top border
-			//  - in light themes
-			//  - in dark themes only for active windows if colorization affects borders
-			boolean paintTopBorder = !FlatLaf.isLafDark() || (active && colorizationAffectsBorders);
-			if( !paintTopBorder )
-				return;
-
-			g.setColor( active ? activeColor : inactiveLightColor );
+			g.setColor( active
+				? (activeColor != null ? activeColor : (dark ? activeDarkColor : activeLightColor))
+				: (dark ? inactiveDarkColor : inactiveLightColor) );
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
 		}
 
