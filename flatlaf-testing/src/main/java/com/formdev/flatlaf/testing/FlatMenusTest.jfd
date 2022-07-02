@@ -194,6 +194,22 @@ new FormModel {
 						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test64.png" )
 					} )
 				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu13"
+					"text": "HTML"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem48"
+						"text": "<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem49"
+						"text": "<html>some longer <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem50"
+						"text": "<html>another <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
+					} )
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 2 1,growx"
 			} )

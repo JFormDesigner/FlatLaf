@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - ComboBox: Fixed vertical alignment of text in popup list with text in combo
   box in IntelliJ/Darcula themes.
+- MenuItem: Fixed sometimes wrapped HTML text on HiDPI screens on Windows.
 - TableHeader: Fixed exception when changing table structure (e.g. removing
   column) from a table header popup menu action. (issue #532)
 - `HiDPIUtils.paintAtScale1x()` now supports rotated graphics. (issue #557)

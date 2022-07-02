@@ -181,6 +181,10 @@ public class FlatMenusTest
 		JMenuItem menuItem45 = new JMenuItem();
 		JMenuItem menuItem46 = new JMenuItem();
 		JMenuItem menuItem47 = new JMenuItem();
+		JMenu menu13 = new JMenu();
+		JMenuItem menuItem48 = new JMenuItem();
+		JMenuItem menuItem49 = new JMenuItem();
+		JMenuItem menuItem50 = new JMenuItem();
 		menuBar2 = new JMenuBar();
 		JMenu menu8 = new JMenu();
 		FlatMenusTest.LargerMenuItem menuItem13 = new FlatMenusTest.LargerMenuItem();
@@ -442,6 +446,24 @@ public class FlatMenusTest
 				menu12.add(menuItem47);
 			}
 			menuBar1.add(menu12);
+
+			//======== menu13 ========
+			{
+				menu13.setText("HTML");
+
+				//---- menuItem48 ----
+				menuItem48.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				menu13.add(menuItem48);
+
+				//---- menuItem49 ----
+				menuItem49.setText("<html>some longer <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				menu13.add(menuItem49);
+
+				//---- menuItem50 ----
+				menuItem50.setText("<html>another <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				menu13.add(menuItem50);
+			}
+			menuBar1.add(menu13);
 		}
 		add(menuBar1, "cell 1 0 2 1,growx");
 

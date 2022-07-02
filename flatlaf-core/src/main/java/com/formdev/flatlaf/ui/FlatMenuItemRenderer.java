@@ -446,6 +446,19 @@ debug*/
 	protected static void paintHTMLText( Graphics g, JMenuItem menuItem,
 		Rectangle textRect, View htmlView, Color selectionForeground )
 	{
+		// On Windows, using Segoe UI font, Java 15 or older and scaling greater than 1,
+		// the width of the HTML view may be initially too small (because component
+		// is not connected to a GraphicsConfiguration when getPreferredSize() is invoked).
+		// Since Java 16, this seems to be fixed somehow by doing popup menu layout twice.
+		//
+		// If using a too small width for htmlView.paint(), the view would rearrange
+		// its children and wrap them to two lines. To avoid this, use view preferred X span
+		// for painting. Core Lafs actually do the same in class MenuItemLayoutHelper.
+		//
+		// Example HTML text that causes the problem: "<html>some <b>HTML</b> <i>text</i></html>"
+		textRect = new Rectangle( textRect );
+		textRect.width = (int) htmlView.getPreferredSpan( View.X_AXIS );
+
 		if( isArmedOrSelected( menuItem ) && selectionForeground != null )
 			g = new GraphicsProxyWithTextColor( (Graphics2D) g, selectionForeground );
 
