@@ -143,8 +143,8 @@ public class MigLayoutVisualPadding
 	//---- class FlatMigInsets ------------------------------------------------
 
 	/**
-	 * Marker class to identify our visual paddings and leaf paddings,
-	 * which were set from outside, untouched.
+	 * Marker class to identify our visual paddings and leave paddings
+	 * set from outside untouched.
 	 */
 	private static class FlatMigInsets
 		extends Insets

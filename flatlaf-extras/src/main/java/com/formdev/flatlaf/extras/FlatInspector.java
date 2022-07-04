@@ -65,6 +65,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.MigLayoutVisualPadding;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -113,6 +114,7 @@ public class FlatInspector
 	private int inspectParentLevel;
 	private boolean wasModifierKeyPressed;
 	private boolean showClassHierarchy;
+	private long lastWhen;
 
 	private JComponent highlightFigure;
 	private Popup popup;
@@ -131,8 +133,22 @@ public class FlatInspector
 				(((KeyEvent)e).getModifiersEx() & KEY_MODIFIERS_MASK) == (keyStroke.getModifiers() & KEY_MODIFIERS_MASK)  )
 			{
 				Window activeWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-				if( activeWindow instanceof RootPaneContainer ) {
-					JRootPane rootPane = ((RootPaneContainer)activeWindow).getRootPane();
+				RootPaneContainer rootPaneContainer = null;
+				if( activeWindow instanceof RootPaneContainer )
+					rootPaneContainer = (RootPaneContainer) activeWindow;
+				else {
+					// search for root pain container in children
+					// (e.g. for Swing embedded into SWT)
+					for( Component child : activeWindow.getComponents() ) {
+						if( child instanceof RootPaneContainer ) {
+							rootPaneContainer = (RootPaneContainer) child;
+							break;
+						}
+					}
+				}
+
+				if( rootPaneContainer != null ) {
+					JRootPane rootPane = rootPaneContainer.getRootPane();
 					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
 					if( inspector == null ) {
 						inspector = new FlatInspector( rootPane );
@@ -172,6 +188,11 @@ public class FlatInspector
 				if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT )
 					wasModifierKeyPressed = true;
 			} else if( id == KeyEvent.KEY_RELEASED && wasModifierKeyPressed ) {
+				// ignore duplicate events (for Swing embedded into SWT)
+				if( (keyEvent.getWhen() - lastWhen) <= 5 )
+					return;
+				lastWhen = keyEvent.getWhen();
+
 				if( keyCode == KeyEvent.VK_CONTROL ) {
 					inspectParentLevel++;
 					int parentLevel = inspect( lastX, lastY );
@@ -463,6 +484,15 @@ public class FlatInspector
 
 		if( margin != null )
 			appendRow( buf, "Margin", toString( margin ) );
+
+		if( c instanceof JComponent ) {
+			Object value = ((JComponent)c).getClientProperty( MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY );
+			Insets visualPadding = (value instanceof int[])
+				? new Insets( ((int[])value)[0], ((int[])value)[1], ((int[])value)[2], ((int[])value)[3] )
+				: (value instanceof Insets ? (Insets) value : null);
+			if( visualPadding != null )
+				appendRow( buf, "Mig visual padding", toString( visualPadding ) );
+		}
 
 		Dimension prefSize = c.getPreferredSize();
 		Dimension minSize = c.getMinimumSize();
