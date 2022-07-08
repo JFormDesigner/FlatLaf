@@ -899,7 +899,8 @@ debug*/
 
 		@Override
 		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
-			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
+			JMenuBar menuBar = rootPane.getJMenuBar();
+			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( menuBar ) && hasMenus( menuBar );
 			int labelWidth = l.getWidth();
 			int textWidth = labelWidth - (textX * 2);
 			int gap = UIScale.scale( menuBarTitleGap );
@@ -924,6 +925,24 @@ debug*/
 			}
 
 			super.paintEnabledText( l, g, s, textX, textY );
+		}
+
+		private boolean hasMenus( JMenuBar menuBar ) {
+			// check whether menu bar is empty
+			if( menuBar.getComponentCount() == 0 || menuBar.getWidth() == 0 )
+				return false;
+
+			// check whether menu bar has a leading glue component
+			// (no menus/components at left side)
+			Component horizontalGlue = findHorizontalGlue( menuBar );
+			if( horizontalGlue != null ) {
+				boolean leftToRight = getComponentOrientation().isLeftToRight();
+				if( (leftToRight && horizontalGlue.getX() == 0) ||
+					(!leftToRight && horizontalGlue.getX() + horizontalGlue.getWidth() == menuBar.getWidth()) )
+				  return false;
+			}
+
+			return true;
 		}
 	}
 

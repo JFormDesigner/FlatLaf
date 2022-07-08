@@ -13,11 +13,13 @@ FlatLaf Change Log
 - `HiDPIUtils.paintAtScale1x()` now supports rotated graphics. (issue #557)
 - Typography: No longer use `Consolas` or `Courier New` as monospaced font on
   Windows because they have bad vertically placement.
-- Native window decorations (Windows 10/11 only): Do not use window decorations
-  if system property `sun.java2d.opengl` is `true` on Windows 10. (issue #540)
-- Native window decorations (Windows 10 only): Fixed missing top window border
-  in dark themes if window drop shadows are disabled in system settings. (issue
-  #554)
+- Native window decorations (Windows 10/11 only):
+  - Do not center window title if embedded menu bar is empty or has no menus at
+    left side, but some components at right side. (issue #558)
+  - Do not use window decorations if system property `sun.java2d.opengl` is
+    `true` on Windows 10. (issue #540)
+  - Fixed missing top window border in dark themes if window drop shadows are
+    disabled in system settings. (issue #554; Windows 10 only)
 
 
 ## 2.3
