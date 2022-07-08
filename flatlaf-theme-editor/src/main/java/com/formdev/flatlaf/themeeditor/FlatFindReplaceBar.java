@@ -16,7 +16,7 @@
 
 package com.formdev.flatlaf.themeeditor;
 
-import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -26,7 +26,6 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.*;
-import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -44,9 +43,13 @@ import net.miginfocom.swing.*;
 class FlatFindReplaceBar
 	extends JPanel
 {
+	static final String PROP_CLOSED = "closed";
+
 	private final RSyntaxTextArea textArea;
 
 	private SearchContext context;
+	private boolean inSetContext;
+	private boolean markAllPending;
 
 	FlatFindReplaceBar( RSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -74,6 +77,10 @@ class FlatFindReplaceBar
 		regexToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/regex.svg" ) );
 		closeButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/close.svg" ) );
 
+		registerKeyboardAction( e -> close(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
 		SearchContext context = new SearchContext();
 		context.setSearchWrap( true );
 		setSearchContext( context );
@@ -93,29 +100,32 @@ class FlatFindReplaceBar
 	void setSearchContext( SearchContext context ) {
 		this.context = context;
 
-		findField.setText( context.getSearchFor() );
-		replaceField.setText( context.getReplaceWith() );
-		matchCaseToggleButton.setSelected( context.getMatchCase() );
-		matchWholeWordToggleButton.setSelected( context.getWholeWord() );
-		regexToggleButton.setSelected( context.isRegularExpression() );
+		inSetContext = true;
+		try {
+			findField.setText( context.getSearchFor() );
+			replaceField.setText( context.getReplaceWith() );
+			matchCaseToggleButton.setSelected( context.getMatchCase() );
+			matchWholeWordToggleButton.setSelected( context.getWholeWord() );
+			regexToggleButton.setSelected( context.isRegularExpression() );
+		} finally {
+			inSetContext = false;
+		}
 	}
 
-	@Override
-	public boolean requestFocusInWindow() {
-		// invoked from CollapsibleSectionPanel
-
-		// use selected text in editor for searching
-		String selectedText = textArea.getSelectedText();
-		if( !StringUtils.isEmpty( selectedText ) && selectedText.indexOf( '\n' ) < 0 )
-			findField.setText( selectedText );
-		else
-			findField.selectAll();
+	void activate( boolean findEditorSelection ) {
+		// use selected text of editor for searching
+		if( findEditorSelection ) {
+			String selectedText = textArea.getSelectedText();
+			if( !StringUtils.isEmpty( selectedText ) && selectedText.indexOf( '\n' ) < 0 )
+				findField.setText( selectedText );
+			else
+				findField.selectAll();
+		}
 
 		// if showing bar, highlight matches in editor
-		// (not invoking this from addNotify() because this would break the slide-in animation)
 		markAll();
 
-		return findField.requestFocusInWindow();
+		findField.requestFocusInWindow();
 	}
 
 	@Override
@@ -142,7 +152,20 @@ class FlatFindReplaceBar
 	}
 
 	void markAll() {
-		findOrMarkAll( false );
+		if( inSetContext )
+			return;
+
+		// do mark all only once
+		if( markAllPending )
+			return;
+		markAllPending = true;
+
+		EventQueue.invokeLater( () -> {
+			markAllPending = false;
+
+			findOrMarkAll( false );
+		} );
+
 	}
 
 	private void findOrMarkAll( boolean find ) {
@@ -254,11 +277,8 @@ class FlatFindReplaceBar
 	}
 
 	private void close() {
-		Container parent = getParent();
-		if( parent instanceof CollapsibleSectionPanel )
-			((CollapsibleSectionPanel)parent).hideBottomComponent();
-		else if( parent != null )
-			parent.remove( this );
+		setVisible( false );
+		firePropertyChange( PROP_CLOSED, false, true );
 	}
 
 	private void initComponents() {

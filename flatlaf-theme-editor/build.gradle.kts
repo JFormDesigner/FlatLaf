@@ -25,7 +25,6 @@ dependencies {
 	implementation( "com.miglayout:miglayout-swing:5.3" )
 	implementation( "com.fifesoft:rsyntaxtextarea:3.1.4" )
 	implementation( "com.fifesoft:autocomplete:3.1.3" )
-	implementation( "com.fifesoft:rstaui:3.1.3" )
 }
 
 tasks {

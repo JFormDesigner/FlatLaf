@@ -336,6 +336,7 @@ class FlatThemeFileEditor
 
 		SwingUtilities.invokeLater( () -> {
 			activateEditor();
+			notifyEditorSelected();
 		} );
 		saveState();
 		enableDisableActions();
@@ -448,11 +449,13 @@ class FlatThemeFileEditor
 		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
 		String filename = (themeEditorPane != null) ? themeEditorPane.getFile().getName() : null;
 		putPrefsString( state, KEY_RECENT_FILE, filename );
+
+		notifyEditorSelected();
 	}
 
 	private void enableDisableActions() {
 		boolean dirOpen = (directoryField.getSelectedItem() != null);
-		boolean editorOpen = (dirOpen &&tabbedPane.getSelectedIndex() >= 0);
+		boolean editorOpen = (dirOpen && tabbedPane.getSelectedIndex() >= 0);
 
 		// enable/disable buttons
 		newButton.setEnabled( dirOpen );
@@ -687,6 +690,12 @@ class FlatThemeFileEditor
 		return result;
 	}
 
+	private void notifyEditorSelected() {
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.selected();
+	}
+
 	private void activateEditor() {
 		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
 		if( themeEditorPane != null )
@@ -709,7 +718,7 @@ class FlatThemeFileEditor
 	private void find() {
 		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
 		if( themeEditorPane != null )
-			themeEditorPane.showFindReplaceBar();
+			themeEditorPane.showFindReplaceBar( true );
 	}
 
 	private void insertColor() {

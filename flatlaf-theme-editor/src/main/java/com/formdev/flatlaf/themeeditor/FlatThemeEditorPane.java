@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -48,6 +47,7 @@ import org.fife.ui.rsyntaxtextarea.TokenTypes;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -62,7 +62,10 @@ class FlatThemeEditorPane
 
 	private static final String FLATLAF_STYLE = "text/flatlaf";
 
-	private final CollapsibleSectionPanel collapsiblePanel;
+	private static boolean findReplaceVisible;
+	private static SearchContext findReplaceContext;
+
+	private final JPanel editorPanel;
 	private final RTextScrollPane scrollPane;
 	private final FlatSyntaxTextArea textArea;
 	private final ErrorStrip errorStrip;
@@ -115,11 +118,11 @@ class FlatThemeEditorPane
 		// create error strip
 		errorStrip = new ErrorStrip( textArea );
 
-		// create collapsible panel
-		collapsiblePanel = new CollapsibleSectionPanel();
-		collapsiblePanel.add( scrollPane );
-		collapsiblePanel.add( errorStrip, BorderLayout.LINE_END );
-		add( collapsiblePanel, BorderLayout.CENTER );
+		// create editor panel
+		editorPanel = new JPanel( new BorderLayout() );
+		editorPanel.add( scrollPane );
+		editorPanel.add( errorStrip, BorderLayout.LINE_END );
+		add( editorPanel, BorderLayout.CENTER );
 
 		updateTheme();
 	}
@@ -164,6 +167,13 @@ class FlatThemeEditorPane
 		textArea.setFont( font );
 		textArea.setSyntaxScheme( new FlatSyntaxScheme( font ) );
 		scrollPane.getGutter().setLineNumberFont( font );
+	}
+
+	void selected() {
+		if( findReplaceVisible )
+			showFindReplaceBar( false );
+		else
+			hideFindReplaceBar();
 	}
 
 	void windowActivated() {
@@ -261,13 +271,30 @@ class FlatThemeEditorPane
 		return (window instanceof JFrame) ? ((JFrame)window).getTitle() : null;
 	}
 
-	void showFindReplaceBar() {
+	void showFindReplaceBar( boolean findEditorSelection ) {
 		if( findReplaceBar == null ) {
 			findReplaceBar = new FlatFindReplaceBar( textArea );
-			collapsiblePanel.addBottomComponent( findReplaceBar );
+			findReplaceBar.addPropertyChangeListener( FlatFindReplaceBar.PROP_CLOSED, e -> {
+				findReplaceVisible = false;
+				textArea.requestFocusInWindow();
+			} );
+			editorPanel.add( findReplaceBar, BorderLayout.SOUTH );
+			editorPanel.revalidate();
 		}
 
-		collapsiblePanel.showBottomComponent( findReplaceBar );
+		findReplaceVisible = true;
+		if( findReplaceContext == null )
+			findReplaceContext = findReplaceBar.getSearchContext();
+		else
+			findReplaceBar.setSearchContext( findReplaceContext );
+
+		findReplaceBar.setVisible( true );
+		findReplaceBar.activate( findEditorSelection );
+	}
+
+	void hideFindReplaceBar() {
+		if( findReplaceBar != null )
+			findReplaceBar.setVisible( false );
 	}
 
 	void showPreview( boolean show ) {
