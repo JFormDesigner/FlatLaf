@@ -202,6 +202,11 @@ public class FlatThemeTokenMaker
 		}
 	}
 
+	@Override
+	public boolean isIdentifierChar( int languageIndex, char ch ) {
+		return super.isIdentifierChar( languageIndex, ch ) || ch == '@';
+	}
+
 /*debug
 	private java.util.HashMap<Integer, String> tokenTypeStrMap;
 
