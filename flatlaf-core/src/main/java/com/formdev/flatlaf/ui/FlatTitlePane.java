@@ -87,6 +87,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
+ * @uiDefault TitlePane.menuBarResizeHeight					int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -111,6 +112,7 @@ public class FlatTitlePane
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
 	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
 	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 20 );
+	/** @since 2.4 */ protected final int menuBarResizeHeight = FlatUIUtils.getUIInt( "TitlePane.menuBarResizeHeight", 4 );
 
 	protected final JRootPane rootPane;
 
@@ -233,10 +235,7 @@ public class FlatTitlePane
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
-				if( buttonMaximizedHeight > 0 &&
-					window instanceof Frame &&
-					(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-				{
+				if( buttonMaximizedHeight > 0 && isWindowMaximized() ) {
 					// make title pane height smaller when frame is maximized
 					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight ) ) );
 				}
@@ -567,6 +566,11 @@ debug*/
 			frame.setExtendedState( frame.getExtendedState() | Frame.ICONIFIED );
 	}
 
+	/** @since 2.4 */
+	protected boolean isWindowMaximized() {
+		return window instanceof Frame && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
+	}
+
 	/**
 	 * Maximizes the window.
 	 */
@@ -741,9 +745,7 @@ debug*/
 
 			// if frame is maximized, increase icon bounds to upper-left corner
 			// of window to allow closing window via double-click in upper-left corner
-			if( window instanceof Frame &&
-				(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-			{
+			if( isWindowMaximized() ) {
 				iconBounds.height += iconBounds.y;
 				iconBounds.y = 0;
 
@@ -768,6 +770,15 @@ debug*/
 		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
 			r = getNativeHitTestSpot( menuBar );
 			if( r != null ) {
+				// if frame is not maximized, make menu bar hit test spot smaller at top
+				// to have a small area above the menu bar to resize the window
+				if( !isWindowMaximized() ) {
+					// limit to 8, because Windows does not use a larger height
+					int resizeHeight = UIScale.scale( Math.min( menuBarResizeHeight, 8 ) );
+					r.y += resizeHeight;
+					r.height -= resizeHeight;
+				}
+
 				Component horizontalGlue = findHorizontalGlue( menuBar );
 				if( horizontalGlue != null ) {
 					// If menu bar is embedded and contains a horizontal glue component,
@@ -854,7 +865,7 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -873,17 +884,13 @@ debug*/
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getBorder() : null;
-		}
-
-		protected boolean isWindowMaximized( Component c ) {
-			return window instanceof Frame && (((Frame) window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 

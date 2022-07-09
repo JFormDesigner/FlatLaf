@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## 2.4-SNAPSHOT
 
+#### New features and improvements
+
+- Native window decorations (Windows 10/11 only):
+  - There is now a small area at top of the embedded menu bar to resize the
+    window.
+
 #### Fixed bugs
 
 - ComboBox: Fixed vertical alignment of text in popup list with text in combo
