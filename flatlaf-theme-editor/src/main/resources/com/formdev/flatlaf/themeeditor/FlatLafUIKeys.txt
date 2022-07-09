@@ -980,6 +980,7 @@ TitlePane.background
 TitlePane.borderColor
 TitlePane.buttonHoverBackground
 TitlePane.buttonMaximizedHeight
+TitlePane.buttonMinimumWidth
 TitlePane.buttonPressedBackground
 TitlePane.buttonSize
 TitlePane.centerTitle
@@ -1005,6 +1006,7 @@ TitlePane.noIconLeftGap
 TitlePane.restoreIcon
 TitlePane.showIcon
 TitlePane.titleMargins
+TitlePane.titleMinimumWidth
 TitlePane.unifiedBackground
 TitlePane.useWindowDecorations
 TitledBorder.border

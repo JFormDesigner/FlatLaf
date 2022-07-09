@@ -8,6 +8,12 @@ FlatLaf Change Log
 - Native window decorations (Windows 10/11 only):
   - There is now a small area at top of the embedded menu bar to resize the
     window.
+  - Improved window title bar layout for small window widths:
+    - Width of iconify/maximize/close buttons is reduced (if necessary) to give
+      more space to embedded menu bar and title.
+    - Window title now has a minimum width to always allow moving window
+      (click-and-drag on window title). Instead, embedded menu bar is made
+      smaller.
 
 #### Fixed bugs
 

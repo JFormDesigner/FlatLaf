@@ -83,6 +83,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
  * @uiDefault TitlePane.menuBarEmbedded						boolean
+ * @uiDefault TitlePane.titleMinimumWidth					int
+ * @uiDefault TitlePane.buttonMinimumWidth					int
  * @uiDefault TitlePane.buttonMaximizedHeight				int
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
@@ -108,6 +110,8 @@ public class FlatTitlePane
 	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
 	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
+	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 30 );
+	/** @since 2.4 */ protected final int buttonMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.buttonMinimumWidth", 22 );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
 	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
@@ -185,18 +189,44 @@ public class FlatTitlePane
 		setLayout( new BorderLayout() {
 			@Override
 			public void layoutContainer( Container target ) {
-				super.layoutContainer( target );
-
-				// make left panel (with embedded menu bar) smaller if horizontal space is rare
-				// to avoid that embedded menu bar overlaps button bar
+				// compute available bounds
 				Insets insets = target.getInsets();
-				int width = target.getWidth() - insets.left - insets.right;
-				if( leftPanel.getWidth() + buttonPanel.getWidth() > width ) {
-					int oldWidth = leftPanel.getWidth();
-					int newWidth = Math.max( width - buttonPanel.getWidth(), 0 );
-					leftPanel.setSize( newWidth, leftPanel.getHeight() );
-					if( !getComponentOrientation().isLeftToRight() )
-						leftPanel.setLocation( leftPanel.getX() + (oldWidth - newWidth), leftPanel.getY() );
+				int x = insets.left;
+				int y = insets.top;
+				int w = target.getWidth() - insets.left - insets.right;
+				int h = target.getHeight() - insets.top - insets.bottom;
+
+				// compute widths
+				int leftWidth = leftPanel.getPreferredSize().width;
+				int buttonsWidth = buttonPanel.getPreferredSize().width;
+				int titleWidth = w - leftWidth - buttonsWidth;
+				int minTitleWidth = UIScale.scale( titleMinimumWidth );
+
+				// if title is too small, reduce width of buttons
+				if( titleWidth < minTitleWidth ) {
+					buttonsWidth = Math.max( buttonsWidth - (minTitleWidth - titleWidth), buttonPanel.getMinimumSize().width );
+					titleWidth = w - leftWidth - buttonsWidth;
+				}
+
+				// if title is still too small, reduce width of left panel (icon and embedded menu bar)
+				if( titleWidth < minTitleWidth ) {
+					int minLeftWidth = iconLabel.isVisible()
+						? iconLabel.getWidth() - iconLabel.getInsets().right
+						: UIScale.scale( noIconLeftGap );
+					leftWidth = Math.max( leftWidth - (minTitleWidth - titleWidth), minLeftWidth );
+					titleWidth = w - leftWidth - buttonsWidth;
+				}
+
+				if( target.getComponentOrientation().isLeftToRight() ) {
+					// left-to-right
+					leftPanel.setBounds( x, y, leftWidth, h );
+					titleLabel.setBounds( x + leftWidth, y, titleWidth, h );
+					buttonPanel.setBounds( x + leftWidth + titleWidth, y, buttonsWidth, h );
+				} else {
+					// right-to-left
+					buttonPanel.setBounds( x, y, buttonsWidth, h );
+					titleLabel.setBounds( x + buttonsWidth, y, titleWidth, h );
+					leftPanel.setBounds( x + buttonsWidth + titleWidth, y, leftWidth, h );
 				}
 
 				// If menu bar is embedded and contains a horizontal glue component,
@@ -258,7 +288,13 @@ public class FlatTitlePane
 	}
 
 	protected JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
-		JButton button = new JButton( UIManager.getIcon( iconKey ) );
+		JButton button = new JButton( UIManager.getIcon( iconKey ) ) {
+			@Override
+			public Dimension getMinimumSize() {
+				// allow the button to shrink if space is rare
+				return new Dimension( UIScale.scale( buttonMinimumWidth ), super.getMinimumSize().height );
+			}
+		};
 		button.setFocusable( false );
 		button.setContentAreaFilled( false );
 		button.setBorder( BorderFactory.createEmptyBorder() );
