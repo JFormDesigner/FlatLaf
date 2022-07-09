@@ -129,7 +129,7 @@
 
 #---- monospaced ----
 
-- monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
+- monospaced.font                [active] Monospaced plain 12    javax.swing.plaf.FontUIResource [UI]
 + monospaced.font                [active] Menlo plain 13    javax.swing.plaf.FontUIResource [UI]
 
 

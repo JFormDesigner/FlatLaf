@@ -1550,7 +1550,7 @@ mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.Fon
 
 #---- monospaced ----
 
-monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
+monospaced.font                [active] Monospaced plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #----  ----
