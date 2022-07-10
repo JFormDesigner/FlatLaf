@@ -265,7 +265,7 @@ public class FlatTitlePane
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
-				if( buttonMaximizedHeight > 0 && isWindowMaximized() ) {
+				if( buttonMaximizedHeight > 0 && isWindowMaximized() && !hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() ) ) {
 					// make title pane height smaller when frame is maximized
 					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight ) ) );
 				}

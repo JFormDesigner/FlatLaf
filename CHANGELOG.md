@@ -14,6 +14,8 @@ FlatLaf Change Log
     - Window title now has a minimum width to always allow moving window
       (click-and-drag on window title). Instead, embedded menu bar is made
       smaller.
+  - No longer reduce height of window title bar if it has an embedded menu bar
+    and is maximized.
 
 #### Fixed bugs
 
