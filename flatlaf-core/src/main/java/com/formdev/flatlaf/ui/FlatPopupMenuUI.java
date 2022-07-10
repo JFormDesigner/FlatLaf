@@ -130,7 +130,7 @@ public class FlatPopupMenuUI
 
 		LayoutManager layout = popupMenu.getLayout();
 		if( layout == null || layout instanceof UIResource )
-			popupMenu.setLayout( new FlatMenuLayout( popupMenu, BoxLayout.Y_AXIS ) );
+			popupMenu.setLayout( new FlatPopupMenuLayout( popupMenu, BoxLayout.Y_AXIS ) );
 	}
 
 	@Override
@@ -230,12 +230,15 @@ public class FlatPopupMenuUI
 		return screenBounds.height - screenInsets.top - screenInsets.bottom;
 	}
 
-	//---- class FlatMenuLayout -----------------------------------------------
+	//---- class FlatPopupMenuLayout ------------------------------------------
 
-	protected static class FlatMenuLayout
+	/**
+	 * @since 2.4
+	 */
+	protected static class FlatPopupMenuLayout
 		extends DefaultMenuLayout
 	{
-		public FlatMenuLayout( Container target, int axis ) {
+		public FlatPopupMenuLayout( Container target, int axis ) {
 			super( target, axis );
 		}
 

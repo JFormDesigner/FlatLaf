@@ -364,6 +364,12 @@ public class FlatRootPaneUI
 			((FlatRootPaneUI)ui).titlePane.isMenuBarEmbedded();
 	}
 
+	/** @since 2.4 */
+	protected static FlatTitlePane getTitlePane( JRootPane rootPane ) {
+		RootPaneUI ui = rootPane.getUI();
+		return ui instanceof FlatRootPaneUI ? ((FlatRootPaneUI)ui).titlePane : null;
+	}
+
 	//---- class FlatRootLayout -----------------------------------------------
 
 	protected class FlatRootLayout
