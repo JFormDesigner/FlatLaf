@@ -809,9 +809,9 @@ debug*/
 		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
 			r = getNativeHitTestSpot( menuBar );
 			if( r != null ) {
-				// if frame is not maximized, make menu bar hit test spot smaller at top
+				// if frame is resizable and not maximized, make menu bar hit test spot smaller at top
 				// to have a small area above the menu bar to resize the window
-				if( !isWindowMaximized() ) {
+				if( window instanceof Frame && ((Frame)window).isResizable() && !isWindowMaximized() ) {
 					// limit to 8, because Windows does not use a larger height
 					int resizeHeight = UIScale.scale( Math.min( menuBarResizeHeight, 8 ) );
 					r.y += resizeHeight;
