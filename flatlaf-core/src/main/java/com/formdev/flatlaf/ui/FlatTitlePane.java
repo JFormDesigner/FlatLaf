@@ -24,6 +24,7 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -50,13 +51,13 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
@@ -110,12 +111,13 @@ public class FlatTitlePane
 	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
 	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
-	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 30 );
-	/** @since 2.4 */ protected final int buttonMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.buttonMinimumWidth", 22 );
+	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 60 );
+	/** @since 2.4 */ protected final int buttonMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.buttonMinimumWidth", 30 );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
 	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
-	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 20 );
+	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 40 );
+	/** @since 2.4 */ protected final int menuBarTitleMinimumGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleMinimumGap", 12 );
 	/** @since 2.4 */ protected final int menuBarResizeHeight = FlatUIUtils.getUIInt( "TitlePane.menuBarResizeHeight", 4 );
 
 	protected final JRootPane rootPane;
@@ -148,6 +150,8 @@ public class FlatTitlePane
 
 		// necessary for closing window with double-click on icon
 		iconLabel.addMouseListener( handler );
+
+		applyComponentOrientation( rootPane.getComponentOrientation() );
 	}
 
 	protected FlatTitlePaneBorder createTitlePaneBorder() {
@@ -169,7 +173,6 @@ public class FlatTitlePane
 		};
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
-		titleLabel.setHorizontalAlignment( SwingConstants.CENTER );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -941,36 +944,62 @@ debug*/
 		}
 
 		@Override
-		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+		protected String layoutCL( JLabel label, FontMetrics fontMetrics, String text, Icon icon,
+			Rectangle viewR, Rectangle iconR, Rectangle textR )
+		{
 			JMenuBar menuBar = rootPane.getJMenuBar();
-			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( menuBar ) && hasMenus( menuBar );
-			int labelWidth = l.getWidth();
-			int textWidth = labelWidth - (textX * 2);
-			int gap = UIScale.scale( menuBarTitleGap );
+			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( menuBar );
+			boolean hasEmbeddedLeadingMenus = hasEmbeddedMenuBar && hasLeadingMenus( menuBar );
+			boolean leftToRight = getComponentOrientation().isLeftToRight();
 
-			// The passed in textX coordinate is always to horizontally center the text within the label bounds.
-			// Modify textX so that the text is painted either centered within the window bounds or leading aligned.
-			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
-			if( center ) {
-				// If window is wide enough, center title within window bounds.
-				// Otherwise, leave it centered within free space (label bounds).
-				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
-				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
-					textX = centeredTextX;
-			} else {
-				// leading aligned
-				boolean leftToRight = getComponentOrientation().isLeftToRight();
-				Insets insets = l.getInsets();
-				int leadingInset = hasEmbeddedMenuBar ? gap : (leftToRight ? insets.left : insets.right);
-				int leadingTextX = leftToRight ? leadingInset : labelWidth - leadingInset - textWidth;
-				if( leftToRight ? leadingTextX < textX : leadingTextX > textX )
-					textX = leadingTextX;
+			if( hasEmbeddedMenuBar ) {
+				int minGap = UIScale.scale( menuBarTitleMinimumGap );
+
+				// apply minimum leading gap (between embedded menu bar and title)
+				if( hasEmbeddedLeadingMenus ) {
+					if( leftToRight )
+						viewR.x += minGap;
+					viewR.width -= minGap;
+				}
+
+				// apply minimum trailing gap (between title and right aligned components of embedded menu bar)
+				Component horizontalGlue = findHorizontalGlue( menuBar );
+				if( horizontalGlue != null && menuBar.getComponent( menuBar.getComponentCount() - 1 ) != horizontalGlue ) {
+					if( !leftToRight )
+						viewR.x += minGap;
+					viewR.width -= minGap;
+				}
 			}
 
-			super.paintEnabledText( l, g, s, textX, textY );
+			String clippedText = super.layoutCL( label, fontMetrics, text, icon, viewR, iconR, textR );
+
+			if( !clippedText.equals( text ) ) {
+				// if text is clipped, align to left (or right)
+				textR.x = leftToRight ? viewR.x : viewR.x + viewR.width - textR.width;
+			} else {
+				int leadingGap = hasEmbeddedLeadingMenus ? UIScale.scale( menuBarTitleGap - menuBarTitleMinimumGap ) : 0;
+
+				boolean center = hasEmbeddedLeadingMenus ? centerTitleIfMenuBarEmbedded : centerTitle;
+				if( center ) {
+					// If window is wide enough, center title within window bounds.
+					// Otherwise, center within free space (label bounds).
+					Container parent = label.getParent();
+					int centeredTextX = (parent != null) ? ((parent.getWidth() - textR.width) / 2) - label.getX() : -1;
+					textR.x = (centeredTextX >= viewR.x + leadingGap && centeredTextX + textR.width <= viewR.x + viewR.width - leadingGap)
+						? centeredTextX
+						: viewR.x + ((viewR.width - textR.width) / 2);
+				} else {
+					// leading aligned with leading gap, which is reduced is space is rare
+					textR.x = leftToRight
+						? Math.min( viewR.x + leadingGap, viewR.x + viewR.width - textR.width )
+						: Math.max( viewR.x + viewR.width - textR.width - leadingGap, viewR.x );
+				}
+			}
+
+			return clippedText;
 		}
 
-		private boolean hasMenus( JMenuBar menuBar ) {
+		private boolean hasLeadingMenus( JMenuBar menuBar ) {
 			// check whether menu bar is empty
 			if( menuBar.getComponentCount() == 0 || menuBar.getWidth() == 0 )
 				return false;

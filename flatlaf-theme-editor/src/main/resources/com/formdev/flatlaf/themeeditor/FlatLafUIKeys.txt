@@ -1002,6 +1002,7 @@ TitlePane.maximizeIcon
 TitlePane.menuBarEmbedded
 TitlePane.menuBarResizeHeight
 TitlePane.menuBarTitleGap
+TitlePane.menuBarTitleMinimumGap
 TitlePane.noIconLeftGap
 TitlePane.restoreIcon
 TitlePane.showIcon

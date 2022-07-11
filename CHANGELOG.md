@@ -34,6 +34,8 @@ FlatLaf Change Log
     `true` on Windows 10. (issue #540)
   - Fixed missing top window border in dark themes if window drop shadows are
     disabled in system settings. (issue #554; Windows 10 only)
+  - Right-to-left component orientation of title bar was lost when switching
+    theme.
 
 
 ## 2.3
