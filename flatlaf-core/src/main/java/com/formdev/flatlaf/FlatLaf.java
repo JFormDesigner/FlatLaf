@@ -103,7 +103,7 @@ public abstract class FlatLaf
 
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
-	private SubMenuUsabilityHelper subMenuUsabilityHelper;
+	private boolean subMenuUsabilityHelperInstalled;
 
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
@@ -246,8 +246,7 @@ public abstract class FlatLaf
 		mnemonicHandler.install();
 
 		// install submenu usability helper
-		subMenuUsabilityHelper = new SubMenuUsabilityHelper();
-		subMenuUsabilityHelper.install();
+		subMenuUsabilityHelperInstalled = SubMenuUsabilityHelper.install();
 
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
@@ -329,9 +328,9 @@ public abstract class FlatLaf
 		}
 
 		// uninstall submenu usability helper
-		if( subMenuUsabilityHelper != null ) {
-			subMenuUsabilityHelper.uninstall();
-			subMenuUsabilityHelper = null;
+		if( subMenuUsabilityHelperInstalled ) {
+			SubMenuUsabilityHelper.uninstall();
+			subMenuUsabilityHelperInstalled = false;
 		}
 
 		// restore default link color

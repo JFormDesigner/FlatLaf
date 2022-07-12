@@ -59,6 +59,11 @@ class SubMenuUsabilityHelper
 	private static final String KEY_USE_SAFE_TRIANGLE = "Menu.useSafeTriangle";
 	private static final String KEY_SHOW_SAFE_TRIANGLE = "FlatLaf.debug.menu.showSafeTriangle";
 
+	// Using a static field to ensure that there is only one instance in the system.
+	// Multiple instances would freeze the application.
+	// https://github.com/apache/netbeans/issues/4231#issuecomment-1179616607
+	private static SubMenuUsabilityHelper instance;
+
 	private SubMenuEventQueue subMenuEventQueue;
 	private SafeTrianglePainter safeTrianglePainter;
 	private boolean changePending;
@@ -74,13 +79,22 @@ class SubMenuUsabilityHelper
 
 	private Rectangle invokerBounds;
 
-	void install() {
-		MenuSelectionManager.defaultManager().addChangeListener( this );
+	static synchronized boolean install() {
+		if( instance != null )
+			return false;
+
+		instance = new SubMenuUsabilityHelper();
+		MenuSelectionManager.defaultManager().addChangeListener( instance );
+		return true;
 	}
 
-	void uninstall() {
-		MenuSelectionManager.defaultManager().removeChangeListener( this );
-		uninstallEventQueue();
+	static synchronized void uninstall() {
+		if( instance == null )
+			return;
+
+		MenuSelectionManager.defaultManager().removeChangeListener( instance );
+		instance.uninstallEventQueue();
+		instance = null;
 	}
 
 	@Override

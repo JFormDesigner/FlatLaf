@@ -7,6 +7,11 @@ FlatLaf Change Log
 
 - ComboBox: Fixed vertical alignment of text in popup list with text in combo
   box in IntelliJ/Darcula themes.
+- Menus: Fixed application freeze under very special conditions (invoking
+  `FlatLaf.initialize()` twice in NetBeans GUI builder) and using menu that has
+  submenus. See
+  [NetBeans issue #4231](https://github.com/apache/netbeans/issues/4231#issuecomment-1179611682)
+  for details.
 - MenuItem: Fixed sometimes wrapped HTML text on HiDPI screens on Windows.
 - TableHeader: Fixed exception when changing table structure (e.g. removing
   column) from a table header popup menu action. (issue #532)
