@@ -232,6 +232,15 @@ public abstract class FlatLaf
 
 	@Override
 	public void initialize() {
+		// do not initialize if this is not the current look and feel
+		//    This is only necessary for special Laf usage. E.g. in GUI builders,
+		//    which may use multiple Lafs and may invoke this method directly.
+		//    This avoids that listeners and factories are installed multiple times.
+		//    In case of the NetBeans GUI builder, which does not invoke uninitialize(),
+		//    this also avoids that listeners stay registered in the system.
+		if( UIManager.getLookAndFeel() != this )
+			return;
+
 		if( SystemInfo.isMacOS )
 			initializeAqua();
 
@@ -303,6 +312,10 @@ public abstract class FlatLaf
 
 	@Override
 	public void uninitialize() {
+		// do not uninitialize if this is not the current look and feel
+		if( UIManager.getLookAndFeel() != this )
+			return;
+
 		// remove desktop property listener
 		if( desktopPropertyListener != null ) {
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
