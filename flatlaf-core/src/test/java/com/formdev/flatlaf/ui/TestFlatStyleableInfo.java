@@ -770,6 +770,7 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = expectedMap(
 			"showTrailingVerticalLine", boolean.class,
+			"disabledForeground", Color.class,
 			"selectionBackground", Color.class,
 			"selectionForeground", Color.class,
 			"selectionInactiveBackground", Color.class,

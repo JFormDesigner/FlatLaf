@@ -941,6 +941,7 @@ public class TestFlatStyling
 		FlatTableUI ui = (FlatTableUI) c.getUI();
 
 		ui.applyStyle( "showTrailingVerticalLine: true" );
+		ui.applyStyle( "disabledForeground: #fff" );
 		ui.applyStyle( "selectionBackground: #fff" );
 		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "selectionInactiveBackground: #fff" );

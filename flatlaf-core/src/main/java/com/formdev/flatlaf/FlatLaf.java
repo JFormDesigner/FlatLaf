@@ -435,6 +435,7 @@ public abstract class FlatLaf
 			"RadioButton.disabledText",
 			"RadioButtonMenuItem.disabledForeground",
 			"Spinner.disabledForeground",
+			"Table.disabledForeground",
 			"ToggleButton.disabledText" );
 		putDefaults( defaults, defaults.getColor( "textText" ),
 			"DesktopIcon.foreground",
