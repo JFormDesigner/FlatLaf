@@ -24,6 +24,7 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -50,13 +51,13 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
@@ -83,10 +84,14 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
  * @uiDefault TitlePane.menuBarEmbedded						boolean
+ * @uiDefault TitlePane.titleMinimumWidth					int
+ * @uiDefault TitlePane.buttonMinimumWidth					int
  * @uiDefault TitlePane.buttonMaximizedHeight				int
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
+ * @uiDefault TitlePane.showIconBesideTitle					boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
+ * @uiDefault TitlePane.menuBarResizeHeight					int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -107,10 +112,15 @@ public class FlatTitlePane
 	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
 	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
+	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 60 );
+	/** @since 2.4 */ protected final int buttonMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.buttonMinimumWidth", 30 );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
 	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
-	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 20 );
+	/** @since 2.4 */ protected final boolean showIconBesideTitle = UIManager.getBoolean( "TitlePane.showIconBesideTitle" );
+	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 40 );
+	/** @since 2.4 */ protected final int menuBarTitleMinimumGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleMinimumGap", 12 );
+	/** @since 2.4 */ protected final int menuBarResizeHeight = FlatUIUtils.getUIInt( "TitlePane.menuBarResizeHeight", 4 );
 
 	protected final JRootPane rootPane;
 
@@ -142,6 +152,8 @@ public class FlatTitlePane
 
 		// necessary for closing window with double-click on icon
 		iconLabel.addMouseListener( handler );
+
+		applyComponentOrientation( rootPane.getComponentOrientation() );
 	}
 
 	protected FlatTitlePaneBorder createTitlePaneBorder() {
@@ -163,7 +175,6 @@ public class FlatTitlePane
 		};
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
-		titleLabel.setHorizontalAlignment( SwingConstants.CENTER );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -183,18 +194,52 @@ public class FlatTitlePane
 		setLayout( new BorderLayout() {
 			@Override
 			public void layoutContainer( Container target ) {
-				super.layoutContainer( target );
-
-				// make left panel (with embedded menu bar) smaller if horizontal space is rare
-				// to avoid that embedded menu bar overlaps button bar
+				// compute available bounds
 				Insets insets = target.getInsets();
-				int width = target.getWidth() - insets.left - insets.right;
-				if( leftPanel.getWidth() + buttonPanel.getWidth() > width ) {
-					int oldWidth = leftPanel.getWidth();
-					int newWidth = Math.max( width - buttonPanel.getWidth(), 0 );
-					leftPanel.setSize( newWidth, leftPanel.getHeight() );
-					if( !getComponentOrientation().isLeftToRight() )
-						leftPanel.setLocation( leftPanel.getX() + (oldWidth - newWidth), leftPanel.getY() );
+				int x = insets.left;
+				int y = insets.top;
+				int w = target.getWidth() - insets.left - insets.right;
+				int h = target.getHeight() - insets.top - insets.bottom;
+
+				// compute widths
+				int leftWidth = leftPanel.getPreferredSize().width;
+				int buttonsWidth = buttonPanel.getPreferredSize().width;
+				int titleWidth = w - leftWidth - buttonsWidth;
+				int minTitleWidth = UIScale.scale( titleMinimumWidth );
+
+				// increase minimum width if icon is show besides the title
+				Icon icon = titleLabel.getIcon();
+				if( icon != null ) {
+					Insets iconInsets = iconLabel.getInsets();
+					int iconTextGap = titleLabel.getComponentOrientation().isLeftToRight() ? iconInsets.right : iconInsets.left;
+					minTitleWidth += icon.getIconWidth() + iconTextGap;
+				}
+
+				// if title is too small, reduce width of buttons
+				if( titleWidth < minTitleWidth ) {
+					buttonsWidth = Math.max( buttonsWidth - (minTitleWidth - titleWidth), buttonPanel.getMinimumSize().width );
+					titleWidth = w - leftWidth - buttonsWidth;
+				}
+
+				// if title is still too small, reduce width of left panel (icon and embedded menu bar)
+				if( titleWidth < minTitleWidth ) {
+					int minLeftWidth = iconLabel.isVisible()
+						? iconLabel.getWidth() - iconLabel.getInsets().right
+						: UIScale.scale( noIconLeftGap );
+					leftWidth = Math.max( leftWidth - (minTitleWidth - titleWidth), minLeftWidth );
+					titleWidth = w - leftWidth - buttonsWidth;
+				}
+
+				if( target.getComponentOrientation().isLeftToRight() ) {
+					// left-to-right
+					leftPanel.setBounds( x, y, leftWidth, h );
+					titleLabel.setBounds( x + leftWidth, y, titleWidth, h );
+					buttonPanel.setBounds( x + leftWidth + titleWidth, y, buttonsWidth, h );
+				} else {
+					// right-to-left
+					buttonPanel.setBounds( x, y, buttonsWidth, h );
+					titleLabel.setBounds( x + buttonsWidth, y, titleWidth, h );
+					leftPanel.setBounds( x + buttonsWidth + titleWidth, y, leftWidth, h );
 				}
 
 				// If menu bar is embedded and contains a horizontal glue component,
@@ -233,10 +278,7 @@ public class FlatTitlePane
 			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
-				if( buttonMaximizedHeight > 0 &&
-					window instanceof Frame &&
-					(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-				{
+				if( buttonMaximizedHeight > 0 && isWindowMaximized() && !hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() ) ) {
 					// make title pane height smaller when frame is maximized
 					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight ) ) );
 				}
@@ -259,7 +301,13 @@ public class FlatTitlePane
 	}
 
 	protected JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
-		JButton button = new JButton( UIManager.getIcon( iconKey ) );
+		JButton button = new JButton( UIManager.getIcon( iconKey ) ) {
+			@Override
+			public Dimension getMinimumSize() {
+				// allow the button to shrink if space is rare
+				return new Dimension( UIScale.scale( buttonMinimumWidth ), super.getMinimumSize().height );
+			}
+		};
 		button.setFocusable( false );
 		button.setContentAreaFilled( false );
 		button.setBorder( BorderFactory.createEmptyBorder() );
@@ -356,11 +404,12 @@ public class FlatTitlePane
 		boolean hasIcon = (images != null && !images.isEmpty());
 
 		// set icon
-		iconLabel.setIcon( hasIcon ? new FlatTitlePaneIcon( images, iconSize ) : null );
+		iconLabel.setIcon( hasIcon && !showIconBesideTitle ? new FlatTitlePaneIcon( images, iconSize ) : null );
+		titleLabel.setIcon( hasIcon && showIconBesideTitle ? new FlatTitlePaneIcon( images, iconSize ) : null );
 
 		// show/hide icon
-		iconLabel.setVisible( hasIcon );
-		leftPanel.setBorder( hasIcon ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
+		iconLabel.setVisible( hasIcon && !showIconBesideTitle );
+		leftPanel.setBorder( hasIcon && !showIconBesideTitle ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
 
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
@@ -567,6 +616,11 @@ debug*/
 			frame.setExtendedState( frame.getExtendedState() | Frame.ICONIFIED );
 	}
 
+	/** @since 2.4 */
+	protected boolean isWindowMaximized() {
+		return window instanceof Frame && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
+	}
+
 	/**
 	 * Maximizes the window.
 	 */
@@ -729,7 +783,7 @@ debug*/
 		List<Rectangle> hitTestSpots = new ArrayList<>();
 		Rectangle appIconBounds = null;
 
-		if( iconLabel.isVisible() ) {
+		if( !showIconBesideTitle && iconLabel.isVisible() ) {
 			// compute real icon size (without insets; 1px larger for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
 			Insets iconInsets = iconLabel.getInsets();
@@ -741,9 +795,7 @@ debug*/
 
 			// if frame is maximized, increase icon bounds to upper-left corner
 			// of window to allow closing window via double-click in upper-left corner
-			if( window instanceof Frame &&
-				(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-			{
+			if( isWindowMaximized() ) {
 				iconBounds.height += iconBounds.y;
 				iconBounds.y = 0;
 
@@ -758,6 +810,38 @@ debug*/
 				hitTestSpots.add( iconBounds );
 			else
 				appIconBounds = iconBounds;
+		} else if( showIconBesideTitle && titleLabel.getIcon() != null && titleLabel.getUI() instanceof FlatTitleLabelUI ) {
+			FlatTitleLabelUI ui = (FlatTitleLabelUI) titleLabel.getUI();
+
+			// compute real icon bounds
+			Insets insets = titleLabel.getInsets();
+			Rectangle viewR = new Rectangle( insets.left, insets.top,
+				titleLabel.getWidth() - insets.left - insets.right,
+				titleLabel.getHeight() - insets.top - insets.bottom );
+			Rectangle iconR = new Rectangle();
+			Rectangle textR = new Rectangle();
+			ui.layoutCL( titleLabel, titleLabel.getFontMetrics( titleLabel.getFont() ),
+				titleLabel.getText(), titleLabel.getIcon(),
+				viewR, iconR, textR );
+
+			// Windows shows the window system menu only in the upper-left corner
+			if( iconR.x == 0 ) {
+				// convert icon location to window coordinates
+				Point location = SwingUtilities.convertPoint( titleLabel, 0, 0, window );
+				iconR.x += location.x;
+				iconR.y += location.y;
+
+				// make icon bounds 1px larger for easier hitting
+				iconR.x -= 1;
+				iconR.y -= 1;
+				iconR.width += 2;
+				iconR.height += 2;
+
+				if( hasJBRCustomDecoration() )
+					hitTestSpots.add( iconR );
+				else
+					appIconBounds = iconR;
+			}
 		}
 
 		Rectangle r = getNativeHitTestSpot( buttonPanel );
@@ -768,6 +852,15 @@ debug*/
 		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
 			r = getNativeHitTestSpot( menuBar );
 			if( r != null ) {
+				// if frame is resizable and not maximized, make menu bar hit test spot smaller at top
+				// to have a small area above the menu bar to resize the window
+				if( window instanceof Frame && ((Frame)window).isResizable() && !isWindowMaximized() ) {
+					// limit to 8, because Windows does not use a larger height
+					int resizeHeight = UIScale.scale( Math.min( menuBarResizeHeight, 8 ) );
+					r.y += resizeHeight;
+					r.height -= resizeHeight;
+				}
+
 				Component horizontalGlue = findHorizontalGlue( menuBar );
 				if( horizontalGlue != null ) {
 					// If menu bar is embedded and contains a horizontal glue component,
@@ -854,7 +947,7 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -873,17 +966,13 @@ debug*/
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getBorder() : null;
-		}
-
-		protected boolean isWindowMaximized( Component c ) {
-			return window instanceof Frame && (((Frame) window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 
@@ -898,36 +987,86 @@ debug*/
 		}
 
 		@Override
-		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+		protected String layoutCL( JLabel label, FontMetrics fontMetrics, String text, Icon icon,
+			Rectangle viewR, Rectangle iconR, Rectangle textR )
+		{
 			JMenuBar menuBar = rootPane.getJMenuBar();
-			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( menuBar ) && hasMenus( menuBar );
-			int labelWidth = l.getWidth();
-			int textWidth = labelWidth - (textX * 2);
-			int gap = UIScale.scale( menuBarTitleGap );
+			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( menuBar );
+			boolean hasEmbeddedLeadingMenus = hasEmbeddedMenuBar && hasLeadingMenus( menuBar );
+			boolean leftToRight = getComponentOrientation().isLeftToRight();
 
-			// The passed in textX coordinate is always to horizontally center the text within the label bounds.
-			// Modify textX so that the text is painted either centered within the window bounds or leading aligned.
-			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
-			if( center ) {
-				// If window is wide enough, center title within window bounds.
-				// Otherwise, leave it centered within free space (label bounds).
-				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
-				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
-					textX = centeredTextX;
-			} else {
-				// leading aligned
-				boolean leftToRight = getComponentOrientation().isLeftToRight();
-				Insets insets = l.getInsets();
-				int leadingInset = hasEmbeddedMenuBar ? gap : (leftToRight ? insets.left : insets.right);
-				int leadingTextX = leftToRight ? leadingInset : labelWidth - leadingInset - textWidth;
-				if( leftToRight ? leadingTextX < textX : leadingTextX > textX )
-					textX = leadingTextX;
+			if( hasEmbeddedMenuBar ) {
+				int minGap = UIScale.scale( menuBarTitleMinimumGap );
+
+				// apply minimum leading gap (between embedded menu bar and title)
+				if( hasEmbeddedLeadingMenus ) {
+					if( leftToRight )
+						viewR.x += minGap;
+					viewR.width -= minGap;
+				}
+
+				// apply minimum trailing gap (between title and right aligned components of embedded menu bar)
+				Component horizontalGlue = findHorizontalGlue( menuBar );
+				if( horizontalGlue != null && menuBar.getComponent( menuBar.getComponentCount() - 1 ) != horizontalGlue ) {
+					if( !leftToRight )
+						viewR.x += minGap;
+					viewR.width -= minGap;
+				}
 			}
 
-			super.paintEnabledText( l, g, s, textX, textY );
+			// compute icon width and gap (if icon is show besides the title)
+			int iconTextGap = 0;
+			int iconWidthAndGap = 0;
+			if( icon != null ) {
+				Insets iconInsets = iconLabel.getInsets();
+				iconTextGap = leftToRight ? iconInsets.right : iconInsets.left;
+				iconWidthAndGap = icon.getIconWidth() + iconTextGap;
+			}
+
+			// layout title and icon (if show besides the title)
+			String clippedText = SwingUtilities.layoutCompoundLabel( label, fontMetrics, text, icon,
+				label.getVerticalAlignment(), label.getHorizontalAlignment(),
+				label.getVerticalTextPosition(), label.getHorizontalTextPosition(),
+				viewR, iconR, textR,
+				iconTextGap );
+
+			// compute text X location
+			if( !clippedText.equals( text ) ) {
+				// if text is clipped, align to left (or right)
+				textR.x = leftToRight
+					? viewR.x + iconWidthAndGap
+					: viewR.x + viewR.width - iconWidthAndGap - textR.width;
+			} else {
+				int leadingGap = hasEmbeddedLeadingMenus ? UIScale.scale( menuBarTitleGap - menuBarTitleMinimumGap ) : 0;
+
+				boolean center = hasEmbeddedLeadingMenus ? centerTitleIfMenuBarEmbedded : centerTitle;
+				if( center ) {
+					// If window is wide enough, center title within window bounds.
+					// Otherwise, center within free space (label bounds).
+					Container parent = label.getParent();
+					int centeredTextX = (parent != null) ? ((parent.getWidth() - textR.width - iconWidthAndGap) / 2) + iconWidthAndGap - label.getX() : -1;
+					textR.x = (centeredTextX >= viewR.x + leadingGap && centeredTextX + textR.width <= viewR.x + viewR.width - leadingGap)
+						? centeredTextX
+						: viewR.x + ((viewR.width - textR.width - iconWidthAndGap) / 2) + iconWidthAndGap;
+				} else {
+					// leading aligned with leading gap, which is reduced if space is rare
+					textR.x = leftToRight
+						? Math.min( viewR.x + leadingGap + iconWidthAndGap, viewR.x + viewR.width - textR.width )
+						: Math.max( viewR.x + viewR.width - leadingGap - iconWidthAndGap - textR.width, viewR.x );
+				}
+			}
+
+			// compute icon X location (relative to text X location)
+			if( icon != null ) {
+				iconR.x = leftToRight
+					? textR.x - iconWidthAndGap
+					: textR.x + textR.width + iconTextGap;
+			}
+
+			return clippedText;
 		}
 
-		private boolean hasMenus( JMenuBar menuBar ) {
+		private boolean hasLeadingMenus( JMenuBar menuBar ) {
 			// check whether menu bar is empty
 			if( menuBar.getComponentCount() == 0 || menuBar.getWidth() == 0 )
 				return false;

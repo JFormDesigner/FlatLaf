@@ -18,8 +18,10 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -40,11 +43,13 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import javax.swing.plaf.basic.DefaultMenuLayout;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuBar}.
@@ -100,6 +105,10 @@ public class FlatMenuBarUI
 		super.installDefaults();
 
 		LookAndFeel.installProperty( menuBar, "opaque", false );
+
+		LayoutManager layout = menuBar.getLayout();
+		if( layout == null || layout instanceof UIResource )
+			menuBar.setLayout( new FlatMenuBarLayout( menuBar ) );
 	}
 
 	@Override
@@ -219,6 +228,130 @@ public class FlatMenuBarUI
 			rootPane.getParent() instanceof Window &&
 			rootPane.getJMenuBar() == c &&
 			rootPane.getWindowDecorationStyle() != JRootPane.NONE;
+	}
+
+	//---- class FlatMenuBarLayout --------------------------------------------
+
+	/**
+	 * @since 2.4
+	 */
+	protected static class FlatMenuBarLayout
+		extends DefaultMenuLayout
+	{
+		public FlatMenuBarLayout( Container target ) {
+			super( target, BoxLayout.LINE_AXIS );
+		}
+
+		@Override
+		public void layoutContainer( Container target ) {
+			super.layoutContainer( target );
+
+
+			// The only purpose of the code below is to make sure that a horizontal glue,
+			// which can be used to move window and displays the window title in embedded menu bar,
+			// is always visible within the menu bar bounds and has a minimum width.
+			// If this is not the case, the horizontal glue is made larger and
+			// components that are on the left side of the glue are made smaller.
+
+
+			// get root pane and check whether this menu bar is the root pane menu bar
+			JRootPane rootPane = SwingUtilities.getRootPane( target );
+			if( rootPane == null || rootPane.getJMenuBar() != target )
+				return;
+
+			// get title pane and check whether menu bar is embedded
+			FlatTitlePane titlePane = FlatRootPaneUI.getTitlePane( rootPane );
+			if( titlePane == null || !titlePane.isMenuBarEmbedded() )
+				return;
+
+			// check whether there is a horizontal glue (used for window title in embedded menu bar)
+			// and check minimum width of horizontal glue
+			Component horizontalGlue = titlePane.findHorizontalGlue( (JMenuBar) target );
+			int minTitleWidth = UIScale.scale( titlePane.titleMinimumWidth );
+			if( horizontalGlue != null && horizontalGlue.getWidth() < minTitleWidth ) {
+				// get index of glue component
+				int glueIndex = -1;
+				Component[] components = target.getComponents();
+				for( int i = components.length - 1; i >= 0; i-- ) {
+					if( components[i] == horizontalGlue ) {
+						glueIndex = i;
+						break;
+					}
+				}
+				if( glueIndex < 0 )
+					return; // should never happen
+
+				if( target.getComponentOrientation().isLeftToRight() ) {
+					// left-to-right
+
+					// make horizontal glue wider (minimum title width)
+					int offset = minTitleWidth - horizontalGlue.getWidth();
+					horizontalGlue.setSize( minTitleWidth, horizontalGlue.getHeight() );
+
+					// check whether glue is fully visible
+					int minGlueX = target.getWidth() - target.getInsets().right - minTitleWidth;
+					if( minGlueX < horizontalGlue.getX() ) {
+						// move glue to the left to make it fully visible
+						offset -= (horizontalGlue.getX() - minGlueX);
+						horizontalGlue.setLocation( minGlueX, horizontalGlue.getY() );
+
+						// shrink and move components that are on the left side of the glue
+						for( int i = glueIndex - 1; i >= 0; i-- ) {
+							Component c = components[i];
+							if( c.getX() > minGlueX ) {
+								// move component and set width to zero
+								c.setBounds( minGlueX, c.getY(), 0, c.getHeight() );
+							} else {
+								// reduce size of component
+								c.setSize( minGlueX - c.getX(), c.getHeight() );
+								break;
+							}
+						}
+					}
+
+					// move components that are on the right side of the glue
+					for( int i = glueIndex + 1; i < components.length; i++ ) {
+						Component c = components[i];
+						c.setLocation( c.getX() + offset, c.getY() );
+					}
+				} else {
+					// right-to-left
+
+					// make horizontal glue wider (minimum title width)
+					int offset = minTitleWidth - horizontalGlue.getWidth();
+					horizontalGlue.setBounds( horizontalGlue.getX() - offset, horizontalGlue.getY(),
+						minTitleWidth, horizontalGlue.getHeight() );
+
+					// check whether glue is fully visible
+					int minGlueX = target.getInsets().left;
+					if( minGlueX > horizontalGlue.getX() ) {
+						// move glue to the right to make it fully visible
+						offset -= (horizontalGlue.getX() - minGlueX);
+						horizontalGlue.setLocation( minGlueX, horizontalGlue.getY() );
+
+						// shrink and move components that are on the right side of the glue
+						int x = horizontalGlue.getX() + horizontalGlue.getWidth();
+						for( int i = glueIndex - 1; i >= 0; i-- ) {
+							Component c = components[i];
+							if( c.getX() + c.getWidth() < x ) {
+								// move component and set width to zero
+								c.setBounds( x, c.getY(), 0, c.getHeight() );
+							} else {
+								// move component and reduce size
+								c.setBounds( x, c.getY(), c.getWidth() - (x - c.getX()), c.getHeight() );
+								break;
+							}
+						}
+					}
+
+					// move components that are on the left side of the glue
+					for( int i = glueIndex + 1; i < components.length; i++ ) {
+						Component c = components[i];
+						c.setLocation( c.getX() - offset, c.getY() );
+					}
+				}
+			}
+		}
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

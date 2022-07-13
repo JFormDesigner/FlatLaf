@@ -241,6 +241,23 @@ public class FlatWindowDecorationsTest
 			if( c instanceof Box.Filler )
 				return;
 		}
+
+/*debug
+		menuBar.add( new Box.Filler( new Dimension(), new Dimension(),
+			new Dimension( Short.MAX_VALUE, Short.MAX_VALUE ) )
+		{
+			@Override
+			protected void paintComponent( Graphics g ) {
+				int w = getWidth();
+				int h = getHeight();
+				g.setColor( Color.blue );
+				g.drawRect( 0, 0, w - 1, h - 1 );
+				g.drawLine( 0, 0, w, h );
+				g.drawLine( 0, h, w, 0 );
+			}
+		} );
+debug*/
+
 		menuBar.add( Box.createGlue() );
 		menuBar.revalidate();
 	}

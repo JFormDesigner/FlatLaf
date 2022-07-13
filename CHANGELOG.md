@@ -3,6 +3,22 @@ FlatLaf Change Log
 
 ## 2.4-SNAPSHOT
 
+#### New features and improvements
+
+- Native window decorations (Windows 10/11 only):
+  - There is now a small area at top of the embedded menu bar to resize the
+    window.
+  - Improved window title bar layout for small window widths:
+    - Width of iconify/maximize/close buttons is reduced (if necessary) to give
+      more space to embedded menu bar and title.
+    - Window title now has a minimum width to always allow moving window
+      (click-and-drag on window title). Instead, embedded menu bar is made
+      smaller.
+    - Option to show window icon beside window title, if menu bar is embedded or
+      title is centered. Set UI value `TitlePane.showIconBesideTitle` to `true`.
+  - No longer reduce height of window title bar if it has an embedded menu bar
+    and is maximized.
+
 #### Fixed bugs
 
 - ComboBox: Fixed vertical alignment of text in popup list with text in combo
@@ -25,6 +41,8 @@ FlatLaf Change Log
     `true` on Windows 10. (issue #540)
   - Fixed missing top window border in dark themes if window drop shadows are
     disabled in system settings. (issue #554; Windows 10 only)
+  - Right-to-left component orientation of title bar was lost when switching
+    theme.
 
 
 ## 2.3
