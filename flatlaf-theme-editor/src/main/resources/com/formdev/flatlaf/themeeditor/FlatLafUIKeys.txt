@@ -1006,6 +1006,7 @@ TitlePane.menuBarTitleMinimumGap
 TitlePane.noIconLeftGap
 TitlePane.restoreIcon
 TitlePane.showIcon
+TitlePane.showIconBesideTitle
 TitlePane.titleMargins
 TitlePane.titleMinimumWidth
 TitlePane.unifiedBackground

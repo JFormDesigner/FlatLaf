@@ -89,6 +89,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.buttonMaximizedHeight				int
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
+ * @uiDefault TitlePane.showIconBesideTitle					boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
  * @uiDefault TitlePane.menuBarResizeHeight					int
  * @uiDefault TitlePane.closeIcon							Icon
@@ -116,6 +117,7 @@ public class FlatTitlePane
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
 	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
+	/** @since 2.4 */ protected final boolean showIconBesideTitle = UIManager.getBoolean( "TitlePane.showIconBesideTitle" );
 	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 40 );
 	/** @since 2.4 */ protected final int menuBarTitleMinimumGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleMinimumGap", 12 );
 	/** @since 2.4 */ protected final int menuBarResizeHeight = FlatUIUtils.getUIInt( "TitlePane.menuBarResizeHeight", 4 );
@@ -204,6 +206,14 @@ public class FlatTitlePane
 				int buttonsWidth = buttonPanel.getPreferredSize().width;
 				int titleWidth = w - leftWidth - buttonsWidth;
 				int minTitleWidth = UIScale.scale( titleMinimumWidth );
+
+				// increase minimum width if icon is show besides the title
+				Icon icon = titleLabel.getIcon();
+				if( icon != null ) {
+					Insets iconInsets = iconLabel.getInsets();
+					int iconTextGap = titleLabel.getComponentOrientation().isLeftToRight() ? iconInsets.right : iconInsets.left;
+					minTitleWidth += icon.getIconWidth() + iconTextGap;
+				}
 
 				// if title is too small, reduce width of buttons
 				if( titleWidth < minTitleWidth ) {
@@ -394,11 +404,12 @@ public class FlatTitlePane
 		boolean hasIcon = (images != null && !images.isEmpty());
 
 		// set icon
-		iconLabel.setIcon( hasIcon ? new FlatTitlePaneIcon( images, iconSize ) : null );
+		iconLabel.setIcon( hasIcon && !showIconBesideTitle ? new FlatTitlePaneIcon( images, iconSize ) : null );
+		titleLabel.setIcon( hasIcon && showIconBesideTitle ? new FlatTitlePaneIcon( images, iconSize ) : null );
 
 		// show/hide icon
-		iconLabel.setVisible( hasIcon );
-		leftPanel.setBorder( hasIcon ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
+		iconLabel.setVisible( hasIcon && !showIconBesideTitle );
+		leftPanel.setBorder( hasIcon && !showIconBesideTitle ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
 
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
@@ -971,11 +982,28 @@ debug*/
 				}
 			}
 
-			String clippedText = super.layoutCL( label, fontMetrics, text, icon, viewR, iconR, textR );
+			// compute icon width and gap (if icon is show besides the title)
+			int iconTextGap = 0;
+			int iconWidthAndGap = 0;
+			if( icon != null ) {
+				Insets iconInsets = iconLabel.getInsets();
+				iconTextGap = leftToRight ? iconInsets.right : iconInsets.left;
+				iconWidthAndGap = icon.getIconWidth() + iconTextGap;
+			}
 
+			// layout title and icon (if show besides the title)
+			String clippedText = SwingUtilities.layoutCompoundLabel( label, fontMetrics, text, icon,
+				label.getVerticalAlignment(), label.getHorizontalAlignment(),
+				label.getVerticalTextPosition(), label.getHorizontalTextPosition(),
+				viewR, iconR, textR,
+				iconTextGap );
+
+			// compute text X location
 			if( !clippedText.equals( text ) ) {
 				// if text is clipped, align to left (or right)
-				textR.x = leftToRight ? viewR.x : viewR.x + viewR.width - textR.width;
+				textR.x = leftToRight
+					? viewR.x + iconWidthAndGap
+					: viewR.x + viewR.width - iconWidthAndGap - textR.width;
 			} else {
 				int leadingGap = hasEmbeddedLeadingMenus ? UIScale.scale( menuBarTitleGap - menuBarTitleMinimumGap ) : 0;
 
@@ -984,16 +1012,23 @@ debug*/
 					// If window is wide enough, center title within window bounds.
 					// Otherwise, center within free space (label bounds).
 					Container parent = label.getParent();
-					int centeredTextX = (parent != null) ? ((parent.getWidth() - textR.width) / 2) - label.getX() : -1;
+					int centeredTextX = (parent != null) ? ((parent.getWidth() - textR.width - iconWidthAndGap) / 2) + iconWidthAndGap - label.getX() : -1;
 					textR.x = (centeredTextX >= viewR.x + leadingGap && centeredTextX + textR.width <= viewR.x + viewR.width - leadingGap)
 						? centeredTextX
-						: viewR.x + ((viewR.width - textR.width) / 2);
+						: viewR.x + ((viewR.width - textR.width - iconWidthAndGap) / 2) + iconWidthAndGap;
 				} else {
-					// leading aligned with leading gap, which is reduced is space is rare
+					// leading aligned with leading gap, which is reduced if space is rare
 					textR.x = leftToRight
-						? Math.min( viewR.x + leadingGap, viewR.x + viewR.width - textR.width )
-						: Math.max( viewR.x + viewR.width - textR.width - leadingGap, viewR.x );
+						? Math.min( viewR.x + leadingGap + iconWidthAndGap, viewR.x + viewR.width - textR.width )
+						: Math.max( viewR.x + viewR.width - leadingGap - iconWidthAndGap - textR.width, viewR.x );
 				}
+			}
+
+			// compute icon X location (relative to text X location)
+			if( icon != null ) {
+				iconR.x = leftToRight
+					? textR.x - iconWidthAndGap
+					: textR.x + textR.width + iconTextGap;
 			}
 
 			return clippedText;
