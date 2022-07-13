@@ -783,7 +783,7 @@ debug*/
 		List<Rectangle> hitTestSpots = new ArrayList<>();
 		Rectangle appIconBounds = null;
 
-		if( iconLabel.isVisible() ) {
+		if( !showIconBesideTitle && iconLabel.isVisible() ) {
 			// compute real icon size (without insets; 1px larger for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
 			Insets iconInsets = iconLabel.getInsets();
@@ -810,6 +810,38 @@ debug*/
 				hitTestSpots.add( iconBounds );
 			else
 				appIconBounds = iconBounds;
+		} else if( showIconBesideTitle && titleLabel.getIcon() != null && titleLabel.getUI() instanceof FlatTitleLabelUI ) {
+			FlatTitleLabelUI ui = (FlatTitleLabelUI) titleLabel.getUI();
+
+			// compute real icon bounds
+			Insets insets = titleLabel.getInsets();
+			Rectangle viewR = new Rectangle( insets.left, insets.top,
+				titleLabel.getWidth() - insets.left - insets.right,
+				titleLabel.getHeight() - insets.top - insets.bottom );
+			Rectangle iconR = new Rectangle();
+			Rectangle textR = new Rectangle();
+			ui.layoutCL( titleLabel, titleLabel.getFontMetrics( titleLabel.getFont() ),
+				titleLabel.getText(), titleLabel.getIcon(),
+				viewR, iconR, textR );
+
+			// Windows shows the window system menu only in the upper-left corner
+			if( iconR.x == 0 ) {
+				// convert icon location to window coordinates
+				Point location = SwingUtilities.convertPoint( titleLabel, 0, 0, window );
+				iconR.x += location.x;
+				iconR.y += location.y;
+
+				// make icon bounds 1px larger for easier hitting
+				iconR.x -= 1;
+				iconR.y -= 1;
+				iconR.width += 2;
+				iconR.height += 2;
+
+				if( hasJBRCustomDecoration() )
+					hitTestSpots.add( iconR );
+				else
+					appIconBounds = iconR;
+			}
 		}
 
 		Rectangle r = getNativeHitTestSpot( buttonPanel );
