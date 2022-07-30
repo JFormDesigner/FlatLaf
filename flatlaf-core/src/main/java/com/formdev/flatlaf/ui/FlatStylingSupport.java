@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.beans.PropertyChangeListener;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -62,6 +63,36 @@ public class FlatStylingSupport
 		boolean dot() default false;
 		Class<?> type() default Void.class;
 	}
+
+	/**
+	 * Indicates that a field in the specified (super) class
+	 * is intended to be used by FlatLaf styling support.
+	 * <p>
+	 * Use this annotation, instead of {@link Styleable}, to style fields
+	 * in superclasses, where it is not possible to use {@link Styleable}.
+	 *
+	 * @since 2.5
+	 */
+	@Target(ElementType.TYPE)
+	@Retention(RetentionPolicy.RUNTIME)
+	@Repeatable(StyleableFields.class)
+	public @interface StyleableField {
+		Class<?> cls();
+		String key();
+		String fieldName() default "";
+	}
+
+	/**
+	 * Container annotation for {@link StyleableField}.
+	 *
+	 * @since 2.5
+	 */
+	@Target(ElementType.TYPE)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface StyleableFields {
+		StyleableField[] value();
+	}
+
 
 	/** @since 2 */
 	public interface StyleableUI {
@@ -405,24 +436,15 @@ public class FlatStylingSupport
 		for(;;) {
 			try {
 				Field f = cls.getDeclaredField( fieldName );
-				if( predicate == null || predicate.test( f ) ) {
-					if( !isValidField( f ) )
-						throw new IllegalArgumentException( "field '" + cls.getName() + "." + fieldName + "' is final or static" );
-
-					try {
-						// necessary to access protected fields in other packages
-						f.setAccessible( true );
-
-						// get old value and set new value
-						Object oldValue = f.get( obj );
-						f.set( obj, convertToEnum( value, f.getType() ) );
-						return oldValue;
-					} catch( IllegalAccessException ex ) {
-						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + fieldName + "'", ex );
-					}
-				}
+				if( predicate == null || predicate.test( f ) )
+					return applyToField( f, obj, value );
 			} catch( NoSuchFieldException ex ) {
 				// field not found in class --> try superclass
+			}
+
+			for( StyleableField styleableField : cls.getAnnotationsByType( StyleableField.class ) ) {
+				if( key.equals( styleableField.key() ) )
+					return applyToField( getStyleableField( styleableField ), obj, value );
 			}
 
 			cls = cls.getSuperclass();
@@ -437,9 +459,38 @@ public class FlatStylingSupport
 		}
 	}
 
+	private static Object applyToField( Field f, Object obj, Object value ) {
+		if( !isValidField( f ) )
+			throw new IllegalArgumentException( "field '" + f.getDeclaringClass().getName() + "." + f.getName() + "' is final or static" );
+
+		try {
+			// necessary to access protected fields in other packages
+			f.setAccessible( true );
+
+			// get old value and set new value
+			Object oldValue = f.get( obj );
+			f.set( obj, convertToEnum( value, f.getType() ) );
+			return oldValue;
+		} catch( IllegalAccessException ex ) {
+			throw new IllegalArgumentException( "failed to access field '" + f.getDeclaringClass().getName() + "." + f.getName() + "'", ex );
+		}
+	}
+
 	private static boolean isValidField( Field f ) {
 		int modifiers = f.getModifiers();
 		return (modifiers & (Modifier.FINAL|Modifier.STATIC)) == 0 && !f.isSynthetic();
+	}
+
+	private static Field getStyleableField( StyleableField styleableField ) {
+		String fieldName = styleableField.fieldName();
+		if( fieldName.isEmpty() )
+			fieldName = styleableField.key();
+
+		try {
+			return styleableField.cls().getDeclaredField( fieldName );
+		} catch( NoSuchFieldException ex ) {
+			throw new IllegalArgumentException( "field '" + styleableField.cls().getName() + "." + fieldName + "' not found", ex );
+		}
 	}
 
 	/**
@@ -628,6 +679,7 @@ public class FlatStylingSupport
 		Class<?> cls = obj.getClass();
 
 		for(;;) {
+			// find fields annotated with 'Styleable'
 			for( Field f : cls.getDeclaredFields() ) {
 				if( !isValidField( f ) )
 					continue;
@@ -664,6 +716,20 @@ public class FlatStylingSupport
 					type = styleable.type();
 
 				infos.put( name, type );
+			}
+
+			// get fields specified in 'StyleableField' annotation
+			for( StyleableField styleableField : cls.getAnnotationsByType( StyleableField.class ) ) {
+				String name = styleableField.key();
+
+				// for the case that the same field name is used in a class and in
+				// one of its superclasses, do not process field in superclass
+				if( processedFields.contains( name ) )
+					continue;
+				processedFields.add( name );
+
+				Field f = getStyleableField( styleableField );
+				infos.put( name, f.getType() );
 			}
 
 			cls = cls.getSuperclass();

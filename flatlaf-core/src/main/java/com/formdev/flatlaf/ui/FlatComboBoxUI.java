@@ -70,6 +70,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -117,6 +118,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=BasicComboBoxUI.class, key="padding" )
+
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
 	implements StyleableUI
@@ -491,13 +494,6 @@ public class FlatComboBoxUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		// BasicComboBoxUI
-		if( key.equals( "padding" ) ) {
-			Object oldValue = padding;
-			padding = (Insets) value;
-			return oldValue;
-		}
-
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
@@ -506,11 +502,7 @@ public class FlatComboBoxUI
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
-		infos.put( "padding", Insets.class );
-		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
-		FlatStylingSupport.collectStyleableInfos( comboBox.getBorder(), infos );
-		return infos;
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, comboBox.getBorder() );
 	}
 
 	@Override

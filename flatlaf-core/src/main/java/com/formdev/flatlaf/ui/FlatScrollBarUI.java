@@ -37,6 +37,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
@@ -77,6 +78,12 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=BasicScrollBarUI.class, key="track", fieldName="trackColor" )
+@StyleableField( cls=BasicScrollBarUI.class, key="thumb", fieldName="thumbColor" )
+@StyleableField( cls=BasicScrollBarUI.class, key="width", fieldName="scrollBarWidth" )
+@StyleableField( cls=BasicScrollBarUI.class, key="minimumThumbSize" )
+@StyleableField( cls=BasicScrollBarUI.class, key="maximumThumbSize" )
+
 public class FlatScrollBarUI
 	extends BasicScrollBarUI
 	implements StyleableUI
@@ -246,30 +253,13 @@ public class FlatScrollBarUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		Object oldValue;
-		switch( key ) {
-			// BasicScrollBarUI
-			case "track": oldValue = trackColor; trackColor = (Color) value; return oldValue;
-			case "thumb": oldValue = thumbColor; thumbColor = (Color) value; return oldValue;
-			case "width": oldValue = scrollBarWidth; scrollBarWidth = (int) value; return oldValue;
-			case "minimumThumbSize": oldValue = minimumThumbSize; minimumThumbSize = (Dimension) value; return oldValue;
-			case "maximumThumbSize": oldValue = maximumThumbSize; maximumThumbSize = (Dimension) value; return oldValue;
-		}
-
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, scrollbar, key, value );
 	}
 
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
-		infos.put( "track", Color.class );
-		infos.put( "thumb", Color.class );
-		infos.put( "width", int.class );
-		infos.put( "minimumThumbSize", Dimension.class );
-		infos.put( "maximumThumbSize", Dimension.class );
-		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
-		return infos;
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

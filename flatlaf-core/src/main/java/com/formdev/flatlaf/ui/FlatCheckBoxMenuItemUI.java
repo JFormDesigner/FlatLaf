@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.beans.PropertyChangeListener;
@@ -26,6 +25,8 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
+import javax.swing.plaf.basic.BasicMenuItemUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -58,6 +59,12 @@ import com.formdev.flatlaf.util.LoggingFacade;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=BasicMenuItemUI.class, key="selectionBackground" )
+@StyleableField( cls=BasicMenuItemUI.class, key="selectionForeground" )
+@StyleableField( cls=BasicMenuItemUI.class, key="disabledForeground" )
+@StyleableField( cls=BasicMenuItemUI.class, key="acceleratorForeground" )
+@StyleableField( cls=BasicMenuItemUI.class, key="acceleratorSelectionForeground" )
+
 public class FlatCheckBoxMenuItemUI
 	extends BasicCheckBoxMenuItemUI
 	implements StyleableUI
@@ -125,23 +132,13 @@ public class FlatCheckBoxMenuItemUI
 			// ignore
 		}
 
-		Object oldValue;
-		switch( key ) {
-			// BasicMenuItemUI
-			case "selectionBackground": oldValue = selectionBackground; selectionBackground = (Color) value; return oldValue;
-			case "selectionForeground": oldValue = selectionForeground; selectionForeground = (Color) value; return oldValue;
-			case "disabledForeground": oldValue = disabledForeground; disabledForeground = (Color) value; return oldValue;
-			case "acceleratorForeground": oldValue = acceleratorForeground; acceleratorForeground = (Color) value; return oldValue;
-			case "acceleratorSelectionForeground": oldValue = acceleratorSelectionForeground; acceleratorSelectionForeground = (Color) value; return oldValue;
-		}
-
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
 	}
 
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatMenuItemUI.getStyleableInfos( renderer );
+		return FlatMenuItemUI.getStyleableInfos( this, renderer );
 	}
 
 	@Override
