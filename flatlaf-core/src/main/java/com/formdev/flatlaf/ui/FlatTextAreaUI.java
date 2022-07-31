@@ -183,6 +183,12 @@ public class FlatTextAreaUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	private void updateBackground() {
 		FlatTextFieldUI.updateBackground( getComponent(), background,
 			disabledBackground, inactiveBackground,

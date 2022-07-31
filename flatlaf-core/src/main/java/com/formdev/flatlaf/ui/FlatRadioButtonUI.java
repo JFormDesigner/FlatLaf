@@ -199,6 +199,19 @@ public class FlatRadioButtonUI
 		return infos;
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		// style icon
+		if( key.startsWith( "icon." ) ) {
+			return (icon instanceof FlatCheckBoxIcon)
+				? ((FlatCheckBoxIcon)icon).getStyleableValue( key.substring( "icon.".length() ) )
+				: null;
+		}
+
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	private static final Insets tempInsets = new Insets( 0, 0, 0, 0 );
 
 	@Override

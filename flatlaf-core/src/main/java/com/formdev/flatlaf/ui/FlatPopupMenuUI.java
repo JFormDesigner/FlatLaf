@@ -184,6 +184,12 @@ public class FlatPopupMenuUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, popupMenu.getBorder(), key );
+	}
+
 	@Override
 	public Popup getPopup( JPopupMenu popup, int x, int y ) {
 		// do not add scroller to combobox popups or to popups that already have a scroll pane

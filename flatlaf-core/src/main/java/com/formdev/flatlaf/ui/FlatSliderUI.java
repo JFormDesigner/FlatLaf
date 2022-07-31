@@ -222,6 +222,12 @@ public class FlatSliderUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	public int getBaseline( JComponent c, int width, int height ) {
 		if( c == null )

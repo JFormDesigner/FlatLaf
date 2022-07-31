@@ -223,6 +223,12 @@ public class FlatSpinnerUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, spinner.getBorder(), key );
+	}
+
 	@Override
 	protected JComponent createEditor() {
 		JComponent editor = super.createEditor();

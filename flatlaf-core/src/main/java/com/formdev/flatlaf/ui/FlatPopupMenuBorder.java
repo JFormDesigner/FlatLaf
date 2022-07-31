@@ -66,6 +66,16 @@ public class FlatPopupMenuBorder
 		return infos;
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( String key ) {
+		switch( key ) {
+			case "borderInsets": return getStyleableValue();
+			case "borderColor": return borderColor;
+		}
+		return null;
+	}
+
 	@Override
 	public Color getLineColor() {
 		return (borderColor != null) ? borderColor : super.getLineColor();

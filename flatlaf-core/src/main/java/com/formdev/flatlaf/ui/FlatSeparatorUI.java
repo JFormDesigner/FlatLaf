@@ -170,6 +170,12 @@ public class FlatSeparatorUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		Graphics2D g2 = (Graphics2D) g.create();

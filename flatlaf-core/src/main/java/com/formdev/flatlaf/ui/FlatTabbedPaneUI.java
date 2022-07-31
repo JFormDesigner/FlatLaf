@@ -687,6 +687,76 @@ public class FlatTabbedPaneUI
 		return infos;
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		// close icon
+		if( key.startsWith( "close" ) ) {
+			return (closeIcon instanceof FlatTabbedPaneCloseIcon)
+				? ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableValue( key )
+				: null;
+		}
+
+		switch( key ) {
+			// BasicTabbedPaneUI
+			case "tabInsets":		return tabInsets;
+			case "tabAreaInsets":	return tabAreaInsets;
+			case "textIconGap":		return textIconGapUnscaled;
+
+			// FlatTabbedPaneUI
+			case "tabType":
+				switch( tabType ) {
+					default:
+					case TAB_TYPE_UNDERLINED:	return TABBED_PANE_TAB_TYPE_UNDERLINED;
+					case TAB_TYPE_CARD:			return TABBED_PANE_TAB_TYPE_CARD;
+				}
+
+			case "tabsPopupPolicy":
+				switch( tabsPopupPolicy ) {
+					default:
+					case AS_NEEDED:				return TABBED_PANE_POLICY_AS_NEEDED;
+					case NEVER:					return TABBED_PANE_POLICY_NEVER;
+				}
+
+			case "scrollButtonsPolicy":
+				switch( scrollButtonsPolicy ) {
+					default:
+					case AS_NEEDED_SINGLE:		return TABBED_PANE_POLICY_AS_NEEDED_SINGLE;
+					case AS_NEEDED:				return TABBED_PANE_POLICY_AS_NEEDED;
+					case NEVER:					return TABBED_PANE_POLICY_NEVER;
+				}
+
+			case "scrollButtonsPlacement":
+				switch( scrollButtonsPlacement ) {
+					default:
+					case BOTH:					return TABBED_PANE_PLACEMENT_BOTH;
+					case TRAILING:				return TABBED_PANE_PLACEMENT_TRAILING;
+				}
+
+			case "tabAreaAlignment":	return alignmentToString( tabAreaAlignment, TABBED_PANE_ALIGN_LEADING );
+			case "tabAlignment":			return alignmentToString( tabAlignment, TABBED_PANE_ALIGN_CENTER );
+
+			case "tabWidthMode":
+				switch( tabWidthMode ) {
+					default:
+					case WIDTH_MODE_PREFERRED:	return TABBED_PANE_TAB_WIDTH_MODE_PREFERRED;
+					case WIDTH_MODE_EQUAL:		return TABBED_PANE_TAB_WIDTH_MODE_EQUAL;
+					case WIDTH_MODE_COMPACT:	return TABBED_PANE_TAB_WIDTH_MODE_COMPACT;
+				}
+
+			case "tabIconPlacement":
+				switch( tabIconPlacement ) {
+					default:
+					case LEADING:				return "leading";
+					case TRAILING:				return "trailing";
+					case TOP:					return "top";
+					case BOTTOM:				return "bottom";
+				}
+		}
+
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	protected void setRolloverTab( int x, int y ) {
 		setRolloverTab( tabForCoordinate( tabPane, x, y ) );
 	}
@@ -1682,6 +1752,16 @@ public class FlatTabbedPaneUI
 			case TABBED_PANE_ALIGN_CENTER:		return CENTER;
 			case TABBED_PANE_ALIGN_FILL:		return FILL;
 			default:							return defaultValue;
+		}
+	}
+
+	private static String alignmentToString( int value, String defaultValue ) {
+		switch( value ) {
+			case LEADING:		return TABBED_PANE_ALIGN_LEADING;
+			case TRAILING:		return TABBED_PANE_ALIGN_TRAILING;
+			case CENTER:		return TABBED_PANE_ALIGN_CENTER;
+			case FILL:			return TABBED_PANE_ALIGN_FILL;
+			default:			return defaultValue;
 		}
 	}
 

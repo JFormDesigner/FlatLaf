@@ -28,7 +28,6 @@ import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -126,19 +125,19 @@ public class FlatCheckBoxMenuItemUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		try {
-			return renderer.applyStyleProperty( key, value );
-		} catch ( UnknownStyleException ex ) {
-			// ignore
-		}
-
-		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
+		return FlatMenuItemUI.applyStyleProperty( menuItem, this, renderer, key, value );
 	}
 
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatMenuItemUI.getStyleableInfos( this, renderer );
+	}
+
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatMenuItemUI.getStyleableValue( this, renderer, key );
 	}
 
 	@Override

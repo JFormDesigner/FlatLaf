@@ -158,6 +158,12 @@ public class FlatLabelUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	/**
 	 * Checks whether text contains HTML tags that use "absolute-size" keywords
 	 * (e.g. "x-large") for font-size in default style sheet

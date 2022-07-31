@@ -160,6 +160,12 @@ public class FlatProgressBarUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );

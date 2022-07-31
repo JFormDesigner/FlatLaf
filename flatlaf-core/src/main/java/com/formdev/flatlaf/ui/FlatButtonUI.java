@@ -366,6 +366,18 @@ public class FlatButtonUI
 		return infos;
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		if( key.startsWith( "help." ) ) {
+			return (helpButtonIcon instanceof FlatHelpButtonIcon)
+				? ((FlatHelpButtonIcon)helpButtonIcon).getStyleableValue( key.substring( "help.".length() ) )
+				: null;
+		}
+
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, c.getBorder(), key );
+	}
+
 	static boolean isContentAreaFilled( Component c ) {
 		return !(c instanceof AbstractButton) || ((AbstractButton)c).isContentAreaFilled();
 	}

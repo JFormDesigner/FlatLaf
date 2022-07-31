@@ -22,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -125,13 +126,19 @@ public class FlatMenuItemUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
+		return applyStyleProperty( menuItem, this, renderer, key, value );
+	}
+
+	static Object applyStyleProperty( JMenuItem menuItem, BasicMenuItemUI ui,
+		FlatMenuItemRenderer renderer, String key, Object value )
+	{
 		try {
 			return renderer.applyStyleProperty( key, value );
 		} catch ( UnknownStyleException ex ) {
 			// ignore
 		}
 
-		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( ui, menuItem, key, value );
 	}
 
 	/** @since 2 */
@@ -144,6 +151,19 @@ public class FlatMenuItemUI
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( ui );
 		infos.putAll( renderer.getStyleableInfos() );
 		return infos;
+	}
+
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return getStyleableValue( this, renderer, key );
+	}
+
+	static Object getStyleableValue( BasicMenuItemUI ui, FlatMenuItemRenderer renderer, String key ) {
+		Object value = renderer.getStyleableValue( key );
+		if( value == null )
+			value = FlatStylingSupport.getAnnotatedStyleableValue( ui, key );
+		return value;
 	}
 
 	@Override

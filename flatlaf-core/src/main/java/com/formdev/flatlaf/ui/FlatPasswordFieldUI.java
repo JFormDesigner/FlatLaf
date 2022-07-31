@@ -234,6 +234,14 @@ public class FlatPasswordFieldUI
 	}
 
 	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon )
+			return ((FlatCapsLockIcon)capsLockIcon).getStyleableValue( key );
+
+		return super.getStyleableValue( c, key );
+	}
+
+	@Override
 	public View create( Element elem ) {
 		return new PasswordView( elem );
 	}

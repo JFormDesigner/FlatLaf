@@ -76,4 +76,9 @@ public class FlatEmptyBorder
 		right = insets.right;
 		return oldInsets;
 	}
+
+	/** @since 2.5 */
+	public Insets getStyleableValue() {
+		return new Insets( top, left, bottom, right );
+	}
 }

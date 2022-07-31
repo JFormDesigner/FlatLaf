@@ -67,6 +67,11 @@ public class FlatSearchIcon
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	public Object getStyleableValue( String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
 		/*

@@ -343,6 +343,12 @@ public class FlatScrollPaneUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, scrollpane.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, scrollpane.getBorder(), key );
+	}
+
 	@Override
 	protected void updateViewport( PropertyChangeEvent e ) {
 		super.updateViewport( e );

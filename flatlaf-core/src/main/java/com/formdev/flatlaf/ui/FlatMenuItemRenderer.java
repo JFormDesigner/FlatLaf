@@ -169,6 +169,19 @@ public class FlatMenuItemRenderer
 		return infos;
 	}
 
+	/** @since 2.5 */
+	public Object getStyleableValue( String key ) {
+		if( key.startsWith( "icon." ) ) {
+			String key2 = key.substring( "icon.".length() );
+			if( checkIcon instanceof FlatCheckBoxMenuItemIcon )
+				return ((FlatCheckBoxMenuItemIcon)checkIcon).getStyleableValue( key2 );
+			if( arrowIcon instanceof FlatMenuArrowIcon )
+				return ((FlatMenuArrowIcon)arrowIcon).getStyleableValue( key2 );
+		}
+
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	protected Dimension getPreferredMenuItemSize() {
 		int width = 0;
 		int height = 0;

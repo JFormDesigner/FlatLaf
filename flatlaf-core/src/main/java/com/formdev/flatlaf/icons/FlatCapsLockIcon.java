@@ -49,6 +49,14 @@ public class FlatCapsLockIcon
 		}
 	}
 
+	/** @since 2.5 */
+	public Object getStyleableValue( String key ) {
+		switch( key ) {
+			case "capsLockIconColor": return color;
+			default: return null;
+		}
+	}
+
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
 		/*

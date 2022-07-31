@@ -127,6 +127,12 @@ public class FlatPanelUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background

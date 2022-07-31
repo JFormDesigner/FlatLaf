@@ -174,6 +174,12 @@ public class FlatMenuBarUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, menuBar.getBorder(), key );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// paint background

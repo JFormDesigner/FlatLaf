@@ -171,6 +171,22 @@ public class FlatTableHeaderUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		if( key.equals( "sortIconPosition" ) ) {
+			switch( sortIconPosition ) {
+				default:
+				case SwingConstants.RIGHT:	return "right";
+				case SwingConstants.LEFT:	return "left";
+				case SwingConstants.TOP:	return "top";
+				case SwingConstants.BOTTOM:	return "bottom";
+			}
+		}
+
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	private static int parseSortIconPosition( String str ) {
 		if( str == null )
 			str = "";

@@ -201,6 +201,12 @@ public class FlatToolBarUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	/** @since 1.4 */
 	protected void setButtonsFocusable( boolean focusable ) {
 		for( Component c : toolBar.getComponents() )

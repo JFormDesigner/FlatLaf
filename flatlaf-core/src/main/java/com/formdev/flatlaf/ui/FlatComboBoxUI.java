@@ -505,6 +505,12 @@ public class FlatComboBoxUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, comboBox.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, comboBox.getBorder(), key );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );

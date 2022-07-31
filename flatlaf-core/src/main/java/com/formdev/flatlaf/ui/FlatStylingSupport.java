@@ -97,12 +97,14 @@ public class FlatStylingSupport
 	/** @since 2 */
 	public interface StyleableUI {
 		Map<String, Class<?>> getStyleableInfos( JComponent c );
+		/** @since 2.5 */ Object getStyleableValue( JComponent c, String key );
 	}
 
 	/** @since 2 */
 	public interface StyleableBorder {
 		Object applyStyleProperty( String key, Object value );
 		Map<String, Class<?>> getStyleableInfos();
+		/** @since 2.5 */ Object getStyleableValue( String key );
 	}
 
 
@@ -396,19 +398,23 @@ public class FlatStylingSupport
 	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
 		throws UnknownStyleException, IllegalArgumentException
 	{
-		String fieldName = key;
-		int dotIndex = key.indexOf( '.' );
-		if( dotIndex >= 0 ) {
-			// remove first dot in key and change subsequent character to uppercase
-			fieldName = key.substring( 0, dotIndex )
-				+ Character.toUpperCase( key.charAt( dotIndex + 1 ) )
-				+ key.substring( dotIndex + 2 );
-		}
+		String fieldName = keyToFieldName( key );
 
 		return applyToField( obj, fieldName, key, value, field -> {
 			Styleable styleable = field.getAnnotation( Styleable.class );
-			return styleable != null && styleable.dot() == (dotIndex >= 0);
+			return styleable != null && styleable.dot() == (fieldName != key);
 		} );
+	}
+
+	private static String keyToFieldName( String key ) {
+		int dotIndex = key.indexOf( '.' );
+		if( dotIndex < 0 )
+			return key;
+
+		// remove first dot in key and change subsequent character to uppercase
+		return key.substring( 0, dotIndex )
+			+ Character.toUpperCase( key.charAt( dotIndex + 1 ) )
+			+ key.substring( dotIndex + 2 );
 	}
 
 	/**
@@ -460,8 +466,7 @@ public class FlatStylingSupport
 	}
 
 	private static Object applyToField( Field f, Object obj, Object value ) {
-		if( !isValidField( f ) )
-			throw new IllegalArgumentException( "field '" + f.getDeclaringClass().getName() + "." + f.getName() + "' is final or static" );
+		checkValidField( f );
 
 		try {
 			// necessary to access protected fields in other packages
@@ -472,8 +477,28 @@ public class FlatStylingSupport
 			f.set( obj, convertToEnum( value, f.getType() ) );
 			return oldValue;
 		} catch( IllegalAccessException ex ) {
-			throw new IllegalArgumentException( "failed to access field '" + f.getDeclaringClass().getName() + "." + f.getName() + "'", ex );
+			throw newFieldAccessFailed( f, ex );
 		}
+	}
+
+	private static Object getFieldValue( Field f, Object obj ) {
+		checkValidField( f );
+
+		try {
+			f.setAccessible( true );
+			return f.get( obj );
+		} catch( IllegalAccessException ex ) {
+			throw newFieldAccessFailed( f, ex );
+		}
+	}
+
+	private static IllegalArgumentException newFieldAccessFailed( Field f, IllegalAccessException ex ) {
+		return new IllegalArgumentException( "failed to access field '" + f.getDeclaringClass().getName() + "." + f.getName() + "'", ex );
+	}
+
+	private static void checkValidField( Field f ) {
+		if( !isValidField( f ) )
+			throw new IllegalArgumentException( "field '" + f.getDeclaringClass().getName() + "." + f.getName() + "' is final or static" );
 	}
 
 	private static boolean isValidField( Field f ) {
@@ -750,6 +775,54 @@ public class FlatStylingSupport
 	public static void putAllPrefixKey( Map<String, Class<?>> infos, String keyPrefix, Map<String, Class<?>> infos2 ) {
 		for( Map.Entry<String, Class<?>> e : infos2.entrySet() )
 			infos.put( keyPrefix.concat( e.getKey() ), e.getValue() );
+	}
+
+	public static Object getAnnotatedStyleableValue( Object obj, String key ) {
+		String fieldName = keyToFieldName( key );
+		Class<?> cls = obj.getClass();
+
+		for(;;) {
+			try {
+				// find field annotated with 'Styleable'
+				Field f = cls.getDeclaredField( fieldName );
+				Styleable styleable = f.getAnnotation( Styleable.class );
+				if( styleable != null ) {
+					if( styleable.dot() != (fieldName != key) )
+						throw new IllegalArgumentException( "'Styleable.dot' on field '" + fieldName + "' does not match key '" + key + "'" );
+					if( styleable.type() != Void.class )
+						throw new IllegalArgumentException( "'Styleable.type' on field '" + fieldName + "' not supported" );
+
+					return getFieldValue( f, obj );
+				}
+			} catch( NoSuchFieldException ex ) {
+				// field not found in class --> try superclass
+			}
+
+			// find field specified in 'StyleableField' annotation
+			for( StyleableField styleableField : cls.getAnnotationsByType( StyleableField.class ) ) {
+				if( key.equals( styleableField.key() ) ) {
+					Field f = getStyleableField( styleableField );
+					return getFieldValue( f, obj );
+				}
+			}
+
+			cls = cls.getSuperclass();
+			if( cls == null )
+				return null;
+
+			String superclassName = cls.getName();
+			if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
+				return null;
+		}
+	}
+
+	public static Object getAnnotatedStyleableValue( Object obj, Border border, String key ) {
+		if( border instanceof StyleableBorder ) {
+			Object value = ((StyleableBorder)border).getStyleableValue( key );
+			if( value != null )
+				return value;
+		}
+		return getAnnotatedStyleableValue( obj, key );
 	}
 
 	//---- class UnknownStyleException ----------------------------------------

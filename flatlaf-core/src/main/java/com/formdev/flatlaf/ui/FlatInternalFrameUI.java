@@ -179,6 +179,12 @@ public class FlatInternalFrameUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, frame.getBorder(), key );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// The internal frame actually should be opaque and fill its background,
@@ -251,6 +257,23 @@ public class FlatInternalFrameUI
 			infos.put( "inactiveDropShadowInsets", Insets.class );
 			infos.put( "inactiveDropShadowOpacity", float.class );
 			return infos;
+		}
+
+		/** @since 2.5 */
+		@Override
+		public Object getStyleableValue( String key ) {
+			switch( key ) {
+				case "borderMargins": return getStyleableValue();
+
+				case "activeDropShadowColor": return activeDropShadowBorder.getStyleableValue( "shadowColor" );
+				case "activeDropShadowInsets": return activeDropShadowBorder.getStyleableValue( "shadowInsets" );
+				case "activeDropShadowOpacity": return activeDropShadowBorder.getStyleableValue( "shadowOpacity" );
+				case "inactiveDropShadowColor": return inactiveDropShadowBorder.getStyleableValue( "shadowColor" );
+				case "inactiveDropShadowInsets": return inactiveDropShadowBorder.getStyleableValue( "shadowInsets" );
+				case "inactiveDropShadowOpacity": return inactiveDropShadowBorder.getStyleableValue( "shadowOpacity" );
+			}
+
+			return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 		}
 
 		@Override

@@ -340,6 +340,12 @@ public class FlatTreeUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	/**
 	 * Same as super.paintRow(), but supports wide selection and uses
 	 * inactive selection background/foreground if tree is not focused.

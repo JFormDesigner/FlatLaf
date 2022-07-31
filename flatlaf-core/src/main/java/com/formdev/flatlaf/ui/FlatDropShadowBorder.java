@@ -107,6 +107,12 @@ public class FlatDropShadowBorder
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
+	/** @since 2.5 */
+	@Override
+	public Object getStyleableValue( String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		if( shadowSize <= 0 )
