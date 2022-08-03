@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 2.5-SNAPSHOT
+
+#### Fixed bugs
+
+- Fixed missing UI value `MenuItem.acceleratorDelimiter` on macOS. (was `null`,
+  is now an empty string)
+
+
 ## 2.4
 
 #### New features and improvements

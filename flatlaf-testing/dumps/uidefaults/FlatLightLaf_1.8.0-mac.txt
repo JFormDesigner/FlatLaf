@@ -25,7 +25,7 @@
 
 #---- MenuItem ----
 
-- MenuItem.acceleratorDelimiter  -
+- MenuItem.acceleratorDelimiter  +
 + MenuItem.acceleratorDelimiter  
 
 
