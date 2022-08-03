@@ -66,6 +66,9 @@ tasks {
 	test {
 		useJUnitPlatform()
 		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+
+		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+			jvmArgs( listOf( "--add-opens", "java.desktop/javax.swing.plaf.basic=ALL-UNNAMED" ) )
 	}
 
 	register( "sigtestGenerate" ) {

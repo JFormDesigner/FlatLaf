@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -108,7 +109,7 @@ public class TestFlatStyleableValue
 	}
 
 	private void testFloat( JComponent c, StyleableUI ui, String key, float value ) {
-		applyStyle( c, ui, String.format( "%s: %f", key, value ) );
+		applyStyle( c, ui, String.format( Locale.ENGLISH, "%s: %f", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
 	}
 
