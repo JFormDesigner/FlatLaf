@@ -151,9 +151,9 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault FileChooser.shortcuts.buttonSize					Dimension	optional; default is 84,64
  * @uiDefault FileChooser.shortcuts.iconSize					Dimension	optional; default is 32,32
- * @uiDefault FileChooser.shortcuts.filesFunction				Function<File[], File[]>
- * @uiDefault FileChooser.shortcuts.displayNameFunction			Function<File, String>
- * @uiDefault FileChooser.shortcuts.iconFunction				Function<File, Icon>
+ * @uiDefault FileChooser.shortcuts.filesFunction				Function&lt;File[], File[]>
+ * @uiDefault FileChooser.shortcuts.displayNameFunction			Function&lt;File, String>
+ * @uiDefault FileChooser.shortcuts.iconFunction				Function&lt;File, Icon>
  *
  * @author Karl Tauber
  */

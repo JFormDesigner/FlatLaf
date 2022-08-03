@@ -312,7 +312,7 @@ debug*/
 			if( window instanceof RootPaneContainer ) {
 				JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
 				setSize( layeredPane.getSize() );
-				layeredPane.add( this, new Integer( JLayeredPane.POPUP_LAYER + 1 ) );
+				layeredPane.add( this, Integer.valueOf( JLayeredPane.POPUP_LAYER + 1 ) );
 			}
 		}
 
