@@ -34,6 +34,8 @@ public class FlatIntelliJLaf
 	/**
 	 * Sets the application look and feel to this LaF
 	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 *
+	 * @since 1.2
 	 */
 	public static boolean setup() {
 		return setup( new FlatIntelliJLaf() );

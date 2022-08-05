@@ -73,6 +73,8 @@ public class IntelliJTheme
 	 *
 	 * The input stream is automatically closed.
 	 * Using a buffered input stream is not necessary.
+	 *
+	 * @since 1.2
 	 */
 	public static boolean setup( InputStream in ) {
 		try {

@@ -111,6 +111,8 @@ public abstract class FlatLaf
 	/**
 	 * Sets the application look and feel to the given LaF
 	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 *
+	 * @since 1.2
 	 */
 	public static boolean setup( LookAndFeel newLookAndFeel ) {
 		try {
