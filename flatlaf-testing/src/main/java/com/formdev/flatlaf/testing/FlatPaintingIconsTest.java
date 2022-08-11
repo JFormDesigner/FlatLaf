@@ -22,33 +22,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatSystemProperties;
-import com.formdev.flatlaf.icons.FlatCapsLockIcon;
-import com.formdev.flatlaf.icons.FlatClearIcon;
-import com.formdev.flatlaf.icons.FlatFileChooserDetailsViewIcon;
-import com.formdev.flatlaf.icons.FlatFileChooserHomeFolderIcon;
-import com.formdev.flatlaf.icons.FlatFileChooserListViewIcon;
-import com.formdev.flatlaf.icons.FlatFileChooserNewFolderIcon;
-import com.formdev.flatlaf.icons.FlatFileChooserUpFolderIcon;
-import com.formdev.flatlaf.icons.FlatFileViewComputerIcon;
-import com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon;
-import com.formdev.flatlaf.icons.FlatFileViewFileIcon;
-import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
-import com.formdev.flatlaf.icons.FlatFileViewHardDriveIcon;
-import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
-import com.formdev.flatlaf.icons.FlatOptionPaneErrorIcon;
-import com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon;
-import com.formdev.flatlaf.icons.FlatOptionPaneQuestionIcon;
-import com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon;
-import com.formdev.flatlaf.icons.FlatRevealIcon;
-import com.formdev.flatlaf.icons.FlatSearchIcon;
-import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
-import com.formdev.flatlaf.icons.FlatTreeClosedIcon;
-import com.formdev.flatlaf.icons.FlatTreeCollapsedIcon;
-import com.formdev.flatlaf.icons.FlatTreeExpandedIcon;
-import com.formdev.flatlaf.icons.FlatTreeLeafIcon;
-import com.formdev.flatlaf.icons.FlatTreeOpenIcon;
+import com.formdev.flatlaf.icons.*;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -61,6 +39,8 @@ public class FlatPaintingIconsTest
 	extends JPanel
 {
 	private int scale = 16;
+	private boolean paintPixels;
+	private float paintPixelsScale = 1;
 	private Timer timer = null;
 
 	public static void main( String[] args ) {
@@ -75,6 +55,11 @@ public class FlatPaintingIconsTest
 
 	FlatPaintingIconsTest() {
 		initComponents();
+
+		Hashtable<Integer, JLabel> labels = new Hashtable<>();
+		for( int i = 100; i <= 600; i += 100 )
+			labels.put( i, new JLabel( String.format( "%dx", i / 100 ) ) );
+		pixelsScaleSlider.setLabelTable( labels );
 
 		scrollPane.getHorizontalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
 		scrollPane.getVerticalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
@@ -148,6 +133,18 @@ public class FlatPaintingIconsTest
 		panel.repaint();
 	}
 
+	private void pixelsChanged() {
+		paintPixels = pixelsCheckBox.isSelected();
+		pixelsScaleLabel.setEnabled( paintPixels );
+		pixelsScaleSlider.setEnabled( paintPixels );
+		panel.repaint();
+	}
+
+	private void pixelsScaleChanged() {
+		paintPixelsScale = pixelsScaleSlider.getValue() / 100f;
+		panel.repaint();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		scrollPane = new JScrollPane();
@@ -155,6 +152,9 @@ public class FlatPaintingIconsTest
 		JPanel panel1 = new JPanel();
 		JLabel scaleLabel = new JLabel();
 		scaleSlider = new JSlider();
+		pixelsCheckBox = new JCheckBox();
+		pixelsScaleLabel = new JLabel();
+		pixelsScaleSlider = new JSlider();
 
 		//======== this ========
 		setLayout(new BorderLayout());
@@ -182,12 +182,15 @@ public class FlatPaintingIconsTest
 				"hidemode 3",
 				// columns
 				"[fill]" +
-				"[grow,fill]",
+				"[grow,fill]para" +
+				"[fill]",
 				// rows
 				"[]"));
 
 			//---- scaleLabel ----
 			scaleLabel.setText("Scale:");
+			scaleLabel.setLabelFor(scaleSlider);
+			scaleLabel.setDisplayedMnemonic('S');
 			panel1.add(scaleLabel, "cell 0 0");
 
 			//---- scaleSlider ----
@@ -200,6 +203,31 @@ public class FlatPaintingIconsTest
 			scaleSlider.setSnapToTicks(true);
 			scaleSlider.addChangeListener(e -> scaleChanged());
 			panel1.add(scaleSlider, "cell 1 0");
+
+			//---- pixelsCheckBox ----
+			pixelsCheckBox.setText("pixels");
+			pixelsCheckBox.setMnemonic('P');
+			pixelsCheckBox.addActionListener(e -> pixelsChanged());
+			panel1.add(pixelsCheckBox, "cell 2 0");
+
+			//---- pixelsScaleLabel ----
+			pixelsScaleLabel.setText("Scale:");
+			pixelsScaleLabel.setEnabled(false);
+			pixelsScaleLabel.setLabelFor(pixelsScaleSlider);
+			pixelsScaleLabel.setDisplayedMnemonic('C');
+			panel1.add(pixelsScaleLabel, "cell 2 0");
+
+			//---- pixelsScaleSlider ----
+			pixelsScaleSlider.setMinimum(100);
+			pixelsScaleSlider.setMaximum(600);
+			pixelsScaleSlider.setMinorTickSpacing(25);
+			pixelsScaleSlider.setMajorTickSpacing(100);
+			pixelsScaleSlider.setSnapToTicks(true);
+			pixelsScaleSlider.setPaintTicks(true);
+			pixelsScaleSlider.setPaintLabels(true);
+			pixelsScaleSlider.setEnabled(false);
+			pixelsScaleSlider.addChangeListener(e -> pixelsScaleChanged());
+			panel1.add(pixelsScaleSlider, "cell 2 0");
 		}
 		add(panel1, BorderLayout.NORTH);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -209,6 +237,9 @@ public class FlatPaintingIconsTest
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JSlider scaleSlider;
+	private JCheckBox pixelsCheckBox;
+	private JLabel pixelsScaleLabel;
+	private JSlider pixelsScaleSlider;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class IconPainter --------------------------------------------------
@@ -248,10 +279,32 @@ public class FlatPaintingIconsTest
 			int scale = getScale();
 
 			// paint icon scaled
-			AffineTransform oldTransform = g2.getTransform();
-			g2.scale( scale, scale );
-			icon.paintIcon( this, g2, 0, 0 );
-			g2.setTransform( oldTransform );
+			if( !paintPixels ) {
+				// paint icon as vector
+				AffineTransform oldTransform = g2.getTransform();
+				g2.scale( scale, scale );
+				icon.paintIcon( this, g2, 0, 0 );
+				g2.setTransform( oldTransform );
+			} else {
+				// paint icon as pixels
+				int width = Math.round( icon.getIconWidth() * paintPixelsScale );
+				int height = Math.round( icon.getIconHeight() * paintPixelsScale );
+
+				// paint icon to buffered image
+				BufferedImage bi = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+				Graphics2D bg = bi.createGraphics();
+				try {
+					FlatUIUtils.setRenderingHints( bg );
+
+					bg.scale( paintPixelsScale, paintPixelsScale );
+					icon.paintIcon( this, bg, 0, 0 );
+				} finally {
+					bg.dispose();
+				}
+
+				// draw scaled-up image
+				g2.drawImage( bi, 0, 0, getWidth(), getHeight(), null );
+			}
 
 			// paint border and grid
 			HiDPIUtils.paintAtScale1x( g2, 0, 0, getWidth(), getHeight(),
