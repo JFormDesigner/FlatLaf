@@ -1052,7 +1052,7 @@ class UIDefaultsLoader
 	 *                 the alpha of this color is used as weight to mix the two colors
 	 *   - background: a background color (e.g. #f00) or a color function
 	 */
-	private static Object parseColorOver( List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static ColorUIResource parseColorOver( List<String> params, Function<String, String> resolver, boolean reportError ) {
 		String foregroundStr = params.get( 0 );
 		String backgroundStr = params.get( 1 );
 
@@ -1061,7 +1061,8 @@ class UIDefaultsLoader
 		if( foreground == null || foreground.getAlpha() == 255 )
 			return foreground;
 
-		Color foreground2 = new Color( foreground.getRGB() );
+		// foreground color without alpha
+		ColorUIResource foreground2 = new ColorUIResource( foreground.getRGB() );
 
 		// parse background color
 		ColorUIResource background = (ColorUIResource) parseColorOrFunction( resolver.apply( backgroundStr ), resolver, reportError );
