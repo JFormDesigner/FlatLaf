@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.UIManager;
 
 /**
@@ -40,14 +42,19 @@ public class FlatFileViewHardDriveIcon
 	protected void paintIcon( Component c, Graphics2D g ) {
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-			  <path fill="#6E6E6E" fill-rule="evenodd" d="M2,6 L14,6 L14,10 L2,10 L2,6 Z M12,8 L12,9 L13,9 L13,8 L12,8 Z M10,8 L10,9 L11,9 L11,8 L10,8 Z"/>
+			  <g fill="none" fill-rule="evenodd">
+			    <rect width="11" height="5" x="2.5" y="5.5" stroke="#6E6E6E" rx="1"/>
+			    <circle cx="11.5" cy="8.5" r="1" fill="#6E6E6E"/>
+			    <circle cx="9.5" cy="8.5" r="1" fill="#6E6E6E"/>
+			  </g>
 			</svg>
 		*/
 
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Rectangle2D.Float( 2, 6, 12, 4 ), false );
-		path.append( new Rectangle2D.Float( 12, 8, 1, 1 ), false );
-		path.append( new Rectangle2D.Float( 10, 8, 1, 1 ), false );
-		g.fill( path );
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+		g.setStroke( new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+
+		g.draw( new RoundRectangle2D.Float( 2.5f, 5.5f, 11, 5, 2, 2 ) );
+		g.fill( new Ellipse2D.Float( 10.8f, 7.8f, 1.4f, 1.4f ) );
+		g.fill( new Ellipse2D.Float( 8.8f, 7.8f, 1.4f, 1.4f ) );
 	}
 }

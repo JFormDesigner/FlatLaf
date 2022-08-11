@@ -16,9 +16,11 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.util.function.Function;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -59,7 +61,8 @@ public class FlatTreeCollapsedIcon
 
 		if( chevron ) {
 			// chevron arrow
-			g.fill( FlatUIUtils.createPath( 3,1, 3,2.5, 6,5.5, 3,8.5, 3,10, 4.5,10, 9,5.5, 4.5,1 ) );
+			g.setStroke( new BasicStroke( 1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER ) );
+			g.draw( FlatUIUtils.createPath( false, 3.5,1.5, 7.5,5.5, 3.5,9.5 ) );
 		} else {
 			// triangle arrow
 			g.fill( FlatUIUtils.createPath( 2,1, 2,10, 10,5.5 ) );

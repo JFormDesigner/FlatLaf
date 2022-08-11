@@ -16,8 +16,10 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
@@ -39,10 +41,22 @@ public class FlatFileChooserHomeFolderIcon
 	protected void paintIcon( Component c, Graphics2D g ) {
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-			  <polygon fill="#6E6E6E" fill-rule="evenodd" points="2 8 8 2 14 8 12 8 12 13 9 13 9 10 7 10 7 13 4 13 4 8"/>
+			  <g fill="none" fill-rule="evenodd">
+			    <polyline stroke="#6E6E6E" stroke-linejoin="round" points="6.5 13 6.5 9.5 9.5 9.5 9.5 13"/>
+			    <path stroke="#6E6E6E" d="M3.5,6.5 L3.5,12.5 C3.5,13.0522847 3.94771525,13.5 4.5,13.5 L11.5,13.5 C12.0522847,13.5 12.5,13.0522847 12.5,12.5 L12.5,6.5 L12.5,6.5"/>
+			    <polyline stroke="#6E6E6E" stroke-linecap="round" stroke-linejoin="round" points="1.5 8.5 8 2 14.5 8.5"/>
+			  </g>
 			</svg>
 		*/
 
-		g.fill( FlatUIUtils.createPath( 2,8, 8,2, 14,8, 12,8, 12,13, 9,13, 9,10, 7,10, 7,13, 4,13, 4,8 ) );
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+		g.setStroke( new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+
+		g.draw( FlatUIUtils.createPath( false, 6.5,13, 6.5,9.5, 9.5,9.5, 9.5,13 ) );
+		g.draw( FlatUIUtils.createPath( false, 3.5,6.5,
+			3.5,12.5,  FlatUIUtils.QUAD_TO, 3.5,13.5,  4.5,13.5,
+			11.5,13.5, FlatUIUtils.QUAD_TO, 12.5,13.5, 12.5,12.5,
+			12.5,6.5 ) );
+		g.draw( FlatUIUtils.createPath( false, 1.5,8.5, 8,2, 14.5,8.5 ) );
 	}
 }

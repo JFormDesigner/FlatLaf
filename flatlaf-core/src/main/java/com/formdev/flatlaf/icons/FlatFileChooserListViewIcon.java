@@ -16,8 +16,11 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.UIManager;
 
 /**
@@ -39,17 +42,20 @@ public class FlatFileChooserListViewIcon
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">
-			    <rect width="4" height="4" x="3" y="3" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="3" y="9" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="9" y="9" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="9" y="3" fill="#6E6E6E"/>
+			    <rect width="4" height="4" x="2.5" y="2.5" stroke="#6E6E6E" rx="1.5"/>
+			    <rect width="4" height="4" x="2.5" y="9.5" stroke="#6E6E6E" rx="1.5"/>
+			    <rect width="4" height="4" x="9.5" y="9.5" stroke="#6E6E6E" rx="1.5"/>
+			    <rect width="4" height="4" x="9.5" y="2.5" stroke="#6E6E6E" rx="1.5"/>
 			  </g>
 			</svg>
 		*/
 
-		g.fillRect( 3, 3, 4, 4 );
-		g.fillRect( 3, 9, 4, 4 );
-		g.fillRect( 9, 9, 4, 4 );
-		g.fillRect( 9, 3, 4, 4 );
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+		g.setStroke( new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+
+		g.draw( new RoundRectangle2D.Float( 2.5f, 2.5f, 4, 4, 2, 2 ) );
+		g.draw( new RoundRectangle2D.Float( 2.5f, 9.5f, 4, 4, 2, 2 ) );
+		g.draw( new RoundRectangle2D.Float( 9.5f, 9.5f, 4, 4, 2, 2 ) );
+		g.draw( new RoundRectangle2D.Float( 9.5f, 2.5f, 4, 4, 2, 2 ) );
 	}
 }

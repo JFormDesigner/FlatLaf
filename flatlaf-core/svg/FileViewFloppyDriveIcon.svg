@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <g fill="none" fill-rule="evenodd">
-    <path fill="#6E6E6E" d="M11,14 L11,11 L5,11 L5,14 L2,14 L2,2 L14,2 L14,14 L11,14 Z M4,4 L4,8 L12,8 L12,4 L4,4 Z"/>
-    <rect width="4" height="2" x="6" y="12" fill="#6E6E6E"/>
+  <g fill="none" fill-rule="evenodd" stroke-linejoin="round">
+    <path stroke="#6E6E6E" d="M3.5,2.5 L11.5,2.5 L11.5,2.5 L13.5,4.5 L13.5,12.5 C13.5,13.0522847 13.0522847,13.5 12.5,13.5 L3.5,13.5 C2.94771525,13.5 2.5,13.0522847 2.5,12.5 L2.5,3.5 C2.5,2.94771525 2.94771525,2.5 3.5,2.5 Z"/>
+    <polyline stroke="#6E6E6E" points="4.5 13 4.5 9.5 11.5 9.5 11.5 13"/>
+    <polyline stroke="#6E6E6E" points="5.5 3 5.5 5.5 10.5 5.5 10.5 3"/>
   </g>
 </svg>

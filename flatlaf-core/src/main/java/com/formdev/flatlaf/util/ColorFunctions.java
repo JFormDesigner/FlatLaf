@@ -106,6 +106,19 @@ public class ColorFunctions
 	}
 
 	/**
+	 * Set the opacity (alpha) of a color.
+	 *
+	 * @param color base color
+	 * @param amount the amount (in range 0-1) of the new opacity
+	 * @return new color
+	 * @since 3
+	 */
+	public static Color fade( Color color, float amount ) {
+		int newAlpha = Math.round( 255 * amount );
+		return new Color( (color.getRGB() & 0xffffff) | (newAlpha << 24), true );
+	}
+
+	/**
 	 * Returns a color that is a mixture of two colors.
 	 * <p>
 	 * This can be used to animate a color change from {@code color1} to {@code color2}

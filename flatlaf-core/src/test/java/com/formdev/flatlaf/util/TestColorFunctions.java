@@ -27,6 +27,7 @@ public class TestColorFunctions
 {
 	@Test
 	void colorFunctions() {
+		// lighten, darken
 		assertEquals( new Color( 0xff6666 ), ColorFunctions.lighten( Color.red, 0.2f ) );
 		assertEquals( new Color( 0x990000 ), ColorFunctions.darken( Color.red, 0.2f ) );
 
@@ -37,6 +38,11 @@ public class TestColorFunctions
 		// spin
 		assertEquals( new Color( 0xffaa00 ), ColorFunctions.spin( Color.red,40 ) );
 		assertEquals( new Color( 0xff00aa ), ColorFunctions.spin( Color.red,-40 ) );
+
+		// fade
+		assertEquals( new Color( 0x33ff0000, true ), ColorFunctions.fade( Color.red, 0.2f ) );
+		assertEquals( new Color( 0xccff0000, true ), ColorFunctions.fade( Color.red, 0.8f ) );
+		assertEquals( new Color( 0xccff0000, true ), ColorFunctions.fade( new Color( 0x10ff0000, true ), 0.8f ) );
 
 		// mix
 		assertEquals( new Color( 0x1ae600 ), ColorFunctions.mix( Color.red, Color.green, 0.1f ) );
