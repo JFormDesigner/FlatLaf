@@ -39,6 +39,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatCapsLockIcon
 	extends FlatAbstractIcon
 {
+	private Path2D path;
+
 	public FlatCapsLockIcon() {
 		super( 16, 16, UIManager.getColor( "PasswordField.capsLockIconColor" ) );
 	}
@@ -75,11 +77,13 @@ public class FlatCapsLockIcon
 		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
 		BasicStroke stroke = new BasicStroke( 1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND );
 
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new RoundRectangle2D.Float( 0, 0, 16, 16, 6, 6 ), false );
-		path.append( new Area( stroke.createStrokedShape( new Rectangle2D.Float( 5.5f, 11.5f, 5, 2 ) ) ), false );
-		path.append( new Area( stroke.createStrokedShape( FlatUIUtils.createPath(
-			2.5,7.5, 8,2, 13.5,7.5, 10.5,7.5, 10.5,9.5, 5.5,9.5, 5.5,7.5, 2.5,7.5 ) ) ), false );
+		if( path == null ) {
+			path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+			path.append( new RoundRectangle2D.Float( 0, 0, 16, 16, 6, 6 ), false );
+			path.append( new Area( stroke.createStrokedShape( new Rectangle2D.Float( 5.5f, 11.5f, 5, 2 ) ) ), false );
+			path.append( new Area( stroke.createStrokedShape( FlatUIUtils.createPath(
+				2.5,7.5, 8,2, 13.5,7.5, 10.5,7.5, 10.5,9.5, 5.5,9.5, 5.5,7.5, 2.5,7.5 ) ) ), false );
+		}
 		g.fill( path );
 	}
 }

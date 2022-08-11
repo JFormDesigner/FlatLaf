@@ -46,6 +46,7 @@ public class FlatSearchIcon
 	@Styleable protected Color searchIconPressedColor = UIManager.getColor( "SearchField.searchIconPressedColor" );
 
 	private final boolean ignoreButtonState;
+	private Area area;
 
 	public FlatSearchIcon() {
 		this( false );
@@ -89,9 +90,11 @@ public class FlatSearchIcon
 				null, searchIconHoverColor, searchIconPressedColor ) );
 
 		// paint magnifier
-		Area area = new Area( new Ellipse2D.Float( 2, 2, 10, 10 ) );
-		area.subtract( new Area( new Ellipse2D.Float( 3, 3, 8, 8 ) ) );
-		area.add( new Area( FlatUIUtils.createPath( 10.813,9.75, 14,12.938, 12.938,14, 9.75,10.813 ) ) );
+		if( area == null ) {
+			area = new Area( new Ellipse2D.Float( 2, 2, 10, 10 ) );
+			area.subtract( new Area( new Ellipse2D.Float( 3, 3, 8, 8 ) ) );
+			area.add( new Area( FlatUIUtils.createPath( 10.813,9.75, 14,12.938, 12.938,14, 9.75,10.813 ) ) );
+		}
 		g.fill( area );
 	}
 }

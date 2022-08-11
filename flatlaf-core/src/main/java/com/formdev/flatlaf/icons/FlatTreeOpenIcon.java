@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
@@ -33,6 +34,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatTreeOpenIcon
 	extends FlatAbstractIcon
 {
+	private Path2D path;
+
 	public FlatTreeOpenIcon() {
 		super( 16, 16, UIManager.getColor( "Tree.icon.openColor" ) );
 	}
@@ -50,28 +53,31 @@ public class FlatTreeOpenIcon
 		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
 		g.setStroke( new BasicStroke( 1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER ) );
 
-		double arc = 1.5;
-		double arc2 = 0.5;
-		g.draw( FlatUIUtils.createPath( false,
-			// bottom-left of opend part
-			2,13.5,
-			// top-left of opend part
-			FlatUIUtils.ROUNDED, 4.5,7.5, arc,
-			// top-right of opend part
-			FlatUIUtils.ROUNDED, 15.5,7.5, arc2,
+		if( path == null ) {
+			double arc = 1.5;
+			double arc2 = 0.5;
+			path = FlatUIUtils.createPath( false,
+				// bottom-left of opend part
+				2,13.5,
+				// top-left of opend part
+				FlatUIUtils.ROUNDED, 4.5,7.5, arc,
+				// top-right of opend part
+				FlatUIUtils.ROUNDED, 15.5,7.5, arc2,
 
-			// bottom-right
-			FlatUIUtils.ROUNDED, 13,13.5, arc,
-			// bottom-left
-			1.5+arc,13.5,   FlatUIUtils.QUAD_TO, 1.5,13.5,  1.5,13.5-arc,
-			// top-left
-			1.5,2.5+arc,    FlatUIUtils.QUAD_TO, 1.5,2.5,   1.5+arc,2.5,
-			// top-mid-left
-			6.5-arc2,2.5,   FlatUIUtils.QUAD_TO, 6.5,2.5,   6.5+arc2,2.5+arc2,
-			// top-mid-right
-			8.5,4.5,
-			// top-right
-			13.5-arc,4.5,   FlatUIUtils.QUAD_TO, 13.5,4.5,  13.5,4.5+arc,
-			13.5,6.5 ) );
+				// bottom-right
+				FlatUIUtils.ROUNDED, 13,13.5, arc,
+				// bottom-left
+				1.5+arc,13.5,   FlatUIUtils.QUAD_TO, 1.5,13.5,  1.5,13.5-arc,
+				// top-left
+				1.5,2.5+arc,    FlatUIUtils.QUAD_TO, 1.5,2.5,   1.5+arc,2.5,
+				// top-mid-left
+				6.5-arc2,2.5,   FlatUIUtils.QUAD_TO, 6.5,2.5,   6.5+arc2,2.5+arc2,
+				// top-mid-right
+				8.5,4.5,
+				// top-right
+				13.5-arc,4.5,   FlatUIUtils.QUAD_TO, 13.5,4.5,  13.5,4.5+arc,
+				13.5,6.5 );
+		}
+		g.draw( path );
 	}
 }

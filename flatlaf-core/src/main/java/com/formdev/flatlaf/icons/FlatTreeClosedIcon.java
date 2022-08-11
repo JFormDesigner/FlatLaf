@@ -19,6 +19,7 @@ package com.formdev.flatlaf.icons;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 
 /**
@@ -31,6 +32,8 @@ import javax.swing.UIManager;
 public class FlatTreeClosedIcon
 	extends FlatAbstractIcon
 {
+	private Path2D path;
+
 	public FlatTreeClosedIcon() {
 		super( 16, 16, UIManager.getColor( "Tree.icon.closedColor" ) );
 	}
@@ -47,6 +50,8 @@ public class FlatTreeClosedIcon
 
 		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
 
-		g.draw( FlatFileViewDirectoryIcon.createFolderPath() );
+		if( path == null )
+			path = FlatFileViewDirectoryIcon.createFolderPath();
+		g.draw( path );
 	}
 }

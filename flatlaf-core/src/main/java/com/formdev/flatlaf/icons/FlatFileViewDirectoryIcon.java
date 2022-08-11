@@ -33,6 +33,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatFileViewDirectoryIcon
 	extends FlatAbstractIcon
 {
+	private Path2D path;
+
 	public FlatFileViewDirectoryIcon() {
 		super( 16, 16, UIManager.getColor( "Objects.Grey" ) );
 	}
@@ -47,7 +49,9 @@ public class FlatFileViewDirectoryIcon
 
 		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
 
-		g.draw( createFolderPath() );
+		if( path == null )
+			path = createFolderPath();
+		g.draw( path );
 	}
 
 	static Path2D createFolderPath() {

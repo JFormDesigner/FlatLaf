@@ -896,9 +896,11 @@ debug*/
 	}
 debug*/
 
-	/** @since 3 */ public static final double QUAD_TO = Double.MIN_VALUE;
-	/** @since 3 */ public static final double CURVE_TO = Double.MIN_NORMAL;
-	/** @since 3 */ public static final double ROUNDED = Double.MAX_VALUE;
+	/** @since 3 */ public static final double MOVE_TO    = -1_000_000_000_001.;
+	/** @since 3 */ public static final double QUAD_TO    = -1_000_000_000_002.;
+	/** @since 3 */ public static final double CURVE_TO   = -1_000_000_000_003.;
+	/** @since 3 */ public static final double ROUNDED    = -1_000_000_000_004.;
+	/** @since 3 */ public static final double CLOSE_PATH = -1_000_000_000_005.;
 
 	/**
 	 * Creates a closed path for the given points.
@@ -914,17 +916,23 @@ debug*/
 		Path2D path = new Path2D.Float( Path2D.WIND_NON_ZERO, points.length / 2 + (close ? 1 : 0) );
 		path.moveTo( points[0], points[1] );
 		for( int i = 2; i < points.length; ) {
-			if( points[i] == QUAD_TO ) {
+			double p = points[i];
+			if( p == MOVE_TO ) {
+				// move pointer to
+				//    params: x, y
+				path.moveTo( points[i + 1], points[i + 2] );
+				i += 3;
+			} else if( p == QUAD_TO ) {
 				// add quadratic curve
 				//    params: x1, y1, x2, y2
 				path.quadTo( points[i + 1], points[i + 2], points[i + 3], points[i + 4] );
 				i += 5;
-			} else if( points[i] == CURVE_TO ) {
+			} else if( p == CURVE_TO ) {
 				// add bezier curve
 				//    params: x1, y1, x2, y2, x3, y3
 				path.curveTo( points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], points[i + 6] );
 				i += 7;
-			} else if( points[i] == ROUNDED ) {
+			} else if( p == ROUNDED ) {
 				// add rounded corner
 				//    params: x, y, arc
 				double x = points[i + 1];
@@ -952,10 +960,15 @@ debug*/
 				path.quadTo( x, y, lerp( x, x2, t2 ), lerp( y, y2, t2 ) );
 
 				i += 4;
+			} else if( p == CLOSE_PATH ) {
+				// close path
+				//    params: -
+				path.closePath();
+				i += 1;
 			} else {
-				// add line
+				// add line to
 				//    params: x, y
-				path.lineTo( points[i], points[i + 1] );
+				path.lineTo( p, points[i + 1] );
 				i += 2;
 			}
 		}
