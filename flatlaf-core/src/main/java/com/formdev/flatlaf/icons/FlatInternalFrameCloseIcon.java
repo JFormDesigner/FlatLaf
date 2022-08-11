@@ -20,7 +20,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
@@ -58,9 +57,11 @@ public class FlatInternalFrameCloseIcon
 		float my = height / 2;
 		float r = 3.25f;
 
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Line2D.Float( mx - r, my - r, mx + r, my + r ), false );
-		path.append( new Line2D.Float( mx - r, my + r, mx + r, my - r ), false );
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD, 4 );
+		path.moveTo( mx - r, my - r );
+		path.lineTo( mx + r, my + r );
+		path.moveTo( mx - r, my + r );
+		path.lineTo( mx + r, my - r );
 		g.setStroke( new BasicStroke( 1f ) );
 		g.draw( path );
 	}

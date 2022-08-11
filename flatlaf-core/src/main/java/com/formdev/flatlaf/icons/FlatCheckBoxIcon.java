@@ -242,7 +242,7 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintCheckmark( Component c, Graphics2D g ) {
-		Path2D.Float path = new Path2D.Float();
+		Path2D.Float path = new Path2D.Float( Path2D.WIND_NON_ZERO, 3 );
 		path.moveTo( 4.5f, 7.5f );
 		path.lineTo( 6.6f, 10f );
 		path.lineTo( 11.25f, 3.5f );

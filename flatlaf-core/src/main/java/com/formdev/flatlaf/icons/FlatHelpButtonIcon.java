@@ -150,7 +150,7 @@ public class FlatHelpButtonIcon
 		g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
 
 		// paint question mark
-		Path2D q = new Path2D.Float();
+		Path2D q = new Path2D.Float( Path2D.WIND_NON_ZERO, 10 );
 		q.moveTo( 8,8.5 );
 		q.curveTo( 8.25,7, 9.66585007,6, 11,6 );
 		q.curveTo( 12.5,6, 14,7, 14,8.5 );

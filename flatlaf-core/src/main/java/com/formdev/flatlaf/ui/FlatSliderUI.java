@@ -531,7 +531,7 @@ debug*/
 	public static Shape createDirectionalThumbShape( float x, float y, float w, float h, float arc ) {
 		float wh = w / 2;
 
-		Path2D path = new Path2D.Float();
+		Path2D path = new Path2D.Float( Path2D.WIND_NON_ZERO, 9 );
 		path.moveTo( x + wh, y + h );
 		path.lineTo( x, y + (h - wh) );
 		path.lineTo( x, y + arc );

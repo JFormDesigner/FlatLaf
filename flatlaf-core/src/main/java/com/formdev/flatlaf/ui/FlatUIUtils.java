@@ -744,7 +744,7 @@ public class FlatUIUtils
 		double ciBottomLeft = arcBottomLeft * ci;
 		double ciBottomRight = arcBottomRight * ci;
 
-		Path2D rect = new Path2D.Float();
+		Path2D rect = new Path2D.Float( Path2D.WIND_NON_ZERO, 16 );
 		rect.moveTo(  x2 - arcTopRight, y );
 		rect.curveTo( x2 - ciTopRight, y,
 					  x2, y + ciTopRight,
@@ -911,7 +911,7 @@ debug*/
 	 * Creates an open or closed path for the given points.
 	 */
 	public static Path2D createPath( boolean close, double... points ) {
-		Path2D path = new Path2D.Float();
+		Path2D path = new Path2D.Float( Path2D.WIND_NON_ZERO, points.length / 2 + (close ? 1 : 0) );
 		path.moveTo( points[0], points[1] );
 		for( int i = 2; i < points.length; ) {
 			if( points[i] == QUAD_TO ) {
