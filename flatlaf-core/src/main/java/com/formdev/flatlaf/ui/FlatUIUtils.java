@@ -352,8 +352,10 @@ public class FlatUIUtils
 	 */
 	public static void resetRenderingHints( Graphics g, Object[] oldRenderingHints ) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldRenderingHints[0] );
-		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, oldRenderingHints[1] );
+		if( oldRenderingHints[0] != null )
+			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldRenderingHints[0] );
+		if( oldRenderingHints[1] != null )
+			g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, oldRenderingHints[1] );
 	}
 
 	/**
