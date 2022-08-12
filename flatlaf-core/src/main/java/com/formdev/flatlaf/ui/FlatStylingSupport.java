@@ -22,6 +22,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -70,6 +71,9 @@ public class FlatStylingSupport
 	 * <p>
 	 * Use this annotation, instead of {@link Styleable}, to style fields
 	 * in superclasses, where it is not possible to use {@link Styleable}.
+	 * <p>
+	 * Classes using this annotation may implement {@link StyleableLookupProvider}
+	 * to give access to protected fields (in JRE) in modular applications.
 	 *
 	 * @since 2.5
 	 */
@@ -105,6 +109,11 @@ public class FlatStylingSupport
 		Object applyStyleProperty( String key, Object value );
 		Map<String, Class<?>> getStyleableInfos();
 		/** @since 2.5 */ Object getStyleableValue( String key );
+	}
+
+	/** @since 2.5 */
+	public interface StyleableLookupProvider {
+		MethodHandles.Lookup getLookupForStyling();
 	}
 
 
@@ -443,14 +452,14 @@ public class FlatStylingSupport
 			try {
 				Field f = cls.getDeclaredField( fieldName );
 				if( predicate == null || predicate.test( f ) )
-					return applyToField( f, obj, value );
+					return applyToField( f, obj, value, false );
 			} catch( NoSuchFieldException ex ) {
 				// field not found in class --> try superclass
 			}
 
 			for( StyleableField styleableField : cls.getAnnotationsByType( StyleableField.class ) ) {
 				if( key.equals( styleableField.key() ) )
-					return applyToField( getStyleableField( styleableField ), obj, value );
+					return applyToField( getStyleableField( styleableField ), obj, value, true );
 			}
 
 			cls = cls.getSuperclass();
@@ -465,8 +474,22 @@ public class FlatStylingSupport
 		}
 	}
 
-	private static Object applyToField( Field f, Object obj, Object value ) {
+	private static Object applyToField( Field f, Object obj, Object value, boolean useMethodHandles ) {
 		checkValidField( f );
+
+		if( useMethodHandles && obj instanceof StyleableLookupProvider ) {
+			try {
+				// use method handles to access protected fields in JRE in modular applications
+				MethodHandles.Lookup lookup = ((StyleableLookupProvider)obj).getLookupForStyling();
+
+				// get old value and set new value
+				Object oldValue = lookup.unreflectGetter( f ).invoke( obj );
+				lookup.unreflectSetter( f ).invoke( obj, convertToEnum( value, f.getType() ) );
+				return oldValue;
+			} catch( Throwable ex ) {
+				throw newFieldAccessFailed( f, ex );
+			}
+		}
 
 		try {
 			// necessary to access protected fields in other packages
@@ -481,8 +504,18 @@ public class FlatStylingSupport
 		}
 	}
 
-	private static Object getFieldValue( Field f, Object obj ) {
+	private static Object getFieldValue( Field f, Object obj, boolean useMethodHandles ) {
 		checkValidField( f );
+
+		if( useMethodHandles && obj instanceof StyleableLookupProvider ) {
+			// use method handles to access protected fields in JRE in modular applications
+			try {
+				MethodHandles.Lookup lookup = ((StyleableLookupProvider)obj).getLookupForStyling();
+				return lookup.unreflectGetter( f ).invoke( obj );
+			} catch( Throwable ex ) {
+				throw newFieldAccessFailed( f, ex );
+			}
+		}
 
 		try {
 			f.setAccessible( true );
@@ -492,7 +525,7 @@ public class FlatStylingSupport
 		}
 	}
 
-	private static IllegalArgumentException newFieldAccessFailed( Field f, IllegalAccessException ex ) {
+	private static IllegalArgumentException newFieldAccessFailed( Field f, Throwable ex ) {
 		return new IllegalArgumentException( "failed to access field '" + f.getDeclaringClass().getName() + "." + f.getName() + "'", ex );
 	}
 
@@ -792,7 +825,7 @@ public class FlatStylingSupport
 					if( styleable.type() != Void.class )
 						throw new IllegalArgumentException( "'Styleable.type' on field '" + fieldName + "' not supported" );
 
-					return getFieldValue( f, obj );
+					return getFieldValue( f, obj, false );
 				}
 			} catch( NoSuchFieldException ex ) {
 				// field not found in class --> try superclass
@@ -800,10 +833,8 @@ public class FlatStylingSupport
 
 			// find field specified in 'StyleableField' annotation
 			for( StyleableField styleableField : cls.getAnnotationsByType( StyleableField.class ) ) {
-				if( key.equals( styleableField.key() ) ) {
-					Field f = getStyleableField( styleableField );
-					return getFieldValue( f, obj );
-				}
+				if( key.equals( styleableField.key() ) )
+					return getFieldValue( getStyleableField( styleableField ), obj, true );
 			}
 
 			cls = cls.getSuperclass();

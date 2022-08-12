@@ -20,7 +20,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -39,6 +41,8 @@ public class FlatModularAppTest
 
 			JButton button1 = new JButton( "Hello" );
 			JButton button2 = new JButton( "World" );
+			JScrollBar scrollBar = new JScrollBar();
+			scrollBar.putClientProperty( FlatClientProperties.STYLE, "track: #0f0" );
 
 			button1.setIcon( new FlatSVGIcon(
 				FlatModularAppTest.class.getResource( "/com/formdev/flatlaf/testing/modular/app/icons/copy.svg" ) ) );
@@ -47,6 +51,7 @@ public class FlatModularAppTest
 			panel.add( new JLabel( "Hello World" ) );
 			panel.add( button1 );
 			panel.add( button2 );
+			panel.add( scrollBar );
 
 			JFrame frame = new JFrame( "FlatModularAppTest" );
 			frame.setIconImages( FlatSVGUtils.createWindowIconImages(

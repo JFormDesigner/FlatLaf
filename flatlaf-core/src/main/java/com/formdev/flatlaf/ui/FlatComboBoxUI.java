@@ -42,6 +42,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
@@ -71,6 +72,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -122,7 +124,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
-	implements StyleableUI
+	implements StyleableUI, StyleableLookupProvider
 {
 	@Styleable protected int minimumWidth;
 	@Styleable protected int editorColumns;
@@ -509,6 +511,14 @@ public class FlatComboBoxUI
 	@Override
 	public Object getStyleableValue( JComponent c, String key ) {
 		return FlatStylingSupport.getAnnotatedStyleableValue( this, comboBox.getBorder(), key );
+	}
+
+	/** @since 2.5 */
+	@Override
+	public MethodHandles.Lookup getLookupForStyling() {
+		// MethodHandles.lookup() is caller sensitive and must be invoked in this class,
+		// otherwise it is not possible to access protected fields in JRE superclass
+		return MethodHandles.lookup();
 	}
 
 	@Override

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.beans.PropertyChangeListener;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -27,6 +28,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -67,7 +69,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
 
 public class FlatMenuItemUI
 	extends BasicMenuItemUI
-	implements StyleableUI
+	implements StyleableUI, StyleableLookupProvider
 {
 	private FlatMenuItemRenderer renderer;
 	private Map<String, Object> oldStyleValues;
@@ -164,6 +166,14 @@ public class FlatMenuItemUI
 		if( value == null )
 			value = FlatStylingSupport.getAnnotatedStyleableValue( ui, key );
 		return value;
+	}
+
+	/** @since 2.5 */
+	@Override
+	public MethodHandles.Lookup getLookupForStyling() {
+		// MethodHandles.lookup() is caller sensitive and must be invoked in this class,
+		// otherwise it is not possible to access protected fields in JRE superclass
+		return MethodHandles.lookup();
 	}
 
 	@Override

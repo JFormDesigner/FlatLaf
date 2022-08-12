@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -38,6 +39,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
@@ -86,7 +88,7 @@ import com.formdev.flatlaf.util.UIScale;
 
 public class FlatScrollBarUI
 	extends BasicScrollBarUI
-	implements StyleableUI
+	implements StyleableUI, StyleableLookupProvider
 {
 	// overrides BasicScrollBarUI.supportsAbsolutePositioning (which is private)
 	@Styleable protected boolean allowsAbsolutePositioning;
@@ -266,6 +268,14 @@ public class FlatScrollBarUI
 	@Override
 	public Object getStyleableValue( JComponent c, String key ) {
 		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
+	}
+
+	/** @since 2.5 */
+	@Override
+	public MethodHandles.Lookup getLookupForStyling() {
+		// MethodHandles.lookup() is caller sensitive and must be invoked in this class,
+		// otherwise it is not possible to access protected fields in JRE superclass
+		return MethodHandles.lookup();
 	}
 
 	@Override
