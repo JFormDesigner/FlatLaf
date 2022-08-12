@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 2.5-SNAPSHOT
 
+#### New features and improvements
+
+- TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
+  value `TabbedPane.rotateTabRuns` to `false`. (issue #574)
+
 #### Fixed bugs
 
 - Fixed missing UI value `MenuItem.acceleratorDelimiter` on macOS. (was `null`,

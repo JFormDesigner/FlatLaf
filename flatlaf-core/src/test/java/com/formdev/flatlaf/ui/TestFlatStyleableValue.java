@@ -739,6 +739,7 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "tabSeparatorsFullHeight", false );
 		testBoolean( c, ui, "hasFullBorder", false );
 		testBoolean( c, ui, "tabsOpaque", false );
+		testBoolean( c, ui, "rotateTabRuns", false );
 
 		testString( c, ui, "tabType", "card" );
 		testString( c, ui, "tabsPopupPolicy", "asNeeded" );

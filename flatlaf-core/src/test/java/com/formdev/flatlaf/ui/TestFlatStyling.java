@@ -891,6 +891,7 @@ public class TestFlatStyling
 		ui.applyStyle( "tabSeparatorsFullHeight: false" );
 		ui.applyStyle( "hasFullBorder: false" );
 		ui.applyStyle( "tabsOpaque: false" );
+		ui.applyStyle( "rotateTabRuns: false" );
 
 		ui.applyStyle( "tabType: card" );
 		ui.applyStyle( "tabsPopupPolicy: asNeeded" );

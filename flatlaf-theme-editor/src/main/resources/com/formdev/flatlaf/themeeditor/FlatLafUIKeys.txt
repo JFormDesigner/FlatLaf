@@ -840,6 +840,7 @@ TabbedPane.hoverColor
 TabbedPane.inactiveUnderlineColor
 TabbedPane.labelShift
 TabbedPane.light
+TabbedPane.rotateTabRuns
 TabbedPane.scrollButtonsPlacement
 TabbedPane.scrollButtonsPolicy
 TabbedPane.selectedBackground

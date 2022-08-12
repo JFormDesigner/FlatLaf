@@ -722,6 +722,7 @@ public class TestFlatStyleableInfo
 			"tabSeparatorsFullHeight", boolean.class,
 			"hasFullBorder", boolean.class,
 			"tabsOpaque", boolean.class,
+			"rotateTabRuns", boolean.class,
 
 			"tabType", String.class,
 			"tabsPopupPolicy", String.class,

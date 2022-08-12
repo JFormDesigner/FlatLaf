@@ -145,7 +145,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
- * @uiDefault TabbedPane.activeTabBorder				boolean
+ * @uiDefault TabbedPane.rotateTabRuns					boolean
  *
  * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
  * @uiDefault TabbedPane.tabType						String	underlined (default) or card
@@ -220,6 +220,7 @@ public class FlatTabbedPaneUI
 	@Styleable protected boolean tabSeparatorsFullHeight;
 	@Styleable protected boolean hasFullBorder;
 	@Styleable protected boolean tabsOpaque = true;
+	/** @since 2.5 */ @Styleable protected boolean rotateTabRuns = true;
 
 	@Styleable(type=String.class) private int tabType;
 	@Styleable(type=String.class) private int tabsPopupPolicy;
@@ -342,6 +343,7 @@ public class FlatTabbedPaneUI
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
+		rotateTabRuns = FlatUIUtils.getUIBoolean( "TabbedPane.rotateTabRuns", true );
 
 		tabType = parseTabType( UIManager.getString( "TabbedPane.tabType" ) );
 		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
@@ -1092,7 +1094,7 @@ public class FlatTabbedPaneUI
 
 		// paint selection indicator
 		if( isSelected )
-			paintTabSelection( g, tabPlacement, x, y, w, h );
+			paintTabSelection( g, tabPlacement, tabIndex, x, y, w, h );
 
 		if( tabPane.getTabComponentAt( tabIndex ) != null )
 			return;
@@ -1281,14 +1283,19 @@ public class FlatTabbedPaneUI
 		}
 	}
 
-	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
+	protected void paintTabSelection( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
 		g.setColor( tabPane.isEnabled()
 			? (isTabbedPaneOrChildFocused() ? underlineColor : inactiveUnderlineColor)
 			: disabledUnderlineColor );
 
 		// paint underline selection
 		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
-		Insets contentInsets = getContentBorderInsets( tabPlacement );
+		Insets contentInsets = atBottom
+			? ((!rotateTabRuns && runCount > 1 && !isScrollTabLayout() && getRunForTab( tabPane.getTabCount(), tabIndex ) > 0)
+				? new Insets( 0, 0, 0, 0 )
+				: getContentBorderInsets( tabPlacement ))
+			: null;
+
 		int tabSelectionHeight = scale( atBottom ? this.tabSelectionHeight : cardTabSelectionHeight );
 		int sx, sy;
 		switch( tabPlacement ) {
@@ -1447,7 +1454,7 @@ public class FlatTabbedPaneUI
 			else
 				g.clipRect( 0, vr.y, tabPane.getWidth(), vr.height );
 
-			paintTabSelection( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
+			paintTabSelection( g, tabPlacement, selectedIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
 			g.setClip( oldClip );
 		}
 	}
@@ -1598,6 +1605,11 @@ public class FlatTabbedPaneUI
 		// since super.ensureCurrentLayout() is private,
 		// use super.getTabRunCount() as workaround
 		super.getTabRunCount( tabPane );
+	}
+
+	@Override
+	protected boolean shouldRotateTabRuns( int tabPlacement ) {
+		return rotateTabRuns;
 	}
 
 	private boolean isLastInRun( int tabIndex ) {
