@@ -19,8 +19,9 @@ package com.formdev.flatlaf.util;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import javax.swing.JComponent;
 
 /**
@@ -32,8 +33,8 @@ import javax.swing.JComponent;
  */
 public class JavaCompatibility
 {
-	private static Method drawStringUnderlineCharAtMethod;
-	private static Method getClippedStringMethod;
+	private static MethodHandle drawStringUnderlineCharAtMethod;
+	private static MethodHandle getClippedStringMethod;
 
 	/**
 	 * Java 8: sun.swing.SwingUtilities2.drawStringUnderlineCharAt( JComponent c,
@@ -51,9 +52,10 @@ public class JavaCompatibility
 					Class<?> cls = Class.forName( SystemInfo.isJava_9_orLater
 						? "javax.swing.plaf.basic.BasicGraphicsUtils"
 						: "sun.swing.SwingUtilities2" );
-					drawStringUnderlineCharAtMethod = cls.getMethod( "drawStringUnderlineCharAt", SystemInfo.isJava_9_orLater
+					MethodType mt = MethodType.methodType( void.class, SystemInfo.isJava_9_orLater
 						? new Class[] { JComponent.class, Graphics2D.class, String.class, int.class, float.class, float.class }
 						: new Class[] { JComponent.class, Graphics.class, String.class, int.class, int.class, int.class } );
+					drawStringUnderlineCharAtMethod = MethodHandles.publicLookup().findStatic( cls, "drawStringUnderlineCharAt", mt );
 				} catch( Exception ex ) {
 					LoggingFacade.INSTANCE.logSevere( null, ex );
 					throw new RuntimeException( ex );
@@ -63,10 +65,10 @@ public class JavaCompatibility
 
 		try {
 			if( SystemInfo.isJava_9_orLater )
-				drawStringUnderlineCharAtMethod.invoke( null, c, g, text, underlinedIndex, (float) x, (float) y );
+				drawStringUnderlineCharAtMethod.invoke( c, (Graphics2D) g, text, underlinedIndex, (float) x, (float) y );
 			else
-				drawStringUnderlineCharAtMethod.invoke( null, c, g, text, underlinedIndex, x, y );
-		} catch( IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+				drawStringUnderlineCharAtMethod.invoke( c, g, text, underlinedIndex, x, y );
+		} catch( Throwable ex ) {
 			LoggingFacade.INSTANCE.logSevere( null, ex );
 			throw new RuntimeException( ex );
 		}
@@ -86,10 +88,11 @@ public class JavaCompatibility
 					Class<?> cls = Class.forName( SystemInfo.isJava_9_orLater
 						? "javax.swing.plaf.basic.BasicGraphicsUtils"
 						: "sun.swing.SwingUtilities2" );
-					getClippedStringMethod = cls.getMethod( SystemInfo.isJava_9_orLater
+					MethodType mt = MethodType.methodType( String.class, JComponent.class, FontMetrics.class, String.class, int.class );
+					getClippedStringMethod = MethodHandles.publicLookup().findStatic( cls, SystemInfo.isJava_9_orLater
 							? "getClippedString"
 							: "clipStringIfNecessary",
-						JComponent.class, FontMetrics.class, String.class, int.class );
+						mt );
 				} catch( Exception ex ) {
 					LoggingFacade.INSTANCE.logSevere( null, ex );
 					throw new RuntimeException( ex );
@@ -98,8 +101,8 @@ public class JavaCompatibility
 		}
 
 		try {
-			return (String) getClippedStringMethod.invoke( null, c, fm, string, availTextWidth );
-		} catch( IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+			return (String) getClippedStringMethod.invoke( c, fm, string, availTextWidth );
+		} catch( Throwable ex ) {
 			LoggingFacade.INSTANCE.logSevere( null, ex );
 			throw new RuntimeException( ex );
 		}
