@@ -36,7 +36,9 @@ import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -64,8 +66,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatPopupFactory
 	extends PopupFactory
 {
-	private Method java8getPopupMethod;
-	private Method java9getPopupMethod;
+	private MethodHandle java8getPopupMethod;
+	private MethodHandle java9getPopupMethod;
 
 	@Override
 	public Popup getPopup( Component owner, Component contents, int x, int y )
@@ -192,23 +194,25 @@ public class FlatPopupFactory
 	{
 		try {
 			if( SystemInfo.isJava_9_orLater ) {
+				// Java 9: protected Popup getPopup( Component owner, Component contents, int x, int y, boolean isHeavyWeightPopup )
 				if( java9getPopupMethod == null ) {
-					java9getPopupMethod = PopupFactory.class.getDeclaredMethod(
-						"getPopup", Component.class, Component.class, int.class, int.class, boolean.class );
+					MethodType mt = MethodType.methodType( Popup.class, Component.class, Component.class, int.class, int.class, boolean.class );
+					java9getPopupMethod = MethodHandles.lookup().findVirtual( PopupFactory.class, "getPopup", mt );
 				}
 				return (Popup) java9getPopupMethod.invoke( this, owner, contents, x, y, true );
 			} else {
-				// Java 8
+				// Java 8: private Popup getPopup( Component owner, Component contents, int ownerX, int ownerY, int popupType )
 				if( java8getPopupMethod == null ) {
-					java8getPopupMethod = PopupFactory.class.getDeclaredMethod(
+					Method m = PopupFactory.class.getDeclaredMethod(
 						"getPopup", Component.class, Component.class, int.class, int.class, int.class );
-					java8getPopupMethod.setAccessible( true );
+					m.setAccessible( true );
+					java8getPopupMethod = MethodHandles.lookup().unreflect( m );
 				}
 				return (Popup) java8getPopupMethod.invoke( this, owner, contents, x, y, /*HEAVY_WEIGHT_POPUP*/ 2 );
 			}
-		} catch( NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex ) {
-			// ignore
-			return null;
+		} catch( Throwable ex ) {
+			// fallback
+			return super.getPopup( owner, contents, x, y );
 		}
 	}
 
