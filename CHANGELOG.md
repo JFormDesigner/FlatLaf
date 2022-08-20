@@ -7,6 +7,9 @@ FlatLaf Change Log
 
 - TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
   value `TabbedPane.rotateTabRuns` to `false`. (issue #574)
+- Native window decorations (Windows 10/11 only): Added client property to mark
+  components in embedded menu bar as "caption" (allow moving window). (issue
+  #569)
 
 #### Fixed bugs
 

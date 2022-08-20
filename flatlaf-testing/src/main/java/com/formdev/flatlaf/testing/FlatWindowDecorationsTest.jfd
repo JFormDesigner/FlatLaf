@@ -36,7 +36,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][][][]unrel[]"
+				"$rowConstraints": "[][][][][]unrel[]"
 			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JButton" ) {
@@ -60,6 +60,16 @@ new FormModel {
 					"value": "cell 0 1"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addCaptionButton"
+					"text": "Add caption"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addCaption", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "removeMenuButton"
 					"text": "Remove menu"
 					auxiliary() {
@@ -67,7 +77,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "removeMenu", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2"
+					"value": "cell 0 3"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "changeMenuButton"
@@ -77,7 +87,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeMenu", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 3"
+					"value": "cell 0 4"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "changeTitleButton"
@@ -87,7 +97,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeTitle", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 4"
+					"value": "cell 0 5"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0 1 8,aligny top,growy 0"

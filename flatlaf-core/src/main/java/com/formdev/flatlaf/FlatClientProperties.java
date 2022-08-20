@@ -253,6 +253,19 @@ public interface FlatClientProperties
 	 */
 	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
 
+	/**
+	 * Specifies whether a component in a embedded menu bar should behave as caption
+	 * (left-click allows moving window, right-click shows window system menu).
+	 * The component does not receive mouse pressed/released/clicked/dragged events,
+	 * but it gets mouse entered/exited/moved events.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2.5
+	 */
+	String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption";
+
 	//---- Popup --------------------------------------------------------------
 
 	/**

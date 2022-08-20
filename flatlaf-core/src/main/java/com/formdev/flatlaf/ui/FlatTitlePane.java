@@ -861,26 +861,32 @@ debug*/
 					r.height -= resizeHeight;
 				}
 
-				Component horizontalGlue = findHorizontalGlue( menuBar );
-				if( horizontalGlue != null ) {
-					// If menu bar is embedded and contains a horizontal glue component,
-					// then split the hit test spot into two spots so that
-					// the glue component area can be used to move the window.
+				int count = menuBar.getComponentCount();
+				for( int i = count - 1; i >= 0; i-- ) {
+					Component c = menuBar.getComponent( i );
+					if( c instanceof Box.Filler ||
+						(c instanceof JComponent && clientPropertyBoolean( (JComponent) c, COMPONENT_TITLE_BAR_CAPTION, false ) ) )
+					{
+						// If menu bar is embedded and contains a horizontal glue or caption component,
+						// then split the hit test spot so that
+						// the glue/caption component area can be used to move the window.
 
-					Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
-					int x2 = glueLocation.x + horizontalGlue.getWidth();
-					Rectangle r2;
-					if( getComponentOrientation().isLeftToRight() ) {
-						r2 = new Rectangle( x2, r.y, (r.x + r.width) - x2, r.height );
+						Point glueLocation = SwingUtilities.convertPoint( c, 0, 0, window );
+						int x2 = glueLocation.x + c.getWidth();
+						Rectangle r2;
+						if( getComponentOrientation().isLeftToRight() ) {
+							r2 = new Rectangle( x2, r.y, (r.x + r.width) - x2, r.height );
 
-						r.width = glueLocation.x - r.x;
-					} else {
-						r2 = new Rectangle( r.x, r.y, glueLocation.x - r.x, r.height );
+							r.width = glueLocation.x - r.x;
+						} else {
+							r2 = new Rectangle( r.x, r.y, glueLocation.x - r.x, r.height );
 
-						r.width = (r.x + r.width) - x2;
-						r.x = x2;
+							r.width = (r.x + r.width) - x2;
+							r.x = x2;
+						}
+						if( r2.width > 0 )
+							hitTestSpots.add( r2 );
 					}
-					hitTestSpots.add( r2 );
 				}
 
 				hitTestSpots.add( r );

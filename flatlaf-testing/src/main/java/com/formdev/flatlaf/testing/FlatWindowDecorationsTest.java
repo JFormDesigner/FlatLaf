@@ -262,6 +262,16 @@ debug*/
 		menuBar.revalidate();
 	}
 
+	private void addCaption() {
+		JLabel caption = new JLabel( "Caption" );
+		caption.setBackground( Color.green );
+		caption.setOpaque( true );
+		caption.putClientProperty( FlatClientProperties.COMPONENT_TITLE_BAR_CAPTION, true );
+
+		menuBar.add( caption );
+		menuBar.revalidate();
+	}
+
 	private void removeMenu() {
 		int menuCount = menuBar.getMenuCount();
 		if( menuCount <= 0 )
@@ -445,6 +455,7 @@ debug*/
 		JPanel panel3 = new JPanel();
 		addMenuButton = new JButton();
 		addGlueButton = new JButton();
+		addCaptionButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
 		changeTitleButton = new JButton();
@@ -547,6 +558,7 @@ debug*/
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]unrel" +
 				"[]"));
 
@@ -560,20 +572,25 @@ debug*/
 			addGlueButton.addActionListener(e -> addGlue());
 			panel3.add(addGlueButton, "cell 0 1");
 
+			//---- addCaptionButton ----
+			addCaptionButton.setText("Add caption");
+			addCaptionButton.addActionListener(e -> addCaption());
+			panel3.add(addCaptionButton, "cell 0 2");
+
 			//---- removeMenuButton ----
 			removeMenuButton.setText("Remove menu");
 			removeMenuButton.addActionListener(e -> removeMenu());
-			panel3.add(removeMenuButton, "cell 0 2");
+			panel3.add(removeMenuButton, "cell 0 3");
 
 			//---- changeMenuButton ----
 			changeMenuButton.setText("Change menu");
 			changeMenuButton.addActionListener(e -> changeMenu());
-			panel3.add(changeMenuButton, "cell 0 3");
+			panel3.add(changeMenuButton, "cell 0 4");
 
 			//---- changeTitleButton ----
 			changeTitleButton.setText("Change title");
 			changeTitleButton.addActionListener(e -> changeTitle());
-			panel3.add(changeTitleButton, "cell 0 4");
+			panel3.add(changeTitleButton, "cell 0 5");
 		}
 		add(panel3, "cell 2 0 1 8,aligny top,growy 0");
 
@@ -961,6 +978,7 @@ debug*/
 	private JCheckBox rightCompCheckBox;
 	private JButton addMenuButton;
 	private JButton addGlueButton;
+	private JButton addCaptionButton;
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
 	private JButton changeTitleButton;
