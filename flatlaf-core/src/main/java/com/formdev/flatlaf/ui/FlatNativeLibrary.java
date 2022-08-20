@@ -55,11 +55,25 @@ class FlatNativeLibrary
 				libraryName += "_64";
 
 			// load jawt native library
-			loadJAWT();
+			if( !SystemInfo.isJava_9_orLater ) {
+				// In Java 8, load jawt.dll (part of JRE) explicitly because it
+				// is not found when running application with <jdk>/bin/java.exe.
+				// When using <jdk>/jre/bin/java.exe, it is found.
+				// jawt.dll is located in <jdk>/jre/bin/.
+				// Java 9 and later do not have this problem.
+				loadJAWT();
+			}
 		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
 			// Linux: requires x86_64
 
 			libraryName = "flatlaf-linux-x86_64";
+
+			// Load jawt.so (part of JRE) explicitly because it is not found
+			// in all Java versions/distributions.
+			// E.g. not found in Java 13 and later from openjdk.java.net.
+			// There seems to be also differences between distributions.
+			// E.g. Adoptium Java 17 does not need this, but Java 17 from openjdk.java.net does.
+			loadJAWT();
 		} else
 			return; // no native library available for current OS or CPU architecture
 
@@ -81,14 +95,6 @@ class FlatNativeLibrary
 	}
 
 	private static void loadJAWT() {
-		if( SystemInfo.isJava_9_orLater )
-			return;
-
-		// In Java 8, load jawt.dll (part of JRE) explicitly because it
-		// is not found when running application with <jdk>/bin/java.exe.
-		// When using <jdk>/jre/bin/java.exe, it is found.
-		// jawt.dll is located in <jdk>/jre/bin/.
-		// Java 9 and later do not have this problem.
 		try {
 			System.loadLibrary( "jawt" );
 		} catch( UnsatisfiedLinkError ex ) {
