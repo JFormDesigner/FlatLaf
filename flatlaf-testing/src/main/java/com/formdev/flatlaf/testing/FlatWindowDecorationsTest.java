@@ -30,6 +30,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
 
 /**
@@ -40,6 +41,12 @@ public class FlatWindowDecorationsTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
+			if( SystemInfo.isLinux ) {
+				// enable custom window decorations
+				JFrame.setDefaultLookAndFeelDecorated( true );
+				JDialog.setDefaultLookAndFeelDecorated( true );
+			}
+
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
 			frame.applyComponentOrientationToFrame = true;
 

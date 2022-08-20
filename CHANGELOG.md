@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Linux: Use X11 window manager events to move window and to show window menu
+  (right-click on window title bar), if custom window decorations are enabled.
+  This gives FlatLaf windows a more "native" feeling. (issue #482)
 - TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
   value `TabbedPane.rotateTabRuns` to `false`. (issue #574)
 - Native window decorations (Windows 10/11 only): Added client property to mark

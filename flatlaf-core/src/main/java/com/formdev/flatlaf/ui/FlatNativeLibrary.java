@@ -56,6 +56,10 @@ class FlatNativeLibrary
 
 			// load jawt native library
 			loadJAWT();
+		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
+			// Linux: requires x86_64
+
+			libraryName = "flatlaf-linux-x86_64";
 		} else
 			return; // no native library available for current OS or CPU architecture
 

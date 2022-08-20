@@ -357,6 +357,7 @@ public class FlatTitlePane
 			restoreButton.setVisible( resizable && maximized );
 
 			if( maximized &&
+				!(SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window )) &&
 				rootPane.getClientProperty( "_flatlaf.maximizedBoundsUpToDate" ) == null )
 			{
 				rootPane.putClientProperty( "_flatlaf.maximizedBoundsUpToDate", null );
@@ -735,6 +736,17 @@ debug*/
 				? (state & ~Frame.ICONIFIED)
 				: (state & ~Frame.MAXIMIZED_BOTH) );
 		}
+	}
+
+	private void maximizeOrRestore() {
+		if( !(window instanceof Frame) || !((Frame)window).isResizable() )
+			return;
+
+		Frame frame = (Frame) window;
+		if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+			restore();
+		else
+			maximize();
 	}
 
 	/**
@@ -1154,23 +1166,23 @@ debug*/
 		//---- interface MouseListener ----
 
 		private Point dragOffset;
+		private boolean nativeMove;
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
+			// on Linux, when using native library, the mouse clicked event
+			// is usually not sent and maximize/restore is done in mouse pressed event
+			// this check is here for the case that a mouse clicked event comes thru for some reason
+			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) )
+				return;
+
 			if( e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton( e ) ) {
 				if( e.getSource() == iconLabel ) {
 					// double-click on icon closes window
 					close();
-				} else if( !hasNativeCustomDecoration() &&
-					window instanceof Frame &&
-					((Frame)window).isResizable() )
-				{
+				} else if( !hasNativeCustomDecoration() ) {
 					// maximize/restore on double-click
-					Frame frame = (Frame) window;
-					if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-						restore();
-					else
-						maximize();
+					maximizeOrRestore();
 				}
 			}
 		}
@@ -1180,10 +1192,37 @@ debug*/
 			if( window == null )
 				return; // should newer occur
 
+			// on Linux, show window menu
+			if( SwingUtilities.isRightMouseButton( e ) &&
+				SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) )
+			{
+				e.consume();
+				FlatNativeLinuxLibrary.showWindowMenu( window, e );
+				return;
+			}
+
 			if( !SwingUtilities.isLeftMouseButton( e ) )
 				return;
 
 			dragOffset = SwingUtilities.convertPoint( FlatTitlePane.this, e.getPoint(), window );
+			nativeMove = false;
+
+			// on Linux, move or maximize/restore window
+			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
+				switch( e.getClickCount() ) {
+					case 1:
+						// move window via _NET_WM_MOVERESIZE event
+						e.consume();
+						nativeMove = FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, FlatNativeLinuxLibrary.MOVE );
+						break;
+
+					case 2:
+						// maximize/restore on double-click
+						// also done here because no mouse clicked event is sent when using _NET_WM_MOVERESIZE event
+						maximizeOrRestore();
+						break;
+				}
+			}
 		}
 
 		@Override public void mouseReleased( MouseEvent e ) {}
@@ -1194,8 +1233,11 @@ debug*/
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
-			if( window == null )
+			if( window == null || dragOffset == null )
 				return; // should newer occur
+
+			if( nativeMove )
+				return;
 
 			if( !SwingUtilities.isLeftMouseButton( e ) )
 				return;
