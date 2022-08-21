@@ -1175,8 +1175,14 @@ debug*/
 			// on Linux, when using native library, the mouse clicked event
 			// is usually not sent and maximize/restore is done in mouse pressed event
 			// this check is here for the case that a mouse clicked event comes thru for some reason
-			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) )
+			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
+				// see comment in mousePressed()
+				if( lastSingleClickWhen != 0 && (e.getWhen() - lastSingleClickWhen) <= getMultiClickInterval() ) {
+					lastSingleClickWhen = 0;
+					maximizeOrRestore();
+				}
 				return;
+			}
 
 			if( e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton( e ) ) {
 				if( e.getSource() == iconLabel ) {
@@ -1211,9 +1217,16 @@ debug*/
 
 			// on Linux, move or maximize/restore window
 			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
+				// The fired Java mouse events, when doing a double-click and the first click
+				// sends a _NET_WM_MOVERESIZE message, are different for various Linux distributions:
+				//   CentOS 7      (GNOME 3.28.2, X11):   PRESSED(clickCount=1) PRESSED(clickCount=2) RELEASED(clickCount=2)
+				//   Ubuntu 20.04  (GNOME 3.36.1, X11):   PRESSED(clickCount=1) PRESSED(clickCount=2) RELEASED(clickCount=2)
+				//   Ubuntu 22.04  (GNOME 42.2, Wayland): PRESSED(clickCount=1)                       RELEASED(clickCount=1) CLICKED(clickCount=1)
+				//   Kubuntu 22.04 (KDE 5.24.4, X11):     PRESSED(clickCount=1) PRESSED(clickCount=1) RELEASED(clickCount=1)
+
 				// double-click is not always recognized in Java when using _NET_WM_MOVERESIZE message
 				int clickCount = e.getClickCount();
-				if( clickCount == 1 && (e.getWhen() - lastSingleClickWhen) <= getMultiClickInterval() )
+				if( clickCount == 1 && lastSingleClickWhen != 0 && (e.getWhen() - lastSingleClickWhen) <= getMultiClickInterval() )
 					clickCount = 2;
 
 				switch( clickCount ) {
@@ -1227,6 +1240,7 @@ debug*/
 					case 2:
 						// maximize/restore on double-click
 						// also done here because no mouse clicked event is sent when using _NET_WM_MOVERESIZE message
+						lastSingleClickWhen = 0;
 						maximizeOrRestore();
 						break;
 				}
@@ -1235,7 +1249,7 @@ debug*/
 
 		private int getMultiClickInterval() {
 			Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval" );
-			return (value instanceof Integer) ? (Integer) value : 200;
+			return (value instanceof Integer) ? (Integer) value : 500;
 		}
 
 		@Override public void mouseReleased( MouseEvent e ) {}
