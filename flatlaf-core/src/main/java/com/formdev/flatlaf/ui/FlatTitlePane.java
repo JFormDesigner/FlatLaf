@@ -32,6 +32,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -1167,6 +1168,7 @@ debug*/
 
 		private Point dragOffset;
 		private boolean nativeMove;
+		private long lastSingleClickWhen;
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
@@ -1209,20 +1211,31 @@ debug*/
 
 			// on Linux, move or maximize/restore window
 			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
-				switch( e.getClickCount() ) {
+				// double-click is not always recognized in Java when using _NET_WM_MOVERESIZE message
+				int clickCount = e.getClickCount();
+				if( clickCount == 1 && (e.getWhen() - lastSingleClickWhen) <= getMultiClickInterval() )
+					clickCount = 2;
+
+				switch( clickCount ) {
 					case 1:
-						// move window via _NET_WM_MOVERESIZE event
+						// move window via _NET_WM_MOVERESIZE message
 						e.consume();
 						nativeMove = FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, FlatNativeLinuxLibrary.MOVE );
+						lastSingleClickWhen = e.getWhen();
 						break;
 
 					case 2:
 						// maximize/restore on double-click
-						// also done here because no mouse clicked event is sent when using _NET_WM_MOVERESIZE event
+						// also done here because no mouse clicked event is sent when using _NET_WM_MOVERESIZE message
 						maximizeOrRestore();
 						break;
 				}
 			}
+		}
+
+		private int getMultiClickInterval() {
+			Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "awt.multiClickInterval" );
+			return (value instanceof Integer) ? (Integer) value : 200;
 		}
 
 		@Override public void mouseReleased( MouseEvent e ) {}
