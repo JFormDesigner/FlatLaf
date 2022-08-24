@@ -10,6 +10,8 @@ FlatLaf Change Log
 - Native window decorations (Windows 10/11 only): Added client property to mark
   components in embedded menu bar as "caption" (allow moving window). (issue
   #569)
+- Added system property `flatlaf.updateUIOnSystemFontChange` to allow disabling
+  automatic UI update when system font changes. (issue #580)
 
 #### Fixed bugs
 

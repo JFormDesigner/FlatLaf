@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -138,6 +139,20 @@ public interface FlatSystemProperties
 	 * <strong>Default</strong> {@code true}
 	 */
 	String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection";
+
+	/**
+	 * Specifies whether FlatLaf updates the UI when the system font changes.
+	 * If {@code true}, {@link SwingUtilities#updateComponentTreeUI(java.awt.Component)}
+	 * gets invoked for all windows if the system font has changed.
+	 * This is the similar to when switching to another look and feel (theme).
+	 * Applications that do not work correctly when switching look and feel,
+	 * should disable this option to avoid corrupted UI.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 * @since 2.5
+	 */
+	String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flatlaf.updateUIOnSystemFontChange";
 
 	/**
 	 * Specifies a directory in which the native FlatLaf library have been extracted.

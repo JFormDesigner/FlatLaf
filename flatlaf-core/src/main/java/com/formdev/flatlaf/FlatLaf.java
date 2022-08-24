@@ -276,6 +276,9 @@ public abstract class FlatLaf
 		}
 		if( desktopPropertyName != null ) {
 			desktopPropertyListener = e -> {
+				if( !FlatSystemProperties.getBoolean( FlatSystemProperties.UPDATE_UI_ON_SYSTEM_FONT_CHANGE, true ) )
+					return;
+
 				String propertyName = e.getPropertyName();
 				if( desktopPropertyName.equals( propertyName ) || propertyName.equals( desktopPropertyName2 ) )
 					reSetLookAndFeel();
