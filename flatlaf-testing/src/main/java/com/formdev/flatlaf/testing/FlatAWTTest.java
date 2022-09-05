@@ -17,8 +17,11 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLightLaf;
 
 /**
@@ -68,6 +71,52 @@ public class FlatAWTTest
 			frame.add( new ScrollPane() );
 			frame.add( new Panel() );
 			frame.add( new Canvas() );
+
+			Panel controlPanel = new Panel();
+			frame.add( controlPanel );
+
+			Checkbox enabledCheckBox = new Checkbox( "enabled", true );
+			enabledCheckBox.addItemListener( e -> {
+				boolean enabled = enabledCheckBox.getState();
+				for( Component c : frame.getComponents() ) {
+					if( c != controlPanel )
+						c.setEnabled( enabled );
+				}
+			} );
+			controlPanel.add( enabledCheckBox );
+
+			Checkbox explicitColorsCheckBox = new Checkbox( "explicit colors" );
+			explicitColorsCheckBox.addItemListener( e -> {
+				boolean explicit = explicitColorsCheckBox.getState();
+				for( Component c : frame.getComponents() ) {
+					if( c != controlPanel )
+						c.setBackground( explicit ? Color.green : null );
+				}
+			} );
+			controlPanel.add( explicitColorsCheckBox );
+
+			Menu menu = new Menu( "File" );
+			menu.add( new MenuItem( "New" ) );
+			menu.add( new MenuItem( "Open" ) );
+			menu.add( new MenuItem( "Save" ) );
+
+			MenuBar menuBar = new MenuBar();
+			menuBar.add( menu );
+			frame.setMenuBar( menuBar );
+
+			PopupMenu popupMenu = new PopupMenu();
+			popupMenu.add( new MenuItem( "item 1" ) );
+			popupMenu.add( new MenuItem( "item 2" ) );
+			popupMenu.add( new MenuItem( "item 3" ) );
+			list.add( popupMenu );
+			list.addMouseListener( new MouseAdapter() {
+				@Override
+				public
+				void mousePressed( MouseEvent e ) {
+					if( SwingUtilities.isRightMouseButton( e ) )
+						popupMenu.show( list, 0, 0 );
+				}
+			} );
 
 			frame.setSize( 800, 600 );
 			frame.setVisible( true );

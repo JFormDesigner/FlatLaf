@@ -631,6 +631,9 @@ public class FlatComboBoxUI
 
 	protected Color getBackground( boolean enabled ) {
 		if( enabled ) {
+			if( FlatUIUtils.isAWTPeer( comboBox ) )
+				return UIManager.getColor( "ComboBox.background" );
+
 			Color background = comboBox.getBackground();
 
 			// always use explicitly set color

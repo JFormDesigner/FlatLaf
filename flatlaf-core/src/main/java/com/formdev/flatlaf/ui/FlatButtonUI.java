@@ -629,6 +629,9 @@ public class FlatButtonUI
 	}
 
 	protected Color getBackgroundBase( JComponent c, boolean def ) {
+		if( FlatUIUtils.isAWTPeer( c ) )
+			return background;
+
 		// use component background if explicitly set
 		Color bg = c.getBackground();
 		if( isCustomBackground( bg ) )

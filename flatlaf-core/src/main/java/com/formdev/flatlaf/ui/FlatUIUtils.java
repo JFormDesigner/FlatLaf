@@ -59,6 +59,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -241,6 +242,11 @@ public class FlatUIUtils
 			}
 		}
 
+		// invoke hasFocus() here because components may have overridden this method
+		// (e.g. Swing delegate components used for AWT components on macOS)
+		if( c.hasFocus() )
+			return true;
+
 		return keyboardFocusManager.getPermanentFocusOwner() == c &&
 			isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
 	}
@@ -249,6 +255,13 @@ public class FlatUIUtils
 		Window window = SwingUtilities.windowForComponent( c );
 		return window == activeWindow ||
 			(window != null && window.getType() == Window.Type.POPUP && window.getOwner() == activeWindow);
+	}
+
+	static boolean isAWTPeer( JComponent c ) {
+		// on macOS, Swing components are used for AWT components
+		if( SystemInfo.isMacOS )
+			return c.getClass().getName().startsWith( "sun.lwawt.LW" );
+		return false;
 	}
 
 	/**
@@ -335,7 +348,7 @@ public class FlatUIUtils
 	 */
 	public static Object[] setRenderingHints( Graphics g ) {
 		Graphics2D g2 = (Graphics2D) g;
-		Object[] oldRenderingHints = new Object[] {
+		Object[] oldRenderingHints = {
 			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
 			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
 		};
@@ -378,7 +391,7 @@ public class FlatUIUtils
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
-		Object[] oldRenderingHints2 = new Object[] {
+		Object[] oldRenderingHints2 = {
 			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
 			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
 		};
@@ -666,9 +679,9 @@ public class FlatUIUtils
 	 * is smaller than its bounds (for the focus decoration).
 	 */
 	public static void paintParentBackground( Graphics g, JComponent c ) {
-		Container parent = findOpaqueParent( c );
-		if( parent != null ) {
-			g.setColor( parent.getBackground() );
+		Color background = getParentBackground( c );
+		if( background != null ) {
+			g.setColor( background );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 		}
 	}
@@ -678,9 +691,10 @@ public class FlatUIUtils
 	 */
 	public static Color getParentBackground( JComponent c ) {
 		Container parent = findOpaqueParent( c );
-		return (parent != null)
-			? parent.getBackground()
-			: UIManager.getColor( "Panel.background" ); // fallback, probably never used
+		// parent.getBackground() may return null
+		// (e.g. for Swing delegate components used for AWT components on macOS)
+		Color background = (parent != null) ? parent.getBackground() : null;
+		return (background != null) ? background : UIManager.getColor( "Panel.background" );
 	}
 
 	/**

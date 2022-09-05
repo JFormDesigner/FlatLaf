@@ -18,6 +18,8 @@ FlatLaf Change Log
 - Fixed missing UI value `MenuItem.acceleratorDelimiter` on macOS. (was `null`,
   is now an empty string)
 - Fixed possible exception in `FlatUIUtils.resetRenderingHints()`. (issue #575)
+- Fixed AWT components on macOS, which use Swing components internally. (issue
+  #583)
 
 
 ## 2.4

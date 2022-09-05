@@ -18,12 +18,16 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.AbstractButton;
@@ -31,6 +35,7 @@ import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonListener;
@@ -92,7 +97,18 @@ public class FlatRadioButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
+		if( FlatUIUtils.isAWTPeer( c ) )
+			AWTPeerMouseExitedFix.install( c );
+
 		installStyle( (AbstractButton) c );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		if( FlatUIUtils.isAWTPeer( c ) )
+			AWTPeerMouseExitedFix.uninstall( c );
 	}
 
 	@Override
@@ -319,6 +335,71 @@ public class FlatRadioButtonUI
 		public void propertyChange( PropertyChangeEvent e ) {
 			super.propertyChange( e );
 			FlatRadioButtonUI.this.propertyChange( b, e );
+		}
+	}
+
+	//---- class AWTPeerMouseExitedFix ----------------------------------------
+
+	/**
+	 * Hack for missing mouse-exited event for java.awt.Checkbox on macOS (to fix hover effect).
+	 *
+	 * On macOS, AWT components internally use Swing components.
+	 * This is implemented in class sun.lwawt.LWCheckboxPeer, which uses
+	 * a container component CheckboxDelegate that has a JCheckBox and a JRadioButton
+	 * as children. Only one of them is visible.
+	 *
+	 * The reason that mouse-exited event is not sent to the JCheckBox or JRadioButton
+	 * is that sun.lwawt.LWComponentPeer.createDelegateEvent() uses
+	 * SwingUtilities.getDeepestComponentAt() to find the event target,
+	 * which finds the container component CheckboxDelegate,
+	 * which receives the mouse-exited event.
+	 *
+	 * This class adds listeners and forwards the mouse-exited event
+	 * from CheckboxDelegate to JCheckBox or JRadioButton.
+	 */
+	private static class AWTPeerMouseExitedFix
+		extends MouseAdapter
+		implements PropertyChangeListener
+	{
+		private final JComponent button;
+
+		static void install( JComponent button ) {
+			AWTPeerMouseExitedFix l = new AWTPeerMouseExitedFix( button );
+			button.addPropertyChangeListener( "ancestor", l );
+			Container parent = button.getParent();
+			if( parent != null )
+				parent.addMouseListener( l );
+		}
+
+		static void uninstall( JComponent button ) {
+			for( PropertyChangeListener l : button.getPropertyChangeListeners( "ancestor" ) ) {
+				if( l instanceof AWTPeerMouseExitedFix ) {
+					button.removePropertyChangeListener( "ancestor", l );
+					Container parent = button.getParent();
+					if( parent != null )
+						parent.removeMouseListener( (AWTPeerMouseExitedFix) l );
+					break;
+				}
+			}
+		}
+
+		AWTPeerMouseExitedFix( JComponent button ) {
+			this.button = button;
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			if( e.getOldValue() instanceof Component )
+				((Component)e.getOldValue()).removeMouseListener( this );
+			if( e.getNewValue() instanceof Component ) {
+				((Component)e.getNewValue()).removeMouseListener( this ); // avoid duplicate listeners
+				((Component)e.getNewValue()).addMouseListener( this );
+			}
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			button.dispatchEvent( SwingUtilities.convertMouseEvent( e.getComponent(), e, button ) );
 		}
 	}
 }
