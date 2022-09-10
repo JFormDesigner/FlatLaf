@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- MenuBar: Support different menu selection style UI defaults for `MenuBar` and
+  `MenuItem`. (issue #587)
 - TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
   value `TabbedPane.rotateTabRuns` to `false`. (issue #574)
 - Native window decorations (Windows 10/11 only): Added client property to mark

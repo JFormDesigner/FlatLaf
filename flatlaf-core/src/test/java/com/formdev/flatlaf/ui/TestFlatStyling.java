@@ -436,6 +436,8 @@ public class TestFlatStyling
 
 		ui.applyStyle( "itemMargins: 1,2,3,4" );
 		ui.applyStyle( "hoverBackground: #fff" );
+		ui.applyStyle( "selectionBackground: #fff" );
+		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "underlineSelectionBackground: #fff" );
 		ui.applyStyle( "underlineSelectionColor: #fff" );
 		ui.applyStyle( "underlineSelectionHeight: 3" );

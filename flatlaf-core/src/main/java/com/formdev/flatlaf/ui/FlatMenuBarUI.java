@@ -76,6 +76,8 @@ public class FlatMenuBarUI
 
 	// used in FlatMenuUI
 	/** @since 2 */ @Styleable protected Color hoverBackground;
+	/** @since 2.5 */ @Styleable protected Color selectionBackground;
+	/** @since 2.5 */ @Styleable protected Color selectionForeground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionColor;
 	/** @since 2 */ @Styleable protected int underlineSelectionHeight = -1;

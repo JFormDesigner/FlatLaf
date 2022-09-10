@@ -380,6 +380,8 @@ public class TestFlatStyleableValue
 
 		testInsets( c, ui, "itemMargins", 1,2,3,4 );
 		testColor( c, ui, "hoverBackground", 0x123456 );
+		testColor( c, ui, "selectionBackground", 0x123456 );
+		testColor( c, ui, "selectionForeground", 0x123456 );
 		testColor( c, ui, "underlineSelectionBackground", 0x123456 );
 		testColor( c, ui, "underlineSelectionColor", 0x123456 );
 		testInteger( c, ui, "underlineSelectionHeight", 123 );

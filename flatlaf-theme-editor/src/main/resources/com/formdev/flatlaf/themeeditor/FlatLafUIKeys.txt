@@ -476,6 +476,8 @@ MenuBar.foreground
 MenuBar.highlight
 MenuBar.hoverBackground
 MenuBar.itemMargins
+MenuBar.selectionBackground
+MenuBar.selectionForeground
 MenuBar.shadow
 MenuBar.underlineSelectionBackground
 MenuBar.underlineSelectionColor
@@ -503,6 +505,7 @@ MenuItem.minimumWidth
 MenuItem.opaque
 MenuItem.selectionBackground
 MenuItem.selectionForeground
+MenuItem.selectionType
 MenuItem.textAcceleratorGap
 MenuItem.textNoAcceleratorGap
 MenuItem.underlineSelectionBackground
