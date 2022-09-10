@@ -120,6 +120,7 @@ public class FlatScrollBarUI
 	protected boolean hoverThumb;
 
 	private Map<String, Object> oldStyleValues;
+	private boolean isAWTPeer;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollBarUI();
@@ -235,17 +236,30 @@ public class FlatScrollBarUI
 					break;
 
 				case "ancestor":
-					// check whether scroll bar is used as AWT peer on macOS and
-					// dark theme is active --> reinstall using light theme
-					if( SystemInfo.isMacOS && FlatLaf.isLafDark() ) {
+					// check whether scroll bar is used as AWT peer on macOS
+					if( SystemInfo.isMacOS ) {
 						Container p = scrollbar.getParent();
 						for( int i = 0; i < 2 && p != null; i++, p = p.getParent() ) {
 							if( FlatUIUtils.isAWTPeer( p ) ) {
-								FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> {
-									JScrollBar scrollbar = this.scrollbar;
-									uninstallUI( scrollbar );
-									installUI( scrollbar );
-								} );
+								// Used to disable hover, which does not work correctly
+								// because scroll bars do not receive mouse exited event.
+								// The scroll pane, including its scroll bars, is not part
+								// of the component hierarchy and does not receive mouse events
+								// directly. Instead LWComponentPeer receives mouse events
+								// and delegates them to peers, but entered/exited events
+								// are sent only for the whole scroll pane.
+								// Exited event is only sent when mouse leaves scroll pane.
+								// If mouse enters/exits scroll bar, no entered/exited events are sent.
+								isAWTPeer = true;
+
+								// if dark theme is active, reinstall using light theme
+								if( FlatLaf.isLafDark() ) {
+									FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> {
+										JScrollBar scrollbar = this.scrollbar;
+										uninstallUI( scrollbar );
+										installUI( scrollbar );
+									} );
+								}
 								break;
 							}
 						}
@@ -384,7 +398,7 @@ public class FlatScrollBarUI
 		Color trackColor = FlatUIUtils.deriveColor( this.trackColor, c.getBackground() );
 		return (pressed && pressedTrackColor != null)
 			? FlatUIUtils.deriveColor( pressedTrackColor, trackColor )
-			: ((hover && hoverTrackColor != null)
+			: ((hover && hoverTrackColor != null && !isAWTPeer)
 				? FlatUIUtils.deriveColor( hoverTrackColor, trackColor )
 				: trackColor);
 	}
@@ -394,7 +408,7 @@ public class FlatScrollBarUI
 		Color thumbColor = FlatUIUtils.deriveColor( this.thumbColor, trackColor );
 		return (pressed && pressedThumbColor != null)
 			? FlatUIUtils.deriveColor( pressedThumbColor, thumbColor )
-			: ((hover && hoverThumbColor != null)
+			: ((hover && hoverThumbColor != null && !isAWTPeer)
 				? FlatUIUtils.deriveColor( hoverThumbColor, thumbColor )
 				: thumbColor);
 	}
