@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -37,11 +38,13 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -229,6 +232,24 @@ public class FlatScrollBarUI
 						}
 					}
 					SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
+					break;
+
+				case "ancestor":
+					// check whether scroll bar is used as AWT peer on macOS and
+					// dark theme is active --> reinstall using light theme
+					if( SystemInfo.isMacOS && FlatLaf.isLafDark() ) {
+						Container p = scrollbar.getParent();
+						for( int i = 0; i < 2 && p != null; i++, p = p.getParent() ) {
+							if( FlatUIUtils.isAWTPeer( p ) ) {
+								FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> {
+									JScrollBar scrollbar = this.scrollbar;
+									uninstallUI( scrollbar );
+									installUI( scrollbar );
+								} );
+								break;
+							}
+						}
+					}
 					break;
 			}
 		};

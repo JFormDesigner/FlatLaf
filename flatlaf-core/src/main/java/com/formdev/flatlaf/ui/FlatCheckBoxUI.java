@@ -43,7 +43,7 @@ public class FlatCheckBoxUI
 	extends FlatRadioButtonUI
 {
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.canUseSharedUI( c )
+		return FlatUIUtils.canUseSharedUI( c ) && !FlatUIUtils.needsLightAWTPeer( c )
 			? FlatUIUtils.createSharedUI( FlatCheckBoxUI.class, () -> new FlatCheckBoxUI( true ) )
 			: new FlatCheckBoxUI( false );
 	}

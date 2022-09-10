@@ -128,6 +128,13 @@ public class FlatTextFieldUI
 
 	@Override
 	public void installUI( JComponent c ) {
+		if( FlatUIUtils.needsLightAWTPeer( c ) )
+			FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> installUIImpl( c ) );
+		else
+			installUIImpl( c );
+	}
+
+	private void installUIImpl( JComponent c ) {
 		super.installUI( c );
 
 		leadingIcon = clientProperty( c, TEXT_FIELD_LEADING_ICON, null, Icon.class );

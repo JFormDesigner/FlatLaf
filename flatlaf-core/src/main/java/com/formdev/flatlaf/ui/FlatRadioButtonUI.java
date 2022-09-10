@@ -83,7 +83,7 @@ public class FlatRadioButtonUI
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.canUseSharedUI( c )
+		return FlatUIUtils.canUseSharedUI( c ) && !FlatUIUtils.needsLightAWTPeer( c )
 			? FlatUIUtils.createSharedUI( FlatRadioButtonUI.class, () -> new FlatRadioButtonUI( true ) )
 			: new FlatRadioButtonUI( false );
 	}
@@ -95,6 +95,13 @@ public class FlatRadioButtonUI
 
 	@Override
 	public void installUI( JComponent c ) {
+		if( FlatUIUtils.needsLightAWTPeer( c ) )
+			FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> installUIImpl( c ) );
+		else
+			installUIImpl( c );
+	}
+
+	private void installUIImpl( JComponent c ) {
 		super.installUI( c );
 
 		if( FlatUIUtils.isAWTPeer( c ) )

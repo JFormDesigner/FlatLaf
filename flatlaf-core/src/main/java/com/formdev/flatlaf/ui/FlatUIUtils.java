@@ -33,6 +33,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.SystemColor;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -45,16 +46,22 @@ import java.util.WeakHashMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
@@ -257,11 +264,36 @@ public class FlatUIUtils
 			(window != null && window.getType() == Window.Type.POPUP && window.getOwner() == activeWindow);
 	}
 
-	static boolean isAWTPeer( JComponent c ) {
+	static boolean isAWTPeer( Component c ) {
 		// on macOS, Swing components are used for AWT components
 		if( SystemInfo.isMacOS )
 			return c.getClass().getName().startsWith( "sun.lwawt.LW" );
 		return false;
+	}
+
+	/**
+	 * Checks whether component is used as peer for AWT (on macOS) and
+	 * whether a dark FlatLaf theme is active, which requires special handling
+	 * because AWT always uses light colors.
+	 */
+	static boolean needsLightAWTPeer( JComponent c ) {
+		return FlatUIUtils.isAWTPeer( c ) && FlatLaf.isLafDark();
+	}
+
+	private static UIDefaults lightAWTPeerDefaults;
+
+	static void runWithLightAWTPeerUIDefaults( Runnable runnable ) {
+		if( lightAWTPeerDefaults == null ) {
+			FlatLaf lightLaf = UIManager.getInt( "Component.focusWidth" ) >= 2
+				? new FlatIntelliJLaf()
+				: new FlatLightLaf();
+			lightAWTPeerDefaults = lightLaf.getDefaults();
+		}
+
+		FlatLaf.runWithUIDefaultsGetter( key -> {
+			Object value = lightAWTPeerDefaults.get( key );
+			return (value != null) ? value : FlatLaf.NULL_VALUE;
+		}, runnable );
 	}
 
 	/**
@@ -694,7 +726,17 @@ public class FlatUIUtils
 		// parent.getBackground() may return null
 		// (e.g. for Swing delegate components used for AWT components on macOS)
 		Color background = (parent != null) ? parent.getBackground() : null;
-		return (background != null) ? background : UIManager.getColor( "Panel.background" );
+		if( background != null )
+			return background;
+
+		if( isAWTPeer( c ) ) {
+			// AWT peers usually use component background, except for TextField and ScrollPane
+			return c instanceof JTextField || c instanceof JScrollPane || c.getBackground() == null
+				? SystemColor.window
+				: c.getBackground();
+		}
+
+		return UIManager.getColor( "Panel.background" );
 	}
 
 	/**

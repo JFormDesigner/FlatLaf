@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.*;
 
 /**
  * Used to test AWT components on macOS, which internally use Swing.
@@ -31,9 +31,14 @@ import com.formdev.flatlaf.FlatLightLaf;
  */
 public class FlatAWTTest
 {
+	private static Color oldBackground;
+
 	public static void main( String[] args ) {
 		EventQueue.invokeLater( () -> {
 			FlatLightLaf.setup();
+//			FlatIntelliJLaf.setup();
+//			FlatDarkLaf.setup();
+//			FlatDarculaLaf.setup();
 
 			Frame frame = new Frame( "FlatAWTTest" );
 			frame.addWindowListener( new WindowAdapter() {
@@ -54,23 +59,36 @@ public class FlatAWTTest
 			frame.add( new Checkbox( "radio 3", false, checkboxGroup ) );
 
 			Choice choice = new Choice();
-			choice.add( "item 1" );
-			choice.add( "item 2" );
-			choice.add( "item 3" );
+			for( int i = 1; i <= 20; i++ )
+				choice.add( "item " + i );
 			frame.add( choice );
 
 			frame.add( new TextField( "text" ) );
-			frame.add( new TextArea( "text" ) );
+			frame.add( new TextArea( "text\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15" ) );
 
 			List list = new List();
-			list.add( "item 1" );
-			list.add( "item 2" );
+			for( int i = 1; i <= 10; i++ )
+				list.add( "item " + i );
+			list.select( 1 );
 			frame.add( list );
 
 			frame.add( new Scrollbar() );
-			frame.add( new ScrollPane() );
+			frame.add( new ScrollPane( ScrollPane.SCROLLBARS_ALWAYS ) );
 			frame.add( new Panel() );
 			frame.add( new Canvas() );
+
+/*
+			java.beans.PropertyChangeListener pcl = e -> {
+				System.out.println( e.getSource().getClass().getName()
+					+ ": " + e.getPropertyName() + "   " + e.getOldValue() + " --> " + e.getNewValue() );
+			};
+			for( Component c : frame.getComponents() ) {
+				c.addPropertyChangeListener( "background", pcl );
+				c.addPropertyChangeListener( "foreground", pcl );
+			}
+			frame.addPropertyChangeListener( "background", pcl );
+			frame.addPropertyChangeListener( "foreground", pcl );
+*/
 
 			Panel controlPanel = new Panel();
 			frame.add( controlPanel );
@@ -89,11 +107,21 @@ public class FlatAWTTest
 			explicitColorsCheckBox.addItemListener( e -> {
 				boolean explicit = explicitColorsCheckBox.getState();
 				for( Component c : frame.getComponents() ) {
-					if( c != controlPanel )
+					if( c != controlPanel ) {
 						c.setBackground( explicit ? Color.green : null );
+						c.setForeground( explicit ? Color.red : null );
+					}
 				}
 			} );
 			controlPanel.add( explicitColorsCheckBox );
+
+			Checkbox backgroundColorsCheckBox = new Checkbox( "background color" );
+			backgroundColorsCheckBox.addItemListener( e -> {
+				if( oldBackground == null )
+					oldBackground = frame.getBackground();
+				frame.setBackground( backgroundColorsCheckBox.getState() ? Color.orange : oldBackground );
+			} );
+			controlPanel.add( backgroundColorsCheckBox );
 
 			Menu menu = new Menu( "File" );
 			menu.add( new MenuItem( "New" ) );

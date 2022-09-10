@@ -132,6 +132,7 @@ public class FlatComboBoxUI
 	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
 
+	private Color background;
 	@Styleable protected Color editableBackground;
 	@Styleable protected Color focusedBackground;
 	@Styleable protected Color disabledBackground;
@@ -165,6 +166,13 @@ public class FlatComboBoxUI
 
 	@Override
 	public void installUI( JComponent c ) {
+		if( FlatUIUtils.needsLightAWTPeer( c ) )
+			FlatUIUtils.runWithLightAWTPeerUIDefaults( () -> installUIImpl( c ) );
+		else
+			installUIImpl( c );
+	}
+
+	private void installUIImpl( JComponent c ) {
 		super.installUI( c );
 
 		installStyle();
@@ -227,6 +235,7 @@ public class FlatComboBoxUI
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
+		background = UIManager.getColor( "ComboBox.background" );
 		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
 		focusedBackground = UIManager.getColor( "ComboBox.focusedBackground" );
 		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
@@ -259,6 +268,7 @@ public class FlatComboBoxUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
 		editableBackground = null;
 		focusedBackground = null;
 		disabledBackground = null;
@@ -632,7 +642,7 @@ public class FlatComboBoxUI
 	protected Color getBackground( boolean enabled ) {
 		if( enabled ) {
 			if( FlatUIUtils.isAWTPeer( comboBox ) )
-				return UIManager.getColor( "ComboBox.background" );
+				return background;
 
 			Color background = comboBox.getBackground();
 
