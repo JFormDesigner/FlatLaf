@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -44,6 +45,14 @@ public class FlatTextComponentsTest
 
 	FlatTextComponentsTest() {
 		initComponents();
+	}
+
+	private void editableChanged() {
+		boolean editable = editableCheckBox.isSelected();
+		for( Component c : getComponents() ) {
+			if( c instanceof JTextComponent )
+				((JTextComponent)c).setEditable( editable );
+		}
 	}
 
 	private void changeText() {
@@ -166,6 +175,7 @@ public class FlatTextComponentsTest
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JPanel panel1 = new JPanel();
+		editableCheckBox = new JCheckBox();
 		JButton button1 = new JButton();
 		JLabel leftPaddingLabel = new JLabel();
 		leftPaddingField = new JSpinner();
@@ -321,6 +331,7 @@ public class FlatTextComponentsTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]0" +
 				"[]" +
 				"[]0" +
@@ -330,84 +341,90 @@ public class FlatTextComponentsTest
 				"[]" +
 				"[]"));
 
+			//---- editableCheckBox ----
+			editableCheckBox.setText("editable");
+			editableCheckBox.setSelected(true);
+			editableCheckBox.addActionListener(e -> editableChanged());
+			panel1.add(editableCheckBox, "cell 0 0 2 1,alignx left,growx 0");
+
 			//---- button1 ----
 			button1.setText("change text");
 			button1.addActionListener(e -> changeText());
-			panel1.add(button1, "cell 0 0 2 1,alignx left,growx 0");
+			panel1.add(button1, "cell 0 1 2 1,alignx left,growx 0");
 
 			//---- leftPaddingLabel ----
 			leftPaddingLabel.setText("Left padding:");
-			panel1.add(leftPaddingLabel, "cell 0 1");
+			panel1.add(leftPaddingLabel, "cell 0 2");
 
 			//---- leftPaddingField ----
 			leftPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(leftPaddingField, "cell 1 1");
+			panel1.add(leftPaddingField, "cell 1 2");
 
 			//---- rightPaddingLabel ----
 			rightPaddingLabel.setText("Right padding:");
-			panel1.add(rightPaddingLabel, "cell 0 2");
+			panel1.add(rightPaddingLabel, "cell 0 3");
 
 			//---- rightPaddingField ----
 			rightPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(rightPaddingField, "cell 1 2");
+			panel1.add(rightPaddingField, "cell 1 3");
 
 			//---- topPaddingLabel ----
 			topPaddingLabel.setText("Top padding:");
-			panel1.add(topPaddingLabel, "cell 0 3");
+			panel1.add(topPaddingLabel, "cell 0 4");
 
 			//---- topPaddingField ----
 			topPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(topPaddingField, "cell 1 3");
+			panel1.add(topPaddingField, "cell 1 4");
 
 			//---- bottomPaddingLabel ----
 			bottomPaddingLabel.setText("Bottom padding:");
-			panel1.add(bottomPaddingLabel, "cell 0 4");
+			panel1.add(bottomPaddingLabel, "cell 0 5");
 
 			//---- bottomPaddingField ----
 			bottomPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(bottomPaddingField, "cell 1 4");
+			panel1.add(bottomPaddingField, "cell 1 5");
 
 			//---- leadingIconCheckBox ----
 			leadingIconCheckBox.setText("leading icon");
 			leadingIconCheckBox.addActionListener(e -> leadingIcon());
-			panel1.add(leadingIconCheckBox, "cell 0 5 2 1,alignx left,growx 0");
+			panel1.add(leadingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
 
 			//---- trailingIconCheckBox ----
 			trailingIconCheckBox.setText("trailing icon");
 			trailingIconCheckBox.addActionListener(e -> trailingIcon());
-			panel1.add(trailingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
+			panel1.add(trailingIconCheckBox, "cell 0 7 2 1,alignx left,growx 0");
 
 			//---- leadingComponentCheckBox ----
 			leadingComponentCheckBox.setText("leading component");
 			leadingComponentCheckBox.addActionListener(e -> leadingComponent());
-			panel1.add(leadingComponentCheckBox, "cell 0 7 2 1,alignx left,growx 0");
+			panel1.add(leadingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
 
 			//---- trailingComponentCheckBox ----
 			trailingComponentCheckBox.setText("trailing component");
 			trailingComponentCheckBox.addActionListener(e -> trailingComponent());
-			panel1.add(trailingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
+			panel1.add(trailingComponentCheckBox, "cell 0 9 2 1,alignx left,growx 0");
 
 			//---- leadingComponentVisibleCheckBox ----
 			leadingComponentVisibleCheckBox.setText("leading component visible");
 			leadingComponentVisibleCheckBox.setSelected(true);
 			leadingComponentVisibleCheckBox.addActionListener(e -> leadingComponentVisible());
-			panel1.add(leadingComponentVisibleCheckBox, "cell 0 9 2 1,alignx left,growx 0");
+			panel1.add(leadingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
 
 			//---- trailingComponentVisibleCheckBox ----
 			trailingComponentVisibleCheckBox.setText("trailing component visible");
 			trailingComponentVisibleCheckBox.setSelected(true);
 			trailingComponentVisibleCheckBox.addActionListener(e -> trailingComponentVisible());
-			panel1.add(trailingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
+			panel1.add(trailingComponentVisibleCheckBox, "cell 0 11 2 1,alignx left,growx 0");
 
 			//---- showClearButtonCheckBox ----
 			showClearButtonCheckBox.setText("clear button");
 			showClearButtonCheckBox.addActionListener(e -> showClearButton());
-			panel1.add(showClearButtonCheckBox, "cell 0 11 2 1,alignx left,growx 0");
+			panel1.add(showClearButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
 
 			//---- showRevealButtonCheckBox ----
 			showRevealButtonCheckBox.setText("password reveal button");
 			showRevealButtonCheckBox.addActionListener(e -> showRevealButton());
-			panel1.add(showRevealButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
+			panel1.add(showRevealButtonCheckBox, "cell 0 13 2 1,alignx left,growx 0");
 		}
 		add(panel1, "cell 4 0 1 10,aligny top,growy 0");
 
@@ -660,6 +677,7 @@ public class FlatTextComponentsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField textField1;
+	private JCheckBox editableCheckBox;
 	private JSpinner leftPaddingField;
 	private JSpinner rightPaddingField;
 	private JSpinner topPaddingField;

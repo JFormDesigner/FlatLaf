@@ -23,6 +23,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -291,6 +292,7 @@ public class FlatPasswordFieldUI
 	protected void installRevealButton() {
 		if( showRevealButton ) {
 			revealButton = createRevealButton();
+			updateRevealButton();
 			installLayout();
 			getComponent().add( revealButton );
 		}
@@ -298,20 +300,52 @@ public class FlatPasswordFieldUI
 
 	/** @since 2 */
 	protected JToggleButton createRevealButton() {
-		JToggleButton button = new JToggleButton( revealIcon );
+		JPasswordField c = (JPasswordField) getComponent();
+		JToggleButton button = new JToggleButton( revealIcon, !c.echoCharIsSet() );
 		button.setName( "PasswordField.revealButton" );
 		prepareLeadingOrTrailingComponent( button );
 		button.putClientProperty( FlatClientProperties.STYLE_CLASS, "inTextField revealButton" );
-		if( FlatClientProperties.clientPropertyBoolean( getComponent(), KEY_REVEAL_SELECTED, false ) ) {
+		if( FlatClientProperties.clientPropertyBoolean( c, KEY_REVEAL_SELECTED, false ) ) {
 			button.setSelected( true );
 			updateEchoChar( true );
 		}
 		button.addActionListener( e -> {
 			boolean selected = button.isSelected();
 			updateEchoChar( selected );
-			getComponent().putClientProperty( KEY_REVEAL_SELECTED, selected );
+			c.putClientProperty( KEY_REVEAL_SELECTED, selected );
 		} );
 		return button;
+	}
+
+	/** @since 2.5 */
+	protected void updateRevealButton() {
+		if( revealButton == null )
+			return;
+
+		JTextComponent c = getComponent();
+		boolean visible = c.isEnabled();
+		if( visible != revealButton.isVisible() ) {
+			revealButton.setVisible( visible );
+			c.revalidate();
+			c.repaint();
+
+			if( !visible ) {
+				revealButton.setSelected( false );
+				updateEchoChar( false );
+				getComponent().putClientProperty( KEY_REVEAL_SELECTED, null );
+			}
+		}
+	}
+
+	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+
+		switch( e.getPropertyName() ) {
+			case "enabled":
+				updateRevealButton();
+				break;
+		}
 	}
 
 	private void updateEchoChar( boolean selected ) {
@@ -320,6 +354,10 @@ public class FlatPasswordFieldUI
 			: (echoChar != null ? echoChar : '*');
 
 		JPasswordField c = (JPasswordField) getComponent();
+		if( newEchoChar == c.getEchoChar() )
+			return;
+
+		// set echo char
 		LookAndFeel.installProperty( c, "echoChar", newEchoChar );
 
 		// check whether was able to set echo char via LookAndFeel.installProperty()
