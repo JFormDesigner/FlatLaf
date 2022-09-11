@@ -138,7 +138,7 @@ public class NativeLibrary
 			System.load( libraryFile.getAbsolutePath() );
 			return true;
 		} catch( Throwable ex ) {
-			log( null, ex );
+			log( ex.getMessage(), ex );
 			return false;
 		}
 	}

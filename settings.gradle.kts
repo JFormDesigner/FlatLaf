@@ -26,7 +26,9 @@ include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
 
 includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
-includeProject( "flatlaf-natives-jna", "flatlaf-natives/flatlaf-natives-jna" )
+includeProject( "flatlaf-natives-linux",   "flatlaf-natives/flatlaf-natives-linux" )
+includeProject( "flatlaf-natives-jna",     "flatlaf-natives/flatlaf-natives-jna" )
+
 includeProject( "flatlaf-testing-modular-app", "flatlaf-testing/flatlaf-testing-modular-app" )
 
 fun includeProject( projectPath: String, projectDir: String ) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 FormDev Software GmbH
+ * Copyright 2022 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,11 @@ plugins {
 }
 
 flatlafJniHeaders {
-	headers = listOf(
-		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder.h",
-		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
-	)
+	headers = listOf( "com_formdev_flatlaf_ui_FlatNativeLinuxLibrary.h" )
 }
 
 library {
-	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64 ) )
+	targetMachines.set( listOf( machines.linux.x86_64 ) )
 }
 
 var javaHome = System.getProperty( "java.home" )
@@ -40,8 +37,8 @@ tasks {
 		group = "build"
 		description = "Builds natives"
 
-		if( org.gradle.internal.os.OperatingSystem.current().isWindows() )
-			dependsOn( "linkReleaseX86", "linkReleaseX86-64" )
+		if( org.gradle.internal.os.OperatingSystem.current().isLinux )
+			dependsOn( "linkRelease" )
 	}
 
 	withType<CppCompile>().configureEach {
@@ -52,13 +49,12 @@ tasks {
 
 		includes.from(
 			"${javaHome}/include",
-			"${javaHome}/include/win32"
+			"${javaHome}/include/linux"
 		)
 
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-O2", "-DUNICODE" )
-				is VisualCpp -> listOf( "/O2", "/Zl", "/GS-", "/DUNICODE" )
+				is Gcc, is Clang -> listOf()
 				else -> emptyList()
 			}
 		} )
@@ -68,14 +64,15 @@ tasks {
 		onlyIf { name.contains( "Release" ) }
 
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
-		val is64Bit = name.contains( "64" )
-		val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
-		val jawt = if( is64Bit ) "lib/jawt-x86_64" else "lib/jawt-x86"
+		val libraryName = "libflatlaf-linux-x86_64.so"
+		val jawt = "jawt"
+		var jawtPath = "${javaHome}/lib"
+		if( JavaVersion.current() == JavaVersion.VERSION_1_8 )
+			jawtPath += "/amd64"
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
-				is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
+				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}" )
 				else -> emptyList()
 			}
 		} )
@@ -85,7 +82,7 @@ tasks {
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "flatlaf-natives-windows.dll", libraryName )
+				rename( "libflatlaf-natives-linux.so", libraryName )
 			}
 		}
 	}

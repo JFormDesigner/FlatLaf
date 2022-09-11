@@ -1,0 +1,104 @@
+/*
+ * Copyright 2022 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.formdev.flatlaf.ui;
+
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+/**
+ * Native methods for Linux.
+ * <p>
+ * <b>Note</b>: This is private API. Do not use!
+ *
+ * @author Karl Tauber
+ * @since 2.5
+ */
+class FlatNativeLinuxLibrary
+{
+	static boolean isLoaded() {
+		return FlatNativeLibrary.isLoaded();
+	}
+
+	// direction for _NET_WM_MOVERESIZE message
+	// see https://specifications.freedesktop.org/wm-spec/wm-spec-latest.html
+	static final int MOVE = 8;
+
+	private static Boolean isXWindowSystem;
+
+	private static boolean isXWindowSystem() {
+		if( isXWindowSystem == null )
+			isXWindowSystem = Toolkit.getDefaultToolkit().getClass().getName().endsWith( ".XToolkit" );
+		return isXWindowSystem;
+	}
+
+	static boolean isWMUtilsSupported( Window window ) {
+		return hasCustomDecoration( window ) && isXWindowSystem() && isLoaded();
+	}
+
+	static boolean moveOrResizeWindow( Window window, MouseEvent e, int direction ) {
+		Point pt = scale( window, e.getLocationOnScreen() );
+		return xMoveOrResizeWindow( window, pt.x, pt.y, direction );
+
+/*
+		try {
+			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.linux.X11WmUtils" );
+			java.lang.reflect.Method m = cls.getMethod( "xMoveOrResizeWindow", Window.class, int.class, int.class, int.class );
+			return (Boolean) m.invoke( null, window, pt.x, pt.y, direction );
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+*/
+	}
+
+	static boolean showWindowMenu( Window window, MouseEvent e ) {
+		Point pt = scale( window, e.getLocationOnScreen() );
+		return xShowWindowMenu( window, pt.x, pt.y );
+
+/*
+		try {
+			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.linux.X11WmUtils" );
+			java.lang.reflect.Method m = cls.getMethod( "xShowWindowMenu", Window.class, int.class, int.class );
+			return (Boolean) m.invoke( null, window, pt.x, pt.y );
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+*/
+	}
+
+	private static Point scale( Window window, Point pt ) {
+		AffineTransform transform = window.getGraphicsConfiguration().getDefaultTransform();
+		int x = (int) Math.round( pt.x * transform.getScaleX() );
+		int y = (int) Math.round( pt.y * transform.getScaleY() );
+		return new Point( x, y );
+	}
+
+	// X Window System
+	private static native boolean xMoveOrResizeWindow( Window window, int x, int y, int direction );
+	private static native boolean xShowWindowMenu( Window window, int x, int y );
+
+	private static boolean hasCustomDecoration( Window window ) {
+		return (window instanceof JFrame && JFrame.isDefaultLookAndFeelDecorated() && ((JFrame)window).isUndecorated()) ||
+			(window instanceof JDialog && JDialog.isDefaultLookAndFeelDecorated() && ((JDialog)window).isUndecorated());
+	}
+}
