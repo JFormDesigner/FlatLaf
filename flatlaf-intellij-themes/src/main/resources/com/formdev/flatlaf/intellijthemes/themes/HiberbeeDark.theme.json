@@ -2,6 +2,23 @@
   "name": "Hiberbee Dark",
   "author": "Vlad Volkov",
   "dark": true,
+  "icons": {
+    "ColorPalette": {
+      "Actions.Blue": "#78dce8",
+      "Actions.Green": "#92d923",
+      "Actions.Grey": "#93918c",
+      "Actions.Red": "#fb3b45",
+      "Actions.Yellow": "#FFD866",
+      "Objects.Blue": "#78dce8",
+      "Objects.Green": "#92d923",
+      "Objects.Pink": "#ff6188",
+      "Objects.Purple": "#ab9df2",
+      "Objects.Red": "#fb3b45",
+      "Objects.RedStatus": "#fb3b45",
+      "Objects.Yellow": "#FFD866",
+      "Objects.YellowDark": "#FFB900"
+    }
+  },
   "editorScheme": "/colors/Dark.xml",
   "colors": {
     "black": "#000000",
@@ -22,7 +39,7 @@
     "deepBlue": "#3199b3",
     "orangeMonokaiPro": "#fc9867",
     "greenMonokaiPro": "#a9dc76",
-    "yellow": "#FFB900",
+    "yellow": "#ffd64c",
     "purpleWinPalette": "#b4a0ff",
     "purpleMonokaiPro": "#ab9df2",
     "greenWinPalette": "#40c5af",
@@ -49,7 +66,7 @@
     "transparentGreen": "#5B80217f",
     "transparentRed": "#F250227f",
     "transparentViolet": "#242221ff",
-    "transparentYellow": "#FFB9007f"
+    "transparentYellow": "#FFB9007a"
   },
   "ui": {
     "*": {
@@ -78,7 +95,6 @@
       "color": "border"
     },
     "Button": {
-      "arc": 5,
       "default": {
         "endBackground": "greyDot80",
         "endBorderColor": "greyDot70",
@@ -125,7 +141,6 @@
       "selectionInactiveBackground": "greyDot85"
     },
     "Component": {
-      "arc": "4",
       "iconColor": "yellow",
       "disabledBorderColor": "greyDot75",
       "infoForeground": "greyDot50",
@@ -160,22 +175,25 @@
     },
     "EditorTabs": {
       "underlineHeight": 1,
-      "borderColor": "editorDarkerBg",
-      "hoverBackground": "editorBg",
+      "hoverBackground": "greyDot95",
+      "borderColor": "border",
       "background": "editorPaneBg",
+      "inactiveColoredFileBackground": "editorPaneBg",
       "inactiveUnderlineColor": "editorPaneBg",
-      "underlinedTabForeground": "textColor"
+      "underlinedTabBackground": "editorPaneBg",
+      "underlinedTabForeground": "yellow"
     },
-    "EditorTabs.inactiveColoredFileBackground": true,
     "FileColor": {
+      "Gray": "greyDot70",
       "Blue": "#23282d",
       "Green": "#232d28",
       "Orange": "#2d2823",
       "Rose": "#2d2323",
       "Violet": "#2D232D",
-      "Yellow": "#2d2d23"
+      "Yellow": "#3b3b19"
     },
     "FormattedTextField": {
+      "caretForeground": "yellow",
       "foreground": "textColor",
       "selectionBackground": "greyDot95",
       "inactiveBackground": "greyDot80",
@@ -186,13 +204,22 @@
       "infoForeground": "greyDot33",
       "lineSeparatorColor": "greyDot70"
     },
-    "InformationHint.borderColor": "greyDot75",
-    "InplaceRefactoringPopup.borderColor": "greyDot75",
+    "InformationHint": {
+      "borderColor": "border"
+    },
+    "InplaceRefactoringPopup.borderColor": "border",
     "Label": {
       "disabledForeground": "greyDot33",
       "disabledText": "greyDot33",
       "foreground": "greyDot20",
       "infoForeground": "greyDot50"
+    },
+    "Link": {
+      "activeForeground": "blue",
+      "hoverForeground": "yellow",
+      "secondaryForeground": "lightBlue",
+      "visitedForeground": "purpleMonokaiPro",
+      "pressedForeground": "deepBlue"
     },
     "Link.hoverForeground": "yellow",
     "MemoryIndicator.allocatedBackground": "green",
@@ -209,16 +236,20 @@
     "Notification.ToolWindow.errorBackground": "greyDot95",
     "Notification.ToolWindow.errorBorderColor": "red",
     "Notification.ToolWindow.errorForeground": "#EE7762",
-    "Notification.ToolWindow.informativeBackground": "greyDot95",
-    "Notification.ToolWindow.informativeBorderColor": "#92D923",
-    "Notification.ToolWindow.informativeForeground": "#92D923",
+    "Notification.ToolWindow.informativeBackground": "editorPaneBg",
+    "Notification.ToolWindow.informativeBorderColor": "border",
+    "Notification.ToolWindow.informativeForeground": "textColor",
     "Notification.ToolWindow.warningBackground": "greyDot95",
     "Notification.ToolWindow.warningBorderColor": "yellow",
     "Notification.ToolWindow.warningForeground": "yellow",
-    "Notification.background": "greyDot95",
+    "Notification.background": "editorPaneBg",
+    "Notification.borderColor": "border",
     "Notification.errorBackground": "greyDot95",
     "Notification.errorBorderColor": "red",
     "Notification.errorForeground": "#EE7762",
+    "Notification.foreground": "textColor",
+    "NotificationsToolwindow.newNotification.background": "editorPaneBg",
+    "NotificationsToolwindow.newNotification.hoverBackground": "greyDot95",
     "OptionPane": {
       "background": "editorPaneBg",
       "foreground": "greyDot20"
@@ -245,11 +276,11 @@
     "Plugins.Tab.hoverBackground": "editorBg",
     "Plugins.Tab.selectedBackground": "editorPaneBg",
     "Plugins.background": "editorPaneBg",
-    "Plugins.lightSelectionBackground": "#242220",
     "Plugins.disabledForeground": "greyDot50",
+    "Plugins.hoverBackground": "editorBg",
+    "Plugins.lightSelectionBackground": "#242220",
     "Plugins.tagBackground": "editorBg",
     "Plugins.tagForeground": "greyDot33",
-    "Plugins.hoverBackground": "editorBg",
     "Popup.Advertiser.background": "greyDot85",
     "Popup.Advertiser.foreground": "greyDot50",
     "Popup.Header.activeBackground": "greyDot75",

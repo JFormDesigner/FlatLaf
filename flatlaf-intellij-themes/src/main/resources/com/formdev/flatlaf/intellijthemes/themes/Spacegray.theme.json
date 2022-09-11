@@ -97,9 +97,10 @@
     },
     "EditorPane.inactiveBackground": "#2b303b",
     "EditorTabs": {
-      "underlinedTabBackground": "#2b303b",
-      "underlineHeight": "0",
-      "borderColor": "#2b303b"
+      "borderColor": "#2b303b",
+      "underlinedTabBackground": "2b303b",
+      "background": "#1c1f26",
+      "underlineHeight": "2"
     },
     "Link": {
       "activeForeground": "#7FA1B3",

@@ -23,17 +23,17 @@
     "button": "#393C4B",
     "table": "#44475A",
     "tree": "#44475A50",
-    "hl": "#6272A4",
+    "hl": "#44475a",
     "notif": "#1D2228",
     "hc": "#191A21",
     "shadow": "undefined",
     "white": "#F8F8F2",
     "blue": "#8aff80",
-    "red": "#f780bf",
+    "red": "#FF79C5",
     "yellow": "#8aff80",
     "green": "#feff80",
     "gray": "#6272A4",
-    "purple": "#f780bf",
+    "purple": "#FF79C5",
     "orange": "#9580ff"
   },
   "editorScheme": "colors/Dracula.xml",
@@ -75,6 +75,11 @@
     },
     "ActionToolbar": {
       "background": "hc"
+    },
+    "AppInspector.GraphNode": {
+      "background": "second",
+      "borderColor": "border",
+      "focusedBorderColor": "accent"
     },
     "AssignedMnemonic": {
       "background": "hl",
@@ -599,7 +604,7 @@
     "link.pressed.foreground": "accent",
     "link.visited.foreground": "accent",
     "List": {
-      "background": "second",
+      "background": "bg",
       "foreground": "fg",
       "hoverBackground": "hl",
       "hoverInactiveBackground": "table",
@@ -884,6 +889,9 @@
       "selectionBackground": "hl",
       "trackColor": "hl"
     },
+    "ProgressIcon": {
+      "color": "accent"
+    },
     "PsiViewer": {
       "referenceHighlightColor": "accent"
     },
@@ -913,6 +921,13 @@
       "foreground": "fg",
       "selectionBackground": "selBg",
       "selectionForeground": "selFg"
+    },
+    "RunWidget": {
+      "Running": {
+        "background": "accent",
+        "leftHoverBackground": "accent70",
+        "leftPressedBackground": "accent"
+      }
     },
     "ScreenView.borderColor": "border",
     "scrollbar": "bg",
@@ -1008,6 +1023,8 @@
       "Repeated.File.Foreground": "fg"
     },
     "SegmentedButton": {
+      "focusedSelectedButtonColor": "hl",
+      "selectedButtonColor": "button",
       "selectedStartBorderColor": "border",
       "selectedEndBorderColor": "border"
     },

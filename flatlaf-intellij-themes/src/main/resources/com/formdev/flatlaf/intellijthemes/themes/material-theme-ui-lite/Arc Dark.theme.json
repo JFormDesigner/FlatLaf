@@ -7,23 +7,23 @@
     "bg30": "#2f343f30",
     "fg": "#D3DAE3",
     "text": "#8b9eb5",
-    "selBg": "#8888FF",
-    "selBg20": "#8888FF20",
+    "selBg": "#414181",
+    "selBg20": "#41418120",
     "selFg": "#FFFFFF",
     "activeFg": "#FFFFFF",
     "border": "#404552",
     "excl": "#37373d",
-    "second": "#393f4c45",
-    "dis": "#D3DAE3",
-    "accent": "#42A5F5",
-    "accent2": "#42A5F52",
-    "accent50": "#42A5F550",
-    "accent70": "#42A5F570",
+    "second": "#393f4c",
+    "dis": "#a2a2a2",
+    "accent": "#5294E2",
+    "accent2": "#5294E22",
+    "accent50": "#5294E250",
+    "accent70": "#5294E270",
     "cs": "#262b33",
     "button": "#383C4A",
     "table": "#41416A",
     "tree": "#09477170",
-    "hl": "#393f4c",
+    "hl": "#444A58",
     "notif": "#262a33",
     "hc": "#2f343f",
     "shadow": "undefined",
@@ -75,6 +75,11 @@
     },
     "ActionToolbar": {
       "background": "hc"
+    },
+    "AppInspector.GraphNode": {
+      "background": "second",
+      "borderColor": "border",
+      "focusedBorderColor": "accent"
     },
     "AssignedMnemonic": {
       "background": "hl",
@@ -599,7 +604,7 @@
     "link.pressed.foreground": "accent",
     "link.visited.foreground": "accent",
     "List": {
-      "background": "second",
+      "background": "bg",
       "foreground": "fg",
       "hoverBackground": "hl",
       "hoverInactiveBackground": "table",
@@ -884,6 +889,9 @@
       "selectionBackground": "hl",
       "trackColor": "hl"
     },
+    "ProgressIcon": {
+      "color": "accent"
+    },
     "PsiViewer": {
       "referenceHighlightColor": "accent"
     },
@@ -913,6 +921,13 @@
       "foreground": "fg",
       "selectionBackground": "selBg",
       "selectionForeground": "selFg"
+    },
+    "RunWidget": {
+      "Running": {
+        "background": "accent",
+        "leftHoverBackground": "accent70",
+        "leftPressedBackground": "accent"
+      }
     },
     "ScreenView.borderColor": "border",
     "scrollbar": "bg",
@@ -1008,6 +1023,8 @@
       "Repeated.File.Foreground": "fg"
     },
     "SegmentedButton": {
+      "focusedSelectedButtonColor": "hl",
+      "selectedButtonColor": "button",
       "selectedStartBorderColor": "border",
       "selectedEndBorderColor": "border"
     },

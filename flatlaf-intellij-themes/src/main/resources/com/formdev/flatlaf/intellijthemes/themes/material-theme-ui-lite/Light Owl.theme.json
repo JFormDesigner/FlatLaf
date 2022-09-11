@@ -76,6 +76,11 @@
     "ActionToolbar": {
       "background": "hc"
     },
+    "AppInspector.GraphNode": {
+      "background": "second",
+      "borderColor": "border",
+      "focusedBorderColor": "accent"
+    },
     "AssignedMnemonic": {
       "background": "hl",
       "borderColor": "selBg",
@@ -599,7 +604,7 @@
     "link.pressed.foreground": "accent",
     "link.visited.foreground": "accent",
     "List": {
-      "background": "second",
+      "background": "bg",
       "foreground": "fg",
       "hoverBackground": "hl",
       "hoverInactiveBackground": "table",
@@ -884,6 +889,9 @@
       "selectionBackground": "hl",
       "trackColor": "hl"
     },
+    "ProgressIcon": {
+      "color": "accent"
+    },
     "PsiViewer": {
       "referenceHighlightColor": "accent"
     },
@@ -913,6 +921,13 @@
       "foreground": "fg",
       "selectionBackground": "selBg",
       "selectionForeground": "selFg"
+    },
+    "RunWidget": {
+      "Running": {
+        "background": "accent",
+        "leftHoverBackground": "accent70",
+        "leftPressedBackground": "accent"
+      }
     },
     "ScreenView.borderColor": "border",
     "scrollbar": "bg",
@@ -1008,6 +1023,8 @@
       "Repeated.File.Foreground": "fg"
     },
     "SegmentedButton": {
+      "focusedSelectedButtonColor": "hl",
+      "selectedButtonColor": "button",
       "selectedStartBorderColor": "border",
       "selectedEndBorderColor": "border"
     },
