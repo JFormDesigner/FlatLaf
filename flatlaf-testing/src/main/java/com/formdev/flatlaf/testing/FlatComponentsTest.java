@@ -1219,6 +1219,7 @@ public class FlatComponentsTest
 		//======== panel5 ========
 		{
 			panel5.setBorder(new TitledBorder("Control"));
+			panel5.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel5.setLayout(new MigLayout(
 				"ltr,insets dialog,hidemode 3",
 				// columns
@@ -1343,6 +1344,7 @@ public class FlatComponentsTest
 
 		//======== panel8 ========
 		{
+			panel8.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel8.setLayout(new MigLayout(
 				"ltr,insets 0,hidemode 3",
 				// columns

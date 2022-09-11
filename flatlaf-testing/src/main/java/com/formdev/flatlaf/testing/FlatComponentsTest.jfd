@@ -121,7 +121,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button13"
-				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
+				"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 1 2 1"
 			} )
@@ -272,7 +272,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton22"
-				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
+				"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
 				"selected": true
 				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType borderless
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -998,6 +998,7 @@ new FormModel {
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( "Control" )
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 					name: "buttonTypeComboBox"
 					auxiliary() {
@@ -1190,6 +1191,7 @@ new FormModel {
 				"$layoutConstraints": "ltr,insets 0,hidemode 3"
 			} ) {
 				name: "panel8"
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$columnConstraints": "[]"
 					"$rowConstraints": "[]0[]0[]0[]"

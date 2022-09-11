@@ -617,6 +617,7 @@ public class FlatContainerTest
 			//======== tabbedPaneControlPanel ========
 			{
 				tabbedPaneControlPanel.setOpaque(false);
+				tabbedPaneControlPanel.putClientProperty("FlatLaf.internal.testing.ignore", true);
 				tabbedPaneControlPanel.setLayout(new MigLayout(
 					"insets 0,hidemode 3",
 					// columns

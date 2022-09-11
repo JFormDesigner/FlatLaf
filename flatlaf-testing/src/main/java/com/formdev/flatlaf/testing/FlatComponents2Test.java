@@ -556,6 +556,7 @@ public class FlatComponents2Test
 
 		//======== panel1 ========
 		{
+			panel1.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel1.setLayout(new MigLayout(
 				"ltr,insets 0,hidemode 3",
 				// columns
@@ -598,6 +599,7 @@ public class FlatComponents2Test
 
 		//======== panel3 ========
 		{
+			panel3.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel3.setLayout(new MigLayout(
 				"insets 0,hidemode 3",
 				// columns
@@ -634,6 +636,7 @@ public class FlatComponents2Test
 
 		//======== panel2 ========
 		{
+			panel2.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel2.setLayout(new MigLayout(
 				"insets 0,hidemode 3",
 				// columns
@@ -766,6 +769,7 @@ public class FlatComponents2Test
 		//======== panel5 ========
 		{
 			panel5.setBorder(new TitledBorder("General Control"));
+			panel5.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel5.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
@@ -785,6 +789,7 @@ public class FlatComponents2Test
 		//======== treeOptionsPanel ========
 		{
 			treeOptionsPanel.setBorder(new TitledBorder("JTree Control"));
+			treeOptionsPanel.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			treeOptionsPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
@@ -832,6 +837,7 @@ public class FlatComponents2Test
 		//======== tableOptionsPanel ========
 		{
 			tableOptionsPanel.setBorder(new TitledBorder("JTable Control"));
+			tableOptionsPanel.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			tableOptionsPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns

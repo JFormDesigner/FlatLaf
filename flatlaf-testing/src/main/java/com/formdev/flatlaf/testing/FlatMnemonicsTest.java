@@ -240,11 +240,13 @@ public class FlatMnemonicsTest
 		//---- alwaysShowMnemonicsCheckBox ----
 		alwaysShowMnemonicsCheckBox.setText("Always show mnemonics");
 		alwaysShowMnemonicsCheckBox.setMnemonic('M');
+		alwaysShowMnemonicsCheckBox.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		alwaysShowMnemonicsCheckBox.addActionListener(e -> alwaysShowMnemonicsChanged());
 		add(alwaysShowMnemonicsCheckBox, "cell 0 7 2 1,alignx left,growx 0");
 
 		//---- button2 ----
 		button2.setText("Open Dialog");
+		button2.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		button2.addActionListener(e -> openDialog());
 		add(button2, "cell 2 7,alignx left,growx 0");
 

@@ -639,12 +639,14 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "popupMenuLabel"
 				"text": "JPopupMenu:"
+				"$client.FlatLaf.internal.testing.ignore": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "showPopupMenuButton"
 				"text": "show JPopupMenu"
+				"$client.FlatLaf.internal.testing.ignore": true
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopupMenuButton", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
@@ -652,6 +654,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "showScrollingPopupMenuButton"
 				"text": "show scrolling JPopupMenu"
+				"$client.FlatLaf.internal.testing.ignore": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -663,6 +666,7 @@ new FormModel {
 				name: "armedCheckBox"
 				"text": "armed"
 				"mnemonic": 65
+				"$client.FlatLaf.internal.testing.ignore": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -673,6 +677,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "underlineCheckBox"
 				"text": "underline menu selection"
+				"$client.FlatLaf.internal.testing.ignore": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -683,6 +688,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "popupMenubackgroundCheckBox"
 				"text": "yellow popup menu background"
+				"$client.FlatLaf.internal.testing.ignore": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}

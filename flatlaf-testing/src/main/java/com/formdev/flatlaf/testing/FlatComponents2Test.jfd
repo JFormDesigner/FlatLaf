@@ -37,6 +37,7 @@ new FormModel {
 				"$layoutConstraints": "ltr,insets 0,hidemode 3"
 			} ) {
 				name: "panel1"
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "listLabel"
 					"text": "JList:"
@@ -97,6 +98,7 @@ new FormModel {
 				"$rowConstraints": "[][grow][][]"
 			} ) {
 				name: "panel3"
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tableLabel"
 					"text": "JTable:"
@@ -147,6 +149,7 @@ new FormModel {
 				"$rowConstraints": "[][grow][][]"
 			} ) {
 				name: "panel2"
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "treeLabel"
 					"text": "JTree:"
@@ -301,6 +304,7 @@ new FormModel {
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( "General Control" )
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "dndCheckBox"
 					"text": "enable drag and drop"
@@ -322,6 +326,7 @@ new FormModel {
 			} ) {
 				name: "treeOptionsPanel"
 				"border": new javax.swing.border.TitledBorder( "JTree Control" )
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "treeRendererLabel"
 					"text": "Renderer:"
@@ -387,6 +392,7 @@ new FormModel {
 			} ) {
 				name: "tableOptionsPanel"
 				"border": new javax.swing.border.TitledBorder( "JTable Control" )
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "autoResizeModeLabel"
 					"text": "Auto resize mode:"

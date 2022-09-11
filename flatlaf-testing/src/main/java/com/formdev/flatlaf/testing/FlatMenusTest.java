@@ -869,31 +869,37 @@ public class FlatMenusTest
 
 		//---- popupMenuLabel ----
 		popupMenuLabel.setText("JPopupMenu:");
+		popupMenuLabel.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		add(popupMenuLabel, "cell 0 2");
 
 		//---- showPopupMenuButton ----
 		showPopupMenuButton.setText("show JPopupMenu");
+		showPopupMenuButton.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		showPopupMenuButton.addActionListener(e -> showPopupMenuButton(e));
 		add(showPopupMenuButton, "cell 1 2");
 
 		//---- showScrollingPopupMenuButton ----
 		showScrollingPopupMenuButton.setText("show scrolling JPopupMenu");
+		showScrollingPopupMenuButton.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		showScrollingPopupMenuButton.addActionListener(e -> showScrollingPopupMenu(e));
 		add(showScrollingPopupMenuButton, "cell 2 2");
 
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
 		armedCheckBox.setMnemonic('A');
+		armedCheckBox.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		armedCheckBox.addActionListener(e -> armedChanged());
 		add(armedCheckBox, "cell 0 3");
 
 		//---- underlineCheckBox ----
 		underlineCheckBox.setText("underline menu selection");
+		underlineCheckBox.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		underlineCheckBox.addActionListener(e -> underlineChanged());
 		add(underlineCheckBox, "cell 0 4 2 1");
 
 		//---- popupMenubackgroundCheckBox ----
 		popupMenubackgroundCheckBox.setText("yellow popup menu background");
+		popupMenubackgroundCheckBox.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		popupMenubackgroundCheckBox.addActionListener(e -> popupMenubackgroundChanged());
 		add(popupMenubackgroundCheckBox, "cell 0 5 2 1");
 

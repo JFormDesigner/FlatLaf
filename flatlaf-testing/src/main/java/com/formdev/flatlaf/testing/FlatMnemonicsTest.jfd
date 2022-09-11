@@ -134,6 +134,7 @@ new FormModel {
 				name: "alwaysShowMnemonicsCheckBox"
 				"text": "Always show mnemonics"
 				"mnemonic": 77
+				"$client.FlatLaf.internal.testing.ignore": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -144,6 +145,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"text": "Open Dialog"
+				"$client.FlatLaf.internal.testing.ignore": true
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 7,alignx left,growx 0"

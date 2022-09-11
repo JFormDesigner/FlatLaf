@@ -80,6 +80,7 @@ new FormModel {
 			} ) {
 				name: "panel1"
 				"border": new javax.swing.border.TitledBorder( "Control" )
+				"$client.FlatLaf.internal.testing.ignore": true
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
 					"text": "change text"

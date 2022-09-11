@@ -136,6 +136,7 @@ new FormModel {
 				} ) {
 					name: "tabbedPaneControlPanel"
 					"opaque": false
+					"$client.FlatLaf.internal.testing.ignore": true
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "tabScrollCheckBox"
 						"text": "Use scroll layout"

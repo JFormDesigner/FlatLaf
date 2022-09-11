@@ -633,6 +633,9 @@ public class FlatTestFrame
 
 	public static void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
 		for( Component c : container.getComponents() ) {
+			if( c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "FlatLaf.internal.testing.ignore" ) ) )
+				continue;
+
 			if( c instanceof JPanel ) {
 				updateComponentsRecur( (Container) c, action );
 				continue;

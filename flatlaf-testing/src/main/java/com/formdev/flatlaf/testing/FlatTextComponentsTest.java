@@ -309,6 +309,7 @@ public class FlatTextComponentsTest
 		//======== panel1 ========
 		{
 			panel1.setBorder(new TitledBorder("Control"));
+			panel1.putClientProperty("FlatLaf.internal.testing.ignore", true);
 			panel1.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
