@@ -16,9 +16,11 @@
 
 package com.formdev.flatlaf.swingx.ui;
 
+import java.awt.Color;
 import java.awt.Insets;
 import java.util.Calendar;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -52,6 +54,8 @@ public class FlatMonthViewUI
 	private static class FlatRenderingHandler
 		extends RenderingHandler
 	{
+		private final Color todayColor = UIManager.getColor( "JXMonthView.todayColor" );
+
 		@Override
 		public JComponent prepareRenderingComponent( JXMonthView monthView, Calendar calendar,
 			CalendarState dayState )
@@ -67,8 +71,12 @@ public class FlatMonthViewUI
 				Border b = c.getBorder();
 				if( b instanceof CompoundBorder && ((CompoundBorder)b).getInsideBorder() instanceof EmptyBorder )
 					border = new CompoundBorder( ((CompoundBorder)b).getOutsideBorder(), new FlatEmptyBorder( py * 2, 0, py * 2, 0 ) );
-			} else if( dayState == CalendarState.TODAY )
-				border = new FlatLineBorder( new Insets( py, px, py, px ), monthView.getTodayBackground() );
+			} else if( dayState == CalendarState.TODAY ) {
+				Color lineColor = monthView.getTodayBackground();
+				if( lineColor == null )
+					lineColor = todayColor;
+				border = new FlatLineBorder( new Insets( py, px, py, px ), lineColor );
+			}
 
 			if( border == null )
 				border = new FlatEmptyBorder( py, px, py, px );

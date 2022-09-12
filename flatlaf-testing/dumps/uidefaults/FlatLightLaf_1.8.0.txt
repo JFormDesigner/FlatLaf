@@ -450,6 +450,7 @@ JXMonthView.monthStringBackground #dfdfdf  HSL   0   0  87    javax.swing.plaf.C
 JXMonthView.monthStringForeground #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthUpIcon [UI]
 JXMonthView.selectedBackground #bfdaf2  HSL 208  66  85    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.todayColor         #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.trailingDayForeground #8c8c8c  HSL   0   0  55    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.unselectableDayForeground #e02222  HSL   0  75  51    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.weekOfTheYearForeground #666666  HSL   0   0  40    javax.swing.plaf.ColorUIResource [UI]

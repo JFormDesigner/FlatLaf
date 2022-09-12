@@ -27,6 +27,8 @@ FlatLaf Change Log
 - Fixed possible exception in `FlatUIUtils.resetRenderingHints()`. (issue #575)
 - Fixed AWT components on macOS, which use Swing components internally. (issue
   #583)
+- SwingX: Fixed missing highlighting of "today" in `JXMonthView` and
+  `JXDatePicker`.
 
 
 ## 2.4

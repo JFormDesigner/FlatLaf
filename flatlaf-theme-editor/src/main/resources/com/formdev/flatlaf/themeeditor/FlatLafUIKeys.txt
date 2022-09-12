@@ -368,6 +368,7 @@ JXMonthView.monthStringBackground
 JXMonthView.monthStringForeground
 JXMonthView.monthUpFileName
 JXMonthView.selectedBackground
+JXMonthView.todayColor
 JXMonthView.trailingDayForeground
 JXMonthView.unselectableDayForeground
 JXMonthView.weekOfTheYearForeground
