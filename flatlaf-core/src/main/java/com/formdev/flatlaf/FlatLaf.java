@@ -30,6 +30,9 @@ import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -63,6 +66,7 @@ import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.IconUIResource;
 import javax.swing.plaf.UIResource;
@@ -73,6 +77,7 @@ import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -1229,6 +1234,62 @@ public abstract class FlatLaf
 	 * @since 1.6
 	 */
 	public static final Object NULL_VALUE = new Object();
+
+	/**
+	 * Returns information about styleable values of a component.
+	 * <p>
+	 * This is equivalent to: {@code ((StyleableUI)c.getUI()).getStyleableInfos(c)}
+	 *
+	 * @since 2.5
+	 */
+	public static Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		StyleableUI ui = getStyleableUI( c );
+		return (ui != null) ? ui.getStyleableInfos( c ) : null;
+	}
+
+	/**
+	 * Returns the (styled) value for the given key from the given component.
+	 * <p>
+	 * This is equivalent to: {@code ((StyleableUI)c.getUI()).getStyleableValue(c, key)}
+	 *
+	 * @since 2.5
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> T getStyleableValue( JComponent c, String key ) {
+		StyleableUI ui = getStyleableUI( c );
+		return (ui != null) ? (T) ui.getStyleableValue( c, key ) : null;
+	}
+
+	private static StyleableUI getStyleableUI( JComponent c ) {
+		if( !getUIMethodInitialized ) {
+			getUIMethodInitialized = true;
+
+			if( SystemInfo.isJava_9_orLater ) {
+				try {
+					// JComponent.getUI() is available since Java 9
+					getUIMethod = MethodHandles.lookup().findVirtual( JComponent.class, "getUI",
+						MethodType.methodType( ComponentUI.class ) );
+				} catch( Exception ex ) {
+					// ignore
+				}
+			}
+		}
+
+		try {
+			Object ui;
+			if( getUIMethod != null )
+				ui = getUIMethod.invoke( c );
+			else
+				ui = c.getClass().getMethod( "getUI" ).invoke( c );
+			return (ui instanceof StyleableUI) ? (StyleableUI) ui : null;
+		} catch( Throwable ex ) {
+			// ignore
+			return null;
+		}
+	}
+
+	private static boolean getUIMethodInitialized;
+	private static MethodHandle getUIMethod;
 
 	//---- class FlatUIDefaults -----------------------------------------------
 
