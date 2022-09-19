@@ -44,6 +44,7 @@ public:
 	LPVOID get( HWND key );
 	void put( HWND key, LPVOID value );
 	void remove( HWND key );
+	bool isTableAllocated() noexcept { return static_cast<bool>(table); }
 
 private:
 	int binarySearch( HWND key );
