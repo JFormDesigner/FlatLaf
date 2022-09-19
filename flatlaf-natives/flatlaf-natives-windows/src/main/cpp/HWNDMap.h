@@ -48,7 +48,7 @@ public:
 
 private:
 	int binarySearch( HWND key );
-	void ensureCapacity( int newCapacity );
+	bool ensureCapacity( int newCapacity );
 
 //	void dump( char* msg );
 };
