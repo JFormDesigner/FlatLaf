@@ -117,10 +117,14 @@ HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
 		return 0;
 
 	FlatWndProc* fwp = new (FlatLafNoThrow) FlatWndProc();
+	if(fwp == NULL)
+		return 0;
+	
 	env->GetJavaVM( &fwp->jvm );
 	fwp->obj = env->NewGlobalRef( obj );
 	fwp->hwnd = hwnd;
-	hwndMap->put( hwnd, fwp );
+	if(!hwndMap->put( hwnd, fwp ))
+		return 0;
 
 	// replace window procedure
 	fwp->defaultWndProc = reinterpret_cast<WNDPROC>(
