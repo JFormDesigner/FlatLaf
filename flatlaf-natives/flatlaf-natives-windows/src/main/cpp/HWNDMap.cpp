@@ -18,7 +18,10 @@
 #define _NO_CRT_STDIO_INLINE
 
 #include <stdio.h>
+#include <stdint.h>
+#include <limits.h>
 #include "HWNDMap.h"
+#include "AllocRoutines.h"
 
 #define DEFAULT_CAPACITY		20
 #define INCREASE_CAPACITY		10
@@ -58,7 +61,7 @@ LPVOID HWNDMap::get( HWND key ) {
 	return (index >= 0) ? table[index].value : NULL;
 }
 
-void HWNDMap::put( HWND key, LPVOID value ) {
+bool HWNDMap::put( HWND key, LPVOID value ) {
 	LOCK lock( &criticalSection );
 
 	int index = binarySearch( key );
@@ -66,9 +69,11 @@ void HWNDMap::put( HWND key, LPVOID value ) {
 	if( index >= 0 ) {
 		// key already in map --> replace
 		table[index].value = value;
+		return true;
 	} else {
 		// insert new key
-		ensureCapacity( size + 1 );
+		if(size == INT_MAX || !ensureCapacity( size + 1 ))
+			return false;
 
 		// make roor for new entry
 		index = -(index + 1);
@@ -79,6 +84,7 @@ void HWNDMap::put( HWND key, LPVOID value ) {
 		// insert entry
 		table[index].key = key;
 		table[index].value = value;
+		return true;
 	}
 
 //	dump( "put" );
@@ -121,23 +127,38 @@ int HWNDMap::binarySearch( HWND key ) {
 	return -(low + 1);
 }
 
-void HWNDMap::ensureCapacity( int minCapacity ) {
-	if( minCapacity <= capacity )
-		return;
+static constexpr size_t MaxEntryArrayLength = (SIZE_MAX >> 1) / sizeof(Entry);
+static_assert(MaxEntryArrayLength > 0, "MaxEntryArrayLength > 0 must be true");
+
+static constexpr int MaxEntryArrayIntCapacity =
+	(MaxEntryArrayLength <= INT_MAX) ? static_cast<int>(MaxEntryArrayLength) : INT_MAX;
+static_assert(MaxEntryArrayIntCapacity > 0, "MaxEntryArrayIntCapacity > 0 must be true");
+
+bool HWNDMap::ensureCapacity( int minCapacity ) {
+	if(minCapacity <= capacity)
+		return true;
+	if(minCapacity > MaxEntryArrayIntCapacity)
+		return false;
 
 	// allocate new table
-	int newCapacity = minCapacity + INCREASE_CAPACITY;
-	Entry* newTable = new Entry[newCapacity];
+	unsigned newCapacity = static_cast<unsigned>(minCapacity) + INCREASE_CAPACITY;
+	if(newCapacity > MaxEntryArrayIntCapacity)
+		newCapacity = MaxEntryArrayIntCapacity;
+	
+	Entry* newTable = new (FlatLafNoThrow) Entry[newCapacity];
+	if(newTable == NULL)
+		return false;
 
 	// copy old table to new table
 	for( int i = 0; i < capacity; i++ )
 		newTable[i] = table[i];
 
 	// delete old table
-	delete table;
+	FlatLafWin32ProcessHeapFree(table);
 
 	table = newTable;
-	capacity = newCapacity;
+	capacity = static_cast<int>(newCapacity);
+	return true;
 }
 
 /*
