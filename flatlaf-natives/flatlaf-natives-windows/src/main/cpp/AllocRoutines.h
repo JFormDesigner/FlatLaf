@@ -30,15 +30,15 @@ FLATLAF_WIN32_ALLOC_INLINE void* operator new(size_t cb, const NoThrowingWin32He
     return AllocateUsingProcessHeap(cb);
 }
 
-inline void* operator new[](size_t cb, const NoThrowingWin32HeapAllocT& tag) noexcept {
+FLATLAF_WIN32_ALLOC_INLINE void* operator new[](size_t cb, const NoThrowingWin32HeapAllocT& tag) noexcept {
     return AllocateUsingProcessHeap(cb);
 }
 
-inline void operator delete(void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
+FLATLAF_WIN32_ALLOC_INLINE void operator delete(void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
     DeleteFromProcessHeap(pv);
 }
 
-inline void operator delete[](void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
+FLATLAF_WIN32_ALLOC_INLINE void operator delete[](void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
     DeleteFromProcessHeap(pv);
 }
 #endif
