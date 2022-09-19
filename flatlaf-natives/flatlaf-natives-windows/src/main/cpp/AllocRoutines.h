@@ -4,10 +4,10 @@
 #include <stddef.h>
 #include <windows.h>
 
-struct NoThrowingWin32HeapAllocT {
+struct FlatLafNoThrowT {
 };
 
-constexpr NoThrowingWin32HeapAllocT NoThrowingWin32HeapAlloc{};
+constexpr FlatLafNoThrowT FlatLafNoThrow{};
 
 #if defined(_MSC_VER)
 #define FLATLAF_WIN32_ALLOC_INLINE __forceinline
@@ -17,28 +17,37 @@ constexpr NoThrowingWin32HeapAllocT NoThrowingWin32HeapAlloc{};
 #define FLATLAF_WIN32_ALLOC_INLINE inline
 #endif
 
-FLATLAF_WIN32_ALLOC_INLINE void* AllocateUsingProcessHeap(size_t cb) noexcept {
+FLATLAF_WIN32_ALLOC_INLINE void* FlatLafWin32ProcessHeapAlloc(size_t cb) noexcept {
+    #ifdef _WIN32
     return ::HeapAlloc(::GetProcessHeap(), HEAP_ZERO_MEMORY, cb);
+    #else
+    return ::calloc(cb, 1);
+    #endif
 }
 
-FLATLAF_WIN32_ALLOC_INLINE void DeleteFromProcessHeap(void* pv) noexcept {
+FLATLAF_WIN32_ALLOC_INLINE void FlatLafWin32ProcessHeapFree(void* pv) noexcept {
+    #ifdef _WIN32
     if(pv)
         ::HeapFree(::GetProcessHeap(), 0, pv);
+    #else
+    if(pv)
+        ::free(pv);
+    #endif
 }
 
-FLATLAF_WIN32_ALLOC_INLINE void* operator new(size_t cb, const NoThrowingWin32HeapAllocT& tag) noexcept {
-    return AllocateUsingProcessHeap(cb);
+FLATLAF_WIN32_ALLOC_INLINE void* operator new(size_t cb, const FlatLafNoThrowT& tag) noexcept {
+    return FlatLafWin32ProcessHeapAlloc(cb);
 }
 
-FLATLAF_WIN32_ALLOC_INLINE void* operator new[](size_t cb, const NoThrowingWin32HeapAllocT& tag) noexcept {
-    return AllocateUsingProcessHeap(cb);
+FLATLAF_WIN32_ALLOC_INLINE void* operator new[](size_t cb, const FlatLafNoThrowT& tag) noexcept {
+    return FlatLafWin32ProcessHeapAlloc(cb);
 }
 
-FLATLAF_WIN32_ALLOC_INLINE void operator delete(void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
-    DeleteFromProcessHeap(pv);
+FLATLAF_WIN32_ALLOC_INLINE void operator delete(void* pv, const FlatLafNoThrowT& tag) noexcept {
+    FlatLafWin32ProcessHeapFree(pv);
 }
 
-FLATLAF_WIN32_ALLOC_INLINE void operator delete[](void* pv, const NoThrowingWin32HeapAllocT& tag) noexcept {
-    DeleteFromProcessHeap(pv);
+FLATLAF_WIN32_ALLOC_INLINE void operator delete[](void* pv, const FlatLafNoThrowT& tag) noexcept {
+    FlatLafWin32ProcessHeapFree(pv);
 }
 #endif
