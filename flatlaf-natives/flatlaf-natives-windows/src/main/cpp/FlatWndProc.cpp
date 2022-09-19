@@ -23,6 +23,7 @@
 #include <jawt.h>
 #include <jawt_md.h>
 #include "FlatWndProc.h"
+#include "AllocRoutines.h"
 #include "com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
 
 /**
