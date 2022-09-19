@@ -99,15 +99,24 @@ HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
 		return 0;
 
 	// create HWND map
-	if( hwndMap == NULL )
-		hwndMap = new HWNDMap();
+	if( hwndMap == NULL ) {
+		HWNDMap* newHwndMap = new (FlatLafNoThrow) HWNDMap();
+		if(newHwndMap == NULL) {
+			return 0;
+		} else if(!newHwndMap->isTableAllocated()) {
+			FlatLafWin32ProcessHeapFree(newHwndMap);
+			return 0;
+		}
+		
+		hwndMap = newHwndMap;
+	}
 
 	// get window handle
 	HWND hwnd = getWindowHandle( env, window );
 	if( hwnd == NULL || hwndMap->get( hwnd ) != NULL )
 		return 0;
 
-	FlatWndProc* fwp = new FlatWndProc();
+	FlatWndProc* fwp = new (FlatLafNoThrow) FlatWndProc();
 	env->GetJavaVM( &fwp->jvm );
 	fwp->obj = env->NewGlobalRef( obj );
 	fwp->hwnd = hwnd;
@@ -140,7 +149,7 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 	env->DeleteGlobalRef( fwp->obj );
 	if( fwp->background != NULL )
 		::DeleteObject( fwp->background );
-	delete fwp;
+	FlatLafWin32ProcessHeapDelete(fwp);
 }
 
 void FlatWndProc::initIDs( JNIEnv *env, jobject obj ) {
@@ -298,7 +307,7 @@ LRESULT FlatWndProc::WmDestroy( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPara
 	if( background != NULL )
 		::DeleteObject( background );
 	hwndMap->remove( hwnd );
-	delete this;
+	FlatLafWin32ProcessHeapFree(this);
 
 	// call original AWT window procedure because it may fire window closed event in AwtWindow::WmDestroy()
 	return ::CallWindowProc( defaultWndProc2, hwnd, uMsg, wParam, lParam );
