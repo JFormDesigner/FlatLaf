@@ -41,19 +41,6 @@ BOOL WINAPI _DllMainCRTStartup( HINSTANCE instance, DWORD reason, LPVOID reserve
 	return TRUE;
 }
 
-void* __cdecl operator new( size_t cb ) {
-	return ::HeapAlloc( ::GetProcessHeap(), HEAP_ZERO_MEMORY, cb );
-}
-
-void* __cdecl operator new[]( size_t cb ) {
-	return ::HeapAlloc( ::GetProcessHeap(), HEAP_ZERO_MEMORY, cb );
-}
-
-void __cdecl operator delete( void* pv, size_t cb ) {
-	if( pv != NULL )
-		::HeapFree( ::GetProcessHeap(), 0, pv );
-}
-
 /*
 extern "C"
 int __cdecl printf( const char* format, ... ) {
