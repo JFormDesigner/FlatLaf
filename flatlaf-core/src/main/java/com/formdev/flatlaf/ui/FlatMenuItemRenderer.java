@@ -97,6 +97,7 @@ public class FlatMenuItemRenderer
 	@Styleable protected int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
 
 	private boolean iconsShared = true;
+	private final Font menuFont = UIManager.getFont( "Menu.font" );
 
 	protected FlatMenuItemRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 		Font acceleratorFont, String acceleratorDelimiter )
@@ -193,7 +194,8 @@ public class FlatMenuItemRenderer
 
 		// layout icon and text
 		SwingUtilities.layoutCompoundLabel( menuItem,
-			menuItem.getFontMetrics( menuItem.getFont() ), menuItem.getText(), getIconForLayout(),
+			menuItem.getFontMetrics( isTopLevelMenu ? getTopLevelFont() : menuItem.getFont() ),
+			menuItem.getText(), getIconForLayout(),
 			menuItem.getVerticalAlignment(), menuItem.getHorizontalAlignment(),
 			menuItem.getVerticalTextPosition(), menuItem.getHorizontalTextPosition(),
 			viewRect, iconRect, textRect, scale( menuItem.getIconTextGap() ) );
@@ -295,7 +297,8 @@ public class FlatMenuItemRenderer
 
 		// layout icon and text
 		SwingUtilities.layoutCompoundLabel( menuItem,
-			menuItem.getFontMetrics( menuItem.getFont() ), menuItem.getText(), getIconForLayout(),
+			menuItem.getFontMetrics( isTopLevelMenu ? getTopLevelFont() : menuItem.getFont() ),
+			menuItem.getText(), getIconForLayout(),
 			menuItem.getVerticalAlignment(), menuItem.getHorizontalAlignment(),
 			menuItem.getVerticalTextPosition(), menuItem.getHorizontalTextPosition(),
 			labelRect, iconRect, textRect, scale( menuItem.getIconTextGap() ) );
@@ -405,9 +408,10 @@ debug*/
 		}
 
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? menuItem.getDisplayedMnemonicIndex() : -1;
-		Color foreground = (isTopLevelMenu( menuItem ) ? menuItem.getParent() : menuItem).getForeground();
+		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
+		Color foreground = (isTopLevelMenu ? menuItem.getParent() : menuItem).getForeground();
 
-		paintText( g, menuItem, textRect, text, mnemonicIndex, menuItem.getFont(),
+		paintText( g, menuItem, textRect, text, mnemonicIndex, isTopLevelMenu ? getTopLevelFont() : menuItem.getFont(),
 			foreground, isUnderlineSelection() ? foreground : selectionForeground, disabledForeground );
 	}
 
@@ -492,6 +496,11 @@ debug*/
 
 	protected boolean isUnderlineSelection() {
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
+	}
+
+	private Font getTopLevelFont() {
+		Font font = menuItem.getFont();
+		return (font != menuFont) ? font : menuItem.getParent().getFont();
 	}
 
 	private Icon getIconForPainting() {

@@ -10,6 +10,8 @@ FlatLaf Change Log
   This gives FlatLaf windows a more "native" feeling. (issue #482)
 - MenuBar: Support different menu selection style UI defaults for `MenuBar` and
   `MenuItem`. (issue #587)
+- MenuBar: Top level menus now use `MenuBar.font` instead of `Menu.font`. (issue
+  #589)
 - PasswordField: Reveal button is now hidden (and turned off) if password field
   is disabled. (issue #501)
 - TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
