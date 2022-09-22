@@ -1012,6 +1012,7 @@ TitlePane.noIconLeftGap
 TitlePane.restoreIcon
 TitlePane.showIcon
 TitlePane.showIconBesideTitle
+TitlePane.showIconInDialogs
 TitlePane.titleMargins
 TitlePane.titleMinimumWidth
 TitlePane.unifiedBackground

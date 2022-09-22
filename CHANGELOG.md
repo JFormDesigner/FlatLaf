@@ -14,9 +14,11 @@ FlatLaf Change Log
   is disabled. (issue #501)
 - TabbedPane: New option to disable tab run rotation in wrap layout. Set UI
   value `TabbedPane.rotateTabRuns` to `false`. (issue #574)
-- Native window decorations (Windows 10/11 only): Added client property to mark
-  components in embedded menu bar as "caption" (allow moving window). (issue
-  #569)
+- Window decorations:
+  - Added client property to mark components in embedded menu bar as "caption"
+    (allow moving window). (issue #569)
+  - Option to show window icon only in frames, but not in dialogs. Set UI value
+    `TitlePane.showIconInDialogs` to `false`. (issue #589)
 - Added system property `flatlaf.updateUIOnSystemFontChange` to allow disabling
   automatic UI update when system font changes. (issue #580)
 

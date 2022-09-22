@@ -55,6 +55,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -80,6 +81,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.borderColor							Color	optional
  * @uiDefault TitlePane.unifiedBackground					boolean
  * @uiDefault TitlePane.showIcon							boolean
+ * @uiDefault TitlePane.showIconInDialogs					boolean
  * @uiDefault TitlePane.noIconLeftGap						int
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
@@ -111,6 +113,7 @@ public class FlatTitlePane
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
 	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
+	/** @since 2.5 */ protected final boolean showIconInDialogs = FlatUIUtils.getUIBoolean( "TitlePane.showIconInDialogs", true );
 	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 60 );
@@ -389,9 +392,13 @@ public class FlatTitlePane
 	}
 
 	protected void updateIcon() {
+		boolean defaultShowIcon = showIcon;
+		if( !showIconInDialogs && rootPane.getParent() instanceof JDialog )
+			defaultShowIcon = false;
+
 		// get window images
 		List<Image> images = null;
-		if( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICON, showIcon ) ) {
+		if( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICON, defaultShowIcon ) ) {
 			images = window.getIconImages();
 			if( images.isEmpty() ) {
 				// search in owners
