@@ -24,6 +24,7 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -73,6 +74,7 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF title bar.
  *
+ * @uiDefault TitlePane.font								Font
  * @uiDefault TitlePane.background							Color
  * @uiDefault TitlePane.inactiveBackground					Color
  * @uiDefault TitlePane.foreground							Color
@@ -105,6 +107,7 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTitlePane
 	extends JComponent
 {
+	/** @since 2.5 */ protected final Font titleFont = UIManager.getFont( "TitlePane.font" );
 	protected final Color activeBackground = UIManager.getColor( "TitlePane.background" );
 	protected final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
 	protected final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
@@ -1010,6 +1013,14 @@ debug*/
 	{
 		protected FlatTitleLabelUI() {
 			super( false );
+		}
+
+		@Override
+		protected void installDefaults( JLabel c ) {
+			super.installDefaults( c );
+
+			if( titleFont != null )
+				c.setFont( titleFont );
 		}
 
 		@Override

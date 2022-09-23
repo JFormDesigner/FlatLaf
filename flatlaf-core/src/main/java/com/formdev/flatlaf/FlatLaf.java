@@ -581,6 +581,7 @@ public abstract class FlatLaf
 
 		// add fonts that are not set in BasicLookAndFeel
 		defaults.put( "RootPane.font", activeFont );
+		defaults.put( "TitlePane.font", activeFont );
 	}
 
 	private void initDefaultFont( UIDefaults defaults ) {

@@ -21,6 +21,7 @@ FlatLaf Change Log
     (allow moving window). (issue #569)
   - Option to show window icon only in frames, but not in dialogs. Set UI value
     `TitlePane.showIconInDialogs` to `false`. (issue #589)
+  - Added UI value `TitlePane.font` to customize window title font. (issue #589)
 - Added system property `flatlaf.updateUIOnSystemFontChange` to allow disabling
   automatic UI update when system font changes. (issue #580)
 

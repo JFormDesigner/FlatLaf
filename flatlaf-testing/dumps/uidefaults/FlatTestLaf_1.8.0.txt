@@ -1259,6 +1259,7 @@ TitlePane.closeHoverForeground #ffffff  HSL   0   0 100    javax.swing.plaf.Colo
 TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
 TitlePane.closePressedBackground #c42b1ce6  90%  HSLA   5  75  44 90    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closePressedForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.font                 [active] $defaultFont [UI]
 TitlePane.foreground           #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.icon                 [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 TitlePane.iconMargins          3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]

@@ -996,6 +996,7 @@ TitlePane.closeIcon
 TitlePane.closePressedBackground
 TitlePane.closePressedForeground
 TitlePane.embeddedForeground
+TitlePane.font
 TitlePane.foreground
 TitlePane.icon
 TitlePane.iconMargins
