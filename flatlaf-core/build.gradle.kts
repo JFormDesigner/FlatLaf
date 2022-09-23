@@ -29,7 +29,7 @@ dependencies {
 	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )
 
 	// https://github.com/jtulach/netbeans-apitest
-	sigtest( "org.netbeans.tools:sigtest-maven-plugin:1.4" )
+	sigtest( "org.netbeans.tools:sigtest-maven-plugin:1.7" )
 }
 
 java {
