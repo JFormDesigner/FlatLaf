@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 FormDev Software GmbH
+ * Copyright 2022 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,12 @@
  */
 
 plugins {
-	`java-library`
-	`flatlaf-toolchain`
-	`flatlaf-module-info`
-	`flatlaf-publish`
+	java
 }
 
-dependencies {
-	implementation( project( ":flatlaf-core" ) )
-}
-
-flatlafModuleInfo {
-	dependsOn( ":flatlaf-core:jar" )
-}
-
-java {
-	withSourcesJar()
-	withJavadocJar()
-}
-
-flatlafPublish {
-	artifactId = "flatlaf-intellij-themes"
-	name = "FlatLaf IntelliJ Themes Pack"
-	description = "Flat Look and Feel IntelliJ Themes Pack"
+val toolchainJavaVersion = System.getProperty( "toolchain" )
+if( !toolchainJavaVersion.isNullOrEmpty() ) {
+	java.toolchain {
+		languageVersion.set( JavaLanguageVersion.of( toolchainJavaVersion ) )
+	}
 }

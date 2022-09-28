@@ -26,6 +26,10 @@ jobs:
           - 8
           - 11  # LTS
           - 17  # LTS
+        toolchain: [""]
+        include:
+          - java: 17
+            toolchain: 19  # latest
 
     steps:
       - uses: actions/checkout@v3
@@ -41,7 +45,7 @@ jobs:
           cache: gradle
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

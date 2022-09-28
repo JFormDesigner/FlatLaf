@@ -16,6 +16,7 @@
 
 plugins {
 	`java-library`
+	`flatlaf-toolchain`
 }
 
 dependencies {

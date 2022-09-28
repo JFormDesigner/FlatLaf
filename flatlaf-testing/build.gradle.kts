@@ -18,6 +18,7 @@ import java.util.Properties
 
 plugins {
 	`java-library`
+	`flatlaf-toolchain`
 }
 
 dependencies {

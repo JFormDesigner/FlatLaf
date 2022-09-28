@@ -16,6 +16,7 @@
 
 plugins {
 	`java-library`
+	`flatlaf-toolchain`
 	`flatlaf-module-info`
 	`flatlaf-publish`
 }
