@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.0.0.0.194" Java: "17.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -132,7 +132,7 @@ new FormModel {
 				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[][fill][]"
-					"$rowConstraints": "[center][][][][][][]para[][]para[][][]"
+					"$rowConstraints": "[center][][][][][][]para[][]para[][][][]"
 				} ) {
 					name: "tabbedPaneControlPanel"
 					"opaque": false
@@ -528,6 +528,16 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customWheelScrollingChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 11"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "contextMenuCheckBox"
+						"text": "Context menu on tabs"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "contextMenuChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 12"
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 11

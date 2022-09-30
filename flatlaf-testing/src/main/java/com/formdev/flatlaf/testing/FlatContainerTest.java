@@ -19,7 +19,9 @@ package com.formdev.flatlaf.testing;
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.*;
@@ -430,14 +432,14 @@ public class FlatContainerTest
 	}
 
 	private void customWheelScrollingChanged() {
-		if( custoMouseWheelScroller != null ) {
+		if( customMouseWheelScroller != null ) {
 			for( FlatTabbedPane tabbedPane : allTabbedPanes )
-				tabbedPane.removeMouseWheelListener( custoMouseWheelScroller );
-			custoMouseWheelScroller = null;
+				tabbedPane.removeMouseWheelListener( customMouseWheelScroller );
+			customMouseWheelScroller = null;
 		}
 
 		if( customWheelScrollingCheckBox.isSelected() ) {
-			custoMouseWheelScroller = new MouseWheelListener() {
+			customMouseWheelScroller = new MouseWheelListener() {
 				@Override
 				public void mouseWheelMoved( MouseWheelEvent e ) {
 					if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL ) {
@@ -451,7 +453,45 @@ public class FlatContainerTest
 				}
 			};
 			for( FlatTabbedPane tabbedPane : allTabbedPanes )
-				tabbedPane.addMouseWheelListener( custoMouseWheelScroller );
+				tabbedPane.addMouseWheelListener( customMouseWheelScroller );
+		}
+	}
+
+	private void contextMenuChanged() {
+		if( contextMenuListener != null ) {
+			for( FlatTabbedPane tabbedPane : allTabbedPanes )
+				tabbedPane.removeMouseListener( contextMenuListener );
+			contextMenuListener = null;
+		}
+
+		if( contextMenuCheckBox.isSelected() ) {
+			contextMenuListener = new MouseAdapter() {
+				@Override
+				public void mousePressed( MouseEvent e ) {
+					popupMenu( e );
+				}
+				@Override
+				public void mouseReleased( MouseEvent e ) {
+					popupMenu( e );
+				}
+				private void popupMenu( MouseEvent e ) {
+					if( !e.isPopupTrigger() )
+						return;
+
+					JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
+					int tabIndex = tabbedPane.indexAtLocation( e.getX(), e.getY() );
+					if( tabIndex < 0 )
+						return;
+
+					JPopupMenu popupMenu = new JPopupMenu();
+					popupMenu.add( "item 1" );
+					popupMenu.add( "item 2" );
+					popupMenu.add( "item 3" );
+					popupMenu.show( tabbedPane, e.getX(), e.getY() );
+				}
+			};
+			for( FlatTabbedPane tabbedPane : allTabbedPanes )
+				tabbedPane.addMouseListener( contextMenuListener );
 		}
 	}
 
@@ -515,6 +555,7 @@ public class FlatContainerTest
 		secondTabWiderCheckBox = new JCheckBox();
 		hideTabAreaWithOneTabCheckBox = new JCheckBox();
 		customWheelScrollingCheckBox = new JCheckBox();
+		contextMenuCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -546,11 +587,11 @@ public class FlatContainerTest
 					splitPane1.setOneTouchExpandable(true);
 
 					//---- panel15 ----
-					panel15.setBackground(new Color(217, 163, 67));
+					panel15.setBackground(new Color(0xd9a343));
 					splitPane1.setLeftComponent(panel15);
 
 					//---- panel21 ----
-					panel21.setBackground(new Color(98, 181, 67));
+					panel21.setBackground(new Color(0x62b543));
 					splitPane1.setRightComponent(panel21);
 				}
 				splitPane3.setLeftComponent(splitPane1);
@@ -563,7 +604,7 @@ public class FlatContainerTest
 
 					//======== panel12 ========
 					{
-						panel12.setBackground(new Color(242, 101, 34));
+						panel12.setBackground(new Color(0xf26522));
 						panel12.setLayout(new BorderLayout());
 
 						//---- label3 ----
@@ -576,7 +617,7 @@ public class FlatContainerTest
 
 					//======== panel13 ========
 					{
-						panel13.setBackground(new Color(64, 182, 224));
+						panel13.setBackground(new Color(0x40b6e0));
 						panel13.setLayout(new BorderLayout());
 
 						//---- label4 ----
@@ -634,6 +675,7 @@ public class FlatContainerTest
 					"[]para" +
 					"[]" +
 					"[]para" +
+					"[]" +
 					"[]" +
 					"[]" +
 					"[]"));
@@ -828,6 +870,11 @@ public class FlatContainerTest
 				customWheelScrollingCheckBox.setText("Custom wheel scrolling");
 				customWheelScrollingCheckBox.addActionListener(e -> customWheelScrollingChanged());
 				tabbedPaneControlPanel.add(customWheelScrollingCheckBox, "cell 2 11");
+
+				//---- contextMenuCheckBox ----
+				contextMenuCheckBox.setText("Context menu on tabs");
+				contextMenuCheckBox.addActionListener(e -> contextMenuChanged());
+				tabbedPaneControlPanel.add(contextMenuCheckBox, "cell 2 12");
 			}
 			panel9.add(tabbedPaneControlPanel, cc.xywh(1, 11, 3, 1));
 		}
@@ -875,10 +922,12 @@ public class FlatContainerTest
 	private JCheckBox secondTabWiderCheckBox;
 	private JCheckBox hideTabAreaWithOneTabCheckBox;
 	private JCheckBox customWheelScrollingCheckBox;
+	private JCheckBox contextMenuCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	private FlatTabbedPane[] allTabbedPanes;
-	private MouseWheelListener custoMouseWheelScroller;
+	private MouseWheelListener customMouseWheelScroller;
+	private MouseListener contextMenuListener;
 
 	//---- enum TabPlacement --------------------------------------------------
 
