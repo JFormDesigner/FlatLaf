@@ -352,6 +352,9 @@ public class FlatScrollBarUI
 
 	@Override
 	protected void paintTrack( Graphics g, JComponent c, Rectangle trackBounds ) {
+		if( trackBounds.isEmpty() || !scrollbar.isEnabled() )
+			return;
+
 		g.setColor( getTrackColor( c, hoverTrack, isPressed && hoverTrack && !hoverThumb ) );
 		paintTrackOrThumb( g, c, trackBounds, trackInsets, trackArc );
 	}
@@ -452,16 +455,29 @@ public class FlatScrollBarUI
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			isPressed = true;
-			repaint();
+			if( SwingUtilities.isLeftMouseButton( e ) || isAbsolutePositioning( e ) ) {
+				isPressed = true;
+				repaint();
+
+				// update hover because BasicScrollBarUI.TrackListener.mousePressed()
+				// moves the track on middle-click (if absolute positioning is enabled)
+				if( isAbsolutePositioning( e ) )
+					update( e.getX(), e.getY() );
+			}
 		}
 
 		@Override
 		public void mouseReleased( MouseEvent e ) {
-			isPressed = false;
-			repaint();
+			if( SwingUtilities.isLeftMouseButton( e ) || isAbsolutePositioning( e ) ) {
+				isPressed = false;
+				repaint();
+			}
 
 			update( e.getX(), e.getY() );
+		}
+
+		private boolean isAbsolutePositioning( MouseEvent e ) {
+			return getSupportsAbsolutePositioning() && SwingUtilities.isMiddleMouseButton( e );
 		}
 
 		private void update( int x, int y ) {

@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicArrowButton;
 
@@ -82,14 +83,18 @@ public class FlatArrowButton
 
 				@Override
 				public void mousePressed( MouseEvent e ) {
-					pressed = true;
-					repaint();
+					if( SwingUtilities.isLeftMouseButton( e ) ) {
+						pressed = true;
+						repaint();
+					}
 				}
 
 				@Override
 				public void mouseReleased( MouseEvent e ) {
-					pressed = false;
-					repaint();
+					if( SwingUtilities.isLeftMouseButton( e ) ) {
+						pressed = false;
+						repaint();
+					}
 				}
 			} );
 		}

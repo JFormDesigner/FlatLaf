@@ -8,6 +8,11 @@ FlatLaf Change Log
 - ComboBox and Spinner: Fixed missing arrow buttons if preferred height is zero.
   Minimum width of arrow buttons is 3/4 of default width.
 - TabbedPane: Switch and close tabs on left mouse click only. (PR #595)
+- ScrollBar: Show "pressed" feedback on track/thumb only for left mouse button.
+  If absolute positioning is enabled (the default), then also for middle mouse
+  button.
+- Arrow buttons in ComboBox, Spinner, ScrollBar and TabbedPane: Show "pressed"
+  feedback only for left mouse button.
 
 
 ## 2.5
