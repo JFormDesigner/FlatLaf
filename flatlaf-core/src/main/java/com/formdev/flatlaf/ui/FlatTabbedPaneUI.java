@@ -2589,7 +2589,7 @@ public class FlatTabbedPaneUI
 		public void mousePressed( MouseEvent e ) {
 			updateRollover( e );
 
-			if( !isPressedTabClose() )
+			if( !isPressedTabClose() && SwingUtilities.isLeftMouseButton( e ) )
 				mouseDelegate.mousePressed( e );
 		}
 
@@ -2644,7 +2644,7 @@ public class FlatTabbedPaneUI
 
 			// check whether mouse hit tab close area
 			boolean hitClose = isTabClosable( tabIndex ) && getTabCloseHitArea( tabIndex ).contains( x, y );
-			if( e.getID() == MouseEvent.MOUSE_PRESSED )
+			if( e.getID() == MouseEvent.MOUSE_PRESSED && SwingUtilities.isLeftMouseButton( e ) )
 				pressedTabIndex = hitClose ? tabIndex : -1;
 			setRolloverTabClose( hitClose );
 			setPressedTabClose( hitClose && tabIndex == pressedTabIndex );
