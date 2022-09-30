@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.0-SNAPSHOT
+
+#### Fixed bugs
+
+- ComboBox and Spinner: Fixed missing arrow buttons if preferred height is zero.
+  Minimum width of arrow buttons is 3/4 of default width.
+
+
 ## 2.5
 
 #### New features and improvements

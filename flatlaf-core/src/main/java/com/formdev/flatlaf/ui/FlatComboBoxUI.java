@@ -308,11 +308,14 @@ public class FlatComboBoxUI
 					// limit button width to height of a raw combobox (without insets)
 					FontMetrics fm = comboBox.getFontMetrics( comboBox.getFont() );
 					int maxButtonWidth = fm.getHeight() + scale( padding.top ) + scale( padding.bottom );
+					int minButtonWidth = (maxButtonWidth * 3) / 4;
 
+					// make button square (except if width is limited)
 					Insets insets = getInsets();
-					int buttonWidth = Math.min( parent.getPreferredSize().height - insets.top - insets.bottom, maxButtonWidth );
+					int buttonWidth = Math.min( Math.max( parent.getHeight() - insets.top - insets.bottom, minButtonWidth ), maxButtonWidth );
+
 					if( buttonWidth != arrowButton.getWidth() ) {
-						// set width of arrow button to preferred height of combobox
+						// set width of arrow button
 						int xOffset = comboBox.getComponentOrientation().isLeftToRight()
 							? arrowButton.getWidth() - buttonWidth
 							: 0;

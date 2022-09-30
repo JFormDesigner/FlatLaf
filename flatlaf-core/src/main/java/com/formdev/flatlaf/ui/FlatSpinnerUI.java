@@ -483,9 +483,10 @@ public class FlatSpinnerUI
 			// limit buttons width to height of a raw spinner (without insets)
 			FontMetrics fm = spinner.getFontMetrics( spinner.getFont() );
 			int maxButtonWidth = fm.getHeight() + scale( padding.top ) + scale( padding.bottom );
+			int minButtonWidth = (maxButtonWidth * 3) / 4;
 
-			// make button area square (if spinner has preferred height)
-			int buttonsWidth = Math.min( parent.getPreferredSize().height - insets.top - insets.bottom, maxButtonWidth );
+			// make button area square (except if width is limited)
+			int buttonsWidth = Math.min( Math.max( buttonsRect.height, minButtonWidth ), maxButtonWidth );
 			buttonsRect.width = buttonsWidth;
 
 			if( parent.getComponentOrientation().isLeftToRight() ) {
