@@ -13,6 +13,8 @@ FlatLaf Change Log
   button.
 - Arrow buttons in ComboBox, Spinner, ScrollBar and TabbedPane: Show "pressed"
   feedback only for left mouse button.
+- ScaledImageIcon: Do not throw exceptions if image was has invalid size (e.g.
+  not found). Instead, paint a red rectangle (similar to `FlatSVGIcon`).
 
 
 ## 2.5

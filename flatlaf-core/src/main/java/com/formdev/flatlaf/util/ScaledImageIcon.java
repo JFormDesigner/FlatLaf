@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -101,6 +102,13 @@ debug*/
 		// size of image
 		int imageWidth = image.getWidth( null );
 		int imageHeight = image.getHeight( null );
+
+		// paint red rectangle if image has invalid size (e.g. not found)
+		if( imageWidth < 0 || imageHeight < 0 ) {
+			g.setColor( Color.red );
+			g.fillRect( x, y, getIconWidth(), getIconHeight() );
+			return;
+		}
 
 		// scale image if necessary to destination size
 		if( imageWidth != destImageWidth || imageHeight != destImageHeight ) {
