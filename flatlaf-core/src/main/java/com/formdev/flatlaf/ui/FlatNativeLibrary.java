@@ -48,27 +48,25 @@ class FlatNativeLibrary
 
 		String libraryName;
 		if( SystemInfo.isWindows_10_orLater && (SystemInfo.isX86 || SystemInfo.isX86_64) ) {
-			// Windows: requires Windows 10 (x86 or x86_64)
+			// Windows: requires Windows 10/11 (x86 or x86_64)
 
 			libraryName = "flatlaf-windows-x86";
 			if( SystemInfo.isX86_64 )
 				libraryName += "_64";
 
-			// load jawt native library
-			if( !SystemInfo.isJava_9_orLater ) {
-				// In Java 8, load jawt.dll (part of JRE) explicitly because it
-				// is not found when running application with <jdk>/bin/java.exe.
-				// When using <jdk>/jre/bin/java.exe, it is found.
-				// jawt.dll is located in <jdk>/jre/bin/.
-				// Java 9 and later do not have this problem.
-				loadJAWT();
-			}
+			// In Java 8, load jawt.dll (part of JRE) explicitly because it
+			// is not found when running application with <jdk>/bin/java.exe.
+			// When using <jdk>/jre/bin/java.exe, it is found.
+			// jawt.dll is located in <jdk>/jre/bin/.
+			// Java 9 and later do not have this problem,
+			// but load jawt.dll anyway to be on the safe side.
+			loadJAWT();
 		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
 			// Linux: requires x86_64
 
 			libraryName = "flatlaf-linux-x86_64";
 
-			// Load jawt.so (part of JRE) explicitly because it is not found
+			// Load libjawt.so (part of JRE) explicitly because it is not found
 			// in all Java versions/distributions.
 			// E.g. not found in Java 13 and later from openjdk.java.net.
 			// There seems to be also differences between distributions.
