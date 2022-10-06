@@ -74,6 +74,22 @@ public class NativeLibrary
 	}
 
 	/**
+	 * Load native library using {@link System#loadLibrary(String)}.
+	 * Searches for the library in classloader of caller
+	 * (using {@link ClassLoader#findLibrary(String)}) and in paths specified
+	 * in system properties {@code sun.boot.library.path} and {@code java.library.path}.
+	 *
+	 * @param libraryName name of the native library (without "lib" prefix and without extension)
+	 * @param supported whether the native library is supported on the current platform
+	 * @since 3
+	 */
+	public NativeLibrary( String libraryName, boolean supported ) {
+		this.loaded = supported
+			? loadLibraryFromSystem( libraryName )
+			: false;
+	}
+
+	/**
 	 * Returns whether the native library is loaded.
 	 * <p>
 	 * Returns {@code false} if not supported on current platform as specified in constructor
@@ -92,7 +108,7 @@ public class NativeLibrary
 			? classLoader.getResource( libraryName )
 			: NativeLibrary.class.getResource( "/" + libraryName );
 		if( libraryUrl == null ) {
-			log( "Library '" + libraryName + "' not found", null );
+			LoggingFacade.INSTANCE.logSevere( "Library '" + libraryName + "' not found", null );
 			return false;
 		}
 
@@ -125,7 +141,7 @@ public class NativeLibrary
 
 			return true;
 		} catch( Throwable ex ) {
-			log( null, ex );
+			LoggingFacade.INSTANCE.logSevere( ex.getMessage(), ex );
 
 			if( tempFile != null )
 				deleteOrMarkForDeletion( tempFile );
@@ -138,7 +154,24 @@ public class NativeLibrary
 			System.load( libraryFile.getAbsolutePath() );
 			return true;
 		} catch( Throwable ex ) {
-			log( ex.getMessage(), ex );
+			LoggingFacade.INSTANCE.logSevere( ex.getMessage(), ex );
+			return false;
+		}
+	}
+
+	private boolean loadLibraryFromSystem( String libraryName ) {
+		try {
+			System.loadLibrary( libraryName );
+			return true;
+		} catch( Throwable ex ) {
+			String message = ex.getMessage();
+
+			// do not log error if library was not found
+			// thrown in ClassLoader.loadLibrary(Class<?> fromClass, String name, boolean isAbsolute)
+			if( ex instanceof UnsatisfiedLinkError && message != null && message.contains( "java.library.path" ) )
+				return false;
+
+			LoggingFacade.INSTANCE.logSevere( message, ex );
 			return false;
 		}
 	}
@@ -156,10 +189,6 @@ public class NativeLibrary
 		return (sep >= 0)
 			? libraryName.substring( 0, sep + 1 ) + System.mapLibraryName( libraryName.substring( sep + 1 ) )
 			: System.mapLibraryName( libraryName );
-	}
-
-	private static void log( String msg, Throwable thrown ) {
-		LoggingFacade.INSTANCE.logSevere( msg, thrown );
 	}
 
 	private static Path createTempFile( String libraryName ) throws IOException {

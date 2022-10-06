@@ -155,9 +155,19 @@ public interface FlatSystemProperties
 	String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flatlaf.updateUIOnSystemFontChange";
 
 	/**
-	 * Specifies a directory in which the native FlatLaf library have been extracted.
+	 * Specifies a directory in which the native FlatLaf libraries have been extracted.
 	 * The path can be absolute or relative to current application working directory.
 	 * This can be used to avoid extraction of the native libraries to the temporary directory at runtime.
+	 * <p>
+	 * If the value is {@code "system"}, then {@link System#loadLibrary(String)} is
+	 * used to load the native library.
+	 * Searches for the native library in classloader of caller
+	 * (using {@link ClassLoader#findLibrary(String)}) and in paths specified
+	 * in system properties {@code sun.boot.library.path} and {@code java.library.path}.
+	 * (supported since FlatLaf 3)
+	 * <p>
+	 * If the native library can not loaded from the given path (or via {@link System#loadLibrary(String)}),
+	 * then the embedded native library is extracted to the temporary directory and loaded from there.
 	 *
 	 * @since 2
 	 */

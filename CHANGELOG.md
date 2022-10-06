@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 3.0-SNAPSHOT
 
+#### New features and improvements
+
+- If value of system property `flatlaf.nativeLibraryPath` is `system`, then
+  `System.loadLibrary(String)` is used to load the native library.
+
 #### Fixed bugs
 
 - ComboBox and Spinner: Fixed missing arrow buttons if preferred height is zero.

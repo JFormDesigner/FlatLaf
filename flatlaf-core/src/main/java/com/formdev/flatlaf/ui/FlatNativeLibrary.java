@@ -84,11 +84,19 @@ class FlatNativeLibrary
 	private static NativeLibrary createNativeLibrary( String libraryName ) {
 		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
 		if( libraryPath != null ) {
-			File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
-			if( libraryFile.exists() )
-				return new NativeLibrary( libraryFile, true );
-			else
+			if( "system".equals( libraryPath ) ) {
+				NativeLibrary library = new NativeLibrary( libraryName, true );
+				if( library.isLoaded() )
+					return library;
+
+				LoggingFacade.INSTANCE.logSevere( "Did not find library " + libraryName + " in java.library.path, using extracted library instead", null );
+			} else {
+				File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
+				if( libraryFile.exists() )
+					return new NativeLibrary( libraryFile, true );
+
 				LoggingFacade.INSTANCE.logSevere( "Did not find external library " + libraryFile + ", using extracted library instead", null );
+			}
 		}
 
 		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, true );
@@ -101,9 +109,9 @@ class FlatNativeLibrary
 			// log error only if native library jawt.dll not already loaded
 			String message = ex.getMessage();
 			if( message == null || !message.contains( "already loaded in another classloader" ) )
-				LoggingFacade.INSTANCE.logSevere( null, ex );
+				LoggingFacade.INSTANCE.logSevere( message, ex );
 		} catch( Exception ex ) {
-			LoggingFacade.INSTANCE.logSevere( null, ex );
+			LoggingFacade.INSTANCE.logSevere( ex.getMessage(), ex );
 		}
 	}
 }
