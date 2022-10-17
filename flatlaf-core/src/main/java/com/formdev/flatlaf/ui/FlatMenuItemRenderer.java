@@ -500,7 +500,11 @@ debug*/
 
 	private Font getTopLevelFont() {
 		Font font = menuItem.getFont();
-		return (font != menuFont) ? font : menuItem.getParent().getFont();
+		// menu item parent may be null if JMenu.isTopLevelMenu() is overridden
+		// and does not check parent (e.g. com.jidesoft.swing.JideMenu.isTopLevelMenu())
+		return (font != menuFont || menuItem.getParent() == null)
+			? font
+			: menuItem.getParent().getFont();
 	}
 
 	private Icon getIconForPainting() {
