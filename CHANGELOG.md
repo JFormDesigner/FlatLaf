@@ -23,6 +23,7 @@ FlatLaf Change Log
   feedback only for left mouse button.
 - ScaledImageIcon: Do not throw exceptions if image was has invalid size (e.g.
   not found). Instead, paint a red rectangle (similar to `FlatSVGIcon`).
+- Fixed NPE in `FlatUIUtils.isCellEditor()`. (issue #601)
 
 
 ## 2.5

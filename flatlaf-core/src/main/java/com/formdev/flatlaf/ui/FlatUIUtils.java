@@ -210,6 +210,9 @@ public class FlatUIUtils
 	}
 
 	public static boolean isCellEditor( Component c ) {
+		if( c == null )
+			return false;
+
 		// check whether used in cell editor (check 3 levels up)
 		Component c2 = c;
 		for( int i = 0; i <= 2 && c2 != null; i++ ) {
