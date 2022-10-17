@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - If value of system property `flatlaf.nativeLibraryPath` is `system`, then
   `System.loadLibrary(String)` is used to load the native library.
+- TabbedPane: Switch and close tabs on left mouse click only. (PR #595)
 
 #### Fixed bugs
 
@@ -15,7 +16,6 @@ FlatLaf Change Log
 - MenuBar: Fixed NPE in `FlatMenuItemRenderer.getTopLevelFont()` if menu item
   does not have a parent. (issue #600; regression since implementing #589 in
   FlatLaf 2.5)
-- TabbedPane: Switch and close tabs on left mouse click only. (PR #595)
 - ScrollBar: Show "pressed" feedback on track/thumb only for left mouse button.
   If absolute positioning is enabled (the default), then also for middle mouse
   button.
