@@ -81,7 +81,7 @@ public class NativeLibrary
 	 *
 	 * @param libraryName name of the native library (without "lib" prefix and without extension)
 	 * @param supported whether the native library is supported on the current platform
-	 * @since 3
+	 * @since 2.6
 	 */
 	public NativeLibrary( String libraryName, boolean supported ) {
 		this.loaded = supported

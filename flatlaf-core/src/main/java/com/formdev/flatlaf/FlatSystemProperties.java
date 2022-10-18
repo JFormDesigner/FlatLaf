@@ -164,7 +164,7 @@ public interface FlatSystemProperties
 	 * Searches for the native library in classloader of caller
 	 * (using {@link ClassLoader#findLibrary(String)}) and in paths specified
 	 * in system properties {@code sun.boot.library.path} and {@code java.library.path}.
-	 * (supported since FlatLaf 3)
+	 * (supported since FlatLaf 2.6)
 	 * <p>
 	 * If the native library can not loaded from the given path (or via {@link System#loadLibrary(String)}),
 	 * then the embedded native library is extracted to the temporary directory and loaded from there.
