@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 2.5
+#Version 2.6
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -604,6 +604,7 @@ supr java.lang.Object
 
 CLSS public com.formdev.flatlaf.util.NativeLibrary
 cons public init(java.io.File,boolean)
+cons public init(java.lang.String,boolean)
 cons public init(java.lang.String,java.lang.ClassLoader,boolean)
 meth public boolean isLoaded()
 supr java.lang.Object
