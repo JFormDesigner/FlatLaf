@@ -243,11 +243,13 @@ public class FlatFileChooserUI
 			borderLayout.setHgap( 8 );
 
 			Component north = borderLayout.getLayoutComponent( BorderLayout.NORTH );
+			Component lineEnd = borderLayout.getLayoutComponent( BorderLayout.LINE_END );
 			Component center = borderLayout.getLayoutComponent( BorderLayout.CENTER );
 			Component south = borderLayout.getLayoutComponent( BorderLayout.SOUTH );
-			if( north != null && center != null && south != null ) {
+			if( north != null && lineEnd != null && center != null && south != null ) {
 				JPanel p = new JPanel( new BorderLayout( 0, 11 ) );
 				p.add( north, BorderLayout.NORTH );
+				p.add( lineEnd, BorderLayout.LINE_END );
 				p.add( center, BorderLayout.CENTER );
 				p.add( south, BorderLayout.SOUTH );
 				fc.add( p, BorderLayout.CENTER );

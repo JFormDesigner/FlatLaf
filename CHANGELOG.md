@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## 3.0-SNAPSHOT
+
+#### Fixed bugs
+
+- FileChooser: Fixed layout of (optional) accessory component and fixed too
+  large right margin. (issue #604; regression since implementing PR #522 in
+  FlatLaf 2.3)
+
+
 ## 2.6
 
 #### New features and improvements
