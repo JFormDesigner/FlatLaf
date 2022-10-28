@@ -126,42 +126,62 @@ Buzz
 Applications using FlatLaf
 --------------------------
 
-- ![New](images/new.svg) [Ultorg](https://www.ultorg.com/) (**commercial**) - a
+- ![New](images/new.svg)
+  [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
+  12 (**commercial**) - the award-winning all-in-one Java profiler
+- ![New](images/new.svg) [JFormDesigner](https://www.formdev.com/) 8
+  (**commercial**) - Java/Swing GUI Designer
+- ![New](images/new.svg) [Fanurio](https://www.fanuriotimetracking.com/) 3.3.2
+  (**commercial**) - time tracking and billing for freelancers and teams
+- ![New](images/new.svg) [Antares](https://www.antarescircuit.io/) - a free,
+  powerful platform for designing, simulating and explaining digital circuits
+- ![New](images/new.svg)
+  [Logisim-evolution](https://github.com/logisim-evolution/logisim-evolution)
+  3.6 - Digital logic design tool and simulator
+- ![New](images/new.svg) [Cinecred](https://loadingbyte.com/cinecred/) - create
+  beautiful film credit sequences
+- ![New](images/new.svg) [tinyMediaManager](https://www.tinymediamanager.org/)
+  v4 (**commercial**) - a media management tool
+- ![New](images/new.svg) [Weasis](https://nroduit.github.io/) - medical DICOM
+  viewer used in healthcare by hospitals, health networks, etc
+- ![New](images/new.svg)
+  [Makelangelo Software](https://github.com/MarginallyClever/Makelangelo-software)
+  7.3.0 - for plotters, especially the wall-hanging polargraph
+- ![Hot](images/hot.svg) [Ultorg](https://www.ultorg.com/) (**commercial**) - a
   visual query system for relational databases
-- ![New](images/new.svg) [MooInfo](https://github.com/rememberber/MooInfo) -
-  visual implementation of OSHI, to view information about the system and
-  hardware
-- ![New](images/new.svg) [Jailer](https://github.com/Wisser/Jailer) 11.2 -
-  database subsetting and relational data browsing tool
-- [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
-  and much more
+- [MooInfo](https://github.com/rememberber/MooInfo) - visual implementation of
+  OSHI, to view information about the system and hardware
+- [Jailer](https://github.com/Wisser/Jailer) 11.2 - database subsetting and
+  relational data browsing tool
+- ![Hot](images/hot.svg) [Apache NetBeans](https://netbeans.apache.org/) 11.3 -
+  IDE for Java, PHP, HTML and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
-- ![New](images/new.svg)
+- ![Hot](images/hot.svg)
   [install4j](https://www.ej-technologies.com/products/install4j/overview.html)
   9.0 (**commercial**) - the powerful multi-platform Java installer builder
-- ![New](images/new.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
+- ![Hot](images/hot.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
   (**commercial**) - the universal database tool for developers, analysts and
   DBAs
-- ![New](images/new.svg) [MagicPlot](https://magicplot.com/) 3.0
+- ![Hot](images/hot.svg) [MagicPlot](https://magicplot.com/) 3.0
   (**commercial**) - Software for nonlinear fitting, plotting and data analysis
-- ![New](images/new.svg)
+- ![Hot](images/hot.svg)
   [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) 2021a
   (**commercial**) - Thermodynamics and Properties Software
-- [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds most widely used web
-  app scanner
-- ![New](images/new.svg)
+- ![Hot](images/hot.svg) [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds
+  most widely used web app scanner
+- ![Hot](images/hot.svg)
   [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
   2020.11.2 (**commercial**) - the leading software for web security testing
-- ![New](images/new.svg)
-  [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
+- [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
   FlatLaf themes to Burp Suite
-- [JOSM](https://josm.openstreetmap.de/) - an extensible editor for
-  [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
-- [jAlbum](https://jalbum.net/) 21 (**commercial**) - creates photo album
-  websites
-- ![New](images/new.svg) [PDF Studio](https://www.qoppa.com/pdfstudio/) 2021
-  (**commercial**) - create, review and edit PDF documents
+- ![Hot](images/hot.svg) [JOSM](https://josm.openstreetmap.de/) - an extensible
+  editor for [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf
+  JOSM plugin)
+- ![Hot](images/hot.svg) [jAlbum](https://jalbum.net/) 21 (**commercial**) -
+  creates photo album websites
+- [PDF Studio](https://www.qoppa.com/pdfstudio/) 2021 (**commercial**) - create,
+  review and edit PDF documents
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
 - [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
   checks your website
@@ -187,8 +207,8 @@ Applications using FlatLaf
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (**commercial**)
-- ![New](images/new.svg) [IGMAS+](https://www.gfz-potsdam.de/igmas) -
-  Interactive Gravity and Magnetic Application System
+- [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
+  Application System
 - [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
   computation environment for meteorological community
 - [lsfusion platform](https://github.com/lsfusion/platform) 4 - information

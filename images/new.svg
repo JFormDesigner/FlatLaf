@@ -1,10 +1,10 @@
-<svg width="27" height="12" version="1.1" viewBox="0 0 27 12" xmlns="http://www.w3.org/2000/svg">
-<g fill-rule="evenodd">
-<path d="m2.5 0.5h17l5.5 5.5-5.5 5.5-16.984 0.03125c-1.0156 0.001869-2.0156-1.0312-2.0156-2.0312v-7c0-1.0721 0.99631-2 2-2z" fill="#db3831" stroke="#db3831" stroke-linejoin="round" stroke-width="1px"/>
-<g fill="#fff">
-<path d="m3 9v-6h1l3 4.5v-4.5h1v6h-1l-3-4.5v4.5h-1"/>
-<path d="m12 9h-3v-6h3v1h-2v1.5h2v1h-2v1.5h2z"/>
-<path d="m12.5 3 1.5 6h1l1-4.5 1 4.5h1l1.5-6h-1l-1 4.5-1-4.5h-1l-1 4.5-1-4.5z"/>
-</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="12" viewBox="0 0 25 12">
+  <g fill="none" fill-rule="evenodd">
+    <path fill="#DB3831" fill-rule="nonzero" stroke="#DB3831" stroke-linejoin="round" d="M2.5,0.5 L19.5,0.5 L25,6 L19.5,11.5 L2.516,11.5312525 C1.5004,11.533119 0.5004,10.50005 0.5004,9.50005 L0.5004,2.50005 C0.5004,1.42795 1.49671,0.5 2.5004,0.5 L2.5,0.5 Z"/>
+    <g fill="#FFF" fill-rule="nonzero" transform="translate(3 3)">
+      <polyline points="0 6 0 0 1 0 4 4.5 4 0 5 0 5 6 4 6 1 1.5 1 6 0 6"/>
+      <polygon points="9 6 6 6 6 0 9 0 9 1 7 1 7 2.5 9 2.5 9 3.5 7 3.5 7 5 9 5"/>
+      <polygon points="9.5 0 11 6 12 6 13 1.5 14 6 15 6 16.5 0 15.5 0 14.5 4.5 13.5 0 12.5 0 11.5 4.5 10.5 0"/>
+    </g>
+  </g>
 </svg>
