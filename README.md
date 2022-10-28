@@ -25,6 +25,13 @@ FlatLaf can use 3rd party themes created for IntelliJ Platform (see
 ![IntelliJ Platform Themes](images/intellij_platform_themes.png)
 
 
+Sponsors
+--------
+
+<a href="https://www.ej-technologies.com/"><img src="https://www.formdev.com/flatlaf/sponsor/ej-technologies.png" width="200"></a>
+
+[Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
+
 Demo
 ----
 
