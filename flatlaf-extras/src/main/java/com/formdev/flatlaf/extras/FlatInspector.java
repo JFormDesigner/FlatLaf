@@ -155,7 +155,7 @@ public class FlatInspector
 						rootPane.putClientProperty( FlatInspector.class, inspector );
 						inspector.setEnabled( true );
 					} else {
-						inspector.uninstall();
+						inspector.setEnabled( false );
 						rootPane.putClientProperty( FlatInspector.class, null );
 					}
 				}
@@ -174,8 +174,6 @@ public class FlatInspector
 				inspect( lastX, lastY );
 			}
 		};
-
-		rootPane.getGlassPane().addMouseMotionListener( mouseMotionListener );
 
 		keyListener = e -> {
 			KeyEvent keyEvent = (KeyEvent) e;
@@ -220,12 +218,10 @@ public class FlatInspector
 				keyEvent.consume();
 
 				if( id == KeyEvent.KEY_PRESSED ) {
+					setEnabled( false );
 					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
-					if( inspector == FlatInspector.this ) {
-						uninstall();
+					if( inspector == FlatInspector.this )
 						rootPane.putClientProperty( FlatInspector.class, null );
-					} else
-						setEnabled( false );
 				}
 			}
 		};
@@ -241,12 +237,6 @@ public class FlatInspector
 				hidePopup();
 			}
 		};
-	}
-
-	private void uninstall() {
-		setEnabled( false );
-		rootPane.getGlassPane().setVisible( false );
-		rootPane.getGlassPane().removeMouseMotionListener( mouseMotionListener );
 	}
 
 
@@ -279,6 +269,12 @@ public class FlatInspector
 			toolkit.addAWTEventListener( keyListener, AWTEvent.KEY_EVENT_MASK );
 		else
 			toolkit.removeAWTEventListener( keyListener );
+
+		// add/remove mouse listener
+		if( enabled )
+			rootPane.getGlassPane().addMouseMotionListener( mouseMotionListener );
+		else
+			rootPane.getGlassPane().removeMouseMotionListener( mouseMotionListener );
 
 		// add/remove window listener
 		if( enabled ) {
