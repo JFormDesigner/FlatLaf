@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -1465,13 +1465,13 @@ new FormModel {
 					"selected": true
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 5 1"
+				"value": "cell 1 23 6 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
 				"text": "Square:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 5 1"
+				"value": "cell 1 23 6 1"
 			} )
 			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar3"
@@ -1498,13 +1498,13 @@ new FormModel {
 					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 5 1"
+				"value": "cell 1 23 6 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "Round:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 5 1"
+				"value": "cell 1 23 6 1"
 			} )
 			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar4"
@@ -1531,7 +1531,59 @@ new FormModel {
 					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 5 1"
+				"value": "cell 1 23 6 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "Group:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 23 6 1"
+			} )
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar5"
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton27"
+					"icon": #SwingIcon4
+					"selected": true
+					"$buttonGroup": new FormReference( "buttonGroup2" )
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton28"
+					"icon": #SwingIcon4
+					"$buttonGroup": new FormReference( "buttonGroup2" )
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator6"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton29"
+					"icon": #SwingIcon4
+					"$buttonGroup": new FormReference( "buttonGroup2" )
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator8"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton30"
+					"icon": #SwingIcon5
+					"$buttonGroup": new FormReference( "buttonGroup3" )
+					"selected": true
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton31"
+					"icon": #SwingIcon5
+					"$buttonGroup": new FormReference( "buttonGroup3" )
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator7"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+					name: "toggleButton32"
+					"icon": #SwingIcon4
+					"$buttonGroup": new FormReference( "buttonGroup2" )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 23 6 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
@@ -1541,6 +1593,16 @@ new FormModel {
 			name: "buttonGroup1"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 810 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup2"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 862 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup3"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 914 )
 		} )
 	}
 }

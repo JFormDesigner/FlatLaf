@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -355,8 +355,36 @@ new FormModel {
 					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png" )
 					"enabled": false
 				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator6"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label7"
+					"text": "Button group hover:"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton1"
+					"icon": &SwingIcon3 new com.jformdesigner.model.SwingIcon( 2, "FileView.computerIcon" )
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+					"selected": true
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton2"
+					"icon": #SwingIcon3
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton3"
+					"icon": #SwingIcon3
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton4"
+					"icon": #SwingIcon3
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 10 3 1,growx"
+				"value": "cell 1 10 4 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "splitPaneLabel"
@@ -442,6 +470,11 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 700, 550 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 560 )
 		} )
 	}
 }

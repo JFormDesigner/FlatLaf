@@ -101,6 +101,11 @@ class MoreComponentsPanel
 		JButton button8 = new JButton();
 		JToggleButton toggleButton6 = new JToggleButton();
 		JButton button1 = new JButton();
+		JLabel label7 = new JLabel();
+		JToggleButton toggleButton1 = new JToggleButton();
+		JToggleButton toggleButton2 = new JToggleButton();
+		JToggleButton toggleButton3 = new JToggleButton();
+		JToggleButton toggleButton4 = new JToggleButton();
 		JLabel splitPaneLabel = new JLabel();
 		JSplitPane splitPane3 = new JSplitPane();
 		JSplitPane splitPane1 = new JSplitPane();
@@ -397,8 +402,30 @@ class MoreComponentsPanel
 			button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png")));
 			button1.setEnabled(false);
 			toolBar1.add(button1);
+			toolBar1.addSeparator();
+
+			//---- label7 ----
+			label7.setText("Button group hover:");
+			toolBar1.add(label7);
+
+			//---- toggleButton1 ----
+			toggleButton1.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toggleButton1.setSelected(true);
+			toolBar1.add(toggleButton1);
+
+			//---- toggleButton2 ----
+			toggleButton2.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar1.add(toggleButton2);
+
+			//---- toggleButton3 ----
+			toggleButton3.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar1.add(toggleButton3);
+
+			//---- toggleButton4 ----
+			toggleButton4.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar1.add(toggleButton4);
 		}
-		add(toolBar1, "cell 1 10 3 1,growx");
+		add(toolBar1, "cell 1 10 4 1,growx");
 
 		//---- splitPaneLabel ----
 		splitPaneLabel.setText("JSplitPane:");
@@ -474,6 +501,13 @@ class MoreComponentsPanel
 			splitPane3.setRightComponent(splitPane2);
 		}
 		add(splitPane3, "cell 1 11 4 1,grow");
+
+		//---- buttonGroup1 ----
+		ButtonGroup buttonGroup1 = new ButtonGroup();
+		buttonGroup1.add(toggleButton1);
+		buttonGroup1.add(toggleButton2);
+		buttonGroup1.add(toggleButton3);
+		buttonGroup1.add(toggleButton4);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( FlatLafDemo.screenshotsMode ) {

@@ -437,6 +437,14 @@ public class FlatComponentsTest
 		FlatButton button29 = new FlatButton();
 		FlatToggleButton toggleButton25 = new FlatToggleButton();
 		FlatToggleButton toggleButton26 = new FlatToggleButton();
+		JLabel label5 = new JLabel();
+		FlatComponentsTest.TestToolBar toolBar5 = new FlatComponentsTest.TestToolBar();
+		FlatToggleButton toggleButton27 = new FlatToggleButton();
+		FlatToggleButton toggleButton28 = new FlatToggleButton();
+		FlatToggleButton toggleButton29 = new FlatToggleButton();
+		FlatToggleButton toggleButton30 = new FlatToggleButton();
+		FlatToggleButton toggleButton31 = new FlatToggleButton();
+		FlatToggleButton toggleButton32 = new FlatToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -1540,11 +1548,11 @@ public class FlatComponentsTest
 			toggleButton17.setSelected(true);
 			toolBar1.add(toggleButton17);
 		}
-		add(toolBar1, "cell 1 23 5 1");
+		add(toolBar1, "cell 1 23 6 1");
 
 		//---- label3 ----
 		label3.setText("Square:");
-		add(label3, "cell 1 23 5 1");
+		add(label3, "cell 1 23 6 1");
 
 		//======== toolBar3 ========
 		{
@@ -1571,11 +1579,11 @@ public class FlatComponentsTest
 			toggleButton24.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(toggleButton24);
 		}
-		add(toolBar3, "cell 1 23 5 1");
+		add(toolBar3, "cell 1 23 6 1");
 
 		//---- label4 ----
 		label4.setText("Round:");
-		add(label4, "cell 1 23 5 1");
+		add(label4, "cell 1 23 6 1");
 
 		//======== toolBar4 ========
 		{
@@ -1602,7 +1610,45 @@ public class FlatComponentsTest
 			toggleButton26.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(toggleButton26);
 		}
-		add(toolBar4, "cell 1 23 5 1");
+		add(toolBar4, "cell 1 23 6 1");
+
+		//---- label5 ----
+		label5.setText("Group:");
+		add(label5, "cell 1 23 6 1");
+
+		//======== toolBar5 ========
+		{
+
+			//---- toggleButton27 ----
+			toggleButton27.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toggleButton27.setSelected(true);
+			toolBar5.add(toggleButton27);
+
+			//---- toggleButton28 ----
+			toggleButton28.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar5.add(toggleButton28);
+			toolBar5.addSeparator();
+
+			//---- toggleButton29 ----
+			toggleButton29.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar5.add(toggleButton29);
+			toolBar5.addSeparator();
+
+			//---- toggleButton30 ----
+			toggleButton30.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
+			toggleButton30.setSelected(true);
+			toolBar5.add(toggleButton30);
+
+			//---- toggleButton31 ----
+			toggleButton31.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
+			toolBar5.add(toggleButton31);
+			toolBar5.addSeparator();
+
+			//---- toggleButton32 ----
+			toggleButton32.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toolBar5.add(toggleButton32);
+		}
+		add(toolBar5, "cell 1 23 6 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -1611,6 +1657,18 @@ public class FlatComponentsTest
 		buttonGroup1.add(warningOutlineRadioButton);
 		buttonGroup1.add(magentaOutlineRadioButton);
 		buttonGroup1.add(magentaCyanOutlineRadioButton);
+
+		//---- buttonGroup2 ----
+		ButtonGroup buttonGroup2 = new ButtonGroup();
+		buttonGroup2.add(toggleButton27);
+		buttonGroup2.add(toggleButton28);
+		buttonGroup2.add(toggleButton29);
+		buttonGroup2.add(toggleButton32);
+
+		//---- buttonGroup3 ----
+		ButtonGroup buttonGroup3 = new ButtonGroup();
+		buttonGroup3.add(toggleButton30);
+		buttonGroup3.add(toggleButton31);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		// Unicode surrogate character pair "script capital A"

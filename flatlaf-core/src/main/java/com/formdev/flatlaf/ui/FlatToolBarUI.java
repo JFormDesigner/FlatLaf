@@ -20,15 +20,24 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Map;
 import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.DefaultButtonModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JToolBar;
 import javax.swing.LayoutFocusTraversalPolicy;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -37,6 +46,7 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -58,6 +68,8 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * @uiDefault ToolBar.focusableButtons					boolean
  * @uiDefault ToolBar.arrowKeysOnlyNavigation			boolean
  * @uiDefault ToolBar.floatable							boolean
+ * @uiDefault ToolBar.hoverButtonGroupArc				int
+ * @uiDefault ToolBar.hoverButtonGroupBackground		Color
  *
  * <!-- FlatToolBarBorder -->
  *
@@ -72,6 +84,8 @@ public class FlatToolBarUI
 {
 	/** @since 1.4 */ @Styleable protected boolean focusableButtons;
 	/** @since 2 */ @Styleable protected boolean arrowKeysOnlyNavigation;
+	/** @since 3 */ @Styleable protected int hoverButtonGroupArc;
+	/** @since 3 */ @Styleable protected Color hoverButtonGroupBackground;
 
 	// for FlatToolBarBorder
 	@Styleable protected Insets borderMargins;
@@ -119,6 +133,8 @@ public class FlatToolBarUI
 
 		focusableButtons = UIManager.getBoolean( "ToolBar.focusableButtons" );
 		arrowKeysOnlyNavigation = UIManager.getBoolean( "ToolBar.arrowKeysOnlyNavigation" );
+		hoverButtonGroupArc = UIManager.getInt( "ToolBar.hoverButtonGroupArc" );
+		hoverButtonGroupBackground = UIManager.getColor( "ToolBar.hoverButtonGroupBackground" );
 
 		// floatable
 		if( !UIManager.getBoolean( "ToolBar.floatable" ) ) {
@@ -131,6 +147,8 @@ public class FlatToolBarUI
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
+
+		hoverButtonGroupBackground = null;
 
 		if( oldFloatable != null ) {
 			toolBar.setFloatable( oldFloatable );
@@ -327,6 +345,99 @@ public class FlatToolBarUI
 		}
 
 		super.setOrientation( orientation );
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		super.paint( g, c );
+
+		paintButtonGroup( g );
+	}
+
+	/**@since 3 */
+	protected void paintButtonGroup( Graphics g ) {
+		if( hoverButtonGroupBackground == null )
+			return;
+
+		// find hovered button that is part of a button group
+		ButtonGroup group = null;
+		for( Component b : toolBar.getComponents() ) {
+			if( b instanceof AbstractButton && ((AbstractButton)b).getModel().isRollover() ) {
+				group = getButtonGroup( (AbstractButton) b );
+				if( group != null )
+					break;
+			}
+		}
+		if( group == null )
+			return;
+
+		// get bounds of buttons in group
+		ArrayList<Rectangle> rects = new ArrayList<>();
+		Enumeration<AbstractButton> e = group.getElements();
+		while( e.hasMoreElements() ) {
+			AbstractButton gb = e.nextElement();
+			if( gb.getParent() == toolBar )
+				rects.add( gb.getBounds() );
+		}
+
+		// sort button bounds
+		boolean horizontal = (toolBar.getOrientation() == JToolBar.HORIZONTAL);
+		rects.sort( (r1, r2) -> horizontal ? r1.x - r2.x : r1.y - r2.y );
+
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+		g.setColor( FlatUIUtils.deriveColor( hoverButtonGroupBackground, toolBar.getBackground() ) );
+
+		// paint button group hover background
+		int maxSepWidth = UIScale.scale( 10 );
+		Rectangle gr = null;
+		for( Rectangle r : rects ) {
+			if( gr == null ) {
+				// first button
+				gr = r;
+			} else if( horizontal ? (gr.x + gr.width + maxSepWidth >= r.x) : (gr.y + gr.height + maxSepWidth >= r.y) ) {
+				// button joins previous button
+				gr = gr.union( r );
+			} else {
+				// paint group
+				FlatUIUtils.paintComponentBackground( (Graphics2D) g, gr.x, gr.y, gr.width, gr.height, 0, UIScale.scale( hoverButtonGroupArc ) );
+				gr = r;
+			}
+		}
+		if( gr != null )
+			FlatUIUtils.paintComponentBackground( (Graphics2D) g, gr.x, gr.y, gr.width, gr.height, 0, UIScale.scale( hoverButtonGroupArc ) );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+	}
+
+	/**@since 3 */
+	protected void repaintButtonGroup( AbstractButton b ) {
+		if( hoverButtonGroupBackground == null )
+			return;
+
+		ButtonGroup group = getButtonGroup( b );
+		if( group == null )
+			return;
+
+		// compute union bounds of all buttons in group (including separators)
+		Rectangle gr = null;
+		Enumeration<AbstractButton> e = group.getElements();
+		while( e.hasMoreElements() ) {
+			AbstractButton gb = e.nextElement();
+			Container parent = gb.getParent();
+			if( parent == toolBar )
+				gr = (gr != null) ? gr.union( gb.getBounds() ) : gb.getBounds();
+		}
+
+		// repaint button group
+		if( gr != null )
+			toolBar.repaint( gr );
+	}
+
+	private ButtonGroup getButtonGroup( AbstractButton b ) {
+		ButtonModel model = b.getModel();
+		return (model instanceof DefaultButtonModel)
+			? ((DefaultButtonModel)model).getGroup()
+			: null;
 	}
 
 	//---- class FlatToolBarFocusTraversalPolicy ------------------------------

@@ -339,6 +339,7 @@ class FlatThemePreviewAll
 		JToggleButton button7 = new JToggleButton();
 		JToggleButton button8 = new JToggleButton();
 		JToggleButton button9 = new JToggleButton();
+		JToggleButton button10 = new JToggleButton();
 		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreviewAll.PreviewTabbedPane();
 		JLabel listTreeLabel = new JLabel();
@@ -803,7 +804,6 @@ class FlatThemePreviewAll
 
 			//---- button8 ----
 			button8.setIcon(UIManager.getIcon("Tree.leafIcon"));
-			button8.setSelected(true);
 			button8.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button8);
 
@@ -812,6 +812,12 @@ class FlatThemePreviewAll
 			button9.setSelected(true);
 			button9.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button9);
+
+			//---- button10 ----
+			button10.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			button10.setSelected(true);
+			button10.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
+			toolBar1.add(button10);
 		}
 		add(toolBar1, "cell 1 20 2 1");
 
@@ -949,6 +955,12 @@ class FlatThemePreviewAll
 		ButtonGroup buttonGroup2 = new ButtonGroup();
 		buttonGroup2.add(radioButtonMenuItem4);
 		buttonGroup2.add(radioButtonMenuItem5);
+
+		//---- buttonGroup3 ----
+		ButtonGroup buttonGroup3 = new ButtonGroup();
+		buttonGroup3.add(button7);
+		buttonGroup3.add(button8);
+		buttonGroup3.add(button9);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

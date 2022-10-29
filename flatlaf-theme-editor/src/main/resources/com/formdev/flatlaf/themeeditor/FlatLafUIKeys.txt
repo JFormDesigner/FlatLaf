@@ -1082,6 +1082,8 @@ ToolBar.font
 ToolBar.foreground
 ToolBar.gripColor
 ToolBar.highlight
+ToolBar.hoverButtonGroupArc
+ToolBar.hoverButtonGroupBackground
 ToolBar.isRollover
 ToolBar.light
 ToolBar.separatorColor
