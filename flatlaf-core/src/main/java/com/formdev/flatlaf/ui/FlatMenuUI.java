@@ -251,6 +251,8 @@ public class FlatMenuUI
 		/** @since 3 */
 		@Override
 		protected void paintBackground( Graphics g ) {
+			super.paintBackground( g );
+
 			if( ((JMenu)menuItem).isTopLevelMenu() && isHover() ) {
 				// paint hover background
 				Color color = deriveBackground( getStyleFromMenuBarUI( ui -> ui.hoverBackground, hoverBackground ) );
@@ -259,10 +261,7 @@ public class FlatMenuUI
 					g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 				} else
 					paintSelection( g, color, selectionInsets, selectionArc );
-				return;
 			}
-
-			super.paintBackground( g );
 		}
 
 		/** @since 3 */
@@ -289,14 +288,6 @@ public class FlatMenuUI
 			super.paintSelection( g, selectionBackground, selectionInsets, selectionArc );
 		}
 
-		@Override
-		protected void paintText( Graphics g, Rectangle textRect, String text, Color selectionForeground, Color disabledForeground ) {
-			if( ((JMenu)menuItem).isTopLevelMenu() && !isUnderlineSelection() )
-				selectionForeground = getStyleFromMenuBarUI( ui -> ui.selectionForeground, menuBarSelectionForeground, selectionForeground );
-
-			super.paintText( g, textRect, text, selectionForeground, disabledForeground );
-		}
-
 		/** @since 3 */
 		@Override
 		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionBackground,
@@ -310,6 +301,14 @@ public class FlatMenuUI
 			}
 
 			super.paintUnderlineSelection( g, underlineSelectionBackground, underlineSelectionColor, underlineSelectionHeight );
+		}
+
+		@Override
+		protected void paintText( Graphics g, Rectangle textRect, String text, Color selectionForeground, Color disabledForeground ) {
+			if( ((JMenu)menuItem).isTopLevelMenu() && !isUnderlineSelection() )
+				selectionForeground = getStyleFromMenuBarUI( ui -> ui.selectionForeground, menuBarSelectionForeground, selectionForeground );
+
+			super.paintText( g, textRect, text, selectionForeground, disabledForeground );
 		}
 
 		private boolean isHover() {
