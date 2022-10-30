@@ -63,6 +63,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuItem.acceleratorArrowGap							int
  * @uiDefault MenuItem.checkBackground								Color
  * @uiDefault MenuItem.checkMargins									Insets
+ * @uiDefault MenuItem.selectionInsets								Insets
+ * @uiDefault MenuItem.selectionArc									int
  * @uiDefault MenuItem.selectionType								String	null (default) or underline
  * @uiDefault MenuItem.underlineSelectionBackground					Color
  * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
@@ -90,6 +92,9 @@ public class FlatMenuItemRenderer
 
 	@Styleable protected Color checkBackground = UIManager.getColor( "MenuItem.checkBackground" );
 	@Styleable protected Insets checkMargins = UIManager.getInsets( "MenuItem.checkMargins" );
+
+	/** @since 3 */ @Styleable protected Insets selectionInsets = UIManager.getInsets( "MenuItem.selectionInsets" );
+	/** @since 3 */ @Styleable protected int selectionArc = UIManager.getInt( "MenuItem.selectionArc" );
 
 	@Styleable protected Color underlineSelectionBackground = UIManager.getColor( "MenuItem.underlineSelectionBackground" );
 	@Styleable protected Color underlineSelectionCheckBackground = UIManager.getColor( "MenuItem.underlineSelectionCheckBackground" );
@@ -337,10 +342,16 @@ public class FlatMenuItemRenderer
 		g.setColor( Color.orange ); g.drawRect( arrowRect.x, arrowRect.y, arrowRect.width - 1, arrowRect.height - 1 );
 debug*/
 
+		boolean armedOrSelected = isArmedOrSelected( menuItem );
 		boolean underlineSelection = isUnderlineSelection();
-		paintBackground( g, underlineSelection ? underlineSelectionBackground : selectionBackground );
-		if( underlineSelection && isArmedOrSelected( menuItem ) )
-			paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
+
+		paintBackground( g );
+		if( armedOrSelected ) {
+			if( underlineSelection )
+				paintUnderlineSelection( g, underlineSelectionBackground, underlineSelectionColor, underlineSelectionHeight );
+			else
+				paintSelection( g, selectionBackground, selectionInsets, selectionArc );
+		}
 		paintIcon( g, iconRect, getIconForPainting(), underlineSelection ? underlineSelectionCheckBackground : checkBackground, selectionBackground );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
@@ -348,21 +359,39 @@ debug*/
 			paintArrowIcon( g, arrowRect, arrowIcon );
 	}
 
-	protected void paintBackground( Graphics g, Color selectionBackground ) {
-		boolean armedOrSelected = isArmedOrSelected( menuItem );
-		if( menuItem.isOpaque() || armedOrSelected ) {
-			// paint background
-			g.setColor( armedOrSelected
-				? deriveBackground( selectionBackground )
-				: menuItem.getBackground() );
+	/** @since 3 */
+	protected void paintBackground( Graphics g ) {
+		if( menuItem.isOpaque() ) {
+			g.setColor( menuItem.getBackground() );
 			g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 		}
 	}
 
-	protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
+	/** @since 3 */
+	protected void paintSelection( Graphics g, Color selectionBackground, Insets selectionInsets, int selectionArc ) {
+		Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( menuItem.getSize() ), scale( selectionInsets ) );
+
+		g.setColor( deriveBackground( selectionBackground ) );
+		if( selectionArc > 0 ) {
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			FlatUIUtils.paintComponentBackground( (Graphics2D) g, r.x, r.y, r.width, r.height, 0, scale( selectionArc ) );
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		} else
+			g.fillRect( r.x, r.y, r.width, r.height );
+	}
+
+	/** @since 3 */
+	protected void paintUnderlineSelection( Graphics g, Color underlineSelectionBackground,
+		Color underlineSelectionColor, int underlineSelectionHeight )
+	{
 		int width = menuItem.getWidth();
 		int height = menuItem.getHeight();
 
+		// paint background
+		g.setColor( deriveBackground( underlineSelectionBackground ) );
+		g.fillRect( 0, 0, width, height );
+
+		// paint underline
 		int underlineHeight = scale( underlineSelectionHeight );
 		g.setColor( underlineSelectionColor );
 		if( isTopLevelMenu( menuItem ) ) {

@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 3.0-SNAPSHOT
 
+#### New features and improvements
+
+- Menus: Support rounded selection. (PR #536)
+
 #### Fixed bugs
 
 - FileChooser: Fixed layout of (optional) accessory component and fixed too

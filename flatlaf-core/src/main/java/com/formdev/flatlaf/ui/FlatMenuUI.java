@@ -20,7 +20,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.invoke.MethodHandles;
@@ -32,7 +34,9 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
@@ -75,9 +79,12 @@ import com.formdev.flatlaf.util.LoggingFacade;
  *
  * <!-- FlatMenuRenderer -->
  *
+ * @uiDefault MenuBar.selectionInsets								Insets
+ * @uiDefault MenuBar.selectionEmbeddedInsets						Insets
+ * @uiDefault MenuBar.selectionArc									int
  * @uiDefault MenuBar.hoverBackground								Color
- * @uiDefault MenuBar.selectionBackground							Color
- * @uiDefault MenuBar.selectionForeground							Color
+ * @uiDefault MenuBar.selectionBackground							Color	optional; defaults to Menu.selectionBackground
+ * @uiDefault MenuBar.selectionForeground							Color	optional; defaults to Menu.selectionForeground
  * @uiDefault MenuBar.underlineSelectionBackground					Color
  * @uiDefault MenuBar.underlineSelectionColor						Color
  * @uiDefault MenuBar.underlineSelectionHeight						int
@@ -225,12 +232,15 @@ public class FlatMenuUI
 	protected class FlatMenuRenderer
 		extends FlatMenuItemRenderer
 	{
+		/** @since 3 */ protected Insets menuBarSelectionInsets = UIManager.getInsets( "MenuBar.selectionInsets" );
+		/** @since 3 */ protected Insets menuBarSelectionEmbeddedInsets = UIManager.getInsets( "MenuBar.selectionEmbeddedInsets" );
+		/** @since 3 */ protected int menuBarSelectionArc = UIManager.getInt( "MenuBar.selectionArc" );
 		protected Color hoverBackground = UIManager.getColor( "MenuBar.hoverBackground" );
-		protected Color menuBarSelectionBackground = UIManager.getColor( "MenuBar.selectionBackground" );
-		protected Color menuBarSelectionForeground = UIManager.getColor( "MenuBar.selectionForeground" );
-		protected Color menuBarUnderlineSelectionBackground = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionBackground", underlineSelectionBackground );
-		protected Color menuBarUnderlineSelectionColor = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionColor", underlineSelectionColor );
-		protected int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", underlineSelectionHeight );
+		/** @since 2.5 */ protected Color menuBarSelectionBackground = UIManager.getColor( "MenuBar.selectionBackground" );
+		/** @since 2.5 */ protected Color menuBarSelectionForeground = UIManager.getColor( "MenuBar.selectionForeground" );
+		protected Color menuBarUnderlineSelectionBackground = UIManager.getColor( "MenuBar.underlineSelectionBackground" );
+		protected Color menuBarUnderlineSelectionColor = UIManager.getColor( "MenuBar.underlineSelectionColor" );
+		protected int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", -1 );
 
 		protected FlatMenuRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 			Font acceleratorFont, String acceleratorDelimiter )
@@ -238,46 +248,77 @@ public class FlatMenuUI
 			super( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
 		}
 
+		/** @since 3 */
 		@Override
-		protected void paintBackground( Graphics g, Color selectionBackground ) {
-			if( ((JMenu)menuItem).isTopLevelMenu() ) {
-				if( isUnderlineSelection() )
-					selectionBackground = getStyleFromMenuBarUI( ui -> ui.underlineSelectionBackground, menuBarUnderlineSelectionBackground );
-				else {
-					selectionBackground = getStyleFromMenuBarUI( ui -> ui.selectionBackground,
-						menuBarSelectionBackground != null ? menuBarSelectionBackground : selectionBackground );
-				}
-
-				ButtonModel model = menuItem.getModel();
-				if( model.isRollover() && !model.isArmed() && !model.isSelected() && model.isEnabled() ) {
-					g.setColor( deriveBackground( getStyleFromMenuBarUI( ui -> ui.hoverBackground, hoverBackground ) ) );
+		protected void paintBackground( Graphics g ) {
+			if( ((JMenu)menuItem).isTopLevelMenu() && isHover() ) {
+				// paint hover background
+				Color color = deriveBackground( getStyleFromMenuBarUI( ui -> ui.hoverBackground, hoverBackground ) );
+				if( isUnderlineSelection() ) {
+					g.setColor( color );
 					g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
-					return;
-				}
+				} else
+					paintSelection( g, color, selectionInsets, selectionArc );
+				return;
 			}
 
-			super.paintBackground( g, selectionBackground );
+			super.paintBackground( g );
+		}
+
+		/** @since 3 */
+		@Override
+		protected void paintSelection( Graphics g, Color selectionBackground, Insets selectionInsets, int selectionArc ) {
+			if( ((JMenu)menuItem).isTopLevelMenu() ) {
+				if( !isHover() )
+					selectionBackground = getStyleFromMenuBarUI( ui -> ui.selectionBackground, menuBarSelectionBackground, selectionBackground );
+
+				JMenuBar menuBar = (JMenuBar) menuItem.getParent();
+				JRootPane rootPane = SwingUtilities.getRootPane( menuBar );
+				if( rootPane != null && rootPane.getParent() instanceof Window &&
+					rootPane.getJMenuBar() == menuBar &&
+					FlatRootPaneUI.isMenuBarEmbedded( rootPane ) )
+				{
+					selectionInsets = getStyleFromMenuBarUI( ui -> ui.selectionEmbeddedInsets, menuBarSelectionEmbeddedInsets );
+				} else
+					selectionInsets = getStyleFromMenuBarUI( ui -> ui.selectionInsets, menuBarSelectionInsets );
+
+				selectionArc = getStyleFromMenuBarUI( ui -> (ui.selectionArc != -1)
+					? ui.selectionArc : null, menuBarSelectionArc );
+			}
+
+			super.paintSelection( g, selectionBackground, selectionInsets, selectionArc );
 		}
 
 		@Override
 		protected void paintText( Graphics g, Rectangle textRect, String text, Color selectionForeground, Color disabledForeground ) {
-			if( ((JMenu)menuItem).isTopLevelMenu() && !isUnderlineSelection() ) {
-				selectionForeground = getStyleFromMenuBarUI( ui -> ui.selectionForeground,
-					menuBarSelectionForeground != null ? menuBarSelectionForeground : selectionForeground );
-			}
+			if( ((JMenu)menuItem).isTopLevelMenu() && !isUnderlineSelection() )
+				selectionForeground = getStyleFromMenuBarUI( ui -> ui.selectionForeground, menuBarSelectionForeground, selectionForeground );
 
 			super.paintText( g, textRect, text, selectionForeground, disabledForeground );
 		}
 
+		/** @since 3 */
 		@Override
-		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
+		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionBackground,
+			Color underlineSelectionColor, int underlineSelectionHeight )
+		{
 			if( ((JMenu)menuItem).isTopLevelMenu() ) {
-				underlineSelectionColor = getStyleFromMenuBarUI( ui -> ui.underlineSelectionColor, menuBarUnderlineSelectionColor );
-				underlineSelectionHeight = getStyleFromMenuBarUI( ui -> (ui.underlineSelectionHeight != -1)
-					? ui.underlineSelectionHeight : null, menuBarUnderlineSelectionHeight );
+				underlineSelectionBackground = getStyleFromMenuBarUI( ui -> ui.underlineSelectionBackground, menuBarUnderlineSelectionBackground, underlineSelectionBackground );
+				underlineSelectionColor = getStyleFromMenuBarUI( ui -> ui.underlineSelectionColor, menuBarUnderlineSelectionColor, underlineSelectionColor );
+				underlineSelectionHeight = getStyleFromMenuBarUI( ui -> (ui.underlineSelectionHeight != -1) ? ui.underlineSelectionHeight : null,
+					 (menuBarUnderlineSelectionHeight != -1) ? menuBarUnderlineSelectionHeight : underlineSelectionHeight );
 			}
 
-			super.paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
+			super.paintUnderlineSelection( g, underlineSelectionBackground, underlineSelectionColor, underlineSelectionHeight );
+		}
+
+		private boolean isHover() {
+			ButtonModel model = menuItem.getModel();
+			return model.isRollover() && !model.isArmed() && !model.isSelected() && model.isEnabled();
+		}
+
+		private <T> T getStyleFromMenuBarUI( Function<FlatMenuBarUI, T> f, T defaultValue, T defaultValue2 ) {
+			return getStyleFromMenuBarUI( f, (defaultValue != null) ? defaultValue : defaultValue2 );
 		}
 
 		private <T> T getStyleFromMenuBarUI( Function<FlatMenuBarUI, T> f, T defaultValue ) {

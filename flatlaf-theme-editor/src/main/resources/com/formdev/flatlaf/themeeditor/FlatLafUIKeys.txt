@@ -477,8 +477,11 @@ MenuBar.foreground
 MenuBar.highlight
 MenuBar.hoverBackground
 MenuBar.itemMargins
+MenuBar.selectionArc
 MenuBar.selectionBackground
+MenuBar.selectionEmbeddedInsets
 MenuBar.selectionForeground
+MenuBar.selectionInsets
 MenuBar.shadow
 MenuBar.underlineSelectionBackground
 MenuBar.underlineSelectionColor
@@ -504,8 +507,10 @@ MenuItem.margin
 MenuItem.minimumIconSize
 MenuItem.minimumWidth
 MenuItem.opaque
+MenuItem.selectionArc
 MenuItem.selectionBackground
 MenuItem.selectionForeground
+MenuItem.selectionInsets
 MenuItem.selectionType
 MenuItem.textAcceleratorGap
 MenuItem.textNoAcceleratorGap
