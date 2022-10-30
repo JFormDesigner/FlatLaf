@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.Map;
 import javax.swing.AbstractButton;
@@ -103,9 +102,11 @@ public class FlatClearIcon
 
 		// paint cross
 		g.setColor( clearIconColor );
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Line2D.Float( 5,5, 11,11 ), false );
-		path.append( new Line2D.Float( 5,11, 11,5 ), false );
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD, 4 );
+		path.moveTo( 5, 5 );
+		path.lineTo( 11, 11 );
+		path.moveTo( 5, 11 );
+		path.lineTo( 11, 5 );
 		g.draw( path );
 	}
 }

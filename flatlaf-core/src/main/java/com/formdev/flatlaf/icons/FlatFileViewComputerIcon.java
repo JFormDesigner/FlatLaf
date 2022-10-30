@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.UIManager;
 
 /**
@@ -41,17 +43,18 @@ public class FlatFileViewComputerIcon
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">
-			    <path fill="#6E6E6E" d="M2,3 L14,3 L14,11 L2,11 L2,3 Z M4,5 L4,9 L12,9 L12,5 L4,5 Z"/>
-			    <rect width="12" height="2" x="2" y="12" fill="#6E6E6E"/>
+			    <rect width="11" height="7" x="2.5" y="3.5" stroke="#6E6E6E" rx="1"/>
+			    <line x1="8" x2="8" y1="11" y2="12" stroke="#6E6E6E"/>
+			    <line x1="4.5" x2="11.5" y1="12.5" y2="12.5" stroke="#6E6E6E" stroke-linecap="round"/>
 			  </g>
 			</svg>
 		*/
 
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Rectangle2D.Float( 2, 3, 12, 8 ), false );
-		path.append( new Rectangle2D.Float( 4, 5, 8, 4 ), false );
-		g.fill( path );
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+		g.setStroke( new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 
-		g.fillRect( 2, 12, 12, 2 );
+		g.draw( new RoundRectangle2D.Float( 2.5f, 3.5f, 11, 7, 2, 2 ) );
+		g.drawLine( 8, 11, 8, 12 );
+		g.draw( new Line2D.Float( 4.5f, 12.5f, 11.5f, 12.5f ) );
 	}
 }

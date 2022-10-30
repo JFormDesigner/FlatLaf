@@ -16,10 +16,10 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * "Question" icon for {@link javax.swing.JOptionPane}.
@@ -40,8 +40,8 @@ public class FlatOptionPaneQuestionIcon
 		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
 		  <g fill="none" fill-rule="evenodd">
 		    <circle cx="16" cy="16" r="14" fill="#389FD6"/>
-		    <rect width="4" height="4" x="14" y="22" fill="#FFF"/>
-		    <path fill="#FFF" d="M14,20 C14,20 18,20 18,20 C18,16 23,16 23,12 C23,8 20,6 16,6 C12,6 9,8 9,12 C9,12 13,12 13,12 C13,10 14,9 16,9 C18,9 19,10 19,12 C19,15 14,15 14,20 Z"/>
+		    <circle cx="16" cy="24" r="1.7" fill="#FFF"/>
+		    <path stroke="#FFF" stroke-linecap="round" stroke-width="3" d="M11.5,11.75 C11.75,9.5 13.75,8 16,8 C18.25,8 20.5,9.5 20.5,11.75 C20.5,14.75 16,15.5 16,19"/>
 		  </g>
 		</svg>
 	*/
@@ -53,21 +53,17 @@ public class FlatOptionPaneQuestionIcon
 
 	@Override
 	protected Shape createInside() {
-		Path2D q = new Path2D.Float();
-		q.moveTo( 14, 20 );
-		q.lineTo( 18, 20 );
-		q.curveTo( 18, 16, 23, 16, 23, 12 );
-		q.curveTo( 23, 8, 20, 6, 16, 6 );
-		q.curveTo( 12, 6, 9, 8, 9, 12 );
-		q.curveTo( 9, 12, 13, 12, 13, 12 );
-		q.curveTo( 13, 10, 14, 9, 16, 9 );
-		q.curveTo( 18, 9, 19, 10, 19, 12 );
-		q.curveTo( 19, 15, 14, 15, 14, 20 );
-		q.closePath();
+		Path2D q = new Path2D.Float( Path2D.WIND_NON_ZERO, 10 );
+		q.moveTo( 11.5,11.75 );
+		q.curveTo( 11.75,9.5, 13.75,8, 16,8 );
+		q.curveTo( 18.25,8, 20.5,9.5, 20.5,11.75 );
+		q.curveTo( 20.5,14.75, 16,15.5, 16,19 );
+
+		BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER );
 
 		Path2D inside = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		inside.append( new Rectangle2D.Float( 14, 22, 4, 4 ), false );
-		inside.append( q, false );
+		inside.append( new Ellipse2D.Float( 14.3f, 22.3f, 3.4f, 3.4f ), false );
+		inside.append( stroke.createStrokedShape( q ), false );
 		return inside;
 	}
 }

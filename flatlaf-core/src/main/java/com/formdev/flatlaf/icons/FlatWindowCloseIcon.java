@@ -20,7 +20,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
@@ -57,9 +56,11 @@ public class FlatWindowCloseIcon
 		int iy2 = iy + iwh - 1;
 		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
 
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Line2D.Float( ix, iy, ix2, iy2 ), false );
-		path.append( new Line2D.Float( ix, iy2, ix2, iy ), false );
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD, 4 );
+		path.moveTo( ix, iy );
+		path.lineTo( ix2, iy2 );
+		path.moveTo( ix, iy2 );
+		path.lineTo( ix2, iy );
 		g.setStroke( new BasicStroke( thickness ) );
 		g.draw( path );
 	}

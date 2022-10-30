@@ -39,6 +39,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.IdentityHashMap;
@@ -848,7 +849,7 @@ public class FlatUIUtils
 		double ciBottomLeft = arcBottomLeft * ci;
 		double ciBottomRight = arcBottomRight * ci;
 
-		Path2D rect = new Path2D.Float();
+		Path2D rect = new Path2D.Float( Path2D.WIND_NON_ZERO, 16 );
 		rect.moveTo(  x2 - arcTopRight, y );
 		rect.curveTo( x2 - ciTopRight, y,
 					  x2, y + ciTopRight,
@@ -868,6 +869,27 @@ public class FlatUIUtils
 		rect.closePath();
 
 		return rect;
+	}
+
+	/**
+	 * Creates a rounded triangle shape for the given points and arc radius.
+	 *
+	 * @since 3
+	 */
+	public static Shape createRoundTrianglePath( float x1, float y1, float x2, float y2,
+		float x3, float y3, float arc )
+	{
+		double averageSideLength = (distance( x1,y1, x2,y2 ) + distance( x2,y2, x3,y3 ) + distance( x3,y3, x1,y1 )) / 3;
+		double t1 = (1 / averageSideLength) * arc;
+		double t2 = 1 - t1;
+
+		return createPath(
+			lerp( x3, x1, t2 ), lerp( y3, y1, t2 ),
+			QUAD_TO, x1, y1, lerp( x1, x2, t1 ), lerp( y1, y2, t1 ),
+			lerp( x1, x2, t2 ), lerp( y1, y2, t2 ),
+			QUAD_TO, x2, y2, lerp( x2, x3, t1 ), lerp( y2, y3, t1 ),
+			lerp( x2, x3, t2 ), lerp( y2, y3, t2 ),
+			QUAD_TO, x3, y3, lerp( x3, x1, t1 ), lerp( y3, y1, t1 ) );
 	}
 
 	/**
@@ -979,6 +1001,12 @@ debug*/
 	}
 debug*/
 
+	/** @since 3 */ public static final double MOVE_TO    = -1_000_000_000_001.;
+	/** @since 3 */ public static final double QUAD_TO    = -1_000_000_000_002.;
+	/** @since 3 */ public static final double CURVE_TO   = -1_000_000_000_003.;
+	/** @since 3 */ public static final double ROUNDED    = -1_000_000_000_004.;
+	/** @since 3 */ public static final double CLOSE_PATH = -1_000_000_000_005.;
+
 	/**
 	 * Creates a closed path for the given points.
 	 */
@@ -990,13 +1018,86 @@ debug*/
 	 * Creates an open or closed path for the given points.
 	 */
 	public static Path2D createPath( boolean close, double... points ) {
-		Path2D path = new Path2D.Float();
+		Path2D path = new Path2D.Float( Path2D.WIND_NON_ZERO, points.length / 2 + (close ? 1 : 0) );
 		path.moveTo( points[0], points[1] );
-		for( int i = 2; i < points.length; i += 2 )
-			path.lineTo( points[i], points[i + 1] );
+		for( int i = 2; i < points.length; ) {
+			double p = points[i];
+			if( p == MOVE_TO ) {
+				// move pointer to
+				//    params: x, y
+				path.moveTo( points[i + 1], points[i + 2] );
+				i += 3;
+			} else if( p == QUAD_TO ) {
+				// add quadratic curve
+				//    params: x1, y1, x2, y2
+				path.quadTo( points[i + 1], points[i + 2], points[i + 3], points[i + 4] );
+				i += 5;
+			} else if( p == CURVE_TO ) {
+				// add bezier curve
+				//    params: x1, y1, x2, y2, x3, y3
+				path.curveTo( points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], points[i + 6] );
+				i += 7;
+			} else if( p == ROUNDED ) {
+				// add rounded corner
+				//    params: x, y, arc
+				double x = points[i + 1];
+				double y = points[i + 2];
+				double arc = points[i + 3];
+
+				// index of next point
+				int ip2 = i + 4;
+				if( points[ip2] == QUAD_TO || points[ip2] == ROUNDED )
+					ip2++;
+
+				// previous and next points
+				Point2D p1 = path.getCurrentPoint();
+				double x1 = p1.getX();
+				double y1 = p1.getY();
+				double x2 = points[ip2];
+				double y2 = points[ip2 + 1];
+
+				double d1 = distance( x, y, x1, y1 );
+				double d2 = distance( x, y, x2, y2 );
+				double t1 = 1 - ((1 / d1) * arc);
+				double t2 = (1 / d2) * arc;
+
+				path.lineTo( lerp( x1, x, t1 ), lerp( y1, y, t1 ) );
+				path.quadTo( x, y, lerp( x, x2, t2 ), lerp( y, y2, t2 ) );
+
+				i += 4;
+			} else if( p == CLOSE_PATH ) {
+				// close path
+				//    params: -
+				path.closePath();
+				i += 1;
+			} else {
+				// add line to
+				//    params: x, y
+				path.lineTo( p, points[i + 1] );
+				i += 2;
+			}
+		}
 		if( close )
 			path.closePath();
 		return path;
+	}
+
+	/**
+	 * Calculates linear interpolation between two values.
+	 *
+	 * https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
+	 */
+	private static double lerp( double v1, double v2, double t ) {
+		return (v1 * (1 - t)) + (v2 * t);
+	}
+
+	/**
+	 * Calculates the distance between two points.
+	 */
+	private static double distance( double x1, double y1, double x2, double y2 ) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		return Math.sqrt( (dx * dx) + (dy * dy) );
 	}
 
 	/**

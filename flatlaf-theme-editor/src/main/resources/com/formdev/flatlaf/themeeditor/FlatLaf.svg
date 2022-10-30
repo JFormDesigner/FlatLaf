@@ -6,7 +6,7 @@
     </linearGradient>
   </defs>
   <g fill="none" fill-rule="evenodd">
-    <rect width="16" height="16" fill="url(#flatlaf-a)"/>
+    <rect width="16" height="16" fill="url(#flatlaf-a)" rx="2"/>
     <polygon fill="#FFF" points="9 13 13 13 12.5 11.5 10.5 11.5 10.5 6.5 9 6"/>
     <polygon fill="#FFF" points="4 12.5 4 3 9 3 8.5 4.5 5.5 4.5 5.5 7 7.5 7 7 8.5 5.5 8.5 5.5 12"/>
   </g>

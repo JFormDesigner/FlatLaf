@@ -17,9 +17,11 @@
 package com.formdev.flatlaf.icons;
 
 import static com.formdev.flatlaf.util.UIScale.*;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.util.Map;
@@ -96,7 +98,8 @@ public class FlatHelpButtonIcon
 			  <g fill="none" fill-rule="evenodd">
 			    <circle cx="11" cy="11" r="10.5" fill="#6E6E6E"/>
 			    <circle cx="11" cy="11" r="9.5" fill="#FFF"/>
-			    <path fill="#6E6E6E" d="M10,17 L12,17 L12,15 L10,15 L10,17 Z M11,5 C8.8,5 7,6.8 7,9 L9,9 C9,7.9 9.9,7 11,7 C12.1,7 13,7.9 13,9 C13,11 10,10.75 10,14 L12,14 C12,11.75 15,11.5 15,9 C15,6.8 13.2,5 11,5 Z"/>
+			    <path stroke="#6E6E6E" stroke-linecap="round" stroke-width="2" d="M8,8.5 C8.25,7 9.66585007,6 11,6 C12.5,6 14,7 14,8.5 C14,10.5 11,11 11,13"/>
+			    <circle cx="11" cy="16" r="1.2" fill="#6E6E6E"/>
 			  </g>
 			</svg>
 		*/
@@ -147,22 +150,19 @@ public class FlatHelpButtonIcon
 		g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
 
 		// paint question mark
-		Path2D q = new Path2D.Float();
-		q.moveTo( 11, 5 );
-		q.curveTo( 8.8,5, 7,6.8, 7,9 );
-		q.lineTo( 9, 9 );
-		q.curveTo( 9,7.9, 9.9,7, 11,7 );
-		q.curveTo( 12.1,7, 13,7.9, 13,9 );
-		q.curveTo( 13,11, 10,10.75, 10,14 );
-		q.lineTo( 12, 14 );
-		q.curveTo( 12,11.75, 15,11.5, 15,9 );
-		q.curveTo( 15,6.8, 13.2,5, 11,5 );
-		q.closePath();
+		Path2D q = new Path2D.Float( Path2D.WIND_NON_ZERO, 10 );
+		q.moveTo( 8,8.5 );
+		q.curveTo( 8.25,7, 9.66585007,6, 11,6 );
+		q.curveTo( 12.5,6, 14,7, 14,8.5 );
+		q.curveTo( 14,10.5, 11,11, 11,13 );
+
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+		g2.setStroke( new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 
 		g2.translate( focusWidth, focusWidth );
 		g2.setColor( enabled ? questionMarkColor : disabledQuestionMarkColor );
-		g2.fill( q );
-		g2.fillRect( 10, 15, 2, 2 );
+		g2.draw( q );
+		g2.fill( new Ellipse2D.Float( 9.8f, 14.8f, 2.4f, 2.4f ) );
 	}
 
 	@Override

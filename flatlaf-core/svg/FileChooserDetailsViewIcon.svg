@@ -1,10 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
   <g fill="none" fill-rule="evenodd">
-    <rect width="2" height="2" x="2" y="3" fill="#6E6E6E"/>
-    <rect width="2" height="2" x="2" y="7" fill="#6E6E6E"/>
-    <rect width="2" height="2" x="2" y="11" fill="#6E6E6E"/>
-    <rect width="8" height="2" x="6" y="3" fill="#6E6E6E"/>
-    <rect width="8" height="2" x="6" y="7" fill="#6E6E6E"/>
-    <rect width="8" height="2" x="6" y="11" fill="#6E6E6E"/>
+    <rect width="2" height="1" x="2" y="3" fill="#6E6E6E" rx=".5"/>
+    <rect width="2" height="1" x="2" y="6" fill="#6E6E6E" rx=".5"/>
+    <rect width="2" height="1" x="2" y="9" fill="#6E6E6E" rx=".5"/>
+    <rect width="2" height="1" x="2" y="12" fill="#6E6E6E" rx=".5"/>
+    <rect width="8" height="1" x="6" y="3" fill="#6E6E6E" rx=".5"/>
+    <rect width="8" height="1" x="6" y="6" fill="#6E6E6E" rx=".5"/>
+    <rect width="8" height="1" x="6" y="9" fill="#6E6E6E" rx=".5"/>
+    <rect width="8" height="1" x="6" y="12" fill="#6E6E6E" rx=".5"/>
   </g>
 </svg>
