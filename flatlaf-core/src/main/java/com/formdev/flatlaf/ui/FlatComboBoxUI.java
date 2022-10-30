@@ -117,6 +117,9 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
  * @uiDefault ComboBox.buttonPressedArrowColor	Color
  * @uiDefault ComboBox.popupBackground			Color	optional
+ * @uiDefault ComboBox.popupInsets				Insets
+ * @uiDefault ComboBox.selectionInsets			Insets
+ * @uiDefault ComboBox.selectionArc				int
  *
  * @author Karl Tauber
  */
@@ -150,6 +153,9 @@ public class FlatComboBoxUI
 	@Styleable protected Color buttonPressedArrowColor;
 
 	@Styleable protected Color popupBackground;
+	/** @since 3 */ @Styleable protected Insets popupInsets;
+	/** @since 3 */ @Styleable protected Insets selectionInsets;
+	/** @since 3 */ @Styleable protected int selectionArc;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
@@ -253,6 +259,9 @@ public class FlatComboBoxUI
 		buttonPressedArrowColor = UIManager.getColor( "ComboBox.buttonPressedArrowColor" );
 
 		popupBackground = UIManager.getColor( "ComboBox.popupBackground" );
+		popupInsets = UIManager.getInsets( "ComboBox.popupInsets" );
+		selectionInsets = UIManager.getInsets( "ComboBox.selectionInsets" );
+		selectionArc = UIManager.getInt( "ComboBox.selectionArc" );
 
 		// set maximumRowCount
 		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
@@ -842,17 +851,12 @@ public class FlatComboBoxUI
 			// make opaque to avoid that background shines thru border (e.g. at 150% scaling)
 			setOpaque( true );
 
-	        // set popup border
-	        // use non-UIResource to avoid that it is overwritten when making
-	        // popup visible (see JPopupMenu.setInvoker()) in theme editor preview
+			// set popup border
+			// use non-UIResource to avoid that it is overwritten when making
+			// popup visible (see JPopupMenu.setInvoker()) in theme editor preview
 			Border border = UIManager.getBorder( "PopupMenu.border" );
 			if( border != null )
 				setBorder( FlatUIUtils.nonUIResource( border ) );
-		}
-
-		@Override
-		protected void configureList() {
-			super.configureList();
 
 			list.setCellRenderer( new PopupListCellRenderer() );
 			updateStyle();
@@ -860,12 +864,21 @@ public class FlatComboBoxUI
 
 		void updateStyle() {
 			if( popupBackground != null )
-		        list.setBackground( popupBackground );
+				list.setBackground( popupBackground );
 
-	        // set popup background because it may shine thru when scaled (e.g. at 150%)
-	        // use non-UIResource to avoid that it is overwritten when making
-	        // popup visible (see JPopupMenu.setInvoker()) in theme editor preview
-	        setBackground( FlatUIUtils.nonUIResource( list.getBackground() ) );
+			// set popup background because it may shine thru when scaled (e.g. at 150%)
+			// use non-UIResource to avoid that it is overwritten when making
+			// popup visible (see JPopupMenu.setInvoker()) in theme editor preview
+			setBackground( FlatUIUtils.nonUIResource( list.getBackground() ) );
+
+			scroller.setViewportBorder( (popupInsets != null) ? new FlatEmptyBorder( popupInsets ) : null );
+			scroller.setOpaque( false );
+
+			if( list.getUI() instanceof FlatListUI ) {
+				FlatListUI ui = (FlatListUI) list.getUI();
+				ui.selectionInsets = selectionInsets;
+				ui.selectionArc = selectionArc;
+			}
 		}
 
 		@Override

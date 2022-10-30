@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- ComboBox: Support rounded selection. (PR #548)
 - List: Support rounded selection. (PR #547)
 - Menus: Support rounded selection. (PR #536)
 - Tree: Support rounded selection. (PR #546)

@@ -208,8 +208,11 @@ ComboBox.minimumWidth
 ComboBox.noActionOnKeyNavigation
 ComboBox.padding
 ComboBox.popupBackground
+ComboBox.popupInsets
+ComboBox.selectionArc
 ComboBox.selectionBackground
 ComboBox.selectionForeground
+ComboBox.selectionInsets
 ComboBox.timeFactor
 ComboBoxUI
 Component.accentColor
