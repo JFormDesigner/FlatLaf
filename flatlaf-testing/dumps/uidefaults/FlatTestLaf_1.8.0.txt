@@ -1437,11 +1437,13 @@ Tree.repaintWholeRow           true
 Tree.rightChildIndent          11
 Tree.rowHeight                 0
 Tree.scrollsOnExpand           true
+Tree.selectionArc              0
 Tree.selectionBackground       #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionBorderColor      #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveBackground #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Tree.showCellFocusIndicator    false
 Tree.textBackground            #fff0ff  HSL 300 100  97    javax.swing.plaf.ColorUIResource [UI]
 Tree.textForeground            #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]

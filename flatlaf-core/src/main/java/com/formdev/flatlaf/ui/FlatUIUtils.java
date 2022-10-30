@@ -443,9 +443,9 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Fills the background of a component with a round rectangle.
+	 * Fills the background of a component with a rounded rectangle.
 	 * <p>
-	 * The bounds of the painted round rectangle are
+	 * The bounds of the painted rounded rectangle are
 	 * {@code x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)}.
 	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
 	 *
@@ -476,7 +476,7 @@ public class FlatUIUtils
 	 * <p>
 	 *
 	 * <strong>Background</strong>:
-	 * The bounds of the filled round rectangle are
+	 * The bounds of the filled rounded rectangle are
 	 * {@code [x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)]}.
 	 * The focus border and the border may paint over the background.
 	 * <p>
@@ -674,6 +674,50 @@ public class FlatUIUtils
 		}
 	}
 
+	/**
+	 * Paints a selection.
+	 * <p>
+	 * The bounds of the painted selection (rounded) rectangle are
+	 * {@code x + insets.left, y + insets.top, width - insets.left - insets.right, height - insets.top - insets.bottom}.
+	 * The given arc radius refers to the painted rectangle (and not to {@code x,y,width,height}).
+	 *
+	 * @since 3
+	 */
+	public static void paintSelection( Graphics2D g, int x, int y, int width, int height, Insets insets,
+		float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight, int flags )
+	{
+		if( insets != null ) {
+			x += insets.left;
+			y += insets.top;
+			width -= insets.left + insets.right;
+			height -= insets.top + insets.bottom;
+		}
+
+		if( arcTopLeft > 0 || arcTopRight > 0 || arcBottomLeft > 0 || arcBottomRight > 0 ) {
+			double systemScaleFactor = UIScale.getSystemScaleFactor( g );
+			if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+				// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
+				HiDPIUtils.paintAtScale1x( g, x, y, width, height,
+					(g2d, x2, y2, width2, height2, scaleFactor) -> {
+						paintRoundedSelectionImpl( g2d, x2, y2, width2, height2,
+							(float) (arcTopLeft * scaleFactor), (float) (arcTopRight * scaleFactor),
+							(float) (arcBottomLeft * scaleFactor), (float) (arcBottomRight * scaleFactor) );
+					} );
+			} else
+				paintRoundedSelectionImpl( g, x, y, width, height, arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight );
+
+		} else
+			g.fillRect( x, y, width, height );
+	}
+
+	private static void paintRoundedSelectionImpl( Graphics2D g, int x, int y, int width, int height,
+		float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )
+	{
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+		g.fill( FlatUIUtils.createRoundRectanglePath( x, y, width, height, arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight ) );
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+	}
+
 	public static void paintGrip( Graphics g, int x, int y, int width, int height,
 		boolean horizontal, int dotCount, int dotSize, int gap, boolean centerPrecise )
 	{
@@ -765,7 +809,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius or each corner.
+	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius of each corner.
 	 */
 	public static Path2D createRoundRectangle( float x, float y, float width, float height,
 		float lineWidth, float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )

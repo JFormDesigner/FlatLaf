@@ -6,6 +6,7 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Menus: Support rounded selection. (PR #536)
+- Tree: Support rounded selection. (PR #546)
 
 #### Fixed bugs
 
