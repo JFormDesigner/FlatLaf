@@ -473,6 +473,22 @@ public class FlatComponents2Test
 			tree.putClientProperty( FlatClientProperties.TREE_PAINT_SELECTION, paintSelection );
 	}
 
+	private void treePaintLinesChanged() {
+		boolean paintLines = treePaintLinesCheckBox.isSelected();
+		UIManager.put( "Tree.paintLines", paintLines ? true : null );
+		for( JTree tree : allTrees )
+			tree.updateUI();
+
+		treeRedLinesCheckBox.setEnabled( paintLines );
+	}
+
+	private void treeRedLinesChanged() {
+		boolean redLines = treeRedLinesCheckBox.isSelected();
+		UIManager.put( "Tree.hash", redLines ? Color.red : null );
+		for( JTree tree : allTrees )
+			tree.updateUI();
+	}
+
 	private void treeEditableChanged() {
 		boolean editable = treeEditableCheckBox.isSelected();
 		for( JTree tree : allTrees )
@@ -575,6 +591,8 @@ public class FlatComponents2Test
 		treeRendererComboBox = new JComboBox<>();
 		treeWideSelectionCheckBox = new JCheckBox();
 		treePaintSelectionCheckBox = new JCheckBox();
+		treePaintLinesCheckBox = new JCheckBox();
+		treeRedLinesCheckBox = new JCheckBox();
 		treeEditableCheckBox = new JCheckBox();
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
@@ -917,6 +935,7 @@ public class FlatComponents2Test
 				"[]" +
 				"[]0" +
 				"[]0" +
+				"[]0" +
 				"[]"));
 
 			//---- treeRendererLabel ----
@@ -946,10 +965,21 @@ public class FlatComponents2Test
 			treePaintSelectionCheckBox.addActionListener(e -> treePaintSelectionChanged());
 			treeOptionsPanel.add(treePaintSelectionCheckBox, "cell 0 2");
 
+			//---- treePaintLinesCheckBox ----
+			treePaintLinesCheckBox.setText("paint lines");
+			treePaintLinesCheckBox.addActionListener(e -> treePaintLinesChanged());
+			treeOptionsPanel.add(treePaintLinesCheckBox, "cell 0 3");
+
+			//---- treeRedLinesCheckBox ----
+			treeRedLinesCheckBox.setText("red lines");
+			treeRedLinesCheckBox.setEnabled(false);
+			treeRedLinesCheckBox.addActionListener(e -> treeRedLinesChanged());
+			treeOptionsPanel.add(treeRedLinesCheckBox, "cell 0 3");
+
 			//---- treeEditableCheckBox ----
 			treeEditableCheckBox.setText("editable");
 			treeEditableCheckBox.addActionListener(e -> treeEditableChanged());
-			treeOptionsPanel.add(treeEditableCheckBox, "cell 0 3");
+			treeOptionsPanel.add(treeEditableCheckBox, "cell 0 4");
 		}
 		add(treeOptionsPanel, "cell 0 4 4 1");
 
@@ -1083,6 +1113,8 @@ public class FlatComponents2Test
 	private JComboBox<String> treeRendererComboBox;
 	private JCheckBox treeWideSelectionCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
+	private JCheckBox treePaintLinesCheckBox;
+	private JCheckBox treeRedLinesCheckBox;
 	private JCheckBox treeEditableCheckBox;
 	private JComboBox<String> autoResizeModeField;
 	private JComboBox<String> sortIconPositionComboBox;

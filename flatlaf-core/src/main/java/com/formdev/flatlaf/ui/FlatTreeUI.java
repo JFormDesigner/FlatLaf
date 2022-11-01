@@ -25,7 +25,11 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Map;
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
@@ -152,6 +156,7 @@ public class FlatTreeUI
 	// only used via styling (not in UI defaults, but has likewise client properties)
 	/** @since 2 */ @Styleable protected boolean paintSelection = true;
 
+	private boolean paintLines;
 	private Color defaultCellNonSelectionBackground;
 	private Color defaultSelectionBackground;
 	private Color defaultSelectionForeground;
@@ -185,6 +190,7 @@ public class FlatTreeUI
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 
+		paintLines = UIManager.getBoolean( "Tree.paintLines" );
 		defaultCellNonSelectionBackground = UIManager.getColor( "Tree.textBackground" );
 		defaultSelectionBackground = selectionBackground;
 		defaultSelectionForeground = selectionForeground;
@@ -381,6 +387,125 @@ public class FlatTreeUI
 		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		if( treeState == null )
+			return;
+
+		// use clip bounds to limit painting to needed rows
+		Rectangle clipBounds = g.getClipBounds();
+		TreePath firstPath = getClosestPathForLocation( tree, 0, clipBounds.y );
+		Enumeration<TreePath> visiblePaths = treeState.getVisiblePathsFrom( firstPath );
+
+		if( visiblePaths != null ) {
+			Insets insets = tree.getInsets();
+
+			HashSet<TreePath> verticalLinePaths = paintLines ? new HashSet<>() : null;
+			ArrayList<Runnable> paintLinesLater = paintLines ? new ArrayList<>() : null;
+			ArrayList<Runnable> paintExpandControlsLater = paintLines ? new ArrayList<>() : null;
+
+			// add parents for later painting of vertical lines
+			if( paintLines ) {
+				for( TreePath path = firstPath.getParentPath(); path != null; path = path.getParentPath() )
+					verticalLinePaths.add( path );
+			}
+
+			Rectangle boundsBuffer = new Rectangle();
+			boolean rootVisible = isRootVisible();
+			int row = treeState.getRowForPath( firstPath );
+			boolean leftToRight = tree.getComponentOrientation().isLeftToRight();
+			int treeWidth = tree.getWidth();
+
+			// iterate over visible rows and paint rows, expand control and lines
+			while( visiblePaths.hasMoreElements() ) {
+				TreePath path = visiblePaths.nextElement();
+				if( path == null )
+					break;
+
+				// compute path bounds
+				Rectangle bounds = treeState.getBounds( path, boundsBuffer );
+				if( bounds == null )
+					break;
+
+				// add tree insets to path bounds
+				if( leftToRight )
+					bounds.x += insets.left;
+				else
+					bounds.x = treeWidth - insets.right - (bounds.x + bounds.width);
+				bounds.y += insets.top;
+
+				boolean isLeaf = treeModel.isLeaf( path.getLastPathComponent() );
+				boolean isExpanded = isLeaf ? false : treeState.getExpandedState( path );
+				boolean hasBeenExpanded = isLeaf ? false : tree.hasBeenExpanded( path );
+
+				// paint row (including selection)
+				paintRow( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
+
+				// collect lines for later painting
+				if( paintLines ) {
+					TreePath parentPath = path.getParentPath();
+
+					// add parent for later painting of vertical lines
+					if( parentPath != null )
+						verticalLinePaths.add( parentPath );
+
+					// paint horizontal line later (for using rendering hints)
+					if( parentPath != null || (rootVisible && row == 0) ) {
+						Rectangle bounds2 = new Rectangle( bounds );
+						int row2 = row;
+						paintLinesLater.add( () -> {
+							paintHorizontalPartOfLeg( g, clipBounds, insets, bounds2, path, row2, isExpanded, hasBeenExpanded, isLeaf );
+						} );
+					}
+				}
+
+				// paint expand control
+				if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
+					if( paintLines ) {
+						// need to paint after painting lines
+						Rectangle bounds2 = new Rectangle( bounds );
+						int row2 = row;
+						paintExpandControlsLater.add( () -> {
+							paintExpandControl( g, clipBounds, insets, bounds2, path, row2, isExpanded, hasBeenExpanded, isLeaf );
+						} );
+					} else
+						paintExpandControl( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
+				}
+
+				if( bounds.y + bounds.height >= clipBounds.y + clipBounds.height )
+					break;
+
+				row++;
+			}
+
+			if( paintLines ) {
+				// enable antialiasing for line painting
+				Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+
+				// paint horizontal lines
+				for( Runnable r : paintLinesLater )
+					r.run();
+
+				// paint vertical lines
+				g.setColor( Color.green );
+				for( TreePath path : verticalLinePaths )
+					paintVerticalPartOfLeg( g, clipBounds, insets, path );
+
+				// restore rendering hints
+				if( oldRenderingHints != null )
+					FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+
+				// paint expand controls
+				for( Runnable r : paintExpandControlsLater )
+					r.run();
+			}
+		}
+
+		paintDropLine( g );
+
+		rendererPane.removeAll();
+	}
+
 	/**
 	 * Similar to super.paintRow(), but supports wide selection and uses
 	 * inactive selection background/foreground if tree is not focused.
@@ -544,13 +669,6 @@ public class FlatTreeUI
 
 		FlatUIUtils.paintSelection( (Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height,
 			UIScale.scale( selectionInsets ), arcTop, arcTop, arcBottom, arcBottom, 0 );
-
-		// paint expand/collapse icon
-		// (was already painted before, but painted over with wide selection)
-		if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
-			paintExpandControl( g, clipBounds, insets, bounds,
-				path, row, isExpanded, hasBeenExpanded, isLeaf );
-		}
 	}
 
 	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds,
@@ -594,6 +712,16 @@ public class FlatTreeUI
 	private boolean useUnitedRoundedSelection() {
 		return selectionArc > 0 &&
 			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
+	}
+
+	@Override
+	protected void paintVerticalLine( Graphics g, JComponent c, int x, int top, int bottom ) {
+		((Graphics2D)g).fill( new Rectangle2D.Float( x, top, UIScale.scale( 1f ), bottom - top ) );
+	}
+
+	@Override
+	protected void paintHorizontalLine( Graphics g, JComponent c, int y, int left, int right ) {
+		((Graphics2D)g).fill( new Rectangle2D.Float( left, y, right - left, UIScale.scale( 1f ) ) );
 	}
 
 	/**

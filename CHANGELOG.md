@@ -17,6 +17,10 @@ FlatLaf Change Log
 - FileChooser: Fixed layout of (optional) accessory component and fixed too
   large right margin. (issue #604; regression since implementing PR #522 in
   FlatLaf 2.3)
+- Tree:
+  - Fixed missing tree lines (if enabled) for wide-selected rows. (issue #598)
+  - Fixed scaling of tree lines and fixed alignment to expand/collapse arrows.
+  - Removed support for dashed tree lines. `Tree.lineTypeDashed` is now ignored.
 
 
 ## 2.6
