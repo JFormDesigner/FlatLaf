@@ -201,12 +201,6 @@ new FormModel {
 					addElement( "ccc" )
 					addElement( "dd" )
 					addElement( "e" )
-					addElement( "ff" )
-					addElement( "ggg" )
-					addElement( "hh" )
-					addElement( "i" )
-					addElement( "jj" )
-					addElement( "kkk" )
 				}
 				"maximumRowCount": 6
 				"$client.FlatLaf.styleClass": "flatlaf-preview-combobox"

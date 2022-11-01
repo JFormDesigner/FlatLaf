@@ -87,7 +87,7 @@ tasks {
 					"action" to "generate",
 					"fileName" to "${project.name}-sigtest.txt",
 					"classpath" to jar.get().outputs.files.asPath,
-					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.util",
+					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.themes,com.formdev.flatlaf.util",
 					"version" to version,
 					"release" to "1.8", // Java version
 					"failonerror" to "true" )

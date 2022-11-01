@@ -54,6 +54,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.themes.*;
 import com.formdev.flatlaf.ui.FlatListUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
@@ -184,6 +185,11 @@ public class IJThemesPanel
 			themes.add( new IJThemeInfo( "FlatLaf IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
 		if( showDark )
 			themes.add( new IJThemeInfo( "FlatLaf Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+
+		if( showLight )
+			themes.add( new IJThemeInfo( "FlatLaf macOS Light", null, false, null, null, null, null, null, FlatMacLightLaf.class.getName() ) );
+		if( showDark )
+			themes.add( new IJThemeInfo( "FlatLaf macOS Dark", null, true, null, null, null, null, null, FlatMacDarkLaf.class.getName() ) );
 
 		// add themes from directory
 		categories.put( themes.size(), "Current Directory" );

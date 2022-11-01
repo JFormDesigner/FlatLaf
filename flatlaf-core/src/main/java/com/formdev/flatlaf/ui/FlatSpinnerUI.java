@@ -65,7 +65,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatSpinnerUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault Spinner.buttonStyle				String	button (default) or none
+ * @uiDefault Spinner.buttonStyle				String	button (default), mac or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Spinner.disabledBackground		Color
@@ -347,6 +347,13 @@ public class FlatSpinnerUI
 			installNextButtonListeners( button );
 		else
 			installPreviousButtonListeners( button );
+
+		if( "mac".equals( buttonStyle ) ) {
+			button.setArrowWidth( 7 );
+			button.setArrowThickness( 1.5f );
+			button.setYOffset( (direction == SwingConstants.NORTH) ? 0.75f : -0.75f );
+			button.setRoundBorderAutoXOffset( false );
+		}
 		return button;
 	}
 
@@ -387,26 +394,50 @@ public class FlatSpinnerUI
 			int arrowX = button.getX();
 			int arrowWidth = button.getWidth();
 			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
-
-			// paint arrow buttons background
-			if( enabled && buttonBackground != null ) {
-				g2.setColor( buttonBackground );
-				Shape oldClip = g2.getClip();
-				if( isLeftToRight )
-					g2.clipRect( arrowX, 0, width - arrowX, height );
-				else
-					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-				FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-				g2.setClip( oldClip );
-			}
-
-			// paint vertical line between value and arrow buttons
 			Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
-			if( separatorColor != null && buttonSeparatorWidth > 0 ) {
-				g2.setColor( separatorColor );
+
+			if( "mac".equals( buttonStyle ) ) {
+				Insets insets = spinner.getInsets();
+				int gapX = scale( 3 );
+				int gapY = scale( 1 );
+				int bx = arrowX + gapX;
+				int by = insets.top + gapY;
+				int bw = arrowWidth - (gapX * 2);
+				int bh = height - insets.top - insets.bottom - (gapY * 2);
 				float lw = scale( buttonSeparatorWidth );
-				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+
+				// buttons border
+				FlatUIUtils.paintOutlinedComponent( g2, bx, by, bw, bh,
+					0, 0, 0, lw, arc - focusWidth,
+					null, separatorColor, buttonBackground );
+
+				// separator between buttons
+				if( separatorColor != null ) {
+					int thickness = scale( 1 );
+					g2.setColor( separatorColor );
+					g2.fill( new Rectangle2D.Float( bx + lw, by + ((bh - thickness) / 2f),
+						bw - (lw * 2), thickness ) );
+				}
+			} else {
+				// paint arrow buttons background
+				if( enabled && buttonBackground != null ) {
+					g2.setColor( buttonBackground );
+					Shape oldClip = g2.getClip();
+					if( isLeftToRight )
+						g2.clipRect( arrowX, 0, width - arrowX, height );
+					else
+						g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+					FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+					g2.setClip( oldClip );
+				}
+
+				// paint vertical line between value and arrow buttons
+				if( separatorColor != null && buttonSeparatorWidth > 0 ) {
+					g2.setColor( separatorColor );
+					float lw = scale( buttonSeparatorWidth );
+					float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+					g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+				}
 			}
 		}
 
