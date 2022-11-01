@@ -29,6 +29,8 @@ Sponsors
 --------
 
 <a href="https://www.ej-technologies.com/"><img src="https://www.formdev.com/flatlaf/sponsor/ej-technologies.png" width="200"></a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="https://www.dbvis.com/"><img src="http://www.formdev.com/flatlaf/sponsor/dbvisualizer.svg" width="200"></a>
 
 [Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
 
