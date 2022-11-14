@@ -708,7 +708,7 @@ public class FlatJideOssContainerTest
 		TabPlacement( int value ) {
 			this.value = value;
 		}
-	};
+	}
 
 	//---- enum JideTabAlignment ----------------------------------------------
 
@@ -721,7 +721,7 @@ public class FlatJideOssContainerTest
 		JideTabAlignment( int value ) {
 			this.value = value;
 		}
-	};
+	}
 
 	//---- enum JideTabResizeMode ---------------------------------------------
 
@@ -736,7 +736,7 @@ public class FlatJideOssContainerTest
 		JideTabResizeMode( int value ) {
 			this.value = value;
 		}
-	};
+	}
 
 	//---- class Tab1Panel ----------------------------------------------------
 

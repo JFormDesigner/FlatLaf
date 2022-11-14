@@ -364,7 +364,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	/** @since 2 */ public enum TabType { underlined, card };
+	/** @since 2 */ public enum TabType { underlined, card }
 
 	/**
 	 * Returns type of selected tab.
@@ -387,7 +387,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum TabsPopupPolicy { never, asNeeded };
+	public enum TabsPopupPolicy { never, asNeeded }
 
 	/**
 	 * Returns the display policy for the "more tabs" button,
@@ -408,7 +408,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum ScrollButtonsPolicy { never, asNeeded, asNeededSingle };
+	public enum ScrollButtonsPolicy { never, asNeeded, asNeededSingle }
 
 	/**
 	 * Returns the display policy for the forward/backward scroll arrow buttons.
@@ -427,7 +427,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum ScrollButtonsPlacement { both, trailing };
+	public enum ScrollButtonsPlacement { both, trailing }
 
 	/**
 	 * Returns the placement of the forward/backward scroll arrow buttons.
@@ -446,7 +446,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum TabAreaAlignment { leading, trailing, center, fill };
+	public enum TabAreaAlignment { leading, trailing, center, fill }
 
 	/**
 	 * Returns the alignment of the tab area.
@@ -465,7 +465,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum TabAlignment { leading, trailing, center };
+	public enum TabAlignment { leading, trailing, center }
 
 	/**
 	 * Returns the horizontal alignment of the tab title and icon.
@@ -484,7 +484,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum TabWidthMode { preferred, equal, compact };
+	public enum TabWidthMode { preferred, equal, compact }
 
 	/**
 	 * Returns how the tabs should be sized.

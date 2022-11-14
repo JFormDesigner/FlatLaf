@@ -634,7 +634,7 @@ public class FlatSVGIcon
 		int iconWidth = getIconWidth();
 		int iconHeight = getIconHeight();
 
-		Dimension[] dimensions = new Dimension[] {
+		Dimension[] dimensions = {
 			new Dimension( iconWidth, iconHeight ),
 			new Dimension( iconWidth * 2, iconHeight * 2 ),
 		};
@@ -897,7 +897,7 @@ public class FlatSVGIcon
 				color = mapper.apply( color );
 
 			return color;
-		};
+		}
 
 		private Color applyMappings( Color color ) {
 			if( colorMap != null ) {

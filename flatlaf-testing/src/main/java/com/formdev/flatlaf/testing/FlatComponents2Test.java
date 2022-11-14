@@ -155,7 +155,7 @@ public class FlatComponents2Test
 
 	private void initTableEditors( JTable table ) {
 		TableColumnModel cm = table.getColumnModel();
-		String[] months = new String[] {
+		String[] months = {
 			"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"
 		};
@@ -427,7 +427,7 @@ public class FlatComponents2Test
 		if( !(sel instanceof String) )
 			return;
 
-		JTree[] trees = new JTree[] { tree1, tree2, xTree1 };
+		JTree[] trees = { tree1, tree2, xTree1 };
 		switch( (String) sel ) {
 			case "default":
 				for( JTree tree : trees )
@@ -1321,19 +1321,19 @@ public class FlatComponents2Test
 	private class TestTableModel
 		extends AbstractTableModel
 	{
-		private final String[] columnNames = new String[] {
+		private final String[] columnNames = {
 			"Not editable", "Text", "Combo", "Combo Editable", "Integer", "Boolean"
 		};
 
-		private final Class<?>[] columnTypes = new Class<?>[] {
+		private final Class<?>[] columnTypes = {
 			Object.class, Object.class, String.class, String.class, Integer.class, Boolean.class
 		};
 
-		private final boolean[] columnEditable = new boolean[] {
+		private final boolean[] columnEditable = {
 			false, true, true, true, true, true
 		};
 
-		private final Object[][] rows = new Object[][] {
+		private final Object[][] rows = {
 			{ "item 1", "item 1b", "January", "July", 123, null },
 			{ "item 2", "item 2b", "February", "August", 456, true },
 			{ "item 3", null, "March", null, null, null },

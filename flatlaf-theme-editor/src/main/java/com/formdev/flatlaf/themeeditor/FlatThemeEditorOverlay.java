@@ -174,7 +174,7 @@ class FlatThemeEditorOverlay
 
 		// resolve lazy value
 		if( value instanceof LazyValue ) {
-			Object[] pValue = new Object[] { value };
+			Object[] pValue = { value };
 			FlatLaf.runWithUIDefaultsGetter( key -> {
 				return (key instanceof String)
 					? textArea.propertiesSupport.getParsedProperty( (String) key )

@@ -511,7 +511,7 @@ class MoreComponentsPanel
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( FlatLafDemo.screenshotsMode ) {
-			Component[] components = new Component[] {
+			Component[] components = {
 				indeterminateCheckBox,
 				toolTipLabel, toolTip1, toolTip2,
 				toolBarLabel, toolBar1, toolBar2,

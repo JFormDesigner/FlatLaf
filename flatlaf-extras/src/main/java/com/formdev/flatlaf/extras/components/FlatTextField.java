@@ -164,7 +164,7 @@ public class FlatTextField
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum SelectAllOnFocusPolicy { never, once, always };
+	public enum SelectAllOnFocusPolicy { never, once, always }
 
 	/**
 	 * Returns whether all text is selected when the text component gains focus.

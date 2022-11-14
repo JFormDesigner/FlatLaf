@@ -35,7 +35,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatDesktop
 {
-	public enum Action { APP_ABOUT, APP_PREFERENCES, APP_QUIT_HANDLER };
+	public enum Action { APP_ABOUT, APP_PREFERENCES, APP_QUIT_HANDLER }
 
 	/**
 	 * Checks whether the given action is supported on the current platform.

@@ -290,10 +290,10 @@ class DataComponentsPanel
 					"Not editable", "Text", "Combo", "Combo Editable", "Integer", "Boolean"
 				}
 			) {
-				Class<?>[] columnTypes = new Class<?>[] {
+				Class<?>[] columnTypes = {
 					Object.class, Object.class, String.class, String.class, Integer.class, Boolean.class
 				};
-				boolean[] columnEditable = new boolean[] {
+				boolean[] columnEditable = {
 					false, true, true, true, true, true
 				};
 				@Override

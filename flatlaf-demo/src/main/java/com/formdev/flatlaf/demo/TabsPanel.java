@@ -889,7 +889,7 @@ class TabsPanel
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( FlatLafDemo.screenshotsMode ) {
-			Component[] components = new Component[] {
+			Component[] components = {
 				tabPlacementLabel, tabPlacementToolBar, tabPlacementTabbedPane,
 				iconBottomTabbedPane, iconTrailingTabbedPane,
 				alignLeadingTabbedPane, alignTrailingTabbedPane, alignFillTabbedPane,

@@ -942,7 +942,7 @@ public class FlatContainerTest
 		TabPlacement( int value ) {
 			this.value = value;
 		}
-	};
+	}
 
 	//---- enum TabIconPlacement ----------------------------------------------
 
@@ -957,7 +957,7 @@ public class FlatContainerTest
 		TabIconPlacement( int value ) {
 			this.value = value;
 		}
-	};
+	}
 
 	//---- class Tab1Panel ----------------------------------------------------
 
