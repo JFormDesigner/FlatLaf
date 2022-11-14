@@ -454,6 +454,7 @@ JXMonthView.monthStringBackground #4c5052  HSL 200   4  31    javax.swing.plaf.C
 JXMonthView.monthStringForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthUpIcon [UI]
 JXMonthView.selectedBackground #0058d0  HSL 215 100  41    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.todayColor         #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.trailingDayForeground #9a9a9a  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.unselectableDayForeground #e05555  HSL   0  69  61    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.weekOfTheYearForeground #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]
@@ -1234,6 +1235,7 @@ TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 TitlePane.background           #323232  HSL   0   0  20    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.buttonHoverBackground #585858  HSL   0   0  35    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15% autoInverse)
 TitlePane.buttonMaximizedHeight 22
+TitlePane.buttonMinimumWidth   30
 TitlePane.buttonPressedBackground #4c4c4c  HSL   0   0  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.centerTitle          false
@@ -1244,6 +1246,7 @@ TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWin
 TitlePane.closePressedBackground #c42b1ce6  90%  HSLA   5  75  44 90    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closePressedForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.embeddedForeground   #b7b7b7  HSL   0   0  72    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.font                 [active] $defaultFont [UI]
 TitlePane.foreground           #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.icon                 [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 TitlePane.iconMargins          3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
@@ -1253,11 +1256,16 @@ TitlePane.inactiveBackground   #323232  HSL   0   0  20    javax.swing.plaf.Colo
 TitlePane.inactiveForeground   #9a9a9a  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.maximizeIcon         [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
 TitlePane.menuBarEmbedded      true
-TitlePane.menuBarTitleGap      20
+TitlePane.menuBarResizeHeight  4
+TitlePane.menuBarTitleGap      40
+TitlePane.menuBarTitleMinimumGap 12
 TitlePane.noIconLeftGap        8
 TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
 TitlePane.showIcon             true
+TitlePane.showIconBesideTitle  false
+TitlePane.showIconInDialogs    true
 TitlePane.titleMargins         3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.titleMinimumWidth    60
 TitlePane.unifiedBackground    true
 TitlePane.useWindowDecorations true
 
@@ -1569,7 +1577,7 @@ mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.Fon
 
 #---- monospaced ----
 
-monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
+monospaced.font                [active] Monospaced plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #----  ----
