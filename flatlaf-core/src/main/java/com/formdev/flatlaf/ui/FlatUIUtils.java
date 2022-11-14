@@ -77,8 +77,6 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatUIUtils
 {
-	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
-
 	private static boolean useSharedUIs = true;
 	private static final WeakHashMap<LookAndFeel, IdentityHashMap<Object, ComponentUI>> sharedUIinstances = new WeakHashMap<>();
 
@@ -390,8 +388,7 @@ public class FlatUIUtils
 		};
 
 		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,
-			MAC_USE_QUARTZ ? RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE );
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE );
 
 		return oldRenderingHints;
 	}
