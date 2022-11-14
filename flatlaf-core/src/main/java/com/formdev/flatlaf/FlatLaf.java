@@ -98,6 +98,7 @@ public abstract class FlatLaf
 	private static List<Object> customDefaultsSources;
 	private static Map<String, String> globalExtraDefaults;
 	private Map<String, String> extraDefaults;
+	private static Function<String, Color> systemColorGetter;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -897,14 +898,14 @@ public abstract class FlatLaf
 	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
 	 * <p>
 	 * The global extra defaults are useful for smaller additional defaults that may change.
-	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
+	 * Otherwise, FlatLaf properties files should be used.
 	 * See {@link #registerCustomDefaultsSource(String)}.
 	 * <p>
 	 * The keys and values are strings in same format as in FlatLaf properties files.
 	 * <p>
-	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * Sample that setups "FlatLaf Light" theme with white background color:
 	 * <pre>{@code
-	 * FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@background", "#fff" ) );
 	 * FlatLightLaf.setup();
 	 * }</pre>
 	 *
@@ -929,15 +930,15 @@ public abstract class FlatLaf
 	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
 	 * <p>
 	 * The extra defaults are useful for smaller additional defaults that may change.
-	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
+	 * Otherwise, FlatLaf properties files should be used.
 	 * See {@link #registerCustomDefaultsSource(String)}.
 	 * <p>
 	 * The keys and values are strings in same format as in FlatLaf properties files.
 	 * <p>
-	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * Sample that setups "FlatLaf Light" theme with white background color:
 	 * <pre>{@code
 	 * FlatLaf laf = new FlatLightLaf();
-	 * laf.setExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * laf.setExtraDefaults( Collections.singletonMap( "@background", "#fff" ) );
 	 * FlatLaf.setup( laf );
 	 * }</pre>
 	 *
@@ -977,6 +978,36 @@ public abstract class FlatLaf
 			val = ((ActiveValue)val).createValue( null );
 
 		return val;
+	}
+
+	/**
+	 * Returns the system color getter function, or {@code null}.
+	 *
+	 * @since 3
+	 */
+	public static Function<String, Color> getSystemColorGetter() {
+		return systemColorGetter;
+	}
+
+	/**
+	 * Sets a system color getter function that is invoked when function
+	 * {@code systemColor()} is used in FlatLaf properties files.
+	 * <p>
+	 * The name of the system color is passed as parameter to the function.
+	 * The function should return {@code null} for unknown system colors.
+	 * <p>
+	 * Can be used to change the accent color:
+	 * <pre>{@code
+	 * FlatLaf.setSystemColorGetter( name -> {
+	 *     return name.equals( "accent" ) ? Color.red : null;
+	 * } );
+	 * FlatLightLaf.setup();
+	 * }</pre>
+	 *
+	 * @since 3
+	 */
+	public static void setSystemColorGetter( Function<String, Color> systemColorGetter ) {
+		FlatLaf.systemColorGetter = systemColorGetter;
 	}
 
 	private static void reSetLookAndFeel() {

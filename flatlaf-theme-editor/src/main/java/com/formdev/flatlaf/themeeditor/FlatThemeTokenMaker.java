@@ -56,6 +56,7 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// color functions
+		tokenMap.put( "systemColor", TOKEN_FUNCTION );
 		tokenMap.put( "rgb", TOKEN_FUNCTION );
 		tokenMap.put( "rgba", TOKEN_FUNCTION );
 		tokenMap.put( "hsl", TOKEN_FUNCTION );
