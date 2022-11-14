@@ -43,7 +43,6 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLaf.DisabledIconProvider;
-import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -584,7 +583,11 @@ public class FlatSVGIcon
 		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), colorFilter, ColorFilter.getInstance(), grayFilter );
 
 		try {
-			FlatUIUtils.setRenderingHints( g2 );
+			// same hints as in FlatUIUtils.setRenderingHints()
+			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+			g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE );
+
+			// enable better image scaling
 			g2.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
 
 			paintSvg( g2, x, y );
