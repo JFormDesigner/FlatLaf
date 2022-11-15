@@ -403,6 +403,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7,growx"
 			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner6"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 7,growx"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "<html>Large row height:<br>(default pref height)</html>"
@@ -435,6 +441,7 @@ new FormModel {
 				"editable": true
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
+					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10,growx"
@@ -442,6 +449,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "spinner4"
 				"preferredSize": new java.awt.Dimension( 60, 40 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11,growx"
 			} )
@@ -478,6 +488,7 @@ new FormModel {
 				"minimumSize": new java.awt.Dimension( 60, 14 )
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
+					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 14,growx"
@@ -486,6 +497,9 @@ new FormModel {
 				name: "spinner5"
 				"minimumSize": new java.awt.Dimension( 60, 14 )
 				"preferredSize": new java.awt.Dimension( 60, 14 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 15,growx,hmax 14"
 			} )
