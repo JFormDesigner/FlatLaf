@@ -45,6 +45,27 @@ public class FlatTextComponentsTest
 
 	FlatTextComponentsTest() {
 		initComponents();
+		updatePreferredSizes();
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( comboBox5 != null )
+			updatePreferredSizes();
+	}
+
+	private void updatePreferredSizes() {
+		Dimension size40 = UIScale.scale( new Dimension( 60, 40 ) );
+		comboBox5.setPreferredSize( size40 );
+		spinner4.setPreferredSize( size40 );
+
+		Dimension size14 = UIScale.scale( new Dimension( 60, 14 ) );
+		comboBox6.setPreferredSize( size14 );
+		comboBox6.setMinimumSize( size14 );
+		spinner5.setPreferredSize( size14 );
+		spinner5.setMinimumSize( size14 );
 	}
 
 	private void editableChanged() {
@@ -216,18 +237,19 @@ public class FlatTextComponentsTest
 		JComboBox<String> comboBox3 = new JComboBox<>();
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
+		JSpinner spinner6 = new JSpinner();
 		JLabel label2 = new JLabel();
 		JComboBox<String> comboBox2 = new JComboBox<>();
 		JSpinner spinner2 = new JSpinner();
 		JLabel label1 = new JLabel();
-		JComboBox<String> comboBox5 = new JComboBox<>();
-		JSpinner spinner4 = new JSpinner();
+		comboBox5 = new JComboBox<>();
+		spinner4 = new JSpinner();
 		JLabel label3 = new JLabel();
 		JComboBox<String> comboBox4 = new JComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel label4 = new JLabel();
-		JComboBox<String> comboBox6 = new JComboBox<>();
-		JSpinner spinner5 = new JSpinner();
+		comboBox6 = new JComboBox<>();
+		spinner5 = new JSpinner();
 		JLabel label5 = new JLabel();
 		textField = new JTextField();
 		dragEnabledCheckBox = new JCheckBox();
@@ -563,6 +585,10 @@ public class FlatTextComponentsTest
 		spinner1.setComponentPopupMenu(popupMenu1);
 		add(spinner1, "cell 1 7,growx");
 
+		//---- spinner6 ----
+		spinner6.setBorder(BorderFactory.createEmptyBorder());
+		add(spinner6, "cell 2 7,growx");
+
 		//---- label2 ----
 		label2.setText("<html>Large row height:<br>(default pref height)</html>");
 		add(label2, "cell 0 8,aligny top,growy 0");
@@ -690,6 +716,10 @@ public class FlatTextComponentsTest
 	private JCheckBox trailingComponentVisibleCheckBox;
 	private JCheckBox showClearButtonCheckBox;
 	private JCheckBox showRevealButtonCheckBox;
+	private JComboBox<String> comboBox5;
+	private JSpinner spinner4;
+	private JComboBox<String> comboBox6;
+	private JSpinner spinner5;
 	private JTextField textField;
 	private JCheckBox dragEnabledCheckBox;
 	private JTextArea textArea;

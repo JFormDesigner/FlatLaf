@@ -982,12 +982,12 @@ SliderUI                       com.formdev.flatlaf.ui.FlatSliderUI
 Spinner.arrowButtonSize        16,5    java.awt.Dimension
 Spinner.background             #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 Spinner.border                 [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
-Spinner.buttonArrowColor       #b7b7b7  HSL   0   0  72    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonArrowColor       #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #565656  HSL   0   0  34    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledArrowColor #777777  HSL   0   0  47    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledSeparatorColor #ffffff0c  5%  HSLA   0   0 100  5    javax.swing.plaf.ColorUIResource [UI]
-Spinner.buttonHoverArrowColor  #d1d1d1  HSL   0   0  82    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
-Spinner.buttonPressedArrowColor #eaeaea  HSL   0   0  92    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+Spinner.buttonHoverArrowColor  #f7f7f7  HSL   0   0  97    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
+Spinner.buttonPressedArrowColor #ffffff  HSL   0   0 100    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
 Spinner.buttonSeparatorColor   #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonSeparatorWidth   0
 Spinner.buttonStyle            mac

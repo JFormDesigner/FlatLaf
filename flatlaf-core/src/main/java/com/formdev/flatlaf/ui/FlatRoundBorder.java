@@ -17,7 +17,10 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
+import java.awt.Graphics;
+import javax.swing.JSpinner;
 import javax.swing.UIManager;
+import javax.swing.plaf.SpinnerUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
@@ -36,6 +39,19 @@ public class FlatRoundBorder
 	/** @since 2 */ @Styleable protected Boolean roundRect;
 
 	@Override
+	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		// make mac style spinner border smaller (border does not surround arrow buttons)
+		if( isMacStyleSpinner( c ) ) {
+			int macStyleButtonsWidth = ((FlatSpinnerUI)((JSpinner)c).getUI()).getMacStyleButtonsWidth();
+			width -= macStyleButtonsWidth;
+			if( !c.getComponentOrientation().isLeftToRight() )
+				x += macStyleButtonsWidth;
+		}
+
+		super.paintBorder( c, g, x, y, width, height );
+	}
+
+	@Override
 	protected int getArc( Component c ) {
 		if( isCellEditor( c ) )
 			return 0;
@@ -43,6 +59,17 @@ public class FlatRoundBorder
 		Boolean roundRect = FlatUIUtils.isRoundRect( c );
 		if( roundRect == null )
 			roundRect = this.roundRect;
-		return roundRect != null ? (roundRect ? Short.MAX_VALUE : 0) : arc;
+		return roundRect != null
+			? (roundRect ? Short.MAX_VALUE : 0)
+			: (isMacStyleSpinner( c ) ? 0 : arc);
+	}
+
+	private boolean isMacStyleSpinner( Component c ) {
+		if( c instanceof JSpinner ) {
+			SpinnerUI ui = ((JSpinner)c).getUI();
+			if( ui instanceof FlatSpinnerUI )
+				return ((FlatSpinnerUI)ui).isMacStyle();
+		}
+		return false;
 	}
 }

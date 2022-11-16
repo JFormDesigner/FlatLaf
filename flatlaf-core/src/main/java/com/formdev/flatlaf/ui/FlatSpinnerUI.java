@@ -340,20 +340,31 @@ public class FlatSpinnerUI
 
 	private Component createArrowButton( int direction, String name ) {
 		FlatArrowButton button = new FlatArrowButton( direction, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null )
+		{
+			@Override
+			public int getArrowWidth() {
+				return isMacStyle() ? 7 : super.getArrowWidth();
+			}
+			@Override
+			public float getArrowThickness() {
+				return isMacStyle() ? 1.5f : super.getArrowThickness();
+			}
+			@Override
+			public float getYOffset() {
+				return isMacStyle() ? 0 : super.getYOffset();
+			}
+			@Override
+			public boolean isRoundBorderAutoXOffset() {
+				return isMacStyle() ? false : super.isRoundBorderAutoXOffset();
+			}
+		};
 		button.setName( name );
 		button.setYOffset( (direction == SwingConstants.NORTH) ? 1.25f : -1.25f );
 		if( direction == SwingConstants.NORTH )
 			installNextButtonListeners( button );
 		else
 			installPreviousButtonListeners( button );
-
-		if( "mac".equals( buttonStyle ) ) {
-			button.setArrowWidth( 7 );
-			button.setArrowThickness( 1.5f );
-			button.setYOffset( (direction == SwingConstants.NORTH) ? 0.75f : -0.75f );
-			button.setRoundBorderAutoXOffset( false );
-		}
 		return button;
 	}
 
@@ -381,10 +392,13 @@ public class FlatSpinnerUI
 		int width = c.getWidth();
 		int height = c.getHeight();
 		boolean enabled = spinner.isEnabled();
+		boolean ltr = spinner.getComponentOrientation().isLeftToRight();
+		boolean isMacStyle = isMacStyle();
+		int macStyleButtonsWidth = isMacStyle ? getMacStyleButtonsWidth() : 0;
 
 		// paint background
 		g2.setColor( getBackground( enabled ) );
-		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+		FlatUIUtils.paintComponentBackground( g2, ltr ? 0 : macStyleButtonsWidth, 0, width - macStyleButtonsWidth, height, focusWidth, arc );
 
 		// paint button background and separator
 		boolean paintButton = !"none".equals( buttonStyle );
@@ -393,22 +407,20 @@ public class FlatSpinnerUI
 			Component button = (handler.nextButton != null) ? handler.nextButton : handler.previousButton;
 			int arrowX = button.getX();
 			int arrowWidth = button.getWidth();
-			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 			Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
 
-			if( "mac".equals( buttonStyle ) ) {
+			if( isMacStyle ) {
 				Insets insets = spinner.getInsets();
-				int gapX = scale( 3 );
-				int gapY = scale( 1 );
-				int bx = arrowX + gapX;
-				int by = insets.top + gapY;
-				int bw = arrowWidth - (gapX * 2);
-				int bh = height - insets.top - insets.bottom - (gapY * 2);
+				int lineWidth = Math.round( FlatUIUtils.getBorderLineWidth( spinner ) );
+				int bx = arrowX;
+				int by = insets.top - lineWidth;
+				int bw = arrowWidth;
+				int bh = height - insets.top - insets.bottom + (lineWidth * 2);
 				float lw = scale( buttonSeparatorWidth );
 
 				// buttons border
 				FlatUIUtils.paintOutlinedComponent( g2, bx, by, bw, bh,
-					0, 0, 0, lw, arc - focusWidth,
+					0, 0, 0, lw, scale( 12 ),
 					null, separatorColor, buttonBackground );
 
 				// separator between buttons
@@ -423,7 +435,7 @@ public class FlatSpinnerUI
 				if( enabled && buttonBackground != null ) {
 					g2.setColor( buttonBackground );
 					Shape oldClip = g2.getClip();
-					if( isLeftToRight )
+					if( ltr )
 						g2.clipRect( arrowX, 0, width - arrowX, height );
 					else
 						g2.clipRect( 0, 0, arrowX + arrowWidth, height );
@@ -435,7 +447,7 @@ public class FlatSpinnerUI
 				if( separatorColor != null && buttonSeparatorWidth > 0 ) {
 					g2.setColor( separatorColor );
 					float lw = scale( buttonSeparatorWidth );
-					float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+					float lx = ltr ? arrowX : arrowX + arrowWidth - lw;
 					g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
 				}
 			}
@@ -445,6 +457,19 @@ public class FlatSpinnerUI
 
 		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
+
+	boolean isMacStyle() {
+		return "mac".equals( buttonStyle );
+	}
+
+	int getMacStyleButtonsWidth() {
+		return (handler.nextButton != null || handler.previousButton != null)
+			? scale( MAC_STEPPER_GAP ) + scale( MAC_STEPPER_WIDTH )
+			: 0;
+	}
+
+	private static final int MAC_STEPPER_WIDTH = 15;
+	private static final int MAC_STEPPER_GAP = 3;
 
 	//---- class Handler ------------------------------------------------------
 
@@ -502,6 +527,7 @@ public class FlatSpinnerUI
 			Insets insets = parent.getInsets();
 			Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( size ), insets );
 
+			// editor gets all space if there are no buttons
 			if( nextButton == null && previousButton == null ) {
 				if( editor != null )
 					editor.setBounds( r );
@@ -517,20 +543,36 @@ public class FlatSpinnerUI
 			int minButtonWidth = (maxButtonWidth * 3) / 4;
 
 			// make button area square (except if width is limited)
-			int buttonsWidth = Math.min( Math.max( buttonsRect.height, minButtonWidth ), maxButtonWidth );
-			buttonsRect.width = buttonsWidth;
+			boolean isMacStyle = isMacStyle();
+			int buttonsGap = isMacStyle ? scale( MAC_STEPPER_GAP ) : 0;
+			int prefButtonWidth = isMacStyle ? scale( MAC_STEPPER_WIDTH ) : buttonsRect.height;
+			int buttonsWidth = Math.min( Math.max( prefButtonWidth, minButtonWidth ), maxButtonWidth );
 
-			if( parent.getComponentOrientation().isLeftToRight() ) {
-				editorRect.width -= buttonsWidth;
-				buttonsRect.x += editorRect.width;
-			} else {
-				editorRect.x += buttonsWidth;
-				editorRect.width -= buttonsWidth;
+			// update editor and buttons bounds
+			buttonsRect.width = buttonsWidth;
+			editorRect.width -= buttonsWidth + buttonsGap;
+			boolean ltr = parent.getComponentOrientation().isLeftToRight();
+			if( ltr )
+				buttonsRect.x += editorRect.width + buttonsGap;
+			else
+				editorRect.x += buttonsWidth + buttonsGap;
+
+			// in mac button style increase buttons height and move to the right
+			// for exact alignment with border
+			if( isMacStyle ) {
+				int lineWidth = Math.round( FlatUIUtils.getBorderLineWidth( spinner ) );
+				if( lineWidth > 0 ) {
+					buttonsRect.x += ltr ? lineWidth : -lineWidth;
+					buttonsRect.y -= lineWidth;
+					buttonsRect.height += lineWidth * 2;
+				}
 			}
 
+			// set editor bounds
 			if( editor != null )
 				editor.setBounds( editorRect );
 
+			// set buttons bounds
 			int nextHeight = (buttonsRect.height / 2) + (buttonsRect.height % 2); // round up
 			if( nextButton != null )
 				nextButton.setBounds( buttonsRect.x, buttonsRect.y, buttonsRect.width, nextHeight );
