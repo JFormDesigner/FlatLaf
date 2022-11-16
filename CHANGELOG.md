@@ -9,6 +9,8 @@ FlatLaf Change Log
 - List: Support rounded selection. (PR #547)
 - Menus: Support rounded selection. (PR #536)
 - Tree: Support rounded selection. (PR #546)
+- Tree: Hide default closed/opened/leaf icons by default. Set UI value
+  `Tree.showDefaultIcons` to `true` to show them.
 - Icons: New modern rounded outlined icons for `JFileChooser`, `JOptionPane`,
   `JPasswordField` and `JTree`. (PR #577)
 

@@ -1409,6 +1409,7 @@ Tree.selectionInactiveBackground #464646  HSL   0   0  27    javax.swing.plaf.Co
 Tree.selectionInactiveForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Tree.showCellFocusIndicator    false
+Tree.showDefaultIcons          false
 Tree.textBackground            #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 Tree.textForeground            #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000

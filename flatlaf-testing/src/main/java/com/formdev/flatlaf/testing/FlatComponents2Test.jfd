@@ -184,7 +184,6 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTree" ) {
 					name: "tree1"
 					"showsRootHandles": true
-					"editable": true
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -473,6 +472,16 @@ new FormModel {
 						"JavaCodeGenerator.variableLocal": false
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeEditableChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showDefaultIconsCheckBox"
+					"text": "show default icons"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showDefaultIcons", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 4"
 				} )

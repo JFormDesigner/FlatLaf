@@ -105,6 +105,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionArc						int
  * @uiDefault Tree.wideSelection					boolean
  * @uiDefault Tree.showCellFocusIndicator			boolean
+ * @uiDefault Tree.showDefaultIcons					boolean
  *
  * <!-- FlatTreeExpandedIcon -->
  *
@@ -143,6 +144,7 @@ public class FlatTreeUI
 	/** @since 3 */ @Styleable protected int selectionArc;
 	@Styleable protected boolean wideSelection;
 	@Styleable protected boolean showCellFocusIndicator;
+	/** @since 3 */ protected boolean showDefaultIcons;
 
 	// for icons
 	// (needs to be public because icon classes are in another package)
@@ -189,6 +191,7 @@ public class FlatTreeUI
 		selectionArc = UIManager.getInt( "Tree.selectionArc" );
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
+		showDefaultIcons = UIManager.getBoolean( "Tree.showDefaultIcons" );
 
 		paintLines = UIManager.getBoolean( "Tree.paintLines" );
 		defaultCellNonSelectionBackground = UIManager.getColor( "Tree.textBackground" );
@@ -221,6 +224,19 @@ public class FlatTreeUI
 		defaultSelectionForeground = null;
 		defaultSelectionBorderColor = null;
 		oldStyleValues = null;
+	}
+
+	@Override
+	protected void updateRenderer() {
+		super.updateRenderer();
+
+		// remove default leaf/closed/opened icons
+		if( !showDefaultIcons && currentCellRenderer instanceof DefaultTreeCellRenderer ) {
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) currentCellRenderer;
+			renderer.setLeafIcon( null );
+			renderer.setClosedIcon( null );
+			renderer.setOpenIcon( null );
+		}
 	}
 
 	@Override

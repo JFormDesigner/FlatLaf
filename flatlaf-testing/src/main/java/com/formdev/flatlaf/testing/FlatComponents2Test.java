@@ -495,6 +495,13 @@ public class FlatComponents2Test
 			tree.setEditable( editable );
 	}
 
+	private void showDefaultIcons() {
+		boolean showDefaultIcons = showDefaultIconsCheckBox.isSelected();
+		UIManager.put( "Tree.showDefaultIcons", showDefaultIcons ? true : null );
+		for( JTree tree : allTrees )
+			tree.updateUI();
+	}
+
 	private void treeMouseClicked( MouseEvent e ) {
 		JTree tree = (JTree) e.getSource();
 		int x = e.getX();
@@ -594,6 +601,7 @@ public class FlatComponents2Test
 		treePaintLinesCheckBox = new JCheckBox();
 		treeRedLinesCheckBox = new JCheckBox();
 		treeEditableCheckBox = new JCheckBox();
+		showDefaultIconsCheckBox = new JCheckBox();
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
@@ -754,7 +762,6 @@ public class FlatComponents2Test
 
 			//---- tree1 ----
 			tree1.setShowsRootHandles(true);
-			tree1.setEditable(true);
 			tree1.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -980,6 +987,11 @@ public class FlatComponents2Test
 			treeEditableCheckBox.setText("editable");
 			treeEditableCheckBox.addActionListener(e -> treeEditableChanged());
 			treeOptionsPanel.add(treeEditableCheckBox, "cell 0 4");
+
+			//---- showDefaultIconsCheckBox ----
+			showDefaultIconsCheckBox.setText("show default icons");
+			showDefaultIconsCheckBox.addActionListener(e -> showDefaultIcons());
+			treeOptionsPanel.add(showDefaultIconsCheckBox, "cell 0 4");
 		}
 		add(treeOptionsPanel, "cell 0 4 4 1");
 
@@ -1116,6 +1128,7 @@ public class FlatComponents2Test
 	private JCheckBox treePaintLinesCheckBox;
 	private JCheckBox treeRedLinesCheckBox;
 	private JCheckBox treeEditableCheckBox;
+	private JCheckBox showDefaultIconsCheckBox;
 	private JComboBox<String> autoResizeModeField;
 	private JComboBox<String> sortIconPositionComboBox;
 	private JCheckBox showHorizontalLinesCheckBox;

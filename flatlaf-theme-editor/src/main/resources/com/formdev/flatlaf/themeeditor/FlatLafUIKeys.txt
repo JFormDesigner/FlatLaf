@@ -1150,6 +1150,7 @@ Tree.selectionInactiveBackground
 Tree.selectionInactiveForeground
 Tree.selectionInsets
 Tree.showCellFocusIndicator
+Tree.showDefaultIcons
 Tree.textBackground
 Tree.textForeground
 Tree.timeFactor
