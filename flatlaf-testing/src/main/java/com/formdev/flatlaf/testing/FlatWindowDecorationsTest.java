@@ -49,6 +49,7 @@ public class FlatWindowDecorationsTest
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
 			frame.applyComponentOrientationToFrame = true;
+			UIManager.put( "FlatLaf.debug.titlebar.showRectangles", true );
 
 			Class<?> cls = FlatWindowDecorationsTest.class;
 			List<Image> images = Arrays.asList(

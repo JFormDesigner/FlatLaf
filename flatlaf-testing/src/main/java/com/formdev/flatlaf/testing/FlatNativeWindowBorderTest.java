@@ -57,6 +57,7 @@ public class FlatNativeWindowBorderTest
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.setup();
 			FlatInspector.install( "ctrl shift alt X" );
+			UIManager.put( "FlatLaf.debug.titlebar.showRectangles", true );
 
 			mainFrame = showFrame();
 		} );

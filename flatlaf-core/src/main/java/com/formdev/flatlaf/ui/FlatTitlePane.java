@@ -107,6 +107,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTitlePane
 	extends JComponent
 {
+	private static final String KEY_DEBUG_SHOW_RECTANGLES = "FlatLaf.debug.titlebar.showRectangles";
+
 	/** @since 2.5 */ protected final Font titleFont = UIManager.getFont( "TitlePane.font" );
 	protected final Color activeBackground = UIManager.getColor( "TitlePane.background" );
 	protected final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
@@ -576,10 +578,12 @@ public class FlatTitlePane
 		doLayout();
 	}
 
-/*debug
 	@Override
 	public void paint( Graphics g ) {
 		super.paint( g );
+
+		if( !UIManager.getBoolean( KEY_DEBUG_SHOW_RECTANGLES ) )
+			return;
 
 		if( debugTitleBarHeight > 0 ) {
 			g.setColor( Color.green );
@@ -604,7 +608,6 @@ public class FlatTitlePane
 		Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 		g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 	}
-debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
@@ -933,15 +936,14 @@ debug*/
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
 			hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 
-/*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
 		debugAppIconBounds = appIconBounds;
 		debugMinimizeButtonBounds = minimizeButtonBounds;
 		debugMaximizeButtonBounds = maximizeButtonBounds;
 		debugCloseButtonBounds = closeButtonBounds;
-		repaint();
-debug*/
+		if( UIManager.getBoolean( KEY_DEBUG_SHOW_RECTANGLES ) )
+			repaint();
 	}
 
 	private Rectangle boundsInWindow( JComponent c ) {
@@ -960,14 +962,12 @@ debug*/
 		return r;
 	}
 
-/*debug
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
 	private Rectangle debugAppIconBounds;
 	private Rectangle debugMinimizeButtonBounds;
 	private Rectangle debugMaximizeButtonBounds;
 	private Rectangle debugCloseButtonBounds;
-debug*/
 
 	//---- class FlatTitlePaneBorder ------------------------------------------
 
