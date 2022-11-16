@@ -354,14 +354,11 @@ public class FlatTitlePane
 		if( window == null || rootPane.getWindowDecorationStyle() != JRootPane.FRAME )
 			return;
 
+		updateVisibility();
+
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
-			boolean resizable = frame.isResizable();
 			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
-
-			iconifyButton.setVisible( true );
-			maximizeButton.setVisible( resizable && !maximized );
-			restoreButton.setVisible( resizable && maximized );
 
 			if( maximized &&
 				!(SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window )) &&
@@ -383,14 +380,27 @@ public class FlatTitlePane
 					frame.setExtendedState( oldExtendedState );
 				}
 			}
+		}
+	}
+
+	/** @since 3 */
+	protected void updateVisibility() {
+		titleLabel.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_TITLE, true ) );
+		closeButton.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_CLOSE, true ) );
+
+		if( window instanceof Frame ) {
+			Frame frame = (Frame) window;
+			boolean maximizable = frame.isResizable() && clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_MAXIMIZE, true );
+			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
+
+			iconifyButton.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICONIFFY, true ) );
+			maximizeButton.setVisible( maximizable && !maximized );
+			restoreButton.setVisible( maximizable && maximized );
 		} else {
 			// hide buttons because they are only supported in frames
 			iconifyButton.setVisible( false );
 			maximizeButton.setVisible( false );
 			restoreButton.setVisible( false );
-
-			revalidate();
-			repaint();
 		}
 	}
 
