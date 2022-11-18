@@ -352,7 +352,7 @@ class DemoFrame
 		fontMenu.addSeparator();
 		ArrayList<String> families = new ArrayList<>( Arrays.asList(
 			"Arial", "Cantarell", "Comic Sans MS", "DejaVu Sans",
-			"Dialog", "Inter", "Liberation Sans", "Noto Sans", "Roboto",
+			"Dialog", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
 			"SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana" ) );
 		if( !families.contains( currentFamily ) )
 			families.add( currentFamily );
