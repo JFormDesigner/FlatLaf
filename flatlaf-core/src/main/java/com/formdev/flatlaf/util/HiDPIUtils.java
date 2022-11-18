@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.GlyphVector;
@@ -141,37 +142,101 @@ public class HiDPIUtils
 		if( !useTextYCorrection() || !SystemInfo.isWindows )
 			return 0;
 
-		if( !SystemInfo.isJava_9_orLater )
-			return UIScale.getUserScaleFactor() > 1 ? -UIScale.scale( 0.625f ) : 0;
+		if( !SystemInfo.isJava_9_orLater ) {
+			// Java 8
+			float scaleFactor = getUserScaleFactor();
+			if( scaleFactor > 1 ) {
+				switch( g.getFont().getFamily() ) {
+					case "Segoe UI":
+					case "Segoe UI Light":
+					case "Segoe UI Semibold":
+						return -((scaleFactor == 2.25f || scaleFactor == 4f ? 0.875f : 0.625f) * scaleFactor);
 
-		AffineTransform t = g.getTransform();
-		double scaleY = t.getScaleY();
-		if( scaleY < 1.25 )
-			return 0;
+					case "Noto Sans":
+					case "Open Sans":
+						return -(0.3f * scaleFactor);
 
-		// Text is painted at slightly different Y positions depending on scale factor
-		// and Y position of component.
-		// The exact reason is not yet known (to me), but there are several factors:
-		// - fractional scale factors result in fractional component Y device coordinates
-		// - fractional text Y device coordinates are rounded for horizontal lines of characters
-		// - maybe different rounding methods for drawing primitives (e.g. rectangle) and text
-		// - Java adds 0.5 to X/Y positions before drawing string in BufferedTextPipe.enqueueGlyphList()
+					case "Verdana":
+						return -((scaleFactor < 2 ? 0.4f : 0.3f) * scaleFactor);
+				}
+			}
+		} else {
+			// Java 9 and later
 
-		// this is not the optimal solution, but works very good in most cases
-		// (tested with class FlatPaintingStringTest on Windows 10 with font "Segoe UI")
-		if( scaleY <= 1.25 )
-			return -0.875f;
-		if( scaleY <= 1.5 )
-			return -0.625f;
-		if( scaleY <= 1.75 )
-			return -0.875f;
-		if( scaleY <= 2.0 )
-			return -0.75f;
-		if( scaleY <= 2.25 )
-			return -0.875f;
-		if( scaleY <= 3.5 )
-			return -0.75f;
-		return -0.875f;
+			// Text is painted at slightly different Y positions depending on scale factor
+			// and Y position of component.
+			// The exact reason is not yet known (to me), but there are several factors:
+			// - fractional scale factors result in fractional component Y device coordinates
+			// - fractional text Y device coordinates are rounded for horizontal lines of characters
+			// - maybe different rounding methods for drawing primitives (e.g. rectangle) and text
+			// - Java adds 0.5 to X/Y positions before drawing string in BufferedTextPipe.enqueueGlyphList()
+
+			// this is not the optimal solution, but works very good in most cases
+			// (tested with class FlatPaintingStringTest on Windows 11)
+
+			switch( g.getFont().getFamily() ) {
+				case "Segoe UI":
+				case "Segoe UI Light":
+				case "Segoe UI Semibold":
+				case "Verdana":
+				case Font.DIALOG:
+				case Font.SANS_SERIF:
+					return correctionForScaleY( g, CORRECTION_SEGOE_UI );
+
+				case "Tahoma":
+					return correctionForScaleY( g, CORRECTION_TAHOMA );
+
+				case "Inter":
+				case "Inter Light":
+				case "Inter Semi Bold":
+				case "Roboto":
+					return correctionForScaleY( g, CORRECTION_INTER );
+
+				case "Noto Sans":
+				case "Open Sans":
+					return correctionForScaleY( g, CORRECTION_OPEN_SANS );
+			}
+		}
+
+		return 0;
+	}
+
+	private static final float[]
+		SCALE_FACTORS        = {  1.25f,   1.5f,    1.75f,   2f,      2.25f,   2.5f,    3f,      3.5f,    4f     },
+
+		CORRECTION_SEGOE_UI  = { -0.5f,   -0.5f,   -0.625f, -0.75f,  -0.75f,  -0.75f,  -0.75f,  -0.75f,  -0.875f },
+		CORRECTION_TAHOMA    = { -0.25f,  -0.25f,  -0.25f,  -0f,     -0.125f, -0.125f, -0.125f, -0.125f, -0f     },
+		CORRECTION_INTER     = { -0.25f,  -0.25f,  -0.25f,  -0f,     -0.125f, -0.125f, -0f,     -0.25f,  -0f     },
+		CORRECTION_OPEN_SANS = { -0.5f,   -0.25f,  -0.25f,  -0f,     -0.25f,  -0.25f,  -0f,     -0.25f,  -0.25f  };
+
+	private static float correctionForScaleY( Graphics2D g, float[] correction ) {
+		if( correction.length != 9 )
+			throw new IllegalArgumentException();
+
+		double scaleY = g.getTransform().getScaleY();
+		return (scaleY < 1.25) ? 0 : correction[scaleFactor2index( (float) scaleY )];
+	}
+
+	private static int scaleFactor2index( float scaleFactor ) {
+		for( int i = 0; i < SCALE_FACTORS.length; i++ ) {
+			if( scaleFactor <= SCALE_FACTORS[i] )
+				return i;
+		}
+		return SCALE_FACTORS.length - 1;
+	}
+
+	private static Boolean useDebugScaleFactor;
+
+	private static boolean useDebugScaleFactor() {
+		if( useDebugScaleFactor == null )
+			useDebugScaleFactor = FlatSystemProperties.getBoolean( "FlatLaf.debug.HiDPIUtils.useDebugScaleFactor", false );
+		return useDebugScaleFactor;
+	}
+
+	private static float getUserScaleFactor() {
+		return !useDebugScaleFactor()
+			? UIScale.getUserScaleFactor()
+			: Float.parseFloat( System.getProperty( "FlatLaf.debug.HiDPIUtils.debugScaleFactor", "1" ) );
 	}
 
 	/**

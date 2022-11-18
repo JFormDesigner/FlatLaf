@@ -1,0 +1,66 @@
+JetBrains Mono font
+===================
+
+This sub-project contains fonts from the JetBrains Mono font family and bundles
+them into an easy-to-use and redistributable JAR.
+
+Font home page: https://www.jetbrains.com/mono
+
+GitHub project: https://github.com/JetBrains/JetBrainsMono
+
+License:
+[SIL OPEN FONT LICENSE Version 1.1](src/main/resources/com/formdev/flatlaf/fonts/jetbrains_mono/OFL.txt)
+
+
+How to install?
+---------------
+
+Invoke the `install()` method once (e.g. in your `main()` method; on AWT
+thread):
+
+~~~java
+FlatJetBrainsMonoFont.install();
+~~~
+
+
+How to use?
+-----------
+
+Use as default monospaced font:
+
+~~~java
+FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
+~~~
+
+Create fonts:
+
+~~~java
+// basic styles
+new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
+new Font( FlatJetBrainsMonoFont.FAMILY, Font.ITALIC, 12 );
+new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD, 12 );
+new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
+~~~
+
+
+Download
+--------
+
+Not yet available.
+
+<!--
+
+FlatLaf Fonts binaries are available on **Maven Central**.
+
+If you use Maven or Gradle, add a dependency with following coordinates to your
+build script:
+
+    groupId:     com.formdev
+    artifactId:  flatlaf-fonts-jetbrains-mono
+    version:     (see button below)
+
+Otherwise download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono)
+
+-->

@@ -54,6 +54,7 @@ jobs:
           name: FlatLaf-build-artifacts
           path: |
             flatlaf-*/build/libs
+            flatlaf-*/flatlaf-*/build/libs
             !**/*-javadoc.jar
             !**/*-sources.jar
 

@@ -23,6 +23,8 @@ import java.awt.GraphicsEnvironment;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
+import com.formdev.flatlaf.fonts.inter.FlatInterFont;
+import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -34,6 +36,9 @@ public class FlatFontsTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
+			FlatInterFont.install();
+			FlatJetBrainsMonoFont.install();
+
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatFontsTest" );
 			frame.showFrame( FlatFontsTest::new );
 		} );

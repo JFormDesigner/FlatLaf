@@ -30,6 +30,8 @@ import javax.swing.*;
 import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.fonts.inter.FlatInterFont;
+import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -45,8 +47,12 @@ public class FlatPaintingStringTest
 	public static void main( String[] args ) {
 		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
+		System.setProperty( "FlatLaf.debug.HiDPIUtils.useDebugScaleFactor", "true" );
 
 		SwingUtilities.invokeLater( () -> {
+			FlatInterFont.install();
+			FlatJetBrainsMonoFont.install();
+
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatPaintingStringTest" );
 
 			ToolTipManager.sharedInstance().setInitialDelay( 0 );
@@ -70,30 +76,32 @@ public class FlatPaintingStringTest
 		String[] families = {
 			// regular
 			"Arial", "Cantarell", "DejaVu Sans",
-			"Dialog", "Helvetica Neue", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
+			"Dialog", "Helvetica Neue", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
 			"SansSerif", "Segoe UI", "Tahoma", "Ubuntu", "Verdana", ".SF NS Text",
+			FlatInterFont.FAMILY,
 
 			// light, semibold
 			"Segoe UI Light", "Segoe UI Semibold",
 			"HelveticaNeue-Thin", "HelveticaNeue-Medium",
 			"Lato Light", "Ubuntu Light", "Cantarell Light",
 			"Lato Semibold", "Ubuntu Medium", "Montserrat SemiBold",
+			FlatInterFont.FAMILY_LIGHT, FlatInterFont.FAMILY_SEMIBOLD,
 
 			// monospaced
 			"Monospaced", "Consolas", "Courier New", "Menlo", "Liberation Mono", "Ubuntu Mono",
+			FlatJetBrainsMonoFont.FAMILY,
 		};
 		Arrays.sort( families, String.CASE_INSENSITIVE_ORDER );
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-		model.addElement( currentFamily );
 		for( String family : families ) {
-			if( !family.equals( currentFamily ) && Arrays.binarySearch( availableFontFamilyNames, family ) >= 0 )
+			if( Arrays.binarySearch( availableFontFamilyNames, family ) >= 0 )
 				model.addElement( family );
 		}
 		fontField.setModel( model );
 		fontField.setSelectedItem( currentFamily );
 		updateFontMetricsLabel();
 
-		add( new JLabel() );
+		add( new JLabel(), "newLine" );
 		add( new JLabel( "none" ) );
 		add( new JLabel( "flatlaf" ) );
 		add( new JLabel() );
@@ -120,9 +128,8 @@ public class FlatPaintingStringTest
 
 		YCorrectionFunction none = (g, scaleFactor) -> 0;
 		YCorrectionFunction flatlaf = (g, scaleFactor) -> {
-			return SystemInfo.isJava_9_orLater
-				? HiDPIUtils.computeTextYCorrection( g )
-				: (scaleFactor > 1 ? -(0.625f * scaleFactor) : 0);
+			System.setProperty( "FlatLaf.debug.HiDPIUtils.debugScaleFactor", Float.toString( scaleFactor ) );
+			return HiDPIUtils.computeTextYCorrection( g );
 		};
 		YCorrectionFunction ty = (g, scaleFactor) -> {
 			// Based on translateY, which is the scaled Y coordinate translation of the graphics context.
@@ -214,8 +221,8 @@ public class FlatPaintingStringTest
 			// columns
 			"[fill]",
 			// rows
-			"[top]unrel" +
-			"[top]"));
+			"[shrink 0,top]unrel" +
+			"[shrink 0,top]"));
 
 		//======== panel1 ========
 		{

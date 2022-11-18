@@ -22,6 +22,7 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
+	implementation( project( ":flatlaf-fonts-inter" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( "com.miglayout:miglayout-swing:5.3" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
@@ -32,6 +33,7 @@ tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
+		dependsOn( ":flatlaf-fonts-inter:jar" )
 		dependsOn( ":flatlaf-intellij-themes:jar" )
 //		dependsOn( ":flatlaf-natives-jna:jar" )
 

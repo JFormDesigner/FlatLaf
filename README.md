@@ -83,6 +83,8 @@ Addons
 - [SwingX](flatlaf-swingx) - support for SwingX components
 - [JIDE Common Layer](flatlaf-jide-oss) - support for JIDE Common Layer
   components
+- [Fonts](flatlaf-fonts) - some font families bundled in easy-to-use and
+  redistributable JARs
 
 
 Getting started

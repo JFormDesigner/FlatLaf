@@ -20,7 +20,9 @@
 *.gif binary
 *.jar binary
 *.lib binary
+*.otf binary
 *.png binary
 *.sketch binary
 *.so binary
+*.ttf binary
 *.zip binary

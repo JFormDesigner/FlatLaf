@@ -24,6 +24,8 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
+	implementation( project( ":flatlaf-fonts-inter" ) )
+	implementation( project( ":flatlaf-fonts-jetbrains-mono" ) )
 	implementation( project( ":flatlaf-swingx" ) )
 	implementation( project( ":flatlaf-jide-oss" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )

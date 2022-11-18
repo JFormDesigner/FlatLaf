@@ -114,6 +114,11 @@ public abstract class FlatLaf
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
 
+	private static String preferredFontFamily;
+	private static String preferredLightFontFamily;
+	private static String preferredSemiboldFontFamily;
+	private static String preferredMonospacedFontFamily;
+
 	/**
 	 * Sets the application look and feel to the given LaF
 	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
@@ -630,6 +635,13 @@ public abstract class FlatLaf
 		// fallback
 		if( uiFont == null )
 			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
+
+		// use preferred font family (if specified)
+		if( preferredFontFamily != null ) {
+			FontUIResource preferredFont = createCompositeFont( preferredFontFamily, uiFont.getStyle(), uiFont.getSize() );
+			if( !ActiveFont.isFallbackFont( preferredFont ) || ActiveFont.isDialogFamily( preferredFontFamily ) )
+				uiFont = preferredFont;
+		}
 
 		// get/remove "defaultFont" from defaults if set in properties files
 		// (use remove() to avoid that ActiveFont.createValue() gets invoked)
@@ -1323,6 +1335,90 @@ public abstract class FlatLaf
 	private static boolean getUIMethodInitialized;
 	private static MethodHandle getUIMethod;
 
+	/**
+	 * Returns the preferred font family to be used for (nearly) all fonts; or {@code null}.
+	 *
+	 * @since 3
+	 */
+	public static String getPreferredFontFamily() {
+		return preferredFontFamily;
+	}
+
+	/**
+	 * Sets the preferred font family to be used for (nearly) all fonts.
+	 * <p>
+	 * <strong>Note</strong>: This must be invoked <strong>before</strong> setting
+	 * the application look and feel.
+	 *
+	 * @since 3
+	 */
+	public static void setPreferredFontFamily( String preferredFontFamily ) {
+		FlatLaf.preferredFontFamily = preferredFontFamily;
+	}
+
+	/**
+	 * Returns the preferred font family to be used for "light" fonts; or {@code null}.
+	 *
+	 * @since 3
+	 */
+	public static String getPreferredLightFontFamily() {
+		return preferredLightFontFamily;
+	}
+
+	/**
+	 * Sets the preferred font family to be used for "light" fonts.
+	 * <p>
+	 * <strong>Note</strong>: This must be invoked <strong>before</strong> setting
+	 * the application look and feel.
+	 *
+	 * @since 3
+	 */
+	public static void setPreferredLightFontFamily( String preferredLightFontFamily ) {
+		FlatLaf.preferredLightFontFamily = preferredLightFontFamily;
+	}
+
+	/**
+	 * Returns the preferred font family to be used for "semibold" fonts; or {@code null}.
+	 *
+	 * @since 3
+	 */
+	public static String getPreferredSemiboldFontFamily() {
+		return preferredSemiboldFontFamily;
+	}
+
+	/**
+	 * Sets the preferred font family to be used for "semibold" fonts.
+	 * <p>
+	 * <strong>Note</strong>: This must be invoked <strong>before</strong> setting
+	 * the application look and feel.
+	 *
+	 * @since 3
+	 */
+	public static void setPreferredSemiboldFontFamily( String preferredSemiboldFontFamily ) {
+		FlatLaf.preferredSemiboldFontFamily = preferredSemiboldFontFamily;
+	}
+
+	/**
+	 * Returns the preferred font family to be used for monospaced fonts; or {@code null}.
+	 *
+	 * @since 3
+	 */
+	public static String getPreferredMonospacedFontFamily() {
+		return preferredMonospacedFontFamily;
+	}
+
+	/**
+	 * Sets the preferred font family to be used for monospaced fonts.
+	 * <p>
+	 * <strong>Note</strong>: This must be invoked <strong>before</strong> setting
+	 * the application look and feel.
+	 *
+	 * @since 3
+	 */
+	public static void setPreferredMonospacedFontFamily( String preferredMonospacedFontFamily ) {
+		FlatLaf.preferredMonospacedFontFamily = preferredMonospacedFontFamily;
+	}
+
 	//---- class FlatUIDefaults -----------------------------------------------
 
 	private class FlatUIDefaults
@@ -1457,9 +1553,16 @@ public abstract class FlatLaf
 
 			// create font for family
 			if( families != null && !families.isEmpty() ) {
+				String preferredFamily = preferredFamily( families );
+				if( preferredFamily != null ) {
+					Font font = createCompositeFont( preferredFamily, newStyle, newSize );
+					if( !isFallbackFont( font ) || isDialogFamily( preferredFamily ) )
+						return toUIResource( font );
+				}
+
 				for( String family : families ) {
 					Font font = createCompositeFont( family, newStyle, newSize );
-					if( !isFallbackFont( font ) || family.equalsIgnoreCase( Font.DIALOG ) )
+					if( !isFallbackFont( font ) || isDialogFamily( family ) )
 						return toUIResource( font );
 				}
 			}
@@ -1488,8 +1591,25 @@ public abstract class FlatLaf
 				: new FontUIResource( font );
 		}
 
-		private boolean isFallbackFont( Font font ) {
+		private static boolean isFallbackFont( Font font ) {
 			return Font.DIALOG.equalsIgnoreCase( font.getFamily() );
+		}
+
+		private static boolean isDialogFamily( String family ) {
+			return family.equalsIgnoreCase( Font.DIALOG );
+		}
+
+		private static String preferredFamily( List<String> families ) {
+			for( String family : families ) {
+				family = family.toLowerCase( Locale.ENGLISH );
+				if( family.endsWith( " light" ) || family.endsWith( "-thin" ) )
+					return preferredLightFontFamily;
+				if( family.endsWith( " semibold" ) || family.endsWith( "-medium" ) )
+					return preferredSemiboldFontFamily;
+				if( family.equals( "monospaced" ) )
+					return preferredMonospacedFontFamily;
+			}
+			return null;
 		}
 	}
 
