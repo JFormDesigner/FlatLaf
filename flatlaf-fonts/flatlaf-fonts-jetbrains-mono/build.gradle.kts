@@ -20,6 +20,10 @@
 //     necessary, but the <font-version> has not changed.
 version = "2.242"
 
+if( !rootProject.hasProperty( "release" ) )
+	version = version.toString() + "-SNAPSHOT"
+
+
 plugins {
 	`java-library`
 	`flatlaf-module-info`
@@ -38,6 +42,10 @@ java {
 }
 
 tasks {
+	all {
+		onlyIf { !rootProject.hasProperty( "skipFonts" ) }
+	}
+
 	named<Jar>( "sourcesJar" ) {
 		exclude( "**/*.ttf", "**/*.otf" )
 	}

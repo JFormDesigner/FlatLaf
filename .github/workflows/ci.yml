@@ -78,7 +78,7 @@ jobs:
           cache: gradle
 
       - name: Publish snapshot to oss.sonatype.org
-        run: ./gradlew publish :flatlaf-theme-editor:build -Dorg.gradle.internal.publish.checksums.insecure=true
+        run: ./gradlew publish :flatlaf-theme-editor:build -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -114,7 +114,7 @@ jobs:
           cache: gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -Drelease=true
+        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}

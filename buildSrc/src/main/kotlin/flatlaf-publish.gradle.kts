@@ -80,7 +80,7 @@ publishing {
 
 			val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 			val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-			url = uri( if( java.lang.Boolean.getBoolean( "release" ) ) releasesRepoUrl else snapshotsRepoUrl )
+			url = uri( if( rootProject.hasProperty( "release" ) ) releasesRepoUrl else snapshotsRepoUrl )
 
 			credentials {
 				// get from gradle.properties
@@ -108,5 +108,5 @@ signing {
 
 // disable signing of snapshots
 tasks.withType<Sign>().configureEach {
-	onlyIf { java.lang.Boolean.getBoolean( "release" ) }
+	onlyIf { rootProject.hasProperty( "release" ) }
 }

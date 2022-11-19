@@ -17,7 +17,7 @@
 val releaseVersion = "2.6"
 val developmentVersion = "3.0-SNAPSHOT"
 
-version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
+version = if( rootProject.hasProperty( "release" ) ) releaseVersion else developmentVersion
 
 allprojects {
 	version = rootProject.version
