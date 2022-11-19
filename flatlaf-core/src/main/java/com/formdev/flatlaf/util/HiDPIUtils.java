@@ -190,6 +190,8 @@ public class HiDPIUtils
 				case "Inter Light":
 				case "Inter Semi Bold":
 				case "Roboto":
+				case "Roboto Light":
+				case "Roboto Medium":
 					return correctionForScaleY( g, CORRECTION_INTER );
 
 				case "Noto Sans":

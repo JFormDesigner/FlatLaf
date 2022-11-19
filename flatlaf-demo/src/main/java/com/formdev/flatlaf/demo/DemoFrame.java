@@ -44,6 +44,7 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -66,6 +67,7 @@ class DemoFrame
 {
 	private final String[] availableFontFamilyNames;
 	private boolean interFontInstalled;
+	private boolean robotoFontInstalled;
 	private int initialFontMenuItemCount = -1;
 
 	DemoFrame() {
@@ -288,6 +290,12 @@ class DemoFrame
 			interFontInstalled = true;
 		}
 
+		// install Roboto font on demand
+		if( fontFamily.equals( FlatRobotoFont.FAMILY ) && !robotoFontInstalled ) {
+			FlatRobotoFont.install();
+			robotoFontInstalled = true;
+		}
+
 		FlatAnimatedLafChange.showSnapshot();
 
 		Font font = UIManager.getFont( "defaultFont" );
@@ -361,7 +369,8 @@ class DemoFrame
 		ButtonGroup familiesGroup = new ButtonGroup();
 		for( String family : families ) {
 			if( Arrays.binarySearch( availableFontFamilyNames, family ) < 0 &&
-				!family.equals( FlatInterFont.FAMILY ) )
+				!family.equals( FlatInterFont.FAMILY ) &&
+				!family.equals( FlatRobotoFont.FAMILY ) )
 			  continue; // not available
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem( family );

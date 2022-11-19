@@ -21,6 +21,7 @@ jobs:
                 font:
                     - inter
                     - jetbrains-mono
+                    - roboto
 
         runs-on: ubuntu-latest
         if: |

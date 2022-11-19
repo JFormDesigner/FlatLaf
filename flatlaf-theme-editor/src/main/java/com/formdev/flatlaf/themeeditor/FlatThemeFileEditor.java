@@ -65,6 +65,7 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.icons.FlatClearIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
@@ -110,6 +111,7 @@ class FlatThemeFileEditor
 			if( SystemInfo.isJava_11_orLater )
 				FlatInterFont.install();
 			FlatJetBrainsMonoFont.install();
+			FlatRobotoFont.install();
 
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
 
