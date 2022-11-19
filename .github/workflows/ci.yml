@@ -1,4 +1,5 @@
-# https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
 name: CI
 
@@ -8,9 +9,6 @@ on:
       - '*'
     tags:
       - '[0-9]*'
-  pull_request:
-    branches: 
-      - '*'
 
 jobs:
   build:
