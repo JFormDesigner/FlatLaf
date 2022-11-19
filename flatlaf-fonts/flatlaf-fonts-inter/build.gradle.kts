@@ -51,7 +51,7 @@ tasks {
 		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 	}
 
-	publish {
+	withType<PublishToMavenRepository>().configureEach {
 		onlyIf { !rootProject.hasProperty( "skipFonts" ) }
 	}
 }
