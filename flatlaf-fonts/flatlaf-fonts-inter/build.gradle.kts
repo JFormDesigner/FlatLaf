@@ -60,3 +60,18 @@ flatlafPublish {
 	artifactId = "flatlaf-fonts-inter"
 	name = "FlatLaf Inter Fonts Pack"
 }
+
+publishing {
+	publications {
+		named<MavenPublication>( "maven" ) {
+			pom {
+				licenses {
+					license {
+						name.set( "SIL OPEN FONT LICENSE Version 1.1" )
+						url.set( "https://choosealicense.com/licenses/ofl-1.1/" )
+					}
+				}
+			}
+		}
+	}
+}
