@@ -25,6 +25,7 @@ import java.awt.datatransfer.Transferable;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.tree.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -35,35 +36,59 @@ class DataComponentsPanel
 {
 	DataComponentsPanel() {
 		initComponents();
+
+		// copy list and tree models
+		list2.setModel( list1.getModel() );
+		list3.setModel( list1.getModel() );
+		tree2.setModel( tree1.getModel() );
+		tree3.setModel( tree1.getModel() );
+
+		// list selection
+		int[] listSelection = { 1, 4, 5 };
+		list1.setSelectedIndices( listSelection );
+		list3.setSelectedIndices( listSelection );
+
+		// tree selection
+		int[] treeSelection = { 1, 4, 5 };
+		for( JTree tree : new JTree[] { tree1, tree3 } ) {
+			tree.expandRow( 1 );
+			tree.setSelectionRows( treeSelection );
+		}
+		tree2.expandRow( 1 );
+
+		// table selection
+		table1.addRowSelectionInterval( 1, 1 );
+
+		// rounded selection
+		list3.putClientProperty( FlatClientProperties.STYLE, "selectionInsets: 0,1,0,1; selectionArc: 6" );
+		tree3.putClientProperty( FlatClientProperties.STYLE, "selectionInsets: 0,1,0,1; selectionArc: 6" );
 	}
 
 	private void dndChanged() {
 		boolean dnd = dndCheckBox.isSelected();
-		list1.setDragEnabled( dnd );
-		list2.setDragEnabled( dnd );
-		tree1.setDragEnabled( dnd );
-		tree2.setDragEnabled( dnd );
-		table1.setDragEnabled( dnd );
-
 		DropMode dropMode = dnd ? DropMode.ON_OR_INSERT : DropMode.USE_SELECTION;
-		list1.setDropMode( dropMode );
-		tree1.setDropMode( dropMode );
+
+		for( JList<?> list : new JList<?>[] { list1, list2, list3 } ) {
+			list.setDragEnabled( dnd );
+			list.setDropMode( dropMode );
+		}
+
+		for( JTree tree : new JTree[] { tree1, tree2, tree3 } ) {
+			tree.setDragEnabled( dnd );
+			tree.setDropMode( dropMode );
+		}
+
+		table1.setDragEnabled( dnd );
 		table1.setDropMode( dropMode );
 
 		String key = "FlatLaf.oldTransferHandler";
-		if( dnd ) {
-			list1.putClientProperty( key, list1.getTransferHandler() );
-			list1.setTransferHandler( new DummyTransferHandler() );
-
-			tree1.putClientProperty( key, tree1.getTransferHandler() );
-			tree1.setTransferHandler( new DummyTransferHandler() );
-
-			table1.putClientProperty( key, table1.getTransferHandler() );
-			table1.setTransferHandler( new DummyTransferHandler() );
-		} else {
-			list1.setTransferHandler( (TransferHandler) list1.getClientProperty( key ) );
-			tree1.setTransferHandler( (TransferHandler) tree1.getClientProperty( key ) );
-			table1.setTransferHandler( (TransferHandler) table1.getClientProperty( key ) );
+		JComponent[] components = { list1, list2, list3, tree1, tree2, tree3, table1 };
+		for( JComponent c : components ) {
+			if( dnd ) {
+				c.putClientProperty( key, c.getTransferHandler() );
+				c.setTransferHandler( new DummyTransferHandler() );
+			} else
+				c.setTransferHandler( (TransferHandler) c.getClientProperty( key ) );
 		}
 	}
 
@@ -105,14 +130,21 @@ class DataComponentsPanel
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		JLabel label1 = new JLabel();
+		JLabel label2 = new JLabel();
+		JLabel label3 = new JLabel();
 		JLabel listLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
 		list1 = new JList<>();
+		JScrollPane scrollPane6 = new JScrollPane();
+		list3 = new JList<>();
 		JScrollPane scrollPane2 = new JScrollPane();
 		list2 = new JList<>();
 		JLabel treeLabel = new JLabel();
 		JScrollPane scrollPane3 = new JScrollPane();
 		tree1 = new JTree();
+		JScrollPane scrollPane7 = new JScrollPane();
+		tree3 = new JTree();
 		JScrollPane scrollPane4 = new JScrollPane();
 		tree2 = new JTree();
 		JLabel tableLabel = new JLabel();
@@ -137,17 +169,31 @@ class DataComponentsPanel
 			"insets dialog,hidemode 3",
 			// columns
 			"[]" +
-			"[200,fill]" +
-			"[200,fill]" +
+			"[150,fill]" +
+			"[150,fill]" +
+			"[150,fill]" +
 			"[fill]",
 			// rows
+			"[]" +
 			"[150,grow,sizegroup 1,fill]" +
 			"[150,grow,sizegroup 1,fill]" +
 			"[150,grow,sizegroup 1,fill]"));
 
+		//---- label1 ----
+		label1.setText("Square Selection");
+		add(label1, "cell 1 0");
+
+		//---- label2 ----
+		label2.setText("Rounded Selection");
+		add(label2, "cell 2 0");
+
+		//---- label3 ----
+		label3.setText("Disabled");
+		add(label3, "cell 3 0");
+
 		//---- listLabel ----
 		listLabel.setText("JList:");
-		add(listLabel, "cell 0 0,aligny top,growy 0");
+		add(listLabel, "cell 0 1,aligny top,growy 0");
 
 		//======== scrollPane1 ========
 		{
@@ -179,43 +225,29 @@ class DataComponentsPanel
 			list1.setComponentPopupMenu(popupMenu2);
 			scrollPane1.setViewportView(list1);
 		}
-		add(scrollPane1, "cell 1 0");
+		add(scrollPane1, "cell 1 1");
+
+		//======== scrollPane6 ========
+		{
+
+			//---- list3 ----
+			list3.setComponentPopupMenu(popupMenu2);
+			scrollPane6.setViewportView(list3);
+		}
+		add(scrollPane6, "cell 2 1");
 
 		//======== scrollPane2 ========
 		{
 
 			//---- list2 ----
-			list2.setModel(new AbstractListModel<String>() {
-				String[] values = {
-					"item 1",
-					"item 2",
-					"item 3",
-					"item 4",
-					"item 5",
-					"item 6",
-					"item 7",
-					"item 8",
-					"item 9",
-					"item 10",
-					"item 11",
-					"item 12",
-					"item 13",
-					"item 14",
-					"item 15"
-				};
-				@Override
-				public int getSize() { return values.length; }
-				@Override
-				public String getElementAt(int i) { return values[i]; }
-			});
 			list2.setEnabled(false);
 			scrollPane2.setViewportView(list2);
 		}
-		add(scrollPane2, "cell 2 0");
+		add(scrollPane2, "cell 3 1");
 
 		//---- treeLabel ----
 		treeLabel.setText("JTree:");
-		add(treeLabel, "cell 0 1,aligny top,growy 0");
+		add(treeLabel, "cell 0 2,aligny top,growy 0");
 
 		//======== scrollPane3 ========
 		{
@@ -252,7 +284,18 @@ class DataComponentsPanel
 			tree1.setComponentPopupMenu(popupMenu2);
 			scrollPane3.setViewportView(tree1);
 		}
-		add(scrollPane3, "cell 1 1");
+		add(scrollPane3, "cell 1 2");
+
+		//======== scrollPane7 ========
+		{
+
+			//---- tree3 ----
+			tree3.setShowsRootHandles(true);
+			tree3.setEditable(true);
+			tree3.setComponentPopupMenu(popupMenu2);
+			scrollPane7.setViewportView(tree3);
+		}
+		add(scrollPane7, "cell 2 2");
 
 		//======== scrollPane4 ========
 		{
@@ -261,11 +304,11 @@ class DataComponentsPanel
 			tree2.setEnabled(false);
 			scrollPane4.setViewportView(tree2);
 		}
-		add(scrollPane4, "cell 2 1");
+		add(scrollPane4, "cell 3 2");
 
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
-		add(tableLabel, "cell 0 2,aligny top,growy 0");
+		add(tableLabel, "cell 0 3,aligny top,growy 0");
 
 		//======== scrollPane5 ========
 		{
@@ -290,10 +333,10 @@ class DataComponentsPanel
 					"Not editable", "Text", "Combo", "Combo Editable", "Integer", "Boolean"
 				}
 			) {
-				Class<?>[] columnTypes = {
+				Class<?>[] columnTypes = new Class<?>[] {
 					Object.class, Object.class, String.class, String.class, Integer.class, Boolean.class
 				};
-				boolean[] columnEditable = {
+				boolean[] columnEditable = new boolean[] {
 					false, true, true, true, true, true
 				};
 				@Override
@@ -342,7 +385,7 @@ class DataComponentsPanel
 			table1.setComponentPopupMenu(popupMenu2);
 			scrollPane5.setViewportView(table1);
 		}
-		add(scrollPane5, "cell 1 2 2 1,width 300");
+		add(scrollPane5, "cell 1 3 3 1,width 300");
 
 		//======== tableOptionsPanel ========
 		{
@@ -396,7 +439,7 @@ class DataComponentsPanel
 			dndCheckBox.addActionListener(e -> dndChanged());
 			tableOptionsPanel.add(dndCheckBox, "cell 0 6");
 		}
-		add(tableOptionsPanel, "cell 3 2");
+		add(tableOptionsPanel, "cell 4 3");
 
 		//======== popupMenu2 ========
 		{
@@ -425,8 +468,10 @@ class DataComponentsPanel
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JList<String> list1;
+	private JList<String> list3;
 	private JList<String> list2;
 	private JTree tree1;
+	private JTree tree3;
 	private JTree tree2;
 	private JTable table1;
 	private JCheckBox showHorizontalLinesCheckBox;
