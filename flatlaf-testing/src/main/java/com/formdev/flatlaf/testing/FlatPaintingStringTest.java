@@ -32,6 +32,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -52,6 +53,7 @@ public class FlatPaintingStringTest
 		SwingUtilities.invokeLater( () -> {
 			FlatInterFont.install();
 			FlatJetBrainsMonoFont.install();
+			FlatRobotoFont.install();
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatPaintingStringTest" );
 
@@ -76,9 +78,10 @@ public class FlatPaintingStringTest
 		String[] families = {
 			// regular
 			"Arial", "Cantarell", "DejaVu Sans",
-			"Dialog", "Helvetica Neue", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
+			"Dialog", "Helvetica Neue", "Liberation Sans", "Noto Sans", "Open Sans",
 			"SansSerif", "Segoe UI", "Tahoma", "Ubuntu", "Verdana", ".SF NS Text",
 			FlatInterFont.FAMILY,
+			FlatRobotoFont.FAMILY,
 
 			// light, semibold
 			"Segoe UI Light", "Segoe UI Semibold",
@@ -86,6 +89,7 @@ public class FlatPaintingStringTest
 			"Lato Light", "Ubuntu Light", "Cantarell Light",
 			"Lato Semibold", "Ubuntu Medium", "Montserrat SemiBold",
 			FlatInterFont.FAMILY_LIGHT, FlatInterFont.FAMILY_SEMIBOLD,
+			FlatRobotoFont.FAMILY_LIGHT, FlatRobotoFont.FAMILY_SEMIBOLD,
 
 			// monospaced
 			"Monospaced", "Consolas", "Courier New", "Menlo", "Liberation Mono", "Ubuntu Mono",
