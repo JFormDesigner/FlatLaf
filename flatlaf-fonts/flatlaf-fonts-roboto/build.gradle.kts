@@ -38,6 +38,10 @@ dependencies {
 	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )
 }
 
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
+}
+
 java {
 	withSourcesJar()
 	withJavadocJar()

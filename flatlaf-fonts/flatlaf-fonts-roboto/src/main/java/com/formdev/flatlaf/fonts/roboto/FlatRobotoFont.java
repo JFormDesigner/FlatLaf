@@ -143,8 +143,8 @@ public class FlatRobotoFont
 	 * This is the preferred method (when using FlatLaf) to avoid unnecessary loading of maybe unused fonts.
 	 * <p>
 	 * <strong>Note</strong>: When using '{@code new Font(...)}', you need to first invoke
-	 * {@link FontUtils#loadFontFamily(family)} to ensure that the font family is loaded.
-	 * When FlatLaf loads a font, or when using {@link FontUtils#getCompositeFont(family, style, size)},
+	 * {@link FontUtils#loadFontFamily(String)} to ensure that the font family is loaded.
+	 * When FlatLaf loads a font, or when using {@link FontUtils#getCompositeFont(String, int, int)},
 	 * this is done automatically.
 	 */
 	public static void installLazy() {
