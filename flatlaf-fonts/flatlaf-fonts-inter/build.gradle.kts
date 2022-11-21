@@ -31,6 +31,8 @@ plugins {
 }
 
 dependencies {
+	implementation( project( ":flatlaf-core" ) )
+
 	testImplementation( "org.junit.jupiter:junit-jupiter-api:5.7.2" )
 	testImplementation( "org.junit.jupiter:junit-jupiter-params" )
 	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )

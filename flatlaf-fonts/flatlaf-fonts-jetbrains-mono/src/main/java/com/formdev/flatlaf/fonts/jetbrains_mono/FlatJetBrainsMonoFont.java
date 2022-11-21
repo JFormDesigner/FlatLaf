@@ -16,11 +16,7 @@
 
 package com.formdev.flatlaf.fonts.jetbrains_mono;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.io.InputStream;
+import com.formdev.flatlaf.util.FontUtils;
 
 /**
  * The JetBrains Mono font family.
@@ -28,22 +24,45 @@ import java.io.InputStream;
  * Font home page: <a href="https://www.jetbrains.com/mono">https://www.jetbrains.com/mono</a><br>
  * GitHub project: <a href="https://github.com/JetBrains/JetBrainsMono">https://github.com/JetBrains/JetBrainsMono</a>
  * <p>
- * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread):
+ * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread).
+ * <p>
+ * For lazy loading use:
+ * <pre>{@code
+ * FlatJetBrainsMonoFont.installLazy();
+ * }</pre>
+ * <p>
+ * Or load immediately with:
  * <pre>{@code
  * FlatJetBrainsMonoFont.install();
  * }</pre>
  * <p>
- * Use as default monospaced font:
+ * Use as application monospaced font (invoke before setting up FlatLaf):
  * <pre>{@code
  * FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
  * }</pre>
  * <p>
- * Create fonts:
+ * Create single fonts:
  * <pre>{@code
  * new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
  * new Font( FlatJetBrainsMonoFont.FAMILY, Font.ITALIC, 12 );
  * new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD, 12 );
  * new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
+ * }</pre>
+ * <p>
+ * If using lazy loading, invoke following before creating the font:
+ * <pre>{@code
+ * FontUtils.loadFontFamily( FlatJetBrainsMonoFont.FAMILY );
+ * }</pre>
+ * <p>
+ * E.g.:
+ * <pre>{@code
+ * FontUtils.loadFontFamily( FlatJetBrainsMonoFont.FAMILY );
+ * Font font = new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
+ * }</pre>
+ * <p>
+ * Or use following:
+ * <pre>{@code
+ * Font font = FontUtils.getCompositeFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
  * }</pre>
  *
  * @author Karl Tauber
@@ -77,7 +96,23 @@ public class FlatJetBrainsMonoFont
 	private FlatJetBrainsMonoFont() {}
 
 	/**
+	 * Registers the fonts for lazy loading via {@link FontUtils#registerFontFamilyLoader(String, Runnable)}.
+	 * <p>
+	 * This is the preferred method (when using FlatLaf) to avoid unnecessary loading of maybe unused fonts.
+	 * <p>
+	 * <strong>Note</strong>: When using '{@code new Font(...)}', you need to first invoke
+	 * {@link FontUtils#loadFontFamily(family)} to ensure that the font family is loaded.
+	 * When FlatLaf loads a font, or when using {@link FontUtils#getCompositeFont(family, style, size)},
+	 * this is done automatically.
+	 */
+	public static void installLazy() {
+		FontUtils.registerFontFamilyLoader( FAMILY, FlatJetBrainsMonoFont::install );
+	}
+
+	/**
 	 * Creates and registers the fonts for all styles.
+	 * <p>
+	 * When using FlatLaf, consider using {@link #installLazy()}.
 	 */
 	public static void install() {
 		installStyle( STYLE_REGULAR );
@@ -91,15 +126,6 @@ public class FlatJetBrainsMonoFont
 	 * See {@code STYLE_} constants.
 	 */
 	public static boolean installStyle( String name ) {
-		try( InputStream in = FlatJetBrainsMonoFont.class.getResourceAsStream( name ) ) {
-			Font font = Font.createFont( Font.TRUETYPE_FONT, in );
-			return GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font );
-		} catch( FontFormatException ex ) {
-			ex.printStackTrace();
-			return false;
-		} catch( IOException ex ) {
-			ex.printStackTrace();
-			return false;
-		}
+		return FontUtils.installFont( FlatJetBrainsMonoFont.class.getResource( name ) );
 	}
 }

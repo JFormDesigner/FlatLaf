@@ -108,10 +108,9 @@ class FlatThemeFileEditor
 		System.setProperty( "user.language", "en" );
 
 		SwingUtilities.invokeLater( () -> {
-			if( SystemInfo.isJava_11_orLater )
-				FlatInterFont.install();
-			FlatJetBrainsMonoFont.install();
-			FlatRobotoFont.install();
+			FlatInterFont.installLazy();
+			FlatJetBrainsMonoFont.installLazy();
+			FlatRobotoFont.installLazy();
 
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
 

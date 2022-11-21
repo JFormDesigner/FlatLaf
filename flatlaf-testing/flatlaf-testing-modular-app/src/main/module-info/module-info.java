@@ -21,6 +21,7 @@ module com.formdev.flatlaf.testing.modular.app {
 	requires java.desktop;
 	requires com.formdev.flatlaf;
 	requires com.formdev.flatlaf.extras;
+	requires com.formdev.flatlaf.fonts.inter;
 	requires com.kitfox.svg;
 
 	exports com.formdev.flatlaf.testing.modular.app.plaf;

@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.text.StyleContext;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -50,6 +49,7 @@ import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.SearchContext;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
+import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -171,8 +171,7 @@ class FlatThemeEditorPane
 
 	private static Font createEditorFont( int sizeIncr ) {
 		int size = UIManager.getFont( "defaultFont" ).getSize() + sizeIncr;
-		StyleContext sc = StyleContext.getDefaultStyleContext();
-		Font font = sc.getFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, size );
+		Font font = FontUtils.getCompositeFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, size );
 		if( isFallbackFont( font ) ) {
 			Font defaultFont = RTextArea.getDefaultFont();
 			font = defaultFont.deriveFont( (float) size );

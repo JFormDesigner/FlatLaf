@@ -16,11 +16,7 @@
 
 package com.formdev.flatlaf.fonts.inter;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.io.InputStream;
+import com.formdev.flatlaf.util.FontUtils;
 
 /**
  * The Inter font family.
@@ -31,19 +27,30 @@ import java.io.InputStream;
  * Font home page: <a href="https://rsms.me/inter/">https://rsms.me/inter/</a><br>
  * GitHub project: <a href="https://github.com/rsms/inter">https://github.com/rsms/inter</a>
  * <p>
- * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread):
+ * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread).
+ * <p>
+ * For lazy loading use:
  * <pre>{@code
- * FlatInterFont.install();
+ * FlatInterFont.installLazy();
  * }</pre>
  * <p>
- * Use as default font:
+ * Or load immediately with:
+ * <pre>{@code
+ * FlatInterFont.install();
+ * // or
+ * FlatInterFont.installBasic();
+ * FlatInterFont.installLight();
+ * FlatInterFont.installSemiBold();
+ * }</pre>
+ * <p>
+ * Use as application font (invoke before setting up FlatLaf):
  * <pre>{@code
  * FlatLaf.setPreferredFontFamily( FlatInterFont.FAMILY );
  * FlatLaf.setPreferredLightFontFamily( FlatInterFont.FAMILY_LIGHT );
  * FlatLaf.setPreferredSemiboldFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
  * }</pre>
  * <p>
- * Create fonts:
+ * Create single fonts:
  * <pre>{@code
  * new Font( FlatInterFont.FAMILY, Font.PLAIN, 12 );
  * new Font( FlatInterFont.FAMILY, Font.ITALIC, 12 );
@@ -53,6 +60,24 @@ import java.io.InputStream;
  * new Font( FlatInterFont.FAMILY_LIGHT, Font.ITALIC, 12 );
  * new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.PLAIN, 12 );
  * new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
+ * }</pre>
+ * <p>
+ * If using lazy loading, invoke one of following before creating the font:
+ * <pre>{@code
+ * FontUtils.loadFontFamily( FlatInterFont.FAMILY );
+ * FontUtils.loadFontFamily( FlatInterFont.FAMILY_LIGHT );
+ * FontUtils.loadFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
+ * }</pre>
+ * <p>
+ * E.g.:
+ * <pre>{@code
+ * FontUtils.loadFontFamily( FlatInterFont.FAMILY );
+ * Font font = new Font( FlatInterFont.FAMILY, Font.PLAIN, 12 );
+ * }</pre>
+ * <p>
+ * Or use following:
+ * <pre>{@code
+ * Font font = FontUtils.getCompositeFont( FlatInterFont.FAMILY, Font.PLAIN, 12 );
  * }</pre>
  *
  * @author Karl Tauber
@@ -116,20 +141,60 @@ public class FlatInterFont
 	private FlatInterFont() {}
 
 	/**
+	 * Registers the fonts for lazy loading via {@link FontUtils#registerFontFamilyLoader(String, Runnable)}.
+	 * <p>
+	 * This is the preferred method (when using FlatLaf) to avoid unnecessary loading of maybe unused fonts.
+	 * <p>
+	 * <strong>Note</strong>: When using '{@code new Font(...)}', you need to first invoke
+	 * {@link FontUtils#loadFontFamily(family)} to ensure that the font family is loaded.
+	 * When FlatLaf loads a font, or when using {@link FontUtils#getCompositeFont(family, style, size)},
+	 * this is done automatically.
+	 */
+	public static void installLazy() {
+		FontUtils.registerFontFamilyLoader( FAMILY, FlatInterFont::installBasic );
+		FontUtils.registerFontFamilyLoader( FAMILY_LIGHT, FlatInterFont::installLight );
+		FontUtils.registerFontFamilyLoader( FAMILY_SEMIBOLD, FlatInterFont::installSemiBold );
+	}
+
+	/**
 	 * Creates and registers the fonts for all styles.
+	 * <p>
+	 * When using FlatLaf, consider using {@link #installLazy()}.
 	 */
 	public static void install() {
-		// basic styles
+		installBasic();
+		installLight();
+		installSemiBold();
+	}
+
+	/**
+	 * Creates and registers the fonts for basic styles (regular, italic and bold).
+	 * <p>
+	 * When using FlatLaf, consider using {@link #installLazy()}.
+	 */
+	public static void installBasic() {
 		installStyle( STYLE_REGULAR );
 		installStyle( STYLE_ITALIC );
 		installStyle( STYLE_BOLD );
 		installStyle( STYLE_BOLD_ITALIC );
+	}
 
-		// light
+	/**
+	 * Creates and registers the fonts for light styles.
+	 * <p>
+	 * When using FlatLaf, consider using {@link #installLazy()}.
+	 */
+	public static void installLight() {
 		installStyle( STYLE_LIGHT );
 		installStyle( STYLE_LIGHT_ITALIC );
+	}
 
-		// semibold
+	/**
+	 * Creates and registers the fonts for semibold styles.
+	 * <p>
+	 * When using FlatLaf, consider using {@link #installLazy()}.
+	 */
+	public static void installSemiBold() {
 		installStyle( STYLE_SEMIBOLD );
 		installStyle( STYLE_SEMIBOLD_ITALIC );
 	}
@@ -139,15 +204,6 @@ public class FlatInterFont
 	 * See {@code STYLE_} constants.
 	 */
 	public static boolean installStyle( String name ) {
-		try( InputStream in = FlatInterFont.class.getResourceAsStream( name ) ) {
-			Font font = Font.createFont( Font.TRUETYPE_FONT, in );
-			return GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font );
-		} catch( FontFormatException ex ) {
-			ex.printStackTrace();
-			return false;
-		} catch( IOException ex ) {
-			ex.printStackTrace();
-			return false;
-		}
+		return FontUtils.installFont( FlatInterFont.class.getResource( name ) );
 	}
 }

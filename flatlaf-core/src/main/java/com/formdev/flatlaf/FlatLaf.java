@@ -78,6 +78,7 @@ import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -663,6 +664,9 @@ public abstract class FlatLaf
 	}
 
 	static FontUIResource createCompositeFont( String family, int style, int size ) {
+		// load lazy font family
+		FontUtils.loadFontFamily( family );
+
 		// using StyleContext.getFont() here because it uses
 		// sun.font.FontUtilities.getCompositeFontUIResource()
 		// and creates a composite font that is able to display all Unicode characters
