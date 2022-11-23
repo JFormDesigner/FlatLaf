@@ -47,7 +47,7 @@ public:
 HWNDMap::HWNDMap() {
 	size = 0;
 	capacity = DEFAULT_CAPACITY;
-	table = new Entry[capacity];
+	table = new (FlatLafNoThrow) Entry[capacity];
 
 	::InitializeCriticalSection( &criticalSection );
 

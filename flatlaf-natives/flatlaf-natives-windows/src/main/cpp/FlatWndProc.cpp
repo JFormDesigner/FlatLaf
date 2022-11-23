@@ -154,7 +154,7 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 	env->DeleteGlobalRef( fwp->obj );
 	if( fwp->background != NULL )
 		::DeleteObject( fwp->background );
-	FlatLafWin32ProcessHeapDelete(fwp);
+	FlatLafWin32ProcessHeapFree(fwp);
 }
 
 void FlatWndProc::initIDs( JNIEnv *env, jobject obj ) {
