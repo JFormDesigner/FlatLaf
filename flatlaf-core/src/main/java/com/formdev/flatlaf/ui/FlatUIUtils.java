@@ -200,6 +200,10 @@ public class FlatUIUtils
 		return (border instanceof UIResource) ? new NonUIResourceBorder( border ) : border;
 	}
 
+	static Border unwrapNonUIResourceBorder( Border border ) {
+		return (border instanceof NonUIResourceBorder) ? ((NonUIResourceBorder)border).delegate : border;
+	}
+
 	public static int minimumWidth( JComponent c, int minimumWidth ) {
 		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_WIDTH, minimumWidth );
 	}

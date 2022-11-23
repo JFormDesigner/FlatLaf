@@ -67,6 +67,4 @@ private:
 	void sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam );
 	void openSystemMenu( HWND hwnd, int x, int y );
 	void setMenuItemState( HMENU systemMenu, int item, bool enabled );
-
-	static HWND getWindowHandle( JNIEnv* env, jobject window );
 };

@@ -22,6 +22,7 @@ plugins {
 
 flatlafJniHeaders {
 	headers = listOf(
+		"com_formdev_flatlaf_ui_FlatNativeWindowsLibrary.h",
 		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder.h",
 		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
 	)
@@ -74,8 +75,8 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
-				is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
+				is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi" )
+				is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "/NODEFAULTLIB" )
 				else -> emptyList()
 			}
 		} )

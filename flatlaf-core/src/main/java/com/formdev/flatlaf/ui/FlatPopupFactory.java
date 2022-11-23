@@ -52,6 +52,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -87,6 +89,14 @@ public class FlatPopupFactory
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux )
 			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+
+		// Windows 11 with FlatLaf native library can use rounded corners and shows drop shadow for heavy weight popups
+		if( SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded() ) {
+			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+			if( popup.popupWindow != null )
+				setupWindows11Border( popup.popupWindow, contents );
+			return popup;
+		}
 
 		// create drop shadow popup
 		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
@@ -298,6 +308,43 @@ public class FlatPopupFactory
 
 		return me.getSource() == owner &&
 			((JComponent)owner).getToolTipLocation( me ) != null;
+	}
+
+	private static void setupWindows11Border( Window popupWindow, Component contents ) {
+		// make sure that the Windows 11 window is created
+		if( !popupWindow.isDisplayable() )
+			popupWindow.addNotify();
+
+		// get window handle
+		long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
+
+		// set corner preference
+		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL );
+
+		// set border color
+		int red = -1; // use system default color
+		int green = 0;
+		int blue = 0;
+		if( contents instanceof JComponent ) {
+			Border border = ((JComponent)contents).getBorder();
+			border = FlatUIUtils.unwrapNonUIResourceBorder( border );
+
+			// get color from border of contents (e.g. JPopupMenu or JToolTip)
+			Color borderColor = null;
+			if( border instanceof FlatLineBorder )
+				borderColor = ((FlatLineBorder)border).getLineColor();
+			else if( border instanceof LineBorder )
+				borderColor = ((LineBorder)border).getLineColor();
+			else if( border instanceof EmptyBorder )
+				red = -2; // do not paint border
+
+			if( borderColor != null ) {
+				red = borderColor.getRed();
+				green = borderColor.getGreen();
+				blue = borderColor.getBlue();
+			}
+		}
+		FlatNativeWindowsLibrary.setWindowBorderColor( hwnd, red, green, blue );
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
