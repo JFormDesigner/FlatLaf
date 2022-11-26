@@ -42,14 +42,23 @@ BOOL WINAPI _DllMainCRTStartup( HINSTANCE instance, DWORD reason, LPVOID reserve
 }
 
 void* __cdecl operator new( size_t cb ) {
+//	printf( "new %d\n", cb );
 	return ::HeapAlloc( ::GetProcessHeap(), HEAP_ZERO_MEMORY, cb );
 }
 
 void* __cdecl operator new[]( size_t cb ) {
+//	printf( "new[] %d\n", cb );
 	return ::HeapAlloc( ::GetProcessHeap(), HEAP_ZERO_MEMORY, cb );
 }
 
 void __cdecl operator delete( void* pv, size_t cb ) {
+//	printf( "delete %p %d\n", pv, cb );
+	if( pv != NULL )
+		::HeapFree( ::GetProcessHeap(), 0, pv );
+}
+
+void __cdecl operator delete[]( void* pv ) {
+//	printf( "delete[] %p\n", pv );
 	if( pv != NULL )
 		::HeapFree( ::GetProcessHeap(), 0, pv );
 }

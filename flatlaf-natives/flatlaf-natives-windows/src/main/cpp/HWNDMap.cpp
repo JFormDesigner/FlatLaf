@@ -43,8 +43,8 @@ public:
 
 HWNDMap::HWNDMap() {
 	size = 0;
-	capacity = DEFAULT_CAPACITY;
-	table = new Entry[capacity];
+	capacity = 0;
+	table = NULL;
 
 	::InitializeCriticalSection( &criticalSection );
 
@@ -58,7 +58,7 @@ LPVOID HWNDMap::get( HWND key ) {
 	return (index >= 0) ? table[index].value : NULL;
 }
 
-void HWNDMap::put( HWND key, LPVOID value ) {
+bool HWNDMap::put( HWND key, LPVOID value ) {
 	LOCK lock( &criticalSection );
 
 	int index = binarySearch( key );
@@ -68,9 +68,10 @@ void HWNDMap::put( HWND key, LPVOID value ) {
 		table[index].value = value;
 	} else {
 		// insert new key
-		ensureCapacity( size + 1 );
+		if( !ensureCapacity() )
+			return false;
 
-		// make roor for new entry
+		// make room for new entry
 		index = -(index + 1);
 		for( int i = size - 1; i >= index; i-- )
 			table[i + 1] = table[i];
@@ -82,6 +83,7 @@ void HWNDMap::put( HWND key, LPVOID value ) {
 	}
 
 //	dump( "put" );
+	return true;
 }
 
 void HWNDMap::remove( HWND key ) {
@@ -102,6 +104,9 @@ void HWNDMap::remove( HWND key ) {
 }
 
 int HWNDMap::binarySearch( HWND key ) {
+	if( table == NULL )
+		return -1;
+
 	__int64 ikey = reinterpret_cast<__int64>( key );
 	int low = 0;
 	int high = size - 1;
@@ -121,23 +126,37 @@ int HWNDMap::binarySearch( HWND key ) {
 	return -(low + 1);
 }
 
-void HWNDMap::ensureCapacity( int minCapacity ) {
+bool HWNDMap::ensureCapacity() {
+	if( table == NULL ) {
+		table = new Entry[DEFAULT_CAPACITY];
+		if( table == NULL )
+			return false;
+
+		capacity = DEFAULT_CAPACITY;
+		return true;
+	}
+
+	// check capacity
+	int minCapacity = size + 1;
 	if( minCapacity <= capacity )
-		return;
+		return true;
 
 	// allocate new table
 	int newCapacity = minCapacity + INCREASE_CAPACITY;
 	Entry* newTable = new Entry[newCapacity];
+	if( newTable == NULL )
+		return false;
 
 	// copy old table to new table
 	for( int i = 0; i < capacity; i++ )
 		newTable[i] = table[i];
 
 	// delete old table
-	delete table;
+	delete[] table;
 
 	table = newTable;
 	capacity = newCapacity;
+	return true;
 }
 
 /*
