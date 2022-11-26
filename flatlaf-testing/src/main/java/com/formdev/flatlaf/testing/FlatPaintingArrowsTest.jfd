@@ -1,0 +1,379 @@
+JFDML JFormDesigner: "8.0.0.0.194" Java: "17.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane"
+				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+					"$columnConstraints": "[fill][fill][fill][fill][fill][fill]"
+					"$rowConstraints": "para[][]"
+				} ) {
+					name: "panel"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter1"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter2"
+						"direction": 1
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter3"
+						"direction": 7
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter4"
+						"direction": 3
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 0,align left top,grow 0 0"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+						"axis": 1
+					} ) {
+						name: "panel2"
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter5"
+							"direction": 1
+							"h": 10
+							"halfHeight": true
+							"YOffset": 1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter6"
+							"h": 10
+							"halfHeight": true
+							"YOffset": -1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 4 0,align left top,grow 0 0"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+						name: "panel3"
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter7"
+							"direction": 7
+							"w": 10
+							"halfWidth": true
+							"XOffset": 1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter8"
+							"direction": 3
+							"w": 10
+							"halfWidth": true
+							"XOffset": -1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 5 0,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter9"
+						"chevron": false
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter10"
+						"direction": 1
+						"chevron": false
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter11"
+						"direction": 7
+						"chevron": false
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 1,align left top,grow 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+						name: "arrowPainter12"
+						"direction": 3
+						"chevron": false
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 1,align left top,grow 0 0"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+						"axis": 1
+					} ) {
+						name: "panel4"
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter13"
+							"direction": 1
+							"h": 10
+							"chevron": false
+							"halfHeight": true
+							"YOffset": 1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter14"
+							"h": 10
+							"chevron": false
+							"halfHeight": true
+							"YOffset": -1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 4 1,align left top,grow 0 0"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+						name: "panel5"
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter15"
+							"direction": 7
+							"w": 10
+							"chevron": false
+							"halfWidth": true
+							"XOffset": 1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingArrowsTest$ArrowPainter" ) {
+							name: "arrowPainter16"
+							"direction": 3
+							"w": 10
+							"chevron": false
+							"halfWidth": true
+							"XOffset": -1
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 5 1,align left top,grow 0 0"
+					} )
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][grow,fill]para[fill]"
+				"$rowConstraints": "[][]"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "scaleLabel"
+					"text": "Scale:"
+					"labelFor": new FormReference( "scaleSlider" )
+					"displayedMnemonic": 83
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "scaleSlider"
+					"maximum": 64
+					"value": 16
+					"paintTicks": true
+					"majorTickSpacing": 8
+					"paintLabels": true
+					"minorTickSpacing": 1
+					"snapToTicks": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "scaleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "pixelsCheckBox"
+					"text": "pixels"
+					"mnemonic": 80
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pixelsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "pixelsScaleLabel"
+					"text": "Scale:"
+					"labelFor": new FormReference( "pixelsScaleSlider" )
+					"displayedMnemonic": 67
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "pixelsScaleSlider"
+					"minimum": 100
+					"maximum": 600
+					"minorTickSpacing": 25
+					"majorTickSpacing": 100
+					"snapToTicks": true
+					"paintTicks": true
+					"paintLabels": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "pixelsScaleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "hidemode 3"
+					"$columnConstraints": "[fill][fill]unrel[fill][fill]unrel[fill][fill]unrel[fill][fill]unrel[fill][fill]unrel[fill]"
+					"$rowConstraints": "[]"
+				} ) {
+					name: "panel55"
+					"border": new javax.swing.border.TitledBorder( "Arrow Control" )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowWidthLabel"
+						"text": "Width:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowWidthSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 0
+							value: 20
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowHeightLabel"
+						"text": "Height:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowHeightSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 0
+							value: 20
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowSizeLabel"
+						"text": "Arrow Size:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 4 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowSizeSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 2
+							value: 9
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 5 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowThicknessLabel"
+						"text": "Arrow Thickness:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 6 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowThicknessSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 0.25f
+							stepSize: 0.25f
+							value: 1.0f
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 7 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "offsetLabel"
+						"text": "Offset:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 8 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "offsetSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							stepSize: 0.05f
+							value: 1.0f
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "offsetChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 9 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "buttonCheckBox"
+						"text": "FlatArrowButton"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "arrowButtonChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 10 0,alignx left,growx 0"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1 3 1"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 1085, 530 )
+		} )
+	}
+}

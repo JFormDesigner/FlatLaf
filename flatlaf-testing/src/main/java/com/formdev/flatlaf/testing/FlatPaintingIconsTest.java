@@ -314,12 +314,18 @@ public class FlatPaintingIconsTest
 					g2d.drawRect( x2, y2, width2 - 1, height2 - 1 );
 
 					// draw grid
-					if( scale > 2 ) {
-						g2d.setColor( new Color( (Color.blue.getRGB() & 0xffffff) | (0x20 << 24), true ) );
-						for( int x = x2 + scale; x < x2 + width2; x += scale )
-							g2d.drawLine( x, y2 + 1, x, y2 + height2 - 2 );
-						for( int y = y2 + scale; y < y2 + height2; y += scale )
-							g2d.drawLine( x2 + 1, y, x2 + width2 - 2, y );
+					float pixelSize = scale / paintPixelsScale;
+					if( pixelSize >= 4 ) {
+						Color lineColor1 = new Color( (Color.blue.getRGB() & 0xffffff) | (0x20 << 24), true );
+						Color lineColor2 = new Color( (Color.blue.getRGB() & 0xffffff) | (0x60 << 24), true );
+						for( float x = x2 + pixelSize, i = 1; x < x2 + width2; x += pixelSize, i++ ) {
+							g2d.setColor( ((int)i % 4 == 0) ? lineColor2 : lineColor1 );
+							g2d.drawLine( Math.round( x ), y2 + 1, Math.round( x ), y2 + height2 - 2 );
+						}
+						for( float y = y2 + pixelSize, i = 1; y < y2 + height2; y += pixelSize, i++ ) {
+							g2d.setColor( ((int)i % 4 == 0) ? lineColor2 : lineColor1 );
+							g2d.drawLine( x2 + 1, Math.round( y ), x2 + width2 - 2, Math.round( y ) );
+						}
 					}
 				} );
 
