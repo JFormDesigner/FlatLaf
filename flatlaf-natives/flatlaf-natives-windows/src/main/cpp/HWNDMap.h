@@ -44,11 +44,10 @@ public:
 	LPVOID get( HWND key );
 	bool put( HWND key, LPVOID value );
 	void remove( HWND key );
-	bool isTableAllocated() noexcept { return static_cast<bool>(table); }
 
 private:
 	int binarySearch( HWND key );
-	bool ensureCapacity( int newCapacity );
+	bool ensureCapacity();
 
 //	void dump( char* msg );
 };

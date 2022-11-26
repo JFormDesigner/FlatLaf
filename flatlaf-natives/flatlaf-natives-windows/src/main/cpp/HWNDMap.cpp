@@ -18,10 +18,7 @@
 #define _NO_CRT_STDIO_INLINE
 
 #include <stdio.h>
-#include <stdint.h>
-#include <limits.h>
 #include "HWNDMap.h"
-#include "AllocRoutines.h"
 
 #define DEFAULT_CAPACITY		20
 #define INCREASE_CAPACITY		10
@@ -46,8 +43,8 @@ public:
 
 HWNDMap::HWNDMap() {
 	size = 0;
-	capacity = DEFAULT_CAPACITY;
-	table = new (FlatLafNoThrow) Entry[capacity];
+	capacity = 0;
+	table = NULL;
 
 	::InitializeCriticalSection( &criticalSection );
 
@@ -69,13 +66,12 @@ bool HWNDMap::put( HWND key, LPVOID value ) {
 	if( index >= 0 ) {
 		// key already in map --> replace
 		table[index].value = value;
-		return true;
 	} else {
 		// insert new key
-		if(size == INT_MAX || !ensureCapacity( size + 1 ))
+		if( !ensureCapacity() )
 			return false;
 
-		// make roor for new entry
+		// make room for new entry
 		index = -(index + 1);
 		for( int i = size - 1; i >= index; i-- )
 			table[i + 1] = table[i];
@@ -84,10 +80,10 @@ bool HWNDMap::put( HWND key, LPVOID value ) {
 		// insert entry
 		table[index].key = key;
 		table[index].value = value;
-		return true;
 	}
 
 //	dump( "put" );
+	return true;
 }
 
 void HWNDMap::remove( HWND key ) {
@@ -108,6 +104,9 @@ void HWNDMap::remove( HWND key ) {
 }
 
 int HWNDMap::binarySearch( HWND key ) {
+	if( table == NULL )
+		return -1;
+
 	__int64 ikey = reinterpret_cast<__int64>( key );
 	int low = 0;
 	int high = size - 1;
@@ -127,26 +126,25 @@ int HWNDMap::binarySearch( HWND key ) {
 	return -(low + 1);
 }
 
-static constexpr size_t MaxEntryArrayLength = (SIZE_MAX >> 1) / sizeof(Entry);
-static_assert(MaxEntryArrayLength > 0, "MaxEntryArrayLength > 0 must be true");
+bool HWNDMap::ensureCapacity() {
+	if( table == NULL ) {
+		table = new Entry[DEFAULT_CAPACITY];
+		if( table == NULL )
+			return false;
 
-static constexpr int MaxEntryArrayIntCapacity =
-	(MaxEntryArrayLength <= INT_MAX) ? static_cast<int>(MaxEntryArrayLength) : INT_MAX;
-static_assert(MaxEntryArrayIntCapacity > 0, "MaxEntryArrayIntCapacity > 0 must be true");
-
-bool HWNDMap::ensureCapacity( int minCapacity ) {
-	if(minCapacity <= capacity)
+		capacity = DEFAULT_CAPACITY;
 		return true;
-	if(minCapacity > MaxEntryArrayIntCapacity)
-		return false;
+	}
+
+	// check capacity
+	int minCapacity = size + 1;
+	if( minCapacity <= capacity )
+		return true;
 
 	// allocate new table
-	unsigned newCapacity = static_cast<unsigned>(minCapacity) + INCREASE_CAPACITY;
-	if(newCapacity > MaxEntryArrayIntCapacity)
-		newCapacity = MaxEntryArrayIntCapacity;
-	
-	Entry* newTable = new (FlatLafNoThrow) Entry[newCapacity];
-	if(newTable == NULL)
+	int newCapacity = minCapacity + INCREASE_CAPACITY;
+	Entry* newTable = new Entry[newCapacity];
+	if( newTable == NULL )
 		return false;
 
 	// copy old table to new table
@@ -154,10 +152,10 @@ bool HWNDMap::ensureCapacity( int minCapacity ) {
 		newTable[i] = table[i];
 
 	// delete old table
-	FlatLafWin32ProcessHeapFree(table);
+	delete[] table;
 
 	table = newTable;
-	capacity = static_cast<int>(newCapacity);
+	capacity = newCapacity;
 	return true;
 }
 
