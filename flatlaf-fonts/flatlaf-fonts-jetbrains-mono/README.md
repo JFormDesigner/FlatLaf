@@ -15,8 +15,15 @@ License:
 How to install?
 ---------------
 
-Invoke the `install()` method once (e.g. in your `main()` method; on AWT
-thread):
+Invoke following once (e.g. in your `main()` method; on AWT thread).
+
+For lazy loading use:
+
+~~~java
+FlatJetBrainsMonoFont.installLazy();
+~~~
+
+Or load immediately with:
 
 ~~~java
 FlatJetBrainsMonoFont.install();
@@ -26,13 +33,13 @@ FlatJetBrainsMonoFont.install();
 How to use?
 -----------
 
-Use as default monospaced font:
+Use as application monospaced font (invoke before setting up FlatLaf):
 
 ~~~java
 FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
 ~~~
 
-Create fonts:
+Create single fonts:
 
 ~~~java
 // basic styles
@@ -40,6 +47,25 @@ new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
 new Font( FlatJetBrainsMonoFont.FAMILY, Font.ITALIC, 12 );
 new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD, 12 );
 new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
+~~~
+
+If using lazy loading, invoke one of following before creating the font:
+
+~~~java
+FontUtils.loadFontFamily( FlatJetBrainsMonoFont.FAMILY );
+~~~
+
+E.g.:
+
+~~~java
+FontUtils.loadFontFamily( FlatJetBrainsMonoFont.FAMILY );
+Font font = new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
+~~~
+
+Or use following:
+
+~~~java
+Font font = FontUtils.getCompositeFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
 ~~~
 
 

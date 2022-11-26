@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
-import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -43,15 +42,13 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
-import com.formdev.flatlaf.fonts.inter.FlatInterFont;
-import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
-import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.layout.ConstraintParser;
@@ -66,15 +63,12 @@ class DemoFrame
 	extends JFrame
 {
 	private final String[] availableFontFamilyNames;
-	private boolean interFontInstalled;
-	private boolean robotoFontInstalled;
 	private int initialFontMenuItemCount = -1;
 
 	DemoFrame() {
 		int tabIndex = DemoPrefs.getState().getInt( FlatLafDemo.KEY_TAB, 0 );
 
-		availableFontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
-			.getAvailableFontFamilyNames().clone();
+		availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
 		Arrays.sort( availableFontFamilyNames );
 
 		initComponents();
@@ -284,24 +278,10 @@ class DemoFrame
 	private void fontFamilyChanged( ActionEvent e ) {
 		String fontFamily = e.getActionCommand();
 
-		// install Inter font on demand
-		if( fontFamily.equals( FlatInterFont.FAMILY ) && !interFontInstalled ) {
-			FlatInterFont.install();
-			interFontInstalled = true;
-		}
-
-		// install Roboto font on demand
-		if( fontFamily.equals( FlatRobotoFont.FAMILY ) && !robotoFontInstalled ) {
-			FlatRobotoFont.install();
-			robotoFontInstalled = true;
-		}
-
 		FlatAnimatedLafChange.showSnapshot();
 
 		Font font = UIManager.getFont( "defaultFont" );
-		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
-		// StyleContext.getFont() may return a UIResource, which would cause loosing user scale factor on Windows
-		newFont = FlatUIUtils.nonUIResource( newFont );
+		Font newFont = FontUtils.getCompositeFont( fontFamily, font.getStyle(), font.getSize() );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();
@@ -368,10 +348,8 @@ class DemoFrame
 
 		ButtonGroup familiesGroup = new ButtonGroup();
 		for( String family : families ) {
-			if( Arrays.binarySearch( availableFontFamilyNames, family ) < 0 &&
-				!family.equals( FlatInterFont.FAMILY ) &&
-				!family.equals( FlatRobotoFont.FAMILY ) )
-			  continue; // not available
+			if( Arrays.binarySearch( availableFontFamilyNames, family ) < 0 )
+				continue; // not available
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem( family );
 			item.setSelected( family.equals( currentFamily ) );

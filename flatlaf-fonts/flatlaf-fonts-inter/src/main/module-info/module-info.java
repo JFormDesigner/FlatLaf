@@ -19,6 +19,7 @@
  */
 module com.formdev.flatlaf.fonts.inter {
 	requires java.desktop;
+	requires com.formdev.flatlaf;
 
 	exports com.formdev.flatlaf.fonts.inter;
 

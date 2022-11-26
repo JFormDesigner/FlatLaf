@@ -18,18 +18,29 @@ License:
 How to install?
 ---------------
 
-Invoke the `install()` method once (e.g. in your `main()` method; on AWT
-thread):
+Invoke following once (e.g. in your `main()` method; on AWT thread).
+
+For lazy loading use:
+
+~~~java
+FlatInterFont.installLazy();
+~~~
+
+Or load immediately with:
 
 ~~~java
 FlatInterFont.install();
+// or
+FlatInterFont.installBasic();
+FlatInterFont.installLight();
+FlatInterFont.installSemiBold();
 ~~~
 
 
 How to use?
 -----------
 
-Use as default font:
+Use as application font (invoke before setting up FlatLaf):
 
 ~~~java
 FlatLaf.setPreferredFontFamily( FlatInterFont.FAMILY );
@@ -37,7 +48,7 @@ FlatLaf.setPreferredLightFontFamily( FlatInterFont.FAMILY_LIGHT );
 FlatLaf.setPreferredSemiboldFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
 ~~~
 
-Create fonts:
+Create single fonts:
 
 ~~~java
 // basic styles
@@ -53,6 +64,27 @@ new Font( FlatInterFont.FAMILY_LIGHT, Font.ITALIC, 12 );
 // semibold
 new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.PLAIN, 12 );
 new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
+~~~
+
+If using lazy loading, invoke one of following before creating the font:
+
+~~~java
+FontUtils.loadFontFamily( FlatInterFont.FAMILY );
+FontUtils.loadFontFamily( FlatInterFont.FAMILY_LIGHT );
+FontUtils.loadFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
+~~~
+
+E.g.:
+
+~~~java
+FontUtils.loadFontFamily( FlatInterFont.FAMILY );
+Font font = new Font( FlatInterFont.FAMILY, Font.PLAIN, 12 );
+~~~
+
+Or use following:
+
+~~~java
+Font font = FontUtils.getCompositeFont( FlatInterFont.FAMILY, Font.PLAIN, 12 );
 ~~~
 
 

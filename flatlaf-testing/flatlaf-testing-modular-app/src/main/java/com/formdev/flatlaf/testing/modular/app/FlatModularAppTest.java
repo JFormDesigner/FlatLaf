@@ -27,6 +27,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 
 /**
  * @author Karl Tauber
@@ -35,6 +36,8 @@ public class FlatModularAppTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
+			FlatInterFont.installBasic();
+
 			FlatLaf.registerCustomDefaultsSource(
 				FlatModularAppTest.class.getResource( "/com/formdev/flatlaf/testing/modular/app/themes/" ) );
 			FlatLightLaf.setup();

@@ -22,9 +22,11 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
+	implementation( project( ":flatlaf-fonts-inter" ) )
 }
 
 flatlafModuleInfo {
 	dependsOn( ":flatlaf-core:jar" )
 	dependsOn( ":flatlaf-extras:jar" )
+	dependsOn( ":flatlaf-fonts-inter:jar" )
 }

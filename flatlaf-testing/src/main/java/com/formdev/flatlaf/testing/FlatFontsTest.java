@@ -19,13 +19,13 @@ package com.formdev.flatlaf.testing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -37,9 +37,9 @@ public class FlatFontsTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
-			FlatInterFont.install();
-			FlatJetBrainsMonoFont.install();
-			FlatRobotoFont.install();
+			FlatInterFont.installLazy();
+			FlatJetBrainsMonoFont.installLazy();
+			FlatRobotoFont.installLazy();
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatFontsTest" );
 			frame.showFrame( FlatFontsTest::new );
@@ -49,7 +49,7 @@ public class FlatFontsTest
 	FlatFontsTest() {
 		initComponents();
 
-		Font[] allFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+		Font[] allFonts = FontUtils.getAllFonts();
 
 		TreeMap<String, TreeMap<String, Font>> familiesMap = new TreeMap<>();
 		for( Font font : allFonts ) {

@@ -15,18 +15,29 @@ License:
 How to install?
 ---------------
 
-Invoke the `install()` method once (e.g. in your `main()` method; on AWT
-thread):
+Invoke following once (e.g. in your `main()` method; on AWT thread).
+
+For lazy loading use:
+
+~~~java
+FlatRobotoFont.installLazy();
+~~~
+
+Or load immediately with:
 
 ~~~java
 FlatRobotoFont.install();
+// or
+FlatRobotoFont.installBasic();
+FlatRobotoFont.installLight();
+FlatRobotoFont.installSemiBold();
 ~~~
 
 
 How to use?
 -----------
 
-Use as default font:
+Use as application font (invoke before setting up FlatLaf):
 
 ~~~java
 FlatLaf.setPreferredFontFamily( FlatRobotoFont.FAMILY );
@@ -34,7 +45,7 @@ FlatLaf.setPreferredLightFontFamily( FlatRobotoFont.FAMILY_LIGHT );
 FlatLaf.setPreferredSemiboldFontFamily( FlatRobotoFont.FAMILY_SEMIBOLD );
 ~~~
 
-Create fonts:
+Create single fonts:
 
 ~~~java
 // basic styles
@@ -50,6 +61,27 @@ new Font( FlatRobotoFont.FAMILY_LIGHT, Font.ITALIC, 12 );
 // semibold
 new Font( FlatRobotoFont.FAMILY_SEMIBOLD, Font.PLAIN, 12 );
 new Font( FlatRobotoFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
+~~~
+
+If using lazy loading, invoke one of following before creating the font:
+
+~~~java
+FontUtils.loadFontFamily( FlatRobotoFont.FAMILY );
+FontUtils.loadFontFamily( FlatRobotoFont.FAMILY_LIGHT );
+FontUtils.loadFontFamily( FlatRobotoFont.FAMILY_SEMIBOLD );
+~~~
+
+E.g.:
+
+~~~java
+FontUtils.loadFontFamily( FlatRobotoFont.FAMILY );
+Font font = new Font( FlatRobotoFont.FAMILY, Font.PLAIN, 12 );
+~~~
+
+Or use following:
+
+~~~java
+Font font = FontUtils.getCompositeFont( FlatRobotoFont.FAMILY, Font.PLAIN, 12 );
 ~~~
 
 

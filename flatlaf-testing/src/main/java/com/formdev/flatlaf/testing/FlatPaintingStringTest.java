@@ -22,17 +22,16 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.Arrays;
 import javax.swing.*;
-import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -51,9 +50,9 @@ public class FlatPaintingStringTest
 		System.setProperty( "FlatLaf.debug.HiDPIUtils.useDebugScaleFactor", "true" );
 
 		SwingUtilities.invokeLater( () -> {
-			FlatInterFont.install();
-			FlatJetBrainsMonoFont.install();
-			FlatRobotoFont.install();
+			FlatInterFont.installLazy();
+			FlatJetBrainsMonoFont.installLazy();
+			FlatRobotoFont.installLazy();
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatPaintingStringTest" );
 
@@ -67,8 +66,7 @@ public class FlatPaintingStringTest
 	FlatPaintingStringTest() {
 		initComponents();
 
-		String[] availableFontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
-			.getAvailableFontFamilyNames().clone();
+		String[] availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
 		Arrays.sort( availableFontFamilyNames );
 
 		Font currentFont = UIManager.getFont( "Label.font" );
@@ -194,7 +192,7 @@ public class FlatPaintingStringTest
 		if( font.getFamily().equals( family ) )
 			return;
 
-		Font newFont = StyleContext.getDefaultStyleContext().getFont( family, font.getStyle(), font.getSize() );
+		Font newFont = FontUtils.getCompositeFont( family, font.getStyle(), font.getSize() );
 		UIManager.put( "defaultFont", newFont );
 		updateFontMetricsLabel();
 
