@@ -5,14 +5,26 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- ComboBox: Support rounded selection. (PR #548)
-- List: Support rounded selection. (PR #547)
-- Menus: Support rounded selection. (PR #536)
-- Tree: Support rounded selection. (PR #546)
+- **macOS light and dark themes**: The two new themes `FlatMacLightLaf` and
+  `FlatMacDarkLaf` use macOS colors and look similar to native macOS controls.
+  (PRs #533, #612 and #607)
+- **Fonts**: Packaged some fonts into JARs and provide an easy way to use them
+  with FlatLaf. (PRs #545, #614 and #615) At the moment there are three fonts:
+  - **Inter** (https://rsms.me/inter/) - a typeface carefully crafted & designed
+    for computer screens
+  - **Roboto** (https://fonts.google.com/specimen/Roboto) - default font on
+    Android and recommended for Material Design
+  - **JetBrains Mono** (https://www.jetbrains.com/mono) - a monospaced typeface
+- **Rounded selection**: Optionally use rounded selection in:
+  - Menus (PR #536)
+  - ComboBox (PR #548)
+  - List (PR #547)
+  - Tree (PR #546)
 - Tree: Hide default closed/opened/leaf icons by default. Set UI value
   `Tree.showDefaultIcons` to `true` to show them.
-- Icons: New modern rounded outlined icons for `JFileChooser`, `JOptionPane`,
-  `JPasswordField` and `JTree`. (PR #577)
+- ToolBar: Hover effect for button groups. (PR #534)
+- Icons: New modern **rounded outlined icons** for `JFileChooser`,
+  `JOptionPane`, `JPasswordField` and `JTree`. (PR #577)
 
 #### Fixed bugs
 
