@@ -35,6 +35,8 @@ FlatLaf Change Log
   - Fixed missing tree lines (if enabled) for wide-selected rows. (issue #598)
   - Fixed scaling of tree lines and fixed alignment to expand/collapse arrows.
   - Removed support for dashed tree lines. `Tree.lineTypeDashed` is now ignored.
+- SwingX: Fonts in `JXHeader`, `JXMonthView`, `JXTaskPane` and `JXTitledPanel`
+  were not updated when changing default font.
 
 
 ## 2.6

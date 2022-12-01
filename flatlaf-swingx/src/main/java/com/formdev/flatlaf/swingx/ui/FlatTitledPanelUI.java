@@ -18,7 +18,6 @@ package com.formdev.flatlaf.swingx.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
@@ -53,9 +52,6 @@ public class FlatTitledPanelUI
 		installProperty( titledPanel, "titlePainter", new PainterUIResource<>(
 			new TitlePainter( UIManager.getColor( "JXTitledPanel.titleBackground" ),
 				UIManager.getColor( "JXTitledPanel.borderColor" ) ) ) );
-
-		// make title bold
-		installProperty( titledPanel, "titleFont", UIManager.getFont( "JXTitledPanel.titleFont" ).deriveFont( Font.BOLD ) );
 	}
 
 	@Override
