@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.beans.Beans;
 import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -91,10 +92,15 @@ public class FlatPaintingArrowsTest
 
 	private void pixelsChanged() {
 		boolean paintPixels = pixelsCheckBox.isSelected();
+		boolean paintVector = vectorCheckBox.isSelected();
+
+		vectorCheckBox.setEnabled( paintPixels );
 
 		FlatTestFrame.updateComponentsRecur( panel, (c, type) -> {
-			if( c instanceof ArrowPainter )
+			if( c instanceof ArrowPainter ) {
 				((ArrowPainter)c).paintPixels = paintPixels;
+				((ArrowPainter)c).paintVector = paintVector;
+			}
 		} );
 
 		panel.repaint();
@@ -189,6 +195,7 @@ public class FlatPaintingArrowsTest
 		JLabel scaleLabel = new JLabel();
 		scaleSlider = new JSlider();
 		pixelsCheckBox = new JCheckBox();
+		vectorCheckBox = new JCheckBox();
 		pixelsScaleLabel = new JLabel();
 		pixelsScaleSlider = new JSlider();
 		JPanel panel55 = new JPanel();
@@ -347,10 +354,12 @@ public class FlatPaintingArrowsTest
 		//======== panel1 ========
 		{
 			panel1.setLayout(new MigLayout(
-				"hidemode 3",
+				"flowy,hidemode 3",
 				// columns
 				"[fill]" +
 				"[grow,fill]para" +
+				"[fill]" +
+				"[fill]" +
 				"[fill]",
 				// rows
 				"[]" +
@@ -380,11 +389,18 @@ public class FlatPaintingArrowsTest
 			pixelsCheckBox.addActionListener(e -> pixelsChanged());
 			panel1.add(pixelsCheckBox, "cell 2 0");
 
+			//---- vectorCheckBox ----
+			vectorCheckBox.setText("vector");
+			vectorCheckBox.setMnemonic('V');
+			vectorCheckBox.setSelected(true);
+			vectorCheckBox.addActionListener(e -> pixelsChanged());
+			panel1.add(vectorCheckBox, "cell 2 0");
+
 			//---- pixelsScaleLabel ----
 			pixelsScaleLabel.setText("Scale:");
 			pixelsScaleLabel.setLabelFor(pixelsScaleSlider);
 			pixelsScaleLabel.setDisplayedMnemonic('C');
-			panel1.add(pixelsScaleLabel, "cell 2 0");
+			panel1.add(pixelsScaleLabel, "cell 3 0");
 
 			//---- pixelsScaleSlider ----
 			pixelsScaleSlider.setMinimum(100);
@@ -395,7 +411,7 @@ public class FlatPaintingArrowsTest
 			pixelsScaleSlider.setPaintTicks(true);
 			pixelsScaleSlider.setPaintLabels(true);
 			pixelsScaleSlider.addChangeListener(e -> pixelsScaleChanged());
-			panel1.add(pixelsScaleSlider, "cell 2 0");
+			panel1.add(pixelsScaleSlider, "cell 4 0");
 
 			//======== panel55 ========
 			{
@@ -467,7 +483,7 @@ public class FlatPaintingArrowsTest
 				buttonCheckBox.addActionListener(e -> arrowButtonChanged());
 				panel55.add(buttonCheckBox, "cell 10 0,alignx left,growx 0");
 			}
-			panel1.add(panel55, "cell 0 1 3 1");
+			panel1.add(panel55, "cell 0 1 5 1");
 		}
 		add(panel1, BorderLayout.NORTH);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -486,6 +502,7 @@ public class FlatPaintingArrowsTest
 	private FlatPaintingArrowsTest.ArrowPainter arrowPainter16;
 	private JSlider scaleSlider;
 	private JCheckBox pixelsCheckBox;
+	private JCheckBox vectorCheckBox;
 	private JLabel pixelsScaleLabel;
 	private JSlider pixelsScaleSlider;
 	private JSpinner arrowWidthSpinner;
@@ -515,6 +532,7 @@ public class FlatPaintingArrowsTest
 		float arrowThickness = 1;
 		int scale = 4;
 		boolean paintPixels;
+		boolean paintVector;
 		float paintPixelsScale = 1;
 
 		public ArrowPainter() {
@@ -619,18 +637,27 @@ public class FlatPaintingArrowsTest
 
 				// paint icon to buffered image
 				BufferedImage bi = new BufferedImage( bitmapWidth, bitmapHeight, BufferedImage.TYPE_INT_ARGB );
-				Graphics bg = bi.createGraphics();
+				Graphics2D bg = bi.createGraphics();
 				try {
 					FlatUIUtils.setRenderingHints( bg );
 
+					bg.scale( paintPixelsScale, paintPixelsScale );
 					bg.setColor( Color.blue );
-					paintArrow( (Graphics2D) bg, bitmapWidth, bitmapHeight );
+					paintArrow( bg, width, height );
 				} finally {
 					bg.dispose();
 				}
 
 				// draw scaled-up image
 				g2.drawImage( bi, 0, 0, getWidth(), getHeight(), null );
+
+				if( paintVector ) {
+					AffineTransform oldTransform = g2.getTransform();
+					g2.scale( scale, scale );
+					g.setColor( new Color( (Color.red.getRGB() & 0xffffff) | (0xa0 << 24), true ) );
+					paintArrow( g2, width, height );
+					g2.setTransform( oldTransform );
+				}
 			}
 
 			// paint border and grid
@@ -660,8 +687,11 @@ public class FlatPaintingArrowsTest
 		}
 
 		private void paintArrow( Graphics2D g, int width, int height ) {
-			FlatUIUtils.paintArrow( g, 0, 0, width, height,
-				direction, chevron, arrowSize, arrowThickness, xOffset, yOffset );
+			// do not paint in JFormDesigner because it may use a different FlatLaf version
+			if( !Beans.isDesignTime() ) {
+				FlatUIUtils.paintArrow( g, 0, 0, width, height,
+					direction, chevron, arrowSize, arrowThickness, xOffset, yOffset );
+			}
 
 			if( button ) {
 				FlatArrowButton arrowButton = new FlatArrowButton( direction,

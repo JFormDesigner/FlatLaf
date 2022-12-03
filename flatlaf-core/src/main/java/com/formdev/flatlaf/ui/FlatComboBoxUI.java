@@ -766,12 +766,6 @@ public class FlatComboBoxUI
 		protected FlatComboBoxButton() {
 			this( SwingConstants.SOUTH, arrowType, buttonArrowColor, buttonDisabledArrowColor,
 				buttonHoverArrowColor, null, buttonPressedArrowColor, null );
-
-			if( isMacStyle() ) {
-				setArrowWidth( 7 );
-				setArrowThickness( 1.5f );
-				setRoundBorderAutoXOffset( false );
-			}
 		}
 
 		protected FlatComboBoxButton( int direction, String type, Color foreground, Color disabledForeground,
@@ -784,6 +778,21 @@ public class FlatComboBoxUI
 		protected void updateStyle() {
 			updateStyle( arrowType, buttonArrowColor, buttonDisabledArrowColor,
 				buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+		}
+
+		@Override
+		public int getArrowWidth() {
+			return isMacStyle() ? (getWidth() % 2 == 0 ? 6 : 7) : super.getArrowWidth();
+		}
+
+		@Override
+		public float getArrowThickness() {
+			return isMacStyle() ? 1.5f : super.getArrowThickness();
+		}
+
+		@Override
+		public boolean isRoundBorderAutoXOffset() {
+			return isMacStyle() ? false : super.isRoundBorderAutoXOffset();
 		}
 
 		@Override
