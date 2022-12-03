@@ -349,6 +349,14 @@ public class FlatRootPaneUI
 					titlePane.updateIcon();
 				break;
 
+			case FlatClientProperties.TITLE_BAR_SHOW_TITLE:
+			case FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY:
+			case FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE:
+			case FlatClientProperties.TITLE_BAR_SHOW_CLOSE:
+				if( titlePane != null )
+					titlePane.updateVisibility();
+				break;
+
 			case FlatClientProperties.TITLE_BAR_BACKGROUND:
 			case FlatClientProperties.TITLE_BAR_FOREGROUND:
 				if( titlePane != null )

@@ -346,7 +346,7 @@ public interface FlatClientProperties
 
 	/**
 	 * Specifies whether the window icon should be shown in the window title bar
-	 * (requires enabled window decorations).
+	 * (requires enabled window decorations). Default is UI property {@code TitlePane.showIcon}.
 	 * <p>
 	 * Setting this shows/hides the windows icon
 	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
@@ -361,6 +361,62 @@ public interface FlatClientProperties
 	 * @since 2
 	 */
 	String TITLE_BAR_SHOW_ICON = "JRootPane.titleBarShowIcon";
+
+	/**
+	 * Specifies whether the window title should be shown in the window title bar
+	 * (requires enabled window decorations). Default is {@code true}.
+	 * <p>
+	 * Setting this shows/hides the windows title
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3
+	 */
+	String TITLE_BAR_SHOW_TITLE = "JRootPane.titleBarShowTitle";
+
+	/**
+	 * Specifies whether the "iconfify" button should be shown in the window title bar
+	 * (requires enabled window decorations). Default is {@code true}.
+	 * <p>
+	 * Setting this shows/hides the "iconfify" button
+	 * for the {@code JFrame} that contains the root pane.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3
+	 */
+	String TITLE_BAR_SHOW_ICONIFFY = "JRootPane.titleBarShowIconify";
+
+	/**
+	 * Specifies whether the "maximize/restore" button should be shown in the window title bar
+	 * (requires enabled window decorations). Default is {@code true}.
+	 * <p>
+	 * Setting this shows/hides the "maximize/restore" button
+	 * for the {@code JFrame} that contains the root pane.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3
+	 */
+	String TITLE_BAR_SHOW_MAXIMIZE = "JRootPane.titleBarShowMaximize";
+
+	/**
+	 * Specifies whether the "close" button should be shown in the window title bar
+	 * (requires enabled window decorations). Default is {@code true}.
+	 * <p>
+	 * Setting this shows/hides the "close" button
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3
+	 */
+	String TITLE_BAR_SHOW_CLOSE = "JRootPane.titleBarShowClose";
 
 	/**
 	 * Background color of window title bar (requires enabled window decorations).

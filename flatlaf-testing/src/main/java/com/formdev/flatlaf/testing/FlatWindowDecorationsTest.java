@@ -49,6 +49,7 @@ public class FlatWindowDecorationsTest
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
 			frame.applyComponentOrientationToFrame = true;
+			UIManager.put( "FlatLaf.debug.titlebar.showRectangles", true );
 
 			Class<?> cls = FlatWindowDecorationsTest.class;
 			List<Image> images = Arrays.asList(
@@ -446,6 +447,30 @@ debug*/
 			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, showIconCheckBox.getChecked() );
 	}
 
+	private void showTitleChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_TITLE, showTitleCheckBox.isSelected() ? null : false );
+	}
+
+	private void showIconifyChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, showIconifyCheckBox.isSelected() ? null : false );
+	}
+
+	private void showMaximizeChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, showMaximizeCheckBox.isSelected() ? null : false );
+	}
+
+	private void showCloseChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_CLOSE, showCloseCheckBox.isSelected() ? null : false );
+	}
+
 	private JRootPane getWindowRootPane() {
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof JFrame )
@@ -495,7 +520,12 @@ debug*/
 		iconTestRandomRadioButton = new JRadioButton();
 		iconTestMRIRadioButton = new JRadioButton();
 		iconTestDynMRIRadioButton = new JRadioButton();
+		JPanel panel4 = new JPanel();
 		showIconCheckBox = new FlatTriStateCheckBox();
+		showTitleCheckBox = new JCheckBox();
+		showIconifyCheckBox = new JCheckBox();
+		showMaximizeCheckBox = new JCheckBox();
+		showCloseCheckBox = new JCheckBox();
 		JButton openDialogButton = new JButton();
 		JButton openFrameButton = new JButton();
 		menuBar = new JMenuBar();
@@ -771,13 +801,52 @@ debug*/
 			iconTestDynMRIRadioButton.setText("test dynamic multi-resolution (Java 9+)");
 			iconTestDynMRIRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestDynMRIRadioButton, "cell 0 4");
+		}
+		add(panel2, "cell 1 8");
+
+		//======== panel4 ========
+		{
+			panel4.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3,gap 0 0",
+				// columns
+				"[grow,left]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]"));
 
 			//---- showIconCheckBox ----
 			showIconCheckBox.setText("show icon");
 			showIconCheckBox.addActionListener(e -> showIconChanged());
-			panel2.add(showIconCheckBox, "cell 0 5");
+			panel4.add(showIconCheckBox, "cell 0 0");
+
+			//---- showTitleCheckBox ----
+			showTitleCheckBox.setText("show title");
+			showTitleCheckBox.setSelected(true);
+			showTitleCheckBox.addActionListener(e -> showTitleChanged());
+			panel4.add(showTitleCheckBox, "cell 0 1");
+
+			//---- showIconifyCheckBox ----
+			showIconifyCheckBox.setText("show iconfiy");
+			showIconifyCheckBox.setSelected(true);
+			showIconifyCheckBox.addActionListener(e -> showIconifyChanged());
+			panel4.add(showIconifyCheckBox, "cell 0 2");
+
+			//---- showMaximizeCheckBox ----
+			showMaximizeCheckBox.setText("show maximize");
+			showMaximizeCheckBox.setSelected(true);
+			showMaximizeCheckBox.addActionListener(e -> showMaximizeChanged());
+			panel4.add(showMaximizeCheckBox, "cell 0 3");
+
+			//---- showCloseCheckBox ----
+			showCloseCheckBox.setText("show close");
+			showCloseCheckBox.setSelected(true);
+			showCloseCheckBox.addActionListener(e -> showCloseChanged());
+			panel4.add(showCloseCheckBox, "cell 0 4");
 		}
-		add(panel2, "cell 1 8");
+		add(panel4, "cell 2 8");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
@@ -1015,6 +1084,10 @@ debug*/
 	private JRadioButton iconTestMRIRadioButton;
 	private JRadioButton iconTestDynMRIRadioButton;
 	private FlatTriStateCheckBox showIconCheckBox;
+	private JCheckBox showTitleCheckBox;
+	private JCheckBox showIconifyCheckBox;
+	private JCheckBox showMaximizeCheckBox;
+	private JCheckBox showCloseCheckBox;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

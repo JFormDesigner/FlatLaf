@@ -107,6 +107,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTitlePane
 	extends JComponent
 {
+	private static final String KEY_DEBUG_SHOW_RECTANGLES = "FlatLaf.debug.titlebar.showRectangles";
+
 	/** @since 2.5 */ protected final Font titleFont = UIManager.getFont( "TitlePane.font" );
 	protected final Color activeBackground = UIManager.getColor( "TitlePane.background" );
 	protected final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
@@ -354,14 +356,11 @@ public class FlatTitlePane
 		if( window == null || rootPane.getWindowDecorationStyle() != JRootPane.FRAME )
 			return;
 
+		updateVisibility();
+
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
-			boolean resizable = frame.isResizable();
 			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
-
-			iconifyButton.setVisible( true );
-			maximizeButton.setVisible( resizable && !maximized );
-			restoreButton.setVisible( resizable && maximized );
 
 			if( maximized &&
 				!(SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window )) &&
@@ -383,14 +382,27 @@ public class FlatTitlePane
 					frame.setExtendedState( oldExtendedState );
 				}
 			}
+		}
+	}
+
+	/** @since 3 */
+	protected void updateVisibility() {
+		titleLabel.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_TITLE, true ) );
+		closeButton.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_CLOSE, true ) );
+
+		if( window instanceof Frame ) {
+			Frame frame = (Frame) window;
+			boolean maximizable = frame.isResizable() && clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_MAXIMIZE, true );
+			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
+
+			iconifyButton.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICONIFFY, true ) );
+			maximizeButton.setVisible( maximizable && !maximized );
+			restoreButton.setVisible( maximizable && maximized );
 		} else {
 			// hide buttons because they are only supported in frames
 			iconifyButton.setVisible( false );
 			maximizeButton.setVisible( false );
 			restoreButton.setVisible( false );
-
-			revalidate();
-			repaint();
 		}
 	}
 
@@ -566,10 +578,12 @@ public class FlatTitlePane
 		doLayout();
 	}
 
-/*debug
 	@Override
 	public void paint( Graphics g ) {
 		super.paint( g );
+
+		if( !UIManager.getBoolean( KEY_DEBUG_SHOW_RECTANGLES ) )
+			return;
 
 		if( debugTitleBarHeight > 0 ) {
 			g.setColor( Color.green );
@@ -594,7 +608,6 @@ public class FlatTitlePane
 		Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 		g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 	}
-debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
@@ -923,15 +936,14 @@ debug*/
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
 			hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 
-/*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
 		debugAppIconBounds = appIconBounds;
 		debugMinimizeButtonBounds = minimizeButtonBounds;
 		debugMaximizeButtonBounds = maximizeButtonBounds;
 		debugCloseButtonBounds = closeButtonBounds;
-		repaint();
-debug*/
+		if( UIManager.getBoolean( KEY_DEBUG_SHOW_RECTANGLES ) )
+			repaint();
 	}
 
 	private Rectangle boundsInWindow( JComponent c ) {
@@ -950,14 +962,12 @@ debug*/
 		return r;
 	}
 
-/*debug
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
 	private Rectangle debugAppIconBounds;
 	private Rectangle debugMinimizeButtonBounds;
 	private Rectangle debugMaximizeButtonBounds;
 	private Rectangle debugCloseButtonBounds;
-debug*/
 
 	//---- class FlatTitlePaneBorder ------------------------------------------
 
