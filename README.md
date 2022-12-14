@@ -28,9 +28,11 @@ FlatLaf can use 3rd party themes created for IntelliJ Platform (see
 Sponsors
 --------
 
-<a href="https://www.ej-technologies.com/"><img src="https://www.formdev.com/flatlaf/sponsor/ej-technologies.png" width="200"></a>
+<a href="https://www.ej-technologies.com/"><img src="https://www.formdev.com/flatlaf/sponsor/ej-technologies.png" width="200" alt="ej-technologies" title="ej-technologies - Java APM, Java Profiler, Java Installer Builder"></a>
 &nbsp; &nbsp; &nbsp; &nbsp;
-<a href="https://www.dbvis.com/"><img src="http://www.formdev.com/flatlaf/sponsor/dbvisualizer.svg" width="200"></a>
+<a href="https://www.dbvis.com/"><img src="https://www.formdev.com/flatlaf/sponsor/dbvisualizer.svg" width="200" alt="DbVisualizer" title="DbVisualizer - SQL Client and Editor"></a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="https://www.dscsag.com/"><img src="https://www.formdev.com/flatlaf/sponsor/DSC.png" height="48" alt="DSC Software AG" title="DSC Software AG - Your Companion for Integrative PLM"></a>
 
 [Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
 
@@ -142,6 +144,8 @@ Applications using FlatLaf
   12 (**commercial**) - the award-winning all-in-one Java profiler
 - ![New](images/new.svg) [JFormDesigner](https://www.formdev.com/) 8
   (**commercial**) - Java/Swing GUI Designer
+- ![New](images/new.svg) [Jeyla Studio](https://www.jeylastudio.com/) - Salon
+  Software
 - ![New](images/new.svg) [Fanurio](https://www.fanuriotimetracking.com/) 3.3.2
   (**commercial**) - time tracking and billing for freelancers and teams
 - ![New](images/new.svg) [Antares](https://www.antarescircuit.io/) - a free,
