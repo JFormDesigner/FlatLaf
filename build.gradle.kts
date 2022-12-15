@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-val releaseVersion = "2.6"
-val developmentVersion = "3.0-SNAPSHOT"
+val releaseVersion = "3.0"
+val developmentVersion = "3.1-SNAPSHOT"
 
 version = if( rootProject.hasProperty( "release" ) ) releaseVersion else developmentVersion
 
