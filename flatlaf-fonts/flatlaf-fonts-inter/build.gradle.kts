@@ -65,6 +65,7 @@ tasks {
 flatlafPublish {
 	artifactId = "flatlaf-fonts-inter"
 	name = "FlatLaf Inter Fonts Pack"
+	description = "Flat Look and Feel Inter Fonts Pack"
 }
 
 publishing {

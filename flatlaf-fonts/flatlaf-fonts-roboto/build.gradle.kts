@@ -65,4 +65,5 @@ tasks {
 flatlafPublish {
 	artifactId = "flatlaf-fonts-roboto"
 	name = "FlatLaf Roboto Fonts Pack"
+	description = "Flat Look and Feel Roboto Fonts Pack"
 }

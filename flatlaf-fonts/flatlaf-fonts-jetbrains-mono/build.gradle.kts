@@ -65,6 +65,7 @@ tasks {
 flatlafPublish {
 	artifactId = "flatlaf-fonts-jetbrains-mono"
 	name = "FlatLaf JetBrains Mono Fonts Pack"
+	description = "Flat Look and Feel JetBrains Mono Fonts Pack"
 }
 
 publishing {
