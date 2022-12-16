@@ -72,10 +72,6 @@ Font font = FontUtils.getCompositeFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN
 Download
 --------
 
-Not yet available.
-
-<!--
-
 FlatLaf Fonts binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
@@ -88,5 +84,3 @@ build script:
 Otherwise download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono)
-
--->

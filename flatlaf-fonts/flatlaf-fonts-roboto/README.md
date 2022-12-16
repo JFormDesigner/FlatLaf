@@ -88,10 +88,6 @@ Font font = FontUtils.getCompositeFont( FlatRobotoFont.FAMILY, Font.PLAIN, 12 );
 Download
 --------
 
-Not yet available.
-
-<!--
-
 FlatLaf Fonts binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
@@ -104,5 +100,3 @@ build script:
 Otherwise download `flatlaf-fonts-roboto-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto)
-
--->
