@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.1-SNAPSHOT
+
+#### Fixed bugs
+
+- IntelliJ Themes: Fixed default button hover background in "Solarized Light"
+  theme. (issue #628)
+
+
 ## 3.0
 
 #### New features and improvements
