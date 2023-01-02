@@ -5,8 +5,11 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- IntelliJ Themes: Fixed default button hover background in "Solarized Light"
-  theme. (issue #628)
+- IntelliJ Themes:
+  - Fixed default button hover background in "Solarized Light" theme. (issue
+    #628)
+  - Avoid that accent color affect some colors in some IntelliJ themes. (issue
+    #625)
 
 
 ## 3.0

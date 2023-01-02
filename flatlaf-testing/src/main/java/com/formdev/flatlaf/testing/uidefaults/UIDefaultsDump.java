@@ -134,6 +134,12 @@ public class UIDefaultsDump
 //			ex.printStackTrace();
 //		}
 
+		// used to test whether system color influences IntelliJ themes
+		// (first run without this, save result, run with this and compare outputs)
+//		FlatLaf.setSystemColorGetter( name -> {
+//			return Color.red;
+//		} );
+
 //		dumpIntelliJThemes( dir );
 
 		// JIDE
