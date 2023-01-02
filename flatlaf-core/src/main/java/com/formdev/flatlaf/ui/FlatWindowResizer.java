@@ -606,9 +606,10 @@ debug*/
 			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.height = (yOnScreen + dragBottomOffset) - newBounds.y;
 				if( limitToParentBounds() ) {
-					int parentHeight = getParentBounds().height;
-					if( newBounds.y + newBounds.height > parentHeight )
-						newBounds.height = parentHeight - newBounds.y;
+					Rectangle parentBounds = getParentBounds();
+					int parentBottomY = parentBounds.y + parentBounds.height;
+					if( newBounds.y + newBounds.height > parentBottomY )
+						newBounds.height = parentBottomY - newBounds.y;
 				}
 			}
 
@@ -624,9 +625,10 @@ debug*/
 			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.width = (xOnScreen + dragRightOffset) - newBounds.x;
 				if( limitToParentBounds() ) {
-					int parentWidth = getParentBounds().width;
-					if( newBounds.x + newBounds.width > parentWidth )
-						newBounds.width = parentWidth - newBounds.x;
+					Rectangle parentBounds = getParentBounds();
+					int parentRightX = parentBounds.x + parentBounds.width;
+					if( newBounds.x + newBounds.width > parentRightX )
+						newBounds.width = parentRightX - newBounds.x;
 				}
 			}
 

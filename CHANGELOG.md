@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- FlatLaf window decorations on Linux: Fixed broken window resizing on
+  multi-screen setups. (issue #632)
 - IntelliJ Themes:
   - Fixed default button hover background in "Solarized Light" theme. (issue
     #628)
