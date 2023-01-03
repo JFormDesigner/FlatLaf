@@ -362,6 +362,10 @@ public class FlatRootPaneUI
 				if( titlePane != null )
 					titlePane.titleBarColorsChanged();
 				break;
+
+			case FlatClientProperties.GLASS_PANE_FULL_HEIGHT:
+				rootPane.revalidate();
+				break;
 		}
 	}
 
@@ -442,11 +446,11 @@ public class FlatRootPaneUI
 			int width = rootPane.getWidth() - insets.left - insets.right;
 			int height = rootPane.getHeight() - insets.top - insets.bottom;
 
+			// layered pane
 			if( rootPane.getLayeredPane() != null )
 				rootPane.getLayeredPane().setBounds( x, y, width, height );
-			if( rootPane.getGlassPane() != null )
-				rootPane.getGlassPane().setBounds( x, y, width, height );
 
+			// title pane
 			int nextY = 0;
 			if( titlePane != null ) {
 				int prefHeight = !isFullScreen ? titlePane.getPreferredSize().height : 0;
@@ -454,6 +458,15 @@ public class FlatRootPaneUI
 				nextY += prefHeight;
 			}
 
+			// glass pane
+			if( rootPane.getGlassPane() != null ) {
+				boolean fullHeight = FlatClientProperties.clientPropertyBoolean(
+					rootPane, FlatClientProperties.GLASS_PANE_FULL_HEIGHT, false );
+				int offset = fullHeight ? 0 : nextY;
+				rootPane.getGlassPane().setBounds( x, y + offset, width, height - offset );
+			}
+
+			// menu bar
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null && menuBar.isVisible() ) {
 				boolean embedded = !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded();
@@ -467,10 +480,12 @@ public class FlatRootPaneUI
 				}
 			}
 
+			// content pane
 			Container contentPane = rootPane.getContentPane();
 			if( contentPane != null )
 				contentPane.setBounds( 0, nextY, width, Math.max( height - nextY, 0 ) );
 
+			// title pane
 			if( titlePane != null )
 				titlePane.menuBarLayouted();
 		}

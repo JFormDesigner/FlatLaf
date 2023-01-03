@@ -442,6 +442,17 @@ public interface FlatClientProperties
 	 */
 	String TITLE_BAR_FOREGROUND = "JRootPane.titleBarForeground";
 
+	/**
+	 * Specifies whether the glass pane should have full height and overlap the title bar,
+	 * if FlatLaf window decorations are enabled. Default is {@code false}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3.1
+	 */
+	String GLASS_PANE_FULL_HEIGHT = "JRootPane.glassPaneFullHeight";
+
 	//---- JScrollBar / JScrollPane -------------------------------------------
 
 	/**

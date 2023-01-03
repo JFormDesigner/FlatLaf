@@ -108,6 +108,7 @@ public class FlatInspector
 	private Window window;
 
 	private boolean enabled;
+	private Object oldGlassPaneFullHeight;
 	private Component lastComponent;
 	private int lastX;
 	private int lastY;
@@ -257,6 +258,14 @@ public class FlatInspector
 			return;
 
 		this.enabled = enabled;
+
+		// make sure that glass pane has full height if enabled
+		if( enabled ) {
+			oldGlassPaneFullHeight = rootPane.getClientProperty( FlatClientProperties.GLASS_PANE_FULL_HEIGHT );
+			rootPane.putClientProperty( FlatClientProperties.GLASS_PANE_FULL_HEIGHT, true );
+			rootPane.validate();
+		} else
+			rootPane.putClientProperty( FlatClientProperties.GLASS_PANE_FULL_HEIGHT, oldGlassPaneFullHeight );
 
 		// make sure that glass pane is not opaque, which is not the case in WebLaF
 		((JComponent)rootPane.getGlassPane()).setOpaque( false );

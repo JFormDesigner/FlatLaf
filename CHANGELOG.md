@@ -5,8 +5,11 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- FlatLaf window decorations on Linux: Fixed broken window resizing on
-  multi-screen setups. (issue #632)
+- FlatLaf window decorations:
+  - Fixed inconsistent size of glass pane depending on whether FlatLaf window
+    decorations are used (e.g. Windows 10/11) or not (e.g. macOS). Now the glass
+    pane no longer overlaps the FlatLaf window title bar. (issue #630)
+  - Linux: Fixed broken window resizing on multi-screen setups. (issue #632)
 - IntelliJ Themes:
   - Fixed default button hover background in "Solarized Light" theme. (issue
     #628)
