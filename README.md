@@ -15,6 +15,11 @@ IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
 ![FlatLaf Dark](images/flat_dark.png)
 
+macOS Themes
+------------
+
+![FlatLaf macOS themes](images/flat_macos_themes.png)
+
 
 IntelliJ Platform Themes
 ------------------------
