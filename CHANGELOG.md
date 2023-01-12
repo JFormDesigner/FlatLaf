@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 3.1-SNAPSHOT
 
+#### New features and improvements
+
+- Fonts: Added **Roboto
+  Mono** (https://fonts.google.com/specimen/Roboto+Mono). (PR #639, issue #638)
+
 #### Fixed bugs
 
 - FlatLaf window decorations:

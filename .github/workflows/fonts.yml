@@ -22,6 +22,7 @@ jobs:
                     - inter
                     - jetbrains-mono
                     - roboto
+                    - roboto-mono
 
         runs-on: ubuntu-latest
         if: |
