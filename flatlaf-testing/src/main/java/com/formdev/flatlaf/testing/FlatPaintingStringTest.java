@@ -31,6 +31,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -53,6 +54,7 @@ public class FlatPaintingStringTest
 			FlatInterFont.installLazy();
 			FlatJetBrainsMonoFont.installLazy();
 			FlatRobotoFont.installLazy();
+			FlatRobotoMonoFont.installLazy();
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatPaintingStringTest" );
 
@@ -91,7 +93,7 @@ public class FlatPaintingStringTest
 
 			// monospaced
 			"Monospaced", "Consolas", "Courier New", "Menlo", "Liberation Mono", "Ubuntu Mono",
-			FlatJetBrainsMonoFont.FAMILY,
+			FlatJetBrainsMonoFont.FAMILY, FlatRobotoMonoFont.FAMILY,
 		};
 		Arrays.sort( families, String.CASE_INSENSITIVE_ORDER );
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -242,7 +244,7 @@ public class FlatPaintingStringTest
 			panel1.add(fontLabel, "cell 0 0");
 
 			//---- fontField ----
-			fontField.setMaximumRowCount(20);
+			fontField.setMaximumRowCount(25);
 			fontField.addActionListener(e -> fontChanged());
 			panel1.add(fontField, "cell 1 0");
 

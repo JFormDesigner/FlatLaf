@@ -27,7 +27,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "fontField"
-					"maximumRowCount": 20
+					"maximumRowCount": 25
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 						"JavaCodeGenerator.typeParameters": "String"

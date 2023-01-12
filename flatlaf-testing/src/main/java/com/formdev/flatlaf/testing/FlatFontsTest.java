@@ -25,6 +25,7 @@ import javax.swing.*;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -40,6 +41,7 @@ public class FlatFontsTest
 			FlatInterFont.installLazy();
 			FlatJetBrainsMonoFont.installLazy();
 			FlatRobotoFont.installLazy();
+			FlatRobotoMonoFont.installLazy();
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatFontsTest" );
 			frame.showFrame( FlatFontsTest::new );

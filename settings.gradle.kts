@@ -28,6 +28,7 @@ include( "flatlaf-theme-editor" )
 includeProject( "flatlaf-fonts-inter",          "flatlaf-fonts/flatlaf-fonts-inter" )
 includeProject( "flatlaf-fonts-jetbrains-mono", "flatlaf-fonts/flatlaf-fonts-jetbrains-mono" )
 includeProject( "flatlaf-fonts-roboto",         "flatlaf-fonts/flatlaf-fonts-roboto" )
+includeProject( "flatlaf-fonts-roboto-mono",    "flatlaf-fonts/flatlaf-fonts-roboto-mono" )
 
 includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
 includeProject( "flatlaf-natives-linux",   "flatlaf-natives/flatlaf-natives-linux" )

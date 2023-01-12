@@ -26,6 +26,7 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -75,6 +76,7 @@ public class FlatLafDemo
 			FlatInterFont.installLazy();
 			FlatJetBrainsMonoFont.installLazy();
 			FlatRobotoFont.installLazy();
+			FlatRobotoMonoFont.installLazy();
 
 			// use Inter font by default
 //			FlatLaf.setPreferredFontFamily( FlatInterFont.FAMILY );
@@ -88,6 +90,9 @@ public class FlatLafDemo
 
 			// use JetBrains Mono font
 //			FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
+
+			// use Roboto Mono font
+//			FlatLaf.setPreferredMonospacedFontFamily( FlatRobotoMonoFont.FAMILY );
 
 			// application specific UI defaults
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
