@@ -18,7 +18,7 @@
 //     For maven compatibility, <font-version> should be in format <major>.<minor>[.<micro>].
 //     <build-number> is optional and should be incremented only if a new release is
 //     necessary, but the <font-version> has not changed.
-version = "2.242"
+version = "2.304"
 
 if( !rootProject.hasProperty( "release" ) )
 	version = version.toString() + "-SNAPSHOT"

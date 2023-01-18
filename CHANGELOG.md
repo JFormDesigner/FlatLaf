@@ -5,8 +5,11 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Fonts: Added **Roboto Mono** (https://fonts.google.com/specimen/Roboto+Mono).
-  (PR #639, issue #638)
+- Fonts:
+  - Added **Roboto Mono** (https://fonts.google.com/specimen/Roboto+Mono). (PR
+    #639, issue #638)
+  - Updated **JetBrains Mono** to
+    [v2.304](https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304).
 
 #### Fixed bugs
 
