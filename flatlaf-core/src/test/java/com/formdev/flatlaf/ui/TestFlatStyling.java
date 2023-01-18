@@ -29,6 +29,7 @@ import javax.swing.table.JTableHeader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.*;
 import com.formdev.flatlaf.util.ColorFunctions;
 
@@ -39,12 +40,20 @@ public class TestFlatStyling
 {
 	@BeforeAll
 	static void setup() {
+		HashMap<String, String> globalExtraDefaults = new HashMap<>();
+		globalExtraDefaults.put( "@var1", "#f00" );
+		globalExtraDefaults.put( "@var2", "@var1" );
+		globalExtraDefaults.put( "var2Resolved", "@var2" );
+		FlatLaf.setGlobalExtraDefaults( globalExtraDefaults );
+
 		TestUtils.setup( false );
 	}
 
 	@AfterAll
 	static void cleanup() {
 		TestUtils.cleanup();
+
+		FlatLaf.setGlobalExtraDefaults( null );
 	}
 
 	@Test
@@ -169,6 +178,13 @@ public class TestFlatStyling
 		testColorStyle(
 			ColorFunctions.saturate( ColorFunctions.darken( background, 0.2f ), 0.1f ).getRGB(),
 			"saturate(darken(@background,20%),10%)" );
+	}
+
+	@Test
+	void parseRecursiveVariables() {
+		Color background = UIManager.getColor( "var2Resolved" );
+
+		testColorStyle( background.getRGB(), "@var2" );
 	}
 
 	private void testColorStyle( int expectedRGB, String style ) {

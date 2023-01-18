@@ -5,8 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Fonts: Added **Roboto
-  Mono** (https://fonts.google.com/specimen/Roboto+Mono). (PR #639, issue #638)
+- Fonts: Added **Roboto Mono** (https://fonts.google.com/specimen/Roboto+Mono).
+  (PR #639, issue #638)
 
 #### Fixed bugs
 
@@ -20,6 +20,7 @@ FlatLaf Change Log
     #628)
   - Avoid that accent color affect some colors in some IntelliJ themes. (issue
     #625)
+- Styling: Fixed resolving of UI variables in styles that use other variables.
 
 
 ## 3.0

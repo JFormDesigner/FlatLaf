@@ -334,7 +334,7 @@ class UIDefaultsLoader
 			if( newValue == null )
 				throw new IllegalArgumentException( "variable '" + value + "' not found" );
 
-			return newValue;
+			return resolveValueFromUIManager( newValue );
 		}
 
 		if( !value.startsWith( PROPERTY_PREFIX ) )
