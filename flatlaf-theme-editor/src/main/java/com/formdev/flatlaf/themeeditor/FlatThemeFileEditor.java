@@ -68,6 +68,8 @@ import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
 import com.formdev.flatlaf.icons.FlatClearIcon;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -415,6 +417,8 @@ class FlatThemeFileEditor
 			case "FlatDarkLaf.properties":		return "\0\2";
 			case "FlatIntelliJLaf.properties":	return "\0\3";
 			case "FlatDarculaLaf.properties":	return "\0\4";
+			case "FlatMacLightLaf.properties":	return "\0\5";
+			case "FlatMacDarkLaf.properties":	return "\0\6";
 			default:							return name;
 		}
 	}
@@ -491,6 +495,8 @@ class FlatThemeFileEditor
 			FlatDarkLaf.NAME,
 			FlatIntelliJLaf.NAME,
 			FlatDarculaLaf.NAME,
+			FlatMacLightLaf.NAME,
+			FlatMacDarkLaf.NAME,
 		} );
 		JCheckBox genJavaClassCheckBox = new JCheckBox( "Generate Java class" );
 		genJavaClassCheckBox.setMnemonic( 'G' );
@@ -564,12 +570,14 @@ class FlatThemeFileEditor
 		throws IOException
 	{
 		StringBuilder buf = new StringBuilder();
-		buf.append( "# base theme (light, dark, intellij or darcula); only used by theme editor\n" );
+		buf.append( "# base theme (light, dark, intellij, darcula, maclight or macdark); only used by theme editor\n" );
 		switch( baseTheme ) {
 			case FlatLightLaf.NAME:		buf.append( "@baseTheme = light\n" ); break;
 			case FlatDarkLaf.NAME:		buf.append( "@baseTheme = dark\n" ); break;
 			case FlatIntelliJLaf.NAME:	buf.append( "@baseTheme = intellij\n" ); break;
 			case FlatDarculaLaf.NAME:	buf.append( "@baseTheme = darcula\n" ); break;
+			case FlatMacLightLaf.NAME:	buf.append( "@baseTheme = maclight\n" ); break;
+			case FlatMacDarkLaf.NAME:	buf.append( "@baseTheme = macdark\n" ); break;
 		}
 
 		writeFile( file, buf.toString() );
@@ -621,18 +629,29 @@ class FlatThemeFileEditor
 			case FlatDarkLaf.NAME:		themeBaseClass = "FlatDarkLaf"; break;
 			case FlatIntelliJLaf.NAME:	themeBaseClass = "FlatIntelliJLaf"; break;
 			case FlatDarculaLaf.NAME:	themeBaseClass = "FlatDarculaLaf"; break;
+			case FlatMacLightLaf.NAME:	themeBaseClass = "FlatMacLightLaf"; break;
+			case FlatMacDarkLaf.NAME:	themeBaseClass = "FlatMacDarkLaf"; break;
+		}
+
+		String themeBasePackage = "";
+		switch( baseTheme ) {
+			case FlatMacLightLaf.NAME:
+			case FlatMacDarkLaf.NAME:
+				themeBasePackage = "themes.";
+				break;
 		}
 
 		String pkgStmt = (pkg != null) ? "package " + pkg + ";\n\n" : "";
 		String classBody = CLASS_TEMPLATE
 			.replace( "${themeClass}", themeName )
+			.replace( "${themeBasePackage}", themeBasePackage )
 			.replace( "${themeBaseClass}", themeBaseClass );
 
 		writeFile( file, pkgStmt + classBody );
 	}
 
 	private static final String CLASS_TEMPLATE =
-		"import com.formdev.flatlaf.${themeBaseClass};\n" +
+		"import com.formdev.flatlaf.${themeBasePackage}${themeBaseClass};\n" +
 		"\n" +
 		"public class ${themeClass}\n" +
 		"	extends ${themeBaseClass}\n" +

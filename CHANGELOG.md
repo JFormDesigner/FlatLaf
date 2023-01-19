@@ -10,6 +10,7 @@ FlatLaf Change Log
     #639, issue #638)
   - Updated **JetBrains Mono** to
     [v2.304](https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304).
+- Theme Editor: Support macOS light and dark themes.
 
 #### Fixed bugs
 

@@ -33,6 +33,8 @@ import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -46,6 +48,8 @@ class FlatThemePropertiesBaseManager
 		FlatDarkLaf.class,
 		FlatIntelliJLaf.class,
 		FlatDarculaLaf.class,
+		FlatMacLightLaf.class,
+		FlatMacDarkLaf.class,
 	};
 
 	private final Map<String, MyBasePropertyProvider> providers = new HashMap<>();
@@ -118,11 +122,13 @@ class FlatThemePropertiesBaseManager
 				break;
 
 			case "FlatIntelliJLaf":
+			case "FlatMacLightLaf":
 				result.add( "FlatLightLaf" );
 				result.add( "FlatLaf" );
 				break;
 
 			case "FlatDarculaLaf":
+			case "FlatMacDarkLaf":
 				result.add( "FlatDarkLaf" );
 				result.add( "FlatLaf" );
 				break;
@@ -153,6 +159,18 @@ class FlatThemePropertiesBaseManager
 
 				case "darcula":
 					result.add( "FlatDarculaLaf" );
+					result.add( "FlatDarkLaf" );
+					result.add( "FlatLaf" );
+					break;
+
+				case "maclight":
+					result.add( "FlatMacLightLaf" );
+					result.add( "FlatLightLaf" );
+					result.add( "FlatLaf" );
+					break;
+
+				case "macdark":
+					result.add( "FlatMacDarkLaf" );
 					result.add( "FlatDarkLaf" );
 					result.add( "FlatLaf" );
 					break;
@@ -189,6 +207,8 @@ class FlatThemePropertiesBaseManager
 				case "FlatDarkLaf":		coreBaseTheme = "dark"; break;
 				case "FlatIntelliJLaf":	coreBaseTheme = "intellij"; break;
 				case "FlatDarculaLaf":	coreBaseTheme = "darcula"; break;
+				case "FlatMacLightLaf":	coreBaseTheme = "maclight"; break;
+				case "FlatMacDarkLaf":	coreBaseTheme = "macdark"; break;
 				default:				coreBaseTheme = null; break;
 			}
 		}
