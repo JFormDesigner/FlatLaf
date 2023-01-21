@@ -15,10 +15,13 @@
  */
 
 
+open class NativeArtifact( val fileName: String, val classifier: String, val type: String ) {}
+
 open class PublishExtension {
 	var artifactId: String? = null
 	var name: String? = null
 	var description: String? = null
+	var nativeArtifacts: List<NativeArtifact>? = null
 }
 
 val extension = project.extensions.create<PublishExtension>( "flatlafPublish" )
@@ -69,6 +72,15 @@ publishing {
 				issueManagement {
 					system.set( "GitHub" )
 					url.set( "https://github.com/JFormDesigner/FlatLaf/issues" )
+				}
+			}
+
+			afterEvaluate {
+				extension.nativeArtifacts?.forEach {
+					artifact( artifacts.add( "archives", file( it.fileName ) ) {
+						classifier = it.classifier
+						type = it.type
+					} )
 				}
 			}
 		}

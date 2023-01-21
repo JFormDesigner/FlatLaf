@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import Flatlaf_publish_gradle.NativeArtifact
+
 plugins {
 	`java-library`
 	`flatlaf-toolchain`
@@ -123,4 +125,11 @@ flatlafPublish {
 	artifactId = "flatlaf"
 	name = "FlatLaf"
 	description = "Flat Look and Feel"
+
+	val natives = "src/main/resources/com/formdev/flatlaf/natives"
+	nativeArtifacts = listOf(
+		NativeArtifact( "${natives}/flatlaf-windows-x86.dll",    "windows-x86",    "dll" ),
+		NativeArtifact( "${natives}/flatlaf-windows-x86_64.dll", "windows-x86_64", "dll" ),
+		NativeArtifact( "${natives}/libflatlaf-linux-x86_64.so", "linux-x86_64",   "so" ),
+	)
 }
