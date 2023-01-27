@@ -181,6 +181,7 @@ ColumnControlButton.iconColor
 ComboBox.ancestorInputMap
 ComboBox.background
 ComboBox.border
+ComboBox.borderCornerRadius
 ComboBox.buttonArrowColor
 ComboBox.buttonBackground
 ComboBox.buttonDarkShadow
@@ -594,6 +595,7 @@ PasswordField.selectionForeground
 PasswordField.showCapsLock
 PasswordField.showRevealButton
 PasswordFieldUI
+Popup.borderCornerRadius
 Popup.dropShadowColor
 Popup.dropShadowInsets
 Popup.dropShadowOpacity
@@ -601,6 +603,7 @@ Popup.dropShadowPainted
 PopupMenu.background
 PopupMenu.border
 PopupMenu.borderColor
+PopupMenu.borderCornerRadius
 PopupMenu.borderInsets
 PopupMenu.consumeEventOnClose
 PopupMenu.font
@@ -1104,6 +1107,7 @@ ToolBarSeparatorUI
 ToolBarUI
 ToolTip.background
 ToolTip.border
+ToolTip.borderCornerRadius
 ToolTip.font
 ToolTip.foreground
 ToolTipManager.enableToolTipMode

@@ -43,6 +43,7 @@ import java.lang.reflect.Method;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JToolTip;
 import javax.swing.JWindow;
 import javax.swing.Popup;
@@ -54,6 +55,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicComboPopup;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -91,10 +93,13 @@ public class FlatPopupFactory
 			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
 
 		// Windows 11 with FlatLaf native library can use rounded corners and shows drop shadow for heavy weight popups
-		if( SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded() ) {
+		int borderCornerRadius;
+		if( isWindows11BorderSupported() &&
+			(borderCornerRadius = getBorderCornerRadius( owner, contents )) > 0 )
+		{
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
 			if( popup.popupWindow != null )
-				setupWindows11Border( popup.popupWindow, contents );
+				setupWindows11Border( popup.popupWindow, contents, borderCornerRadius );
 			return popup;
 		}
 
@@ -176,19 +181,39 @@ public class FlatPopupFactory
 	}
 
 	private boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
-		if( owner instanceof JComponent ) {
-			Boolean b = FlatClientProperties.clientPropertyBooleanStrict( (JComponent) owner, clientKey, null );
-			if( b != null )
-				return b;
+		Object value = getOption( owner, contents, clientKey, uiKey );
+		return (value instanceof Boolean) ? (Boolean) value : false;
+	}
+
+	private int getBorderCornerRadius( Component owner, Component contents ) {
+		String uiKey =
+			(contents instanceof BasicComboPopup) ? "ComboBox.borderCornerRadius" :
+			(contents instanceof JPopupMenu) ? "PopupMenu.borderCornerRadius" :
+			(contents instanceof JToolTip) ? "ToolTip.borderCornerRadius" :
+			"Popup.borderCornerRadius";
+
+		Object value = getOption( owner, contents, FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, uiKey );
+		return (value instanceof Integer) ? (Integer) value : 0;
+	}
+
+	/**
+	 * Get option from:
+	 * <ol>
+	 * <li>client property {@code clientKey} of {@code owner}
+	 * <li>client property {@code clientKey} of {@code contents}
+	 * <li>UI property {@code uiKey}
+	 * </ol>
+	 */
+	private Object getOption( Component owner, Component contents, String clientKey, String uiKey ) {
+		for( Component c : new Component[] { owner, contents } ) {
+			if( c instanceof JComponent ) {
+				Object value = ((JComponent)c).getClientProperty( clientKey );
+				if( value != null )
+					return value;
+			}
 		}
 
-		if( contents instanceof JComponent ) {
-			Boolean b = FlatClientProperties.clientPropertyBooleanStrict( (JComponent) contents, clientKey, null );
-			if( b != null )
-				return b;
-		}
-
-		return UIManager.getBoolean( uiKey );
+		return UIManager.get( uiKey );
 	}
 
 	/**
@@ -310,7 +335,11 @@ public class FlatPopupFactory
 			((JComponent)owner).getToolTipLocation( me ) != null;
 	}
 
-	private static void setupWindows11Border( Window popupWindow, Component contents ) {
+	private static boolean isWindows11BorderSupported() {
+		return SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded();
+	}
+
+	private static void setupWindows11Border( Window popupWindow, Component contents, int borderCornerRadius ) {
 		// make sure that the Windows 11 window is created
 		if( !popupWindow.isDisplayable() )
 			popupWindow.addNotify();
@@ -319,7 +348,10 @@ public class FlatPopupFactory
 		long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
 
 		// set corner preference
-		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL );
+		int cornerPreference = (borderCornerRadius <= 4)
+			? FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL  // 4px
+			: FlatNativeWindowsLibrary.DWMWCP_ROUND;      // 8px
+		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, cornerPreference );
 
 		// set border color
 		int red = -1; // use system default color
@@ -345,6 +377,16 @@ public class FlatPopupFactory
 			}
 		}
 		FlatNativeWindowsLibrary.setWindowBorderColor( hwnd, red, green, blue );
+	}
+
+	private static void resetWindows11Border( Window popupWindow ) {
+		// get window handle
+		long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
+		if( hwnd == 0 )
+			return;
+
+		// reset corner preference
+		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
@@ -478,6 +520,14 @@ public class FlatPopupFactory
 					oldDropShadowWindowBackground = dropShadowWindow.getBackground();
 					dropShadowWindow.setBackground( new Color( 0, true ) );
 				}
+
+				// Windows 11: reset corner preference on reused heavy weight popups
+				if( isWindows11BorderSupported() ) {
+					resetWindows11Border( popupWindow );
+					if( dropShadowWindow != null )
+						resetWindows11Border( dropShadowWindow );
+				}
+
 			} else {
 				mediumWeightPanel = (Panel) SwingUtilities.getAncestorOfClass( Panel.class, contents );
 				if( mediumWeightPanel != null ) {

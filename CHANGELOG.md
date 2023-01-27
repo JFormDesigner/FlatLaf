@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Windows 11: Popups (`JPopupMenu`, `JComboBox`, `JToolTip`, etc.) now use
+  native Windows 11 rounded borders and drop shadows.
 - Fonts:
   - Added **Roboto Mono** (https://fonts.google.com/specimen/Roboto+Mono). (PR
     #639, issue #638)
