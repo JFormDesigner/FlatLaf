@@ -126,6 +126,12 @@
       "matchForeground": "accentColor"
     },
 
+    "ComplexPopup": {
+      "Header": {
+        "background": "backgroundColor"
+      }
+    },
+
     "Component": {
       "errorFocusColor": "#802d43",
       "inactiveErrorFocusColor": "#522530",
@@ -156,7 +162,10 @@
       "SearchField": {
         "background": "#282c34"
       },
-      "shortcutForeground": "accentColor"
+      "shortcutForeground": "accentColor",
+      "ToolTip": {
+        "background": "#323844"
+      }
     },
 
     "EditorPane.inactiveBackground": "#282c34",
@@ -203,6 +212,19 @@
     "List": {
       "selectionBackground": "#4d78cc",
       "selectionForeground": "#ffffff"
+    },
+
+    "MainToolbar": {
+      "inactiveBackground": "#282c34",
+      "background": "backgroundColor",
+      "Dropdown": {
+        "hoverBackground": "#3d424b"
+      }
+    },
+
+    "MemoryIndicator": {
+      "allocatedBackground": "#304676",
+      "usedBackground": "#3a5a9c"
     },
 
     "Notification": {
@@ -279,6 +301,7 @@
     },
 
     "Popup": {
+      "background": "#282c34",
       "paintBorder": false,
       "borderColor": "#21252b",
       "Toolbar.borderColor": "#3d424b",
@@ -293,12 +316,18 @@
     "ProgressBar": {
       "trackColor": "#1D1D26",
       "progressColor": "accentColor",
-      "indeterminateStartColor": "accentColor",
-      "indeterminateEndColor": "#313469",
-      "failedColor": "#bd3c5f",
-      "failedEndColor": "#472c33",
-      "passedColor": "#239E62",
-      "passedEndColor": "#2b4242"
+      "indeterminateStartColor": "#313469",
+      "indeterminateEndColor": "accentColor",
+      "failedColor": "#472c33",
+      "failedEndColor": "#bd3c5f",
+      "passedColor": "#2b4242",
+      "passedEndColor": "#239E62"
+    },
+
+    "RunWidget": {
+      "foreground": "#eef3ff",
+      "separatorColor": "#eef3ff",
+      "background": "accentColor"
     },
 
     "SearchEverywhere": {

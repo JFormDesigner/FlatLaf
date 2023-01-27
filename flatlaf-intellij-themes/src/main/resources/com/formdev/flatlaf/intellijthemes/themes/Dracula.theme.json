@@ -47,15 +47,15 @@
       }
     },
     "BookmarkMnemonicAssigned": {
-      "foreground": "primaryForeground",
-      "background": "#786299",
+      "buttonForeground": "primaryForeground",
+      "buttonBackground": "#786299",
       "borderColor": "secondaryAccentColor"
     },
     "BookmarkMnemonicAvailable": {
     },
     "BookmarkMnemonicCurrent": {
-      "foreground": "primaryForeground",
-      "background": "#8d6b81",
+      "buttonForeground": "primaryForeground",
+      "buttonBackground": "#8d6b81",
       "borderColor": "accentColor"
     },
     "Button": {
@@ -167,7 +167,7 @@
         "foreground": "primaryForeground"
       },
       "hoverBackground": "hoverBackground",
-      "lightSelectionBackground": "hoverBackground",
+      "lightSelectionBackground": "secondaryBackground",
       "Button": {
         "installBorderColor": "secondaryAccentColor",
         "installForeground": "secondaryAccentColor",
@@ -228,9 +228,6 @@
     "SidePanel": {
       "background": "secondaryBackground"
     },
-    "StatusBar": {
-      "hoverBackground": "hoverBackground"
-    },
     "TabbedPane": {
       "tabSelectionHeight": 1,
       "focusColor": "hoverBackground",
@@ -240,7 +237,8 @@
     },
     "Table": {
       "gridColor": "#5d617a",
-      "hoverBackground": "selectionBackground"
+      "hoverBackground": "selectionBackground",
+      "lightSelectionBackground": "secondaryBackground"
     },
     "TableHeader": {
       "bottomSeparatorColor": "separatorColor"
@@ -312,8 +310,11 @@
         "selectionBackground": "secondaryBackground",
         "selectionInactiveBackground": "secondaryBackground",
         "actions": {
-          "background": "hoverBackground"
+          "background": "secondaryBackground"
         }
+      },
+      "Details": {
+        "background": "hoverBackground"
       }
     }
   },

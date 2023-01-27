@@ -24,6 +24,7 @@ FlatLaf Change Log
     #628)
   - Avoid that accent color affect some colors in some IntelliJ themes. (issue
     #625)
+  - Updated "Hiberbee Dark" and "Material Theme UI Lite" themes.
 - Styling: Fixed resolving of UI variables in styles that use other variables.
 
 
