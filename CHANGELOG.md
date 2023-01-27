@@ -26,6 +26,7 @@ FlatLaf Change Log
     #625)
   - Updated "Hiberbee Dark" and "Material Theme UI Lite" themes.
 - Styling: Fixed resolving of UI variables in styles that use other variables.
+- MenuItem: Fixed horizontal alignment of icons. (issue #631)
 
 
 ## 3.0

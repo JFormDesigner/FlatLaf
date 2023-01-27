@@ -456,10 +456,11 @@ debug*/
 			return;
 
 		// center because the real icon may be smaller than dimension in iconRect
+		int x = iconRect.x + centerOffset( iconRect.width, icon.getIconWidth() );
 		int y = iconRect.y + centerOffset( iconRect.height, icon.getIconHeight() );
 
 		// paint
-		icon.paintIcon( menuItem, g, iconRect.x, y );
+		icon.paintIcon( menuItem, g, x, y );
 	}
 
 	protected static void paintText( Graphics g, JMenuItem menuItem,
