@@ -442,7 +442,9 @@ JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swin
 #---- JXHeader ----
 
 JXHeader.background            #f6f6f6  HSL   0   0  96    javax.swing.plaf.ColorUIResource [UI]
+JXHeader.descriptionFont       [active] $defaultFont [UI]
 JXHeader.startBackground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+JXHeader.titleFont             [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- JXMonthView ----
@@ -452,6 +454,7 @@ JXMonthView.background         #ffffff  HSL   0   0 100    javax.swing.plaf.Colo
 JXMonthView.daysOfTheWeekForeground #444444  HSL   0   0  27    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.disabledArrowColor #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.flaggedDayForeground #e02222  HSL   0  75  51    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.font               [active] $defaultFont [UI]
 JXMonthView.leadingDayForeground #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthDownFileName  [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthDownIcon [UI]
 JXMonthView.monthStringBackground #dfdfdf  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
@@ -469,6 +472,7 @@ JXMonthView.weekOfTheYearForeground #666666  HSL   0   0  40    javax.swing.plaf
 JXTitledPanel.borderColor      #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.captionInsets    4,10,4,10    javax.swing.plaf.InsetsUIResource [UI]
 JXTitledPanel.titleBackground  #dfdfdf  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+JXTitledPanel.titleFont        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
 JXTitledPanel.titleForeground  #222222  HSL   0   0  13    javax.swing.plaf.ColorUIResource [UI]
 
 
@@ -1156,6 +1160,7 @@ TableUI                        com.formdev.flatlaf.ui.FlatTableUI
 TaskPane.background            #f6f6f6  HSL   0   0  96    javax.swing.plaf.ColorUIResource [UI]
 TaskPane.borderColor           #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 TaskPane.contentInsets         10,10,10,10    javax.swing.plaf.InsetsUIResource [UI]
+TaskPane.font                  [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
 TaskPane.specialTitleBackground #afafaf  HSL   0   0  69    javax.swing.plaf.ColorUIResource [UI]
 TaskPane.specialTitleForeground #222222  HSL   0   0  13    javax.swing.plaf.ColorUIResource [UI]
 TaskPane.specialTitleOver      #666666  HSL   0   0  40    javax.swing.plaf.ColorUIResource [UI]

@@ -357,14 +357,17 @@ JXBusyLabel.baseColor
 JXBusyLabel.highlightColor
 JXDatePicker.border
 JXHeader.background
+JXHeader.descriptionFont
 JXHeader.descriptionForeground
 JXHeader.startBackground
+JXHeader.titleFont
 JXHeader.titleForeground
 JXMonthView.arrowColor
 JXMonthView.background
 JXMonthView.daysOfTheWeekForeground
 JXMonthView.disabledArrowColor
 JXMonthView.flaggedDayForeground
+JXMonthView.font
 JXMonthView.leadingDayForeground
 JXMonthView.monthDownFileName
 JXMonthView.monthStringBackground
@@ -378,6 +381,7 @@ JXMonthView.weekOfTheYearForeground
 JXTitledPanel.borderColor
 JXTitledPanel.captionInsets
 JXTitledPanel.titleBackground
+JXTitledPanel.titleFont
 JXTitledPanel.titleForeground
 JideButton.background
 JideButton.border
@@ -929,6 +933,7 @@ TableUI
 TaskPane.background
 TaskPane.borderColor
 TaskPane.contentInsets
+TaskPane.font
 TaskPane.specialTitleBackground
 TaskPane.specialTitleForeground
 TaskPane.specialTitleOver
