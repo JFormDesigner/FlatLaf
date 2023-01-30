@@ -11,6 +11,8 @@ FlatLaf Change Log
   - Updated **JetBrains Mono** to
     [v2.304](https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304).
 - Theme Editor: Support macOS light and dark themes.
+- TableHeader: Support column hover and pressed background and foreground
+  colors. (issue #636)
 
 #### Fixed bugs
 

@@ -59,6 +59,10 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTableHeaderUI -->
  *
+ * @uiDefault TableHeader.hoverBackground		Color	optional
+ * @uiDefault TableHeader.hoverForeground		Color	optional
+ * @uiDefault TableHeader.pressedBackground		Color	optional
+ * @uiDefault TableHeader.pressedForeground		Color	optional
  * @uiDefault TableHeader.bottomSeparatorColor	Color
  * @uiDefault TableHeader.height				int
  * @uiDefault TableHeader.sortIconPosition		String	right (default), left, top or bottom
@@ -81,6 +85,10 @@ public class FlatTableHeaderUI
 	extends BasicTableHeaderUI
 	implements StyleableUI
 {
+	/** @since 3.1 */ @Styleable protected Color hoverBackground;
+	/** @since 3.1 */ @Styleable protected Color hoverForeground;
+	/** @since 3.1 */ @Styleable protected Color pressedBackground;
+	/** @since 3.1 */ @Styleable protected Color pressedForeground;
 	@Styleable protected Color bottomSeparatorColor;
 	@Styleable protected int height;
 	@Styleable(type=String.class) protected int sortIconPosition;
@@ -113,6 +121,10 @@ public class FlatTableHeaderUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		hoverBackground = UIManager.getColor( "TableHeader.hoverBackground" );
+		hoverForeground = UIManager.getColor( "TableHeader.hoverForeground" );
+		pressedBackground = UIManager.getColor( "TableHeader.pressedBackground" );
+		pressedForeground = UIManager.getColor( "TableHeader.pressedForeground" );
 		bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
 		height = UIManager.getInt( "TableHeader.height" );
 		sortIconPosition = parseSortIconPosition( UIManager.getString( "TableHeader.sortIconPosition" ) );
@@ -122,6 +134,10 @@ public class FlatTableHeaderUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		hoverBackground = null;
+		hoverForeground = null;
+		pressedBackground = null;
+		pressedForeground = null;
 		bottomSeparatorColor = null;
 
 		oldStyleValues = null;
@@ -212,6 +228,12 @@ public class FlatTableHeaderUI
 	}
 
 	@Override
+	protected void rolloverColumnUpdated( int oldColumn, int newColumn ) {
+		header.repaint( header.getHeaderRect( oldColumn ) );
+		header.repaint( header.getHeaderRect( newColumn ) );
+	}
+
+	@Override
 	public void paint( Graphics g, JComponent c ) {
 		fixDraggedAndResizingColumns( header );
 
@@ -243,21 +265,16 @@ public class FlatTableHeaderUI
 			}
 		}
 
-		// temporary use own default renderer if necessary
-		FlatTableCellHeaderRenderer sortIconRenderer = null;
-		if( sortIconPosition != SwingConstants.RIGHT ) {
-			sortIconRenderer = new FlatTableCellHeaderRenderer( header.getDefaultRenderer() );
-			header.setDefaultRenderer( sortIconRenderer );
-		}
+		// temporary use own default renderer
+		FlatTableCellHeaderRenderer tempRenderer = new FlatTableCellHeaderRenderer( header.getDefaultRenderer() );
+		header.setDefaultRenderer( tempRenderer );
 
 		// paint header
 		super.paint( g, c );
 
 		// restore default renderer
-		if( sortIconRenderer != null ) {
-			sortIconRenderer.reset();
-			header.setDefaultRenderer( sortIconRenderer.delegate );
-		}
+		tempRenderer.reset();
+		header.setDefaultRenderer( tempRenderer.delegate );
 	}
 
 	private boolean isSystemDefaultRenderer( Object headerRenderer ) {
@@ -318,8 +335,8 @@ public class FlatTableHeaderUI
 	//---- class FlatTableCellHeaderRenderer ----------------------------------
 
 	/**
-	 * A delegating header renderer that is only used to paint sort arrows at
-	 * top, bottom or left position.
+	 * A delegating header renderer that is only used to paint hover and pressed
+	 * background/foreground and to paint sort arrows at top, bottom or left position.
 	 */
 	private class FlatTableCellHeaderRenderer
 		implements TableCellRenderer, Border, UIResource
@@ -327,6 +344,9 @@ public class FlatTableHeaderUI
 		private final TableCellRenderer delegate;
 
 		private JLabel l;
+		private Color oldBackground;
+		private Color oldForeground;
+		private Boolean oldOpaque;
 		private int oldHorizontalTextPosition = -1;
 		private Border origBorder;
 		private Icon sortIcon;
@@ -345,11 +365,38 @@ public class FlatTableHeaderUI
 
 			l = (JLabel) c;
 
+			// hover and pressed background/foreground
+			TableColumn draggedColumn = header.getDraggedColumn();
+			Color background = null;
+			Color foreground = null;
+			if( draggedColumn != null && header.getTable().convertColumnIndexToView( draggedColumn.getModelIndex() ) == column ) {
+				background = pressedBackground;
+				foreground = pressedForeground;
+			} else if( getRolloverColumn() == column ) {
+				background = hoverBackground;
+				foreground = hoverForeground;
+			}
+			if( background != null ) {
+				if( oldBackground == null )
+					oldBackground = l.getBackground();
+				if( oldOpaque == null )
+					oldOpaque = l.isOpaque();
+				l.setBackground( FlatUIUtils.deriveColor( background, header.getBackground() ) );
+				l.setOpaque( true );
+			}
+			if( foreground != null ) {
+				if( oldForeground == null )
+					oldForeground = l.getForeground();
+				l.setForeground( FlatUIUtils.deriveColor( foreground, header.getForeground() ) );
+			}
+
+			// sort icon
 			if( sortIconPosition == SwingConstants.LEFT ) {
+				// left
 				if( oldHorizontalTextPosition < 0 )
 					oldHorizontalTextPosition = l.getHorizontalTextPosition();
 				l.setHorizontalTextPosition( SwingConstants.RIGHT );
-			} else {
+			} else if( sortIconPosition == SwingConstants.TOP || sortIconPosition == SwingConstants.BOTTOM ) {
 				// top or bottom
 				sortIcon = l.getIcon();
 				origBorder = l.getBorder();
@@ -361,7 +408,16 @@ public class FlatTableHeaderUI
 		}
 
 		void reset() {
-			if( l != null && sortIconPosition == SwingConstants.LEFT && oldHorizontalTextPosition >= 0 )
+			if( l == null )
+				return;
+
+			if( oldBackground != null )
+				l.setBackground( oldBackground );
+			if( oldForeground != null )
+				l.setForeground( oldForeground );
+			if( oldOpaque != null )
+				l.setOpaque( oldOpaque );
+			if( oldHorizontalTextPosition >= 0 )
 				l.setHorizontalTextPosition( oldHorizontalTextPosition );
 		}
 

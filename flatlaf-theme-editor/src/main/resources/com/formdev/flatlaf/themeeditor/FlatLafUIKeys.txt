@@ -926,6 +926,10 @@ TableHeader.focusCellBackground
 TableHeader.font
 TableHeader.foreground
 TableHeader.height
+TableHeader.hoverBackground
+TableHeader.hoverForeground
+TableHeader.pressedBackground
+TableHeader.pressedForeground
 TableHeader.separatorColor
 TableHeader.showTrailingVerticalLine
 TableHeaderUI

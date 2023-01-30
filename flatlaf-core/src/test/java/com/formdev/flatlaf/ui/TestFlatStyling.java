@@ -999,6 +999,10 @@ public class TestFlatStyling
 		JTableHeader c = new JTableHeader();
 		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
 
+		ui.applyStyle( "hoverBackground: #fff" );
+		ui.applyStyle( "hoverForeground: #fff" );
+		ui.applyStyle( "pressedBackground: #fff" );
+		ui.applyStyle( "pressedForeground: #fff" );
 		ui.applyStyle( "bottomSeparatorColor: #fff" );
 		ui.applyStyle( "height: 20" );
 		ui.applyStyle( "sortIconPosition: top" );

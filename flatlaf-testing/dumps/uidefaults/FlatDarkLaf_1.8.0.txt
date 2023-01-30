@@ -1131,6 +1131,8 @@ TableHeader.focusCellBackground #46494b  HSL 204   3  28    javax.swing.plaf.Col
 TableHeader.font               [active] $defaultFont [UI]
 TableHeader.foreground         #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.height             25
+TableHeader.hoverBackground    #525658  HSL 200   4  33    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5% autoInverse)
+TableHeader.pressedBackground  #5f6365  HSL 200   3  38    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
 TableHeader.separatorColor     #5f6365  HSL 200   3  38    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.showTrailingVerticalLine false
 TableHeaderUI                  com.formdev.flatlaf.ui.FlatTableHeaderUI

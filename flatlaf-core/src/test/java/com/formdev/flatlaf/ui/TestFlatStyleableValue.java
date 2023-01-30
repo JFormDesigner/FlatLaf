@@ -802,6 +802,10 @@ public class TestFlatStyleableValue
 		JTableHeader c = new JTableHeader();
 		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
 
+		testColor( c, ui, "hoverBackground", 0x123456 );
+		testColor( c, ui, "hoverForeground", 0x123456 );
+		testColor( c, ui, "pressedBackground", 0x123456 );
+		testColor( c, ui, "pressedForeground", 0x123456 );
 		testColor( c, ui, "bottomSeparatorColor", 0x123456 );
 		testInteger( c, ui, "height", 123 );
 		testString( c, ui, "sortIconPosition", "top" );

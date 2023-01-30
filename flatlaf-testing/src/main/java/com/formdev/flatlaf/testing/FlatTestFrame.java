@@ -647,6 +647,10 @@ public class FlatTestFrame
 				Component view = ((JScrollPane)c).getViewport().getView();
 				if( view != null )
 					action.accept( view, "view" );
+
+				JViewport columnHeader = ((JScrollPane)c).getColumnHeader();
+				if( columnHeader != null )
+					action.accept( columnHeader.getView(), "columnHeader" );
 			} else if( c instanceof JTabbedPane ) {
 				JTabbedPane tabPane = (JTabbedPane)c;
 				int tabCount = tabPane.getTabCount();

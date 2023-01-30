@@ -26,6 +26,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -1052,6 +1054,11 @@ class FlatThemePreviewAll
 		Function<Object, Object> uiDefaultsGetter;
 
 		@Override
+		protected JTableHeader createDefaultTableHeader() {
+			return new PreviewTableHeader( columnModel );
+		}
+
+		@Override
 		public void paint( Graphics g ) {
 			if( !Beans.isDesignTime() ) {
 				// needed for DefaultTableCellRenderer
@@ -1060,6 +1067,27 @@ class FlatThemePreviewAll
 				} );
 			} else
 				super.paint( g );
+		}
+
+		//---- class PreviewTableHeader ----
+
+		private class PreviewTableHeader
+			extends JTableHeader
+		{
+			PreviewTableHeader( TableColumnModel columnModel ) {
+				super( columnModel );
+			}
+
+			@Override
+			public void paint( Graphics g ) {
+				if( !Beans.isDesignTime() ) {
+					// needed for DefaultTableCellHeaderRenderer
+					FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+						super.paint( g );
+					} );
+				} else
+					super.paint( g );
+			}
 		}
 	}
 }

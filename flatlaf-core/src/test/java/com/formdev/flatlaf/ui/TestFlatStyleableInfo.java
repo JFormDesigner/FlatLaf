@@ -804,6 +804,10 @@ public class TestFlatStyleableInfo
 		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"hoverBackground", Color.class,
+			"hoverForeground", Color.class,
+			"pressedBackground", Color.class,
+			"pressedForeground", Color.class,
 			"bottomSeparatorColor", Color.class,
 			"height", int.class,
 			"sortIconPosition", String.class,
