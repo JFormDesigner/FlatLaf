@@ -11,6 +11,11 @@ FlatLaf Change Log
   - Updated **JetBrains Mono** to
     [v2.304](https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304).
 - Theme Editor: Support macOS light and dark themes.
+- TabbedPane: Support hover and focused tab foreground colors. (issue #627)
+- TabbedPane: `tabbedPane.getBackgroundAt(tabIndex)` now has higher priority
+  than `TabbedPane.focusColor` and `TabbedPane.selectedBackground`. If
+  `tabbedPane.setBackgroundAt(tabIndex)` is used to set a color for a single
+  tab, then this color is now used even if the tab is focused or selected.
 - TableHeader: Support column hover and pressed background and foreground
   colors. (issue #636)
 

@@ -128,12 +128,14 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault TabbedPane.disabledForeground				Color
  * @uiDefault TabbedPane.selectedBackground				Color	optional
- * @uiDefault TabbedPane.selectedForeground				Color
+ * @uiDefault TabbedPane.selectedForeground				Color	optional
  * @uiDefault TabbedPane.underlineColor					Color
  * @uiDefault TabbedPane.inactiveUnderlineColor			Color
  * @uiDefault TabbedPane.disabledUnderlineColor			Color
- * @uiDefault TabbedPane.hoverColor						Color
- * @uiDefault TabbedPane.focusColor						Color
+ * @uiDefault TabbedPane.hoverColor						Color	optional
+ * @uiDefault TabbedPane.hoverForeground				Color	optional
+ * @uiDefault TabbedPane.focusColor						Color	optional
+ * @uiDefault TabbedPane.focusForeground				Color	optional
  * @uiDefault TabbedPane.tabSeparatorColor				Color	optional; defaults to TabbedPane.contentAreaColor
  * @uiDefault TabbedPane.contentAreaColor				Color
  * @uiDefault TabbedPane.minimumTabWidth				int		optional
@@ -205,7 +207,9 @@ public class FlatTabbedPaneUI
 	/** @since 2.2 */ @Styleable protected Color inactiveUnderlineColor;
 	@Styleable protected Color disabledUnderlineColor;
 	@Styleable protected Color hoverColor;
+	/** @since 3.1 */ @Styleable protected Color hoverForeground;
 	@Styleable protected Color focusColor;
+	/** @since 3.1 */ @Styleable protected Color focusForeground;
 	@Styleable protected Color tabSeparatorColor;
 	@Styleable protected Color contentAreaColor;
 
@@ -328,7 +332,9 @@ public class FlatTabbedPaneUI
 		inactiveUnderlineColor = FlatUIUtils.getUIColor( "TabbedPane.inactiveUnderlineColor", underlineColor );
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
 		hoverColor = UIManager.getColor( "TabbedPane.hoverColor" );
+		hoverForeground = UIManager.getColor( "TabbedPane.hoverForeground" );
 		focusColor = UIManager.getColor( "TabbedPane.focusColor" );
+		focusForeground = UIManager.getColor( "TabbedPane.focusForeground" );
 		tabSeparatorColor = UIManager.getColor( "TabbedPane.tabSeparatorColor" );
 		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
@@ -397,7 +403,9 @@ public class FlatTabbedPaneUI
 		inactiveUnderlineColor = null;
 		disabledUnderlineColor = null;
 		hoverColor = null;
+		hoverForeground = null;
 		focusColor = null;
+		focusForeground = null;
 		tabSeparatorColor = null;
 		contentAreaColor = null;
 		closeIcon = null;
@@ -1141,20 +1149,35 @@ public class FlatTabbedPaneUI
 			}
 
 			// plain text
-			Color color;
-			if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
-				color = tabPane.getForegroundAt( tabIndex );
-				if( isSelected && selectedForeground != null && color == tabPane.getForeground() )
-					color = selectedForeground;
-			} else
-				color = disabledForeground;
-
 			int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
-
-			g.setColor( color );
+			g.setColor( getTabForeground( tabPlacement, tabIndex, isSelected ) );
 			FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
 				textRect.x, textRect.y + metrics.getAscent() );
 		} );
+	}
+
+	/** @since 3.1 */
+	protected Color getTabForeground( int tabPlacement, int tabIndex, boolean isSelected ) {
+		// tabbed pane or tab is disabled
+		if( !tabPane.isEnabled() || !tabPane.isEnabledAt( tabIndex ) )
+			return disabledForeground;
+
+		// hover
+		if( hoverForeground != null && getRolloverTab() == tabIndex )
+			return hoverForeground;
+
+		// tab foreground (if set)
+		Color foreground = tabPane.getForegroundAt( tabIndex );
+		if( foreground != tabPane.getForeground() )
+			return foreground;
+
+		// focused and selected
+		if( focusForeground != null && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane ) )
+			return focusForeground;
+		if( selectedForeground != null && isSelected )
+			return selectedForeground;
+
+		return foreground;
 	}
 
 	@Override
@@ -1169,14 +1192,27 @@ public class FlatTabbedPaneUI
 
 	/** @since 2 */
 	protected Color getTabBackground( int tabPlacement, int tabIndex, boolean isSelected ) {
-		boolean enabled = tabPane.isEnabled();
-		return enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
-			? hoverColor
-			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane )
-				? focusColor
-				: (selectedBackground != null && enabled && isSelected
-					? selectedBackground
-					: tabPane.getBackgroundAt( tabIndex )));
+		Color background = tabPane.getBackgroundAt( tabIndex );
+
+		// tabbed pane or tab is disabled
+		if( !tabPane.isEnabled() || !tabPane.isEnabledAt( tabIndex ) )
+			return background;
+
+		// hover
+		if( hoverColor != null && getRolloverTab() == tabIndex )
+			return hoverColor;
+
+		// tab background (if set)
+		if( background != tabPane.getBackground() )
+			return background;
+
+		// focused and selected
+		if( focusColor != null && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane ) )
+			return focusColor;
+		if( selectedBackground != null && isSelected )
+			return selectedBackground;
+
+		return background;
 	}
 
 	@Override
@@ -1431,7 +1467,8 @@ public class FlatTabbedPaneUI
 				path.append( gap, false );
 
 				// fill gap in case that the tab is colored (e.g. focused or hover)
-				g.setColor( getTabBackground( tabPlacement, selectedIndex, true ) );
+				Color background = getTabBackground( tabPlacement, selectedIndex, true );
+				g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
 				((Graphics2D)g).fill( gap );
 			}
 		}

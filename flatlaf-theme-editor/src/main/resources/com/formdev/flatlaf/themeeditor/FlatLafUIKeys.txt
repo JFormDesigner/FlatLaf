@@ -848,6 +848,7 @@ TabbedPane.disabledForeground
 TabbedPane.disabledUnderlineColor
 TabbedPane.focus
 TabbedPane.focusColor
+TabbedPane.focusForeground
 TabbedPane.focusInputMap
 TabbedPane.font
 TabbedPane.foreground
@@ -855,6 +856,7 @@ TabbedPane.hasFullBorder
 TabbedPane.hiddenTabsNavigation
 TabbedPane.highlight
 TabbedPane.hoverColor
+TabbedPane.hoverForeground
 TabbedPane.inactiveUnderlineColor
 TabbedPane.labelShift
 TabbedPane.light

@@ -1085,12 +1085,14 @@ TabbedPane.disabledForeground  #777777  HSL   0   0  47    javax.swing.plaf.Colo
 TabbedPane.disabledUnderlineColor #7a7a7a  HSL   0   0  48    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focus               #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focusColor          #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focusForeground     #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.font                [active] $defaultFont [UI]
 TabbedPane.foreground          #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hasFullBorder       false
 TabbedPane.hiddenTabsNavigation moreTabsButton
 TabbedPane.highlight           #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hoverColor          #eeeeee  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.hoverForeground     #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.inactiveUnderlineColor #ff00ff  HSL 300 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.labelShift          1
 TabbedPane.light               #e3e3e3  HSL   0   0  89    javax.swing.plaf.ColorUIResource [UI]

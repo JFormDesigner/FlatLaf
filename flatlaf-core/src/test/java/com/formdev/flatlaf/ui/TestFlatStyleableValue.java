@@ -727,7 +727,9 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "inactiveUnderlineColor", 0x123456 );
 		testColor( c, ui, "disabledUnderlineColor", 0x123456 );
 		testColor( c, ui, "hoverColor", 0x123456 );
+		testColor( c, ui, "hoverForeground", 0x123456 );
 		testColor( c, ui, "focusColor", 0x123456 );
+		testColor( c, ui, "focusForeground", 0x123456 );
 		testColor( c, ui, "tabSeparatorColor", 0x123456 );
 		testColor( c, ui, "contentAreaColor", 0x123456 );
 

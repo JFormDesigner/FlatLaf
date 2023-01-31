@@ -906,7 +906,9 @@ public class TestFlatStyling
 		ui.applyStyle( "inactiveUnderlineColor: #fff" );
 		ui.applyStyle( "disabledUnderlineColor: #fff" );
 		ui.applyStyle( "hoverColor: #fff" );
+		ui.applyStyle( "hoverForeground: #fff" );
 		ui.applyStyle( "focusColor: #fff" );
+		ui.applyStyle( "focusForeground: #fff" );
 		ui.applyStyle( "tabSeparatorColor: #fff" );
 		ui.applyStyle( "contentAreaColor: #fff" );
 

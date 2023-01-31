@@ -721,7 +721,9 @@ public class TestFlatStyleableInfo
 			"inactiveUnderlineColor", Color.class,
 			"disabledUnderlineColor", Color.class,
 			"hoverColor", Color.class,
+			"hoverForeground", Color.class,
 			"focusColor", Color.class,
+			"focusForeground", Color.class,
 			"tabSeparatorColor", Color.class,
 			"contentAreaColor", Color.class,
 
