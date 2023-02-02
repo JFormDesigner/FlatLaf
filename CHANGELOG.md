@@ -34,6 +34,9 @@ FlatLaf Change Log
   - Updated "Hiberbee Dark" and "Material Theme UI Lite" themes.
 - Styling: Fixed resolving of UI variables in styles that use other variables.
 - MenuItem: Fixed horizontal alignment of icons. (issue #631)
+- Tree: Fixed truncated node text and too small painted non-wide node background
+  if custom cell renderer sets icon, but not disabled icon, and tree is
+  disabled. (issue #640)
 
 
 ## 3.0

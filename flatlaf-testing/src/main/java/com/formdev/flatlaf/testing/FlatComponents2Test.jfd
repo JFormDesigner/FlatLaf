@@ -411,6 +411,7 @@ new FormModel {
 						selectedItem: "default"
 						addElement( "default" )
 						addElement( "defaultSubclass" )
+						addElement( "defaultWithIcon" )
 						addElement( "label" )
 						addElement( "swingxDefault" )
 						addElement( "jideCheckBox" )
@@ -476,12 +477,12 @@ new FormModel {
 					"value": "cell 0 4"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "showDefaultIconsCheckBox"
+					name: "treeShowDefaultIconsCheckBox"
 					"text": "show default icons"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showDefaultIcons", false ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeShowDefaultIconsChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 4"
 				} )

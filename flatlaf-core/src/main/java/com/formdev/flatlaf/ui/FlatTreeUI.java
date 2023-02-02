@@ -310,6 +310,21 @@ public class FlatTreeUI
 						tree.revalidate();
 						tree.repaint();
 						break;
+
+					case "enabled":
+						// if default icons are not shown and the renderer is a subclass
+						// of DefaultTreeCellRenderer, then invalidate tree node sizes
+						// because the custom renderer may use an icon for enabled state
+						// but none for disabled state
+						if( !showDefaultIcons &&
+							currentCellRenderer instanceof DefaultTreeCellRenderer &&
+							currentCellRenderer.getClass() != DefaultTreeCellRenderer.class &&
+							treeState != null )
+						{
+							treeState.invalidateSizes();
+							updateSize();
+						}
+						break;
 				}
 			}
 		};
@@ -695,7 +710,7 @@ public class FlatTreeUI
 
 		if( rendererComponent instanceof JLabel ) {
 			JLabel label = (JLabel) rendererComponent;
-			Icon icon = label.getIcon();
+			Icon icon = label.isEnabled() ? label.getIcon() : label.getDisabledIcon();
 			imageOffset = (icon != null && label.getText() != null)
 				? icon.getIconWidth() + Math.max( label.getIconTextGap() - 1, 0 )
 				: 0;

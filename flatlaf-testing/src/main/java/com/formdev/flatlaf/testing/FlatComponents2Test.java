@@ -439,6 +439,11 @@ public class FlatComponents2Test
 					tree.setCellRenderer( new TestDefaultTreeCellRenderer() );
 				break;
 
+			case "defaultWithIcon":
+				for( JTree tree : trees )
+					tree.setCellRenderer( new TestDefaultWithIconTreeCellRenderer() );
+				break;
+
 			case "label":
 				for( JTree tree : trees )
 					tree.setCellRenderer( new TestLabelTreeCellRenderer() );
@@ -495,11 +500,13 @@ public class FlatComponents2Test
 			tree.setEditable( editable );
 	}
 
-	private void showDefaultIcons() {
-		boolean showDefaultIcons = showDefaultIconsCheckBox.isSelected();
+	private void treeShowDefaultIconsChanged() {
+		boolean showDefaultIcons = treeShowDefaultIconsCheckBox.isSelected();
 		UIManager.put( "Tree.showDefaultIcons", showDefaultIcons ? true : null );
 		for( JTree tree : allTrees )
 			tree.updateUI();
+
+		treeRendererChanged();
 	}
 
 	private void treeMouseClicked( MouseEvent e ) {
@@ -601,7 +608,7 @@ public class FlatComponents2Test
 		treePaintLinesCheckBox = new JCheckBox();
 		treeRedLinesCheckBox = new JCheckBox();
 		treeEditableCheckBox = new JCheckBox();
-		showDefaultIconsCheckBox = new JCheckBox();
+		treeShowDefaultIconsCheckBox = new JCheckBox();
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
@@ -953,6 +960,7 @@ public class FlatComponents2Test
 			treeRendererComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 				"default",
 				"defaultSubclass",
+				"defaultWithIcon",
 				"label",
 				"swingxDefault",
 				"jideCheckBox",
@@ -988,10 +996,10 @@ public class FlatComponents2Test
 			treeEditableCheckBox.addActionListener(e -> treeEditableChanged());
 			treeOptionsPanel.add(treeEditableCheckBox, "cell 0 4");
 
-			//---- showDefaultIconsCheckBox ----
-			showDefaultIconsCheckBox.setText("show default icons");
-			showDefaultIconsCheckBox.addActionListener(e -> showDefaultIcons());
-			treeOptionsPanel.add(showDefaultIconsCheckBox, "cell 0 4");
+			//---- treeShowDefaultIconsCheckBox ----
+			treeShowDefaultIconsCheckBox.setText("show default icons");
+			treeShowDefaultIconsCheckBox.addActionListener(e -> treeShowDefaultIconsChanged());
+			treeOptionsPanel.add(treeShowDefaultIconsCheckBox, "cell 0 4");
 		}
 		add(treeOptionsPanel, "cell 0 4 4 1");
 
@@ -1128,7 +1136,7 @@ public class FlatComponents2Test
 	private JCheckBox treePaintLinesCheckBox;
 	private JCheckBox treeRedLinesCheckBox;
 	private JCheckBox treeEditableCheckBox;
-	private JCheckBox showDefaultIconsCheckBox;
+	private JCheckBox treeShowDefaultIconsCheckBox;
 	private JComboBox<String> autoResizeModeField;
 	private JComboBox<String> sortIconPositionComboBox;
 	private JCheckBox showHorizontalLinesCheckBox;
@@ -1601,6 +1609,26 @@ public class FlatComponents2Test
 			setTextNonSelectionColor( (nonSelectionFg != null) ? nonSelectionFg : UIManager.getColor( "Tree.textForeground" ) );
 
 			return super.getTreeCellRendererComponent( tree, value, sel, expanded, leaf, row, hasFocus );
+		}
+	}
+
+	//---- class TestDefaultWithIconTreeCellRenderer --------------------------
+
+	private static class TestDefaultWithIconTreeCellRenderer
+		extends TestDefaultTreeCellRenderer
+	{
+		@Override
+		public Component getTreeCellRendererComponent( JTree tree, Object value, boolean sel, boolean expanded,
+			boolean leaf, int row, boolean hasFocus )
+		{
+			super.getTreeCellRendererComponent( tree, value, sel, expanded, leaf, row, hasFocus );
+
+			// set icon for enabled state, but not for disabled state,
+			// which allows testing whether tree node layout is updated correctly
+			// when enabled state changes
+			setIcon( UIManager.getIcon( "FileView.floppyDriveIcon" ) );
+
+			return this;
 		}
 	}
 
