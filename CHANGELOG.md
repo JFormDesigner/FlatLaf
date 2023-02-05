@@ -37,6 +37,9 @@ FlatLaf Change Log
 - Tree: Fixed truncated node text and too small painted non-wide node background
   if custom cell renderer sets icon, but not disabled icon, and tree is
   disabled. (issue #640)
+- Fixed `HiDPIUtils.paintAtScale1x()`, which painted at wrong location if
+  graphics is rotated, is scaled and `x` or `y` parameters are not zero. (issue
+  #646)
 
 
 ## 3.0

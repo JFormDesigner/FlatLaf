@@ -40,10 +40,13 @@ public class FlatPaintingHiDPITest
 
 	FlatPaintingHiDPITest() {
 		initComponents();
+		reset();
 		sliderChanged();
 	}
 
 	private void sliderChanged() {
+		painter.originX = originXSlider.getValue();
+		painter.originY = originYSlider.getValue();
 		painter.translateX = translateXSlider.getValue();
 		painter.translateY = translateYSlider.getValue();
 		painter.scaleX = scaleXSlider.getValue();
@@ -78,15 +81,23 @@ public class FlatPaintingHiDPITest
 	}
 
 	private void reset() {
+		AffineTransform t = getGraphicsConfiguration().getDefaultTransform();
+
+		originXSlider.setValue( 20 );
+		originYSlider.setValue( 10 );
 		translateXSlider.setValue( 100 );
 		translateYSlider.setValue( 100 );
-		scaleXSlider.setValue( 100 );
-		scaleYSlider.setValue( 100 );
+		scaleXSlider.setValue( (int) (t.getScaleX() * 100) );
+		scaleYSlider.setValue( (int) (t.getScaleY() * 100) );
 		rotateSlider.setValue( 0 );
 	}
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		JLabel originXLabel = new JLabel();
+		originXSlider = new JSlider();
+		JLabel originYLabel = new JLabel();
+		originYSlider = new JSlider();
 		JLabel translateXLabel = new JLabel();
 		translateXSlider = new JSlider();
 		JLabel translateYLabel = new JLabel();
@@ -128,30 +139,58 @@ public class FlatPaintingHiDPITest
 			"[400,fill]para" +
 			"[grow,fill]",
 			// rows
-			"[fill]" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
 			"[grow]"));
 
+		//---- originXLabel ----
+		originXLabel.setText("OriginX:");
+		add(originXLabel, "cell 0 0");
+
+		//---- originXSlider ----
+		originXSlider.setMaximum(500);
+		originXSlider.setMajorTickSpacing(100);
+		originXSlider.setMinorTickSpacing(25);
+		originXSlider.setValue(20);
+		originXSlider.setPaintTicks(true);
+		originXSlider.addChangeListener(e -> sliderChanged());
+		add(originXSlider, "cell 1 0");
+
+		//---- originYLabel ----
+		originYLabel.setText("OriginY:");
+		add(originYLabel, "cell 0 1");
+
+		//---- originYSlider ----
+		originYSlider.setMaximum(500);
+		originYSlider.setPaintLabels(true);
+		originYSlider.setPaintTicks(true);
+		originYSlider.setMajorTickSpacing(100);
+		originYSlider.setMinorTickSpacing(25);
+		originYSlider.setValue(10);
+		originYSlider.addChangeListener(e -> sliderChanged());
+		add(originYSlider, "cell 1 1");
+
 		//---- translateXLabel ----
 		translateXLabel.setText("TranslateX:");
-		add(translateXLabel, "cell 0 0");
+		add(translateXLabel, "cell 0 2");
 
 		//---- translateXSlider ----
 		translateXSlider.setMaximum(500);
-		translateXSlider.setPaintLabels(true);
 		translateXSlider.setPaintTicks(true);
 		translateXSlider.setMajorTickSpacing(100);
 		translateXSlider.setMinorTickSpacing(25);
 		translateXSlider.setValue(100);
 		translateXSlider.addChangeListener(e -> sliderChanged());
-		add(translateXSlider, "cell 1 0");
+		add(translateXSlider, "cell 1 2");
 
 		//---- translateYLabel ----
 		translateYLabel.setText("TranslateY:");
-		add(translateYLabel, "cell 0 1");
+		add(translateYLabel, "cell 0 3");
 
 		//---- translateYSlider ----
 		translateYSlider.setMaximum(500);
@@ -161,30 +200,29 @@ public class FlatPaintingHiDPITest
 		translateYSlider.setMinorTickSpacing(25);
 		translateYSlider.setValue(100);
 		translateYSlider.addChangeListener(e -> sliderChanged());
-		add(translateYSlider, "cell 1 1");
+		add(translateYSlider, "cell 1 3");
 
 		//---- scaleXLabel ----
 		scaleXLabel.setText("ScaleX:");
-		add(scaleXLabel, "cell 0 2");
+		add(scaleXLabel, "cell 0 4");
 
 		//---- scaleXSlider ----
-		scaleXSlider.setMaximum(300);
+		scaleXSlider.setMaximum(400);
 		scaleXSlider.setValue(100);
 		scaleXSlider.setPaintTicks(true);
-		scaleXSlider.setPaintLabels(true);
 		scaleXSlider.setMajorTickSpacing(50);
 		scaleXSlider.setSnapToTicks(true);
 		scaleXSlider.setMinorTickSpacing(10);
 		scaleXSlider.setMinimum(-100);
 		scaleXSlider.addChangeListener(e -> sliderChanged());
-		add(scaleXSlider, "cell 1 2");
+		add(scaleXSlider, "cell 1 4");
 
 		//---- scaleYLabel ----
 		scaleYLabel.setText("ScaleY:");
-		add(scaleYLabel, "cell 0 3");
+		add(scaleYLabel, "cell 0 5");
 
 		//---- scaleYSlider ----
-		scaleYSlider.setMaximum(300);
+		scaleYSlider.setMaximum(400);
 		scaleYSlider.setValue(100);
 		scaleYSlider.setPaintTicks(true);
 		scaleYSlider.setPaintLabels(true);
@@ -193,11 +231,11 @@ public class FlatPaintingHiDPITest
 		scaleYSlider.setMinorTickSpacing(10);
 		scaleYSlider.setMinimum(-100);
 		scaleYSlider.addChangeListener(e -> sliderChanged());
-		add(scaleYSlider, "cell 1 3");
+		add(scaleYSlider, "cell 1 5");
 
 		//---- rotateLabel ----
 		rotateLabel.setText("Rotate:");
-		add(rotateLabel, "cell 0 4");
+		add(rotateLabel, "cell 0 6");
 
 		//---- rotateSlider ----
 		rotateSlider.setMaximum(360);
@@ -207,7 +245,7 @@ public class FlatPaintingHiDPITest
 		rotateSlider.setPaintLabels(true);
 		rotateSlider.setPaintTicks(true);
 		rotateSlider.addChangeListener(e -> sliderChanged());
-		add(rotateSlider, "cell 1 4");
+		add(rotateSlider, "cell 1 6");
 
 		//======== panel1 ========
 		{
@@ -298,17 +336,19 @@ public class FlatPaintingHiDPITest
 			cRotationDegreesLabel.setText("text");
 			panel1.add(cRotationDegreesLabel, "cell 1 6");
 		}
-		add(panel1, "cell 2 0 1 4");
+		add(panel1, "cell 2 2 1 4,growy");
 
 		//---- resetButton ----
 		resetButton.setText("Reset");
 		resetButton.addActionListener(e -> reset());
-		add(resetButton, "cell 2 4,align left bottom,grow 0 0");
-		add(painter, "cell 0 5 3 1,grow,width 600,height 400");
+		add(resetButton, "cell 2 6,align left bottom,grow 0 0");
+		add(painter, "cell 0 7 3 1,grow,width 600,height 400");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JSlider originXSlider;
+	private JSlider originYSlider;
 	private JSlider translateXSlider;
 	private JSlider translateYSlider;
 	private JSlider scaleXSlider;
@@ -331,6 +371,8 @@ public class FlatPaintingHiDPITest
 	public static class HiDPI1xPainter
 		extends JComponent
 	{
+		int originX;
+		int originY;
 		int translateX;
 		int translateY;
 		int scaleX;
@@ -361,10 +403,10 @@ public class FlatPaintingHiDPITest
 				g2.rotate( Math.toRadians( rotate ) );
 
 				g2.setColor( Color.red );
-				g2.fillRect( 0, 0, 100, 50 );
+				g2.fillRect( originX, originY, 100, 50 );
 
 				g2.setColor( Color.green );
-				HiDPIUtils.paintAtScale1x( g2, 0, 0, 100, 50,
+				HiDPIUtils.paintAtScale1x( g2, originX, originY, 100, 50,
 					(g2d, x2, y2, width2, height2, scaleFactor) -> {
 						g2d.fillRect( x2 + 10, y2 + 10, width2 - 20, height2 - 20 );
 					} );
