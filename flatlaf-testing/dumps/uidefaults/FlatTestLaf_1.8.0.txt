@@ -220,6 +220,7 @@ ColumnControlButton.actionIcon [lazy] 10,10    com.formdev.flatlaf.swingx.icons.
 
 ComboBox.background            #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+ComboBox.borderCornerRadius    4
 ComboBox.buttonArrowColor      #666666  HSL   0   0  40    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonBackground      #f0f0f0  HSL   0   0  94    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #696969  HSL   0   0  41    javax.swing.plaf.ColorUIResource [UI]
@@ -769,6 +770,7 @@ PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
 
 #---- Popup ----
 
+Popup.borderCornerRadius       4
 Popup.dropShadowColor          #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 Popup.dropShadowInsets         -6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 Popup.dropShadowOpacity        0.5
@@ -780,6 +782,7 @@ Popup.dropShadowPainted        true
 PopupMenu.background           #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]    lineColor=#0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 PopupMenu.borderColor          #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.borderCornerRadius   4
 PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
 PopupMenu.font                 [active] $defaultFont [UI]
@@ -1406,6 +1409,7 @@ ToolBarUI                      com.formdev.flatlaf.ui.FlatToolBarUI
 
 ToolTip.background             #eeeeff  HSL 240 100  97    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.border                 [lazy] line: #000000  HSL   0   0   0    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+ToolTip.borderCornerRadius     4
 ToolTip.font                   [active] $defaultFont [UI]
 ToolTip.foreground             #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 

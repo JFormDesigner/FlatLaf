@@ -269,6 +269,25 @@ public interface FlatClientProperties
 	//---- Popup --------------------------------------------------------------
 
 	/**
+	 * Specifies the popup border corner radius if the component is shown in a popup
+	 * or if the component is the owner of another component that is shown in a popup.
+	 * <p>
+	 * Note that this is not available on all platforms since it requires special support.
+	 * Supported platforms:
+	 * <p>
+	 * <strong>Windows 11</strong> (x86 or x86_64): Only two corner radiuses are supported
+	 * by the OS: {@code DWMWCP_ROUND} is 8px and {@code DWMWCP_ROUNDSMALL} is 4px.
+	 * If this value is {@code 1 - 4}, then {@code DWMWCP_ROUNDSMALL} is used.
+	 * If it is {@code >= 5}, then {@code DWMWCP_ROUND} is used.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 *
+	 * @since 3.1
+	 */
+	String POPUP_BORDER_CORNER_RADIUS = "Popup.borderCornerRadius";
+
+	/**
 	 * Specifies whether a drop shadow is painted if the component is shown in a popup
 	 * or if the component is the owner of another component that is shown in a popup.
 	 * <p>

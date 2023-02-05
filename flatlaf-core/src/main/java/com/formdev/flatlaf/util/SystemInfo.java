@@ -18,6 +18,7 @@ package com.formdev.flatlaf.util;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
+import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
 
 /**
  * Provides information about the current system.
@@ -34,9 +35,7 @@ public class SystemInfo
 	// OS versions
 	public static final long osVersion;
 	public static final boolean isWindows_10_orLater;
-	/** <strong>Note</strong>: This requires Java 8u321, 11.0.14, 17.0.2 or 18 (or later).
-	 * (see https://bugs.openjdk.java.net/browse/JDK-8274840)
-	 * @since 2 */ public static final boolean isWindows_11_orLater;
+	/** @since 2 */ public static final boolean isWindows_11_orLater;
 	public static final boolean isMacOS_10_11_ElCapitan_orLater;
 	public static final boolean isMacOS_10_14_Mojave_orLater;
 	public static final boolean isMacOS_10_15_Catalina_orLater;
@@ -80,8 +79,6 @@ public class SystemInfo
 		// OS versions
 		osVersion = scanVersion( System.getProperty( "os.version" ) );
 		isWindows_10_orLater = (isWindows && osVersion >= toVersion( 10, 0, 0, 0 ));
-		isWindows_11_orLater = (isWindows_10_orLater && osName.length() > "windows ".length() &&
-			scanVersion( osName.substring( "windows ".length() ) ) >= toVersion( 11, 0, 0, 0 ));
 		isMacOS_10_11_ElCapitan_orLater = (isMacOS && osVersion >= toVersion( 10, 11, 0, 0 ));
 		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
 		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));
@@ -119,6 +116,24 @@ public class SystemInfo
 		isMacFullWindowContentSupported =
 			javaVersion >= toVersion( 11, 0, 8, 0 ) ||
 			(javaVersion >= toVersion( 1, 8, 0, 292 ) && !isJava_9_orLater);
+
+
+		// Note: Keep following at the end of this block because (optional) loading
+		//       of native library uses fields of this class. E.g. isX86_64
+
+		// Windows 11 detection is implemented in Java 8u321, 11.0.14, 17.0.2 and 18 (or later).
+		// (see https://bugs.openjdk.java.net/browse/JDK-8274840)
+		// For older Java versions, use native library to get OS build number.
+		boolean isWin_11_orLater = false;
+		try {
+			isWin_11_orLater = (isWindows_10_orLater &&
+				(scanVersion( StringUtils.removeLeading( osName, "windows " ) ) >= toVersion( 11, 0, 0, 0 )) ||
+				(FlatNativeWindowsLibrary.isLoaded() && FlatNativeWindowsLibrary.getOSBuildNumber() >= 22000));
+		} catch( Throwable ex ) {
+			// catch to avoid that application can not start if native library is not up-to-date
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+		isWindows_11_orLater = isWin_11_orLater;
 	}
 
 	public static long scanVersion( String version ) {

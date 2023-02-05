@@ -29,6 +29,8 @@
  * @author Karl Tauber
  */
 
+HWND getWindowHandle( JNIEnv* env, jobject window );
+
 //---- JNI methods ------------------------------------------------------------
 
 extern "C"
@@ -540,7 +542,7 @@ void FlatWndProc::setMenuItemState( HMENU systemMenu, int item, bool enabled ) {
 	::SetMenuItemInfo( systemMenu, item, FALSE, &mii );
 }
 
-HWND FlatWndProc::getWindowHandle( JNIEnv* env, jobject window ) {
+HWND getWindowHandle( JNIEnv* env, jobject window ) {
 	JAWT awt;
 	awt.version = JAWT_VERSION_1_4;
 	if( !JAWT_GetAWT( env, &awt ) )

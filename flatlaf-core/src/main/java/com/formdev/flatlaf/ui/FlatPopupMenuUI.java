@@ -67,6 +67,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.BasicMenuItemUI;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
 import javax.swing.plaf.basic.DefaultMenuLayout;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -297,6 +298,9 @@ public class FlatPopupMenuUI
 			popup.addMenuKeyListener( this );
 
 			updateArrowButtons();
+
+			putClientProperty( FlatClientProperties.POPUP_BORDER_CORNER_RADIUS,
+				UIManager.getInt( "PopupMenu.borderCornerRadius" ) );
 		}
 
 		void scroll( int unitsToScroll ) {
