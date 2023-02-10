@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Native methods for Linux.
@@ -35,7 +36,7 @@ import javax.swing.JFrame;
 class FlatNativeLinuxLibrary
 {
 	static boolean isLoaded() {
-		return FlatNativeLibrary.isLoaded();
+		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded();
 	}
 
 	// direction for _NET_WM_MOVERESIZE message

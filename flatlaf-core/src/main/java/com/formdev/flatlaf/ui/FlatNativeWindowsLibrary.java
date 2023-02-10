@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Window;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Native methods for Windows.
@@ -31,7 +32,7 @@ public class FlatNativeWindowsLibrary
 	private static long osBuildNumber = Long.MIN_VALUE;
 
 	public static boolean isLoaded() {
-		return FlatNativeLibrary.isLoaded();
+		return SystemInfo.isWindows && FlatNativeLibrary.isLoaded();
 	}
 
 	/**

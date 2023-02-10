@@ -126,9 +126,9 @@ public class SystemInfo
 		// For older Java versions, use native library to get OS build number.
 		boolean isWin_11_orLater = false;
 		try {
-			isWin_11_orLater = (isWindows_10_orLater &&
-				(scanVersion( StringUtils.removeLeading( osName, "windows " ) ) >= toVersion( 11, 0, 0, 0 )) ||
-				(FlatNativeWindowsLibrary.isLoaded() && FlatNativeWindowsLibrary.getOSBuildNumber() >= 22000));
+			isWin_11_orLater = isWindows_10_orLater &&
+				(scanVersion( StringUtils.removeLeading( osName, "windows " ) ) >= toVersion( 11, 0, 0, 0 ) ||
+				 (FlatNativeWindowsLibrary.isLoaded() && FlatNativeWindowsLibrary.getOSBuildNumber() >= 22000));
 		} catch( Throwable ex ) {
 			// catch to avoid that application can not start if native library is not up-to-date
 			LoggingFacade.INSTANCE.logSevere( null, ex );
