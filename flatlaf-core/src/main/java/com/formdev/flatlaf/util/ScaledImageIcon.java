@@ -100,8 +100,13 @@ debug*/
 		Image image = getResolutionVariant( destImageWidth, destImageHeight );
 
 		// size of image
-		int imageWidth = image.getWidth( null );
-		int imageHeight = image.getHeight( null );
+		int imageWidth = -1;
+		int imageHeight = -1;
+
+		if (image != null) {
+			imageWidth = image.getWidth( null );
+			imageHeight = image.getHeight( null );
+		}
 
 		// paint red rectangle if image has invalid size (e.g. not found)
 		if( imageWidth < 0 || imageHeight < 0 ) {
