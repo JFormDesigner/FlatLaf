@@ -360,9 +360,8 @@ public class FlatTitlePane
 
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
-			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
 
-			if( maximized &&
+			if( isWindowMaximized() &&
 				!(SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window )) &&
 				rootPane.getClientProperty( "_flatlaf.maximizedBoundsUpToDate" ) == null )
 			{
@@ -393,7 +392,7 @@ public class FlatTitlePane
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
 			boolean maximizable = frame.isResizable() && clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_MAXIMIZE, true );
-			boolean maximized = ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
+			boolean maximized = isWindowMaximized();
 
 			iconifyButton.setVisible( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICONIFFY, true ) );
 			maximizeButton.setVisible( maximizable && !maximized );
@@ -643,7 +642,10 @@ public class FlatTitlePane
 
 	/** @since 2.4 */
 	protected boolean isWindowMaximized() {
-		return window instanceof Frame && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
+		// Windows and macOS use always MAXIMIZED_BOTH.
+		// Only Linux uses MAXIMIZED_VERT and MAXIMIZED_HORIZ (when dragging window to left or right edge).
+		// (searched jdk source code)
+		return window instanceof Frame && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH;
 	}
 
 	/**
@@ -661,8 +663,30 @@ public class FlatTitlePane
 		rootPane.putClientProperty( "_flatlaf.maximizedBoundsUpToDate", true );
 
 		// maximize window
-		if( !FlatNativeWindowBorder.showWindow( frame, FlatNativeWindowBorder.Provider.SW_MAXIMIZE ) )
-			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
+		if( !FlatNativeWindowBorder.showWindow( frame, FlatNativeWindowBorder.Provider.SW_MAXIMIZE ) ) {
+			int oldState = frame.getExtendedState();
+			int newState = oldState | Frame.MAXIMIZED_BOTH;
+
+			if( SystemInfo.isLinux ) {
+				// Linux supports vertical and horizontal maximization:
+				//   - dragging a window to left or right edge of screen vertically maximizes
+				//     the window to the left or right half of the screen
+				//   - don't know whether user can do horizontal maximization
+				// (Windows and macOS use only MAXIMIZED_BOTH)
+				//
+				// If a window is maximized vertically or horizontally (but not both),
+				// then Frame.setExtendedState() behaves not as expected on Linux.
+				// E.g. if window state is MAXIMIZED_VERT, calling setExtendedState(MAXIMIZED_BOTH)
+				// changes state to MAXIMIZED_HORIZ. But calling setExtendedState(MAXIMIZED_HORIZ)
+				// changes state from MAXIMIZED_VERT to MAXIMIZED_BOTH.
+				// Seems to be a bug in sun.awt.X11.XNETProtocol.requestState(),
+				// which does some strange state XOR-ing...
+				if( (oldState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_VERT )
+					newState = oldState & ~Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_HORIZ;
+			}
+
+			frame.setExtendedState( newState );
+		}
 	}
 
 	protected void updateMaximizedBounds() {
@@ -766,8 +790,7 @@ public class FlatTitlePane
 		if( !(window instanceof Frame) || !((Frame)window).isResizable() )
 			return;
 
-		Frame frame = (Frame) window;
-		if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+		if( isWindowMaximized() )
 			restore();
 		else
 			maximize();
@@ -1188,6 +1211,13 @@ public class FlatTitlePane
 
 		@Override
 		public void windowStateChanged( WindowEvent e ) {
+/*debug
+			System.out.println( "state " + e.getOldState() + " -> " + e.getNewState() + "     "
+				+ ((e.getNewState() & Frame.MAXIMIZED_HORIZ) != 0 ? " HORIZ" : "")
+				+ ((e.getNewState() & Frame.MAXIMIZED_VERT) != 0 ? " VERT" : "")
+			);
+debug*/
+
 			frameStateChanged();
 			updateNativeTitleBarHeightAndHitTestSpots();
 		}
@@ -1195,7 +1225,7 @@ public class FlatTitlePane
 		//---- interface MouseListener ----
 
 		private Point dragOffset;
-		private boolean nativeMove;
+		private boolean linuxNativeMove;
 		private long lastSingleClickWhen;
 
 		@Override
@@ -1241,7 +1271,7 @@ public class FlatTitlePane
 				return;
 
 			dragOffset = SwingUtilities.convertPoint( FlatTitlePane.this, e.getPoint(), window );
-			nativeMove = false;
+			linuxNativeMove = false;
 
 			// on Linux, move or maximize/restore window
 			if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
@@ -1261,7 +1291,7 @@ public class FlatTitlePane
 					case 1:
 						// move window via _NET_WM_MOVERESIZE message
 						e.consume();
-						nativeMove = FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, FlatNativeLinuxLibrary.MOVE );
+						linuxNativeMove = FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, FlatNativeLinuxLibrary.MOVE );
 						lastSingleClickWhen = e.getWhen();
 						break;
 
@@ -1291,7 +1321,7 @@ public class FlatTitlePane
 			if( window == null || dragOffset == null )
 				return; // should newer occur
 
-			if( nativeMove )
+			if( linuxNativeMove )
 				return;
 
 			if( !SwingUtilities.isLeftMouseButton( e ) )

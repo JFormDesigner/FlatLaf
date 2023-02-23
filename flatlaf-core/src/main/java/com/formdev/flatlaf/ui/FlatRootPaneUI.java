@@ -551,7 +551,7 @@ public class FlatRootPaneUI
 
 		protected boolean isWindowMaximized( Component c ) {
 			Container parent = c.getParent();
-			return parent instanceof Frame && (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
+			return parent instanceof Frame && (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH;
 		}
 	}
 

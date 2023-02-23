@@ -28,6 +28,8 @@ FlatLaf Change Log
     decorations are used (e.g. Windows 10/11) or not (e.g. macOS). Now the glass
     pane no longer overlaps the FlatLaf window title bar. (issue #630)
   - Linux: Fixed broken window resizing on multi-screen setups. (issue #632)
+  - Linux: Fixed behavior of maximize/restore button when tiling window to left
+    or right half of screen. (issue #647)
 - IntelliJ Themes:
   - Fixed default button hover background in "Solarized Light" theme. (issue
     #628)
