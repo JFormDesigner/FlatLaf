@@ -439,6 +439,11 @@ public class FlatComponents2Test
 					tree.setCellRenderer( new TestDefaultTreeCellRenderer() );
 				break;
 
+			case "defaultWithIcons":
+				for( JTree tree : trees )
+					tree.setCellRenderer( new TestDefaultWithIconsTreeCellRenderer() );
+				break;
+
 			case "defaultWithIcon":
 				for( JTree tree : trees )
 					tree.setCellRenderer( new TestDefaultWithIconTreeCellRenderer() );
@@ -960,6 +965,7 @@ public class FlatComponents2Test
 			treeRendererComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 				"default",
 				"defaultSubclass",
+				"defaultWithIcons",
 				"defaultWithIcon",
 				"label",
 				"swingxDefault",
@@ -1609,6 +1615,18 @@ public class FlatComponents2Test
 			setTextNonSelectionColor( (nonSelectionFg != null) ? nonSelectionFg : UIManager.getColor( "Tree.textForeground" ) );
 
 			return super.getTreeCellRendererComponent( tree, value, sel, expanded, leaf, row, hasFocus );
+		}
+	}
+
+	//---- class TestDefaultWithIconsTreeCellRenderer -------------------------
+
+	private static class TestDefaultWithIconsTreeCellRenderer
+		extends TestDefaultTreeCellRenderer
+	{
+		public TestDefaultWithIconsTreeCellRenderer() {
+			setLeafIcon( UIManager.getIcon( "FileView.floppyDriveIcon" ) );
+			setClosedIcon( UIManager.getIcon( "FileView.hardDriveIcon" ) );
+			setOpenIcon( UIManager.getIcon( "FileView.computerIcon" ) );
 		}
 	}
 

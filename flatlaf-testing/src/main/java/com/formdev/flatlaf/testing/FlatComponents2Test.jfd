@@ -411,6 +411,7 @@ new FormModel {
 						selectedItem: "default"
 						addElement( "default" )
 						addElement( "defaultSubclass" )
+						addElement( "defaultWithIcons" )
 						addElement( "defaultWithIcon" )
 						addElement( "label" )
 						addElement( "swingxDefault" )

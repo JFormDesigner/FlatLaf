@@ -158,6 +158,10 @@ public class FlatTreeUI
 	// only used via styling (not in UI defaults, but has likewise client properties)
 	/** @since 2 */ @Styleable protected boolean paintSelection = true;
 
+	private Icon defaultLeafIcon;
+	private Icon defaultClosedIcon;
+	private Icon defaultOpenIcon;
+
 	private boolean paintLines;
 	private Color defaultCellNonSelectionBackground;
 	private Color defaultSelectionBackground;
@@ -193,6 +197,10 @@ public class FlatTreeUI
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 		showDefaultIcons = UIManager.getBoolean( "Tree.showDefaultIcons" );
 
+		defaultLeafIcon = UIManager.getIcon( "Tree.leafIcon" );
+		defaultClosedIcon = UIManager.getIcon( "Tree.closedIcon" );
+		defaultOpenIcon = UIManager.getIcon( "Tree.openIcon" );
+
 		paintLines = UIManager.getBoolean( "Tree.paintLines" );
 		defaultCellNonSelectionBackground = UIManager.getColor( "Tree.textBackground" );
 		defaultSelectionBackground = selectionBackground;
@@ -219,6 +227,10 @@ public class FlatTreeUI
 		selectionInactiveForeground = null;
 		selectionBorderColor = null;
 
+		defaultLeafIcon = null;
+		defaultClosedIcon = null;
+		defaultOpenIcon = null;
+
 		defaultCellNonSelectionBackground = null;
 		defaultSelectionBackground = null;
 		defaultSelectionForeground = null;
@@ -233,9 +245,14 @@ public class FlatTreeUI
 		// remove default leaf/closed/opened icons
 		if( !showDefaultIcons && currentCellRenderer instanceof DefaultTreeCellRenderer ) {
 			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) currentCellRenderer;
-			renderer.setLeafIcon( null );
-			renderer.setClosedIcon( null );
-			renderer.setOpenIcon( null );
+			if( renderer.getLeafIcon() == defaultLeafIcon &&
+				renderer.getClosedIcon() == defaultClosedIcon &&
+				renderer.getOpenIcon() == defaultOpenIcon )
+			{
+				renderer.setLeafIcon( null );
+				renderer.setClosedIcon( null );
+				renderer.setOpenIcon( null );
+			}
 		}
 	}
 
