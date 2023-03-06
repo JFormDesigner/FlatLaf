@@ -24,10 +24,11 @@ jobs:
           - 8
           - 11  # LTS
           - 17  # LTS
+          - 19
         toolchain: [""]
-        include:
-          - java: 17
-            toolchain: 19  # latest
+#        include:
+#          - java: 17
+#            toolchain: 19  # latest
 
     steps:
       - uses: actions/checkout@v3
