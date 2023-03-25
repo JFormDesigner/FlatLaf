@@ -624,7 +624,7 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 					name: "scrollPane2"
 					"preferredSize": new java.awt.Dimension( 50, 50 )
-					add( new FormComponent( "javax.swing.JList" ) {
+					add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewAll$PreviewList" ) {
 						name: "list1"
 						"model": new javax.swing.DefaultListModel {
 							addElement( "Item 1" )

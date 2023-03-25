@@ -27,6 +27,7 @@ import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -37,6 +38,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import net.miginfocom.swing.*;
 
 /**
@@ -91,10 +93,14 @@ class FlatThemePreviewAll
 		tabbedPane1.addTab( "Tab 8", null );
 
 		list1.setSelectedIndex( 1 );
+//		list1.setSelectedIndices( new int[] { 0, 1 } );
+		list1.uiDefaultsGetter = preview::getUIDefaultProperty;
 		tree1.setSelectionRow( 1 );
+//		tree1.setSelectionRows( new int[] { 0, 1 } );
 		table1.setRowSorter( new TableRowSorter<>( table1.getModel() ) );
 		table1.getRowSorter().toggleSortOrder( 0 );
 		table1.setRowSelectionInterval( 1, 1 );
+		table1.setColumnSelectionInterval( 0, 0 );
 		table1.uiDefaultsGetter = preview::getUIDefaultProperty;
 
 		EventQueue.invokeLater( () -> {
@@ -347,7 +353,7 @@ class FlatThemePreviewAll
 		JLabel listTreeLabel = new JLabel();
 		JSplitPane splitPane1 = new JSplitPane();
 		JScrollPane scrollPane2 = new JScrollPane();
-		list1 = new JList<>();
+		list1 = new FlatThemePreviewAll.PreviewList();
 		JScrollPane scrollPane3 = new JScrollPane();
 		tree1 = new JTree();
 		JLabel tableLabel = new JLabel();
@@ -980,7 +986,7 @@ class FlatThemePreviewAll
 	private FlatProgressBar progressBar2;
 	private JToolBar toolBar1;
 	private FlatThemePreviewAll.PreviewTabbedPane tabbedPane1;
-	private JList<String> list1;
+	private FlatThemePreviewAll.PreviewList list1;
 	private JTree tree1;
 	private FlatThemePreviewAll.PreviewTable table1;
 	private JDesktopPane desktopPane1;
@@ -1046,12 +1052,32 @@ class FlatThemePreviewAll
 		}
 	}
 
+	//---- class PreviewList --------------------------------------------------
+
+	private static class PreviewList
+		extends JList<String>
+	{
+		Function<Object, Object> uiDefaultsGetter;
+
+		@Override
+		public void paint( Graphics g ) {
+			if( !Beans.isDesignTime() ) {
+				// needed for DefaultListCellRenderer
+				FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+					super.paint( g );
+				} );
+			} else
+				super.paint( g );
+		}
+	}
+
 	//---- class PreviewTable -------------------------------------------------
 
 	private static class PreviewTable
 		extends JTable
 	{
 		Function<Object, Object> uiDefaultsGetter;
+		private boolean inPrepareRenderer;
 
 		@Override
 		protected JTableHeader createDefaultTableHeader() {
@@ -1067,6 +1093,24 @@ class FlatThemePreviewAll
 				} );
 			} else
 				super.paint( g );
+		}
+
+		@Override
+		public Component prepareRenderer( TableCellRenderer renderer, int row, int column ) {
+			inPrepareRenderer = true;
+			try {
+				return super.prepareRenderer( renderer, row, column );
+			} finally {
+				inPrepareRenderer = false;
+			}
+		}
+
+		@Override
+		public boolean isFocusOwner() {
+			// needed because FlatUIUtils.isPermanentFocusOwner() is not used in FlatTableUI
+			return inPrepareRenderer
+				? FlatUIUtils.isPermanentFocusOwner( this )
+				: super.isFocusOwner();
 		}
 
 		//---- class PreviewTableHeader ----
