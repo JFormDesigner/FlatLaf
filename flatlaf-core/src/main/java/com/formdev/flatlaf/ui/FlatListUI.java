@@ -301,7 +301,8 @@ public class FlatListUI
 		// get renderer component
 		@SuppressWarnings( "unchecked" )
 		Component rendererComponent = cellRenderer.getListCellRendererComponent( list,
-			dataModel.getElementAt( row ), row, isSelected, list.hasFocus() && (row == leadIndex) );
+			dataModel.getElementAt( row ), row, isSelected,
+			FlatUIUtils.isPermanentFocusOwner( list ) && (row == leadIndex) );
 
 		//
 		boolean isFileList = Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) );
