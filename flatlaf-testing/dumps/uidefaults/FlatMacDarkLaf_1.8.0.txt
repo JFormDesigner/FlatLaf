@@ -548,15 +548,15 @@ LabelUI                        com.formdev.flatlaf.ui.FlatLabelUI
 
 List.background                #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 List.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
-List.cellFocusColor            #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
+List.cellFocusColor            #046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]
 List.cellMargins               1,6,1,6    javax.swing.plaf.InsetsUIResource [UI]
-List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
 List.dropCellBackground        [lazy] #00429d  HSL 215 100  31    javax.swing.plaf.ColorUIResource [UI]
 List.dropCellForeground        [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 List.dropLineColor             [lazy] #046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]
-List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
-List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.font                      [active] $defaultFont [UI]
 List.foreground                #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
@@ -1105,9 +1105,9 @@ TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
 
 Table.ascendingSortIcon        [lazy] 10,5    com.formdev.flatlaf.icons.FlatAscendingSortIcon [UI]
 Table.background               #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
-Table.cellFocusColor           #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
+Table.cellFocusColor           #046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]
 Table.cellMargins              2,3,2,3    javax.swing.plaf.InsetsUIResource [UI]
-Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.consistentHomeEndKeyBehavior true
 Table.descendingSortIcon       [lazy] 10,5    com.formdev.flatlaf.icons.FlatDescendingSortIcon [UI]
 Table.dropCellBackground       [lazy] #00429d  HSL 215 100  31    javax.swing.plaf.ColorUIResource [UI]
@@ -1116,8 +1116,8 @@ Table.dropLineColor            [lazy] #046eff  HSL 215 100  51    javax.swing.pl
 Table.dropLineShortColor       [lazy] #6aa9ff  HSL 215 100  71    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellBackground      #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
-Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #3c3c3c  HSL   0   0  24    javax.swing.plaf.ColorUIResource [UI]
@@ -1391,7 +1391,7 @@ Tree.drawsFocusBorderAroundIcon false
 Tree.dropCellBackground        [lazy] #00429d  HSL 215 100  31    javax.swing.plaf.ColorUIResource [UI]
 Tree.dropCellForeground        [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.dropLineColor             [lazy] #046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]
-Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
 Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
@@ -1414,7 +1414,7 @@ Tree.rowHeight                 0
 Tree.scrollsOnExpand           true
 Tree.selectionArc              0
 Tree.selectionBackground       #0058d0  HSL 215 100  41    javax.swing.plaf.ColorUIResource [UI]
-Tree.selectionBorderColor      #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionBorderColor      #046eff  HSL 215 100  51    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveBackground #464646  HSL   0   0  27    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
