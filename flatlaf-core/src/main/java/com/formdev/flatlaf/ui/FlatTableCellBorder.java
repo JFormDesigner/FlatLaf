@@ -113,11 +113,24 @@ public class FlatTableCellBorder
 
 	/**
 	 * Border for selected cell that uses margins and paints focus indicator border
-	 * if enabled (Table.showCellFocusIndicator=true) or at least one selected cell is editable.
+	 * <ul>
+	 * <li>if enabled (Table.showCellFocusIndicator=true) or
+	 * <li>if column selection is enabled and row selection disabled or
+	 * <li>if cells in only one row are selected and at least one cell is editable
+	 * </ul>
+	 * The reason for this logic is to hide the focus indicator when it is not needed,
+	 * and only show it when there are editable cells and the user needs to know
+	 * which cell is focused to start editing.
+	 * <p>
+	 * To avoid possible performance issues, checking for editable cell is limited
+	 * to {@link #maxCheckCellsEditable}.
 	 */
 	public static class Selected
 		extends FlatTableCellBorder
 	{
+		/** @since 3.1 */
+		public int maxCheckCellsEditable = 50;
+
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			Boolean b = getStyleFromTableUI( c, ui -> ui.showCellFocusIndicator );
@@ -125,7 +138,7 @@ public class FlatTableCellBorder
 
 			if( !showCellFocusIndicator ) {
 				JTable table = (JTable) SwingUtilities.getAncestorOfClass( JTable.class, c );
-				if( table != null && !isSelectionEditable( table ) )
+				if( table != null && !shouldShowCellFocusIndicator( table ) )
 					return;
 			}
 
@@ -133,28 +146,52 @@ public class FlatTableCellBorder
 		}
 
 		/**
-		 * Checks whether at least one selected cell is editable.
+		 * Returns whether focus indicator border should be shown.
+		 *
+		 * @since 3.1
 		 */
-		protected boolean isSelectionEditable( JTable table ) {
-			if( table.getRowSelectionAllowed() ) {
-				int columnCount = table.getColumnCount();
-				int[] selectedRows = table.getSelectedRows();
-				for( int selectedRow : selectedRows ) {
-					for( int column = 0; column < columnCount; column++ ) {
-						if( table.isCellEditable( selectedRow, column ) )
-							return true;
-					}
-				}
-			}
+		protected boolean shouldShowCellFocusIndicator( JTable table ) {
+			// show always for column only selection
+			// (do not check for editable cells because there may be thousands or millions of rows)
+			if( !table.getRowSelectionAllowed() )
+				return true;
+
+			// do not show if more than one row is selected
+			// (unlikely that user wants edit cell in this case)
+			if( table.getSelectedRowCount() != 1 )
+				return false;
+
+			int selectedRow = table.getSelectedRow();
 
 			if( table.getColumnSelectionAllowed() ) {
-				int rowCount = table.getRowCount();
-				int[] selectedColumns = table.getSelectedColumns();
-				for( int selectedColumn : selectedColumns ) {
-					for( int row = 0; row < rowCount; row++ ) {
-						if( table.isCellEditable( row, selectedColumn ) )
-							return true;
-					}
+				// column and row selection are allowed --> cell selection enabled
+				int selectedColumnCount = table.getSelectedColumnCount();
+
+				// do not show if exactly one cell is selected
+				if( selectedColumnCount == 1 )
+					return false;
+
+				// show always if there are too many columns to check for editable
+				if( selectedColumnCount > maxCheckCellsEditable )
+					return true;
+
+				// check whether at least one selected cell is editable
+				for( int selectedColumn : table.getSelectedColumns() ) {
+					if( table.isCellEditable( selectedRow, selectedColumn ) )
+						return true;
+				}
+			} else {
+				// row selection enabled
+				int columnCount = table.getColumnCount();
+
+				// show always if there are too many columns to check for editable
+				if( columnCount > maxCheckCellsEditable )
+					return true;
+
+				// check whether at least one selected cell is editable
+				for( int column = 0; column < columnCount; column++ ) {
+					if( table.isCellEditable( selectedRow, column ) )
+						return true;
 				}
 			}
 

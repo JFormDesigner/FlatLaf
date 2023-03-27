@@ -38,6 +38,8 @@ FlatLaf Change Log
   - Updated "Hiberbee Dark" and "Material Theme UI Lite" themes.
 - Styling: Fixed resolving of UI variables in styles that use other variables.
 - MenuItem: Fixed horizontal alignment of icons. (issue #631)
+- Table: Fixed potential performance issue with paint cell focus indicator
+  border. (issue #654)
 - Tree: Fixed missing custom closed/opened/leaf icons of a custom
   `DefaultTreeCellRenderer`. (issue #653; regression since implementing PR #609
   in FlatLaf 3.0)
