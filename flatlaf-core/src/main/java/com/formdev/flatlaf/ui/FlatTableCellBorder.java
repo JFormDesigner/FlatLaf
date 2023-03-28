@@ -135,18 +135,21 @@ public class FlatTableCellBorder
 	//---- class Selected -----------------------------------------------------
 
 	/**
-	 * Border for selected cell that uses margins and paints focus indicator border
+	 * Border for selected cell that uses margins and paints focus indicator border.
+	 * The focus indicator is shown under following conditions:
 	 * <ul>
-	 * <li>if enabled (Table.showCellFocusIndicator=true) or
-	 * <li>if column selection is enabled and row selection disabled or
-	 * <li>if cells in only one row are selected and at least one cell is editable
+	 * <li>always if enabled via UI property {@code Table.showCellFocusIndicator=true}
+	 * <li>for row selection mode if exactly one row is selected and at least one cell in that row is editable
+	 * <li>for column selection mode if exactly one column is selected and at least one cell in that column is editable
+	 * <li>never for cell selection mode
 	 * </ul>
 	 * The reason for this logic is to hide the focus indicator when it is not needed,
 	 * and only show it when there are editable cells and the user needs to know
 	 * which cell is focused to start editing.
 	 * <p>
-	 * To avoid possible performance issues, checking for editable cell is limited
-	 * to {@link #maxCheckCellsEditable}.
+	 * To avoid possible performance issues, checking for editable cells is limited
+	 * to {@link #maxCheckCellsEditable}. If there are more cells to check,
+	 * the focus indicator is always shown.
 	 */
 	public static class Selected
 		extends FlatTableCellBorder
@@ -174,46 +177,51 @@ public class FlatTableCellBorder
 		 * @since 3.1
 		 */
 		protected boolean shouldShowCellFocusIndicator( JTable table ) {
-			// show always for column only selection
-			// (do not check for editable cells because there may be thousands or millions of rows)
-			if( !table.getRowSelectionAllowed() )
-				return true;
+			boolean rowSelectionAllowed = table.getRowSelectionAllowed();
+			boolean columnSelectionAllowed = table.getColumnSelectionAllowed();
 
-			// do not show if more than one row is selected
-			// (unlikely that user wants edit cell in this case)
-			if( table.getSelectedRowCount() != 1 )
+			// do not show for cell selection mode
+			// (unlikely that user wants edit cell in case that multiple cells are selected;
+			// if only a single cell is selected then it is clear where the focus is)
+			if( rowSelectionAllowed && columnSelectionAllowed )
 				return false;
 
-			int selectedRow = table.getSelectedRow();
+			if( rowSelectionAllowed ) {
+				// row selection mode
 
-			if( table.getColumnSelectionAllowed() ) {
-				// column and row selection are allowed --> cell selection enabled
-				int selectedColumnCount = table.getSelectedColumnCount();
-
-				// do not show if exactly one cell is selected
-				if( selectedColumnCount == 1 )
+				// do not show if more than one row is selected
+				// (unlikely that user wants edit cell in this case)
+				if( table.getSelectedRowCount() != 1 )
 					return false;
 
 				// show always if there are too many columns to check for editable
-				if( selectedColumnCount > maxCheckCellsEditable )
-					return true;
-
-				// check whether at least one selected cell is editable
-				for( int selectedColumn : table.getSelectedColumns() ) {
-					if( table.isCellEditable( selectedRow, selectedColumn ) )
-						return true;
-				}
-			} else {
-				// row selection enabled
 				int columnCount = table.getColumnCount();
-
-				// show always if there are too many columns to check for editable
 				if( columnCount > maxCheckCellsEditable )
 					return true;
 
 				// check whether at least one selected cell is editable
+				int selectedRow = table.getSelectedRow();
 				for( int column = 0; column < columnCount; column++ ) {
 					if( table.isCellEditable( selectedRow, column ) )
+						return true;
+				}
+			} else if( columnSelectionAllowed ) {
+				// column selection mode
+
+				// do not show if more than one column is selected
+				// (unlikely that user wants edit cell in this case)
+				if( table.getSelectedColumnCount() != 1 )
+					return false;
+
+				// show always if there are too many rows to check for editable
+				int rowCount = table.getRowCount();
+				if( rowCount > maxCheckCellsEditable )
+					return true;
+
+				// check whether at least one selected cell is editable
+				int selectedColumn = table.getSelectedColumn();
+				for( int row = 0; row < rowCount; row++ ) {
+					if( table.isCellEditable( row, selectedColumn ) )
 						return true;
 				}
 			}
