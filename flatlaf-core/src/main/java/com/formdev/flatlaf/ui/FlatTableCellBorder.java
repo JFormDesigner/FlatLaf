@@ -24,6 +24,7 @@ import java.util.function.Function;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.TableUI;
 
 /**
@@ -107,6 +108,28 @@ public class FlatTableCellBorder
 	public static class Focused
 		extends FlatTableCellBorder
 	{
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			if( c != null && c.getClass().getName().equals( "javax.swing.JTable$BooleanRenderer" ) ) {
+				// boolean renderer in JTable does not use Table.focusSelectedCellHighlightBorder
+				// if cell is selected and focused (as DefaultTableCellRenderer does)
+				// --> delegate to Table.focusSelectedCellHighlightBorder
+				//     to make FlatLaf "focus indicator border hiding" work
+				JTable table = (JTable) SwingUtilities.getAncestorOfClass( JTable.class, c );
+				if( table != null &&
+					c.getForeground() == table.getSelectionForeground() &&
+					c.getBackground() == table.getSelectionBackground() )
+				{
+					Border border = UIManager.getBorder( "Table.focusSelectedCellHighlightBorder" );
+					if( border != null ) {
+						border.paintBorder( c, g, x, y, width, height );
+						return;
+					}
+				}
+			}
+
+			super.paintBorder( c, g, x, y, width, height );
+		}
 	}
 
 	//---- class Selected -----------------------------------------------------
