@@ -113,9 +113,9 @@ public class SystemInfo
 
 		// features
 		// available since Java 12; backported to Java 11.0.8 and 8u292
-		isMacFullWindowContentSupported =
-			javaVersion >= toVersion( 11, 0, 8, 0 ) ||
-			(javaVersion >= toVersion( 1, 8, 0, 292 ) && !isJava_9_orLater);
+		isMacFullWindowContentSupported = isMacOS &&
+			(javaVersion >= toVersion( 11, 0, 8, 0 ) ||
+			 (javaVersion >= toVersion( 1, 8, 0, 292 ) && !isJava_9_orLater));
 
 
 		// Note: Keep following at the end of this block because (optional) loading
