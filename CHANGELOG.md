@@ -6,7 +6,7 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Windows 11: Popups (`JPopupMenu`, `JComboBox`, `JToolTip`, etc.) now use
-  native Windows 11 rounded borders and drop shadows.
+  native Windows 11 rounded borders and drop shadows. (PR #643)
 - Fonts:
   - Added **Roboto Mono** (https://fonts.google.com/specimen/Roboto+Mono). (PR
     #639, issue #638)
@@ -20,6 +20,18 @@ FlatLaf Change Log
   tab, then this color is now used even if the tab is focused or selected.
 - TableHeader: Support column hover and pressed background and foreground
   colors. (issue #636)
+- Native libraries: Made it easier to distribute FlatLaf native libraries
+  (Windows `.dll` and Linux `.so`) to avoid problems on operating systems with
+  enabled execution restrictions.
+  See https://www.formdev.com/flatlaf/native-libraries/ for more details. (issue #624)
+  - Published native libraries to Maven Central for easy using them as
+    dependencies in Gradle and Maven.
+  - If available, native libraries are now loaded from same location as
+    `flatlaf.jar`, otherwise they are extract from `flatlaf.jar` to temporary
+    folder and loaded from there.
+  - Windows DLLs are now digitally signed with FormDev Software GmbH
+    certificate.
+
 
 #### Fixed bugs
 

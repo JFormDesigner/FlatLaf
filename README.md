@@ -66,6 +66,11 @@ Otherwise download `flatlaf-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf)
 
+See also
+[Native Libraries distribution](https://www.formdev.com/flatlaf/native-libraries/)
+for instructions on how to redistribute FlatLaf native libraries with your
+application.
+
 
 ### Snapshots
 
