@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.io.File;
 import java.net.URL;
+import java.security.CodeSource;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
@@ -128,8 +129,13 @@ class FlatNativeLibrary
 	private static File findLibraryBesideJar( String classifier, String ext ) {
 		try {
 			// get location of FlatLaf jar
-			URL jarUrl = FlatNativeLibrary.class.getProtectionDomain().getCodeSource().getLocation();
+			CodeSource codeSource = FlatNativeLibrary.class.getProtectionDomain().getCodeSource();
+			URL jarUrl = (codeSource != null) ? codeSource.getLocation() : null;
 			if( jarUrl == null )
+				return null;
+
+			// if url is not a file, then we're running in a special environment (e.g. WebStart)
+			if( !"file".equals( jarUrl.getProtocol() ) )
 				return null;
 
 			File jarFile = new File( jarUrl.toURI() );

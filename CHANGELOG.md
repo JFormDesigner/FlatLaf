@@ -8,6 +8,8 @@ FlatLaf Change Log
     "Material Theme UI Lite" themes; issue #667; regression in FlatLaf 3.1).
   - Fixed too large tree row height in "Carbon", "Dark Purple", "Gray",
     "Material Design Dark", "Monokai Pro", "One Dark" and "Spacegray" themes.
+- Native libraries: Fixed `IllegalArgumentException: URI scheme is not "file"`
+  when using FlatLaf in WebStart. (issue #668; regression in FlatLaf 3.1)
 
 
 ## 3.1
