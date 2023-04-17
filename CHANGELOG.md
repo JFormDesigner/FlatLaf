@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## 3.1.1-SNAPSHOT
+
+- IntelliJ Themes:
+  - Fixed too large menu item paddings and too large table/tree row heights (all
+    "Material Theme UI Lite" themes; issue #667; regression in FlatLaf 3.1).
+  - Fixed too large tree row height in "Carbon", "Dark Purple", "Gray",
+    "Material Design Dark", "Monokai Pro", "One Dark" and "Spacegray" themes.
+
+
 ## 3.1
 
 #### New features and improvements

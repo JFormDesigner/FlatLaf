@@ -336,9 +336,14 @@ public class IntelliJTheme
 
 			uiKeys.add( key );
 
-			// fix ComboBox size and Spinner border in all Material UI Lite themes
-			if( isMaterialUILite && (key.equals( "ComboBox.padding" ) || key.equals( "Spinner.border" )) )
-				return; // ignore
+			// ignore some properties that affect sizes
+			if( key.endsWith( ".border" ) ||
+				key.endsWith( ".rowHeight" ) ||
+				key.equals( "ComboBox.padding" ) ||
+				key.equals( "Spinner.padding" ) ||
+				key.equals( "Tree.leftChildIndent" ) ||
+				key.equals( "Tree.rightChildIndent" ) )
+			  return; // ignore
 
 			// map keys
 			key = uiKeyMapping.getOrDefault( key, key );
