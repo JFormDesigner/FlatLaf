@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.1.1-SNAPSHOT
+## 3.1.1
 
 - IntelliJ Themes:
   - Fixed too large menu item paddings and too large table/tree row heights (all
