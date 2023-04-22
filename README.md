@@ -150,6 +150,8 @@ Applications using FlatLaf
 --------------------------
 
 - ![New](images/new.svg)
+  [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) Kafka GUI client
+- ![New](images/new.svg)
   [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
   12 (**commercial**) - the award-winning all-in-one Java profiler
 - ![New](images/new.svg) [JFormDesigner](https://www.formdev.com/) 8
