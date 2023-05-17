@@ -150,6 +150,8 @@ Applications using FlatLaf
 --------------------------
 
 - ![New](images/new.svg)
+  [Spark](https://github.com/igniterealtime/Spark) - cross-platform IM client optimized for businesses and organizations.
+- ![New](images/new.svg)
   [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) Kafka GUI client
 - ![New](images/new.svg)
   [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
