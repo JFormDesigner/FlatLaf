@@ -34,13 +34,13 @@ dependencies {
 	implementation( project( ":flatlaf-demo" ) )
 //	implementation( project( ":flatlaf-natives-jna" ) )
 
-	implementation( "com.miglayout:miglayout-swing:5.3" )
-	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
-	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
-	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
-	implementation( "com.formdev:jide-oss:3.7.12" )
-	implementation( "com.glazedlists:glazedlists:1.11.0" )
-	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
+	implementation( libs.miglayout.swing )
+	implementation( libs.jgoodies.forms )
+	implementation( libs.swingx.all )
+	implementation( libs.swingx.beaninfo )
+	implementation( libs.jide.oss )
+	implementation( libs.glazedlists )
+	implementation( libs.netbeans.api.awt )
 }
 
 applyLafs()

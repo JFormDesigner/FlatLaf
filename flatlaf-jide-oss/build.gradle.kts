@@ -24,7 +24,7 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 
 	// use compileOnly() because there are various JIDE libraries available on Maven Central
-	compileOnly( "com.formdev:jide-oss:3.7.12" )
+	compileOnly( libs.jide.oss )
 }
 
 java {

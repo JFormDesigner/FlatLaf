@@ -21,6 +21,6 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( "net.java.dev.jna:jna:5.12.1" )
-	implementation( "net.java.dev.jna:jna-platform:5.12.1" )
+	implementation( libs.jna )
+	implementation( libs.jna.platform )
 }

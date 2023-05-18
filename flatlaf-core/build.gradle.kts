@@ -27,12 +27,11 @@ plugins {
 val sigtest = configurations.create( "sigtest" )
 
 dependencies {
-	testImplementation( "org.junit.jupiter:junit-jupiter-api:5.7.2" )
-	testImplementation( "org.junit.jupiter:junit-jupiter-params" )
-	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )
+	testImplementation( libs.bundles.junit )
+	testRuntimeOnly( libs.junit.engine )
 
 	// https://github.com/jtulach/netbeans-apitest
-	sigtest( "org.netbeans.tools:sigtest-maven-plugin:1.7" )
+	sigtest( libs.sigtest )
 }
 
 java {

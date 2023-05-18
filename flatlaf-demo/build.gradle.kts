@@ -27,8 +27,8 @@ dependencies {
 	implementation( project( ":flatlaf-fonts-roboto" ) )
 	implementation( project( ":flatlaf-fonts-roboto-mono" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )
-	implementation( "com.miglayout:miglayout-swing:5.3" )
-	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
+	implementation( libs.miglayout.swing )
+	implementation( libs.jgoodies.forms )
 //	implementation( project( ":flatlaf-natives-jna" ) )
 }
 

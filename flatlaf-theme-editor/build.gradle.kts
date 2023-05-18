@@ -27,9 +27,9 @@ dependencies {
 	implementation( project( ":flatlaf-fonts-roboto" ) )
 	implementation( project( ":flatlaf-fonts-roboto-mono" ) )
 
-	implementation( "com.miglayout:miglayout-swing:5.3" )
-	implementation( "com.fifesoft:rsyntaxtextarea:3.1.4" )
-	implementation( "com.fifesoft:autocomplete:3.1.3" )
+	implementation( libs.miglayout.swing )
+	implementation( libs.fifesoft.rsyntaxtextarea )
+	implementation( libs.fifesoft.autocomplete )
 }
 
 tasks {
