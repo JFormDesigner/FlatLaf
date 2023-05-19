@@ -1456,7 +1456,7 @@ public class FlatComponents2Test
 
 	//---- TestTableRowHeaderModel --------------------------------------------
 
-	private class TestTableRowHeaderModel
+	private static class TestTableRowHeaderModel
 		extends AbstractTableModel
 		implements TableModelListener
 	{

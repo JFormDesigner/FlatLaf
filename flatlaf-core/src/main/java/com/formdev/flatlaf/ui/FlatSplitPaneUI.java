@@ -87,7 +87,6 @@ public class FlatSplitPaneUI
 	@Styleable protected Color oneTouchHoverArrowColor;
 	@Styleable protected Color oneTouchPressedArrowColor;
 
-	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -126,19 +125,9 @@ public class FlatSplitPaneUI
 	}
 
 	@Override
-	protected void installListeners() {
-		super.installListeners();
-
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( splitPane, this::installStyle, null );
-		splitPane.addPropertyChangeListener( propertyChangeListener );
-	}
-
-	@Override
-	protected void uninstallListeners() {
-		super.uninstallListeners();
-
-		splitPane.removePropertyChangeListener( propertyChangeListener );
-		propertyChangeListener = null;
+	protected PropertyChangeListener createPropertyChangeListener() {
+		return FlatStylingSupport.createPropertyChangeListener( splitPane, this::installStyle,
+			super.createPropertyChangeListener() );
 	}
 
 	@Override

@@ -46,6 +46,6 @@ public class FlatLafThemeEditor
 			System.setProperty( "apple.awt.application.appearance", "system" );
 		}
 
-		FlatThemeFileEditor.main( args );
+		FlatThemeFileEditor.launch( args );
 	}
 }

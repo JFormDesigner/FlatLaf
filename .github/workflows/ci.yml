@@ -43,6 +43,10 @@ jobs:
           distribution: adopt  # Java 8 and 11 are pre-installed on ubuntu-latest
           cache: gradle
 
+      - name: Check with Error Prone
+        if: matrix.java == '11'
+        run: ./gradlew errorprone clean -Dtoolchain=${{ matrix.toolchain }}
+
       - name: Build with Gradle
         run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
 

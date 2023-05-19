@@ -348,8 +348,11 @@ class UIDefaultsLoader
 		// convert binary color to string
 		if( newValue instanceof Color ) {
 			Color color = (Color) newValue;
+			int rgb = color.getRGB() & 0xffffff;
 			int alpha = color.getAlpha();
-			return String.format( (alpha != 255) ? "#%06x%02x" : "#%06x", color.getRGB() & 0xffffff, alpha );
+			return (alpha != 255)
+				? String.format( "#%06x%02x", rgb, alpha )
+				: String.format( "#%06x", rgb );
 		}
 
 		throw new IllegalArgumentException( "property value type '" + newValue.getClass().getName() + "' not supported in references" );
@@ -702,8 +705,6 @@ class UIDefaultsLoader
 	/**
 	 * Parses a hex color in  {@code #RGB}, {@code #RGBA}, {@code #RRGGBB} or {@code #RRGGBBAA}
 	 * format and returns it as color object.
-	 *
-	 * @throws IllegalArgumentException
 	 */
 	static ColorUIResource parseColor( String value ) {
 		int rgba = parseColorRGBA( value );
@@ -716,8 +717,6 @@ class UIDefaultsLoader
 	 * Parses a hex color in  {@code #RGB}, {@code #RGBA}, {@code #RRGGBB} or {@code #RRGGBBAA}
 	 * format and returns it as {@code rgba} integer suitable for {@link java.awt.Color},
 	 * which includes alpha component in bits 24-31.
-	 *
-	 * @throws IllegalArgumentException
 	 */
 	static int parseColorRGBA( String value ) {
 		int len = value.length();

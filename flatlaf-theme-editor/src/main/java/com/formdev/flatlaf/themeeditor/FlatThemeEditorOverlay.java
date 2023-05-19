@@ -52,6 +52,7 @@ class FlatThemeEditorOverlay
 	private Font font;
 	private Font baseFont;
 
+	@SuppressWarnings( "FormatString" ) // Error Prone
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		// paint the syntax text area

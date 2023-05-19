@@ -391,7 +391,7 @@ public abstract class FlatLaf
 				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
 				aquaLaf = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
 			} else
-				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
+				aquaLaf = Class.forName( aquaLafClassName ).asSubclass( BasicLookAndFeel.class ).getDeclaredConstructor().newInstance();
 		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
@@ -581,10 +581,13 @@ public abstract class FlatLaf
 		Object activeFont = new ActiveFont( null, null, -1, 0, 0, 0, 0 );
 
 		// override fonts
+		List<String> fontKeys = new ArrayList<>( 50 );
 		for( Object key : defaults.keySet() ) {
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, activeFont );
+				fontKeys.add( (String) key );
 		}
+		for( String key : fontKeys )
+			defaults.put( key, activeFont );
 
 		// add fonts that are not set in BasicLookAndFeel
 		defaults.put( "RootPane.font", activeFont );
@@ -1541,7 +1544,7 @@ public abstract class FlatLaf
 			int newStyle = (style != -1)
 				? style
 				: (styleChange != 0)
-					? baseStyle & ~((styleChange >> 16) & 0xffff) | (styleChange & 0xffff)
+					? (baseStyle & ~((styleChange >> 16) & 0xffff)) | (styleChange & 0xffff)
 					: baseStyle;
 
 			// new size

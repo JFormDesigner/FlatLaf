@@ -23,11 +23,14 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -68,7 +71,7 @@ class LinuxFontPolicy
 			if( word.endsWith( "," ) )
 				word = word.substring( 0, word.length() - 1 ).trim();
 
-			String lword = word.toLowerCase();
+			String lword = word.toLowerCase( Locale.ENGLISH );
 			if( lword.equals( "italic" ) || lword.equals( "oblique" ) )
 				style |= Font.ITALIC;
 			else if( lword.equals( "bold" ) )
@@ -104,7 +107,7 @@ class LinuxFontPolicy
 			size = 1;
 
 		// handle logical font names
-		String logicalFamily = mapFcName( family.toLowerCase() );
+		String logicalFamily = mapFcName( family.toLowerCase( Locale.ENGLISH ) );
 		if( logicalFamily != null )
 			family = logicalFamily;
 
@@ -143,7 +146,7 @@ class LinuxFontPolicy
 				return createFont( Font.DIALOG, style, size, dsize );
 
 			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
-			String lastWord = family.substring( index + 1 ).toLowerCase();
+			String lastWord = family.substring( index + 1 ).toLowerCase( Locale.ENGLISH );
 			if( lastWord.contains( "bold" ) || lastWord.contains( "heavy" ) || lastWord.contains( "black" ) )
 				style |= Font.BOLD;
 
@@ -257,6 +260,7 @@ class LinuxFontPolicy
 		return createFont( family, style, size, dsize );
 	}
 
+	@SuppressWarnings( "MixedMutabilityReturnType" ) // Error Prone
 	private static List<String> readConfig( String filename ) {
 		File userHome = new File( System.getProperty( "user.home" ) );
 
@@ -277,7 +281,9 @@ class LinuxFontPolicy
 
 		// read config file
 		ArrayList<String> lines = new ArrayList<>( 200 );
-		try( BufferedReader reader = new BufferedReader( new FileReader( file ) ) ) {
+		try( BufferedReader reader = new BufferedReader( new InputStreamReader(
+			new FileInputStream( file ), StandardCharsets.US_ASCII ) ) )
+		{
 			String line;
 			while( (line = reader.readLine()) != null )
 				lines.add( line );

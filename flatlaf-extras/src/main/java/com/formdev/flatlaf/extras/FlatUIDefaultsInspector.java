@@ -770,6 +770,7 @@ public class FlatUIDefaultsInspector
 				return String.valueOf( value );
 		}
 
+		@SuppressWarnings( "FormatString" ) // Error Prone
 		private static String color2hex( Color color ) {
 			int rgb = color.getRGB();
 			boolean hasAlpha = color.getAlpha() != 255;

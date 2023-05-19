@@ -229,7 +229,7 @@ public class FlatTaskPaneUI
 
 			// compute chevron position
 			int cx = (int) (x + width / 2 - cw / 2);
-			int cy = (int) (y + (height / 2 - ch));
+			int cy = (int) (y + height / 2 - ch);
 			float offset = ch + UIScale.scale( 1f );
 
 			// set stroke with scaled width

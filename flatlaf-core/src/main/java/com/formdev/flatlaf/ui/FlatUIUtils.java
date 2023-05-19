@@ -725,7 +725,7 @@ public class FlatUIUtils
 	{
 		dotSize = UIScale.scale( dotSize );
 		gap = UIScale.scale( gap );
-		int gripSize = (dotSize * dotCount) + ((gap * (dotCount - 1)));
+		int gripSize = (dotSize * dotCount) + (gap * (dotCount - 1));
 
 		// calculate grip position
 		float gx;

@@ -575,7 +575,7 @@ public class FlatTreeUI
 			if( isSelected && isWideSelection() ) {
 				Color oldColor = g.getColor();
 				g.setColor( selectionInactiveBackground );
-				paintWideSelection( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
+				paintWideSelection( g, bounds, row );
 				g.setColor( oldColor );
 			}
 			return;
@@ -633,7 +633,7 @@ public class FlatTreeUI
 
 			if( isWideSelection() ) {
 				// wide selection
-				paintWideSelection( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
+				paintWideSelection( g, bounds, row );
 			} else {
 				// non-wide selection
 				paintCellBackground( g, rendererComponent, bounds, row, true );
@@ -702,9 +702,7 @@ public class FlatTreeUI
 		return oldColor;
 	}
 
-	private void paintWideSelection( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
-		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
-	{
+	private void paintWideSelection( Graphics g, Rectangle bounds, int row ) {
 		float arcTop, arcBottom;
 		arcTop = arcBottom = UIScale.scale( selectionArc / 2f );
 

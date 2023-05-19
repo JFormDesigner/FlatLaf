@@ -28,7 +28,6 @@ import java.awt.Paint;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.RenderingHints.Key;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
@@ -368,12 +367,12 @@ public class Graphics2DProxy
 	}
 
 	@Override
-	public void setRenderingHint( Key hintKey, Object hintValue ) {
+	public void setRenderingHint( RenderingHints.Key hintKey, Object hintValue ) {
 		delegate.setRenderingHint( hintKey, hintValue );
 	}
 
 	@Override
-	public Object getRenderingHint( Key hintKey ) {
+	public Object getRenderingHint( RenderingHints.Key hintKey ) {
 		return delegate.getRenderingHint( hintKey );
 	}
 

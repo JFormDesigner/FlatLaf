@@ -102,7 +102,7 @@ class FlatThemeFileEditor
 	private final FlatThemePropertiesBaseManager propertiesBaseManager = new FlatThemePropertiesBaseManager();
 	private final JButton newButton;
 
-	static void main( String[] args ) {
+	static void launch( String[] args ) {
 		File dir = (args.length > 0)
 			? new File( args[0] )
 			: null;
@@ -1306,7 +1306,7 @@ class FlatThemeFileEditor
 				super.addElement( obj );
 			} else {
 				int index = binarySearch( this, obj, comparator );
-				insertElementAt( obj, (index < 0) ? ((-index)-1) : index );
+				insertElementAt( obj, (index < 0) ? (-index - 1) : index );
 			}
 		}
 

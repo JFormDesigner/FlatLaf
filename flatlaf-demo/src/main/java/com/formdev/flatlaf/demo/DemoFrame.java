@@ -440,9 +440,9 @@ class DemoFrame
 
 		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
 		try {
-			FlatLaf.setup( lafClass.newInstance() );
+			FlatLaf.setup( lafClass.getDeclaredConstructor().newInstance() );
 			FlatLaf.updateUI();
-		} catch( InstantiationException | IllegalAccessException ex ) {
+		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}

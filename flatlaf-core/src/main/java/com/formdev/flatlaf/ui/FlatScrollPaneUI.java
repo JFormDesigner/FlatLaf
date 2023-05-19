@@ -360,8 +360,8 @@ public class FlatScrollPaneUI
 	protected void updateViewport( PropertyChangeEvent e ) {
 		super.updateViewport( e );
 
-		JViewport oldViewport = (JViewport) (e.getOldValue());
-		JViewport newViewport = (JViewport) (e.getNewValue());
+		JViewport oldViewport = (JViewport) e.getOldValue();
+		JViewport newViewport = (JViewport) e.getNewValue();
 
 		removeViewportListeners( oldViewport );
 		addViewportListeners( newViewport );

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import net.ltgt.gradle.errorprone.errorprone
+
 val releaseVersion = "3.1.1"
 val developmentVersion = "3.2-SNAPSHOT"
 
@@ -42,6 +44,10 @@ if( !toolchainJavaVersion.isNullOrEmpty() )
 	println( "Java toolchain ${toolchainJavaVersion}" )
 println()
 
+
+plugins {
+	alias( libs.plugins.errorprone ) apply false
+}
 
 allprojects {
 	tasks {
@@ -79,6 +85,57 @@ allprojects {
 				links( "https://docs.oracle.com/en/java/javase/11/docs/api/" )
 			}
 			isFailOnError = false
+		}
+	}
+
+
+	//---- Error Prone ----
+
+	tasks.register( "errorprone" ) {
+		group = "verification"
+		tasks.withType<JavaCompile>().forEach {
+			dependsOn( it )
+		}
+	}
+
+	val useErrorProne = gradle.startParameter.taskNames.contains( "errorprone" )
+	if( useErrorProne ) {
+		plugins.withType<JavaPlugin> {
+			apply( plugin = libs.plugins.errorprone.get().pluginId )
+
+			dependencies {
+				"errorprone"( libs.errorprone )
+			}
+
+			tasks.withType<JavaCompile>().configureEach {
+				options.compilerArgs.add( "-Werror" )
+				options.errorprone {
+					disable(
+						"ReferenceEquality",	// reports usage of '==' for objects
+						"StringSplitter",		// reports String.split()
+						"JavaTimeDefaultTimeZone",	// reports Year.now()
+						"MissingSummary",		// reports `/** @since 2 */`
+						"InvalidBlockTag",		// reports @uiDefault in javadoc
+						"AlreadyChecked",		// reports false positives
+						"InlineMeSuggester",	// suggests using Error Prone annotations for deprecated methods
+						"TypeParameterUnusedInFormals",
+						"UnsynchronizedOverridesSynchronized",
+					)
+					when( project.name ) {
+						"flatlaf-intellij-themes" -> disable(
+							"MutablePublicArray",	// reports FlatAllIJThemes.INFOS
+						)
+						"flatlaf-theme-editor" -> disable(
+							"CatchAndPrintStackTrace",
+						)
+						"flatlaf-testing" -> disable(
+							"CatchAndPrintStackTrace",
+							"JdkObsolete",			// reports Hashtable used for JSlider.setLabelTable()
+							"JavaUtilDate",			// reports usage of class Date
+						)
+					}
+				}
+			}
 		}
 	}
 }

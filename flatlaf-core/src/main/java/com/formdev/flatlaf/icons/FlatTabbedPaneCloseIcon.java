@@ -94,8 +94,8 @@ public class FlatTabbedPaneCloseIcon
 		Color fg = FlatButtonUI.buttonStateColor( c, closeForeground, null, null, closeHoverForeground, closePressedForeground );
 		g.setColor( FlatUIUtils.deriveColor( fg, c.getForeground() ) );
 
-		float mx = width / 2;
-		float my = height / 2;
+		float mx = width / 2f;
+		float my = height / 2f;
 		float r = ((bg != null) ? closeCrossFilledSize : closeCrossPlainSize) / 2;
 
 		// paint cross

@@ -30,6 +30,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
  */
 public class TestUtils
 {
+	@SuppressWarnings( "MutablePublicArray" ) // Error Prone
 	public static final float[] FACTORS = { 1f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3f, 3.25f, 3.5f, 3.75f, 4f, 5f, 6f };
 
 	public static void setup( boolean withFocus ) {

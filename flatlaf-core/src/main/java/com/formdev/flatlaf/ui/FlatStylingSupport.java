@@ -278,6 +278,7 @@ public class FlatStylingSupport
 	 * @throws IllegalArgumentException on syntax errors
 	 * @throws ClassCastException if value type does not fit to expected type
 	 */
+	@SuppressWarnings( "ReturnValueIgnored" ) // Error Prone
 	public static Map<String, Object> parseAndApply( Map<String, Object> oldStyleValues,
 		Object style, BiFunction<String, Object, Object> applyProperty )
 			throws UnknownStyleException, IllegalArgumentException

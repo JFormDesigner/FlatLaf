@@ -869,7 +869,6 @@ public class FlatWindowsNativeWindowBorder
 		int GetSystemMetricsForDpi( int nIndex, int dpi );
 
 		boolean IsZoomed( HWND hWnd );
-		HANDLE GetProp( HWND hWnd, String lpString );
 
 		HMENU GetSystemMenu( HWND hWnd, boolean bRevert );
 		boolean SetMenuItemInfo( HMENU hmenu, int item, boolean fByPositon, MENUITEMINFO lpmii );

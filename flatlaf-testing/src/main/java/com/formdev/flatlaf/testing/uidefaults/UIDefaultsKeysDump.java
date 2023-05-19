@@ -19,10 +19,13 @@ package com.formdev.flatlaf.testing.uidefaults;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -47,7 +50,9 @@ public class UIDefaultsKeysDump
 
 		// load existing keys file
 		HashSet<String> keys = new HashSet<>();
-		try( BufferedReader reader = new BufferedReader( new FileReader( keysFile ) ) ) {
+		try( BufferedReader reader = new BufferedReader( new InputStreamReader(
+			new FileInputStream( keysFile ), StandardCharsets.UTF_8 ) ) )
+		{
 			String key;
 			while( (key = reader.readLine()) != null ) {
 				keys.add( key );
@@ -64,7 +69,9 @@ public class UIDefaultsKeysDump
 		collectKeys( FlatTestLaf.class.getName(), keys );
 
 		// write key file
-		try( Writer fileWriter = new BufferedWriter( new FileWriter( keysFile ) ) ) {
+		try( Writer fileWriter = new BufferedWriter( new OutputStreamWriter(
+			new FileOutputStream( keysFile ), StandardCharsets.UTF_8 ) ) )
+		{
 			String[] sortedKeys = keys.toArray( new String[keys.size()] );
 			Arrays.sort( sortedKeys );
 			for( String key : sortedKeys ) {

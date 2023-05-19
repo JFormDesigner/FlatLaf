@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -96,7 +97,7 @@ public class FlatPropertiesLaf
 	protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
 		lafClasses.add( FlatLaf.class );
-		switch( baseTheme.toLowerCase() ) {
+		switch( baseTheme.toLowerCase( Locale.ENGLISH ) ) {
 			default:
 			case "light":
 				lafClasses.add( FlatLightLaf.class );

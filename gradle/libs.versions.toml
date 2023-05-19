@@ -54,6 +54,12 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
+# errorprone
+errorprone = "com.google.errorprone:error_prone_core:2.19.1"
+
 
 [bundles]
 junit = [ "junit-api", "junit-params" ]
+
+[plugins]
+errorprone = { id = "net.ltgt.errorprone", version = "3.1.0" }

@@ -932,7 +932,7 @@ public class FlatDisabledIconsTest
 		@Override
 		public int filterRGB(int x, int y, int rgb) {
 			// Reduce the color bandwidth in quarter (>> 2) and Shift 0x88.
-			return (rgb & 0xff000000) + 0x888888 + ((((rgb >> 16) & 0xff) >> 2) << 16) + ((((rgb >> 8) & 0xff) >> 2) << 8) + (((rgb) & 0xff) >> 2);
+			return (rgb & 0xff000000) + 0x888888 + ((((rgb >> 16) & 0xff) >> 2) << 16) + ((((rgb >> 8) & 0xff) >> 2) << 8) + ((rgb & 0xff) >> 2);
 		}
 	}
 }

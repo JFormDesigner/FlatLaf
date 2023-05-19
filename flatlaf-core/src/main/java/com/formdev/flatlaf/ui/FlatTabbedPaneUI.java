@@ -1967,7 +1967,7 @@ public class FlatTabbedPaneUI
 
 	//---- class TabCloseButton -----------------------------------------------
 
-	private class TabCloseButton
+	private static class TabCloseButton
 		extends JButton
 		implements UIResource
 	{
@@ -1977,7 +1977,7 @@ public class FlatTabbedPaneUI
 
 	//---- class ContainerUIResource ------------------------------------------
 
-	private class ContainerUIResource
+	private static class ContainerUIResource
 		extends JPanel
 		implements UIResource
 	{
@@ -2382,7 +2382,7 @@ public class FlatTabbedPaneUI
 			if( isPreciseWheel &&
 				getScrollButtonsPlacement() == BOTH &&
 				getScrollButtonsPolicy() == AS_NEEDED_SINGLE &&
-				(isLeftToRight() || !horizontal) || // scroll buttons are hidden in right-to-left
+				(isLeftToRight() || !horizontal) && // scroll buttons are hidden in right-to-left
 				scrollBackwardButtonPrefSize != null )
 			{
 				// special cases for scrolling with touchpad or high-resolution wheel:
@@ -3051,7 +3051,7 @@ public class FlatTabbedPaneUI
 							break;
 
 						case CENTER:
-							shiftTabs( 0, (diff) / 2 );
+							shiftTabs( 0, diff / 2 );
 							topHeight += diff / 2;
 							bottomHeight += diff - (diff / 2);
 							break;

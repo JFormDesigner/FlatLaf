@@ -69,7 +69,7 @@ public class Location {
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof Location)) {
       return false;
     }
     Location other = (Location)obj;

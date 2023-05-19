@@ -53,8 +53,8 @@ public class FlatInternalFrameCloseIcon
 
 		g.setColor( FlatButtonUI.buttonStateColor( c, c.getForeground(), null, null, hoverForeground, pressedForeground ) );
 
-		float mx = width / 2;
-		float my = height / 2;
+		float mx = width / 2f;
+		float my = height / 2f;
 		float r = 3.25f;
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD, 4 );

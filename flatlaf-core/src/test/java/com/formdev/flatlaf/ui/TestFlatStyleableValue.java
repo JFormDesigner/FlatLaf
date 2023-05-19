@@ -1214,6 +1214,7 @@ public class TestFlatStyleableValue
 
 	//---- class TestIcon -----------------------------------------------------
 
+	@SuppressWarnings( "EqualsHashCode" ) // Error Prone
 	public static class TestIcon
 		implements Icon
 	{

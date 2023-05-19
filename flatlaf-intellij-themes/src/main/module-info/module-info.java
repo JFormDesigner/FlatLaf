@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/**
+/*
  * @author Karl Tauber
  */
 module com.formdev.flatlaf.intellijthemes {

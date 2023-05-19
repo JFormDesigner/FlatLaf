@@ -279,7 +279,7 @@ public class FlatSVGIcon
 
 	private static synchronized URI loadFromStream( InputStream in ) throws IOException {
 		try( InputStream in2 = in ) {
-			return svgUniverse.loadSVG( in2, "/flatlaf-stream-" + (streamNumber++) );
+			return svgUniverse.loadSVG( in2, "/flatlaf-stream-" + streamNumber++ );
 		}
 	}
 
@@ -474,7 +474,7 @@ public class FlatSVGIcon
 		URI uri = this.uri;
 		if( uri == null ) {
 			URL url = getIconURL( name, dark );
-			if( url == null & dark )
+			if( url == null && dark )
 				url = getIconURL( name, false );
 
 			if( url == null ) {

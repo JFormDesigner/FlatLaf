@@ -682,7 +682,7 @@ public class FlatTitlePane
 				// Seems to be a bug in sun.awt.X11.XNETProtocol.requestState(),
 				// which does some strange state XOR-ing...
 				if( (oldState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_VERT )
-					newState = oldState & ~Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_HORIZ;
+					newState = (oldState & ~Frame.MAXIMIZED_BOTH) | Frame.MAXIMIZED_HORIZ;
 			}
 
 			frame.setExtendedState( newState );

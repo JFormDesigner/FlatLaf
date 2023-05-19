@@ -22,16 +22,20 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -229,7 +233,8 @@ public class UIDefaultsDump
 		}
 		if( origFile != null ) {
 			try {
-				Map<String, String> defaults1 = parse( new FileReader( origFile ) );
+				Map<String, String> defaults1 = parse( new InputStreamReader(
+					new FileInputStream( origFile ), StandardCharsets.UTF_8 ) );
 				Map<String, String> defaults2 = parse( new StringReader( stringWriter.toString() ) );
 
 				content = diff( defaults1, defaults2 );
@@ -242,7 +247,9 @@ public class UIDefaultsDump
 
 		// write to file
 		file.getParentFile().mkdirs();
-		try( FileWriter fileWriter = new FileWriter( file ) ) {
+		try( Writer fileWriter = new OutputStreamWriter(
+			new FileOutputStream( file ), StandardCharsets.UTF_8 ) )
+		{
 			fileWriter.write( content );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
@@ -419,7 +426,7 @@ public class UIDefaultsDump
 		} else if( value instanceof Character ) {
 			char ch = ((Character)value).charValue();
 			if( ch >= ' ' && ch <= '~' )
-				out.printf( "'%c'", value );
+				out.printf( "'%c'", ch );
 			else
 				out.printf( "'\\u%h'", (int) ch );
 		} else if( value.getClass().isArray() )

@@ -398,7 +398,7 @@ public class FlatSubMenusTest
 
 	//---- class PopupMenu ----------------------------------------------------
 
-	private class PopupMenu extends JPopupMenu {
+	private static class PopupMenu extends JPopupMenu {
 		private PopupMenu() {
 			initComponents();
 		}

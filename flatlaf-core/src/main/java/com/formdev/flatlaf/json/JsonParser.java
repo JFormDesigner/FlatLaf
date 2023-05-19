@@ -502,9 +502,9 @@ class JsonParser {
   }
 
   private boolean isHexDigit() {
-    return current >= '0' && current <= '9'
-        || current >= 'a' && current <= 'f'
-        || current >= 'A' && current <= 'F';
+    return (current >= '0' && current <= '9')
+        || (current >= 'a' && current <= 'f')
+        || (current >= 'A' && current <= 'F');
   }
 
   private boolean isEndOfText() {

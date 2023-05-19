@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.Icon;
@@ -179,7 +180,7 @@ public class FlatLabelUI
 			// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
 			String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
 
-			String lowerText = text.toLowerCase();
+			String lowerText = text.toLowerCase( Locale.ENGLISH );
 			int headIndex;
 			int styleIndex;
 
@@ -228,7 +229,7 @@ public class FlatLabelUI
 						int tagBegin = i + 1;
 						for( i += 2; i < textLength; i++ ) {
 							if( !Character.isLetterOrDigit( text.charAt( i ) ) ) {
-								String tag = text.substring( tagBegin, i ).toLowerCase();
+								String tag = text.substring( tagBegin, i ).toLowerCase( Locale.ENGLISH );
 								if( tagsUseFontSizeSet.contains( tag ) )
 									return true;
 

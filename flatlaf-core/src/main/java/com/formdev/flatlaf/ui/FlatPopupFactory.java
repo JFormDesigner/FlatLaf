@@ -391,7 +391,7 @@ public class FlatPopupFactory
 
 	//---- class NonFlashingPopup ---------------------------------------------
 
-	private class NonFlashingPopup
+	private static class NonFlashingPopup
 		extends Popup
 	{
 		private Popup delegate;
