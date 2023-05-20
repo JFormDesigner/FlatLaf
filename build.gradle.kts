@@ -16,10 +16,7 @@
 
 import net.ltgt.gradle.errorprone.errorprone
 
-val releaseVersion = "3.1.1"
-val developmentVersion = "3.2-SNAPSHOT"
-
-version = if( rootProject.hasProperty( "release" ) ) releaseVersion else developmentVersion
+version = property( if( hasProperty( "release" ) ) "flatlaf.releaseVersion" else "flatlaf.developmentVersion" ) as String
 
 allprojects {
 	version = rootProject.version
