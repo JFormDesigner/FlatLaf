@@ -376,7 +376,7 @@ class FlatSyntaxTextAreaActions
 				dialog.setVisible( true );
 
 				lastLocation = dialog.getLocation();
-			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
+			} catch( BadLocationException | IndexOutOfBoundsException | IllegalArgumentException ex ) {
 				ex.printStackTrace();
 			}
 		}

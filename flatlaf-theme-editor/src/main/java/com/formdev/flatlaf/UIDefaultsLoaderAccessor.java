@@ -50,12 +50,15 @@ public class UIDefaultsLoaderAccessor
 	public static Object NULL = ValueType.NULL;
 	public static Object LAZY = ValueType.LAZY;
 
-	public static String resolveValue( String value, Function<String, String> propertiesGetter ) {
+	public static String resolveValue( String value, Function<String, String> propertiesGetter )
+		throws IllegalArgumentException
+	{
 		return UIDefaultsLoader.resolveValue( value, propertiesGetter );
 	}
 
 	public static Object parseValue( String key, String value, Object[] resultValueType,
 		Function<String, String> resolver )
+			throws IllegalArgumentException
 	{
 		ValueType[] resultValueType2 = new ValueType[1];
 		Object result = UIDefaultsLoader.parseValue( key, value, null,
@@ -64,7 +67,9 @@ public class UIDefaultsLoaderAccessor
 		return result;
 	}
 
-	public static int parseColorRGBA( String value ) {
+	public static int parseColorRGBA( String value )
+		throws IllegalArgumentException
+	{
 		return UIDefaultsLoader.parseColorRGBA( value );
 	}
 }

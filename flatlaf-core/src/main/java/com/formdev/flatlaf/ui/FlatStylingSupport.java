@@ -100,15 +100,15 @@ public class FlatStylingSupport
 
 	/** @since 2 */
 	public interface StyleableUI {
-		Map<String, Class<?>> getStyleableInfos( JComponent c );
-		/** @since 2.5 */ Object getStyleableValue( JComponent c, String key );
+		Map<String, Class<?>> getStyleableInfos( JComponent c ) throws IllegalArgumentException;
+		/** @since 2.5 */ Object getStyleableValue( JComponent c, String key ) throws IllegalArgumentException;
 	}
 
 	/** @since 2 */
 	public interface StyleableBorder {
 		Object applyStyleProperty( String key, Object value );
-		Map<String, Class<?>> getStyleableInfos();
-		/** @since 2.5 */ Object getStyleableValue( String key );
+		Map<String, Class<?>> getStyleableInfos() throws IllegalArgumentException;
+		/** @since 2.5 */ Object getStyleableValue( String key ) throws IllegalArgumentException;
 	}
 
 	/** @since 2.5 */
@@ -135,7 +135,9 @@ public class FlatStylingSupport
 		return getStyle( c ) != null || getStyleClass( c ) != null;
 	}
 
-	public static Object getResolvedStyle( JComponent c, String type ) {
+	public static Object getResolvedStyle( JComponent c, String type )
+		throws IllegalArgumentException
+	{
 		Object style = getStyle( c );
 		Object styleClass = getStyleClass( c );
 		Object styleForClasses = getStyleForClasses( styleClass, type );
@@ -175,7 +177,9 @@ public class FlatStylingSupport
 	 * @param type the type of the component
 	 * @return the styles
 	 */
-	public static Object getStyleForClasses( Object styleClass, String type ) {
+	public static Object getStyleForClasses( Object styleClass, String type )
+		throws IllegalArgumentException
+	{
 		if( styleClass == null )
 			return null;
 
@@ -198,7 +202,9 @@ public class FlatStylingSupport
 			return null;
 	}
 
-	private static Object getStyleForClass( String styleClass, String type ) {
+	private static Object getStyleForClass( String styleClass, String type )
+		throws IllegalArgumentException
+	{
 		return joinStyles(
 			UIManager.get( "[style]." + styleClass ),
 			UIManager.get( "[style]" + type + '.' + styleClass ) );
@@ -218,7 +224,9 @@ public class FlatStylingSupport
 	 * @return new joined style
 	 */
 	@SuppressWarnings( "unchecked" )
-	public static Object joinStyles( Object style1, Object style2 ) {
+	public static Object joinStyles( Object style1, Object style2 )
+		throws IllegalArgumentException
+	{
 		if( style1 == null )
 			return style2;
 		if( style2 == null )
@@ -380,7 +388,9 @@ public class FlatStylingSupport
 		return map;
 	}
 
-	private static Object parseValue( String key, String value ) {
+	private static Object parseValue( String key, String value )
+		throws IllegalArgumentException
+	{
 		// simple reference
 		if( value.startsWith( "$" ) )
 			return UIManager.get( value.substring( 1 ) );
@@ -475,7 +485,9 @@ public class FlatStylingSupport
 		}
 	}
 
-	private static Object applyToField( Field f, Object obj, Object value, boolean useMethodHandles ) {
+	private static Object applyToField( Field f, Object obj, Object value, boolean useMethodHandles )
+		throws IllegalArgumentException
+	{
 		checkValidField( f );
 
 		if( useMethodHandles && obj instanceof StyleableLookupProvider ) {
@@ -505,7 +517,9 @@ public class FlatStylingSupport
 		}
 	}
 
-	private static Object getFieldValue( Field f, Object obj, boolean useMethodHandles ) {
+	private static Object getFieldValue( Field f, Object obj, boolean useMethodHandles )
+		throws IllegalArgumentException
+	{
 		checkValidField( f );
 
 		if( useMethodHandles && obj instanceof StyleableLookupProvider ) {
@@ -530,7 +544,9 @@ public class FlatStylingSupport
 		return new IllegalArgumentException( "failed to access field '" + f.getDeclaringClass().getName() + "." + f.getName() + "'", ex );
 	}
 
-	private static void checkValidField( Field f ) {
+	private static void checkValidField( Field f )
+		throws IllegalArgumentException
+	{
 		if( !isValidField( f ) )
 			throw new IllegalArgumentException( "field '" + f.getDeclaringClass().getName() + "." + f.getName() + "' is final or static" );
 	}
@@ -540,7 +556,9 @@ public class FlatStylingSupport
 		return (modifiers & (Modifier.FINAL|Modifier.STATIC)) == 0 && !f.isSynthetic();
 	}
 
-	private static Field getStyleableField( StyleableField styleableField ) {
+	private static Field getStyleableField( StyleableField styleableField )
+		throws IllegalArgumentException
+	{
 		String fieldName = styleableField.fieldName();
 		if( fieldName.isEmpty() )
 			fieldName = styleableField.key();
@@ -648,6 +666,7 @@ public class FlatStylingSupport
 
 	static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
 		JComponent c, AtomicBoolean borderShared )
+			throws IllegalArgumentException
 	{
 		try {
 			return applyToAnnotatedObject( obj, key, value );
@@ -696,7 +715,9 @@ public class FlatStylingSupport
 		};
 	}
 
-	static Border cloneBorder( Border border ) {
+	static Border cloneBorder( Border border )
+		throws IllegalArgumentException
+	{
 		Class<? extends Border> borderClass = border.getClass();
 		try {
 			return borderClass.getDeclaredConstructor().newInstance();
@@ -705,7 +726,9 @@ public class FlatStylingSupport
 		}
 	}
 
-	static Icon cloneIcon( Icon icon ) {
+	static Icon cloneIcon( Icon icon )
+		throws IllegalArgumentException
+	{
 		Class<? extends Icon> iconClass = icon.getClass();
 		try {
 			return iconClass.getDeclaredConstructor().newInstance();
@@ -718,11 +741,15 @@ public class FlatStylingSupport
 	 * Returns a map of all fields annotated with {@link Styleable}.
 	 * The key is the name of the field and the value the type of the field.
 	 */
-	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj ) {
+	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj )
+		throws IllegalArgumentException
+	{
 		return getAnnotatedStyleableInfos( obj, null );
 	}
 
-	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj, Border border ) {
+	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj, Border border )
+		throws IllegalArgumentException
+	{
 		Map<String, Class<?>> infos = new StyleableInfosMap<>();
 		collectAnnotatedStyleableInfos( obj, infos );
 		collectStyleableInfos( border, infos );
@@ -733,7 +760,9 @@ public class FlatStylingSupport
 	 * Search for all fields annotated with {@link Styleable} and add them to the given map.
 	 * The key is the name of the field and the value the type of the field.
 	 */
-	public static void collectAnnotatedStyleableInfos( Object obj, Map<String, Class<?>> infos ) {
+	public static void collectAnnotatedStyleableInfos( Object obj, Map<String, Class<?>> infos )
+		throws IllegalArgumentException
+	{
 		HashSet<String> processedFields = new HashSet<>();
 		Class<?> cls = obj.getClass();
 
@@ -811,7 +840,9 @@ public class FlatStylingSupport
 			infos.put( keyPrefix.concat( e.getKey() ), e.getValue() );
 	}
 
-	public static Object getAnnotatedStyleableValue( Object obj, String key ) {
+	public static Object getAnnotatedStyleableValue( Object obj, String key )
+		throws IllegalArgumentException
+	{
 		String fieldName = keyToFieldName( key );
 		Class<?> cls = obj.getClass();
 
@@ -878,7 +909,9 @@ public class FlatStylingSupport
 		extends LinkedHashMap<K,V>
 	{
 		@Override
-		public V put( K key, V value ) {
+		public V put( K key, V value )
+			throws IllegalArgumentException
+		{
 			V oldValue = super.put( key, value );
 			if( oldValue != null )
 				throw new IllegalArgumentException( "duplicate key '" + key + "'" );

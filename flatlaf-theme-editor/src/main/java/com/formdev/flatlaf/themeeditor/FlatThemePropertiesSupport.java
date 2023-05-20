@@ -82,7 +82,9 @@ class FlatThemePropertiesSupport
 		this.basePropertyProvider = basePropertyProvider;
 	}
 
-	private String resolveValue( String value ) {
+	private String resolveValue( String value )
+		throws IllegalArgumentException
+	{
 		return UIDefaultsLoaderAccessor.resolveValue( value, propertiesGetter );
 	}
 
