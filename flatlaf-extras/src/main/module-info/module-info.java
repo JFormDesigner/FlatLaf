@@ -20,7 +20,7 @@
 module com.formdev.flatlaf.extras {
 	requires java.desktop;
 	requires java.prefs;
-	requires static com.kitfox.svg; // optional at runtime
+	requires static com.github.weisj.jsvg; // optional at runtime
 	requires com.formdev.flatlaf;
 
 	exports com.formdev.flatlaf.extras;

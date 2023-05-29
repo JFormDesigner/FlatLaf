@@ -23,7 +23,7 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( libs.svgSalamander )
+	implementation( libs.jsvg )
 }
 
 flatlafModuleInfo {
