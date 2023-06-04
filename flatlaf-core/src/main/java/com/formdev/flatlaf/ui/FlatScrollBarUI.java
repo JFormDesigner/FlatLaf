@@ -34,6 +34,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -480,12 +481,14 @@ public class FlatScrollBarUI
 		// remember current scrollbar value so that we can start scroll animation from there
 		int oldValue = scrollbar.getValue();
 
-		// if invoked while animation is running, calculation of new value
-		// should start at the previous target value
-		if( targetValue != Integer.MIN_VALUE )
-			scrollbar.setValue( targetValue );
+		runWithoutBlitting( scrollbar.getParent(), () ->{
+			// if invoked while animation is running, calculation of new value
+			// should start at the previous target value
+			if( targetValue != Integer.MIN_VALUE )
+				scrollbar.setValue( targetValue );
 
-		r.run();
+	 		r.run();
+		} );
 
 		// do not use animation if started dragging thumb
 		if( isDragging ) {
@@ -505,6 +508,26 @@ public class FlatScrollBarUI
 		}
 
 		inRunAndSetValueAnimated = false;
+	}
+
+	private void runWithoutBlitting( Container scrollPane, Runnable r ) {
+		// prevent the viewport to immediately repaint using blitting
+		JViewport viewport = null;
+		int oldScrollMode = 0;
+		if( scrollPane instanceof JScrollPane ) {
+			viewport = ((JScrollPane) scrollPane).getViewport();
+			if( viewport != null ) {
+				oldScrollMode = viewport.getScrollMode();
+				viewport.setScrollMode( JViewport.BACKINGSTORE_SCROLL_MODE );
+			}
+		}
+
+		try {
+			r.run();
+		} finally {
+			if( viewport != null )
+				viewport.setScrollMode( oldScrollMode );
+		}
 	}
 
 	private boolean inRunAndSetValueAnimated;

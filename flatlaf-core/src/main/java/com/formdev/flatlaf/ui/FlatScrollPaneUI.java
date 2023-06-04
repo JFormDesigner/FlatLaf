@@ -455,6 +455,8 @@ public class FlatScrollPaneUI
 
 	@Override
 	protected void syncScrollPaneWithViewport() {
+		// if the viewport has been scrolled by using JComponent.scrollRectToVisible()
+		// (e.g. by moving selection), then it is necessary to update the scroll bar values
 		if( isSmoothScrollingEnabled() ) {
 			runAndSyncScrollBarValueAnimated( scrollpane.getVerticalScrollBar(), 0, () -> {
 				runAndSyncScrollBarValueAnimated( scrollpane.getHorizontalScrollBar(), 1, () -> {

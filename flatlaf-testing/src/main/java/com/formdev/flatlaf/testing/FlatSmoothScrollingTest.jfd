@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -75,7 +75,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatSmoothScrollingTest$DebugScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "tableScrollPane"
 				add( new FormComponent( "javax.swing.JTable" ) {
 					name: "table"
@@ -134,7 +134,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 4"
 			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatSmoothScrollingTest$DebugScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "customScrollPane"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"

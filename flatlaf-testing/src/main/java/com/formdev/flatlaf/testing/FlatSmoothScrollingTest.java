@@ -78,26 +78,26 @@ public class FlatSmoothScrollingTest
 		editorPaneLabel.setIcon( new ColorIcon( Color.orange.darker() ) );
 		customLabel.setIcon( new ColorIcon( Color.pink ) );
 
-		listScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "list vert", Color.red.darker() ) );
-		listScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "list horz", Color.red ) );
+		listScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( listScrollPane, true, "list vert", Color.red.darker() ) );
+		listScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( listScrollPane, false, "list horz", Color.red ) );
 
-		treeScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "tree vert", Color.blue.darker() ) );
-		treeScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "tree horz", Color.blue ) );
+		treeScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( treeScrollPane, true, "tree vert", Color.blue.darker() ) );
+		treeScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( treeScrollPane, false, "tree horz", Color.blue ) );
 
-		tableScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "table vert", Color.green.darker() ) );
-		tableScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "table horz", Color.green ) );
+		tableScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( tableScrollPane, true, "table vert", Color.green.darker() ) );
+		tableScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( tableScrollPane, false, "table horz", Color.green ) );
 
-		textAreaScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textArea vert", Color.magenta.darker() ) );
-		textAreaScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textArea horz", Color.magenta ) );
+		textAreaScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( textAreaScrollPane, true, "textArea vert", Color.magenta.darker() ) );
+		textAreaScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( textAreaScrollPane, false, "textArea horz", Color.magenta ) );
 
-		textPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textPane vert", Color.cyan.darker() ) );
-		textPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textPane horz", Color.cyan ) );
+		textPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( textPaneScrollPane, true, "textPane vert", Color.cyan.darker() ) );
+		textPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( textPaneScrollPane, false, "textPane horz", Color.cyan ) );
 
-		editorPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "editorPane vert", Color.orange.darker() ) );
-		editorPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "editorPane horz", Color.orange ) );
+		editorPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( editorPaneScrollPane, true, "editorPane vert", Color.orange.darker() ) );
+		editorPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( editorPaneScrollPane, false, "editorPane horz", Color.orange ) );
 
-		customScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "custom vert", Color.pink ) );
-		customScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "custom horz", Color.pink.darker() ) );
+		customScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( customScrollPane, true, "custom vert", Color.pink ) );
+		customScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( customScrollPane, false, "custom horz", Color.pink.darker() ) );
 
 		ArrayList<String> items = new ArrayList<>();
 		for( char ch = '0'; ch < 'z'; ch++ ) {
@@ -150,6 +150,13 @@ public class FlatSmoothScrollingTest
 				return items.get( rowIndex );
 			}
 		} );
+
+		// select some rows to better see smooth scrolling issues
+		for( int i = 5; i < items.size(); i += 10 ) {
+			list.addSelectionInterval( i, i );
+			tree.addSelectionInterval( i, i );
+			table.addRowSelectionInterval( i, i );
+		}
 
 		// text components
 		String text = items.stream().collect( Collectors.joining( "\n" ) );
@@ -207,7 +214,7 @@ public class FlatSmoothScrollingTest
 		list = new JList<>();
 		treeScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		tree = new JTree();
-		tableScrollPane = new JScrollPane();
+		tableScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		table = new JTable();
 		textAreaLabel = new JLabel();
 		textPaneLabel = new JLabel();
@@ -219,7 +226,7 @@ public class FlatSmoothScrollingTest
 		textPane = new JTextPane();
 		editorPaneScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		editorPane = new JEditorPane();
-		customScrollPane = new JScrollPane();
+		customScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		button1 = new JButton();
 		scrollPane1 = new JScrollPane();
 		lineChartPanel = new FlatSmoothScrollingTest.LineChartPanel();
@@ -382,7 +389,7 @@ public class FlatSmoothScrollingTest
 	private JList<String> list;
 	private FlatSmoothScrollingTest.DebugScrollPane treeScrollPane;
 	private JTree tree;
-	private JScrollPane tableScrollPane;
+	private FlatSmoothScrollingTest.DebugScrollPane tableScrollPane;
 	private JTable table;
 	private JLabel textAreaLabel;
 	private JLabel textPaneLabel;
@@ -394,7 +401,7 @@ public class FlatSmoothScrollingTest
 	private JTextPane textPane;
 	private FlatSmoothScrollingTest.DebugScrollPane editorPaneScrollPane;
 	private JEditorPane editorPane;
-	private JScrollPane customScrollPane;
+	private FlatSmoothScrollingTest.DebugScrollPane customScrollPane;
 	private JButton button1;
 	private JScrollPane scrollPane1;
 	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
@@ -413,31 +420,42 @@ public class FlatSmoothScrollingTest
 		private int count;
 		private long lastTime;
 
-		ScrollBarChangeHandler( String name, Color chartColor ) {
+		ScrollBarChangeHandler( DebugScrollPane scrollPane, boolean vertical, String name, Color chartColor ) {
 			this.name = name;
 			this.chartColor = chartColor;
+
+			// add change listener to viewport that is invoked from JViewport.setViewPosition()
+			scrollPane.getViewport().addChangeListener( e -> {
+				// add dot to chart if blit scroll mode is disabled
+				if( vertical == scrollPane.lastScrollingWasVertical &&
+					scrollPane.getViewport().getScrollMode() != JViewport.BLIT_SCROLL_MODE )
+				{
+					JScrollBar sb = vertical ? scrollPane.getVerticalScrollBar() : scrollPane.getHorizontalScrollBar();
+					lineChartPanel.addValue( getChartValue( sb.getModel() ), true, chartColor );
+				}
+			} );
 		}
 
 		@Override
 		public void stateChanged( ChangeEvent e ) {
 			DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) e.getSource();
-			int value = m.getValue();
-			boolean valueIsAdjusting = m.getValueIsAdjusting();
 
-			if( chartColor != null ) {
-				double chartValue = (double) (value - m.getMinimum()) / (double) (m.getMaximum() - m.getExtent());
-				lineChartPanel.addValue( chartValue, chartColor );
-			}
+			lineChartPanel.addValue( getChartValue( m ), chartColor );
 
 			long t = System.nanoTime() / 1000000;
 
 			System.out.printf( "%s (%d):  %4d  %3d ms   %b%n",
 				name, ++count,
-				value,
+				m.getValue(),
 				t - lastTime,
-				valueIsAdjusting );
+				m.getValueIsAdjusting() );
 
 			lastTime = t;
+		}
+
+		private double getChartValue( BoundedRangeModel m ) {
+			int value = m.getValue();
+			return (double) (value - m.getMinimum()) / (double) (m.getMaximum() - m.getExtent());
 		}
 	}
 
@@ -446,6 +464,8 @@ public class FlatSmoothScrollingTest
 	private static class DebugScrollPane
 		extends JScrollPane
 	{
+		boolean lastScrollingWasVertical;
+
 		@Override
 		protected JViewport createViewport() {
 			return new JViewport() {
@@ -454,6 +474,23 @@ public class FlatSmoothScrollingTest
 					Point viewPosition = super.getViewPosition();
 //					System.out.println( "    viewPosition  " + viewPosition.x + "," + viewPosition.y );
 					return viewPosition;
+				}
+
+				@Override
+				public void setViewPosition( Point p ) {
+					// remember whether scrolling vertically or horizontally
+					Component view = getView();
+					if( view != null ) {
+						int oldY = (view instanceof JComponent)
+							? ((JComponent) view).getY()
+							: view.getBounds().y;
+
+						int newY = -p.y;
+						lastScrollingWasVertical = (oldY != newY);
+					} else
+						lastScrollingWasVertical = true;
+
+					super.setViewPosition( p );
 				}
 			};
 		}
