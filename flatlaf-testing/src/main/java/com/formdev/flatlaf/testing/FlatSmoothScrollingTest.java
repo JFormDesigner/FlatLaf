@@ -70,6 +70,14 @@ public class FlatSmoothScrollingTest
 			KeyStroke.getKeyStroke( "alt " + (char) smoothScrollingCheckBox.getMnemonic() ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
+		// allow clearing chart with Alt+C without moving focus to button
+		registerKeyboardAction(
+			e -> {
+				clearChart();
+			},
+			KeyStroke.getKeyStroke( "alt " + (char) clearChartButton.getMnemonic() ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
 		listLabel.setIcon( new ColorIcon( Color.red.darker() ) );
 		treeLabel.setIcon( new ColorIcon( Color.blue.darker() ) );
 		tableLabel.setIcon( new ColorIcon( Color.green.darker() ) );
@@ -205,6 +213,9 @@ public class FlatSmoothScrollingTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		smoothScrollingCheckBox = new JCheckBox();
+		splitPane1 = new JSplitPane();
+		splitPane2 = new JSplitPane();
+		panel1 = new JPanel();
 		listLabel = new JLabel();
 		treeLabel = new JLabel();
 		tableLabel = new JLabel();
@@ -216,6 +227,7 @@ public class FlatSmoothScrollingTest
 		tree = new JTree();
 		tableScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		table = new JTable();
+		panel2 = new JPanel();
 		textAreaLabel = new JLabel();
 		textPaneLabel = new JLabel();
 		editorPaneLabel = new JLabel();
@@ -228,7 +240,8 @@ public class FlatSmoothScrollingTest
 		editorPane = new JEditorPane();
 		customScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		button1 = new JButton();
-		scrollPane1 = new JScrollPane();
+		panel3 = new JPanel();
+		chartScrollPane = new JScrollPane();
 		lineChartPanel = new FlatSmoothScrollingTest.LineChartPanel();
 		label1 = new JLabel();
 		updateChartDelayedCheckBox = new JCheckBox();
@@ -238,17 +251,10 @@ public class FlatSmoothScrollingTest
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
-			"[200,fill]" +
-			"[200,fill]" +
-			"[200,fill]" +
-			"[200,fill]",
+			"[200,grow,fill]",
 			// rows
 			"[]" +
-			"[]" +
-			"[200,grow,fill]" +
-			"[]" +
-			"[200,grow,fill]" +
-			"[300,grow,fill]" +
+			"[grow,fill]" +
 			"[]"));
 
 		//---- smoothScrollingCheckBox ----
@@ -258,128 +264,186 @@ public class FlatSmoothScrollingTest
 		smoothScrollingCheckBox.addActionListener(e -> smoothScrollingChanged());
 		add(smoothScrollingCheckBox, "cell 0 0,alignx left,growx 0");
 
-		//---- listLabel ----
-		listLabel.setText("JList:");
-		listLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(listLabel, "cell 0 1,aligny top,growy 0");
-
-		//---- treeLabel ----
-		treeLabel.setText("JTree:");
-		treeLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(treeLabel, "cell 1 1");
-
-		//---- tableLabel ----
-		tableLabel.setText("JTable:");
-		tableLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(tableLabel, "cell 2 1 2 1");
-
-		//---- showTableGridCheckBox ----
-		showTableGridCheckBox.setText("Show table grid");
-		showTableGridCheckBox.setMnemonic('G');
-		showTableGridCheckBox.addActionListener(e -> showTableGridChanged());
-		add(showTableGridCheckBox, "cell 2 1 2 1,alignx right,growx 0");
-
-		//---- autoResizeModeCheckBox ----
-		autoResizeModeCheckBox.setText("Auto-resize mode");
-		autoResizeModeCheckBox.setSelected(true);
-		autoResizeModeCheckBox.addActionListener(e -> autoResizeModeChanged());
-		add(autoResizeModeCheckBox, "cell 2 1 2 1,alignx right,growx 0");
-
-		//======== listScrollPane ========
+		//======== splitPane1 ========
 		{
-			listScrollPane.setViewportView(list);
+			splitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
+			splitPane1.setResizeWeight(1.0);
+
+			//======== splitPane2 ========
+			{
+				splitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
+				splitPane2.setResizeWeight(0.5);
+
+				//======== panel1 ========
+				{
+					panel1.setLayout(new MigLayout(
+						"ltr,insets 3,hidemode 3",
+						// columns
+						"[200,grow,fill]" +
+						"[200,grow,fill]" +
+						"[200,grow,fill]" +
+						"[200,grow,fill]",
+						// rows
+						"[]0" +
+						"[200,grow,fill]"));
+
+					//---- listLabel ----
+					listLabel.setText("JList:");
+					listLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel1.add(listLabel, "cell 0 0,aligny top,growy 0");
+
+					//---- treeLabel ----
+					treeLabel.setText("JTree:");
+					treeLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel1.add(treeLabel, "cell 1 0");
+
+					//---- tableLabel ----
+					tableLabel.setText("JTable:");
+					tableLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel1.add(tableLabel, "cell 2 0 2 1");
+
+					//---- showTableGridCheckBox ----
+					showTableGridCheckBox.setText("Show table grid");
+					showTableGridCheckBox.setMnemonic('G');
+					showTableGridCheckBox.addActionListener(e -> showTableGridChanged());
+					panel1.add(showTableGridCheckBox, "cell 2 0 2 1,alignx right,growx 0");
+
+					//---- autoResizeModeCheckBox ----
+					autoResizeModeCheckBox.setText("Auto-resize mode");
+					autoResizeModeCheckBox.setSelected(true);
+					autoResizeModeCheckBox.addActionListener(e -> autoResizeModeChanged());
+					panel1.add(autoResizeModeCheckBox, "cell 2 0 2 1,alignx right,growx 0");
+
+					//======== listScrollPane ========
+					{
+						listScrollPane.setViewportView(list);
+					}
+					panel1.add(listScrollPane, "cell 0 1,growx");
+
+					//======== treeScrollPane ========
+					{
+						treeScrollPane.setViewportView(tree);
+					}
+					panel1.add(treeScrollPane, "cell 1 1");
+
+					//======== tableScrollPane ========
+					{
+						tableScrollPane.setViewportView(table);
+					}
+					panel1.add(tableScrollPane, "cell 2 1 2 1,width 100,height 100");
+				}
+				splitPane2.setTopComponent(panel1);
+
+				//======== panel2 ========
+				{
+					panel2.setLayout(new MigLayout(
+						"ltr,insets 3,hidemode 3",
+						// columns
+						"[200,grow,fill]" +
+						"[200,grow,fill]" +
+						"[200,grow,fill]" +
+						"[200,grow,fill]",
+						// rows
+						"[]0" +
+						"[200,grow,fill]"));
+
+					//---- textAreaLabel ----
+					textAreaLabel.setText("JTextArea:");
+					textAreaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel2.add(textAreaLabel, "cell 0 0");
+
+					//---- textPaneLabel ----
+					textPaneLabel.setText("JTextPane:");
+					textPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel2.add(textPaneLabel, "cell 1 0");
+
+					//---- editorPaneLabel ----
+					editorPaneLabel.setText("JEditorPane:");
+					editorPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+					panel2.add(editorPaneLabel, "cell 2 0");
+
+					//---- customLabel ----
+					customLabel.setText("Custom:");
+					panel2.add(customLabel, "cell 3 0");
+
+					//======== textAreaScrollPane ========
+					{
+						textAreaScrollPane.setViewportView(textArea);
+					}
+					panel2.add(textAreaScrollPane, "cell 0 1");
+
+					//======== textPaneScrollPane ========
+					{
+						textPaneScrollPane.setViewportView(textPane);
+					}
+					panel2.add(textPaneScrollPane, "cell 1 1");
+
+					//======== editorPaneScrollPane ========
+					{
+						editorPaneScrollPane.setViewportView(editorPane);
+					}
+					panel2.add(editorPaneScrollPane, "cell 2 1");
+
+					//======== customScrollPane ========
+					{
+
+						//---- button1 ----
+						button1.setText("I'm a large button, but do not implement Scrollable interface");
+						button1.setPreferredSize(new Dimension(800, 800));
+						button1.setHorizontalAlignment(SwingConstants.LEADING);
+						button1.setVerticalAlignment(SwingConstants.TOP);
+						customScrollPane.setViewportView(button1);
+					}
+					panel2.add(customScrollPane, "cell 3 1");
+				}
+				splitPane2.setBottomComponent(panel2);
+			}
+			splitPane1.setTopComponent(splitPane2);
+
+			//======== panel3 ========
+			{
+				panel3.setLayout(new MigLayout(
+					"insets 3,hidemode 3",
+					// columns
+					"[grow,fill]",
+					// rows
+					"[300,grow,fill]"));
+
+				//======== chartScrollPane ========
+				{
+					chartScrollPane.putClientProperty("JScrollPane.smoothScrolling", false);
+					chartScrollPane.setViewportView(lineChartPanel);
+				}
+				panel3.add(chartScrollPane, "cell 0 0");
+			}
+			splitPane1.setBottomComponent(panel3);
 		}
-		add(listScrollPane, "cell 0 2,growx");
-
-		//======== treeScrollPane ========
-		{
-			treeScrollPane.setViewportView(tree);
-		}
-		add(treeScrollPane, "cell 1 2");
-
-		//======== tableScrollPane ========
-		{
-			tableScrollPane.setViewportView(table);
-		}
-		add(tableScrollPane, "cell 2 2 2 1,width 100,height 100");
-
-		//---- textAreaLabel ----
-		textAreaLabel.setText("JTextArea:");
-		textAreaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(textAreaLabel, "cell 0 3");
-
-		//---- textPaneLabel ----
-		textPaneLabel.setText("JTextPane:");
-		textPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(textPaneLabel, "cell 1 3");
-
-		//---- editorPaneLabel ----
-		editorPaneLabel.setText("JEditorPane:");
-		editorPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-		add(editorPaneLabel, "cell 2 3");
-
-		//---- customLabel ----
-		customLabel.setText("Custom:");
-		add(customLabel, "cell 3 3");
-
-		//======== textAreaScrollPane ========
-		{
-			textAreaScrollPane.setViewportView(textArea);
-		}
-		add(textAreaScrollPane, "cell 0 4");
-
-		//======== textPaneScrollPane ========
-		{
-			textPaneScrollPane.setViewportView(textPane);
-		}
-		add(textPaneScrollPane, "cell 1 4");
-
-		//======== editorPaneScrollPane ========
-		{
-			editorPaneScrollPane.setViewportView(editorPane);
-		}
-		add(editorPaneScrollPane, "cell 2 4");
-
-		//======== customScrollPane ========
-		{
-
-			//---- button1 ----
-			button1.setText("I'm a large button, but do not implement Scrollable interface");
-			button1.setPreferredSize(new Dimension(800, 800));
-			button1.setHorizontalAlignment(SwingConstants.LEADING);
-			button1.setVerticalAlignment(SwingConstants.TOP);
-			customScrollPane.setViewportView(button1);
-		}
-		add(customScrollPane, "cell 3 4");
-
-		//======== scrollPane1 ========
-		{
-			scrollPane1.putClientProperty("JScrollPane.smoothScrolling", false);
-			scrollPane1.setViewportView(lineChartPanel);
-		}
-		add(scrollPane1, "cell 0 5 4 1,width 100");
+		add(splitPane1, "cell 0 1");
 
 		//---- label1 ----
 		label1.setText("X: time (200ms per line) / Y: scroll bar value (10% per line)");
-		add(label1, "cell 0 6 4 1");
+		add(label1, "cell 0 2");
 
 		//---- updateChartDelayedCheckBox ----
 		updateChartDelayedCheckBox.setText("Update chart delayed");
 		updateChartDelayedCheckBox.setMnemonic('U');
 		updateChartDelayedCheckBox.setSelected(true);
 		updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
-		add(updateChartDelayedCheckBox, "cell 0 6 4 1,alignx right,growx 0");
+		add(updateChartDelayedCheckBox, "cell 0 2,alignx right,growx 0");
 
 		//---- clearChartButton ----
 		clearChartButton.setText("Clear Chart");
 		clearChartButton.setMnemonic('C');
 		clearChartButton.addActionListener(e -> clearChart());
-		add(clearChartButton, "cell 0 6 4 1,alignx right,growx 0");
+		add(clearChartButton, "cell 0 2,alignx right,growx 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox smoothScrollingCheckBox;
+	private JSplitPane splitPane1;
+	private JSplitPane splitPane2;
+	private JPanel panel1;
 	private JLabel listLabel;
 	private JLabel treeLabel;
 	private JLabel tableLabel;
@@ -391,6 +455,7 @@ public class FlatSmoothScrollingTest
 	private JTree tree;
 	private FlatSmoothScrollingTest.DebugScrollPane tableScrollPane;
 	private JTable table;
+	private JPanel panel2;
 	private JLabel textAreaLabel;
 	private JLabel textPaneLabel;
 	private JLabel editorPaneLabel;
@@ -403,7 +468,8 @@ public class FlatSmoothScrollingTest
 	private JEditorPane editorPane;
 	private FlatSmoothScrollingTest.DebugScrollPane customScrollPane;
 	private JButton button1;
-	private JScrollPane scrollPane1;
+	private JPanel panel3;
+	private JScrollPane chartScrollPane;
 	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
 	private JLabel label1;
 	private JCheckBox updateChartDelayedCheckBox;
@@ -416,13 +482,15 @@ public class FlatSmoothScrollingTest
 		implements ChangeListener
 	{
 		private final String name;
-		private final Color chartColor;
+		private final Color chartColor;		// for smooth scrolling
+		private final Color chartColor2;	// for non-smooth scrolling
 		private int count;
 		private long lastTime;
 
 		ScrollBarChangeHandler( DebugScrollPane scrollPane, boolean vertical, String name, Color chartColor ) {
 			this.name = name;
 			this.chartColor = chartColor;
+			this.chartColor2 = chartColor.brighter();
 
 			// add change listener to viewport that is invoked from JViewport.setViewPosition()
 			scrollPane.getViewport().addChangeListener( e -> {
@@ -439,8 +507,9 @@ public class FlatSmoothScrollingTest
 		@Override
 		public void stateChanged( ChangeEvent e ) {
 			DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) e.getSource();
+			boolean smoothScrolling = smoothScrollingCheckBox.isSelected();
 
-			lineChartPanel.addValue( getChartValue( m ), chartColor );
+			lineChartPanel.addValue( getChartValue( m ), smoothScrolling ? chartColor : chartColor2 );
 
 			long t = System.nanoTime() / 1000000;
 
@@ -643,6 +712,8 @@ public class FlatSmoothScrollingTest
 				int px = 0;
 				int py = 0;
 				int pcount = 0;
+				int s1 = UIScale.scale( 1 );
+				int s3 = UIScale.scale( 3 );
 
 				g.setColor( chartColor );
 
@@ -656,15 +727,17 @@ public class FlatSmoothScrollingTest
 						int dotx = px;
 						if( i > 0 && data.time > ptime + NEW_SEQUENCE_TIME_LAG )
 							dotx += seqGapWidth;
-						int o = UIScale.scale( 1 );
-						int s = UIScale.scale( 3 );
-						g.fillRect( dotx - o, dy - o, s, s );
+						g.fillRect( dotx - s1, dy - s1, s3, s3 );
 						continue;
 					}
 
 					if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
-						if( !first && pcount == 0 )
+						if( !first && pcount == 0 ) {
 							g.drawLine( px, py, px + (int) (4 * scaleFactor), py );
+
+							// small vertical line to indicate data point
+							g.drawLine( px, py - s1, px, py + s1 );
+						}
 
 						// start new sequence
 						seqTime = data.time;
@@ -680,11 +753,16 @@ public class FlatSmoothScrollingTest
 						// line in sequence
 						int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
 						g.drawLine( px, py, dx, dy );
-						px = dx;
-						pcount++;
 
 						if( isTemporaryValue )
 							g.setColor( chartColor );
+
+						// small vertical lines to indicate data point
+						g.drawLine( px, py - s1, px, py + s1 );
+						g.drawLine( dx, dy - s1, dx, dy + s1 );
+
+						px = dx;
+						pcount++;
 					}
 
 					py = dy;
