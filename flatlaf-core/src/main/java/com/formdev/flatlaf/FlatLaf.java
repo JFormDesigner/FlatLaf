@@ -749,7 +749,7 @@ public abstract class FlatLaf
 
 	private Object fallbackAATextInfo() {
 		// do nothing if explicitly overridden
-		if( System.getProperty( "awt.useSystemAAFontSettings" ) != null )
+		if( FlatSystemCachedProperties.getProperty( "awt.useSystemAAFontSettings" ) != null )
 			return null;
 
 		Object aaHint = null;

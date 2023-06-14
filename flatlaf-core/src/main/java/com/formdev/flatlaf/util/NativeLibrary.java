@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -220,7 +221,7 @@ public class NativeLibrary
 
 	private static Path getTempDir() throws IOException {
 		// get standard temporary directory
-		String tmpdir = System.getProperty( "java.io.tmpdir" );
+		String tmpdir = FlatSystemCachedProperties.getProperty( "java.io.tmpdir" );
 
 		if( SystemInfo.isWindows ) {
 			// On Windows, where File.delete() and File.deleteOnExit() does not work

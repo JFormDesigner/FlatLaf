@@ -179,7 +179,7 @@ public interface FlatSystemProperties
 	 * If the system property is not set, {@code defaultValue} is returned.
 	 */
 	static boolean getBoolean( String key, boolean defaultValue ) {
-		String value = System.getProperty( key );
+		String value = FlatSystemCachedProperties.getProperty( key );
 		return (value != null) ? Boolean.parseBoolean( value ) : defaultValue;
 	}
 
@@ -189,7 +189,7 @@ public interface FlatSystemProperties
 	 * is {@code "false"} (case-insensitive). Otherwise {@code defaultValue} is returned.
 	 */
 	static Boolean getBooleanStrict( String key, Boolean defaultValue ) {
-		String value = System.getProperty( key );
+		String value = FlatSystemCachedProperties.getProperty( key );
 		if( "true".equalsIgnoreCase( value ) )
 			return Boolean.TRUE;
 		if( "false".equalsIgnoreCase( value ) )

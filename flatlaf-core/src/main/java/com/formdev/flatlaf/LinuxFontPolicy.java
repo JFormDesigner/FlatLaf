@@ -262,7 +262,7 @@ class LinuxFontPolicy
 
 	@SuppressWarnings( "MixedMutabilityReturnType" ) // Error Prone
 	private static List<String> readConfig( String filename ) {
-		File userHome = new File( System.getProperty( "user.home" ) );
+		File userHome = new File( FlatSystemCachedProperties.getProperty( "user.home" ) );
 
 		// search for config file
 		String[] configDirs = {

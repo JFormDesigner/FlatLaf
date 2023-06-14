@@ -18,6 +18,7 @@ package com.formdev.flatlaf.util;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
 
 /**
@@ -71,26 +72,26 @@ public class SystemInfo
 
 	static {
 		// platforms
-		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
+		String osName = FlatSystemCachedProperties.getProperty("os.name" ).toLowerCase( Locale.ENGLISH );
 		isWindows = osName.startsWith( "windows" );
 		isMacOS = osName.startsWith( "mac" );
 		isLinux = osName.startsWith( "linux" );
 
 		// OS versions
-		osVersion = scanVersion( System.getProperty( "os.version" ) );
+		osVersion = scanVersion( FlatSystemCachedProperties.getProperty( "os.version" ) );
 		isWindows_10_orLater = (isWindows && osVersion >= toVersion( 10, 0, 0, 0 ));
 		isMacOS_10_11_ElCapitan_orLater = (isMacOS && osVersion >= toVersion( 10, 11, 0, 0 ));
 		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
 		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));
 
 		// OS architecture
-		String osArch = System.getProperty( "os.arch" );
+		String osArch = FlatSystemCachedProperties.getProperty( "os.arch" );
 		isX86 = osArch.equals( "x86" );
 		isX86_64 = osArch.equals( "amd64" ) || osArch.equals( "x86_64" );
 		isAARCH64 = osArch.equals( "aarch64" );
 
 		// Java versions
-		javaVersion = scanVersion( System.getProperty( "java.version" ) );
+		javaVersion = scanVersion( FlatSystemCachedProperties.getProperty( "java.version" ) );
 		isJava_9_orLater = (javaVersion >= toVersion( 9, 0, 0, 0 ));
 		isJava_11_orLater = (javaVersion >= toVersion( 11, 0, 0, 0 ));
 		isJava_12_orLater = (javaVersion >= toVersion( 12, 0, 0, 0 ));
@@ -99,7 +100,7 @@ public class SystemInfo
 		isJava_18_orLater = (javaVersion >= toVersion( 18, 0, 0, 0 ));
 
 		// Java VMs
-		isJetBrainsJVM = System.getProperty( "java.vm.vendor", "Unknown" )
+		isJetBrainsJVM = FlatSystemCachedProperties.getProperty( "java.vm.vendor", "Unknown" )
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
 		isJetBrainsJVM_11_orLater = isJetBrainsJVM && isJava_11_orLater;
 
@@ -108,8 +109,8 @@ public class SystemInfo
 
 		// other
 		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );
-		isWebswing = (System.getProperty( "webswing.rootDir" ) != null);
-		isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase( System.getProperty( "user.dir" ) );
+		isWebswing = (FlatSystemCachedProperties.getProperty( "webswing.rootDir" ) != null);
+		isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase( FlatSystemCachedProperties.getProperty( "user.dir" ) );
 
 		// features
 		// available since Java 12; backported to Java 11.0.8 and 8u292

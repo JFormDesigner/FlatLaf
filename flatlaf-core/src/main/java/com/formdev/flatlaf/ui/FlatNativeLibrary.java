@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.io.File;
 import java.net.URL;
 import java.security.CodeSource;
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
@@ -86,7 +87,7 @@ class FlatNativeLibrary
 		String libraryName = "flatlaf-" + classifier;
 
 		// load from "java.library.path" or from path specified in system property "flatlaf.nativeLibraryPath"
-		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
+		String libraryPath = FlatSystemCachedProperties.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
 		if( libraryPath != null ) {
 			if( "system".equals( libraryPath ) ) {
 				NativeLibrary library = new NativeLibrary( libraryName, true );

@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import javax.swing.JComponent;
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
@@ -242,7 +243,7 @@ public class HiDPIUtils
 	private static float getUserScaleFactor() {
 		return !useDebugScaleFactor()
 			? UIScale.getUserScaleFactor()
-			: Float.parseFloat( System.getProperty( "FlatLaf.debug.HiDPIUtils.debugScaleFactor", "1" ) );
+			: Float.parseFloat( FlatSystemCachedProperties.getProperty( "FlatLaf.debug.HiDPIUtils.debugScaleFactor", "1" ) );
 	}
 
 	/**

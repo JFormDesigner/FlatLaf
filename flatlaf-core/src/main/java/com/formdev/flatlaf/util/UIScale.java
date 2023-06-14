@@ -33,6 +33,7 @@ import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.UIResource;
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
@@ -292,7 +293,7 @@ public class UIScale
 	 * Get custom scale factor specified in system property "flatlaf.uiScale".
 	 */
 	private static float getCustomScaleFactor() {
-		return parseScaleFactor( System.getProperty( FlatSystemProperties.UI_SCALE ) );
+		return parseScaleFactor( FlatSystemCachedProperties.getProperty( FlatSystemProperties.UI_SCALE ) );
 	}
 
 	/**

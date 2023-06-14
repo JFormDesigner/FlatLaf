@@ -53,6 +53,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
 import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemCachedProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -490,7 +491,7 @@ public class FlatFileChooserUI
 					File[] files = (File[]) m.invoke( fsv );
 
 					// on macOS and Linux, files consists only of the user home directory
-					if( files.length == 1 && files[0].equals( new File( System.getProperty( "user.home" ) ) ) )
+					if( files.length == 1 && files[0].equals( new File( FlatSystemCachedProperties.getProperty( "user.home" ) ) ) )
 						files = new File[0];
 
 					return files;
