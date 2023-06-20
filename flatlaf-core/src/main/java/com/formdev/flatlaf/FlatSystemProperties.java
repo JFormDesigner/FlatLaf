@@ -150,9 +150,23 @@ public interface FlatSystemProperties
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}
+	 *
 	 * @since 2.5
 	 */
 	String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flatlaf.updateUIOnSystemFontChange";
+
+	/**
+	 * Specifies whether FlatLaf native library should be used.
+	 * <p>
+	 * Setting this to {@code false} disables loading native library,
+	 * which also disables some features that depend on the native library.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 *
+	 * @since 3.2
+	 */
+	String USE_NATIVE_LIBRARY = "flatlaf.useNativeLibrary";
 
 	/**
 	 * Specifies a directory in which the native FlatLaf libraries have been extracted.

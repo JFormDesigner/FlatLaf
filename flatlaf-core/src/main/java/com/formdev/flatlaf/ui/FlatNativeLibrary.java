@@ -33,6 +33,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 class FlatNativeLibrary
 {
+	private static boolean initialized;
 	private static NativeLibrary nativeLibrary;
 
 	/**
@@ -45,7 +46,11 @@ class FlatNativeLibrary
 	}
 
 	private static void initialize() {
-		if( nativeLibrary != null )
+		if( initialized )
+			return;
+		initialized = true;
+
+		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_NATIVE_LIBRARY, true ) )
 			return;
 
 		String classifier;

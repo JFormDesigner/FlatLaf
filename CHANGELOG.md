@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 3.2-SNAPSHOT
 
+#### New features and improvements
+
+- Added system property `flatlaf.useNativeLibrary` to allow disabling loading of
+  FlatLaf native library. (issue #674)
+
 #### Fixed bugs
 
 - Styling: Fixed scaling of some styling properties (`rowHeight` for Table and
