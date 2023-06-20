@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Styling: Fixed scaling of some styling properties (`rowHeight` for Table and
+  Tree; `iconTextGap` for Button, CheckBox and RadioButton). (issue #682)
 - Fixed `IllegalComponentStateException` when invoker is not showing in
   `SubMenuUsabilityHelper`. (issue #692)
 

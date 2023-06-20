@@ -277,6 +277,9 @@ public class FlatTableUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
+		if( "rowHeight".equals( key ) && value instanceof Integer )
+			value = UIScale.scale( (Integer) value );
+
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, table, key, value );
 	}
 

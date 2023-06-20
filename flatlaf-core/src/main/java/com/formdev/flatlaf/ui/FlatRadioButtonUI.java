@@ -208,6 +208,9 @@ public class FlatRadioButtonUI
 			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
 		}
 
+		if( "iconTextGap".equals( key ) && value instanceof Integer )
+			value = UIScale.scale( (Integer) value );
+
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, b, key, value );
 	}
 

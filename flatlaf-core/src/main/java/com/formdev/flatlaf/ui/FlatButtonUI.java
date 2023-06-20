@@ -362,6 +362,9 @@ public class FlatButtonUI
 			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
 		}
 
+		if( "iconTextGap".equals( key ) && value instanceof Integer )
+			value = UIScale.scale( (Integer) value );
+
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
