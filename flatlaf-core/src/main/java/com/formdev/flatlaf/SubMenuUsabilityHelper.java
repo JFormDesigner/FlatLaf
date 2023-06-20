@@ -153,7 +153,7 @@ debug*/
 
 		// get invoker screen bounds
 		Component invoker = popup.getInvoker();
-		invokerBounds = (invoker != null)
+		invokerBounds = (invoker != null && invoker.isShowing())
 			? new Rectangle( invoker.getLocationOnScreen(), invoker.getSize() )
 			: null;
 

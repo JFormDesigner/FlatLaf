@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Fixed `IllegalComponentStateException` when invoker is not showing in
+  `SubMenuUsabilityHelper`. (issue #692)
+
+
 ## 3.1.1
 
 - IntelliJ Themes:
