@@ -9,6 +9,12 @@ FlatLaf Change Log
   Tree; `iconTextGap` for Button, CheckBox and RadioButton). (issue #682)
 - Fixed `IllegalComponentStateException` when invoker is not showing in
   `SubMenuUsabilityHelper`. (issue #692)
+- IntelliJ Themes:
+  - "Light Owl" theme: Fixed wrong (unreadable) text color in selected menu
+    items, selected text in text components, and selection in ComboBox popup
+    list. (issue #687)
+  - "Gradianto Midnight Blue" theme: Fixed color of ScrollBar track, which was
+    not visible. (issue #686)
 
 
 ## 3.1.1
