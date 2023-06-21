@@ -22,6 +22,8 @@ FlatLaf Change Log
     list. (issue #687)
   - "Gradianto Midnight Blue" theme: Fixed color of ScrollBar track, which was
     not visible. (issue #686)
+  - "Monocai" theme: Fixed unreadable text color of default buttons. (issue
+    #693)
 
 
 ## 3.1.1
