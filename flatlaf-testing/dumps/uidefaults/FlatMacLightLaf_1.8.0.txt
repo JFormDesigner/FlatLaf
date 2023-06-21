@@ -71,11 +71,11 @@ Button.default.background      #007aff  HSL 211 100  50    javax.swing.plaf.Colo
 Button.default.boldText        true
 Button.default.borderColor     #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.default.borderWidth     1
-Button.default.focusColor      #0067f47f  50%  HSLA 215 100  48 50    javax.swing.plaf.ColorUIResource [UI]
-Button.default.focusedBorderColor #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+Button.default.focusColor      #0069ff80  50%  HSLA 215 100  50 50    javax.swing.plaf.ColorUIResource [UI]
+Button.default.focusedBorderColor #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 Button.default.foreground      #f6f6f6  HSL   0   0  96    javax.swing.plaf.ColorUIResource [UI]
 Button.default.hoverBackground #0073f0  HSL 211 100  47    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
-Button.default.hoverBorderColor #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+Button.default.hoverBorderColor #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #0062cc  HSL 211 100  40    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 Button.defaultButtonFollowsFocus false
 Button.disabledBackground      #fafafa  HSL   0   0  98    javax.swing.plaf.ColorUIResource [UI]
@@ -83,12 +83,12 @@ Button.disabledBorderColor     #00000019  10%  HSLA   0   0   0 10    javax.swin
 Button.disabledForeground      #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledSelectedBackground #dedede  HSL   0   0  87    com.formdev.flatlaf.util.DerivedColor [UI]    darken(13% autoInverse)
 Button.disabledText            #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
-Button.focusedBorderColor      #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+Button.focusedBorderColor      #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 Button.font                    [active] $defaultFont [UI]
 Button.foreground              #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 Button.highlight               #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #f7f7f7  HSL   0   0  97    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
-Button.hoverBorderColor        #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+Button.hoverBorderColor        #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
 Button.innerFocusWidth         0
 Button.light                   #1f1f1f26  15%  HSLA   0   0  12 15    javax.swing.plaf.ColorUIResource [UI]
@@ -128,11 +128,11 @@ CheckBox.icon.checkmarkColor   #007aff  HSL 211 100  50    javax.swing.plaf.Colo
 CheckBox.icon.disabledBackground #f6f6f6  HSL   0   0  96    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBorderColor #33333363  39%  HSLA   0   0  20 39    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledCheckmarkColor #8d8d8d  HSL   0   0  55    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon.focusedBorderColor #0054c698  60%  HSLA 215 100  39 60    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.focusedBorderColor #0056cf98  60%  HSLA 215 100  41 60    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.hoverBackground  #f7f7f7  HSL   0   0  97    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
-CheckBox.icon.hoverBorderColor #0054c698  60%  HSLA 215 100  39 60    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.hoverBorderColor #0056cf98  60%  HSLA 215 100  41 60    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.pressedBackground #e6e6e6  HSL   0   0  90    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
-CheckBox.icon.pressedBorderColor #0054c698  60%  HSLA 215 100  39 60    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.pressedBorderColor #0056cf98  60%  HSLA 215 100  41 60    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBackground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBorderColor #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.style            filled
@@ -251,9 +251,9 @@ Component.custom.borderColor   #f38d8d  HSL   0  81  75    com.formdev.flatlaf.u
 Component.disabledBorderColor  #00000019  10%  HSLA   0   0   0 10    javax.swing.plaf.ColorUIResource [UI]
 Component.error.borderColor    #ebb8bc  HSL 355  56  82    javax.swing.plaf.ColorUIResource [UI]
 Component.error.focusedBorderColor #e53e4d  HSL 355  76  57    javax.swing.plaf.ColorUIResource [UI]
-Component.focusColor           #0067f47f  50%  HSLA 215 100  48 50    javax.swing.plaf.ColorUIResource [UI]
+Component.focusColor           #0069ff80  50%  HSLA 215 100  50 50    javax.swing.plaf.ColorUIResource [UI]
 Component.focusWidth           2
-Component.focusedBorderColor   #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+Component.focusedBorderColor   #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 Component.grayFilter           [lazy] [unknown type] com.formdev.flatlaf.util.GrayFilter
 Component.hideMnemonics        true
 Component.innerFocusWidth      0
@@ -363,9 +363,9 @@ HelpButton.borderWidth         1
 HelpButton.disabledBackground  #fafafa  HSL   0   0  98    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #00000019  10%  HSLA   0   0   0 10    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #acacac  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.focusedBorderColor  #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.focusedBorderColor  #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #f7f7f7  HSL   0   0  97    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
-HelpButton.hoverBorderColor    #005ddc8c  55%  HSLA 215 100  43 55    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.hoverBorderColor    #005fe68d  55%  HSLA 215 100  45 55    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 HelpButton.innerFocusWidth     0
 HelpButton.pressedBackground   #e6e6e6  HSL   0   0  90    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
@@ -461,7 +461,7 @@ JXMonthView.monthDownFileName  [lazy] 20,20    com.formdev.flatlaf.swingx.ui.Fla
 JXMonthView.monthStringBackground #dfdfdf  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthStringForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthUpIcon [UI]
-JXMonthView.selectedBackground #b3d4ff  HSL 214 100  85    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.selectedBackground #b3d2ff  HSL 216 100  85    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.todayColor         #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.trailingDayForeground #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.unselectableDayForeground #e02222  HSL   0  75  51    javax.swing.plaf.ColorUIResource [UI]
@@ -552,20 +552,20 @@ LabelUI                        com.formdev.flatlaf.ui.FlatLabelUI
 
 List.background                #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 List.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
-List.cellFocusColor            #00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]
+List.cellFocusColor            #003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]
 List.cellMargins               1,6,1,6    javax.swing.plaf.InsetsUIResource [UI]
-List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
-List.dropCellBackground        [lazy] #157cff  HSL 214 100  54    javax.swing.plaf.ColorUIResource [UI]
+List.dropCellBackground        [lazy] #1a79ff  HSL 215 100  55    javax.swing.plaf.ColorUIResource [UI]
 List.dropCellForeground        [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-List.dropLineColor             [lazy] #4899ff  HSL 213 100  64    javax.swing.plaf.ColorUIResource [UI]
-List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
-List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.dropLineColor             [lazy] #4d97ff  HSL 215 100  65    javax.swing.plaf.ColorUIResource [UI]
+List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.font                      [active] $defaultFont [UI]
 List.foreground                #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
 List.selectionArc              0
-List.selectionBackground       #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+List.selectionBackground       #005fe6  HSL 215 100  45    javax.swing.plaf.ColorUIResource [UI]
 List.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveBackground #dcdcdc  HSL   0   0  86    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
@@ -967,7 +967,7 @@ Slider.disabledTrackColor      #ececec  HSL   0   0  93    javax.swing.plaf.Colo
 Slider.focus                   #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.focusWidth              4
-Slider.focusedColor            #80b5ff80  50%  HSLA 215 100  75 50    com.formdev.flatlaf.util.DerivedColor [UI]    changeLightness(75%) fade(50%)
+Slider.focusedColor            #80b4ff80  50%  HSLA 215 100  75 50    com.formdev.flatlaf.util.DerivedColor [UI]    changeLightness(75%) fade(50%)
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
@@ -1109,26 +1109,26 @@ TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
 
 Table.ascendingSortIcon        [lazy] 10,5    com.formdev.flatlaf.icons.FlatAscendingSortIcon [UI]
 Table.background               #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-Table.cellFocusColor           #00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]
+Table.cellFocusColor           #003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]
 Table.cellMargins              2,3,2,3    javax.swing.plaf.InsetsUIResource [UI]
-Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.consistentHomeEndKeyBehavior true
 Table.descendingSortIcon       [lazy] 10,5    com.formdev.flatlaf.icons.FlatDescendingSortIcon [UI]
-Table.dropCellBackground       [lazy] #157cff  HSL 214 100  54    javax.swing.plaf.ColorUIResource [UI]
+Table.dropCellBackground       [lazy] #1a79ff  HSL 215 100  55    javax.swing.plaf.ColorUIResource [UI]
 Table.dropCellForeground       [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-Table.dropLineColor            [lazy] #4899ff  HSL 213 100  64    javax.swing.plaf.ColorUIResource [UI]
-Table.dropLineShortColor       [lazy] #00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineColor            [lazy] #4d97ff  HSL 215 100  65    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineShortColor       [lazy] #003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellBackground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
-Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #ebebeb  HSL   0   0  92    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
-Table.selectionBackground      #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+Table.selectionBackground      #005fe6  HSL 215 100  45    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionForeground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionInactiveBackground #dcdcdc  HSL   0   0  86    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionInactiveForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
@@ -1392,10 +1392,10 @@ Tree.changeSelectionWithFocus  true
 Tree.closedIcon                [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeClosedIcon [UI]
 Tree.collapsedIcon             [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeCollapsedIcon [UI]
 Tree.drawsFocusBorderAroundIcon false
-Tree.dropCellBackground        [lazy] #157cff  HSL 214 100  54    javax.swing.plaf.ColorUIResource [UI]
+Tree.dropCellBackground        [lazy] #1a79ff  HSL 215 100  55    javax.swing.plaf.ColorUIResource [UI]
 Tree.dropCellForeground        [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-Tree.dropLineColor             [lazy] #4899ff  HSL 213 100  64    javax.swing.plaf.ColorUIResource [UI]
-Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Tree.dropLineColor             [lazy] #4d97ff  HSL 215 100  65    javax.swing.plaf.ColorUIResource [UI]
+Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
 Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
@@ -1417,8 +1417,8 @@ Tree.rightChildIndent          11
 Tree.rowHeight                 0
 Tree.scrollsOnExpand           true
 Tree.selectionArc              0
-Tree.selectionBackground       #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
-Tree.selectionBorderColor      #00367b  HSL 214 100  24    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionBackground       #005fe6  HSL 215 100  45    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionBorderColor      #003580  HSL 215 100  25    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveBackground #dcdcdc  HSL   0   0  86    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
@@ -1619,7 +1619,7 @@ swingx/TaskPaneUI              com.formdev.flatlaf.swingx.ui.FlatTaskPaneUI
 #----  ----
 
 text                           #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-textHighlight                  #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+textHighlight                  #005fe6  HSL 215 100  45    javax.swing.plaf.ColorUIResource [UI]
 textHighlightText              #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 textInactiveText               #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 textText                       #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]

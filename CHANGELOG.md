@@ -14,6 +14,8 @@ FlatLaf Change Log
   Tree; `iconTextGap` for Button, CheckBox and RadioButton). (issue #682)
 - Fixed `IllegalComponentStateException` when invoker is not showing in
   `SubMenuUsabilityHelper`. (issue #692)
+- macOS themes: Changing `@accentColor` variable in FlatLaf properties files did
+  not change all accent related colors for all components.
 - IntelliJ Themes:
   - "Light Owl" theme: Fixed wrong (unreadable) text color in selected menu
     items, selected text in text components, and selection in ComboBox popup
