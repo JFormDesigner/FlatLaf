@@ -40,3 +40,9 @@ fun includeProject( projectPath: String, projectDir: String ) {
 	include( projectPath )
 	project( ":$projectPath" ).projectDir = file( projectDir )
 }
+
+
+// for using newer Java version via toolchain
+plugins {
+	id( "org.gradle.toolchains.foojay-resolver-convention" ) version( "0.5.0" )
+}

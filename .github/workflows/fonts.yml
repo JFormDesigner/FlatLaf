@@ -36,7 +36,7 @@ jobs:
               uses: actions/setup-java@v3
               with:
                   java-version: 11
-                  distribution: adopt  # pre-installed on ubuntu-latest
+                  distribution: temurin  # pre-installed on ubuntu-latest
                   cache: gradle
 
             - name: Build with Gradle

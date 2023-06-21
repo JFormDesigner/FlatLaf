@@ -26,9 +26,9 @@ jobs:
           - 17  # LTS
           - 19
         toolchain: [""]
-#        include:
-#          - java: 17
-#            toolchain: 19  # latest
+        include:
+          - java: 17
+            toolchain: 20  # latest
 
     steps:
       - uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: adopt  # Java 8 and 11 are pre-installed on ubuntu-latest
+          distribution: temurin  # Java 8, 11 and 17 are pre-installed on ubuntu-latest
           cache: gradle
 
       - name: Check with Error Prone
@@ -77,7 +77,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 11
-          distribution: adopt  # pre-installed on ubuntu-latest
+          distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
 
       - name: Publish snapshot to oss.sonatype.org
@@ -113,7 +113,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 11
-          distribution: adopt  # pre-installed on ubuntu-latest
+          distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
 
       - name: Release a new stable version to Maven Central
