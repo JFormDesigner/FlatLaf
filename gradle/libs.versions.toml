@@ -55,7 +55,7 @@ junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref 
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
 # errorprone
-errorprone = "com.google.errorprone:error_prone_core:2.19.1"
+errorprone = "com.google.errorprone:error_prone_core:2.20.0"
 
 
 [bundles]

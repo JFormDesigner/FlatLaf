@@ -117,6 +117,7 @@ allprojects {
 						"InlineMeSuggester",	// suggests using Error Prone annotations for deprecated methods
 						"TypeParameterUnusedInFormals",
 						"UnsynchronizedOverridesSynchronized",
+						"NonApiType",			// reports ArrayList/HashSet in parameter or return type
 					)
 					when( project.name ) {
 						"flatlaf-intellij-themes" -> disable(
