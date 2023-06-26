@@ -47,7 +47,9 @@ tasks {
 
 	jar {
 		archiveBaseName.set( "flatlaf" )
-
+		manifest {
+			attributes["Permissions"] = "all-permissions"
+		}
 		doLast {
 			ReorderJarEntries.reorderJarEntries( outputs.files.singleFile );
 		}
