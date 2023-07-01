@@ -71,12 +71,11 @@ tasks {
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
 		val is64Bit = name.contains( "64" )
 		val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
-		val jawt = if( is64Bit ) "lib/jawt-x86_64" else "lib/jawt-x86"
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi" )
-				is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "/NODEFAULTLIB" )
+				is Gcc, is Clang -> listOf( "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi" )
+				is VisualCpp -> listOf( "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "/NODEFAULTLIB" )
 				else -> emptyList()
 			}
 		} )

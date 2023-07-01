@@ -542,10 +542,82 @@ void FlatWndProc::setMenuItemState( HMENU systemMenu, int item, bool enabled ) {
 	::SetMenuItemInfo( systemMenu, item, FALSE, &mii );
 }
 
+//---- window handle ----------------------------------------------------------
+
+#ifdef _WIN64
+#define GETAWT_METHOD_NAME			"JAWT_GetAWT"
+#else
+#define GETAWT_METHOD_NAME			"_JAWT_GetAWT@8"
+#endif
+
+typedef jboolean (JNICALL *JAWT_GetAWT_Type)( JNIEnv*, JAWT* );
+
+static HMODULE jawtModule = NULL;
+static JAWT_GetAWT_Type pJAWT_GetAWT = NULL;
+
+
 HWND getWindowHandle( JNIEnv* env, jobject window ) {
+
+	// flatlaf.dll is not linked to jawt.dll because flatlaf.dll may be loaded
+	// very early on Windows (e.g. from class com.formdev.flatlaf.util.SystemInfo) and
+	// before AWT is initialized (and awt.dll is loaded). Loading jawt.dll also loads awt.dll.
+	// In Java 8, loading jawt.dll before AWT is initialized may load
+	// a wrong version of awt.dll if a newer Java version (e.g. 19)
+	// is in PATH environment variable. Then Java 19 awt.dll and Java 8 awt.dll
+	// are loaded at same time and calling JAWT_GetAWT() crashes the application.
+	//
+	// To avoid this, flatlaf.dll is not linked to jawt.dll,
+	// which avoids loading jawt.dll when flatlaf.dll is loaded.
+	// Instead flatlaf.dll dynamically loads jawt.dll when first used,
+	// which is guaranteed after AWT initialization.
+	//
+	// Load JAWT library from ${java.home}\bin\jawt.dll and use wide chars for path
+	// for the case that Java path uses special characters. (this is similar to JNA)
+
+	// load JAWT library jawt.dll
+	if( jawtModule == NULL ) {
+		// invoke: javaHome = System.getProperty( "java.home" )
+		jclass cls = env->FindClass( "java/lang/System" );
+		jmethodID mid = (cls != NULL) ? env->GetStaticMethodID( cls, "getProperty", "(Ljava/lang/String;)Ljava/lang/String;" ) : NULL;
+		jstring javaHome = (mid != NULL) ? (jstring) env->CallStaticObjectMethod( cls, mid, env->NewStringUTF( "java.home" ) ) : NULL;
+		if( javaHome != NULL ) {
+			// invoke: jawtPath = javaHome.concat( "\\bin\\jawt.dll" )
+			jmethodID mid2 = env->GetMethodID( env->GetObjectClass( javaHome ), "concat", "(Ljava/lang/String;)Ljava/lang/String;" );
+			jstring jawtPath = (mid2 != NULL) ? (jstring) env->CallObjectMethod( javaHome, mid2, env->NewStringUTF( "\\bin\\jawt.dll" ) ) : NULL;
+			if( jawtPath != NULL ) {
+				// convert Java UTF-8 string to Windows wide chars
+				const char* sjawtPath = env->GetStringUTFChars( jawtPath, NULL );
+				int wstr_len = MultiByteToWideChar( CP_UTF8, 0, sjawtPath, -1, NULL, 0 );
+				if( wstr_len > 0 ) {
+					wchar_t* wstr = new wchar_t[wstr_len];
+					if( MultiByteToWideChar( CP_UTF8, 0, sjawtPath, -1, wstr, wstr_len ) == wstr_len ) {
+						// load jawt.dll from Java home
+						jawtModule = LoadLibraryExW( wstr, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
+					}
+					delete[] wstr;
+				}
+				env->ReleaseStringUTFChars( jawtPath, sjawtPath );
+			}
+		}
+
+		// fallback
+		if( jawtModule == NULL )
+			jawtModule = LoadLibraryA( "jawt.dll" );
+
+		if( jawtModule == NULL )
+			return 0;
+	}
+
+	// get address of method JAWT_GetAWT()
+	if( pJAWT_GetAWT == NULL ) {
+		pJAWT_GetAWT = (JAWT_GetAWT_Type) GetProcAddress( jawtModule, GETAWT_METHOD_NAME );
+		if( pJAWT_GetAWT == NULL )
+			return 0;
+	}
+
 	JAWT awt;
 	awt.version = JAWT_VERSION_1_4;
-	if( !JAWT_GetAWT( env, &awt ) )
+	if( !pJAWT_GetAWT( env, &awt ) )
 		return 0;
 
 	jawt_DrawingSurface* ds = awt.GetDrawingSurface( env, window );
@@ -558,12 +630,15 @@ HWND getWindowHandle( JNIEnv* env, jobject window ) {
 		return 0;
 	}
 
+	HWND hwnd = 0;
+
 	JAWT_DrawingSurfaceInfo* dsi = ds->GetDrawingSurfaceInfo( ds );
-	JAWT_Win32DrawingSurfaceInfo* wdsi = (JAWT_Win32DrawingSurfaceInfo*) dsi->platformInfo;
+	if( dsi != NULL ) {
+		JAWT_Win32DrawingSurfaceInfo* wdsi = (JAWT_Win32DrawingSurfaceInfo*) dsi->platformInfo;
+		hwnd = wdsi->hwnd;
+		ds->FreeDrawingSurfaceInfo( dsi );
+	}
 
-	HWND hwnd = wdsi->hwnd;
-
-	ds->FreeDrawingSurfaceInfo( dsi );
 	ds->Unlock( ds );
 	awt.FreeDrawingSurface( ds );
 

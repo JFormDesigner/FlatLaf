@@ -24,6 +24,9 @@ FlatLaf Change Log
     not visible. (issue #686)
   - "Monocai" theme: Fixed unreadable text color of default buttons. (issue
     #693)
+- Native Windows libraries: Fixed crash when running in Java 8 and newer Java
+  version is installed in `PATH` environment variable and using class
+  `SystemInfo` before AWT initialization. (issue #673)
 
 
 ## 3.1.1

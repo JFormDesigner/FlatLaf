@@ -61,13 +61,20 @@ class FlatNativeLibrary
 			classifier = SystemInfo.isX86_64 ? "windows-x86_64" : "windows-x86";
 			ext = "dll";
 
-			// In Java 8, load jawt.dll (part of JRE) explicitly because it
-			// is not found when running application with <jdk>/bin/java.exe.
-			// When using <jdk>/jre/bin/java.exe, it is found.
-			// jawt.dll is located in <jdk>/jre/bin/.
-			// Java 9 and later do not have this problem,
-			// but load jawt.dll anyway to be on the safe side.
-			loadJAWT();
+			// Do not load jawt.dll (part of JRE) here explicitly because
+			// the FlatLaf native library flatlaf.dll may be loaded very early on Windows
+			// (e.g. from class com.formdev.flatlaf.util.SystemInfo) and before AWT is
+			// initialized (and awt.dll is loaded). Loading jawt.dll also loads awt.dll.
+			// In Java 8, loading jawt.dll before AWT is initialized may load
+			// a wrong version of awt.dll if a newer Java version (e.g. 19)
+			// is in PATH environment variable. Then Java 19 awt.dll and Java 8 awt.dll
+			// are loaded at same time and calling JAWT_GetAWT() crashes the application.
+			//
+			// To avoid this, flatlaf.dll is not linked to jawt.dll,
+			// which avoids loading jawt.dll when flatlaf.dll is loaded.
+			// Instead flatlaf.dll dynamically loads jawt.dll when first used,
+			// which is guaranteed after AWT initialization.
+
 		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
 			// Linux: requires x86_64
 
