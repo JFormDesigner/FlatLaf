@@ -985,6 +985,18 @@ public class FlatSVGIcon
 		}
 
 		@Override
+		public Graphics create() {
+			return new GraphicsFilter( (Graphics2D) super.create(),
+				colorFilter, globalColorFilter, grayFilter );
+		}
+
+		@Override
+		public Graphics create( int x, int y, int width, int height ) {
+			return new GraphicsFilter( (Graphics2D) super.create( x, y, width, height ),
+				colorFilter, globalColorFilter, grayFilter );
+		}
+
+		@Override
 		public void setColor( Color c ) {
 			super.setColor( filterColor( c ) );
 		}
