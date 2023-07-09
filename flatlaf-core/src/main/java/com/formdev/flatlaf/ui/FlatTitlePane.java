@@ -57,6 +57,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -950,6 +951,13 @@ public class FlatTitlePane
 
 				hitTestSpots.add( r );
 			}
+		}
+
+		// allow internal frames in layered pane to be moved/resized when placed over title bar
+		for( Component c : rootPane.getLayeredPane().getComponents() ) {
+			r = (c instanceof JInternalFrame) ? getNativeHitTestSpot( (JInternalFrame) c ) : null;
+			if( r != null )
+				hitTestSpots.add( r );
 		}
 
 		Rectangle minimizeButtonBounds = boundsInWindow( iconifyButton );
