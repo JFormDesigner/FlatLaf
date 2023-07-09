@@ -395,7 +395,8 @@ public class IntelliJTheme
 				// replace all values in UI defaults that match the wildcard key
 				for( Object k : defaultsKeysCache ) {
 					if( k.equals( "Desktop.background" ) ||
-						k.equals( "DesktopIcon.background" ) )
+						k.equals( "DesktopIcon.background" ) ||
+						k.equals( "TabbedPane.focusColor" ) )
 					  continue;
 
 					if( k instanceof String ) {
