@@ -83,7 +83,7 @@ public class FlatSVGUtils
 	 * @since 2
 	 */
 	public static List<Image> createWindowIconImages( URL svgUrl ) {
-		SVGDocument document = loadSVG( svgUrl );
+		SVGDocument document = FlatSVGIcon.loadSVG( svgUrl );
 
 		if( SystemInfo.isWindows && MultiResolutionImageSupport.isAvailable() ) {
 			// use a multi-resolution image that creates images on demand for requested sizes
@@ -148,7 +148,7 @@ public class FlatSVGUtils
 	 * @since 2
 	 */
 	public static BufferedImage svg2image( URL svgUrl, int width, int height ) {
-		return svg2image( loadSVG( svgUrl ), width, height );
+		return svg2image( FlatSVGIcon.loadSVG( svgUrl ), width, height );
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class FlatSVGUtils
 	 * @since 2
 	 */
 	public static BufferedImage svg2image( URL svgUrl, float scaleFactor ) {
-		SVGDocument document = loadSVG( svgUrl );
+		SVGDocument document = FlatSVGIcon.loadSVG( svgUrl );
 		FloatSize size = document.size();
 		int width = (int) (size.width * scaleFactor);
 		int height = (int) (size.height * scaleFactor);
@@ -196,7 +196,7 @@ public class FlatSVGUtils
 	 * @return the image
 	 * @throws RuntimeException if failed to render SVG file
 	 */
-	public static BufferedImage svg2image( SVGDocument document, int width, int height ) {
+	private static BufferedImage svg2image( SVGDocument document, int width, int height ) {
 		BufferedImage image = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 
 		Graphics2D g = image.createGraphics();
@@ -219,9 +219,5 @@ public class FlatSVGUtils
 
 	private static URL getResource( String svgName ) {
 		return FlatSVGUtils.class.getResource( svgName );
-	}
-
-	private static SVGDocument loadSVG( URL url ) {
-		return FlatSVGIcon.loadSVG( FlatSVGIcon.url2uri( url ), url );
 	}
 }

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,9 +63,8 @@ public class FlatSVGIcon
 	implements DisabledIconProvider
 {
 	// cache that uses soft references for values, which allows freeing SVG documents if no longer used
-	private static final SoftCache<URI, SVGDocument> svgCache = new SoftCache<>();
+	private static final SoftCache<URL, SVGDocument> svgCache = new SoftCache<>();
 	private static final SVGLoader svgLoader = new SVGLoader();
-	private static int streamNumber;
 
 	private final String name;
 	private final int width;
@@ -74,7 +72,7 @@ public class FlatSVGIcon
 	private final float scale;
 	private final boolean disabled;
 	private final ClassLoader classLoader;
-	private final URI uri;
+	private final URL url;
 
 	private ColorFilter colorFilter;
 
@@ -219,7 +217,7 @@ public class FlatSVGIcon
 	 * @since 2
 	 */
 	public FlatSVGIcon( URL url ) {
-		this( null, -1, -1, 1, false, null, url2uri( url ) );
+		this( null, -1, -1, 1, false, null, url );
 	}
 
 	/**
@@ -235,7 +233,7 @@ public class FlatSVGIcon
 	 * @since 2
 	 */
 	public FlatSVGIcon( URI uri ) {
-		this( null, -1, -1, 1, false, null, uri );
+		this( null, -1, -1, 1, false, null, uri2url( uri ) );
 	}
 
 	/**
@@ -250,7 +248,7 @@ public class FlatSVGIcon
 	 * @since 2
 	 */
 	public FlatSVGIcon( File file ) {
-		this( null, -1, -1, 1, false, null, file.toURI() );
+		this( null, -1, -1, 1, false, null, uri2url( file.toURI() ) );
 	}
 
 	/**
@@ -266,24 +264,15 @@ public class FlatSVGIcon
 	 * @since 2
 	 */
 	public FlatSVGIcon( InputStream in ) throws IOException {
-		this( null, -1, -1, 1, false, null, loadFromStream( in ) );
+		this( null, -1, -1, 1, false, null, null );
 
-		// since the input stream is already loaded and parsed,
-		// get the document here and remove it from cache
-		update();
-		synchronized( FlatSVGIcon.class ) {
-			svgCache.remove( uri );
-		}
-	}
-
-	private static synchronized URI loadFromStream( InputStream in ) throws IOException {
 		try( InputStream in2 = in ) {
-			SVGDocument document = svgLoader.load( in2 );
-			URI dummyUri = new URI( "inputStreamSVG", "/flatlaf-stream-" + streamNumber++, null );
-			svgCache.put( dummyUri, document );
-			return dummyUri;
-		} catch( URISyntaxException e ) {
-			throw new IllegalStateException( e );
+			document = svgLoader.load( in2 );
+
+			if( document == null ) {
+				loadFailed = true;
+				LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load SVG icon from input stream", null );
+			}
 		}
 	}
 
@@ -295,14 +284,14 @@ public class FlatSVGIcon
 	 * @since 2.0.1
 	 */
 	public FlatSVGIcon( FlatSVGIcon icon ) {
-		this( icon.name, icon.width, icon.height, icon.scale, icon.disabled, icon.classLoader, icon.uri );
+		this( icon.name, icon.width, icon.height, icon.scale, icon.disabled, icon.classLoader, icon.url );
 		colorFilter = icon.colorFilter;
 		document = icon.document;
 		dark = icon.dark;
 	}
 
-	protected FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader,
-		URI uri )
+	protected FlatSVGIcon( String name, int width, int height, float scale,
+		boolean disabled, ClassLoader classLoader, URL url )
 	{
 		this.name = name;
 		this.width = width;
@@ -310,7 +299,7 @@ public class FlatSVGIcon
 		this.scale = scale;
 		this.disabled = disabled;
 		this.classLoader = classLoader;
-		this.uri = uri;
+		this.url = url;
 	}
 
 	/**
@@ -389,7 +378,7 @@ public class FlatSVGIcon
 		if( width == this.width && height == this.height )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, uri );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, url );
 		icon.colorFilter = colorFilter;
 		icon.document = document;
 		icon.dark = dark;
@@ -408,7 +397,7 @@ public class FlatSVGIcon
 		if( scale == this.scale )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, uri );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, url );
 		icon.colorFilter = colorFilter;
 		icon.document = document;
 		icon.dark = dark;
@@ -427,7 +416,7 @@ public class FlatSVGIcon
 		if( disabled )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader, uri );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader, url );
 		icon.colorFilter = colorFilter;
 		icon.document = document;
 		icon.dark = dark;
@@ -473,13 +462,12 @@ public class FlatSVGIcon
 
 		dark = isDarkLaf();
 
-		// SVGs already loaded via url or input stream can not have light/dark variants
-		if( uri != null && document != null )
+		// SVGs already loaded via url, file or input stream can not have light/dark variants
+		if( document != null && name == null )
 			return;
 
-		URI uri = this.uri;
-		URL url = null;
-		if( uri == null ) {
+		URL url = this.url;
+		if( url == null ) {
 			url = getIconURL( name, dark );
 			if( url == null && dark )
 				url = getIconURL( name, false );
@@ -489,37 +477,27 @@ public class FlatSVGIcon
 				LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
 				return;
 			}
-
-			uri = url2uri( url );
 		}
 
-		if( url == null ) {
-			url = uri2url( uri );
-		}
-
-		document = loadSVG( uri, url );
+		document = loadSVG( url );
 		loadFailed = (document == null);
 	}
 
-	/*
-	 * The uri and url parameters should always match each other in the sense that they represent the same
-	 * location. We pass both as most places
-	 */
-	static synchronized SVGDocument loadSVG( URI uri, URL url ) {
+	static synchronized SVGDocument loadSVG( URL url ) {
 		// get from our cache
-		SVGDocument document = svgCache.get( uri );
+		SVGDocument document = svgCache.get( url );
 		if( document != null )
 			return document;
 
-		// load/get SVG document
+		// load SVG document
 		document = svgLoader.load( url );
 
 		if( document == null ) {
-			LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load '" + uri + "'", null );
+			LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load '" + url + "'", null );
 			return null;
 		}
 
-		svgCache.put( uri, document );
+		svgCache.put( url, document );
 
 		return document;
 	}
@@ -672,14 +650,6 @@ public class FlatSVGIcon
 		};
 
 		return MultiResolutionImageSupport.create( 0, dimensions, producer );
-	}
-
-	static URI url2uri( URL url ) {
-		try {
-			return url.toURI();
-		} catch( URISyntaxException ex ) {
-			throw new IllegalArgumentException( ex );
-		}
 	}
 
 	static URL uri2url( URI uri ) {
