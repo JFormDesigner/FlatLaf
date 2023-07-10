@@ -24,7 +24,6 @@ junit = "5.7.2"
 sigtest = "org.netbeans.tools:sigtest-maven-plugin:1.7"
 
 # flatlaf-extras
-svgSalamander = "com.formdev:svgSalamander:1.1.3"
 jsvg = "com.github.weisj:jsvg:1.0.0"
 
 # flatlaf-jide-oss

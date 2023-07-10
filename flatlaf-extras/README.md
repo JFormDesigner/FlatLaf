@@ -4,8 +4,7 @@ FlatLaf Extras
 This sub-project provides some additional components and classes:
 
 - [FlatSVGIcon](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/FlatSVGIcon.html):
-  An icon that displays SVG using
-  [svgSalamander](https://github.com/JFormDesigner/svgSalamander).\
+  An icon that displays SVG using [JSVG](https://github.com/weisJ/jsvg).\
   ![FlatSVGIcon.png](../images/extras-FlatSVGIcon.png)
 - [FlatTriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html):
   A tri-state check box.\
@@ -38,9 +37,9 @@ Otherwise download `flatlaf-extras-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras)
 
-If SVG classes are used, `svgSalamander-<version>.jar` is also required:
+If SVG classes are used, `jsvg-<version>.jar` is also required:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.weisj/jsvg/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.github.weisj/jsvg)
 
 
 Tools
