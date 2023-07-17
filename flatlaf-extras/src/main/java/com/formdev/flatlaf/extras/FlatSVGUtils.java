@@ -19,7 +19,6 @@ package com.formdev.flatlaf.extras;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
@@ -201,8 +200,7 @@ public class FlatSVGUtils
 
 		Graphics2D g = image.createGraphics();
 		try {
-			g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-			g.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+			FlatSVGIcon.setRenderingHints( g );
 
 			FloatSize size = document.size();
 			double sx = width / size.width;

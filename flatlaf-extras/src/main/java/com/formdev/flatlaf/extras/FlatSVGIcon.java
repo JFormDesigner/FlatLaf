@@ -574,12 +574,7 @@ public class FlatSVGIcon
 		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), colorFilter, ColorFilter.getInstance(), grayFilter );
 
 		try {
-			// same hints as in FlatUIUtils.setRenderingHints()
-			g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-			g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE );
-
-			// enable better image scaling
-			g2.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+			setRenderingHints( g2 );
 
 			paintSvg( g2, x, y );
 		} finally {
@@ -650,6 +645,17 @@ public class FlatSVGIcon
 		};
 
 		return MultiResolutionImageSupport.create( 0, dimensions, producer );
+	}
+
+	static void setRenderingHints( Graphics2D g ) {
+		// enable anti-aliasing
+		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+
+		// disable coordinate normalization for correct line rendering
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+
+		// enable better image scaling
+		g.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
 	}
 
 	static URL uri2url( URI uri ) {
