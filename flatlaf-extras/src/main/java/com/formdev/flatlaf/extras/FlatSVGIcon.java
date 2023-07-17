@@ -63,7 +63,7 @@ public class FlatSVGIcon
 	implements DisabledIconProvider
 {
 	// cache that uses soft references for values, which allows freeing SVG documents if no longer used
-	private static final SoftCache<URL, SVGDocument> svgCache = new SoftCache<>();
+	private static final SoftCache<String, SVGDocument> svgCache = new SoftCache<>();
 	private static final SVGLoader svgLoader = new SVGLoader();
 
 	private final String name;
@@ -485,7 +485,8 @@ public class FlatSVGIcon
 
 	static synchronized SVGDocument loadSVG( URL url ) {
 		// get from our cache
-		SVGDocument document = svgCache.get( url );
+		String cacheKey = url.toString();
+		SVGDocument document = svgCache.get( cacheKey );
 		if( document != null )
 			return document;
 
@@ -497,7 +498,7 @@ public class FlatSVGIcon
 			return null;
 		}
 
-		svgCache.put( url, document );
+		svgCache.put( cacheKey, document );
 
 		return document;
 	}
