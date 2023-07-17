@@ -30,6 +30,9 @@ FlatLaf Change Log
 - Native Windows libraries: Fixed crash when running in Java 8 and newer Java
   version is installed in `PATH` environment variable and using class
   `SystemInfo` before AWT initialization. (issue #673)
+- FormattedTextField: On Linux, fixed `IllegalArgumentException: Invalid
+  location` if `JFormattedTextField.setDocument()` is invoked in a focus gained
+  listener on that formatted text field. (issue #698)
 
 
 ## 3.1.1

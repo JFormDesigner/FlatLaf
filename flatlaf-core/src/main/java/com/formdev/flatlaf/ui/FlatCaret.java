@@ -256,10 +256,14 @@ public class FlatCaret
 		// select all
 		if( c instanceof JFormattedTextField ) {
 			EventQueue.invokeLater( () -> {
-				if( getComponent() == null )
+				// Warning: do not use variables from outside of this runnable
+				//          because they may be out-of-date when this runnable is executed
+
+				JTextComponent c2 = getComponent();
+				if( c2 == null )
 					return; // was deinstalled
 
-				select( 0, doc.getLength() );
+				select( 0, c2.getDocument().getLength() );
 			} );
 		} else {
 			select( 0, doc.getLength() );
