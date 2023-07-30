@@ -180,6 +180,7 @@ public class TestUIDefaultsLoader
 
 	//---- class TestInstance -------------------------------------------------
 
+	@SuppressWarnings( "EqualsHashCode" ) // Error Prone
 	public static class TestInstance
 	{
 		private String s;
