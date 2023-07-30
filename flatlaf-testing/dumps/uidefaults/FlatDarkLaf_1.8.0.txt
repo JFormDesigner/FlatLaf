@@ -1238,6 +1238,7 @@ TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonMinimumWidth   30
 TitlePane.buttonPressedBackground #484c4f  HSL 206   5  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.buttonSymbolHeight   10
 TitlePane.centerTitle          false
 TitlePane.centerTitleIfMenuBarEmbedded true
 TitlePane.closeHoverBackground #c42b1c  HSL   5  75  44    javax.swing.plaf.ColorUIResource [UI]
@@ -1264,6 +1265,14 @@ TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWin
 TitlePane.showIcon             true
 TitlePane.showIconBesideTitle  false
 TitlePane.showIconInDialogs    true
+TitlePane.small.buttonSize     30,20    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.small.buttonSymbolHeight 8
+TitlePane.small.closeIcon      [lazy] 30,20    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
+TitlePane.small.font           [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
+TitlePane.small.iconifyIcon    [lazy] 30,20    com.formdev.flatlaf.icons.FlatWindowIconifyIcon [UI]
+TitlePane.small.maximizeIcon   [lazy] 30,20    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
+TitlePane.small.restoreIcon    [lazy] 30,20    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
+TitlePane.small.showIcon       false
 TitlePane.titleMargins         3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.titleMinimumWidth    60
 TitlePane.unifiedBackground    true

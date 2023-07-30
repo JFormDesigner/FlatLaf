@@ -32,18 +32,24 @@ public class FlatWindowRestoreIcon
 	extends FlatWindowAbstractIcon
 {
 	public FlatWindowRestoreIcon() {
+		this( null );
+	}
+
+	/** @since 3.2 */
+	public FlatWindowRestoreIcon( String windowStyle ) {
+		super( windowStyle );
 	}
 
 	@Override
 	protected void paintIconAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-		int iwh = (int) (10 * scaleFactor);
+		int iwh = (int) (getSymbolHeight() * scaleFactor);
 		int ix = x + ((width - iwh) / 2);
 		int iy = y + ((height - iwh) / 2);
 		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
 		int arc = Math.max( (int) (1.5 * scaleFactor), 2 );
 		int arcOuter = (int) (arc + (1.5 * scaleFactor));
 
-		int rwh = (int) (8 * scaleFactor);
+		int rwh = (int) ((getSymbolHeight() - 2) * scaleFactor);
 		int ro2 = iwh - rwh;
 
 		// upper-right rectangle

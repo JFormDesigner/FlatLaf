@@ -361,6 +361,7 @@ debug*/
 	private void openDialog() {
 		Window owner = SwingUtilities.windowForComponent( this );
 		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.DOCUMENT_MODAL );
+		initWindowType( dialog );
 		dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
 		dialog.add( new FlatWindowDecorationsTest() );
 		dialog.pack();
@@ -371,12 +372,20 @@ debug*/
 	private void openFrame() {
 		FlatWindowDecorationsTest comp = new FlatWindowDecorationsTest();
 		JFrame frame = new JFrame( "Frame" );
+		initWindowType( frame );
 		frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		frame.add( comp );
 		frame.setJMenuBar( comp.menuBar );
 		frame.pack();
 		frame.setLocationRelativeTo( this );
 		frame.setVisible( true );
+	}
+
+	private void initWindowType( Window window ) {
+		if( typeUtilityRadioButton.isSelected() )
+			window.setType( Window.Type.UTILITY );
+		else if( typeSmallRadioButton.isSelected() )
+			((RootPaneContainer)window).getRootPane().putClientProperty( "Window.style", "small" );
 	}
 
 	private void decorationStyleChanged() {
@@ -536,6 +545,9 @@ debug*/
 		colorizeMenusCheckBox = new JCheckBox();
 		JButton openDialogButton = new JButton();
 		JButton openFrameButton = new JButton();
+		typeNormalRadioButton = new JRadioButton();
+		typeUtilityRadioButton = new JRadioButton();
+		typeSmallRadioButton = new JRadioButton();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -567,7 +579,7 @@ debug*/
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
-			"[fill]" +
+			"[left]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]",
@@ -617,7 +629,7 @@ debug*/
 			maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
 			panel7.add(maximizedBoundsCheckBox, "cell 0 4");
 		}
-		add(panel7, "cell 0 0");
+		add(panel7, "cell 0 0,growx");
 
 		//======== panel4 ========
 		{
@@ -818,7 +830,7 @@ debug*/
 			styleFileChooserRadioButton.addActionListener(e -> decorationStyleChanged());
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
-		add(panel1, "cell 0 1");
+		add(panel1, "cell 0 1,growx");
 
 		//======== panel2 ========
 		{
@@ -900,13 +912,26 @@ debug*/
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 2");
+		add(openDialogButton, "cell 0 2 3 1");
 
 		//---- openFrameButton ----
 		openFrameButton.setText("Open Frame");
 		openFrameButton.setMnemonic('A');
 		openFrameButton.addActionListener(e -> openFrame());
-		add(openFrameButton, "cell 0 2");
+		add(openFrameButton, "cell 0 2 3 1");
+
+		//---- typeNormalRadioButton ----
+		typeNormalRadioButton.setText("Normal");
+		typeNormalRadioButton.setSelected(true);
+		add(typeNormalRadioButton, "cell 0 2 3 1");
+
+		//---- typeUtilityRadioButton ----
+		typeUtilityRadioButton.setText("Utility");
+		add(typeUtilityRadioButton, "cell 0 2 3 1");
+
+		//---- typeSmallRadioButton ----
+		typeSmallRadioButton.setText("Small");
+		add(typeSmallRadioButton, "cell 0 2 3 1");
 
 		//======== menuBar ========
 		{
@@ -1095,6 +1120,12 @@ debug*/
 		iconButtonGroup.add(iconTestRandomRadioButton);
 		iconButtonGroup.add(iconTestMRIRadioButton);
 		iconButtonGroup.add(iconTestDynMRIRadioButton);
+
+		//---- typeButtonGroup ----
+		ButtonGroup typeButtonGroup = new ButtonGroup();
+		typeButtonGroup.add(typeNormalRadioButton);
+		typeButtonGroup.add(typeUtilityRadioButton);
+		typeButtonGroup.add(typeSmallRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -1138,6 +1169,9 @@ debug*/
 	private JCheckBox colorizeTitleBarCheckBox;
 	private JCheckBox colorizeMenuBarCheckBox;
 	private JCheckBox colorizeMenusCheckBox;
+	private JRadioButton typeNormalRadioButton;
+	private JRadioButton typeUtilityRadioButton;
+	private JRadioButton typeSmallRadioButton;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

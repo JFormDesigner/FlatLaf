@@ -27,8 +27,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -548,7 +552,7 @@ class UIDefaultsLoader
 			case INTEGERORFLOAT:return parseIntegerOrFloat( value );
 			case FLOAT:			return parseFloat( value );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
-			case ICON:			return parseInstance( value, addonClassLoaders );
+			case ICON:			return parseInstance( value, resolver, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case DIMENSION:		return parseDimension( value );
 			case COLOR:			return parseColorOrFunction( value, resolver );
@@ -557,7 +561,7 @@ class UIDefaultsLoader
 			case SCALEDFLOAT:	return parseScaledFloat( value );
 			case SCALEDINSETS:	return parseScaledInsets( value );
 			case SCALEDDIMENSION:return parseScaledDimension( value );
-			case INSTANCE:		return parseInstance( value, addonClassLoaders );
+			case INSTANCE:		return parseInstance( value, resolver, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
 			case GRAYFILTER:	return parseGrayFilter( value );
 			case UNKNOWN:
@@ -623,7 +627,7 @@ class UIDefaultsLoader
 		throws IllegalArgumentException
 	{
 		if( value.indexOf( ',' ) >= 0 ) {
-			// top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
+			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() >= 5)
@@ -638,13 +642,29 @@ class UIDefaultsLoader
 					: new FlatEmptyBorder( insets );
 			};
 		} else
-			return parseInstance( value, addonClassLoaders );
+			return parseInstance( value, resolver, addonClassLoaders );
 	}
 
-	private static Object parseInstance( String value, List<ClassLoader> addonClassLoaders ) {
+	private static Object parseInstance( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		return (LazyValue) t -> {
 			try {
-				return findClass( value, addonClassLoaders ).getDeclaredConstructor().newInstance();
+				if( value.indexOf( ',' ) >= 0 ) {
+					// Syntax: className,param1,param2,...
+					List<String> parts = splitFunctionParams( value, ',' );
+					String className = parts.get( 0 );
+					Class<?> cls = findClass( className, addonClassLoaders );
+
+					Constructor<?>[] constructors = cls.getDeclaredConstructors();
+					Object result = invokeConstructorOrStaticMethod( constructors, parts, resolver );
+					if( result != null )
+						return result;
+
+					LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + className
+						+ "': no constructor found for parameters '"
+						+ value.substring( value.indexOf( ',' + 1 ) ) + "'.", null );
+					return null;
+				} else
+					return findClass( value, addonClassLoaders ).getDeclaredConstructor().newInstance();
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
@@ -1464,6 +1484,86 @@ class UIDefaultsLoader
 			strs.add( s );
 
 		return strs;
+	}
+
+	private static Object invokeConstructorOrStaticMethod( Executable[] constructorsOrMethods,
+			List<String> parts, Function<String, String> resolver )
+		throws Exception
+	{
+		// order constructors/methods by parameter types:
+		// - String parameters to the end
+		// - int before float parameters
+		constructorsOrMethods = constructorsOrMethods.clone();
+		Arrays.sort( constructorsOrMethods, (c1, c2) -> {
+			Class<?>[] ptypes1 = c1.getParameterTypes();
+			Class<?>[] ptypes2 = c2.getParameterTypes();
+			if( ptypes1.length != ptypes2.length )
+				return ptypes1.length - ptypes2.length;
+
+			for( int i = 0; i < ptypes1.length; i++ ) {
+				Class<?> pt1 = ptypes1[i];
+				Class<?> pt2 = ptypes2[i];
+
+				if( pt1 == pt2 )
+					continue;
+
+				// order methods with String parameters to the end
+				if( pt1 == String.class )
+					return 2;
+				if( pt2 == String.class )
+					return -2;
+
+				// order int before float
+				if( pt1 == int.class )
+					return -1;
+				if( pt2 == int.class )
+					return 1;
+			}
+			return 0;
+		} );
+
+		// search for best constructor/method for given parameter values
+		for( Executable cm : constructorsOrMethods ) {
+			if( cm.getParameterCount() != parts.size() - 1 )
+				continue;
+
+			Object[] params = parseMethodParams( cm.getParameterTypes(), parts, resolver );
+			if( params == null )
+				continue;
+
+			// invoke constructor or static method
+			if( cm instanceof Constructor )
+				return ((Constructor<?>)cm).newInstance( params );
+			else
+				return ((Method)cm).invoke( null, params );
+		}
+
+		return null;
+	}
+
+	private static Object[] parseMethodParams( Class<?>[] paramTypes, List<String> parts, Function<String, String> resolver ) {
+		Object[] params = new Object[paramTypes.length];
+		try {
+			for( int i = 0; i < params.length; i++ ) {
+				Class<?> paramType = paramTypes[i];
+				String paramValue = parts.get( i + 1 );
+				if( paramType == String.class )
+					params[i] = paramValue;
+				else if( paramType == boolean.class )
+					params[i] = parseBoolean( paramValue );
+				else if( paramType == int.class )
+					params[i] = parseInteger( paramValue );
+				else if( paramType == float.class )
+					params[i] = parseFloat( paramValue );
+				else if( paramType == Color.class )
+					params[i] = parseColorOrFunction( resolver.apply( paramValue ), resolver );
+				else
+					return null; // unsupported parameter type
+			}
+		} catch( IllegalArgumentException ex ) {
+			return null; // failed to parse parameter for expected parameter type
+		}
+		return params;
 	}
 
 	/**

@@ -46,6 +46,7 @@ import java.util.IdentityHashMap;
 import java.util.WeakHashMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -164,6 +165,88 @@ public class FlatUIUtils
 			}
 		}
 		return defaultValue;
+	}
+
+	/** @since 3.2 */
+	public static Color getSubUIColor( String key, String subKey ) {
+		if( subKey != null ) {
+			Color value = UIManager.getColor( buildSubKey( key, subKey ) );
+			if( value != null )
+				return value;
+		}
+		return UIManager.getColor( key );
+	}
+
+	/** @since 3.2 */
+	public static boolean getSubUIBoolean( String key, String subKey, boolean defaultValue ) {
+		if( subKey != null ) {
+			Object value = UIManager.get( buildSubKey( key, subKey ) );
+			if( value instanceof Boolean )
+				return (Boolean) value;
+		}
+		return getUIBoolean( key, defaultValue );
+	}
+
+	/** @since 3.2 */
+	public static int getSubUIInt( String key, String subKey, int defaultValue ) {
+		if( subKey != null ) {
+			Object value = UIManager.get( buildSubKey( key, subKey ) );
+			if( value instanceof Integer )
+				return (Integer) value;
+		}
+		return getUIInt( key, defaultValue );
+	}
+
+	/** @since 3.2 */
+	public static Insets getSubUIInsets( String key, String subKey ) {
+		if( subKey != null ) {
+			Insets value = UIManager.getInsets( buildSubKey( key, subKey ) );
+			if( value != null )
+				return value;
+		}
+		return UIManager.getInsets( key );
+	}
+
+	/** @since 3.2 */
+	public static Dimension getSubUIDimension( String key, String subKey ) {
+		if( subKey != null ) {
+			Dimension value = UIManager.getDimension( buildSubKey( key, subKey ) );
+			if( value != null )
+				return value;
+		}
+		return UIManager.getDimension( key );
+	}
+
+	/** @since 3.2 */
+	public static Icon getSubUIIcon( String key, String subKey ) {
+		if( subKey != null ) {
+			Icon value = UIManager.getIcon( buildSubKey( key, subKey ) );
+			if( value != null )
+				return value;
+		}
+		return UIManager.getIcon( key );
+	}
+
+	/** @since 3.2 */
+	public static Font getSubUIFont( String key, String subKey ) {
+		if( subKey != null ) {
+			Font value = UIManager.getFont( buildSubKey( key, subKey ) );
+			if( value != null )
+				return value;
+		}
+		return UIManager.getFont( key );
+	}
+
+	/**
+	 * Inserts {@code subKey} at last dot in {@code key}.
+	 * <p>
+	 * E.g. {@code buildSubKey( "TitlePane.font", "small" )} returns {@code "TitlePane.small.font"}.
+	 */
+	private static String buildSubKey( String key, String subKey ) {
+		int dot = key.lastIndexOf( '.' );
+		return (dot >= 0)
+			? key.substring( 0, dot ) + '.' + subKey + '.' + key.substring( dot + 1 )
+			: key;
 	}
 
 	/** @since 1.1.2 */

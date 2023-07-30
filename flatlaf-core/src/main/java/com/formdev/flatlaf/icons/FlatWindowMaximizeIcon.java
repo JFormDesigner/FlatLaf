@@ -29,11 +29,17 @@ public class FlatWindowMaximizeIcon
 	extends FlatWindowAbstractIcon
 {
 	public FlatWindowMaximizeIcon() {
+		this( null );
+	}
+
+	/** @since 3.2 */
+	public FlatWindowMaximizeIcon( String windowStyle ) {
+		super( windowStyle );
 	}
 
 	@Override
 	protected void paintIconAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-		int iwh = (int) (10 * scaleFactor);
+		int iwh = (int) (getSymbolHeight() * scaleFactor);
 		int ix = x + ((width - iwh) / 2);
 		int iy = y + ((height - iwh) / 2);
 		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;

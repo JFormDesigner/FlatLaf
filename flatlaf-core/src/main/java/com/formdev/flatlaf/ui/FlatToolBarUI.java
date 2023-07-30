@@ -39,10 +39,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
 import javax.swing.LayoutFocusTraversalPolicy;
+import javax.swing.RootPaneContainer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -154,6 +156,13 @@ public class FlatToolBarUI
 			toolBar.setFloatable( oldFloatable );
 			oldFloatable = null;
 		}
+	}
+
+	@Override
+	protected RootPaneContainer createFloatingWindow( JToolBar toolbar ) {
+		RootPaneContainer floatingWindow = super.createFloatingWindow( toolbar );
+		floatingWindow.getRootPane().putClientProperty( FlatClientProperties.WINDOW_STYLE, FlatClientProperties.WINDOW_STYLE_SMALL );
+		return floatingWindow;
 	}
 
 	@Override

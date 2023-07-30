@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.IllegalComponentStateException;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
@@ -365,6 +366,11 @@ public class FlatRootPaneUI
 
 			case FlatClientProperties.GLASS_PANE_FULL_HEIGHT:
 				rootPane.revalidate();
+				break;
+
+			case FlatClientProperties.WINDOW_STYLE:
+				if( rootPane.isDisplayable() )
+					throw new IllegalComponentStateException( "The client property 'Window.style' must be set before the window becomes displayable." );
 				break;
 		}
 	}
