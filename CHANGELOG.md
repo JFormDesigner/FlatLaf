@@ -43,7 +43,8 @@ FlatLaf Change Log
 
 - Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
   library for SVG rendering. You need to replace svgSalamander with JSVG in your
-  build scripts.
+  build scripts and distribute `jsvg.jar` with your application. Also replace
+  `com.kitfox.svg` with `com.github.weisj.jsvg` in `module-info.java` files.
 
 
 ## 3.1.1

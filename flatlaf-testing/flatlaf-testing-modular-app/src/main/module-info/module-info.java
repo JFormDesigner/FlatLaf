@@ -22,7 +22,7 @@ module com.formdev.flatlaf.testing.modular.app {
 	requires com.formdev.flatlaf;
 	requires com.formdev.flatlaf.extras;
 	requires com.formdev.flatlaf.fonts.inter;
-	requires com.kitfox.svg;
+	requires com.github.weisj.jsvg;
 
 	exports com.formdev.flatlaf.testing.modular.app.plaf;
 }
