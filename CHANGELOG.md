@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
+  library (instead of svgSalamander) for rendering. JSVG provides improved SVG
+  rendering and uses less memory compared to svgSalamander. (PR #684)
 - Added system property `flatlaf.useNativeLibrary` to allow disabling loading of
   FlatLaf native library. (issue #674)
 
@@ -33,6 +36,12 @@ FlatLaf Change Log
 - FormattedTextField: On Linux, fixed `IllegalArgumentException: Invalid
   location` if `JFormattedTextField.setDocument()` is invoked in a focus gained
   listener on that formatted text field. (issue #698)
+
+#### Incompatibilities
+
+- Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
+  library for SVG rendering. You need to replace svgSalamander with JSVG in your
+  build scripts.
 
 
 ## 3.1.1
