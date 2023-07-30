@@ -8,6 +8,8 @@ FlatLaf Change Log
 - Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
   library (instead of svgSalamander) for rendering. JSVG provides improved SVG
   rendering and uses less memory compared to svgSalamander. (PR #684)
+- ComboBox: Improved location of selected item in popup if list is large and
+  scrollable.
 - Added system property `flatlaf.useNativeLibrary` to allow disabling loading of
   FlatLaf native library. (issue #674)
 

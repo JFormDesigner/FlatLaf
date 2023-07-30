@@ -986,6 +986,29 @@ public class FlatComboBoxUI
 				}
 			}
 
+			// improve location of selected item in popup if list is large and scrollable
+			if( list.getHeight() == 0 ) {
+				// If popup is shown for the first time (or after a laf switch) and is scrollable,
+				// then BasicComboPopup scrolls the selected item to the top of the visible area.
+				// But for usability it would be better to have selected item somewhere
+				// in the middle of the visible area so that the user can see items above
+				// the selected item, which are usually more "important".
+
+				int selectedIndex = list.getSelectedIndex();
+				if( selectedIndex >= 1 ) {
+					int maximumRowCount = comboBox.getMaximumRowCount();
+					if( selectedIndex < maximumRowCount ) {
+						// selected item is in the first visible items --> scroll to top
+						list.scrollRectToVisible( new Rectangle() );
+					} else {
+						// scroll the selected item to the middle of the visible area
+						int firstVisibleIndex = Math.max( selectedIndex - (maximumRowCount / 2), 0 );
+						if( firstVisibleIndex > 0 )
+							list.ensureIndexIsVisible( firstVisibleIndex );
+					}
+				}
+			}
+
 			super.show( invoker, x, y );
 		}
 
