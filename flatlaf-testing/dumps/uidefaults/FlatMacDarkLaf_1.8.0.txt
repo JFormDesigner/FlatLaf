@@ -1047,7 +1047,8 @@ TabbedPane.buttonArc           12
 TabbedPane.buttonHoverBackground #111111  HSL   0   0   7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
 TabbedPane.buttonInsets        2,1,2,1    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.buttonPressedBackground #0a0a0a  HSL   0   0   4    com.formdev.flatlaf.util.DerivedColor [UI]    darken(8%)
-TabbedPane.cardTabSelectionHeight 2
+TabbedPane.cardTabArc          12
+TabbedPane.cardTabSelectionHeight 4
 TabbedPane.closeArc            4
 TabbedPane.closeCrossFilledSize 7.5
 TabbedPane.closeCrossLineWidth 1
@@ -1078,18 +1079,22 @@ TabbedPane.labelShift          1
 TabbedPane.light               #cccccc19  10%  HSLA   0   0  80 10    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.scrollButtonsPlacement both
 TabbedPane.scrollButtonsPolicy asNeededSingle
+TabbedPane.selectedInsets      0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.selectedLabelShift  -1
 TabbedPane.selectedTabPadInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.selectionFollowsFocus true
 TabbedPane.shadow              #1e1e1e  HSL   0   0  12    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.showTabSeparators   false
 TabbedPane.tabAlignment        center
+TabbedPane.tabArc              12
 TabbedPane.tabAreaAlignment    leading
 TabbedPane.tabAreaInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabHeight           32
 TabbedPane.tabInsets           4,12,4,12    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabRunOverlay       0
-TabbedPane.tabSelectionHeight  3
+TabbedPane.tabSelectionArc     4
+TabbedPane.tabSelectionHeight  4
+TabbedPane.tabSelectionInsets  0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabSeparatorsFullHeight false
 TabbedPane.tabType             underlined
 TabbedPane.tabWidthMode        preferred

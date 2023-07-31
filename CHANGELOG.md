@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TabbedPane: Support rounded underline selection and rounded card tabs.
 - Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
   library (instead of svgSalamander) for rendering. JSVG provides improved SVG
   rendering and uses less memory compared to svgSalamander. (PR #684)

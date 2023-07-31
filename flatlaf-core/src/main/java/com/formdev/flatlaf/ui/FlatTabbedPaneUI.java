@@ -49,6 +49,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -143,6 +144,11 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
  * @uiDefault TabbedPane.cardTabSelectionHeight			int
+ * @uiDefault TabbedPane.tabArc							int
+ * @uiDefault TabbedPane.tabSelectionArc				int
+ * @uiDefault TabbedPane.cardTabArc						int
+ * @uiDefault TabbedPane.selectedInsets					Insets
+ * @uiDefault TabbedPane.tabSelectionInsets				Insets
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
@@ -219,6 +225,11 @@ public class FlatTabbedPaneUI
 	@Styleable protected int tabHeight;
 	@Styleable protected int tabSelectionHeight;
 	/** @since 2 */ @Styleable protected int cardTabSelectionHeight;
+	/** @since 3.2 */ @Styleable protected int tabArc;
+	/** @since 3.2 */ @Styleable protected int tabSelectionArc;
+	/** @since 3.2 */ @Styleable protected int cardTabArc;
+	/** @since 3.2 */ @Styleable protected Insets selectedInsets;
+	/** @since 3.2 */ @Styleable protected Insets tabSelectionInsets;
 	@Styleable protected int contentSeparatorHeight;
 	@Styleable protected boolean showTabSeparators;
 	@Styleable protected boolean tabSeparatorsFullHeight;
@@ -344,6 +355,11 @@ public class FlatTabbedPaneUI
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		cardTabSelectionHeight = UIManager.getInt( "TabbedPane.cardTabSelectionHeight" );
+		tabArc = UIManager.getInt( "TabbedPane.tabArc" );
+		tabSelectionArc = UIManager.getInt( "TabbedPane.tabSelectionArc" );
+		cardTabArc = UIManager.getInt( "TabbedPane.cardTabArc" );
+		selectedInsets = UIManager.getInsets( "TabbedPane.selectedInsets" );
+		tabSelectionInsets = UIManager.getInsets( "TabbedPane.tabSelectionInsets" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
@@ -1184,10 +1200,41 @@ public class FlatTabbedPaneUI
 	protected void paintTabBackground( Graphics g, int tabPlacement, int tabIndex,
 		int x, int y, int w, int h, boolean isSelected )
 	{
+		boolean isCard = (getTabType() == TAB_TYPE_CARD);
+
+		// fill whole tab background if tab is rounded or has insets
+		if( (!isCard && tabArc > 0) ||
+			(isCard && cardTabArc > 0) ||
+			(!isCard && selectedInsets != null &&
+			 (selectedInsets.top != 0 || selectedInsets.left != 0 ||
+			  selectedInsets.bottom != 0 || selectedInsets.right != 0)) )
+		{
+			Color background = tabPane.getBackgroundAt( tabIndex );
+			g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
+			g.fillRect( x, y, w, h );
+		}
+
+		// apply insets
+		if( !isCard && selectedInsets != null ) {
+			Insets insets = new Insets( 0, 0, 0, 0 );
+			rotateInsets( selectedInsets, insets, tabPane.getTabPlacement() );
+
+			x += scale( insets.left );
+			y += scale( insets.top );
+			w -= scale( insets.left + insets.right );
+			h -= scale( insets.top + insets.bottom );
+		}
+
 		// paint tab background
 		Color background = getTabBackground( tabPlacement, tabIndex, isSelected );
 		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
-		g.fillRect( x, y, w, h );
+		if( !isCard && tabArc > 0 ) {
+			float arc = scale( (float) tabArc ) / 2f;
+			FlatUIUtils.paintSelection( (Graphics2D) g, x, y, w, h, null, arc, arc, arc, arc, 0 );
+		} else if( isCard && cardTabArc > 0 )
+			((Graphics2D)g).fill( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
+		else
+			g.fillRect( x, y, w, h );
 	}
 
 	/** @since 2 */
@@ -1241,42 +1288,38 @@ public class FlatTabbedPaneUI
 	protected void paintCardTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
 		Graphics2D g2 = (Graphics2D) g;
 
-		float borderWidth = scale( (float) contentSeparatorHeight );
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( createCardTabOuterPath( tabPlacement, x, y, w, h ), false );
+		path.append( createCardTabInnerPath( tabPlacement, x, y, w, h ), false );
+
 		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+		g2.fill( path );
+	}
+
+	/** @since 3.2 */
+	protected Shape createCardTabOuterPath( int tabPlacement, int x, int y, int w, int h ) {
+		float arc = scale( (float) cardTabArc ) / 2f;
 
 		switch( tabPlacement ) {
 			default:
-			case TOP:
-			case BOTTOM:
-				// paint left and right tab border
-				g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
-				g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
-				break;
-			case LEFT:
-			case RIGHT:
-				// paint top and bottom tab border
-				g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
-				g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
-				break;
+			case TOP:    return FlatUIUtils.createRoundRectanglePath( x, y, w, h, arc, arc, 0, 0 );
+			case BOTTOM: return FlatUIUtils.createRoundRectanglePath( x, y, w, h, 0, 0, arc, arc );
+			case LEFT:   return FlatUIUtils.createRoundRectanglePath( x, y, w, h, arc, 0, arc, 0 );
+			case RIGHT:  return FlatUIUtils.createRoundRectanglePath( x, y, w, h, 0, arc, 0, arc );
 		}
+	}
 
-		if( cardTabSelectionHeight <= 0 ) {
-			// if there is no tab selection indicator, paint a top border as well
-			switch( tabPlacement ) {
-				default:
-				case TOP:
-					g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
-					break;
-				case BOTTOM:
-					g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
-					break;
-				case LEFT:
-					g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
-					break;
-				case RIGHT:
-					g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
-					break;
-			}
+	/** @since 3.2 */
+	protected Shape createCardTabInnerPath( int tabPlacement, int x, int y, int w, int h ) {
+		float bw = scale( (float) contentSeparatorHeight );
+		float arc = (scale( (float) cardTabArc ) / 2f) - bw;
+
+		switch( tabPlacement ) {
+			default:
+			case TOP:    return FlatUIUtils.createRoundRectanglePath( x + bw, y + bw, w - (bw * 2), h - bw,       arc, arc, 0, 0 );
+			case BOTTOM: return FlatUIUtils.createRoundRectanglePath( x + bw, y,      w - (bw * 2), h - bw,       0, 0, arc, arc );
+			case LEFT:   return FlatUIUtils.createRoundRectanglePath( x + bw, y + bw, w - bw,       h - (bw * 2), arc, 0, arc, 0 );
+			case RIGHT:  return FlatUIUtils.createRoundRectanglePath( x,      y + bw, w - bw,       h - (bw * 2), 0, arc, 0, arc );
 		}
 	}
 
@@ -1324,37 +1367,61 @@ public class FlatTabbedPaneUI
 			? (isTabbedPaneOrChildFocused() ? underlineColor : inactiveUnderlineColor)
 			: disabledUnderlineColor );
 
-		// paint underline selection
-		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
+		boolean isCard = (getTabType() == TAB_TYPE_CARD);
+		boolean atBottom = !isCard;
 		Insets contentInsets = atBottom
 			? ((!rotateTabRuns && runCount > 1 && !isScrollTabLayout() && getRunForTab( tabPane.getTabCount(), tabIndex ) > 0)
 				? new Insets( 0, 0, 0, 0 )
 				: getContentBorderInsets( tabPlacement ))
 			: null;
 
-		int tabSelectionHeight = scale( atBottom ? this.tabSelectionHeight : cardTabSelectionHeight );
-		int sx, sy;
+		int tabSelectionHeight = scale( isCard ? cardTabSelectionHeight : this.tabSelectionHeight );
+		float arc = scale( (float) (isCard ? cardTabArc : tabSelectionArc) ) / 2f;
+		int sx = x, sy = y, sw = w, sh = h;
 		switch( tabPlacement ) {
 			case TOP:
 			default:
 				sy = atBottom ? (y + h + contentInsets.top - tabSelectionHeight) : y;
-				g.fillRect( x, sy, w, tabSelectionHeight );
+				sh = tabSelectionHeight;
 				break;
 
 			case BOTTOM:
 				sy = atBottom ? (y - contentInsets.bottom) : (y + h - tabSelectionHeight);
-				g.fillRect( x, sy, w, tabSelectionHeight );
+				sh = tabSelectionHeight;
 				break;
 
 			case LEFT:
 				sx = atBottom ? (x + w + contentInsets.left - tabSelectionHeight) : x;
-				g.fillRect( sx, y, tabSelectionHeight, h );
+				sw = tabSelectionHeight;
 				break;
 
 			case RIGHT:
 				sx = atBottom ? (x - contentInsets.right) : (x + w - tabSelectionHeight);
-				g.fillRect( sx, y, tabSelectionHeight, h );
+				sw = tabSelectionHeight;
 				break;
+		}
+
+		// apply insets
+		if( !isCard && tabSelectionInsets != null ) {
+			Insets insets = new Insets( 0, 0, 0, 0 );
+			rotateInsets( tabSelectionInsets, insets, tabPane.getTabPlacement() );
+
+			sx += scale( insets.left );
+			sy += scale( insets.top );
+			sw -= scale( insets.left + insets.right );
+			sh -= scale( insets.top + insets.bottom );
+		}
+
+		// paint underline selection
+		if( arc <= 0 )
+			g.fillRect( sx, sy, sw, sh );
+		else {
+			if( isCard ) {
+				Area area = new Area( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
+				area.intersect( new Area( new Rectangle2D.Float( sx, sy, sw, sh ) ) );
+				((Graphics2D)g).fill( area );
+			} else
+				FlatUIUtils.paintSelection( (Graphics2D) g, sx, sy, sw, sh, null, arc, arc, arc, arc, 0 );
 		}
 	}
 

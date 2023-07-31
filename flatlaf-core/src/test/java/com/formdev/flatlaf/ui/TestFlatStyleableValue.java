@@ -738,6 +738,11 @@ public class TestFlatStyleableValue
 		testInteger( c, ui, "tabHeight", 123 );
 		testInteger( c, ui, "tabSelectionHeight", 123 );
 		testInteger( c, ui, "cardTabSelectionHeight", 123 );
+		testInteger( c, ui, "tabArc", 123 );
+		testInteger( c, ui, "tabSelectionArc", 123 );
+		testInteger( c, ui, "cardTabArc", 123 );
+		testInsets( c, ui, "selectedInsets", 1,2,3,4 );
+		testInsets( c, ui, "tabSelectionInsets", 1,2,3,4 );
 		testInteger( c, ui, "contentSeparatorHeight", 123 );
 		testBoolean( c, ui, "showTabSeparators", false );
 		testBoolean( c, ui, "tabSeparatorsFullHeight", false );

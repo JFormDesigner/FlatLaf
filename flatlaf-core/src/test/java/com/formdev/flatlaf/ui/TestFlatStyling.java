@@ -917,6 +917,11 @@ public class TestFlatStyling
 		ui.applyStyle( "tabHeight: 30" );
 		ui.applyStyle( "tabSelectionHeight: 3" );
 		ui.applyStyle( "cardTabSelectionHeight: 2" );
+		ui.applyStyle( "tabArc: 3" );
+		ui.applyStyle( "tabSelectionArc: 4" );
+		ui.applyStyle( "cardTabArc: 5" );
+		ui.applyStyle( "selectedInsets: 1,2,3,4" );
+		ui.applyStyle( "tabSelectionInsets: 1,2,3,4" );
 		ui.applyStyle( "contentSeparatorHeight: 1" );
 		ui.applyStyle( "showTabSeparators: false" );
 		ui.applyStyle( "tabSeparatorsFullHeight: false" );
