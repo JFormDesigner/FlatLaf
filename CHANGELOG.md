@@ -38,6 +38,8 @@ FlatLaf Change Log
 - FormattedTextField: On Linux, fixed `IllegalArgumentException: Invalid
   location` if `JFormattedTextField.setDocument()` is invoked in a focus gained
   listener on that formatted text field. (issue #698)
+- PopupMenu: Make sure that popup menu does not overlap any operating system
+  task bar. (issue #701)
 
 #### Incompatibilities
 

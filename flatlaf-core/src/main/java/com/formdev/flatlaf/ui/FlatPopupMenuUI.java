@@ -193,27 +193,38 @@ public class FlatPopupMenuUI
 
 	@Override
 	public Popup getPopup( JPopupMenu popup, int x, int y ) {
+		Dimension popupSize = popup.getPreferredSize();
+		Rectangle screenBounds = getScreenBoundsAt( x, y );
+
+		// make sure that popup does not overlap any task/side bar
+		if( x + popupSize.width > screenBounds.x + screenBounds.width )
+			x = screenBounds.x + screenBounds.width - popupSize.width;
+		if( y + popupSize.height > screenBounds.y + screenBounds.height )
+			y = screenBounds.y + screenBounds.height - popupSize.height;
+		if( x < screenBounds.x )
+			x = screenBounds.x;
+		if( y < screenBounds.y )
+			y = screenBounds.y;
+
 		// do not add scroller to combobox popups or to popups that already have a scroll pane
 		if( popup instanceof BasicComboPopup ||
 			(popup.getComponentCount() > 0 && popup.getComponent( 0 ) instanceof JScrollPane) )
 		  return super.getPopup( popup, x, y );
 
 		// do not add scroller if popup fits into screen
-		Dimension prefSize = popup.getPreferredSize();
-		int screenHeight = getScreenHeightAt( x, y );
-		if( prefSize.height <= screenHeight )
+		if( popupSize.height <= screenBounds.height )
 			return super.getPopup( popup, x, y );
 
 		// create scroller
 		FlatPopupScroller scroller = new FlatPopupScroller( popup );
-		scroller.setPreferredSize( new Dimension( prefSize.width, screenHeight ) );
+		scroller.setPreferredSize( new Dimension( popupSize.width, screenBounds.height ) );
 
 		// create popup
 		PopupFactory popupFactory = PopupFactory.getSharedInstance();
 		return popupFactory.getPopup( popup.getInvoker(), scroller, x, y );
 	}
 
-	private int getScreenHeightAt( int x, int y ) {
+	private Rectangle getScreenBoundsAt( int x, int y ) {
 		// find GraphicsConfiguration at popup location (similar to JPopupMenu.getCurrentGraphicsConfiguration())
 		GraphicsConfiguration gc = null;
 		for( GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices() ) {
@@ -234,7 +245,7 @@ public class FlatPopupMenuUI
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Rectangle screenBounds = (gc != null) ? gc.getBounds() : new Rectangle( toolkit.getScreenSize() );
 		Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
-		return screenBounds.height - screenInsets.top - screenInsets.bottom;
+		return FlatUIUtils.subtractInsets( screenBounds, screenInsets );
 	}
 
 	//---- class FlatPopupMenuLayout ------------------------------------------
