@@ -197,7 +197,7 @@ Applications using FlatLaf
 - ![Hot](images/hot.svg)
   [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) 2021a
   (**commercial**) - Thermodynamics and Properties Software
-- ![Hot](images/hot.svg) [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds
+- ![Hot](images/hot.svg) [ZAP](https://www.zaproxy.org/) 2.10 - the worlds
   most widely used web app scanner
 - ![Hot](images/hot.svg)
   [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
