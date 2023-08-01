@@ -50,7 +50,8 @@ class FlatInputMaps
 		}
 
 		modifyInputMap( defaults, "ComboBox.ancestorInputMap",
-			"SPACE", "spacePopup",
+// Space key still shows popup, but from FlatComboBoxUI.FlatKeySelectionManager
+//			"SPACE", "spacePopup",
 
 			"UP", mac( "selectPrevious2", "selectPrevious" ),
 			"DOWN", mac( "selectNext2", "selectNext" ),

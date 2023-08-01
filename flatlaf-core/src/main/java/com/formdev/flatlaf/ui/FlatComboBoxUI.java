@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -48,10 +49,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.CellRendererPane;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComboBox.KeySelectionManager;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -181,6 +184,9 @@ public class FlatComboBoxUI
 
 	private void installUIImpl( JComponent c ) {
 		super.installUI( c );
+
+		// install key selection manager that shows popup when Space key is pressed
+		comboBox.setKeySelectionManager( new FlatKeySelectionManager( comboBox.getKeySelectionManager() ) );
 
 		installStyle();
 	}
@@ -1230,6 +1236,48 @@ public class FlatComboBoxUI
 				action.actionPerformed( new ActionEvent( comboBox, e.getID(),
 					e.getActionCommand(), e.getWhen(), e.getModifiers() ) );
 			}
+		}
+	}
+
+	//---- class FlatKeySelectionManager --------------------------------------
+
+	/**
+	 * Key selection manager that delegates to the default manager.
+	 * Shows the popup if Space key is pressed and "typed characters" buffer is empty.
+	 * If items contain spaces (e.g. "a b") it is still possible to select them
+	 * by pressing keys a, Space and b.
+	 */
+	private class FlatKeySelectionManager
+		implements JComboBox.KeySelectionManager, UIResource
+	{
+		private final KeySelectionManager delegate;
+		private final long timeFactor;
+		private long lastTime;
+
+		FlatKeySelectionManager( JComboBox.KeySelectionManager delegate ) {
+			this.delegate = delegate;
+
+			Long value = (Long) UIManager.get( "ComboBox.timeFactor" );
+			timeFactor = (value != null) ? value : 1000;
+		}
+
+		@SuppressWarnings( "rawtypes" )
+		@Override
+		public int selectionForKey( char aKey, ComboBoxModel aModel ) {
+			long time = EventQueue.getMostRecentEventTime();
+			long oldLastTime = lastTime;
+			lastTime = time;
+
+			// SPACE key shows popup if not yet visible
+			if( aKey == ' ' &&
+				time - oldLastTime >= timeFactor &&
+				!comboBox.isPopupVisible() )
+			{
+				comboBox.setPopupVisible( true );
+				return -1;
+			}
+
+			return delegate.selectionForKey( aKey, aModel );
 		}
 	}
 }
