@@ -23,10 +23,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,9 +63,9 @@ public class IntelliJTheme
 
 	private final boolean isMaterialUILite;
 
-	private final Map<String, String> colors;
-	private final Map<String, Object> ui;
-	private final Map<String, Object> icons;
+	private Map<String, String> colors;
+	private Map<String, Object> ui;
+	private Map<String, Object> icons;
 
 	private Map<String, ColorUIResource> namedColors = Collections.emptyMap();
 
@@ -261,6 +263,11 @@ public class IntelliJTheme
 
 			defaults.put( key, value );
 		}
+
+		// let Java release memory
+		colors = null;
+		ui = null;
+		icons = null;
 	}
 
 	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {
@@ -334,8 +341,6 @@ public class IntelliJTheme
 			if( "".equals( value ) )
 				return; // ignore empty value
 
-			uiKeys.add( key );
-
 			// ignore some properties that affect sizes
 			if( key.endsWith( ".border" ) ||
 				key.endsWith( ".rowHeight" ) ||
@@ -349,6 +354,16 @@ public class IntelliJTheme
 			key = uiKeyMapping.getOrDefault( key, key );
 			if( key.isEmpty() )
 				return; // ignore key
+
+			// exclude properties
+			int dot = key.indexOf( '.' );
+			if( dot > 0 && uiKeyExcludes.contains( key.substring( 0, dot + 1 ) ) )
+				return;
+
+			if( uiKeyDoNotOverride.contains( key ) && uiKeys.contains( key ) )
+				return;
+
+			uiKeys.add( key );
 
 			String valueStr = value.toString();
 
@@ -576,15 +591,56 @@ public class IntelliJTheme
 			defaults.put( destKey, defaults.get( srcKey ) );
 	}
 
+	private static final Set<String> uiKeyExcludes;
+	private static final Set<String> uiKeyDoNotOverride;
 	/** Rename UI default keys (key --> value). */
 	private static final Map<String, String> uiKeyMapping = new HashMap<>();
 	/** Copy UI default keys (value --> key). */
-	private static final Map<String, String> uiKeyCopying = new HashMap<>();
+	private static final Map<String, String> uiKeyCopying = new LinkedHashMap<>();
 	private static final Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static final Map<String, String> checkboxKeyMapping = new HashMap<>();
 	private static final Map<String, String> checkboxDuplicateColors = new HashMap<>();
 
 	static {
+		// IntelliJ UI properties that are not used in FlatLaf
+		uiKeyExcludes = new HashSet<>( Arrays.asList(
+			"ActionButton.", "ActionToolbar.", "ActionsList.", "AppInspector.", "AssignedMnemonic.", "Autocomplete.",
+			"AvailableMnemonic.",
+			"BigSpinner.", "Bookmark.", "BookmarkIcon.", "BookmarkMnemonicAssigned.", "BookmarkMnemonicAvailable.",
+			"BookmarkMnemonicCurrent.", "BookmarkMnemonicIcon.", "Borders.", "Breakpoint.",
+			"Canvas.", "CodeWithMe.", "ComboBoxButton.", "CompletionPopup.", "ComplexPopup.", "Content.",
+			"CurrentMnemonic.", "Counter.",
+			"Debugger.", "DebuggerPopup.", "DebuggerTabs.", "DefaultTabs.", "Dialog.", "DialogWrapper.", "DragAndDrop.",
+			"Editor.", "EditorGroupsTabs.", "EditorTabs.",
+			"FileColor.", "FlameGraph.", "Focus.",
+			"Git.", "Github.", "GotItTooltip.", "Group.", "Gutter.", "GutterTooltip.",
+			"HeaderColor.", "HelpTooltip.", "Hg.",
+			"IconBadge.", "InformationHint.", "InplaceRefactoringPopup.",
+			"Lesson.", "Link.", "LiveIndicator.",
+			"MainMenu.", "MainToolbar.", "MemoryIndicator.", "MlModelBinding.", "MnemonicIcon.",
+			"NavBar.", "NewClass.", "NewPSD.", "Notification.", "Notifications.", "NotificationsToolwindow.",
+			"OnePixelDivider.", "OptionButton.", "Outline.",
+			"ParameterInfo.", "Plugins.", "ProgressIcon.", "PsiViewer.",
+			"ReviewList.", "RunWidget.",
+			"ScreenView.", "SearchEverywhere.", "SearchFieldWithExtension.", "SearchMatch.", "SearchOption.",
+			"SearchResults.", "SegmentedButton.", "Settings.", "SidePanel.", "Space.", "SpeedSearch.", "StateWidget.",
+			"StatusBar.",
+			"Tag.", "TipOfTheDay.", "ToolbarComboWidget.", "ToolWindow.",
+			"UIDesigner.", "UnattendedHostStatus.",
+			"ValidationTooltip.", "VersionControl.",
+			"WelcomeScreen.",
+
+			// lower case
+			"darcula.", "dropArea.", "icons.", "intellijlaf.", "macOSWindow.", "material.", "tooltips.",
+
+			// possible typos in .theme.json files
+			"Checkbox.", "Toolbar.", "Tooltip.", "UiDesigner.", "link."
+		) );
+
+		uiKeyDoNotOverride = new HashSet<>( Arrays.asList(
+			"TabbedPane.selectedForeground"
+		) );
+
 		// ComboBox
 		uiKeyMapping.put( "ComboBox.background",                        "" ); // ignore
 		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );
@@ -644,9 +700,9 @@ public class IntelliJTheme
 		uiKeyCopying.put( "Spinner.buttonDisabledSeparatorColor", "Component.disabledBorderColor" );
 
 		// TabbedPane
-		uiKeyCopying.put( "TabbedPane.selectedBackground",     "DefaultTabs.underlinedTabBackground" );
-		uiKeyCopying.put( "TabbedPane.selectedForeground",     "DefaultTabs.underlinedTabForeground" );
-		uiKeyCopying.put( "TabbedPane.inactiveUnderlineColor", "DefaultTabs.inactiveUnderlineColor" );
+		uiKeyMapping.put( "DefaultTabs.underlinedTabBackground", "TabbedPane.selectedBackground" );
+		uiKeyMapping.put( "DefaultTabs.underlinedTabForeground", "TabbedPane.selectedForeground" );
+		uiKeyMapping.put( "DefaultTabs.inactiveUnderlineColor",  "TabbedPane.inactiveUnderlineColor" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
