@@ -482,7 +482,7 @@ public class IntelliJTheme
 
 	/**
 	 * Because IDEA uses SVGs for check boxes and radio buttons, the colors for
-	 * this two components are specified in "icons > ColorPalette".
+	 * these two components are specified in "icons > ColorPalette".
 	 * FlatLaf uses vector icons and expects colors for the two components in UI defaults.
 	 */
 	private void applyCheckBoxColors( UIDefaults defaults ) {
@@ -501,16 +501,6 @@ public class IntelliJTheme
 			Object value = e.getValue();
 			if( !key.startsWith( "Checkbox." ) || !(value instanceof String) )
 				continue;
-
-			if( key.equals( "Checkbox.Background.Default" ) ||
-				key.equals( "Checkbox.Foreground.Selected" ) )
-			{
-				// This two keys do not work correctly in IDEA because they
-				// map SVG color "#ffffff" to another color, but checkBox.svg and
-				// radio.svg (in package com.intellij.ide.ui.laf.icons.intellij)
-				// use "#fff". So use white to get same appearance as in IDEA.
-				value = "#ffffff";
-			}
 
 			String key2 = checkboxDuplicateColors.get( key );
 
