@@ -55,6 +55,7 @@ FlatLaf Change Log
   library for SVG rendering. You need to replace svgSalamander with JSVG in your
   build scripts and distribute `jsvg.jar` with your application. Also replace
   `com.kitfox.svg` with `com.github.weisj.jsvg` in `module-info.java` files.
+- IntelliJ Themes: Removed all "Contrast" themes from "Material UI Lite".
 
 
 ## 3.1.1

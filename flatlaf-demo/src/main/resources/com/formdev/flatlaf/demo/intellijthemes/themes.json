@@ -249,14 +249,6 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Arc Dark.theme.json"
 	},
-	"material-theme-ui-lite/Arc Dark Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Arc Dark Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Arc Dark Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Atom One Dark.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Dark",
 		"dark": true,
@@ -265,27 +257,12 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Atom One Dark.theme.json"
 	},
-	"material-theme-ui-lite/Atom One Dark Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Atom One Dark Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Atom One Dark Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Atom One Light.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Light",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Atom One Light.theme.json"
-	},
-	"material-theme-ui-lite/Atom One Light Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Atom One Light Contrast",
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Atom One Light Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Dracula.theme.json": {
 		"name": "Material Theme UI Lite / Dracula",
@@ -295,27 +272,12 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Dracula.theme.json"
 	},
-	"material-theme-ui-lite/Dracula Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Dracula Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Dracula Contrast.theme.json"
-	},
 	"material-theme-ui-lite/GitHub.theme.json": {
 		"name": "Material Theme UI Lite / GitHub",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/GitHub.theme.json"
-	},
-	"material-theme-ui-lite/GitHub Contrast.theme.json": {
-		"name": "Material Theme UI Lite / GitHub Contrast",
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/GitHub Contrast.theme.json"
 	},
 	"material-theme-ui-lite/GitHub Dark.theme.json": {
 		"name": "Material Theme UI Lite / GitHub Dark",
@@ -325,27 +287,12 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/GitHub Dark.theme.json"
 	},
-	"material-theme-ui-lite/GitHub Dark Contrast.theme.json": {
-		"name": "Material Theme UI Lite / GitHub Dark Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/GitHub Dark Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Light Owl.theme.json": {
 		"name": "Material Theme UI Lite / Light Owl",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Light Owl.theme.json"
-	},
-	"material-theme-ui-lite/Light Owl Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Light Owl Contrast",
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Light Owl Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Material Darker.theme.json": {
 		"name": "Material Theme UI Lite / Material Darker",
@@ -355,14 +302,6 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Material Darker.theme.json"
 	},
-	"material-theme-ui-lite/Material Darker Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Material Darker Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Material Darker Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Material Deep Ocean.theme.json": {
 		"name": "Material Theme UI Lite / Material Deep Ocean",
 		"dark": true,
@@ -371,27 +310,12 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Material Deep Ocean.theme.json"
 	},
-	"material-theme-ui-lite/Material Deep Ocean Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Material Deep Ocean Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Material Deep Ocean Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Material Lighter.theme.json": {
 		"name": "Material Theme UI Lite / Material Lighter",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Material Lighter.theme.json"
-	},
-	"material-theme-ui-lite/Material Lighter Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Material Lighter Contrast",
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Material Lighter Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Material Oceanic.theme.json": {
 		"name": "Material Theme UI Lite / Material Oceanic",
@@ -401,14 +325,6 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Material Oceanic.theme.json"
 	},
-	"material-theme-ui-lite/Material Oceanic Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Material Oceanic Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Material Oceanic Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Material Palenight.theme.json": {
 		"name": "Material Theme UI Lite / Material Palenight",
 		"dark": true,
@@ -416,14 +332,6 @@
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Material Palenight.theme.json"
-	},
-	"material-theme-ui-lite/Material Palenight Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Material Palenight Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Material Palenight Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Monokai Pro.theme.json": {
 		"name": "Material Theme UI Lite / Monokai Pro",
@@ -433,14 +341,6 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Monokai Pro.theme.json"
 	},
-	"material-theme-ui-lite/Monokai Pro Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Monokai Pro Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Monokai Pro Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Moonlight.theme.json": {
 		"name": "Material Theme UI Lite / Moonlight",
 		"dark": true,
@@ -448,14 +348,6 @@
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Moonlight.theme.json"
-	},
-	"material-theme-ui-lite/Moonlight Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Moonlight Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Moonlight Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Night Owl.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl",
@@ -465,14 +357,6 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Night Owl.theme.json"
 	},
-	"material-theme-ui-lite/Night Owl Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Night Owl Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Night Owl Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Solarized Dark.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Dark",
 		"dark": true,
@@ -481,26 +365,11 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Solarized Dark.theme.json"
 	},
-	"material-theme-ui-lite/Solarized Dark Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Solarized Dark Contrast",
-		"dark": true,
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Solarized Dark Contrast.theme.json"
-	},
 	"material-theme-ui-lite/Solarized Light.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Light",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/regular/Solarized Light.theme.json"
-	},
-	"material-theme-ui-lite/Solarized Light Contrast.theme.json": {
-		"name": "Material Theme UI Lite / Solarized Light Contrast",
-		"license": "MIT",
-		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
-		"sourceCodePath": "blob/master/src/main/resources/themes/contrast/Solarized Light Contrast.theme.json"
 	}
 }
