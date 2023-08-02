@@ -104,8 +104,8 @@
     "CompletionPopup": {
       "foreground": "#fcfcfa",
       "matchForeground": "#ffd866",
-      "selectionInactiveBackground": "#2d2a2e",
-      "selectionBackground": "#2d2a2e"
+      "selectionInactiveBackground": "#5b595c",
+      "selectionBackground": "#5b595c"
     },
     "Component": {
       "arc": 4,
@@ -530,7 +530,7 @@
       "inactiveInfoForeground": "#939293"
     },
     "TitledBorder": {
-      "titleColor": "#2d2a2e"
+      "titleColor": "#939293"
     },
     "ToggleButton": {
       "borderColor": "#403e41",

@@ -38,8 +38,10 @@ public class IJThemesUpdater
 		themesManager.loadBundledThemes();
 
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
-			if( ti.sourceCodeUrl == null || ti.sourceCodePath == null )
+			if( ti.sourceCodeUrl == null || ti.sourceCodePath == null ) {
+				System.out.println( "    " + ti.name + " NOT downloaded. Needs manual update from release on JetBrains Plugin portal." );
 				continue;
+			}
 
 			String fromUrl = ti.sourceCodeUrl + "/" + ti.sourceCodePath;
 			if( fromUrl.contains( "github.com" ) )
