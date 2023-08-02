@@ -52,8 +52,8 @@
     "ActionButton": {
       "hoverBackground": "#3d424b",
       "hoverBorderColor": "#3d424b",
-      "pressedBackground": "#333841",
-      "pressedBorderColor": "#333841"
+      "pressedBackground": "#3f444d",
+      "pressedBorderColor": "#3f444d"
     },
 
     "BookmarkIcon.background": "#d9a343",

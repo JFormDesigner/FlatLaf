@@ -502,8 +502,6 @@ public class IntelliJTheme
 			if( !key.startsWith( "Checkbox." ) || !(value instanceof String) )
 				continue;
 
-			String key2 = checkboxDuplicateColors.get( key );
-
 			if( dark )
 				key = StringUtils.removeTrailing( key, ".Dark" );
 
@@ -517,6 +515,7 @@ public class IntelliJTheme
 				if( color != null ) {
 					defaults.put( newKey, color );
 
+					String key2 = checkboxDuplicateColors.get( key + ".Dark");
 					if( key2 != null ) {
 						// When IDEA replaces colors in SVGs it uses color values and not the keys
 						// from com.intellij.ide.ui.UITheme.colorPalette, but there are some keys that

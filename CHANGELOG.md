@@ -12,8 +12,10 @@ FlatLaf Change Log
   scrollable.
 - Added system property `flatlaf.useNativeLibrary` to allow disabling loading of
   FlatLaf native library. (issue #674)
-- IntelliJ Themes: Reduced memory footprint and improved setup speed by ignoring
-  IntelliJ UI properties that are not used in FlatLaf.
+- IntelliJ Themes:
+  - Reduced memory footprint by releasing Json data and ignoring IntelliJ UI
+    properties that are not used in FlatLaf.
+  - Updated "Hiberbee Dark" and "Gradianto" themes.
 
 #### Fixed bugs
 

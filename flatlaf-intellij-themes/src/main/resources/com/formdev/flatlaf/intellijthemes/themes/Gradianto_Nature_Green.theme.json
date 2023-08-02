@@ -45,8 +45,10 @@
       "separatorColor": "#20574f"
     },
     "Tree": {
-      "background": "#203a40",
-      "selectionBackground": "#00695c"
+      "background": "#20403f",
+      "selectionBackground": "#00695c",
+      "hoverBackground": "#386d54f8",
+      "hoverInactiveBackground": "#386d54f8"
     },
     "ActionButton": {
       "hoverBackground": "#084934",
@@ -103,6 +105,13 @@
     "Editor": {
       "shortcutForeground": "#3f795b"
     },
+    "MemoryIndicator": {
+      "usedBackground": "#386d54f8",
+      "allocatedBackground": "#2f5e47e8"
+    },
+    "NotificationsToolwindow.newNotification.background": "#2f5e47e8",
+    "NotificationsToolwindow.newNotification.hoverBackground": "#386d54f8",
+    "NotificationsToolwindow.Notification.hoverBackground": "#386d54f8",
     "EditorTabs": {
       "selectedForeground": "#eceff1",
       "selectedBackground": "#006448",
@@ -215,17 +224,28 @@
     },
     "DragAndDrop": {
       "areaForeground": "#e5e5e5",
-      "areaBackground": "#243937",
+      "areaBackground": "#2439378a",
       "areaBorderColor": "#143427"
     },
     "Plugins": {
       "SectionHeader.background": "#2a6346",
       "tagBackground": "#3d5a50",
-      "lightSelectionBackground": "#3c7e64"
+      "lightSelectionBackground": "#356f58",
+      "hoverBackground": "#325e4d"
     },
+
     "VersionControl": {
-      "Log.Commit.currentBranchBackground": "#225740",
-      "Log.Commit.unmatchedForeground": "#94aba8"
+      "Log.Commit.currentBranchBackground": "#1e3938",
+      "Log.Commit.unmatchedForeground": "#94aba8",
+      "GitLog.localBranchIconColor": "#65a05c",
+      "GitLog.tagIconColor": "#bcc4ce",
+      "Log.Commit.hoveredBackground": "#34634dff",
+      "Log.Commit.rowHeight": 30,
+      "Log.Commit.selectionBackground": "#00695c",
+      "Log.Commit.selectionInactiveBackground": "#004b41",
+      "RefLabel.backgroundBase": "#04d9ffff",
+      "RefLabel.backgroundBrightness": 0.99
+
     },
     "ScrollBar" : {
       "hoverThumbBorderColor" : "#39666394",

@@ -145,7 +145,7 @@
 		"license": "MIT",
 		"licenseFile": "Hiberbee.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Hiberbee/themes",
-		"sourceCodePath": "blob/latest/src/main/resources/themes/HiberbeeDark.theme.json"
+		"sourceCodePath": "blob/latest/src/intellij/src/main/resources/themes/HiberbeeDark.theme.json"
 	},
 	"HighContrast.theme.json": {
 		"name": "High contrast",

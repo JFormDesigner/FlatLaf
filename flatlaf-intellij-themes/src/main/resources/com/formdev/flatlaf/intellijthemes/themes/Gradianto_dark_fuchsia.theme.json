@@ -30,10 +30,29 @@
 
       "separatorColor": "#4b2665"
     },
+    "Tree": {
+      "hoverBackground": "#71468f",
+      "hoverInactiveBackground": "#71468f"
 
+    },
+    "MemoryIndicator": {
+      "usedBackground": "#6f3986",
+      "allocatedBackground": "#4a2b5e"
+    },
+    "NotificationsToolwindow.newNotification.background": "#4a2b5e",
+    "NotificationsToolwindow.newNotification.hoverBackground": "#6f3986",
+    "NotificationsToolwindow.Notification.hoverBackground": "#6f3986",
     "VersionControl" :{
-      "Log.Commit.currentBranchBackground": "#442661",
-      "Log.Commit.unmatchedForeground": "#8f7fa8"
+      "Log.Commit.currentBranchBackground": "#2e1e38",
+      "Log.Commit.unmatchedForeground": "#8f7fa8",
+      "GitLog.localBranchIconColor": "#65a05c",
+      "GitLog.tagIconColor": "#bcc4ce",
+      "Log.Commit.hoveredBackground": "#512663",
+      "Log.Commit.rowHeight": 30,
+      "Log.Commit.selectionBackground": "#402a4b",
+      "Log.Commit.selectionInactiveBackground": "#402a4b",
+      "RefLabel.backgroundBase": "#04d9ffff",
+      "RefLabel.backgroundBrightness": 0.99
     },
     "ActionButton": {
       "hoverBackground": "#512663",
@@ -71,9 +90,9 @@
     "RadioButton": {
       "foreground": "#c8ccd0"
     },
-
     "CompletionPopup":  {
-      "matchForeground": "#652683",
+
+      "matchForeground": "#cf98db",
       "matchSelectionForeground": "#9057f2"
     },
 
@@ -123,7 +142,7 @@
       "selectedBackground": "#8a599e",
       "underlinedTabBackground": "#5c306f",
       "background": "#3e1c4c",
-      "underlineColor": "#693d6c",
+      "underlineColor": "#8b5c8e",
       "hoverMaskColor": "#71468f",
       "inactiveMaskColor": "#34244aff"
     },
@@ -239,12 +258,13 @@
     },
     "DragAndDrop": {
       "areaForeground": "#FFFFFF",
-      "areaBackground": "#745382",
+      "areaBackground": "#7453829a",
       "areaBorderColor": "#392d42"
     },
     "Plugins": {
       "SectionHeader.background": "#7b638b",
       "tagBackground": "#7d6089",
+      "hoverBackground": "#7a5a89",
       "lightSelectionBackground": "#4e3a57",
       "Tab.selectedBackground": "#a778bfff",
       "Tab.hoverBackground": "#82519cff"
@@ -295,7 +315,9 @@
       "Checkbox.Background.Default.Dark": "#442557",
       "Checkbox.Border.Default.Dark": "#532d68",
       "Checkbox.Foreground.Selected.Dark": "#6aae41",
-
+      "Checkbox.Background.Default": "#532e6a",
+      "Checkbox.Background.Disabled": "#321d3d",
+      "Checkbox.Background.Disabled.Dark": "#321d3d",
       "Objects.Grey": "#a098a0",
       "Objects.Blue": "#55a9c2",
       "Objects.RedStatus": "#a74d4dff",

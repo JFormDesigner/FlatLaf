@@ -1,7 +1,7 @@
 {
   "name": "Nord",
   "dark": true,
-  "author": "Arctic Ice Studio",
+  "author": "Sven Greb",
   "editorScheme": "/themes/nord.xml",
   "ui": {
     "*": {

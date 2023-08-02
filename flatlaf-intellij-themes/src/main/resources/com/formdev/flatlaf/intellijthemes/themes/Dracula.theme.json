@@ -41,22 +41,16 @@
     "Bookmark": {
       "iconBackground": "accentColor",
       "Mnemonic": {
-        "iconForeground": "primaryForeground",
-        "iconBackground": "#8d6b81",
-        "iconBorderColor": "accentColor"
+        "iconForeground": "primaryForeground"
+      },
+      "MnemonicAssigned": {
+        "foreground": "primaryForeground",
+        "background": "#786299"
+      },
+      "MnemonicCurrent": {
+        "foreground": "primaryForeground",
+        "background": "#8d6b81"
       }
-    },
-    "BookmarkMnemonicAssigned": {
-      "buttonForeground": "primaryForeground",
-      "buttonBackground": "#786299",
-      "borderColor": "secondaryAccentColor"
-    },
-    "BookmarkMnemonicAvailable": {
-    },
-    "BookmarkMnemonicCurrent": {
-      "buttonForeground": "primaryForeground",
-      "buttonBackground": "#8d6b81",
-      "borderColor": "accentColor"
     },
     "Button": {
       "foreground": "primaryForeground",
@@ -154,6 +148,15 @@
         "informativeForeground": "primaryForeground",
         "informativeBackground": "primaryBackground",
         "informativeBorderColor": "#50fa7b"
+      }
+    },
+    "NotificationsToolwindow": {
+      "newNotification": {
+        "hoverBackground": "secondaryBackground",
+        "background": "secondaryBackground"
+      },
+      "Notification": {
+        "hoverBackground": "secondaryBackground"
       }
     },
     "PasswordField": {
@@ -255,6 +258,7 @@
     },
     "ToolWindow": {
       "Button": {
+        "selectedBackground": "secondaryAccentColor",
         "hoverBackground": "hoverBackground"
       },
       "Header": {
@@ -271,7 +275,8 @@
     "Tree": {
       "modifiedItemForeground": "accentColor",
       "selectionBackground": "selectionBackground",
-      "selectionInactiveBackground": "selectionInactiveBackground"
+      "selectionInactiveBackground": "selectionInactiveBackground",
+      "hash": "hoverBackground"
     },
     "ValidationTooltip": {
       "errorBackground": "#4c273c",

@@ -30,9 +30,29 @@
 
       "separatorColor": "#383850"
     },
+    "Tree": {
+      "hoverBackground": "#5841a7",
+      "hoverInactiveBackground": "#5841a7"
+
+    },
+    "MemoryIndicator": {
+      "usedBackground": "#504480",
+      "allocatedBackground": "#493c6c"
+    },
+    "NotificationsToolwindow.newNotification.background": "#504480",
+    "NotificationsToolwindow.newNotification.hoverBackground": "#493c6c",
+    "NotificationsToolwindow.Notification.hoverBackground": "#493c6c",
     "VersionControl" :{
-      "Log.Commit.currentBranchBackground": "#3e2e61",
-      "Log.Commit.unmatchedForeground": "#7f80a8"
+      "Log.Commit.currentBranchBackground": "#333345",
+      "Log.Commit.unmatchedForeground": "#7f80a8",
+
+      "GitLog.localBranchIconColor": "#65a05c",
+      "GitLog.tagIconColor": "#bcc4ce",
+      "Log.Commit.hoveredBackground": "#5841a7",
+      "Log.Commit.rowHeight": 30,
+      "Log.Commit.selectionBackground": "#4a3889",
+      "Log.Commit.selectionInactiveBackground": "#4a3889"
+
     },
     "Tree.background": "#2c2c3e",
 
@@ -43,8 +63,8 @@
       "pressedBorderColor": "#4b3a81"
     },
     "Borders": {
-      "color": "#1b092f",
-      "ContrastBorderColor": "#1a1328"
+      "color": "#221b3c",
+      "ContrastBorderColor": "#221b3c"
     },
     "Button": {
       "startBackground": "#544c91",
@@ -66,11 +86,13 @@
     },
     "CompletionPopup":  {
       "matchForeground": "#cecb46",
-      "matchSelectionForeground": "#ffcd7e"
+      "matchSelectionForeground": "#ffcd7e",
+      "foreground": "#c2c2c2",
+      "selectionBackground": "#5d5d84"
     },
     "MenuBar.borderColor": "#221b3c",
-    "Menu.borderColor": "#140928",
-    "NavBar.borderColor": "#140928",
+    "Menu.borderColor": "#221b3c",
+    "NavBar.borderColor": "#221b3c",
 
     "Notification": {
 
@@ -108,9 +130,9 @@
     "EditorTabs": {
       "underlinedTabBackground": "#3d3d56",
       "selectedBackground": "#3d3d56",
-      "underlineColor": "#44346e"
+      "underlineColor": "#6b53a5",
+      "hoverBackground": "#493c6c"
     },
-
     "Link": {
       "activeForeground": "#ede891",
       "hoverForeground": "#ede891",
@@ -137,8 +159,11 @@
     },
 
     "WelcomeScreen": {
-      "Projects.selectionInactiveBackground": "#323247",
-      "separatorColor": "#323247"
+      "separatorColor": "#323247",
+      "borderColor": "#221b3c",
+      "SidePanel.background": "#2c2c3e",
+      "Details.background": "2c2c3e"
+
     },
 
     "ValidationTooltip": {
@@ -175,7 +200,7 @@
       "separatorForeground": "#654bbe",
       "Advertiser": {
         "background": "#323247",
-        "borderColor": "#140928",
+        "borderColor": "#221b3c",
         "borderInsets": "3,8,5,0"
       }
     },
@@ -185,7 +210,7 @@
       "offForeground": "#646464",
       "offBackground": "#232332",
       "buttonColor": "#411e85",
-      "borderColor": "#140928"
+      "borderColor": "#221b3c"
     },
     "ToolTip": {
       "background": "#5c5c83",
@@ -212,12 +237,15 @@
     },
     "DragAndDrop": {
       "areaForeground": "#f5f5f5",
-      "areaBackground": "#282839",
-      "areaBorderColor": "#140928"
+      "rowBackground": "#2828399a",
+      "areaBackground": "#2828399a",
+      "areaBorderColor": "#221b3c",
+      "borderColor": "#221b3c"
     },
     "Plugins": {
       "SectionHeader.background": "#392c63",
       "tagBackground": "#40405a",
+      "hoverBackground": "#5e4e93",
       "lightSelectionBackground": "#48387e"
     },
     "TabbedPane": {
@@ -242,7 +270,7 @@
         "hoverThumbBorderColor" : "#281c39ff",
         "hoverThumbColor": "#423162ff",
         "hoverTrackColor": "#2d2240ff",
-        "thumbBorderColor": "#261b3bff"
+        "thumbBorderColor": "#221b3cff"
       },
       "Mac" : {
         "Transparent": {

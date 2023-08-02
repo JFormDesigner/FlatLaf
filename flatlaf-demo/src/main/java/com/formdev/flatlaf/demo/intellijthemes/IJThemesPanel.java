@@ -370,7 +370,10 @@ public class IJThemesPanel
 		if( themeInfo == null || themeInfo.resourceName == null )
 			return;
 
-		String themeUrl = (themeInfo.sourceCodeUrl + '/' + themeInfo.sourceCodePath).replace( " ", "%20" );
+		String themeUrl = themeInfo.sourceCodeUrl;
+		if( themeInfo.sourceCodePath != null )
+			themeUrl += '/' + themeInfo.sourceCodePath;
+		themeUrl = themeUrl.replace( " ", "%20" );
 		try {
 			Desktop.getDesktop().browse( new URI( themeUrl ) );
 		} catch( IOException | URISyntaxException ex ) {
