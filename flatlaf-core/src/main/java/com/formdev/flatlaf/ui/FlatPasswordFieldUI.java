@@ -66,7 +66,6 @@ import com.formdev.flatlaf.util.UIScale;
  * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.minimumWidth				int
- * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
  * @uiDefault PasswordField.focusedBackground		Color	optional
  * @uiDefault PasswordField.iconTextGap				int		optional, default is 4

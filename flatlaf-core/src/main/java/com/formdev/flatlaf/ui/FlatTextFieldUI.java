@@ -81,7 +81,6 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
  * @uiDefault TextField.focusedBackground		Color	optional
  * @uiDefault TextField.iconTextGap				int		optional, default is 4
@@ -95,7 +94,6 @@ public class FlatTextFieldUI
 	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
-	protected boolean isIntelliJTheme;
 	private Color background;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color inactiveBackground;
@@ -165,7 +163,6 @@ public class FlatTextFieldUI
 
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		background = UIManager.getColor( prefix + ".background" );
 		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
@@ -402,7 +399,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
+		paintBackground( g, getComponent(), focusedBackground );
 		paintPlaceholder( g );
 
 		if( hasLeadingIcon() || hasTrailingIcon() )
@@ -422,7 +419,7 @@ debug*/
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
+	static void paintBackground( Graphics g, JTextComponent c, Color focusedBackground ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
@@ -443,14 +440,14 @@ debug*/
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			g2.setColor( getBackground( c, isIntelliJTheme, focusedBackground ) );
+			g2.setColor( getBackground( c, focusedBackground ) );
 			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 		} finally {
 			g2.dispose();
 		}
 	}
 
-	static Color getBackground( JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
+	static Color getBackground( JTextComponent c, Color focusedBackground ) {
 		Color background = c.getBackground();
 
 		// always use explicitly set color
@@ -460,10 +457,6 @@ debug*/
 		// focused
 		if( focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) )
 			return focusedBackground;
-
-		// for compatibility with IntelliJ themes
-		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) )
-			return FlatUIUtils.getParentBackground( c );
 
 		return background;
 	}

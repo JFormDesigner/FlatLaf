@@ -59,7 +59,6 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatEditorPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault EditorPane.focusedBackground		Color	optional
  *
  * @author Karl Tauber
@@ -69,7 +68,6 @@ public class FlatEditorPaneUI
 	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
-	protected boolean isIntelliJTheme;
 	private Color background;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color inactiveBackground;
@@ -101,7 +99,6 @@ public class FlatEditorPaneUI
 
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		background = UIManager.getColor( prefix + ".background" );
 		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
@@ -252,11 +249,11 @@ public class FlatEditorPaneUI
 
 	@Override
 	protected void paintBackground( Graphics g ) {
-		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
+		paintBackground( g, getComponent(), focusedBackground );
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
-		g.setColor( FlatTextFieldUI.getBackground( c, isIntelliJTheme, focusedBackground ) );
+	static void paintBackground( Graphics g, JTextComponent c, Color focusedBackground ) {
+		g.setColor( FlatTextFieldUI.getBackground( c, focusedBackground ) );
 		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 	}
 }

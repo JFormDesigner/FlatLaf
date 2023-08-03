@@ -105,7 +105,6 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.maximumRowCount			int
  * @uiDefault ComboBox.buttonStyle				String	auto (default), button, mac or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
  * @uiDefault ComboBox.focusedBackground		Color	optional
  * @uiDefault ComboBox.disabledBackground		Color
@@ -137,7 +136,6 @@ public class FlatComboBoxUI
 	@Styleable protected int editorColumns;
 	@Styleable protected String buttonStyle;
 	@Styleable protected String arrowType;
-	protected boolean isIntelliJTheme;
 
 	private Color background;
 	@Styleable protected Color editableBackground;
@@ -246,7 +244,6 @@ public class FlatComboBoxUI
 		editorColumns = UIManager.getInt( "ComboBox.editorColumns" );
 		buttonStyle = UIManager.getString( "ComboBox.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		background = UIManager.getColor( "ComboBox.background" );
 		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
@@ -685,7 +682,7 @@ public class FlatComboBoxUI
 
 			return (editableBackground != null && comboBox.isEditable()) ? editableBackground : background;
 		} else
-			return isIntelliJTheme ? FlatUIUtils.getParentBackground( comboBox ) : disabledBackground;
+			return disabledBackground;
 	}
 
 	protected Color getForeground( boolean enabled ) {

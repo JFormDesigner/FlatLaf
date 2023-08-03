@@ -39,6 +39,10 @@ FlatLaf Change Log
   - TabbedPane: Fixed focused tab background color for themes "Arc *", "Material
     Design Dark", "Monocai", "One Dark", "Spacegray" and "Xcode-Dark". (issue
     #697)
+  - TextComponents: Fixed background colors of enabled text components, to
+    distinguish from disabled, for themes "Carbon", "Cobalt 2", "Gradianto *",
+    "Gruvbox *", "Monocai", "Spacegray", "Vuesion", "Xcode-Dark", "GitHub", and
+    "Light Owl". (issue #528)
 - Native Windows libraries: Fixed crash when running in Java 8 and newer Java
   version is installed in `PATH` environment variable and using class
   `SystemInfo` before AWT initialization. (issue #673)

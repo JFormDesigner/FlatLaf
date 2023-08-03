@@ -40,7 +40,6 @@ import javax.swing.plaf.ComponentUI;
  * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.minimumWidth					int
- * @uiDefault Component.isIntelliJTheme					boolean
  * @uiDefault FormattedTextField.placeholderForeground	Color
  * @uiDefault FormattedTextField.focusedBackground		Color	optional
  * @uiDefault FormattedTextField.iconTextGap			int		optional, default is 4

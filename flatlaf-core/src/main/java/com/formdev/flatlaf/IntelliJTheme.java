@@ -198,8 +198,9 @@ public class IntelliJTheme
 		defaults.put( "HelpButton.focusedBackground", defaults.get( "Button.focusedBackground" ) );
 
 		// IDEA uses TextField.background for editable ComboBox and Spinner
-		defaults.put( "ComboBox.editableBackground", defaults.get( "TextField.background" ) );
-		defaults.put( "Spinner.background", defaults.get( "TextField.background" ) );
+		Object textFieldBackground = themeSpecificDefaults.getOrDefault( "TextField.background", defaults.get( "TextField.background" ) );
+		defaults.put( "ComboBox.editableBackground", textFieldBackground );
+		defaults.put( "Spinner.background", textFieldBackground );
 
 		// Spinner arrow button always has same colors as ComboBox arrow button
 		defaults.put( "Spinner.buttonBackground", defaults.get( "ComboBox.buttonEditableBackground" ) );
@@ -207,22 +208,28 @@ public class IntelliJTheme
 		defaults.put( "Spinner.buttonDisabledArrowColor", defaults.get( "ComboBox.buttonDisabledArrowColor" ) );
 
 		// some themes specify colors for TextField.background, but forget to specify it for other components
-		// (probably because those components are not used in IntelliJ)
-		if( uiKeys.contains( "TextField.background" ) ) {
-			Object textFieldBackground = defaults.get( "TextField.background" );
-			if( !uiKeys.contains( "FormattedTextField.background" ) )
-				defaults.put( "FormattedTextField.background", textFieldBackground );
-			if( !uiKeys.contains( "PasswordField.background" ) )
-				defaults.put( "PasswordField.background", textFieldBackground );
-			if( !uiKeys.contains( "EditorPane.background" ) )
-				defaults.put( "EditorPane.background", textFieldBackground );
-			if( !uiKeys.contains( "TextArea.background" ) )
-				defaults.put( "TextArea.background", textFieldBackground );
-			if( !uiKeys.contains( "TextPane.background" ) )
-				defaults.put( "TextPane.background", textFieldBackground );
-			if( !uiKeys.contains( "Spinner.background" ) )
-				defaults.put( "Spinner.background", textFieldBackground );
-		}
+		// (probably because those components are not used in IntelliJ IDEA)
+		putAll( defaults, textFieldBackground,
+			"EditorPane.background",
+			"FormattedTextField.background",
+			"PasswordField.background",
+			"Spinner.background",
+			"TextArea.background",
+			"TextPane.background"
+		);
+
+		// fix disabled and not-editable backgrounds for text components, combobox and spinner
+		// (IntelliJ IDEA does not use those colors; instead it used background color of parent)
+		putAll( defaults, panelBackground,
+			"ComboBox.disabledBackground",
+			"EditorPane.disabledBackground", "EditorPane.inactiveBackground",
+			"FormattedTextField.disabledBackground", "FormattedTextField.inactiveBackground",
+			"PasswordField.disabledBackground", "PasswordField.inactiveBackground",
+			"Spinner.disabledBackground",
+			"TextArea.disabledBackground", "TextArea.inactiveBackground",
+			"TextField.disabledBackground", "TextField.inactiveBackground",
+			"TextPane.disabledBackground", "TextPane.inactiveBackground"
+		);
 
 		// fix ToggleButton
 		if( !uiKeys.contains( "ToggleButton.startBackground" ) && !uiKeys.contains( "*.startBackground" ) )
@@ -268,6 +275,11 @@ public class IntelliJTheme
 		colors = null;
 		ui = null;
 		icons = null;
+	}
+
+	private void putAll( UIDefaults defaults, Object value, String... keys ) {
+		for( String key : keys )
+			defaults.put( key, value );
 	}
 
 	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {

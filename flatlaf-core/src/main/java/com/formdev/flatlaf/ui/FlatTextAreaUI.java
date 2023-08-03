@@ -54,7 +54,6 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatTextAreaUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextArea.disabledBackground		Color	used if not enabled
  * @uiDefault TextArea.inactiveBackground		Color	used if not editable
  * @uiDefault TextArea.focusedBackground		Color	optional
@@ -66,7 +65,6 @@ public class FlatTextAreaUI
 	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
-	protected boolean isIntelliJTheme;
 	private Color background;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color inactiveBackground;
@@ -103,7 +101,6 @@ public class FlatTextAreaUI
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		background = UIManager.getColor( "TextArea.background" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
@@ -227,6 +224,6 @@ public class FlatTextAreaUI
 
 	@Override
 	protected void paintBackground( Graphics g ) {
-		FlatEditorPaneUI.paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
+		FlatEditorPaneUI.paintBackground( g, getComponent(), focusedBackground );
 	}
 }

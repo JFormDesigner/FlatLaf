@@ -67,7 +67,6 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Spinner.buttonStyle				String	button (default), mac or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Spinner.disabledBackground		Color
  * @uiDefault Spinner.disabledForeground		Color
  * @uiDefault Spinner.focusedBackground			Color	optional
@@ -92,7 +91,6 @@ public class FlatSpinnerUI
 	@Styleable protected int minimumWidth;
 	@Styleable protected String buttonStyle;
 	@Styleable protected String arrowType;
-	protected boolean isIntelliJTheme;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color disabledForeground;
 	@Styleable protected Color focusedBackground;
@@ -129,7 +127,6 @@ public class FlatSpinnerUI
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		buttonStyle = UIManager.getString( "Spinner.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
 		disabledForeground = UIManager.getColor( "Spinner.disabledForeground" );
 		focusedBackground = UIManager.getColor( "Spinner.focusedBackground" );
@@ -316,7 +313,7 @@ public class FlatSpinnerUI
 
 			return background;
 		} else
-			return isIntelliJTheme ? FlatUIUtils.getParentBackground( spinner ) : disabledBackground;
+			return disabledBackground;
 	}
 
 	protected Color getForeground( boolean enabled ) {

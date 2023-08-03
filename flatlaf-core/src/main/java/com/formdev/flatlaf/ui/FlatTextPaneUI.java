@@ -56,7 +56,6 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatTextPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextPane.focusedBackground		Color	optional
  *
  * @author Karl Tauber
@@ -66,7 +65,6 @@ public class FlatTextPaneUI
 	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
-	protected boolean isIntelliJTheme;
 	private Color background;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color inactiveBackground;
@@ -98,7 +96,6 @@ public class FlatTextPaneUI
 
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		background = UIManager.getColor( prefix + ".background" );
 		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
@@ -220,6 +217,6 @@ public class FlatTextPaneUI
 
 	@Override
 	protected void paintBackground( Graphics g ) {
-		FlatEditorPaneUI.paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
+		FlatEditorPaneUI.paintBackground( g, getComponent(), focusedBackground );
 	}
 }
