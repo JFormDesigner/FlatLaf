@@ -28,10 +28,12 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
@@ -255,6 +257,33 @@ public class IntelliJTheme
 		int rowHeight = defaults.getInt( "Tree.rowHeight" );
 		if( rowHeight > 22 )
 			defaults.put( "Tree.rowHeight", 22 );
+
+		// get (and remove) theme specific wildcard replacements, which override all other defaults that end with same suffix
+		HashMap<String, Object> wildcards = new HashMap<>();
+		Iterator<Entry<Object, Object>> it = themeSpecificDefaults.entrySet().iterator();
+		while( it.hasNext() ) {
+			Entry<Object, Object> e = it.next();
+			String key = (String) e.getKey();
+			if( key.startsWith( "*." ) ) {
+				wildcards.put( key.substring( "*.".length() ), e.getValue() );
+				it.remove();
+			}
+		}
+
+		// override UI defaults with theme specific wildcard replacements
+		if( !wildcards.isEmpty() ) {
+			for( Object key : defaults.keySet() ) {
+				int dot;
+				if( !(key instanceof String) ||
+					(dot = ((String)key).lastIndexOf( '.' )) < 0 )
+				  continue;
+
+				String wildcardKey = ((String)key).substring( dot + 1 );
+				Object wildcardValue = wildcards.get( wildcardKey );
+				if( wildcardValue != null )
+					defaults.put( key, wildcardValue );
+			}
+		}
 
 		// apply theme specific UI defaults at the end to allow overwriting
 		for( Map.Entry<Object, Object> e : themeSpecificDefaults.entrySet() ) {

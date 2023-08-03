@@ -33,6 +33,7 @@ FlatLaf Change Log
     not visible. (issue #686)
   - "Monocai" theme: Fixed unreadable text color of default buttons. (issue
     #693)
+  - "Vuesion" theme: Fixed foreground colors of disabled text.
   - CheckBox and RadioButton: Fixed unselected icon colors for themes "Atom One
     Light", "Cyan Light", "GitHub", "Light Owl", "Material Lighter" and
     "Solarized Light".
