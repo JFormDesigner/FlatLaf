@@ -88,8 +88,6 @@ public class IJThemesPanel
 
 		saveButton.setEnabled( false );
 		sourceCodeButton.setEnabled( false );
-		saveButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/download.svg" ) );
-		sourceCodeButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/github.svg" ) );
 
 		// create renderer
 		themesList.setCellRenderer( new DefaultListCellRenderer() {
@@ -491,11 +489,13 @@ public class IJThemesPanel
 
 			//---- saveButton ----
 			saveButton.setToolTipText("Save .theme.json of selected IntelliJ theme to file.");
+			saveButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/download.svg"));
 			saveButton.addActionListener(e -> saveTheme());
 			toolBar.add(saveButton);
 
 			//---- sourceCodeButton ----
 			sourceCodeButton.setToolTipText("Opens the source code repository of selected IntelliJ theme in the browser.");
+			sourceCodeButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/github.svg"));
 			sourceCodeButton.addActionListener(e -> browseSourceCode());
 			toolBar.add(sourceCodeButton);
 		}

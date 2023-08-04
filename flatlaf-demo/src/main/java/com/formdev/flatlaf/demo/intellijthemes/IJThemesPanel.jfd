@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -24,11 +24,13 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "saveButton"
 					"toolTipText": "Save .theme.json of selected IntelliJ theme to file."
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/download.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveTheme", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "sourceCodeButton"
 					"toolTipText": "Opens the source code repository of selected IntelliJ theme in the browser."
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/github.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseSourceCode", false ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

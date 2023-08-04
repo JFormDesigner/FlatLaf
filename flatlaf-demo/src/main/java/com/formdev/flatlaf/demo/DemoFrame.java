@@ -591,6 +591,7 @@ class DemoFrame
 				undoMenuItem.setText("Undo");
 				undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				undoMenuItem.setMnemonic('U');
+				undoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/undo.svg"));
 				undoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(undoMenuItem);
 
@@ -598,6 +599,7 @@ class DemoFrame
 				redoMenuItem.setText("Redo");
 				redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				redoMenuItem.setMnemonic('R');
+				redoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/redo.svg"));
 				redoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(redoMenuItem);
 				editMenu.addSeparator();
@@ -606,18 +608,21 @@ class DemoFrame
 				cutMenuItem.setText("Cut");
 				cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				cutMenuItem.setMnemonic('C');
+				cutMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-cut.svg"));
 				editMenu.add(cutMenuItem);
 
 				//---- copyMenuItem ----
 				copyMenuItem.setText("Copy");
 				copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				copyMenuItem.setMnemonic('O');
+				copyMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/copy.svg"));
 				editMenu.add(copyMenuItem);
 
 				//---- pasteMenuItem ----
 				pasteMenuItem.setText("Paste");
 				pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				pasteMenuItem.setMnemonic('P');
+				pasteMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-paste.svg"));
 				editMenu.add(pasteMenuItem);
 				editMenu.addSeparator();
 
@@ -827,34 +832,41 @@ class DemoFrame
 
 			//---- backButton ----
 			backButton.setToolTipText("Back");
+			backButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/back.svg"));
 			toolBar.add(backButton);
 
 			//---- forwardButton ----
 			forwardButton.setToolTipText("Forward");
+			forwardButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/forward.svg"));
 			toolBar.add(forwardButton);
 			toolBar.addSeparator();
 
 			//---- cutButton ----
 			cutButton.setToolTipText("Cut");
+			cutButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-cut.svg"));
 			toolBar.add(cutButton);
 
 			//---- copyButton ----
 			copyButton.setToolTipText("Copy");
+			copyButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/copy.svg"));
 			toolBar.add(copyButton);
 
 			//---- pasteButton ----
 			pasteButton.setToolTipText("Paste");
+			pasteButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-paste.svg"));
 			toolBar.add(pasteButton);
 			toolBar.addSeparator();
 
 			//---- refreshButton ----
 			refreshButton.setToolTipText("Refresh");
+			refreshButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/refresh.svg"));
 			toolBar.add(refreshButton);
 			toolBar.addSeparator();
 
 			//---- showToggleButton ----
 			showToggleButton.setSelected(true);
 			showToggleButton.setToolTipText("Show Details");
+			showToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/show.svg"));
 			toolBar.add(showToggleButton);
 		}
 		contentPane.add(toolBar, BorderLayout.NORTH);
@@ -901,21 +913,6 @@ class DemoFrame
 		menuBar1.add( Box.createGlue() );
 		menuBar1.add( usersButton );
 
-		undoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/undo.svg" ) );
-		redoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/redo.svg" ) );
-
-		cutMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-cut.svg" ) );
-		copyMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/copy.svg" ) );
-		pasteMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-paste.svg" ) );
-
-		backButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/back.svg" ) );
-		forwardButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/forward.svg" ) );
-		cutButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-cut.svg" ) );
-		copyButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/copy.svg" ) );
-		pasteButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-paste.svg" ) );
-		refreshButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/refresh.svg" ) );
-		showToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/show.svg" ) );
-
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
@@ -949,6 +946,9 @@ class DemoFrame
 
 		if( SystemInfo.isMacOS )
 			unsupported( underlineMenuSelectionMenuItem );
+
+		if( "false".equals( System.getProperty( "flatlaf.animatedLafChange" ) ) )
+			animatedLafChangeMenuItem.setSelected( false );
 
 		// remove contentPanel bottom insets
 		MigLayout layout = (MigLayout) contentPanel.getLayout();

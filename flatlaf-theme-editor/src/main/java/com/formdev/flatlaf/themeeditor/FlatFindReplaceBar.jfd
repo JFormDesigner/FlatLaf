@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -34,11 +34,13 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "findPreviousButton"
 					"toolTipText": "Previous Occurrence"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findPrevious", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "findNextButton"
 					"toolTipText": "Next Occurrence"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findNext", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
@@ -47,16 +49,19 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "matchCaseToggleButton"
 					"toolTipText": "Match Case"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/matchCase.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "matchCaseChanged", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "matchWholeWordToggleButton"
 					"toolTipText": "Match Whole Word"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/words.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "matchWholeWordChanged", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "regexToggleButton"
 					"toolTipText": "Regex"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/regex.svg" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "regexChanged", false ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

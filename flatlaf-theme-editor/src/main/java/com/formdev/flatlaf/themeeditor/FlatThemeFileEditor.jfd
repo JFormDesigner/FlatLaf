@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -65,6 +65,7 @@ new FormModel {
 						"text": "Open Directory..."
 						"mnemonic": 79
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 79, 4226, false )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/themeeditor/icons/menu-open.svg" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDirectory", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {

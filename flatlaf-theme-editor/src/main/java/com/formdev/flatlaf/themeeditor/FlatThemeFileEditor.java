@@ -140,7 +140,6 @@ class FlatThemeFileEditor
 
 		directoryField.setRenderer( new DirectoryRenderer( directoryField ) );
 
-		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
 		if( UIManager.getLookAndFeel() instanceof FlatDarkLaf )
 			darkLafMenuItem.setSelected( true );
 
@@ -1045,6 +1044,7 @@ class FlatThemeFileEditor
 				openDirectoryMenuItem.setText("Open Directory...");
 				openDirectoryMenuItem.setMnemonic('O');
 				openDirectoryMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				openDirectoryMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/menu-open.svg"));
 				openDirectoryMenuItem.addActionListener(e -> openDirectory());
 				fileMenu.add(openDirectoryMenuItem);
 

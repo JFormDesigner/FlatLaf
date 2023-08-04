@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "17" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -21,10 +21,12 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "backButton"
 					"toolTipText": "Back"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/back.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "forwardButton"
 					"toolTipText": "Forward"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/forward.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator5"
@@ -32,14 +34,17 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "cutButton"
 					"toolTipText": "Cut"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-cut.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "copyButton"
 					"toolTipText": "Copy"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/copy.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "pasteButton"
 					"toolTipText": "Paste"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-paste.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator6"
@@ -47,6 +52,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "refreshButton"
 					"toolTipText": "Refresh"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/refresh.svg" )
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator7"
@@ -55,6 +61,7 @@ new FormModel {
 					name: "showToggleButton"
 					"selected": true
 					"toolTipText": "Show Details"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/show.svg" )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
@@ -185,6 +192,7 @@ new FormModel {
 						"text": "Undo"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 90, 4226, false )
 						"mnemonic": 85
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/undo.svg" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
@@ -192,6 +200,7 @@ new FormModel {
 						"text": "Redo"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 89, 4226, false )
 						"mnemonic": 82
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/redo.svg" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
@@ -202,18 +211,21 @@ new FormModel {
 						"text": "Cut"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 88, 4226, false )
 						"mnemonic": 67
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-cut.svg" )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "copyMenuItem"
 						"text": "Copy"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 4226, false )
 						"mnemonic": 79
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/copy.svg" )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "pasteMenuItem"
 						"text": "Paste"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 86, 4226, false )
 						"mnemonic": 80
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-paste.svg" )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator3"

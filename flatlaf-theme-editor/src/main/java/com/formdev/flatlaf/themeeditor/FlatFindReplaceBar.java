@@ -70,13 +70,6 @@ class FlatFindReplaceBar
 		actionMap.put( "editorPageUp", new ConsumerAction( e -> notifyEditorAction( "page-up" ) ) );
 		actionMap.put( "editorPageDown", new ConsumerAction( e -> notifyEditorAction( "page-down" ) ) );
 
-		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
-		findNextButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" ) );
-		matchCaseToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/matchCase.svg" ) );
-		matchWholeWordToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/words.svg" ) );
-		regexToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/regex.svg" ) );
-		closeButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/close.svg" ) );
-
 		registerKeyboardAction( e -> close(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
@@ -335,27 +328,32 @@ class FlatFindReplaceBar
 
 			//---- findPreviousButton ----
 			findPreviousButton.setToolTipText("Previous Occurrence");
+			findPreviousButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg"));
 			findPreviousButton.addActionListener(e -> findPrevious());
 			findToolBar.add(findPreviousButton);
 
 			//---- findNextButton ----
 			findNextButton.setToolTipText("Next Occurrence");
+			findNextButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg"));
 			findNextButton.addActionListener(e -> findNext());
 			findToolBar.add(findNextButton);
 			findToolBar.addSeparator();
 
 			//---- matchCaseToggleButton ----
 			matchCaseToggleButton.setToolTipText("Match Case");
+			matchCaseToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/matchCase.svg"));
 			matchCaseToggleButton.addActionListener(e -> matchCaseChanged());
 			findToolBar.add(matchCaseToggleButton);
 
 			//---- matchWholeWordToggleButton ----
 			matchWholeWordToggleButton.setToolTipText("Match Whole Word");
+			matchWholeWordToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/words.svg"));
 			matchWholeWordToggleButton.addActionListener(e -> matchWholeWordChanged());
 			findToolBar.add(matchWholeWordToggleButton);
 
 			//---- regexToggleButton ----
 			regexToggleButton.setToolTipText("Regex");
+			regexToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/regex.svg"));
 			regexToggleButton.addActionListener(e -> regexChanged());
 			findToolBar.add(regexToggleButton);
 		}
