@@ -272,7 +272,7 @@ public class IntelliJTheme
 
 		// override UI defaults with theme specific wildcard replacements
 		if( !wildcards.isEmpty() ) {
-			for( Object key : defaults.keySet() ) {
+			for( Object key : defaults.keySet().toArray() ) {
 				int dot;
 				if( !(key instanceof String) ||
 					(dot = ((String)key).lastIndexOf( '.' )) < 0 )
