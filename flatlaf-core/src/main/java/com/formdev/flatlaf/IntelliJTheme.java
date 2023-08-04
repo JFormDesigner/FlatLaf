@@ -673,6 +673,7 @@ public class IntelliJTheme
 
 		// ComboBox
 		uiKeyMapping.put( "ComboBox.background",                        "" ); // ignore
+		uiKeyMapping.put( "ComboBox.buttonBackground",                  "" ); // ignore
 		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.background",            "ComboBox.buttonEditableBackground" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
