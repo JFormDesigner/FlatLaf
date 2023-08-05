@@ -1052,6 +1052,7 @@ class FlatThemeFileEditor
 				newPropertiesFileMenuItem.setText("New Properties File...");
 				newPropertiesFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				newPropertiesFileMenuItem.setMnemonic('N');
+				newPropertiesFileMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/add.svg"));
 				newPropertiesFileMenuItem.addActionListener(e -> newPropertiesFile());
 				fileMenu.add(newPropertiesFileMenuItem);
 
@@ -1059,6 +1060,7 @@ class FlatThemeFileEditor
 				saveAllMenuItem.setText("Save All");
 				saveAllMenuItem.setMnemonic('S');
 				saveAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				saveAllMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/menu-saveall.svg"));
 				saveAllMenuItem.addActionListener(e -> saveAll());
 				fileMenu.add(saveAllMenuItem);
 				fileMenu.addSeparator();
@@ -1230,6 +1232,7 @@ class FlatThemeFileEditor
 
 			//---- openDirectoryButton ----
 			openDirectoryButton.setFocusable(false);
+			openDirectoryButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/themeeditor/icons/menu-open.svg"));
 			openDirectoryButton.addActionListener(e -> openDirectory());
 			controlPanel.add(openDirectoryButton, "cell 2 0");
 		}
