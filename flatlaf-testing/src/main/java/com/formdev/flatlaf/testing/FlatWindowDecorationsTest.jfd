@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.0.0.0.194" Java: "17.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[fill][fill][fill][fill]"
+			"$columnConstraints": "[left][fill][fill][fill]"
 			"$rowConstraints": "[fill][fill][]"
 		} ) {
 			name: "this"
@@ -72,7 +72,7 @@ new FormModel {
 					"value": "cell 0 4"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
+				"value": "cell 0 0,growx"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "ltr,hidemode 3,gap 0 0"
@@ -378,7 +378,7 @@ new FormModel {
 					"value": "cell 0 8"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
+				"value": "cell 0 1,growx"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[left]"
@@ -501,7 +501,7 @@ new FormModel {
 				"text": "Open Dialog"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 2 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "openFrameButton"
@@ -509,7 +509,38 @@ new FormModel {
 				"mnemonic": 65
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openFrame", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 2 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "typeNormalRadioButton"
+				"text": "Normal"
+				"selected": true
+				"$buttonGroup": new FormReference( "typeButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "typeUtilityRadioButton"
+				"text": "Utility"
+				"$buttonGroup": new FormReference( "typeButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "typeSmallRadioButton"
+				"text": "Small"
+				"$buttonGroup": new FormReference( "typeButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
@@ -691,6 +722,11 @@ new FormModel {
 			name: "iconButtonGroup"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 615 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "typeButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 669 )
 		} )
 	}
 }

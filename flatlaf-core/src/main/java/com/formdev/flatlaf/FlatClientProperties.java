@@ -17,6 +17,8 @@
 package com.formdev.flatlaf;
 
 import java.awt.Color;
+import java.awt.IllegalComponentStateException;
+import java.awt.Window;
 import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
@@ -123,6 +125,7 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SQUARE_SIZE = "JButton.squareSize";
+
 
 	//---- JComponent ---------------------------------------------------------
 
@@ -266,6 +269,7 @@ public interface FlatClientProperties
 	 */
 	String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption";
 
+
 	//---- Popup --------------------------------------------------------------
 
 	/**
@@ -305,6 +309,7 @@ public interface FlatClientProperties
 	 */
 	String POPUP_FORCE_HEAVY_WEIGHT = "Popup.forceHeavyWeight";
 
+
 	//---- JProgressBar -------------------------------------------------------
 
 	/**
@@ -322,6 +327,7 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String PROGRESS_BAR_SQUARE = "JProgressBar.square";
+
 
 	//---- JRootPane ----------------------------------------------------------
 
@@ -472,6 +478,37 @@ public interface FlatClientProperties
 	 */
 	String GLASS_PANE_FULL_HEIGHT = "JRootPane.glassPaneFullHeight";
 
+	/**
+	 * Specifies the style of the window title bar.
+	 * Besides the default title bar style, you can use a Utility-style title bar,
+	 * which is smaller than the default title bar.
+	 * <p>
+	 * On Windows 10/11, this requires FlatLaf window decorations.
+	 * On macOS, Java supports this out of the box.
+	 * <p>
+	 * Note that this client property must be set before the window becomes displayable.
+	 * Otherwise an {@link IllegalComponentStateException} is thrown.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #WINDOW_STYLE_SMALL}
+	 *
+	 * @since 3.2
+	 */
+	String WINDOW_STYLE = "Window.style";
+
+	/**
+	 * The window has Utility-style title bar, which is smaller than default title bar.
+	 * <p>
+	 * This is the same as using {@link Window#setType}( {@link Window.Type#UTILITY} ).
+	 *
+	 * @see #WINDOW_STYLE
+	 * @since 3.2
+	 */
+	String WINDOW_STYLE_SMALL = "small";
+
+
 	//---- JScrollBar / JScrollPane -------------------------------------------
 
 	/**
@@ -489,6 +526,7 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
+
 
 	//---- JSplitPane ---------------------------------------------------------
 
@@ -523,6 +561,7 @@ public interface FlatClientProperties
 	 * @since 2.2
 	 */
 	String SPLIT_PANE_EXPANDABLE_SIDE_RIGHT = "right";
+
 
 	//---- JTabbedPane --------------------------------------------------------
 
@@ -919,6 +958,7 @@ public interface FlatClientProperties
 	 */
 	String TABBED_PANE_TRAILING_COMPONENT = "JTabbedPane.trailingComponent";
 
+
 	//---- JTextField ---------------------------------------------------------
 
 	/**
@@ -1088,6 +1128,7 @@ public interface FlatClientProperties
 	 */
 	String TEXT_FIELD_CLEAR_CALLBACK = "JTextField.clearCallback";
 
+
 	//---- JToggleButton ------------------------------------------------------
 
 	/**
@@ -1129,6 +1170,7 @@ public interface FlatClientProperties
 	 */
 	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
 
+
 	//---- JTree --------------------------------------------------------------
 
 	/**
@@ -1147,6 +1189,7 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TREE_PAINT_SELECTION = "JTree.paintSelection";
+
 
 	//---- helper methods -----------------------------------------------------
 

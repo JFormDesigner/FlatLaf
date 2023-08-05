@@ -7,8 +7,9 @@ FlatLaf Change Log
 
 - TabbedPane: Support rounded underline selection and rounded card tabs. (PR
   #703)
-- FlatLaf window decorations: Support for Windows on ARM 64-bit. (issue #443, PR
-  #707)
+- FlatLaf window decorations:
+  - Support for Windows on ARM 64-bit. (issue #443, PR #707)
+  - Support toolbox-style "small" window title bar. (issue #659, PR #702)
 - Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
   library (instead of svgSalamander) for rendering. JSVG provides improved SVG
   rendering and uses less memory compared to svgSalamander. (PR #684)

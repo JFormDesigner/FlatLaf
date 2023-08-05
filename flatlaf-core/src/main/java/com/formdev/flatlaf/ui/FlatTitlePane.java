@@ -97,6 +97,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.showIconBesideTitle					boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
+ * @uiDefault TitlePane.menuBarTitleMinimumGap				int
  * @uiDefault TitlePane.menuBarResizeHeight					int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
@@ -110,29 +111,30 @@ public class FlatTitlePane
 {
 	private static final String KEY_DEBUG_SHOW_RECTANGLES = "FlatLaf.debug.titlebar.showRectangles";
 
-	/** @since 2.5 */ protected final Font titleFont = UIManager.getFont( "TitlePane.font" );
-	protected final Color activeBackground = UIManager.getColor( "TitlePane.background" );
-	protected final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
-	protected final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
-	protected final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
-	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
-	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
+	/** @since 2.5 */ protected final Font titleFont;
+	protected final Color activeBackground;
+	protected final Color inactiveBackground;
+	protected final Color activeForeground;
+	protected final Color inactiveForeground;
+	protected final Color embeddedForeground;
+	protected final Color borderColor;
 
-	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
-	/** @since 2.5 */ protected final boolean showIconInDialogs = FlatUIUtils.getUIBoolean( "TitlePane.showIconInDialogs", true );
-	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
-	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
-	/** @since 2.4 */ protected final int titleMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.titleMinimumWidth", 60 );
-	/** @since 2.4 */ protected final int buttonMinimumWidth = FlatUIUtils.getUIInt( "TitlePane.buttonMinimumWidth", 30 );
-	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
-	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
-	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
-	/** @since 2.4 */ protected final boolean showIconBesideTitle = UIManager.getBoolean( "TitlePane.showIconBesideTitle" );
-	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 40 );
-	/** @since 2.4 */ protected final int menuBarTitleMinimumGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleMinimumGap", 12 );
-	/** @since 2.4 */ protected final int menuBarResizeHeight = FlatUIUtils.getUIInt( "TitlePane.menuBarResizeHeight", 4 );
+	/** @since 2 */ protected final boolean showIcon;
+	/** @since 2.5 */ protected final boolean showIconInDialogs;
+	/** @since 2 */ protected final int noIconLeftGap;
+	protected final Dimension iconSize;
+	/** @since 2.4 */ protected final int titleMinimumWidth;
+	/** @since 2.4 */ protected final int buttonMinimumWidth;
+	protected final int buttonMaximizedHeight;
+	protected final boolean centerTitle;
+	protected final boolean centerTitleIfMenuBarEmbedded;
+	/** @since 2.4 */ protected final boolean showIconBesideTitle;
+	protected final int menuBarTitleGap;
+	/** @since 2.4 */ protected final int menuBarTitleMinimumGap;
+	/** @since 2.4 */ protected final int menuBarResizeHeight;
 
 	protected final JRootPane rootPane;
+	protected final String windowStyle;
 
 	protected JPanel leftPanel;
 	protected JLabel iconLabel;
@@ -150,6 +152,34 @@ public class FlatTitlePane
 
 	public FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;
+
+		Window w = SwingUtilities.getWindowAncestor( rootPane );
+		String defaultWindowStyle = (w != null && w.getType() == Window.Type.UTILITY) ? WINDOW_STYLE_SMALL : null;
+		windowStyle = clientProperty( rootPane, WINDOW_STYLE, defaultWindowStyle, String.class );
+
+		titleFont = FlatUIUtils.getSubUIFont( "TitlePane.font", windowStyle );
+		activeBackground = FlatUIUtils.getSubUIColor( "TitlePane.background", windowStyle );
+		inactiveBackground = FlatUIUtils.getSubUIColor( "TitlePane.inactiveBackground", windowStyle );
+		activeForeground = FlatUIUtils.getSubUIColor( "TitlePane.foreground", windowStyle );
+		inactiveForeground = FlatUIUtils.getSubUIColor( "TitlePane.inactiveForeground", windowStyle );
+		embeddedForeground = FlatUIUtils.getSubUIColor( "TitlePane.embeddedForeground", windowStyle );
+		// not using windowStyle here because TitlePane.borderColor is also used in FlatRootPaneUI
+		borderColor = UIManager.getColor( "TitlePane.borderColor" );
+
+		showIcon = FlatUIUtils.getSubUIBoolean( "TitlePane.showIcon", windowStyle, true );
+		showIconInDialogs = FlatUIUtils.getSubUIBoolean( "TitlePane.showIconInDialogs", windowStyle, true );
+		noIconLeftGap = FlatUIUtils.getSubUIInt( "TitlePane.noIconLeftGap", windowStyle, 8 );
+		iconSize = FlatUIUtils.getSubUIDimension( "TitlePane.iconSize", windowStyle );
+		titleMinimumWidth = FlatUIUtils.getSubUIInt( "TitlePane.titleMinimumWidth", windowStyle, 60 );
+		buttonMinimumWidth = FlatUIUtils.getSubUIInt( "TitlePane.buttonMinimumWidth", windowStyle, 30 );
+		buttonMaximizedHeight = FlatUIUtils.getSubUIInt( "TitlePane.buttonMaximizedHeight", windowStyle, 0 );
+		centerTitle = FlatUIUtils.getSubUIBoolean( "TitlePane.centerTitle", windowStyle, false );
+		centerTitleIfMenuBarEmbedded = FlatUIUtils.getSubUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", windowStyle, true );
+		showIconBesideTitle = FlatUIUtils.getSubUIBoolean( "TitlePane.showIconBesideTitle", windowStyle, false );
+		menuBarTitleGap = FlatUIUtils.getSubUIInt( "TitlePane.menuBarTitleGap", windowStyle, 40 );
+		menuBarTitleMinimumGap = FlatUIUtils.getSubUIInt( "TitlePane.menuBarTitleMinimumGap", windowStyle, 12 );
+		menuBarResizeHeight = FlatUIUtils.getSubUIInt( "TitlePane.menuBarResizeHeight", windowStyle, 4 );
+
 
 		handler = createHandler();
 		setBorder( createTitlePaneBorder() );
@@ -183,8 +213,8 @@ public class FlatTitlePane
 				setUI( new FlatTitleLabelUI() );
 			}
 		};
-		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
-		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
+		iconLabel.setBorder( new FlatEmptyBorder( FlatUIUtils.getSubUIInsets( "TitlePane.iconMargins", windowStyle ) ) );
+		titleLabel.setBorder( new FlatEmptyBorder( FlatUIUtils.getSubUIInsets( "TitlePane.titleMargins", windowStyle ) ) );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -311,7 +341,7 @@ public class FlatTitlePane
 	}
 
 	protected JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
-		JButton button = new JButton( UIManager.getIcon( iconKey ) ) {
+		JButton button = new JButton( FlatUIUtils.getSubUIIcon( iconKey, windowStyle ) ) {
 			@Override
 			public Dimension getMinimumSize() {
 				// allow the button to shrink if space is rare

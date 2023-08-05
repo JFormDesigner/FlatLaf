@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.util.Objects;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
@@ -152,5 +153,104 @@ public class TestUIDefaultsLoader
 		assertEquals(
 			new Font( name, style, size ),
 			((ActiveValue)UIDefaultsLoader.parseValue( "dummyFont", actualStyle, null )).createValue( null ) );
+	}
+
+	@Test
+	void parseInstance() {
+		String className = TestInstance.class.getName();
+		assertEquals( new TestInstance(), ((LazyValue)UIDefaultsLoader.parseValue( "dummyIcon", className, null )).createValue( null ) );
+		assertInstanceEquals( new TestInstance(), null );
+		assertInstanceEquals( new TestInstance( "some string" ), "some string" );
+		assertInstanceEquals( new TestInstance( false ), "false" );
+		assertInstanceEquals( new TestInstance( true ), "true" );
+		assertInstanceEquals( new TestInstance( 123 ), "123" );
+		assertInstanceEquals( new TestInstance( 123.456f ), "123.456" );
+		assertInstanceEquals( new TestInstance( Color.red ), "#f00" );
+		assertInstanceEquals( new TestInstance( "some string", true ), "some string, true" );
+		assertInstanceEquals( new TestInstance( "some string", true, 123 ), "some string, true, 123" );
+		assertInstanceEquals( new TestInstance( "some string", 123, true ), "some string, 123, true" );
+		assertInstanceEquals( new TestInstance( "some string", 123.456f, true ), "some string, 123.456, true" );
+		assertInstanceEquals( new TestInstance( 123, "some string" ), "123, some string" );
+	}
+
+	private void assertInstanceEquals( TestInstance expected, String params ) {
+		String value = TestInstance.class.getName() + (params != null ? "," + params : "");
+		assertEquals( expected, ((LazyValue)UIDefaultsLoader.parseValue( "dummyIcon", value, null )).createValue( null ) );
+	}
+
+	//---- class TestInstance -------------------------------------------------
+
+	@SuppressWarnings( "EqualsHashCode" ) // Error Prone
+	public static class TestInstance
+	{
+		private String s;
+		private boolean b;
+		private int i;
+		private float f;
+		private Color color;
+
+		public TestInstance() {
+		}
+
+		public TestInstance( String s ) {
+			this.s = s;
+		}
+
+		public TestInstance( boolean b ) {
+			this.b = b;
+		}
+
+		public TestInstance( int i ) {
+			this.i = i;
+		}
+
+		public TestInstance( float f ) {
+			this.f = f;
+		}
+
+		public TestInstance( Color color ) {
+			this.color = color;
+		}
+
+		public TestInstance( String s, boolean b ) {
+			this.s = s;
+			this.b = b;
+		}
+
+		public TestInstance( String s, boolean b, int i ) {
+			this.s = s;
+			this.b = b;
+			this.i = i;
+		}
+
+		public TestInstance( String s, int i, boolean b ) {
+			this.s = s;
+			this.b = b;
+			this.i = i;
+		}
+
+		public TestInstance( String s, float f, boolean b ) {
+			this.s = s;
+			this.b = b;
+			this.f = f;
+		}
+
+		protected TestInstance( int i, String s ) {
+			this.s = s;
+			this.i = i;
+		}
+
+		@Override
+		public boolean equals( Object obj ) {
+			if( !(obj instanceof TestInstance) )
+				return false;
+
+			TestInstance inst = (TestInstance) obj;
+			return Objects.equals( s, inst.s ) &&
+				b == inst.b &&
+				i == inst.i &&
+				f == inst.f &&
+				Objects.equals( color, inst.color );
+		}
 	}
 }
