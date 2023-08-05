@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TabbedPane: Support rounded underline selection and rounded card tabs. (PR
+  #703)
 - FlatLaf window decorations: Support for Windows on ARM 64-bit. (issue #443, PR
   #707)
 - Extras: Class `FlatSVGIcon` now uses [JSVG](https://github.com/weisJ/jsvg)
