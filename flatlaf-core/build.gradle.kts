@@ -129,6 +129,7 @@ flatlafPublish {
 	nativeArtifacts = listOf(
 		NativeArtifact( "${natives}/flatlaf-windows-x86.dll",    "windows-x86",    "dll" ),
 		NativeArtifact( "${natives}/flatlaf-windows-x86_64.dll", "windows-x86_64", "dll" ),
+		NativeArtifact( "${natives}/flatlaf-windows-arm64.dll",  "windows-arm64",  "dll" ),
 		NativeArtifact( "${natives}/libflatlaf-linux-x86_64.so", "linux-x86_64",   "so" ),
 	)
 }

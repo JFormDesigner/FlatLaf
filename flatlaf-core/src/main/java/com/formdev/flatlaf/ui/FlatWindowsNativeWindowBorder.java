@@ -88,10 +88,6 @@ class FlatWindowsNativeWindowBorder
 		if( !SystemInfo.isWindows_10_orLater )
 			return null;
 
-		// requires x86 architecture
-		if( !SystemInfo.isX86 && !SystemInfo.isX86_64 )
-			return null;
-
 		// check whether native library was successfully loaded
 		if( !FlatNativeLibrary.isLoaded() )
 			return null;

@@ -55,10 +55,16 @@ class FlatNativeLibrary
 
 		String classifier;
 		String ext;
-		if( SystemInfo.isWindows_10_orLater && (SystemInfo.isX86 || SystemInfo.isX86_64) ) {
-			// Windows: requires Windows 10/11 (x86 or x86_64)
+		if( SystemInfo.isWindows_10_orLater && (SystemInfo.isX86 || SystemInfo.isX86_64 || SystemInfo.isAARCH64) ) {
+			// Windows: requires Windows 10/11 (x86, x86_64 or aarch64)
 
-			classifier = SystemInfo.isX86_64 ? "windows-x86_64" : "windows-x86";
+			if( SystemInfo.isAARCH64 )
+				classifier = "windows-arm64";
+			else if( SystemInfo.isX86_64 )
+				classifier = "windows-x86_64";
+			else
+				classifier = "windows-x86";
+
 			ext = "dll";
 
 			// Do not load jawt.dll (part of JRE) here explicitly because

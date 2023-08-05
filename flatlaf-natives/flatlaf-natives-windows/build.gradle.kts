@@ -29,7 +29,7 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64 ) )
+	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64, machines.windows.architecture( "aarch64" ) ) )
 }
 
 var javaHome = System.getProperty( "java.home" )
@@ -42,7 +42,7 @@ tasks {
 		description = "Builds natives"
 
 		if( org.gradle.internal.os.OperatingSystem.current().isWindows() )
-			dependsOn( "linkReleaseX86", "linkReleaseX86-64" )
+			dependsOn( "linkReleaseX86", "linkReleaseX86-64", "linkReleaseAarch64" )
 	}
 
 	withType<CppCompile>().configureEach {
@@ -69,8 +69,9 @@ tasks {
 		onlyIf { name.contains( "Release" ) }
 
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
+		val isX86 = name.contains("X86")
 		val is64Bit = name.contains( "64" )
-		val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
+		val libraryName = if( is64Bit && isX86 ) "flatlaf-windows-x86_64.dll" else if( isX86 ) "flatlaf-windows-x86.dll" else "flatlaf-windows-arm64.dll"
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
