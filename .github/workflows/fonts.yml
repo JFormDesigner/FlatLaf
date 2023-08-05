@@ -37,21 +37,29 @@ jobs:
               with:
                   java-version: 11
                   distribution: temurin  # pre-installed on ubuntu-latest
-                  cache: gradle
 
             - name: Build with Gradle
-              run: ./gradlew :flatlaf-fonts-${{ matrix.font }}:build
+              uses: gradle/gradle-build-action@v2
+              with:
+                gradle-version: wrapper
+                arguments: :flatlaf-fonts-${{ matrix.font }}:build
               if: startsWith( github.ref, format( 'refs/tags/fonts/{0}-', matrix.font ) ) != true
 
             - name: Publish snapshot to oss.sonatype.org
-              run: ./gradlew :flatlaf-fonts-${{ matrix.font }}:publish -Dorg.gradle.internal.publish.checksums.insecure=true
+              uses: gradle/gradle-build-action@v2
+              with:
+                gradle-version: wrapper
+                arguments: :flatlaf-fonts-${{ matrix.font }}:publish -Dorg.gradle.internal.publish.checksums.insecure=true
               env:
                   OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
                   OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
               if: github.ref == 'refs/heads/main' || startsWith( github.ref, 'refs/heads/develop-' )
 
             - name: Release a new stable version to Maven Central
-              run: ./gradlew :flatlaf-fonts-${{ matrix.font }}:build :flatlaf-fonts-${{ matrix.font }}:publish -Prelease
+              uses: gradle/gradle-build-action@v2
+              with:
+                gradle-version: wrapper
+                arguments: :flatlaf-fonts-${{ matrix.font }}:build :flatlaf-fonts-${{ matrix.font }}:publish -Prelease
               env:
                   OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
                   OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}

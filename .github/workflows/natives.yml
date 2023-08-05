@@ -34,12 +34,14 @@ jobs:
               with:
                   java-version: 11
                   distribution: temurin
-                  cache: gradle
 
             - name: Build with Gradle
               # --no-daemon is necessary on Windows otherwise caching Gradle would fail with:
               #   tar.exe: Couldn't open ~/.gradle/caches/modules-2/modules-2.lock: Permission denied
-              run: ./gradlew build-natives --no-daemon
+              uses: gradle/gradle-build-action@v2
+              with:
+                gradle-version: wrapper
+                arguments: build-natives --no-daemon
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v3

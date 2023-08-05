@@ -41,14 +41,19 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: temurin  # Java 8, 11 and 17 are pre-installed on ubuntu-latest
-          cache: gradle
 
       - name: Check with Error Prone
         if: matrix.java == '11'
-        run: ./gradlew errorprone clean -Dtoolchain=${{ matrix.toolchain }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          arguments: errorprone clean -Dtoolchain=${{ matrix.toolchain }}
 
       - name: Build with Gradle
-        run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          arguments: build -Dtoolchain=${{ matrix.toolchain }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -78,10 +83,12 @@ jobs:
         with:
           java-version: 11
           distribution: temurin  # pre-installed on ubuntu-latest
-          cache: gradle
 
       - name: Publish snapshot to oss.sonatype.org
-        run: ./gradlew publish :flatlaf-theme-editor:build -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          arguments: publish :flatlaf-theme-editor:build -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -114,10 +121,12 @@ jobs:
         with:
           java-version: 11
           distribution: temurin  # pre-installed on ubuntu-latest
-          cache: gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          arguments: publish :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
