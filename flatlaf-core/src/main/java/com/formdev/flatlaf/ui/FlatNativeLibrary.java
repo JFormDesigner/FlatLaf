@@ -55,12 +55,12 @@ class FlatNativeLibrary
 
 		String classifier;
 		String ext;
-		if( SystemInfo.isWindows_10_orLater ) {
-			// Windows: requires Windows 10/11
+		if( SystemInfo.isWindows_10_orLater && (SystemInfo.isX86 || SystemInfo.isX86_64 || SystemInfo.isAARCH64) ) {
+			// Windows: requires Windows 10/11 (x86, x86_64 or aarch64)
 
-			if ( SystemInfo.isAARCH64 )
-				classifier = "windows-aarch64";
-			else if ( SystemInfo.isX86_64 )
+			if( SystemInfo.isAARCH64 )
+				classifier = "windows-arm64";
+			else if( SystemInfo.isX86_64 )
 				classifier = "windows-x86_64";
 			else
 				classifier = "windows-x86";

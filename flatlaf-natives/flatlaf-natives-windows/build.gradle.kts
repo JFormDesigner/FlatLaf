@@ -29,7 +29,7 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64, machines.windows.architecture("aarch64") ) )
+	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64, machines.windows.architecture( "aarch64" ) ) )
 }
 
 var javaHome = System.getProperty( "java.home" )
@@ -71,7 +71,7 @@ tasks {
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
 		val isX86 = name.contains("X86")
 		val is64Bit = name.contains( "64" )
-		val libraryName = if( is64Bit && isX86 ) "flatlaf-windows-x86_64.dll" else if( isX86 ) "flatlaf-windows-x86.dll" else "flatlaf-windows-aarch64.dll"
+		val libraryName = if( is64Bit && isX86 ) "flatlaf-windows-x86_64.dll" else if( isX86 ) "flatlaf-windows-x86.dll" else "flatlaf-windows-arm64.dll"
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
