@@ -866,7 +866,14 @@ class FlatThemeFileEditor
 
 		// restore directories history
 		String[] directories = getPrefsStrings( state, KEY_DIRECTORIES );
-		SortedComboBoxModel<File> model = new SortedComboBoxModel<>( new File[0] );
+		SortedComboBoxModel<File> model = new SortedComboBoxModel<>( new File[0],
+			(file1, file2) -> {
+				// replace path separator with zero to order shorter names before longer
+				// (e.g. c:\dir\sub before c:\dir2\sub)
+				String path1 = file1.getPath().replace( '/', '\0' ).replace( '\\', '\0' );
+				String path2 = file2.getPath().replace( '/', '\0' ).replace( '\\', '\0' );
+				return path1.compareToIgnoreCase( path2 );
+			} );
 		for( String dirStr : directories ) {
 			File dir = new File( dirStr );
 			if( dir.isDirectory() )
@@ -1292,13 +1299,9 @@ class FlatThemeFileEditor
 	private static class SortedComboBoxModel<E>
 		extends DefaultComboBoxModel<E>
 	{
-		private Comparator<E> comparator;
+		private final Comparator<E> comparator;
 
-		public SortedComboBoxModel( E[] items ) {
-			this( items, null );
-		}
-
-		public SortedComboBoxModel( E[] items, Comparator<E> c ) {
+		SortedComboBoxModel( E[] items, Comparator<E> c ) {
 			super( sort( items, c ) );
 			this.comparator = c;
 		}
