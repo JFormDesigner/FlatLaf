@@ -15,6 +15,8 @@ FlatLaf Change Log
   rendering and uses less memory compared to svgSalamander. (PR #684)
 - ComboBox: Improved location of selected item in popup if list is large and
   scrollable.
+- FileChooser: Show localized text for all locales supported by Java's Metal
+  look and feel. (issue #680)
 - Added system property `flatlaf.useNativeLibrary` to allow disabling loading of
   FlatLaf native library. (issue #674)
 - IntelliJ Themes:

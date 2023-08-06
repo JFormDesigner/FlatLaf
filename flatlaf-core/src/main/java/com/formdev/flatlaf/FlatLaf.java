@@ -71,6 +71,7 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.IconUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
@@ -543,7 +544,7 @@ public abstract class FlatLaf
 		// which can happen in applications that use some plugin system
 		// and load FlatLaf in a plugin that uses its own classloader.
 		// (e.g. Apache NetBeans)
-		if( defaults.get( "FileChooser.fileNameHeaderText" ) != null )
+		if( defaults.get( "TabbedPane.moreTabsButtonToolTipText" ) != null )
 			return;
 
 		// load FlatLaf resource bundle and add content to defaults
@@ -1431,26 +1432,36 @@ public abstract class FlatLaf
 	private class FlatUIDefaults
 		extends UIDefaults
 	{
+		private UIDefaults metalDefaults;
+
 		FlatUIDefaults( int initialCapacity, float loadFactor ) {
 			super( initialCapacity, loadFactor );
 		}
 
 		@Override
 		public Object get( Object key ) {
-			Object value = getValue( key );
-			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key );
+			return get( key, null );
 		}
 
 		@Override
 		public Object get( Object key, Locale l ) {
-			Object value = getValue( key );
-			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key, l );
+			Object value = getFromUIDefaultsGetters( key );
+			if( value != null )
+				return (value != NULL_VALUE) ? value : null;
+
+			value = super.get( key, l );
+			if( value != null )
+				return value;
+
+			// get file chooser texts from Metal
+			return (key instanceof String && ((String)key).startsWith( "FileChooser." ))
+				? getFromMetal( (String) key, l )
+				: null;
 		}
 
-		private Object getValue( Object key ) {
+		private Object getFromUIDefaultsGetters( Object key ) {
 			// use local variable for getters to avoid potential multi-threading issues
 			List<Function<Object, Object>> uiDefaultsGetters = FlatLaf.this.uiDefaultsGetters;
-
 			if( uiDefaultsGetters == null )
 				return null;
 
@@ -1461,6 +1472,22 @@ public abstract class FlatLaf
 			}
 
 			return null;
+		}
+
+		private synchronized Object getFromMetal( String key, Locale l ) {
+			if( metalDefaults == null ) {
+				metalDefaults = new MetalLookAndFeel() {
+					// avoid unnecessary initialization
+					@Override protected void initClassDefaults( UIDefaults table ) {}
+					@Override protected void initSystemColorDefaults( UIDefaults table ) {}
+				}.getDefaults();
+
+				// empty not needed defaults (to save memory) because we're only interested
+				// in resource bundle strings, which are stored in another internal map
+				metalDefaults.clear();
+			}
+
+			return metalDefaults.get( key, l );
 		}
 	}
 

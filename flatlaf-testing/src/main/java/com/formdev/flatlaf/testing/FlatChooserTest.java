@@ -33,6 +33,13 @@ public class FlatChooserTest
 	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
+//		Locale.setDefault( Locale.FRENCH );
+//		Locale.setDefault( Locale.GERMAN );
+//		Locale.setDefault( Locale.ITALIAN );
+//		Locale.setDefault( Locale.JAPANESE );
+//		Locale.setDefault( Locale.SIMPLIFIED_CHINESE );
+//		Locale.setDefault( Locale.TRADITIONAL_CHINESE );
+
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatChooserTest" );
 
