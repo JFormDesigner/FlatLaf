@@ -53,6 +53,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
 import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -346,7 +347,7 @@ public class FlatFileChooserUI
 			fileView.clearIconCache();
 	}
 
-	private boolean doNotUseSystemIcons() {
+	private static boolean doNotUseSystemIcons() {
 		// Java 17 32bit craches on Windows when using system icons
 		// fixed in Java 18+ (see https://bugs.openjdk.java.net/browse/JDK-8277299)
 		return SystemInfo.isWindows &&
@@ -525,6 +526,9 @@ public class FlatFileChooserUI
 				if( icon != null )
 					return icon;
 			}
+
+			if( doNotUseSystemIcons() )
+				return new FlatFileViewDirectoryIcon();
 
 			// Java 17+ supports getting larger system icons
 			try {
