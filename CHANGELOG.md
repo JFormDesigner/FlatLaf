@@ -61,6 +61,9 @@ FlatLaf Change Log
   listener on that formatted text field. (issue #698)
 - PopupMenu: Make sure that popup menu does not overlap any operating system
   task bar. (issue #701)
+- FileChooser: Use system icons on Windows with Java 17.0.3 (and later) 32-bit.
+  Only Java 7 - 17.0.2 32-bit do not use system icons because of a bug in Java
+  32-bit that crashes the application. (PR #709)
 - FileChooser: Fixed crash on Windows with Java 17 to 17.0.2 32-bit. Java 17
   64-bit is not affected. (regression since FlatLaf 2.3; PR #522, see also issue
   #403)
