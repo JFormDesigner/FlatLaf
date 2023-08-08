@@ -52,6 +52,8 @@ FlatLaf Change Log
     text components, to distinguish from disabled, for themes "Carbon", "Cobalt
     2", "Gradianto *", "Gruvbox *", "Monocai", "Spacegray", "Vuesion",
     "Xcode-Dark", "GitHub", and "Light Owl". (issue #528)
+  - Fixed wrong disabled text colors in "Dark Flat", "Hiberbee Dark", "Light
+    Flat", "Nord", "Solarized Dark" and "Solarized Light" themes.
 - Native Windows libraries: Fixed crash when running in Java 8 and newer Java
   version is installed in `PATH` environment variable and using class
   `SystemInfo` before AWT initialization. (issue #673)
