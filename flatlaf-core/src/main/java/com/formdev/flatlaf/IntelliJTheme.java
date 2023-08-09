@@ -200,7 +200,7 @@ public class IntelliJTheme
 		defaults.put( "HelpButton.focusedBackground", defaults.get( "Button.focusedBackground" ) );
 
 		// IDEA uses TextField.background for editable ComboBox and Spinner
-		Object textFieldBackground = themeSpecificDefaults.getOrDefault( "TextField.background", defaults.get( "TextField.background" ) );
+		Object textFieldBackground = get( defaults, themeSpecificDefaults, "TextField.background" );
 		defaults.put( "ComboBox.editableBackground", textFieldBackground );
 		defaults.put( "Spinner.background", textFieldBackground );
 
@@ -215,9 +215,22 @@ public class IntelliJTheme
 			"EditorPane.background",
 			"FormattedTextField.background",
 			"PasswordField.background",
-			"Spinner.background",
 			"TextArea.background",
 			"TextPane.background"
+		);
+		putAll( defaults, get( defaults, themeSpecificDefaults, "TextField.selectionBackground" ),
+			"EditorPane.selectionBackground",
+			"FormattedTextField.selectionBackground",
+			"PasswordField.selectionBackground",
+			"TextArea.selectionBackground",
+			"TextPane.selectionBackground"
+		);
+		putAll( defaults, get( defaults, themeSpecificDefaults, "TextField.selectionForeground" ),
+			"EditorPane.selectionForeground",
+			"FormattedTextField.selectionForeground",
+			"PasswordField.selectionForeground",
+			"TextArea.selectionForeground",
+			"TextPane.selectionForeground"
 		);
 
 		// fix disabled and not-editable backgrounds for text components, combobox and spinner
@@ -304,6 +317,10 @@ public class IntelliJTheme
 		colors = null;
 		ui = null;
 		icons = null;
+	}
+
+	private Object get( UIDefaults defaults, Map<Object, Object> themeSpecificDefaults, String key ) {
+		return themeSpecificDefaults.getOrDefault( key, defaults.get( key ) );
 	}
 
 	private void putAll( UIDefaults defaults, Object value, String... keys ) {
