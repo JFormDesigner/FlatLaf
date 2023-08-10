@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.1
+#Version 3.2
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -96,6 +96,8 @@ fld public final static java.lang.String TITLE_BAR_SHOW_TITLE = "JRootPane.title
 fld public final static java.lang.String TREE_PAINT_SELECTION = "JTree.paintSelection"
 fld public final static java.lang.String TREE_WIDE_SELECTION = "JTree.wideSelection"
 fld public final static java.lang.String USE_WINDOW_DECORATIONS = "JRootPane.useWindowDecorations"
+fld public final static java.lang.String WINDOW_STYLE = "Window.style"
+fld public final static java.lang.String WINDOW_STYLE_SMALL = "small"
 meth public static <%0 extends java.lang.Object> {%%0} clientProperty(javax.swing.JComponent,java.lang.String,{%%0},java.lang.Class<{%%0}>)
 meth public static boolean clientPropertyBoolean(javax.swing.JComponent,java.lang.String,boolean)
 meth public static boolean clientPropertyEquals(javax.swing.JComponent,java.lang.String,java.lang.Object)
@@ -280,6 +282,7 @@ fld public final static java.lang.String UI_SCALE_ALLOW_SCALE_DOWN = "flatlaf.ui
 fld public final static java.lang.String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled"
 fld public final static java.lang.String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flatlaf.updateUIOnSystemFontChange"
 fld public final static java.lang.String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations"
+fld public final static java.lang.String USE_NATIVE_LIBRARY = "flatlaf.useNativeLibrary"
 fld public final static java.lang.String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection"
 fld public final static java.lang.String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont"
 fld public final static java.lang.String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations"
@@ -298,7 +301,7 @@ meth public static boolean setup(java.io.InputStream)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(com.formdev.flatlaf.IntelliJTheme)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(java.io.InputStream) throws java.io.IOException
 supr java.lang.Object
-hfds checkboxDuplicateColors,checkboxKeyMapping,colors,icons,isMaterialUILite,namedColors,ui,uiKeyCopying,uiKeyInverseMapping,uiKeyMapping
+hfds checkboxDuplicateColors,checkboxKeyMapping,colors,icons,isMaterialUILite,namedColors,ui,uiKeyCopying,uiKeyDoNotOverride,uiKeyExcludes,uiKeyInverseMapping,uiKeyMapping
 
 CLSS public static com.formdev.flatlaf.IntelliJTheme$ThemeLaf
  outer com.formdev.flatlaf.IntelliJTheme
