@@ -153,13 +153,13 @@ Applications using FlatLaf
   [Spark](https://github.com/igniterealtime/Spark) - cross-platform IM client optimized for businesses and organizations.
 - ![New](images/new.svg)
   [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) Kafka GUI client
-- ![New](images/new.svg)
+- ![Sponsor](images/sponsor.svg)
   [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
   12 (**commercial**) - the award-winning all-in-one Java profiler
-- ![New](images/new.svg) [JFormDesigner](https://www.formdev.com/) 8
+- ![Sponsor](images/sponsor.svg) [JFormDesigner](https://www.formdev.com/) 8
   (**commercial**) - Java/Swing GUI Designer
-- ![New](images/new.svg) [Jeyla Studio](https://www.jeylastudio.com/) - Salon
-  Software
+- ![Sponsor](images/sponsor.svg) [Jeyla Studio](https://www.jeylastudio.com/) -
+  Salon Software
 - ![New](images/new.svg) [Fanurio](https://www.fanuriotimetracking.com/) 3.3.2
   (**commercial**) - time tracking and billing for freelancers and teams
 - ![New](images/new.svg) [Antares](https://www.antarescircuit.io/) - a free,
@@ -186,15 +186,15 @@ Applications using FlatLaf
   IDE for Java, PHP, HTML and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
-- ![Hot](images/hot.svg)
+- ![Sponsor](images/sponsor.svg)
   [install4j](https://www.ej-technologies.com/products/install4j/overview.html)
   9.0 (**commercial**) - the powerful multi-platform Java installer builder
-- ![Hot](images/hot.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
+- ![Sponsor](images/sponsor.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
   (**commercial**) - the universal database tool for developers, analysts and
   DBAs
 - ![Hot](images/hot.svg) [MagicPlot](https://magicplot.com/) 3.0
   (**commercial**) - Software for nonlinear fitting, plotting and data analysis
-- ![Hot](images/hot.svg)
+- !Sponsor](images/sponsor.svg)
   [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) 2021a
   (**commercial**) - Thermodynamics and Properties Software
 - ![Hot](images/hot.svg) [ZAP](https://www.zaproxy.org/) 2.10 - the world's
@@ -214,7 +214,8 @@ Applications using FlatLaf
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
 - [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
   checks your website
-- [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
+- ![Sponsor](images/sponsor.svg)
+  [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - [MegaMek](https://github.com/MegaMek/megamek),
   [MegaMekLab](https://github.com/MegaMek/megameklab) and
   [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5+ - a sci-fi tabletop
