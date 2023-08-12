@@ -149,81 +149,78 @@ Buzz
 Applications using FlatLaf
 --------------------------
 
-- ![New](images/new.svg)
-  [Spark](https://github.com/igniterealtime/Spark) - cross-platform IM client optimized for businesses and organizations.
+- ![New](images/new.svg) [Spark](https://github.com/igniterealtime/Spark) -
+  cross-platform IM client optimized for businesses and organizations.
 - ![New](images/new.svg)
   [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) Kafka GUI client
 - ![Sponsor](images/sponsor.svg)
   [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
-  12 (**commercial**) - the award-winning all-in-one Java profiler
-- ![Sponsor](images/sponsor.svg) [JFormDesigner](https://www.formdev.com/) 8
+  (**commercial**) - the award-winning all-in-one Java profiler
+- ![Sponsor](images/sponsor.svg) [JFormDesigner](https://www.formdev.com/)
   (**commercial**) - Java/Swing GUI Designer
 - ![Sponsor](images/sponsor.svg) [Jeyla Studio](https://www.jeylastudio.com/) -
   Salon Software
-- ![New](images/new.svg) [Fanurio](https://www.fanuriotimetracking.com/) 3.3.2
-  (**commercial**) - time tracking and billing for freelancers and teams
-- ![New](images/new.svg) [Antares](https://www.antarescircuit.io/) - a free,
-  powerful platform for designing, simulating and explaining digital circuits
-- ![New](images/new.svg)
-  [Logisim-evolution](https://github.com/logisim-evolution/logisim-evolution)
-  3.6 - Digital logic design tool and simulator
-- ![New](images/new.svg) [Cinecred](https://loadingbyte.com/cinecred/) - create
-  beautiful film credit sequences
-- ![New](images/new.svg) [tinyMediaManager](https://www.tinymediamanager.org/)
-  v4 (**commercial**) - a media management tool
-- ![New](images/new.svg) [Weasis](https://nroduit.github.io/) - medical DICOM
-  viewer used in healthcare by hospitals, health networks, etc
-- ![New](images/new.svg)
-  [Makelangelo Software](https://github.com/MarginallyClever/Makelangelo-software)
-  7.3.0 - for plotters, especially the wall-hanging polargraph
+- [Fanurio](https://www.fanuriotimetracking.com/) (**commercial**) - time
+  tracking and billing for freelancers and teams
+- [Antares](https://www.antarescircuit.io/) - a free, powerful platform for
+  designing, simulating and explaining digital circuits
+- [Logisim-evolution](https://github.com/logisim-evolution/logisim-evolution) -
+  Digital logic design tool and simulator
+- [Cinecred](https://loadingbyte.com/cinecred/) - create beautiful film credit
+  sequences
+- [tinyMediaManager](https://www.tinymediamanager.org/) (**commercial**) - a
+  media management tool
+- [Weasis](https://nroduit.github.io/) - medical DICOM viewer used in healthcare
+  by hospitals, health networks, etc
+- [Makelangelo Software](https://github.com/MarginallyClever/Makelangelo-software) -
+  for plotters, especially the wall-hanging polargraph
 - ![Hot](images/hot.svg) [Ultorg](https://www.ultorg.com/) (**commercial**) - a
   visual query system for relational databases
 - [MooInfo](https://github.com/rememberber/MooInfo) - visual implementation of
   OSHI, to view information about the system and hardware
-- [Jailer](https://github.com/Wisser/Jailer) 11.2 - database subsetting and
+- [Jailer](https://github.com/Wisser/Jailer) - database subsetting and
   relational data browsing tool
-- ![Hot](images/hot.svg) [Apache NetBeans](https://netbeans.apache.org/) 11.3 -
-  IDE for Java, PHP, HTML and much more
-- [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
-- [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
+- ![Hot](images/hot.svg) [Apache NetBeans](https://netbeans.apache.org/) - IDE
+  for Java, PHP, HTML and much more
+- [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib)
+- [KeyStore Explorer](https://keystore-explorer.org/)
 - ![Sponsor](images/sponsor.svg)
   [install4j](https://www.ej-technologies.com/products/install4j/overview.html)
-  9.0 (**commercial**) - the powerful multi-platform Java installer builder
-- ![Sponsor](images/sponsor.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
+  (**commercial**) - the powerful multi-platform Java installer builder
+- ![Sponsor](images/sponsor.svg) [DbVisualizer](https://www.dbvis.com/)
   (**commercial**) - the universal database tool for developers, analysts and
   DBAs
-- ![Hot](images/hot.svg) [MagicPlot](https://magicplot.com/) 3.0
-  (**commercial**) - Software for nonlinear fitting, plotting and data analysis
+- ![Hot](images/hot.svg) [MagicPlot](https://magicplot.com/) (**commercial**) -
+  Software for nonlinear fitting, plotting and data analysis
 - !Sponsor](images/sponsor.svg)
-  [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) 2021a
-  (**commercial**) - Thermodynamics and Properties Software
-- ![Hot](images/hot.svg) [ZAP](https://www.zaproxy.org/) 2.10 - the world's
-  most widely used web app scanner
+  [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) (**commercial**) -
+  Thermodynamics and Properties Software
+- ![Hot](images/hot.svg) [ZAP](https://www.zaproxy.org/) - the world's most
+  widely used web app scanner
 - ![Hot](images/hot.svg)
   [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
-  2020.11.2 (**commercial**) - the leading software for web security testing
+  (**commercial**) - the leading software for web security testing
 - [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
   FlatLaf themes to Burp Suite
 - ![Hot](images/hot.svg) [JOSM](https://josm.openstreetmap.de/) - an extensible
   editor for [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf
   JOSM plugin)
-- ![Hot](images/hot.svg) [jAlbum](https://jalbum.net/) 21 (**commercial**) -
+- ![Hot](images/hot.svg) [jAlbum](https://jalbum.net/) (**commercial**) -
   creates photo album websites
-- [PDF Studio](https://www.qoppa.com/pdfstudio/) 2021 (**commercial**) - create,
+- [PDF Studio](https://www.qoppa.com/pdfstudio/) (**commercial**) - create,
   review and edit PDF documents
-- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
-- [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
-  checks your website
+- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) (**commercial**)
+- [Total Validator](https://www.totalvalidator.com/) (**commercial**) - checks
+  your website
 - ![Sponsor](images/sponsor.svg)
   [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - [MegaMek](https://github.com/MegaMek/megamek),
   [MegaMekLab](https://github.com/MegaMek/megameklab) and
-  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5+ - a sci-fi tabletop
-  BattleTech simulator suite handling battles, unit building, and campaigns
-- [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
-  0.13.b024 - GUI builder for
-  [GUIslice](https://github.com/ImpulseAdventure/GUIslice), a lightweight GUI
-  framework for embedded displays
+  [MekHQ](https://github.com/MegaMek/mekhq) - a sci-fi tabletop BattleTech
+  simulator suite handling battles, unit building, and campaigns
+- [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder) - GUI
+  builder for [GUIslice](https://github.com/ImpulseAdventure/GUIslice), a
+  lightweight GUI framework for embedded displays
 - [Rest Suite](https://github.com/supanadit/restsuite) - Rest API testing
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy) - advanced
   gamepad mapping software
@@ -239,23 +236,23 @@ Applications using FlatLaf
   [OFTP2](https://mendelson-e-c.com/oftp2) (**commercial**)
 - [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
   Application System
-- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
+- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) - GIS and scientific
   computation environment for meteorological community
-- [lsfusion platform](https://github.com/lsfusion/platform) 4 - information
+- [lsfusion platform](https://github.com/lsfusion/platform) - information
   systems development platform
 - [JPass](https://github.com/gaborbata/jpass) - password manager with strong
   encryption
 - [Jes - Die Java-EÜR](https://www.jes-eur.de)
-- [Mapton](https://mapton.org/) 2.0
+- [Mapton](https://mapton.org/)
   ([source code](https://github.com/trixon/mapton)) - some kind of map
   application (based on NetBeans platform)
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
-- [Linotte](https://github.com/cpc6128/LangageLinotte) 3.1 - French programming
+- [Linotte](https://github.com/cpc6128/LangageLinotte) - French programming
   language created to learn programming
-- [MEKA](https://github.com/Waikato/meka) 1.9.3 - multi-label classifiers and
+- [MEKA](https://github.com/Waikato/meka) - multi-label classifiers and
   evaluation procedures using the Weka machine learning framework
-- [Shutter Encoder](https://www.shutterencoder.com/) 14.2
+- [Shutter Encoder](https://www.shutterencoder.com/)
   ([source code](https://github.com/paulpacifico/shutter-encoder)) -
   professional video converter and compression tool (screenshots show **old**
   look)
@@ -267,8 +264,8 @@ Applications using FlatLaf
   Arduino-based telescope focuser
 - [Novel-Grabber](https://github.com/Flameish/Novel-Grabber) - download novels
   from any webnovel and lightnovel site
-- [lectureStudio](https://www.lecturestudio.org/) 4.3.1060 - digitize your
-  lectures with ease
+- [lectureStudio](https://www.lecturestudio.org/) - digitize your lectures with
+  ease
 - [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
 - and more...
