@@ -122,3 +122,11 @@ signing {
 tasks.withType<Sign>().configureEach {
 	onlyIf { rootProject.hasProperty( "release" ) }
 }
+
+// check whether parallel build is enabled
+tasks.withType<PublishToMavenRepository>().configureEach {
+	doFirst {
+		if( rootProject.hasProperty( "org.gradle.parallel" ) && rootProject.property( "org.gradle.parallel" ) == "true" )
+			throw RuntimeException( "Publishing does not work correctly with enabled parallel build. Disable parallel build with VM option '-Dorg.gradle.parallel=false'." )
+	}
+}
