@@ -6,7 +6,7 @@ Swing desktop applications.
 
 It looks almost flat (no shadows or gradients), clean, simple and elegant.
 FlatLaf comes with **Light**, **Dark**, **IntelliJ** and **Darcula** themes,
-scales on **HiDPI** displays and runs on Java 8 or newer.
+scales on **HiDPI** displays and runs on Java 8 or newer (LTS and latest).
 
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
 IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
@@ -142,6 +142,7 @@ Buzz
 ----
 
 - [What others say about FlatLaf on Twitter](https://twitter.com/search?f=live&q=flatlaf)
+- [FlatLaf 3.1 (and 3.0) announcement on Reddit](https://www.reddit.com/r/java/comments/12xgrsu/flatlaf_31_and_30_swing_look_and_feel/)
 - [FlatLaf 1.0 announcement on Reddit](https://www.reddit.com/r/java/comments/lsbcwe/flatlaf_10_swing_look_and_feel/)
 - [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)
 
