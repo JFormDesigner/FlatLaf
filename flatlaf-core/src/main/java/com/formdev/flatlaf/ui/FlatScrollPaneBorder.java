@@ -41,11 +41,8 @@ public class FlatScrollPaneBorder
 
 		// if view is rounded, increase left and right insets to avoid that the viewport
 		// is painted over the rounded border on the corners
-		int arc = getArc( c );
-		if( arc > 0 ) {
-			// increase insets by radius minus lineWidth because radius is measured
-			// from the outside of the line, but insets from super include lineWidth
-			int padding = UIScale.scale( (arc / 2) - getLineWidth( c ) );
+		int padding = getLeftRightPadding( c );
+		if( padding > 0 ) {
 			insets.left += padding;
 			insets.right += padding;
 		}
@@ -59,5 +56,23 @@ public class FlatScrollPaneBorder
 			return 0;
 
 		return arc;
+	}
+
+	/**
+	 * Returns the scaled left/right padding used when arc is larger than zero.
+	 * <p>
+	 * This is the distance from the inside of the left border to the left side of the view component.
+	 * On the right side, this is the distance between the right side of the view component and
+	 * the vertical scrollbar. Or the inside of the right border if the scrollbar is hidden.
+	 */
+	public int getLeftRightPadding( Component c ) {
+		// Subtract lineWidth from radius because radius is given for the outside
+		// of the painted line, but insets from super already include lineWidth.
+		// Reduce padding by 10% to make padding slightly smaller because it is not recognizable
+		// when the view is minimally painted over the beginning of the border curve.
+		int arc = getArc( c );
+		return (arc > 0)
+			? Math.max( Math.round( UIScale.scale( ((arc / 2f) - getLineWidth( c )) * 0.9f ) ), 0 )
+			: 0;
 	}
 }

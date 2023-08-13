@@ -521,17 +521,19 @@ public class FlatScrollPaneUI
 			super.layoutContainer( parent );
 
 			JScrollPane scrollPane = (JScrollPane) parent;
-			float arc = getBorderArc( scrollPane );
-			if( arc > 0 ) {
+			Border border = scrollPane.getBorder();
+			int padding;
+			if( border instanceof FlatScrollPaneBorder &&
+				(padding = ((FlatScrollPaneBorder)border).getLeftRightPadding( scrollPane )) > 0 )
+			{
 				JScrollBar vsb = getVerticalScrollBar();
 				if( vsb != null && vsb.isVisible() ) {
 					// move vertical scrollbar to trailing edge
-					int padding = Math.round( (arc / 2) - FlatUIUtils.getBorderLineWidth( scrollPane ) );
-					Insets insets = parent.getInsets();
+					Insets insets = scrollPane.getInsets();
 					Rectangle r = vsb.getBounds();
 					int y = Math.max( r.y, insets.top + padding );
-					int y2 = Math.min( r.y + r.height, parent.getHeight() - insets.bottom - padding );
-					boolean ltr = parent.getComponentOrientation().isLeftToRight();
+					int y2 = Math.min( r.y + r.height, scrollPane.getHeight() - insets.bottom - padding );
+					boolean ltr = scrollPane.getComponentOrientation().isLeftToRight();
 
 					vsb.setBounds( r.x + (ltr ? padding : -padding), y, r.width, y2 - y );
 				}

@@ -27,6 +27,18 @@ new FormModel {
 						"value": "cell 0 0,aligny top,growy 0"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "paddingLabel"
+						"text": "Padding:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,alignx trailing,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "paddingField"
+						"text": "0"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,alignx trailing,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "treeLabel"
 						"text": "JTree:"
 						"horizontalTextPosition": 10
@@ -156,8 +168,8 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][grow,fill]para[fill][fill][fill][fill][fill]"
-				"$rowConstraints": "[]"
+				"$columnConstraints": "[fill][grow,fill]para[][][]"
+				"$rowConstraints": "[][]"
 			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -180,7 +192,7 @@ new FormModel {
 					"paintLabels": true
 					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arcSliderChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 0"
+					"value": "cell 1 0 1 2"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "cornersCheckBox"
@@ -197,19 +209,19 @@ new FormModel {
 					"value": "cell 3 0"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "rowHeaderCheckBox"
-					"text": "Row Header"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 0"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "horizontalScrollBarCheckBox"
 					"text": "Horizontal ScrollBar"
 					"selected": true
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "horizontalScrollBarChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 0"
+					"value": "cell 4 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowHeaderCheckBox"
+					"text": "Row Header"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "verticalScrollBarCheckBox"
@@ -217,7 +229,7 @@ new FormModel {
 					"selected": true
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "verticalScrollBarChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 6 0"
+					"value": "cell 4 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"

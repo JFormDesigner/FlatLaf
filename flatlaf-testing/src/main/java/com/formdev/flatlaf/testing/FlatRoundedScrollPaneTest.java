@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatScrollPaneBorder;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -203,6 +205,11 @@ public class FlatRoundedScrollPaneTest
 		int arc = arcSlider.getValue();
 		for( JScrollPane scrollPane : allJScrollPanes )
 			scrollPane.putClientProperty( FlatClientProperties.STYLE, "arc: " + arc );
+
+		Border border = allJScrollPanes[0].getBorder();
+		paddingField.setText( border instanceof FlatScrollPaneBorder
+			? Integer.toString( ((FlatScrollPaneBorder)border).getLeftRightPadding( allJScrollPanes[0] ) )
+			: "?" );
 	}
 
 	private void initComponents() {
@@ -210,6 +217,8 @@ public class FlatRoundedScrollPaneTest
 		splitPane2 = new JSplitPane();
 		panel1 = new FlatTestPanel();
 		listLabel = new JLabel();
+		paddingLabel = new JLabel();
+		paddingField = new JLabel();
 		treeLabel = new JLabel();
 		tableLabel = new JLabel();
 		autoResizeModeCheckBox = new JCheckBox();
@@ -237,8 +246,8 @@ public class FlatRoundedScrollPaneTest
 		arcSlider = new JSlider();
 		cornersCheckBox = new JCheckBox();
 		columnHeaderCheckBox = new JCheckBox();
-		rowHeaderCheckBox = new JCheckBox();
 		horizontalScrollBarCheckBox = new JCheckBox();
+		rowHeaderCheckBox = new JCheckBox();
 		verticalScrollBarCheckBox = new JCheckBox();
 
 		//======== this ========
@@ -272,6 +281,14 @@ public class FlatRoundedScrollPaneTest
 				listLabel.setText("JList:");
 				listLabel.setHorizontalTextPosition(SwingConstants.LEADING);
 				panel1.add(listLabel, "cell 0 0,aligny top,growy 0");
+
+				//---- paddingLabel ----
+				paddingLabel.setText("Padding:");
+				panel1.add(paddingLabel, "cell 0 0,alignx trailing,growx 0");
+
+				//---- paddingField ----
+				paddingField.setText("0");
+				panel1.add(paddingField, "cell 0 0,alignx trailing,growx 0");
 
 				//---- treeLabel ----
 				treeLabel.setText("JTree:");
@@ -382,12 +399,11 @@ public class FlatRoundedScrollPaneTest
 				// columns
 				"[fill]" +
 				"[grow,fill]para" +
-				"[fill]" +
-				"[fill]" +
-				"[fill]" +
-				"[fill]" +
-				"[fill]",
+				"[]" +
+				"[]" +
+				"[]",
 				// rows
+				"[]" +
 				"[]"));
 
 			//---- arcLabel ----
@@ -403,7 +419,7 @@ public class FlatRoundedScrollPaneTest
 			arcSlider.setPaintTicks(true);
 			arcSlider.setPaintLabels(true);
 			arcSlider.addChangeListener(e -> arcSliderChanged());
-			panel3.add(arcSlider, "cell 1 0");
+			panel3.add(arcSlider, "cell 1 0 1 2");
 
 			//---- cornersCheckBox ----
 			cornersCheckBox.setText("Corners");
@@ -415,22 +431,22 @@ public class FlatRoundedScrollPaneTest
 			columnHeaderCheckBox.addActionListener(e -> columnHeaderChanged());
 			panel3.add(columnHeaderCheckBox, "cell 3 0");
 
-			//---- rowHeaderCheckBox ----
-			rowHeaderCheckBox.setText("Row Header");
-			rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
-			panel3.add(rowHeaderCheckBox, "cell 4 0");
-
 			//---- horizontalScrollBarCheckBox ----
 			horizontalScrollBarCheckBox.setText("Horizontal ScrollBar");
 			horizontalScrollBarCheckBox.setSelected(true);
 			horizontalScrollBarCheckBox.addActionListener(e -> horizontalScrollBarChanged());
-			panel3.add(horizontalScrollBarCheckBox, "cell 5 0");
+			panel3.add(horizontalScrollBarCheckBox, "cell 4 0");
+
+			//---- rowHeaderCheckBox ----
+			rowHeaderCheckBox.setText("Row Header");
+			rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
+			panel3.add(rowHeaderCheckBox, "cell 3 1");
 
 			//---- verticalScrollBarCheckBox ----
 			verticalScrollBarCheckBox.setText("Vertical ScrollBar");
 			verticalScrollBarCheckBox.setSelected(true);
 			verticalScrollBarCheckBox.addActionListener(e -> verticalScrollBarChanged());
-			panel3.add(verticalScrollBarCheckBox, "cell 6 0");
+			panel3.add(verticalScrollBarCheckBox, "cell 4 1");
 		}
 		add(panel3, "cell 0 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -440,6 +456,8 @@ public class FlatRoundedScrollPaneTest
 	private JSplitPane splitPane2;
 	private FlatTestPanel panel1;
 	private JLabel listLabel;
+	private JLabel paddingLabel;
+	private JLabel paddingField;
 	private JLabel treeLabel;
 	private JLabel tableLabel;
 	private JCheckBox autoResizeModeCheckBox;
@@ -466,8 +484,8 @@ public class FlatRoundedScrollPaneTest
 	private JSlider arcSlider;
 	private JCheckBox cornersCheckBox;
 	private JCheckBox columnHeaderCheckBox;
-	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox horizontalScrollBarCheckBox;
+	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox verticalScrollBarCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
