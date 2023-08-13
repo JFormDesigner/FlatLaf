@@ -651,6 +651,14 @@ public class FlatTestFrame
 				JViewport columnHeader = ((JScrollPane)c).getColumnHeader();
 				if( columnHeader != null )
 					action.accept( columnHeader.getView(), "columnHeader" );
+			} else if( c instanceof JSplitPane ) {
+				JSplitPane splitPane = (JSplitPane) c;
+				Component left = splitPane.getLeftComponent();
+				Component right = splitPane.getRightComponent();
+				if( left instanceof Container )
+					updateComponentsRecur( (Container) left, action );
+				if( right instanceof Container )
+					updateComponentsRecur( (Container) right, action );
 			} else if( c instanceof JTabbedPane ) {
 				JTabbedPane tabPane = (JTabbedPane)c;
 				int tabCount = tabPane.getTabCount();

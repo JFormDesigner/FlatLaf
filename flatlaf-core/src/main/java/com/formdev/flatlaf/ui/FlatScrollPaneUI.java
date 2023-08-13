@@ -17,9 +17,12 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
@@ -41,16 +44,19 @@ import javax.swing.JTree;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -97,7 +103,13 @@ public class FlatScrollPaneUI
 		super.installUI( c );
 
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
-		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
+		int arc = UIManager.getInt( "ScrollPane.arc" );
+		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 && arc == 0 );
+
+		// install layout manager
+		LayoutManager layout = c.getLayout();
+		if( layout != null && layout.getClass() == ScrollPaneLayout.UIResource.class )
+			c.setLayout( createScrollPaneLayout() );
 
 		installStyle();
 
@@ -107,6 +119,10 @@ public class FlatScrollPaneUI
 	@Override
 	public void uninstallUI( JComponent c ) {
 		MigLayoutVisualPadding.uninstall( scrollpane );
+
+		// uninstall layout manager
+		if( c.getLayout() instanceof FlatScrollPaneLayout )
+			c.setLayout( new ScrollPaneLayout.UIResource() );
 
 		super.uninstallUI( c );
 
@@ -128,6 +144,13 @@ public class FlatScrollPaneUI
 		removeViewportListeners( scrollpane.getViewport() );
 
 		handler = null;
+	}
+
+	/**
+	 * @since 3.3
+	 */
+	protected FlatScrollPaneLayout createScrollPaneLayout() {
+		return new FlatScrollPaneLayout();
 	}
 
 	@Override
@@ -290,8 +313,7 @@ public class FlatScrollPaneUI
 					Object corner = e.getNewValue();
 					if( corner instanceof JButton &&
 						((JButton)corner).getBorder() instanceof FlatButtonBorder &&
-						scrollpane.getViewport() != null &&
-						scrollpane.getViewport().getView() instanceof JTable )
+						getView( scrollpane ) instanceof JTable )
 					{
 						((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
 						((JButton)corner).setFocusable( false );
@@ -334,9 +356,10 @@ public class FlatScrollPaneUI
 
 	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		if( key.equals( "focusWidth" ) ) {
+		if( key.equals( "focusWidth" ) || key.equals( "arc" ) ) {
 			int focusWidth = (value instanceof Integer) ? (int) value : UIManager.getInt( "Component.focusWidth" );
-			LookAndFeel.installProperty( scrollpane, "opaque", focusWidth == 0 );
+			int arc = (value instanceof Integer) ? (int) value : UIManager.getInt( "ScrollPane.arc" );
+			LookAndFeel.installProperty( scrollpane, "opaque", focusWidth == 0 && arc == 0 );
 		}
 
 		if( borderShared == null )
@@ -402,13 +425,26 @@ public class FlatScrollPaneUI
 				c.getHeight() - insets.top - insets.bottom );
 		}
 
+		// if view is rounded, paint rounded background with view background color
+		// to ensure that free areas at left and right have same color as view
+		Component view;
+		float arc = getBorderArc( scrollpane );
+		if( arc > 0 && (view = getView( scrollpane )) != null ) {
+			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+
+			g.setColor( view.getBackground() );
+
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		}
+
 		paint( g, c );
 	}
 
 	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JScrollPane scrollPane ) {
-		JViewport viewport = scrollPane.getViewport();
-		Component view = (viewport != null) ? viewport.getView() : null;
+		Component view = getView( scrollPane );
 		if( view == null )
 			return false;
 
@@ -426,6 +462,18 @@ public class FlatScrollPaneUI
 		}
 
 		return false;
+	}
+
+	private static Component getView( JScrollPane scrollPane ) {
+		JViewport viewport = scrollPane.getViewport();
+		return (viewport != null) ? viewport.getView() : null;
+	}
+
+	private static float getBorderArc( JScrollPane scrollPane ) {
+		Border border = scrollPane.getBorder();
+		return (border instanceof FlatScrollPaneBorder)
+			? UIScale.scale( (float) ((FlatScrollPaneBorder)border).getArc( scrollPane ) )
+			: 0;
 	}
 
 	//---- class Handler ------------------------------------------------------
@@ -457,6 +505,37 @@ public class FlatScrollPaneUI
 		public void focusLost( FocusEvent e ) {
 			// necessary to update focus border
 			scrollpane.repaint();
+		}
+	}
+
+	//---- class FlatScrollPaneLayout -----------------------------------------
+
+	/**
+	 * @since 3.3
+	 */
+	protected static class FlatScrollPaneLayout
+		extends ScrollPaneLayout.UIResource
+	{
+		@Override
+		public void layoutContainer( Container parent ) {
+			super.layoutContainer( parent );
+
+			JScrollPane scrollPane = (JScrollPane) parent;
+			float arc = getBorderArc( scrollPane );
+			if( arc > 0 ) {
+				JScrollBar vsb = getVerticalScrollBar();
+				if( vsb != null && vsb.isVisible() ) {
+					// move vertical scrollbar to trailing edge
+					int padding = Math.round( (arc / 2) - FlatUIUtils.getBorderLineWidth( scrollPane ) );
+					Insets insets = parent.getInsets();
+					Rectangle r = vsb.getBounds();
+					int y = Math.max( r.y, insets.top + padding );
+					int y2 = Math.min( r.y + r.height, parent.getHeight() - insets.bottom - padding );
+					boolean ltr = parent.getComponentOrientation().isLeftToRight();
+
+					vsb.setBounds( r.x + (ltr ? padding : -padding), y, r.width, y2 - y );
+				}
+			}
 		}
 	}
 }

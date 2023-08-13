@@ -625,7 +625,7 @@ public class TestFlatStyleableValue
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
 		// border
-		flatBorder( c, ui );
+		flatScrollPaneBorder( c, ui );
 
 		testBoolean( c, ui, "showButtons", true );
 	}
@@ -965,15 +965,19 @@ public class TestFlatStyleableValue
 		flatBorder( c, ui );
 
 		testInteger( c, ui, "arc", 123 );
-
 		testBoolean( c, ui, "roundRect", true );
+	}
+
+	private void flatScrollPaneBorder( JComponent c, StyleableUI ui ) {
+		flatBorder( c, ui );
+
+		testInteger( c, ui, "arc", 123 );
 	}
 
 	private void flatTextBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
 		testInteger( c, ui, "arc", 123 );
-
 		testBoolean( c, ui, "roundRect", true );
 	}
 
@@ -1035,6 +1039,17 @@ public class TestFlatStyleableValue
 		flatBorder( border );
 
 		testValue( border, "arc", 6 );
+		testValue( border, "roundRect", true );
+	}
+
+	@Test
+	void flatScrollPaneBorder() {
+		FlatScrollPaneBorder border = new FlatScrollPaneBorder();
+
+		// FlatScrollPaneBorder extends FlatBorder
+		flatBorder( border );
+
+		testValue( border, "arc", 6 );
 	}
 
 	@Test
@@ -1045,6 +1060,7 @@ public class TestFlatStyleableValue
 		flatBorder( border );
 
 		testValue( border, "arc", 6 );
+		testValue( border, "roundRect", true );
 	}
 
 	@Test

@@ -719,6 +719,7 @@ ScrollBar.width
 ScrollBarUI
 ScrollPane.ancestorInputMap
 ScrollPane.ancestorInputMap.RightToLeft
+ScrollPane.arc
 ScrollPane.background
 ScrollPane.border
 ScrollPane.fillUpperCorner
