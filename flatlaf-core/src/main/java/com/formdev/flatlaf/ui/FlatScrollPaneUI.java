@@ -330,6 +330,18 @@ public class FlatScrollPaneUI
 					scrollpane.revalidate();
 					scrollpane.repaint();
 					break;
+
+				case "border":
+					Object newBorder = e.getNewValue();
+					if( newBorder != null && newBorder == UIManager.getBorder( "Table.scrollPaneBorder" ) ) {
+						// JTable.configureEnclosingScrollPaneUI() replaces the scrollpane border
+						// with another one --> re-apply style on new border
+						borderShared = null;
+						installStyle();
+						scrollpane.revalidate();
+						scrollpane.repaint();
+					}
+					break;
 			}
 		};
 	}

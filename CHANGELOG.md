@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.3-SNAPSHOT
+
+#### Fixed bugs
+
+- ScrollPane: Styling ScrollPane border properties did not work if view
+  component is a Table.
+
+
 ## 3.2
 
 #### New features and improvements
