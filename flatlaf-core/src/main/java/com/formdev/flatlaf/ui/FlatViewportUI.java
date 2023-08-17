@@ -21,8 +21,11 @@ import java.awt.Graphics;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
 import javax.swing.JViewport;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicViewportUI;
+import com.formdev.flatlaf.SmoothScrollingHelper;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JViewport}.
@@ -36,7 +39,7 @@ import javax.swing.plaf.basic.BasicViewportUI;
  * @author Karl Tauber
  */
 public class FlatViewportUI
-	extends BasicViewportUI
+	extends BasicViewportUI implements AncestorListener
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return FlatUIUtils.createSharedUI( FlatViewportUI.class, FlatViewportUI::new );
@@ -59,6 +62,38 @@ public class FlatViewportUI
 		}
 	}
 
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+		c.addAncestorListener( this );
+	}
+	
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+		c.removeAncestorListener( this );
+	}
+	
+	@Override
+	public void ancestorAdded( AncestorEvent event ) {
+		SmoothScrollingHelper.registerViewport( (JViewport)event.getComponent() );
+	}
+	
+	@Override
+	public void ancestorMoved( AncestorEvent event ) {
+		JViewport viewport = (JViewport)event.getComponent();
+		if(viewport.isShowing()) {
+			SmoothScrollingHelper.registerViewport( viewport );
+		} else {
+			SmoothScrollingHelper.unregisterViewport( viewport );
+		}
+	}
+
+	@Override
+	public void ancestorRemoved( AncestorEvent event ) {
+		SmoothScrollingHelper.unregisterViewport( (JViewport)event.getComponent() );
+	}
+	
 	//---- interface ViewportPainter ------------------------------------------
 
 	/**

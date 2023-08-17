@@ -48,8 +48,11 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.SmoothScrollingHelper;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -135,18 +138,36 @@ public class FlatScrollPaneUI
 		MouseWheelListener superListener = super.createMouseWheelListener();
 		return e -> {
 			if( isSmoothScrollingEnabled() &&
-				scrollpane.isWheelScrollingEnabled() &&
-				e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-				e.getPreciseWheelRotation() != 0 &&
-				e.getPreciseWheelRotation() != e.getWheelRotation() )
+				scrollpane.isWheelScrollingEnabled() )
 			{
-				mouseWheelMovedSmooth( e );
+				if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
+					e.getPreciseWheelRotation() != 0 &&
+					e.getPreciseWheelRotation() != e.getWheelRotation() )
+				{
+					// precise scrolling
+					mouseWheelMovedPrecise( e );
+				} else {
+					// smooth scrolling
+					JScrollBar scrollBar = findScrollBarToScroll( e );
+					if( scrollBar != null && scrollBar.getUI() instanceof FlatScrollBarUI ) {
+						FlatScrollBarUI ui = (FlatScrollBarUI) scrollBar.getUI();
+						ui.runAndSetValueAnimated( () -> {
+							superListener.mouseWheelMoved( e );
+						} );
+					} else
+						superListener.mouseWheelMoved( e );
+				}
 			} else
 				superListener.mouseWheelMoved( e );
 		};
 	}
 
 	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( FlatSystemProperties.SMOOTH_SCROLLING, true ) )
+			return false;
+		// Only allow smooth scrolling if it originates from an event on the scrollpane. Programmatic calls do not trigger smooth scrolling.
+		if(!SmoothScrollingHelper.isInSmoothScrolling( scrollpane.getViewport() ))
+			return false;
 		Object smoothScrolling = scrollpane.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
 		if( smoothScrolling instanceof Boolean )
 			return (Boolean) smoothScrolling;
@@ -157,19 +178,16 @@ public class FlatScrollPaneUI
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
 
-	private void mouseWheelMovedSmooth( MouseWheelEvent e ) {
+	private void mouseWheelMovedPrecise( MouseWheelEvent e ) {
 		// return if there is no viewport
 		JViewport viewport = scrollpane.getViewport();
 		if( viewport == null )
 			return;
 
 		// find scrollbar to scroll
-		JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
-		if( scrollbar == null || !scrollbar.isVisible() || e.isShiftDown() ) {
-			scrollbar = scrollpane.getHorizontalScrollBar();
-			if( scrollbar == null || !scrollbar.isVisible() )
-				return;
-		}
+		JScrollBar scrollbar = findScrollBarToScroll( e );
+		if( scrollbar == null )
+			return;
 
 		// consume event
 		e.consume();
@@ -260,6 +278,16 @@ public class FlatScrollPaneUI
 			minValue,
 			maxValue ) );
 */
+	}
+
+	private JScrollBar findScrollBarToScroll( MouseWheelEvent e ) {
+		JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+		if( scrollBar == null || !scrollBar.isVisible() || e.isShiftDown() ) {
+			scrollBar = scrollpane.getHorizontalScrollBar();
+			if( scrollBar == null || !scrollBar.isVisible() )
+				return null;
+		}
+		return scrollBar;
 	}
 
 	@Override
@@ -427,6 +455,48 @@ public class FlatScrollPaneUI
 
 		return false;
 	}
+
+	@Override
+	protected void syncScrollPaneWithViewport() {
+		if( isSmoothScrollingEnabled() ) {
+			runAndSyncScrollBarValueAnimated( scrollpane.getVerticalScrollBar(), 0, () -> {
+				runAndSyncScrollBarValueAnimated( scrollpane.getHorizontalScrollBar(), 1, () -> {
+					super.syncScrollPaneWithViewport();
+				} );
+			} );
+		} else
+			super.syncScrollPaneWithViewport();
+	}
+
+	private void runAndSyncScrollBarValueAnimated( JScrollBar sb, int i, Runnable r ) {
+		if( inRunAndSyncValueAnimated[i] || sb == null ) {
+			r.run();
+			return;
+		}
+
+		inRunAndSyncValueAnimated[i] = true;
+
+		int oldValue = sb.getValue();
+		int oldVisibleAmount = sb.getVisibleAmount();
+		int oldMinimum = sb.getMinimum();
+		int oldMaximum = sb.getMaximum();
+
+		r.run();
+
+		int newValue = sb.getValue();
+		if( newValue != oldValue &&
+			sb.getVisibleAmount() == oldVisibleAmount &&
+			sb.getMinimum() == oldMinimum &&
+			sb.getMaximum() == oldMaximum &&
+			sb.getUI() instanceof FlatScrollBarUI )
+		{
+			((FlatScrollBarUI)sb.getUI()).setValueAnimated( oldValue, newValue );
+		}
+
+		inRunAndSyncValueAnimated[i] = false;
+	}
+
+	private final boolean[] inRunAndSyncValueAnimated = new boolean[2];
 
 	//---- class Handler ------------------------------------------------------
 

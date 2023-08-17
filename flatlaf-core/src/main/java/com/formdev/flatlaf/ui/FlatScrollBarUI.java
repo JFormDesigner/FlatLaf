@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
@@ -33,16 +34,21 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.SmoothScrollingHelper;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Animator;
+import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -201,6 +207,16 @@ public class FlatScrollBarUI
 		pressedButtonBackground = null;
 
 		oldStyleValues = null;
+	}
+
+	@Override
+	protected TrackListener createTrackListener() {
+		return new FlatTrackListener();
+	}
+
+	@Override
+	protected ScrollListener createScrollListener() {
+		return new FlatScrollListener();
 	}
 
 	@Override
@@ -429,6 +445,226 @@ public class FlatScrollBarUI
 	@Override
 	public boolean getSupportsAbsolutePositioning() {
 		return allowsAbsolutePositioning;
+	}
+
+	@Override
+	protected void scrollByBlock( int direction ) {
+		runAndSetValueAnimated( () -> {
+			super.scrollByBlock( direction );
+		} );
+	}
+
+	@Override
+	protected void scrollByUnit( int direction ) {
+		runAndSetValueAnimated( () -> {
+			super.scrollByUnit( direction );
+		} );
+	}
+
+	/**
+	 * Runs the given runnable, which should modify the scroll bar value,
+	 * and then animate scroll bar value from old value to new value.
+	 */
+	public void runAndSetValueAnimated( Runnable r ) {
+		if( inRunAndSetValueAnimated || !isSmoothScrollingEnabled() ) {
+			JViewport viewport = null;
+			Container parent = scrollbar.getParent();
+			if ( parent instanceof JScrollPane ) {
+				JScrollPane scrollpane = (JScrollPane)parent;
+				viewport = scrollpane.getViewport();
+				if( SmoothScrollingHelper.isInBlockedBlitScrollMode( viewport ) ) {
+					viewport = null;
+				}
+			}
+			try {
+				if( viewport != null )
+					SmoothScrollingHelper.setBlitScrollModeBlocked( viewport, true );
+				r.run();
+			} finally {
+				if( viewport != null )
+					SmoothScrollingHelper.setBlitScrollModeBlocked( viewport, false );
+			}
+			return;
+		}
+
+		inRunAndSetValueAnimated = true;
+
+		if( animator != null )
+			animator.cancel();
+
+		if( useValueIsAdjusting )
+			scrollbar.setValueIsAdjusting( true );
+
+		// remember current scrollbar value so that we can start scroll animation from there
+		int oldValue = scrollbar.getValue();
+
+    	// if invoked while animation is running, calculation of new value
+    	// should start at the previous target value
+    	if( targetValue != Integer.MIN_VALUE )
+    		scrollbar.setValue( targetValue );
+    	
+    	r.run();
+
+		// do not use animation if started dragging thumb
+		if( isDragging ) {
+			// do not clear valueIsAdjusting here
+			inRunAndSetValueAnimated = false;
+			return;
+		}
+
+		int newValue = scrollbar.getValue();
+		if( newValue != oldValue ) {
+			// start scroll animation if value has changed
+			setValueAnimated( oldValue, newValue );
+		} else {
+			// clear valueIsAdjusting if value has not changed
+			if( useValueIsAdjusting )
+				scrollbar.setValueIsAdjusting( false );
+		}
+
+		inRunAndSetValueAnimated = false;
+	}
+
+	private boolean inRunAndSetValueAnimated;
+	private Animator animator;
+	private int startValue = Integer.MIN_VALUE;
+	private int targetValue = Integer.MIN_VALUE;
+	private boolean useValueIsAdjusting = true;
+
+	public void setValueAnimated( int initialValue, int value ) {
+		// do some check if animation already running
+		if( animator != null && animator.isRunning() && targetValue != Integer.MIN_VALUE ) {
+			// ignore requests if animation still running and scroll direction is the same
+			// and new value is within currently running animation
+			// (this may occur when repeat-scrolling via keyboard)
+			if( value == targetValue ||
+				(value > startValue && value < targetValue) || // scroll down/right
+				(value < startValue && value > targetValue) )  // scroll up/left
+			  return;
+		}
+
+		if( useValueIsAdjusting )
+			scrollbar.setValueIsAdjusting( true );
+
+		// set scrollbar value to initial value
+		scrollbar.setValue( initialValue );
+
+		startValue = initialValue;
+		targetValue = value;
+
+		// create animator
+		if( animator == null ) {
+			int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
+			int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
+			Object interpolator = UIManager.get( "ScrollPane.smoothScrolling.interpolator" );
+
+			animator = new Animator( duration, fraction -> {
+				if( scrollbar == null || !scrollbar.isShowing() ) {
+					animator.stop();
+					return;
+				}
+
+				// re-enable valueIsAdjusting if disabled while animation is running
+				// (e.g. in mouse released listener)
+				if( useValueIsAdjusting && !scrollbar.getValueIsAdjusting() )
+					scrollbar.setValueIsAdjusting( true );
+				JViewport viewport = null;
+				Container parent = scrollbar.getParent();
+				if ( parent instanceof JScrollPane ) {
+					JScrollPane scrollpane = (JScrollPane)parent;
+					viewport = scrollpane.getViewport();
+				}
+				boolean isInBlockedBlitScrollMode = false;
+				try {
+					if( viewport != null ) {
+						isInBlockedBlitScrollMode = SmoothScrollingHelper.isInBlockedBlitScrollMode( viewport );
+						if( isInBlockedBlitScrollMode ) {
+							SmoothScrollingHelper.allowBlitScrollModeTemporarily( viewport, true );
+						}
+					}
+					scrollbar.setValue( startValue + Math.round( (targetValue - startValue) * fraction ) );
+				} finally {
+					if( isInBlockedBlitScrollMode && viewport != null ) {
+						SmoothScrollingHelper.allowBlitScrollModeTemporarily( viewport, false );
+					}
+				}
+			}, () -> {
+				startValue = targetValue = Integer.MIN_VALUE;
+
+				if( useValueIsAdjusting && scrollbar != null )
+					scrollbar.setValueIsAdjusting( false );
+			});
+
+			animator.setResolution( resolution );
+			animator.setInterpolator( (interpolator instanceof Animator.Interpolator)
+				? (Animator.Interpolator) interpolator
+				: new CubicBezierEasing( 0.5f, 0.5f, 0.5f, 1 ) );
+		}
+
+		// restart animator
+		animator.cancel();
+		animator.start();
+	}
+	
+	int getTargetValue() {
+		return targetValue;
+	}
+
+	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( FlatSystemProperties.SMOOTH_SCROLLING, true ) )
+			return false;
+
+		// if scroll bar is child of scroll pane, check only client property of scroll pane
+		Container parent = scrollbar.getParent();
+		JComponent c = (parent instanceof JScrollPane) ? (JScrollPane) parent : scrollbar;
+		Object smoothScrolling = c.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
+		if( smoothScrolling instanceof Boolean )
+			return (Boolean) smoothScrolling;
+
+		// Note: Getting UI value "ScrollPane.smoothScrolling" here to allow
+		// applications to turn smooth scrolling on or off at any time
+		// (e.g. in application options dialog).
+		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
+	//---- class FlatTrackListener --------------------------------------------
+
+	protected class FlatTrackListener
+		extends TrackListener
+	{
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			// Do not use valueIsAdjusting here (in runAndSetValueAnimated())
+			// for smooth scrolling because super.mousePressed() enables this itself
+			// and super.mouseRelease() disables it later.
+			// If we would disable valueIsAdjusting here (in runAndSetValueAnimated())
+			// and move the thumb with the mouse, then the thumb location is not updated
+			// if later scrolled with a key (e.g. HOME key).
+			useValueIsAdjusting = false;
+
+			runAndSetValueAnimated( () -> {
+				super.mousePressed( e );
+			} );
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			super.mouseReleased( e );
+			useValueIsAdjusting = true;
+		}
+	}
+
+	//---- class FlatScrollListener -------------------------------------------
+
+	protected class FlatScrollListener
+		extends ScrollListener
+	{
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			runAndSetValueAnimated( () -> {
+				super.actionPerformed( e );
+			} );
+		}
 	}
 
 	//---- class ScrollBarHoverListener ---------------------------------------
