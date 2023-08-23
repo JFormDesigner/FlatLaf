@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.3-SNAPSHOT
+
+#### Fixed bugs
+
+- FileChooser: Fixed occasional NPE in `FlatShortcutsPanel` on Windows. (issue
+  #718)
+
+
 ## 3.2
 
 #### New features and improvements

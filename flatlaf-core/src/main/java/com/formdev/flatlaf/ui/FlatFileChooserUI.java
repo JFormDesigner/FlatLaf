@@ -29,6 +29,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.function.Function;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
@@ -408,7 +409,7 @@ public class FlatFileChooserUI
 
 		protected final File[] files;
 		protected final JToggleButton[] buttons;
-		protected final ButtonGroup buttonGroup;
+		protected final ButtonGroup buttonGroup = new ButtonGroup();
 
 		@SuppressWarnings( "unchecked" )
 		public FlatShortcutsPanel( JFileChooser fc ) {
@@ -427,19 +428,22 @@ public class FlatFileChooserUI
 			File[] files = getChooserShortcutPanelFiles( fsv );
 			if( filesFunction != null )
 				files = filesFunction.apply( files );
-			this.files = files;
 
 			// create toolbar buttons
-			buttons = new JToggleButton[files.length];
-			buttonGroup = new ButtonGroup();
-			for( int i = 0; i < files.length; i++ ) {
-				// wrap drive path
-				if( fsv.isFileSystemRoot( files[i] ) )
-					files[i] = fsv.createFileObject( files[i].getAbsolutePath() );
+			ArrayList<File> filesList = new ArrayList<>();
+			ArrayList<JToggleButton> buttonsList = new ArrayList<>();
+			for( File file : files ) {
+				if( file == null )
+					continue;
 
-				File file = files[i];
+				// wrap drive path
+				if( fsv.isFileSystemRoot( file ) )
+					file = fsv.createFileObject( file.getAbsolutePath() );
+
 				String name = getDisplayName( fsv, file );
 				Icon icon = getIcon( fsv, file );
+				if( name == null )
+					continue;
 
 				// remove path from name
 				int lastSepIndex = name.lastIndexOf( File.separatorChar );
@@ -454,14 +458,20 @@ public class FlatFileChooserUI
 
 				// create button
 				JToggleButton button = createButton( name, icon );
+				File f = file;
 				button.addActionListener( e -> {
-					fc.setCurrentDirectory( file );
+					fc.setCurrentDirectory( f );
 				} );
 
 				add( button );
 				buttonGroup.add( button );
-				buttons[i] = button;
+
+				filesList.add( file );
+				buttonsList.add( button );
 			}
+
+			this.files = filesList.toArray( new File[filesList.size()] );
+			this.buttons = buttonsList.toArray( new JToggleButton[buttonsList.size()] );
 
 			directoryChanged( fc.getCurrentDirectory() );
 		}
