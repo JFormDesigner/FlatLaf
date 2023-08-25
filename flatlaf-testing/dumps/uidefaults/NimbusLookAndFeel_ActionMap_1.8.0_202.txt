@@ -1,0 +1,831 @@
+Class  javax.swing.plaf.nimbus.NimbusLookAndFeel
+ID     Nimbus
+Name   Nimbus
+Java   1.8.0_202
+OS     Windows 10
+
+
+
+#---- javax.swing.JButton ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    pressed                              javax.swing.plaf.basic.BasicButtonListener$Actions
+    released                             javax.swing.plaf.basic.BasicButtonListener$Actions
+
+
+#---- javax.swing.JCheckBox ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    pressed                              javax.swing.plaf.basic.BasicButtonListener$Actions
+    released                             javax.swing.plaf.basic.BasicButtonListener$Actions
+
+
+#---- javax.swing.JCheckBoxMenuItem ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    doClick                              javax.swing.plaf.basic.BasicMenuItemUI$Actions
+
+
+#---- javax.swing.JColorChooser ----
+
+
+
+
+#---- javax.swing.JComboBox ----
+
+12      javax.swing.plaf.basic.LazyActionMap [UI]
+    endPassThrough                       javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    enterPressed                         javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    hidePopup                            javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    homePassThrough                      javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    pageDownPassThrough                  javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    pageUpPassThrough                    javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    selectNext                           javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    selectNext2                          javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    selectPrevious                       javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    selectPrevious2                      javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    spacePopup                           javax.swing.plaf.basic.BasicComboBoxUI$Actions
+    togglePopup                          javax.swing.plaf.basic.BasicComboBoxUI$Actions
+
+
+#---- javax.swing.JDesktopPane ----
+
+19      javax.swing.plaf.basic.LazyActionMap [UI]
+    close                                javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    down                                 javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    escape                               javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    left                                 javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    maximize                             javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    minimize                             javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    move                                 javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    navigateNext                         javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    navigatePrevious                     javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    resize                               javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    restore                              javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    right                                javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    selectNextFrame                      javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    selectPreviousFrame                  javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    shrinkDown                           javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    shrinkLeft                           javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    shrinkRight                          javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    shrinkUp                             javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+    up                                   javax.swing.plaf.basic.BasicDesktopPaneUI$Actions
+
+
+#---- javax.swing.JEditorPane ----
+
+59      javax.swing.plaf.ActionMapUIResource [UI]
+    beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+    caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+    caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+    caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+    caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+    caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+    caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+    caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+    caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+    caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+    caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+    caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    copy                                 javax.swing.TransferHandler$TransferAction
+    copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+    cut                                  javax.swing.TransferHandler$TransferAction
+    cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+    default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+    delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+    delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+    delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+    delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+    dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+    insert-break                         javax.swing.text.DefaultEditorKit$InsertBreakAction
+    insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+    insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+    page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+    page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+    paste                                javax.swing.TransferHandler$TransferAction
+    paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+    select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+    select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+    select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+    select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+    selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+    selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+    selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+    selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+    selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+    selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+    selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+    selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+    selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+    selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+    selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+    selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+    selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+    selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+    selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+    set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+    toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+    unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JFileChooser ----
+
+9       javax.swing.plaf.ActionMapUIResource [UI]
+    Go Up                                javax.swing.plaf.basic.BasicFileChooserUI$ChangeToParentDirectoryAction
+    New Folder                           sun.swing.FilePane$9
+    approveSelection                     javax.swing.plaf.basic.BasicFileChooserUI$ApproveSelectionAction
+    cancelSelection                      sun.swing.FilePane$1FilePaneAction
+    editFileName                         sun.swing.FilePane$1FilePaneAction
+    fileNameCompletion                   sun.swing.plaf.synth.SynthFileChooserUI$FileNameCompletionAction
+    refresh                              sun.swing.FilePane$1FilePaneAction (Refresh)
+    viewTypeDetails                      sun.swing.FilePane$ViewTypeAction (Details)
+    viewTypeList                         sun.swing.FilePane$ViewTypeAction (List)
+
+
+#---- javax.swing.JFormattedTextField ----
+
+2       javax.swing.plaf.ActionMapUIResource [UI]
+    insert-break                         javax.swing.plaf.basic.BasicTextUI$TextActionWrapper
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+
+    60      javax.swing.plaf.ActionMapUIResource [UI]
+        beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+        caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+        caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+        caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+        caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+        caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+        caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+        caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+        caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+        caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+        caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        copy                                 javax.swing.TransferHandler$TransferAction
+        copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+        cut                                  javax.swing.TransferHandler$TransferAction
+        cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+        default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+        delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+        delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+        delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+        delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+        dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+        insert-break                         javax.swing.text.DefaultEditorKit$InsertBreakAction
+        insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+        insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+        notify-field-accept                  javax.swing.JFormattedTextField$CommitAction
+        page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+        page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+        paste                                javax.swing.TransferHandler$TransferAction
+        paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+        reset-field-edit                     javax.swing.JFormattedTextField$CancelAction
+        select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+        select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+        select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+        select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+        selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+        selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+        selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+        selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+        selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+        selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+        selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+        selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+        selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+        selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+        set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+        toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+        unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JInternalFrame ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    showSystemMenu                       javax.swing.plaf.basic.BasicInternalFrameUI$1
+
+
+#---- javax.swing.JLabel ----
+
+
+
+
+#---- javax.swing.JList ----
+
+33      javax.swing.plaf.basic.LazyActionMap [UI]
+    addToSelection                       javax.swing.plaf.basic.BasicListUI$Actions
+    clearSelection                       javax.swing.plaf.basic.BasicListUI$Actions
+    copy                                 javax.swing.TransferHandler$TransferAction
+    cut                                  javax.swing.TransferHandler$TransferAction
+    extendTo                             javax.swing.plaf.basic.BasicListUI$Actions
+    moveSelectionTo                      javax.swing.plaf.basic.BasicListUI$Actions
+    paste                                javax.swing.TransferHandler$TransferAction
+    scrollDown                           javax.swing.plaf.basic.BasicListUI$Actions
+    scrollDownChangeLead                 javax.swing.plaf.basic.BasicListUI$Actions
+    scrollDownExtendSelection            javax.swing.plaf.basic.BasicListUI$Actions
+    scrollUp                             javax.swing.plaf.basic.BasicListUI$Actions
+    scrollUpChangeLead                   javax.swing.plaf.basic.BasicListUI$Actions
+    scrollUpExtendSelection              javax.swing.plaf.basic.BasicListUI$Actions
+    selectAll                            javax.swing.plaf.basic.BasicListUI$Actions
+    selectFirstRow                       javax.swing.plaf.basic.BasicListUI$Actions
+    selectFirstRowChangeLead             javax.swing.plaf.basic.BasicListUI$Actions
+    selectFirstRowExtendSelection        javax.swing.plaf.basic.BasicListUI$Actions
+    selectLastRow                        javax.swing.plaf.basic.BasicListUI$Actions
+    selectLastRowChangeLead              javax.swing.plaf.basic.BasicListUI$Actions
+    selectLastRowExtendSelection         javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextColumn                     javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextColumnChangeLead           javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextColumnExtendSelection      javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextRow                        javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextRowChangeLead              javax.swing.plaf.basic.BasicListUI$Actions
+    selectNextRowExtendSelection         javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousColumn                 javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousColumnChangeLead       javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousColumnExtendSelection  javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousRow                    javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousRowChangeLead          javax.swing.plaf.basic.BasicListUI$Actions
+    selectPreviousRowExtendSelection     javax.swing.plaf.basic.BasicListUI$Actions
+    toggleAndAnchor                      javax.swing.plaf.basic.BasicListUI$Actions
+
+
+#---- javax.swing.JMenu ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    doClick                              javax.swing.plaf.basic.BasicMenuItemUI$Actions
+    selectMenu                           javax.swing.plaf.basic.BasicMenuUI$Actions
+
+
+#---- javax.swing.JMenuBar ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    takeFocus                            javax.swing.plaf.basic.BasicMenuBarUI$Actions
+
+
+#---- javax.swing.JMenuItem ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    doClick                              javax.swing.plaf.basic.BasicMenuItemUI$Actions
+
+
+#---- javax.swing.JOptionPane ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    close                                javax.swing.plaf.basic.BasicOptionPaneUI$Actions
+
+
+#---- javax.swing.JPanel ----
+
+
+
+
+#---- javax.swing.JPasswordField ----
+
+3       javax.swing.plaf.ActionMapUIResource [UI]
+    insert-break                         javax.swing.plaf.basic.BasicTextUI$TextActionWrapper
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+    select-word                          javax.swing.text.DefaultEditorKit$SelectLineAction (select-line)
+
+    59      javax.swing.plaf.ActionMapUIResource [UI]
+        beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+        caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+        caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+        caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+        caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+        caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+        caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+        caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+        caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+        caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+        caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        copy                                 javax.swing.TransferHandler$TransferAction
+        copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+        cut                                  javax.swing.TransferHandler$TransferAction
+        cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+        default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+        delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+        delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+        delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+        delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+        dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+        insert-break                         javax.swing.text.DefaultEditorKit$InsertBreakAction
+        insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+        insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+        notify-field-accept                  javax.swing.JTextField$NotifyAction
+        page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+        page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+        paste                                javax.swing.TransferHandler$TransferAction
+        paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+        select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+        select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+        select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+        select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+        selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+        selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+        selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+        selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+        selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+        selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+        selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+        selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+        selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+        selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+        set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+        toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+        unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JPopupMenu ----
+
+
+
+
+#---- javax.swing.JProgressBar ----
+
+
+
+
+#---- javax.swing.JRadioButton ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    pressed                              javax.swing.plaf.basic.BasicButtonListener$Actions
+    released                             javax.swing.plaf.basic.BasicButtonListener$Actions
+
+
+#---- javax.swing.JRadioButtonMenuItem ----
+
+1       javax.swing.plaf.basic.LazyActionMap [UI]
+    doClick                              javax.swing.plaf.basic.BasicMenuItemUI$Actions
+
+
+#---- javax.swing.JRootPane ----
+
+3       javax.swing.plaf.basic.LazyActionMap [UI]
+    postPopup                            javax.swing.plaf.basic.BasicRootPaneUI$Actions
+    press                                javax.swing.plaf.basic.BasicRootPaneUI$Actions
+    release                              javax.swing.plaf.basic.BasicRootPaneUI$Actions
+
+
+#---- javax.swing.JScrollBar ----
+
+6       javax.swing.plaf.basic.LazyActionMap [UI]
+    maxScroll                            javax.swing.plaf.basic.BasicScrollBarUI$Actions
+    minScroll                            javax.swing.plaf.basic.BasicScrollBarUI$Actions
+    negativeBlockIncrement               javax.swing.plaf.basic.BasicScrollBarUI$Actions
+    negativeUnitIncrement                javax.swing.plaf.basic.BasicScrollBarUI$Actions
+    positiveBlockIncrement               javax.swing.plaf.basic.BasicScrollBarUI$Actions
+    positiveUnitIncrement                javax.swing.plaf.basic.BasicScrollBarUI$Actions
+
+
+#---- javax.swing.JScrollPane ----
+
+10      javax.swing.plaf.basic.LazyActionMap [UI]
+    scrollDown                           javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    scrollEnd                            javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    scrollHome                           javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    scrollLeft                           javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    scrollRight                          javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    scrollUp                             javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    unitScrollDown                       javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    unitScrollLeft                       javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    unitScrollRight                      javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+    unitScrollUp                         javax.swing.plaf.basic.BasicScrollPaneUI$Actions
+
+
+#---- javax.swing.JSeparator ----
+
+
+
+
+#---- javax.swing.JSlider ----
+
+6       javax.swing.plaf.basic.LazyActionMap [UI]
+    maxScroll                            javax.swing.plaf.basic.BasicSliderUI$Actions
+    minScroll                            javax.swing.plaf.basic.BasicSliderUI$Actions
+    negativeBlockIncrement               javax.swing.plaf.basic.BasicSliderUI$Actions
+    negativeUnitIncrement                javax.swing.plaf.basic.BasicSliderUI$Actions
+    positiveBlockIncrement               javax.swing.plaf.basic.BasicSliderUI$Actions
+    positiveUnitIncrement                javax.swing.plaf.basic.BasicSliderUI$Actions
+
+
+#---- javax.swing.JSpinner ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    decrement                            javax.swing.plaf.basic.BasicSpinnerUI$ArrowButtonHandler
+    increment                            javax.swing.plaf.basic.BasicSpinnerUI$ArrowButtonHandler
+
+
+#---- javax.swing.JSplitPane ----
+
+8       javax.swing.plaf.basic.LazyActionMap [UI]
+    focusOutBackward                     javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    focusOutForward                      javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    negativeIncrement                    javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    positiveIncrement                    javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    selectMax                            javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    selectMin                            javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    startResize                          javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+    toggleFocus                          javax.swing.plaf.basic.BasicSplitPaneUI$Actions
+
+
+#---- javax.swing.JTabbedPane ----
+
+14      javax.swing.plaf.basic.LazyActionMap [UI]
+    navigateDown                         javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigateLeft                         javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigateNext                         javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigatePageDown                     javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigatePageUp                       javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigatePrevious                     javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigateRight                        javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    navigateUp                           javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    requestFocus                         javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    requestFocusForVisibleComponent      javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    scrollTabsBackwardAction             javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    scrollTabsForwardAction              javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    selectTabWithFocus                   javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+    setSelectedIndex                     javax.swing.plaf.basic.BasicTabbedPaneUI$Actions
+
+
+#---- javax.swing.JTable ----
+
+44      javax.swing.plaf.basic.LazyActionMap [UI]
+    addToSelection                       javax.swing.plaf.basic.BasicTableUI$Actions
+    cancel                               javax.swing.plaf.basic.BasicTableUI$Actions
+    clearSelection                       javax.swing.plaf.basic.BasicTableUI$Actions
+    copy                                 javax.swing.TransferHandler$TransferAction
+    cut                                  javax.swing.TransferHandler$TransferAction
+    extendTo                             javax.swing.plaf.basic.BasicTableUI$Actions
+    focusHeader                          javax.swing.plaf.basic.BasicTableUI$Actions
+    moveSelectionTo                      javax.swing.plaf.basic.BasicTableUI$Actions
+    paste                                javax.swing.TransferHandler$TransferAction
+    scrollDownChangeSelection            javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollDownExtendSelection            javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollLeftChangeSelection            javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollLeftExtendSelection            javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollRightChangeSelection           javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollRightExtendSelection           javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollUpChangeSelection              javax.swing.plaf.basic.BasicTableUI$Actions
+    scrollUpExtendSelection              javax.swing.plaf.basic.BasicTableUI$Actions
+    selectAll                            javax.swing.plaf.basic.BasicTableUI$Actions
+    selectFirstColumn                    javax.swing.plaf.basic.BasicTableUI$Actions
+    selectFirstColumnExtendSelection     javax.swing.plaf.basic.BasicTableUI$Actions
+    selectFirstRow                       javax.swing.plaf.basic.BasicTableUI$Actions
+    selectFirstRowExtendSelection        javax.swing.plaf.basic.BasicTableUI$Actions
+    selectLastColumn                     javax.swing.plaf.basic.BasicTableUI$Actions
+    selectLastColumnExtendSelection      javax.swing.plaf.basic.BasicTableUI$Actions
+    selectLastRow                        javax.swing.plaf.basic.BasicTableUI$Actions
+    selectLastRowExtendSelection         javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextColumn                     javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextColumnCell                 javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextColumnChangeLead           javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextColumnExtendSelection      javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextRow                        javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextRowCell                    javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextRowChangeLead              javax.swing.plaf.basic.BasicTableUI$Actions
+    selectNextRowExtendSelection         javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousColumn                 javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousColumnCell             javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousColumnChangeLead       javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousColumnExtendSelection  javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousRow                    javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousRowCell                javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousRowChangeLead          javax.swing.plaf.basic.BasicTableUI$Actions
+    selectPreviousRowExtendSelection     javax.swing.plaf.basic.BasicTableUI$Actions
+    startEditing                         javax.swing.plaf.basic.BasicTableUI$Actions
+    toggleAndAnchor                      javax.swing.plaf.basic.BasicTableUI$Actions
+
+
+#---- javax.swing.table.JTableHeader ----
+
+8       javax.swing.plaf.basic.LazyActionMap [UI]
+    focusTable                           javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    moveColumnLeft                       javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    moveColumnRight                      javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    resizeLeft                           javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    resizeRight                          javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    selectColumnToLeft                   javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    selectColumnToRight                  javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+    toggleSortOrder                      javax.swing.plaf.basic.BasicTableHeaderUI$Actions
+
+
+#---- javax.swing.JTextArea ----
+
+2       javax.swing.plaf.ActionMapUIResource [UI]
+    insert-break                         javax.swing.plaf.basic.BasicTextUI$TextActionWrapper
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+
+    58      javax.swing.plaf.ActionMapUIResource [UI]
+        beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+        caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+        caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+        caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+        caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+        caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+        caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+        caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+        caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+        caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+        caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        copy                                 javax.swing.TransferHandler$TransferAction
+        copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+        cut                                  javax.swing.TransferHandler$TransferAction
+        cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+        default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+        delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+        delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+        delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+        delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+        dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+        insert-break                         javax.swing.text.DefaultEditorKit$InsertBreakAction
+        insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+        insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+        page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+        page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+        paste                                javax.swing.TransferHandler$TransferAction
+        paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+        select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+        select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+        select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+        select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+        selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+        selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+        selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+        selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+        selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+        selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+        selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+        selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+        selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+        selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+        set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+        toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+        unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JTextField ----
+
+2       javax.swing.plaf.ActionMapUIResource [UI]
+    insert-break                         javax.swing.plaf.basic.BasicTextUI$TextActionWrapper
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+
+    59      javax.swing.plaf.ActionMapUIResource [UI]
+        beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+        caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+        caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+        caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+        caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+        caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+        caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+        caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+        caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+        caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+        caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        copy                                 javax.swing.TransferHandler$TransferAction
+        copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+        cut                                  javax.swing.TransferHandler$TransferAction
+        cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+        default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+        delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+        delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+        delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+        delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+        dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+        insert-break                         javax.swing.text.DefaultEditorKit$InsertBreakAction
+        insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+        insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+        notify-field-accept                  javax.swing.JTextField$NotifyAction
+        page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+        page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+        paste                                javax.swing.TransferHandler$TransferAction
+        paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+        select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+        select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+        select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+        select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+        selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+        selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+        selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+        selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+        selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+        selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+        selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+        selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+        selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+        selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+        selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+        selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+        selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+        set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+        set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+        toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+        unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JTextPane ----
+
+77      javax.swing.plaf.ActionMapUIResource [UI]
+    beep                                 javax.swing.text.DefaultEditorKit$BeepAction
+    caret-backward                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-begin                          javax.swing.text.DefaultEditorKit$BeginAction
+    caret-begin-line                     javax.swing.text.DefaultEditorKit$BeginLineAction
+    caret-begin-paragraph                javax.swing.text.DefaultEditorKit$BeginParagraphAction
+    caret-begin-word                     javax.swing.text.DefaultEditorKit$BeginWordAction
+    caret-down                           javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-end                            javax.swing.text.DefaultEditorKit$EndAction
+    caret-end-line                       javax.swing.text.DefaultEditorKit$EndLineAction
+    caret-end-paragraph                  javax.swing.text.DefaultEditorKit$EndParagraphAction
+    caret-end-word                       javax.swing.text.DefaultEditorKit$EndWordAction
+    caret-forward                        javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    caret-next-word                      javax.swing.text.DefaultEditorKit$NextWordAction
+    caret-previous-word                  javax.swing.text.DefaultEditorKit$PreviousWordAction
+    caret-up                             javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    center-justify                       javax.swing.text.StyledEditorKit$AlignmentAction
+    copy                                 javax.swing.TransferHandler$TransferAction
+    copy-to-clipboard                    javax.swing.text.DefaultEditorKit$CopyAction
+    cut                                  javax.swing.TransferHandler$TransferAction
+    cut-to-clipboard                     javax.swing.text.DefaultEditorKit$CutAction
+    default-typed                        javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction
+    delete-next                          javax.swing.text.DefaultEditorKit$DeleteNextCharAction
+    delete-next-word                     javax.swing.text.DefaultEditorKit$DeleteWordAction
+    delete-previous                      javax.swing.text.DefaultEditorKit$DeletePrevCharAction
+    delete-previous-word                 javax.swing.text.DefaultEditorKit$DeleteWordAction
+    dump-model                           javax.swing.text.DefaultEditorKit$DumpModelAction
+    font-bold                            javax.swing.text.StyledEditorKit$BoldAction
+    font-family-Monospaced               javax.swing.text.StyledEditorKit$FontFamilyAction
+    font-family-SansSerif                javax.swing.text.StyledEditorKit$FontFamilyAction
+    font-family-Serif                    javax.swing.text.StyledEditorKit$FontFamilyAction
+    font-italic                          javax.swing.text.StyledEditorKit$ItalicAction
+    font-size-10                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-12                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-14                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-16                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-18                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-24                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-36                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-48                         javax.swing.text.StyledEditorKit$FontSizeAction
+    font-size-8                          javax.swing.text.StyledEditorKit$FontSizeAction
+    font-underline                       javax.swing.text.StyledEditorKit$UnderlineAction
+    insert-break                         javax.swing.text.StyledEditorKit$StyledInsertBreakAction
+    insert-content                       javax.swing.text.DefaultEditorKit$InsertContentAction
+    insert-tab                           javax.swing.text.DefaultEditorKit$InsertTabAction
+    left-justify                         javax.swing.text.StyledEditorKit$AlignmentAction
+    page-down                            javax.swing.text.DefaultEditorKit$VerticalPageAction
+    page-up                              javax.swing.text.DefaultEditorKit$VerticalPageAction
+    paste                                javax.swing.TransferHandler$TransferAction
+    paste-from-clipboard                 javax.swing.text.DefaultEditorKit$PasteAction
+    requestFocus                         javax.swing.plaf.basic.BasicTextUI$FocusAction (null)
+    right-justify                        javax.swing.text.StyledEditorKit$AlignmentAction
+    select-all                           javax.swing.text.DefaultEditorKit$SelectAllAction
+    select-line                          javax.swing.text.DefaultEditorKit$SelectLineAction
+    select-paragraph                     javax.swing.text.DefaultEditorKit$SelectParagraphAction
+    select-word                          javax.swing.text.DefaultEditorKit$SelectWordAction
+    selection-backward                   javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-begin                      javax.swing.text.DefaultEditorKit$BeginAction
+    selection-begin-line                 javax.swing.text.DefaultEditorKit$BeginLineAction
+    selection-begin-paragraph            javax.swing.text.DefaultEditorKit$BeginParagraphAction
+    selection-begin-word                 javax.swing.text.DefaultEditorKit$BeginWordAction
+    selection-down                       javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-end                        javax.swing.text.DefaultEditorKit$EndAction
+    selection-end-line                   javax.swing.text.DefaultEditorKit$EndLineAction
+    selection-end-paragraph              javax.swing.text.DefaultEditorKit$EndParagraphAction
+    selection-end-word                   javax.swing.text.DefaultEditorKit$EndWordAction
+    selection-forward                    javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    selection-next-word                  javax.swing.text.DefaultEditorKit$NextWordAction
+    selection-page-down                  javax.swing.text.DefaultEditorKit$VerticalPageAction
+    selection-page-left                  javax.swing.text.DefaultEditorKit$PageAction
+    selection-page-right                 javax.swing.text.DefaultEditorKit$PageAction
+    selection-page-up                    javax.swing.text.DefaultEditorKit$VerticalPageAction
+    selection-previous-word              javax.swing.text.DefaultEditorKit$PreviousWordAction
+    selection-up                         javax.swing.text.DefaultEditorKit$NextVisualPositionAction
+    set-read-only                        javax.swing.text.DefaultEditorKit$ReadOnlyAction
+    set-writable                         javax.swing.text.DefaultEditorKit$WritableAction
+    toggle-componentOrientation          javax.swing.text.DefaultEditorKit$ToggleComponentOrientationAction
+    unselect                             javax.swing.text.DefaultEditorKit$UnselectAction
+
+
+#---- javax.swing.JToggleButton ----
+
+2       javax.swing.plaf.basic.LazyActionMap [UI]
+    pressed                              javax.swing.plaf.basic.BasicButtonListener$Actions
+    released                             javax.swing.plaf.basic.BasicButtonListener$Actions
+
+
+#---- javax.swing.JToolBar ----
+
+4       javax.swing.plaf.basic.LazyActionMap [UI]
+    navigateDown                         javax.swing.plaf.basic.BasicToolBarUI$Actions
+    navigateLeft                         javax.swing.plaf.basic.BasicToolBarUI$Actions
+    navigateRight                        javax.swing.plaf.basic.BasicToolBarUI$Actions
+    navigateUp                           javax.swing.plaf.basic.BasicToolBarUI$Actions
+
+
+#---- javax.swing.JToolTip ----
+
+
+
+
+#---- javax.swing.JTree ----
+
+43      javax.swing.plaf.basic.LazyActionMap [UI]
+    addToSelection                       javax.swing.plaf.basic.BasicTreeUI$Actions
+    cancel                               javax.swing.plaf.basic.BasicTreeUI$Actions
+    clearSelection                       javax.swing.plaf.basic.BasicTreeUI$Actions
+    collapse                             javax.swing.plaf.basic.BasicTreeUI$Actions
+    copy                                 javax.swing.TransferHandler$TransferAction
+    cut                                  javax.swing.TransferHandler$TransferAction
+    expand                               javax.swing.plaf.basic.BasicTreeUI$Actions
+    extendTo                             javax.swing.plaf.basic.BasicTreeUI$Actions
+    moveSelectionTo                      javax.swing.plaf.basic.BasicTreeUI$Actions
+    moveSelectionToParent                javax.swing.plaf.basic.BasicTreeUI$Actions
+    paste                                javax.swing.TransferHandler$TransferAction
+    scrollDownChangeLead                 javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollDownChangeSelection            javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollDownExtendSelection            javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollLeft                           javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollLeftChangeLead                 javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollLeftExtendSelection            javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollRight                          javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollRightChangeLead                javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollRightExtendSelection           javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollUpChangeLead                   javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollUpChangeSelection              javax.swing.plaf.basic.BasicTreeUI$Actions
+    scrollUpExtendSelection              javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectAll                            javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectChild                          javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectChildChangeLead                javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectFirst                          javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectFirstChangeLead                javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectFirstExtendSelection           javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectLast                           javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectLastChangeLead                 javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectLastExtendSelection            javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectNext                           javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectNextChangeLead                 javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectNextExtendSelection            javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectParent                         javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectParentChangeLead               javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectPrevious                       javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectPreviousChangeLead             javax.swing.plaf.basic.BasicTreeUI$Actions
+    selectPreviousExtendSelection        javax.swing.plaf.basic.BasicTreeUI$Actions
+    startEditing                         javax.swing.plaf.basic.BasicTreeUI$Actions
+    toggle                               javax.swing.plaf.basic.BasicTreeUI$Actions
+    toggleAndAnchor                      javax.swing.plaf.basic.BasicTreeUI$Actions
+
+
+#---- javax.swing.JViewport ----
+

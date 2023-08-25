@@ -46,19 +46,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.function.Predicate;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
-import javax.swing.LookAndFeel;
-import javax.swing.UIDefaults;
+import javax.swing.*;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
-import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -66,6 +56,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
+import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.testing.FlatTestLaf;
@@ -193,8 +184,10 @@ public class UIDefaultsDump
 
 		dump( dir, "", lookAndFeel, defaults, key -> !key.contains( "InputMap" ) );
 
-		if( lookAndFeel.getClass() == FlatLightLaf.class || !(lookAndFeel instanceof FlatLaf) )
+		if( lookAndFeel.getClass() == FlatLightLaf.class || !(lookAndFeel instanceof FlatLaf) ) {
 			dump( dir, "_InputMap", lookAndFeel, defaults, key -> key.contains( "InputMap" ) );
+			dumpActionMaps( dir, "_ActionMap", lookAndFeel, defaults );
+		}
 	}
 
 	private static void dump( File dir, String nameSuffix,
@@ -251,6 +244,33 @@ public class UIDefaultsDump
 			new FileOutputStream( file ), StandardCharsets.UTF_8 ) )
 		{
 			fileWriter.write( content );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+	}
+
+	private static void dumpActionMaps( File dir, String nameSuffix,
+		LookAndFeel lookAndFeel, UIDefaults defaults )
+	{
+		// dump to string
+		StringWriter stringWriter = new StringWriter( 100000 );
+		new UIDefaultsDump( lookAndFeel, defaults ).dumpActionMaps( new PrintWriter( stringWriter ) );
+
+		String name = lookAndFeel instanceof MyBasicLookAndFeel
+			? BasicLookAndFeel.class.getSimpleName()
+			: lookAndFeel.getClass().getSimpleName();
+		String javaVersion = System.getProperty( "java.version" );
+		if( javaVersion.startsWith( "1.8.0_" ) && lookAndFeel instanceof FlatLaf )
+			javaVersion = "1.8.0";
+		File file = new File( dir, name + nameSuffix + "_"
+			+ javaVersion + ".txt" );
+
+		// write to file
+		file.getParentFile().mkdirs();
+		try( Writer fileWriter = new OutputStreamWriter(
+			new FileOutputStream( file ), StandardCharsets.UTF_8 ) )
+		{
+			fileWriter.write( stringWriter.toString().replace( "\r", "" ) );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
@@ -373,7 +393,7 @@ public class UIDefaultsDump
 		dumpHSL = lookAndFeel instanceof FlatLaf;
 	}
 
-	private void dump( PrintWriter out, Predicate<String> keyFilter ) {
+	private void dumpHeader( PrintWriter out ) {
 		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
 			? BasicLookAndFeel.class
 			: lookAndFeel.getClass();
@@ -382,6 +402,10 @@ public class UIDefaultsDump
 		out.printf( "Name   %s%n", lookAndFeel.getName() );
 		out.printf( "Java   %s%n", System.getProperty( "java.version" ) );
 		out.printf( "OS     %s%n", System.getProperty( "os.name" ) );
+	}
+
+	private void dump( PrintWriter out, Predicate<String> keyFilter ) {
+		dumpHeader( out );
 
 		defaults.entrySet().stream()
 			.sorted( (key1, key2) -> {
@@ -405,6 +429,59 @@ public class UIDefaultsDump
 				dumpValue( out, strKey, value );
 				out.println();
 			} );
+	}
+
+	private void dumpActionMaps( PrintWriter out ) {
+		dumpHeader( out );
+
+		dumpActionMap( out, new JButton() );
+		dumpActionMap( out, new JCheckBox() );
+		dumpActionMap( out, new JCheckBoxMenuItem() );
+		dumpActionMap( out, new JColorChooser() );
+		dumpActionMap( out, new JComboBox<>() );
+		dumpActionMap( out, new JDesktopPane() );
+		dumpActionMap( out, new JEditorPane() );
+		dumpActionMap( out, new JFileChooser() );
+		dumpActionMap( out, new JFormattedTextField() );
+		dumpActionMap( out, new JInternalFrame() );
+		dumpActionMap( out, new JLabel() );
+		dumpActionMap( out, new JList<>() );
+		dumpActionMap( out, new JMenu() );
+		dumpActionMap( out, new JMenuBar() );
+		dumpActionMap( out, new JMenuItem() );
+		dumpActionMap( out, new JOptionPane() );
+		dumpActionMap( out, new JPanel() );
+		dumpActionMap( out, new JPasswordField() );
+		dumpActionMap( out, new JPopupMenu() );
+		dumpActionMap( out, new JProgressBar() );
+		dumpActionMap( out, new JRadioButton() );
+		dumpActionMap( out, new JRadioButtonMenuItem() );
+		dumpActionMap( out, new JRootPane() );
+		dumpActionMap( out, new JScrollBar() );
+		dumpActionMap( out, new JScrollPane() );
+		dumpActionMap( out, new JSeparator() );
+		dumpActionMap( out, new JSlider() );
+		dumpActionMap( out, new JSpinner() );
+		dumpActionMap( out, new JSplitPane() );
+		dumpActionMap( out, new JTabbedPane() );
+		dumpActionMap( out, new JTable() );
+		dumpActionMap( out, new JTableHeader() );
+		dumpActionMap( out, new JTextArea() );
+		dumpActionMap( out, new JTextField() );
+		dumpActionMap( out, new JTextPane() );
+		dumpActionMap( out, new JToggleButton() );
+		dumpActionMap( out, new JToolBar() );
+		dumpActionMap( out, new JToolTip() );
+		dumpActionMap( out, new JTree() );
+		dumpActionMap( out, new JViewport() );
+	}
+
+	private void dumpActionMap( PrintWriter out, JComponent c ) {
+		out.printf( "%n%n%n#---- %s ----%n%n", c.getClass().getName() );
+
+		ActionMap actionMap = SwingUtilities.getUIActionMap( c );
+		if( actionMap != null )
+			dumpActionMap( out, actionMap, null );
 	}
 
 	private static String keyPrefix( String key ) {
@@ -651,8 +728,38 @@ public class UIDefaultsDump
 		}
 
 		InputMap parent = inputMap.getParent();
-		if( parent != null )
+		if( parent != null ) {
+			out.printf( "%n%n%s", indent );
 			dumpInputMap( out, parent, indent + "    " );
+		}
+	}
+
+	private void dumpActionMap( PrintWriter out, ActionMap actionMap, String indent ) {
+		if( indent == null )
+			indent = "    ";
+
+		out.printf( "%-2d      %s", actionMap.size(), dumpClass( actionMap ) );
+
+		Object[] keys = actionMap.keys();
+		if( keys != null ) {
+			Arrays.sort( keys, (key1, key2) -> {
+				return String.valueOf( key1 ).compareTo( String.valueOf( key2 ) );
+			} );
+			for( Object key : keys ) {
+				Action action = actionMap.get( key );
+				out.printf( "%n%s%-35s  %s", indent, key, action.getClass().getName() );
+
+				Object name = action.getValue( Action.NAME );
+				if( !Objects.equals( name, key ) )
+					out.printf( " (%s)", name );
+			}
+		}
+
+		ActionMap parent = actionMap.getParent();
+		if( parent != null ) {
+			out.printf( "%n%n%s", indent );
+			dumpActionMap( out, parent, indent + "    " );
+		}
 	}
 
 	private void dumpLazyValue( PrintWriter out, LazyValue value ) {
