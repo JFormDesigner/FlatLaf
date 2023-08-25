@@ -144,8 +144,7 @@ public class FlatScrollPaneUI
 				scrollpane.isWheelScrollingEnabled() )
 			{
 				if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-					e.getPreciseWheelRotation() != 0 &&
-					e.getPreciseWheelRotation() != e.getWheelRotation() )
+					isPreciseWheelEvent( e ) )
 				{
 					// precise scrolling
 					mouseWheelMovedPrecise( e );
@@ -177,6 +176,30 @@ public class FlatScrollPaneUI
 		// applications to turn smooth scrolling on or off at any time
 		// (e.g. in application options dialog).
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
+	private long lastPreciseWheelWhen;
+
+	private boolean isPreciseWheelEvent( MouseWheelEvent e ) {
+		double preciseWheelRotation = e.getPreciseWheelRotation();
+		if( preciseWheelRotation != 0 && preciseWheelRotation != e.getWheelRotation() ) {
+			// precise wheel event
+			lastPreciseWheelWhen = e.getWhen();
+			return true;
+		}
+
+		// If a non-precise wheel event occurs shortly after a precise wheel event,
+		// then it is probably still a precise wheel but the precise value
+		// is by chance an integer value (e.g. 1.0 or 2.0).
+		// Not handling this special case, would start an animation for smooth scrolling,
+		// which would be interrupted soon when the next precise wheel event occurs.
+		// This would result in jittery scrolling. E.g. on a MacBook using Trackpad or Magic Mouse.
+		if( e.getWhen() - lastPreciseWheelWhen < 1000 )
+			return true;
+
+		// non-precise wheel event
+		lastPreciseWheelWhen = 0;
+		return false;
 	}
 
 	private void mouseWheelMovedPrecise( MouseWheelEvent e ) {
