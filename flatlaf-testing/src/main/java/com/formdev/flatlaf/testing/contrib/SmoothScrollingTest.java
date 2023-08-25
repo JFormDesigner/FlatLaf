@@ -95,7 +95,7 @@ public class SmoothScrollingTest {
 				titles[j * 3 + 1] = "Column" + j * 3 + 2;
 				titles[j * 3 + 2] = "Column" + j * 3 + 3;
 				for(int i=0; i<data.length; i++) {
-					data[i][j * 3] = (prefixes[i % prefixes.length]) + "Cell " + (i + 1) + "/" + (j + 1);
+					data[i][j * 3] = prefixes[i % prefixes.length] + "Cell " + (i + 1) + "/" + (j + 1);
 					data[i][j * 3 + 1] = "Cell " + (i + 1) + "/" + (j + 2);
 					data[i][j * 3 + 2] = Boolean.valueOf(i%5 == 0);
 				}
