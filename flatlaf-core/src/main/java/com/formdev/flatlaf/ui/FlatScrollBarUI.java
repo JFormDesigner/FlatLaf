@@ -521,22 +521,24 @@ public class FlatScrollBarUI
 	}
 
 	public void setValueAnimated( int initialValue, int value ) {
+		if( useValueIsAdjusting )
+			scrollbar.setValueIsAdjusting( true );
+
+		// (always) set scrollbar value to initial value
+		scrollbar.setValue( initialValue );
+
 		// do some check if animation already running
 		if( animator != null && animator.isRunning() && targetValue != Integer.MIN_VALUE ) {
-			// ignore requests if animation still running and scroll direction is the same
-			// and new value is within currently running animation
-			// (this may occur when repeat-scrolling via keyboard)
+			// Ignore requests if animation still running and scroll direction is the same
+			// and new value is within currently running animation.
+			// Without this check, repeating-scrolling via keyboard would become
+			// very slow when reaching the top/bottom/left/right of the viewport,
+			// because it would start a new 200ms animation to scroll a few pixels.
 			if( value == targetValue ||
 				(value > startValue && value < targetValue) || // scroll down/right
 				(value < startValue && value > targetValue) )  // scroll up/left
 			  return;
 		}
-
-		if( useValueIsAdjusting )
-			scrollbar.setValueIsAdjusting( true );
-
-		// set scrollbar value to initial value
-		scrollbar.setValue( initialValue );
 
 		startValue = initialValue;
 		targetValue = value;

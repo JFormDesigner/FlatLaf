@@ -561,21 +561,16 @@ public class FlatScrollPaneUI
 	 */
 	static void runWithoutBlitting( Container scrollPane, Runnable r ) {
 		// prevent the viewport to immediately repaint using blitting
-		JViewport viewport = null;
-		int oldScrollMode = 0;
-		if( scrollPane instanceof JScrollPane ) {
-			viewport = ((JScrollPane) scrollPane).getViewport();
-			if( viewport != null ) {
-				oldScrollMode = viewport.getScrollMode();
-				viewport.setScrollMode( JViewport.BACKINGSTORE_SCROLL_MODE );
-			}
-		}
+		JViewport viewport = (scrollPane instanceof JScrollPane) ? ((JScrollPane)scrollPane).getViewport() : null;
+		boolean isBlitScrollMode = (viewport != null) ? viewport.getScrollMode() == JViewport.BLIT_SCROLL_MODE : false;
+		if( isBlitScrollMode )
+			viewport.setScrollMode( JViewport.SIMPLE_SCROLL_MODE );
 
 		try {
 			r.run();
 		} finally {
-			if( viewport != null )
-				viewport.setScrollMode( oldScrollMode );
+			if( isBlitScrollMode )
+				viewport.setScrollMode( JViewport.BLIT_SCROLL_MODE );
 		}
 	}
 
