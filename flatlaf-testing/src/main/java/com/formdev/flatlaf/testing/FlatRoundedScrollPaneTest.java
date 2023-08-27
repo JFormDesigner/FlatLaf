@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -212,6 +214,19 @@ public class FlatRoundedScrollPaneTest
 			: "?" );
 	}
 
+	private void viewportBorderChanged() {
+		Border viewportBorder = viewportBorderCheckBox.isSelected()
+			? new CompoundBorder(
+				new MatteBorder( 1, 1, 0, 0, Color.red ),
+				new MatteBorder( 0, 0, 1, 1, Color.blue ) )
+			: null;
+		for( JScrollPane scrollPane : allJScrollPanes ) {
+			scrollPane.setViewportBorder( viewportBorder );
+			scrollPane.revalidate();
+			scrollPane.repaint();
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		splitPane2 = new JSplitPane();
@@ -247,6 +262,7 @@ public class FlatRoundedScrollPaneTest
 		cornersCheckBox = new JCheckBox();
 		columnHeaderCheckBox = new JCheckBox();
 		horizontalScrollBarCheckBox = new JCheckBox();
+		viewportBorderCheckBox = new JCheckBox();
 		rowHeaderCheckBox = new JCheckBox();
 		verticalScrollBarCheckBox = new JCheckBox();
 
@@ -437,6 +453,11 @@ public class FlatRoundedScrollPaneTest
 			horizontalScrollBarCheckBox.addActionListener(e -> horizontalScrollBarChanged());
 			panel3.add(horizontalScrollBarCheckBox, "cell 4 0");
 
+			//---- viewportBorderCheckBox ----
+			viewportBorderCheckBox.setText("Viewport border");
+			viewportBorderCheckBox.addActionListener(e -> viewportBorderChanged());
+			panel3.add(viewportBorderCheckBox, "cell 2 1");
+
 			//---- rowHeaderCheckBox ----
 			rowHeaderCheckBox.setText("Row Header");
 			rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
@@ -485,6 +506,7 @@ public class FlatRoundedScrollPaneTest
 	private JCheckBox cornersCheckBox;
 	private JCheckBox columnHeaderCheckBox;
 	private JCheckBox horizontalScrollBarCheckBox;
+	private JCheckBox viewportBorderCheckBox;
 	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox verticalScrollBarCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.1.0.298" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -215,6 +215,13 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "horizontalScrollBarChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 4 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "viewportBorderCheckBox"
+					"text": "Viewport border"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "viewportBorderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "rowHeaderCheckBox"

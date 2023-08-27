@@ -454,6 +454,26 @@ public class FlatScrollPaneUI
 		paint( g, c );
 	}
 
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		Border viewportBorder = scrollpane.getViewportBorder();
+		if( viewportBorder != null ) {
+			Rectangle r = scrollpane.getViewportBorderBounds();
+			int padding = getBorderLeftRightPadding( scrollpane );
+			JScrollBar vsb = scrollpane.getVerticalScrollBar();
+			if( padding > 0 &&
+				vsb != null && vsb.isVisible() &&
+				scrollpane.getLayout() instanceof FlatScrollPaneLayout &&
+				((FlatScrollPaneLayout)scrollpane.getLayout()).canIncreaseViewportWidth( scrollpane ) )
+			{
+				boolean ltr = scrollpane.getComponentOrientation().isLeftToRight();
+				int extraWidth = Math.min( padding, vsb.getWidth() );
+				viewportBorder.paintBorder( scrollpane, g, r.x - (ltr ? 0 : extraWidth), r.y, r.width + extraWidth, r.height );
+			} else
+				viewportBorder.paintBorder( scrollpane, g, r.x, r.y, r.width, r.height );
+		}
+	}
+
 	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JScrollPane scrollPane ) {
 		Component view = getView( scrollPane );
@@ -485,6 +505,13 @@ public class FlatScrollPaneUI
 		Border border = scrollPane.getBorder();
 		return (border instanceof FlatScrollPaneBorder)
 			? UIScale.scale( (float) ((FlatScrollPaneBorder)border).getArc( scrollPane ) )
+			: 0;
+	}
+
+	private static int getBorderLeftRightPadding( JScrollPane scrollPane ) {
+		Border border = scrollPane.getBorder();
+		return (border instanceof FlatScrollPaneBorder)
+			? ((FlatScrollPaneBorder)border).getLeftRightPadding( scrollPane )
 			: 0;
 	}
 
@@ -533,23 +560,46 @@ public class FlatScrollPaneUI
 			super.layoutContainer( parent );
 
 			JScrollPane scrollPane = (JScrollPane) parent;
-			Border border = scrollPane.getBorder();
-			int padding;
-			if( border instanceof FlatScrollPaneBorder &&
-				(padding = ((FlatScrollPaneBorder)border).getLeftRightPadding( scrollPane )) > 0 )
-			{
-				JScrollBar vsb = getVerticalScrollBar();
-				if( vsb != null && vsb.isVisible() ) {
-					// move vertical scrollbar to trailing edge
-					Insets insets = scrollPane.getInsets();
-					Rectangle r = vsb.getBounds();
-					int y = Math.max( r.y, insets.top + padding );
-					int y2 = Math.min( r.y + r.height, scrollPane.getHeight() - insets.bottom - padding );
-					boolean ltr = scrollPane.getComponentOrientation().isLeftToRight();
+			int padding = getBorderLeftRightPadding( scrollPane );
+			if( padding > 0 && vsb != null && vsb.isVisible() ) {
+				// move vertical scrollbar to trailing edge
+				Insets insets = scrollPane.getInsets();
+				Rectangle r = vsb.getBounds();
+				int y = Math.max( r.y, insets.top + padding );
+				int y2 = Math.min( r.y + r.height, scrollPane.getHeight() - insets.bottom - padding );
+				boolean ltr = scrollPane.getComponentOrientation().isLeftToRight();
 
-					vsb.setBounds( r.x + (ltr ? padding : -padding), y, r.width, y2 - y );
+				vsb.setBounds( r.x + (ltr ? padding : -padding), y, r.width, y2 - y );
+
+				// increase width of viewport, column header and horizontal scrollbar
+				if( canIncreaseViewportWidth( scrollPane ) ) {
+					int extraWidth = Math.min( padding, vsb.getWidth() );
+					resizeViewport( viewport, extraWidth, ltr );
+					resizeViewport( colHead, extraWidth, ltr );
+					resizeViewport( hsb, extraWidth, ltr );
 				}
 			}
+		}
+
+		boolean canIncreaseViewportWidth( JScrollPane scrollPane ) {
+			return scrollPane.getComponentOrientation().isLeftToRight()
+				? !isCornerVisible( upperRight ) && !isCornerVisible( lowerRight )
+				: !isCornerVisible( upperLeft ) && !isCornerVisible( lowerLeft );
+		}
+
+		private static boolean isCornerVisible( Component corner ) {
+			return corner != null &&
+				corner.getWidth() > 0 &&
+				corner.getHeight() > 0 &&
+				corner.isVisible();
+		}
+
+		private static void resizeViewport( Component c, int extraWidth, boolean ltr ) {
+			if( c == null )
+				return;
+
+			Rectangle vr = c.getBounds();
+			c.setBounds( vr.x - (ltr ? 0 : extraWidth), vr.y, vr.width + extraWidth, vr.height );
 		}
 	}
 }
