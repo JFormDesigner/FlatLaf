@@ -45,6 +45,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -480,9 +481,21 @@ debug*/
 		// compute placeholder location
 		Rectangle r = getVisibleEditorRect();
 		FontMetrics fm = c.getFontMetrics( c.getFont() );
-		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, placeholder, r.width );
-		int x = r.x + (isLeftToRight() ? 0 : r.width - fm.stringWidth( clippedPlaceholder ));
+		int x = r.x;
 		int y = r.y + fm.getAscent() + ((r.height - fm.getHeight()) / 2);
+
+		// apply horizontal alignment to x location
+		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, placeholder, r.width );
+		int stringWidth = fm.stringWidth( clippedPlaceholder );
+		int halign = (c instanceof JTextField) ? ((JTextField)c).getHorizontalAlignment() : SwingConstants.LEADING;
+		if( halign == SwingConstants.LEADING )
+			halign = isLeftToRight() ? SwingConstants.LEFT : SwingConstants.RIGHT;
+		else if( halign == SwingConstants.TRAILING )
+			halign = isLeftToRight() ? SwingConstants.RIGHT : SwingConstants.LEFT;
+		if( halign == SwingConstants.RIGHT )
+			x += r.width - stringWidth;
+		else if( halign == SwingConstants.CENTER )
+			x = Math.max( 0, x + (r.width / 2) - (stringWidth / 2) );
 
 		// paint placeholder
 		g.setColor( placeholderForeground );

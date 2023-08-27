@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][][::100][100,fill][fill]"
+			"$columnConstraints": "[][][::100][100,fill][fill][fill]"
 			"$rowConstraints": "[][][][50,fill][50,fill][50,fill][][]para[40][40][][][::14][::14][][]para[][90,fill]"
 		} ) {
 			name: "this"
@@ -243,6 +243,89 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 0 1 10,aligny top,growy 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][fill]"
+				"$rowConstraints": "[][][][][]"
+			} ) {
+				name: "panel2"
+				"border": new javax.swing.border.TitledBorder( "Placeholder" )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label7"
+					"text": "leading"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+					name: "flatTextField1"
+					"horizontalAlignment": 10
+					"placeholderText": "text"
+					"columns": 10
+					auxiliary() {
+						"horizontalAlignment.forceValue": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label8"
+					"text": "left"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+					name: "flatTextField2"
+					"horizontalAlignment": 2
+					"placeholderText": "text"
+					"columns": 10
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label9"
+					"text": "center"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+					name: "flatTextField3"
+					"horizontalAlignment": 0
+					"placeholderText": "text"
+					"columns": 10
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label10"
+					"text": "right"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+					name: "flatTextField4"
+					"horizontalAlignment": 4
+					"placeholderText": "text"
+					"columns": 10
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 3"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label11"
+					"text": "trailing"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+					name: "flatTextField5"
+					"horizontalAlignment": 11
+					"placeholderText": "text"
+					"columns": 10
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 4"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 0 1 9,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordFieldLabel"
@@ -572,7 +655,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 640, 725 )
+			"size": new java.awt.Dimension( 875, 725 )
 		} )
 		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
 			name: "popupMenu1"

@@ -27,6 +27,7 @@ import javax.swing.border.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -214,6 +215,17 @@ public class FlatTextComponentsTest
 		trailingComponentVisibleCheckBox = new JCheckBox();
 		showClearButtonCheckBox = new JCheckBox();
 		showRevealButtonCheckBox = new JCheckBox();
+		JPanel panel2 = new JPanel();
+		JLabel label7 = new JLabel();
+		FlatTextField flatTextField1 = new FlatTextField();
+		JLabel label8 = new JLabel();
+		FlatTextField flatTextField2 = new FlatTextField();
+		JLabel label9 = new JLabel();
+		FlatTextField flatTextField3 = new FlatTextField();
+		JLabel label10 = new JLabel();
+		FlatTextField flatTextField4 = new FlatTextField();
+		JLabel label11 = new JLabel();
+		FlatTextField flatTextField5 = new FlatTextField();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -273,6 +285,7 @@ public class FlatTextComponentsTest
 			"[]" +
 			"[::100]" +
 			"[100,fill]" +
+			"[fill]" +
 			"[fill]",
 			// rows
 			"[]" +
@@ -449,6 +462,73 @@ public class FlatTextComponentsTest
 			panel1.add(showRevealButtonCheckBox, "cell 0 13 2 1,alignx left,growx 0");
 		}
 		add(panel1, "cell 4 0 1 10,aligny top,growy 0");
+
+		//======== panel2 ========
+		{
+			panel2.setBorder(new TitledBorder("Placeholder"));
+			panel2.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- label7 ----
+			label7.setText("leading");
+			panel2.add(label7, "cell 0 0");
+
+			//---- flatTextField1 ----
+			flatTextField1.setHorizontalAlignment(SwingConstants.LEADING);
+			flatTextField1.setPlaceholderText("text");
+			flatTextField1.setColumns(10);
+			panel2.add(flatTextField1, "cell 1 0");
+
+			//---- label8 ----
+			label8.setText("left");
+			panel2.add(label8, "cell 0 1");
+
+			//---- flatTextField2 ----
+			flatTextField2.setHorizontalAlignment(SwingConstants.LEFT);
+			flatTextField2.setPlaceholderText("text");
+			flatTextField2.setColumns(10);
+			panel2.add(flatTextField2, "cell 1 1");
+
+			//---- label9 ----
+			label9.setText("center");
+			panel2.add(label9, "cell 0 2");
+
+			//---- flatTextField3 ----
+			flatTextField3.setHorizontalAlignment(SwingConstants.CENTER);
+			flatTextField3.setPlaceholderText("text");
+			flatTextField3.setColumns(10);
+			panel2.add(flatTextField3, "cell 1 2");
+
+			//---- label10 ----
+			label10.setText("right");
+			panel2.add(label10, "cell 0 3");
+
+			//---- flatTextField4 ----
+			flatTextField4.setHorizontalAlignment(SwingConstants.RIGHT);
+			flatTextField4.setPlaceholderText("text");
+			flatTextField4.setColumns(10);
+			panel2.add(flatTextField4, "cell 1 3");
+
+			//---- label11 ----
+			label11.setText("trailing");
+			panel2.add(label11, "cell 0 4");
+
+			//---- flatTextField5 ----
+			flatTextField5.setHorizontalAlignment(SwingConstants.TRAILING);
+			flatTextField5.setPlaceholderText("text");
+			flatTextField5.setColumns(10);
+			panel2.add(flatTextField5, "cell 1 4");
+		}
+		add(panel2, "cell 5 0 1 9,aligny top,growy 0");
 
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");

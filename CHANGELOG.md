@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - FileChooser: Fixed occasional NPE in `FlatShortcutsPanel` on Windows. (issue
   #718)
+- TextField: Fixed placeholder text painting, which did not respect horizontal
+  alignment property of `JTextField`. (issue #721)
 
 
 ## 3.2
