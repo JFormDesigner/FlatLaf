@@ -21,29 +21,16 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.MouseEvent;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.ColorFunctions;
-import com.formdev.flatlaf.util.HSLColor;
-import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -64,9 +51,6 @@ public class FlatSmoothScrollingTest
 	FlatSmoothScrollingTest() {
 		initComponents();
 
-		oneSecondWidthChanged();
-		updateChartDelayedChanged();
-
 		ToolTipManager.sharedInstance().setInitialDelay( 0 );
 		ToolTipManager.sharedInstance().setDismissDelay( Integer.MAX_VALUE );
 
@@ -77,14 +61,6 @@ public class FlatSmoothScrollingTest
 				smoothScrollingChanged();
 			},
 			KeyStroke.getKeyStroke( "alt " + (char) smoothScrollingCheckBox.getMnemonic() ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-
-		// allow clearing chart with Alt+C without moving focus to button
-		registerKeyboardAction(
-			e -> {
-				clearChart();
-			},
-			KeyStroke.getKeyStroke( "alt " + (char) clearChartButton.getMnemonic() ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 		listLabel.setIcon( new ColorIcon( Color.red.darker() ) );
@@ -115,12 +91,6 @@ public class FlatSmoothScrollingTest
 
 		customScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( customScrollPane, true, "custom vert", Color.pink ) );
 		customScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( customScrollPane, false, "custom horz", Color.pink.darker() ) );
-
-		// clear chart on startup
-		addHierarchyListener( e -> {
-			if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing() )
-				EventQueue.invokeLater( this::clearChart );
-		});
 
 		ArrayList<String> items = new ArrayList<>();
 		for( char ch = '0'; ch < 'z'; ch++ ) {
@@ -207,33 +177,6 @@ public class FlatSmoothScrollingTest
 		UIManager.put( "ScrollPane.smoothScrolling", smoothScrollingCheckBox.isSelected() );
 	}
 
-	private void oneSecondWidthChanged() {
-		int oneSecondWidth = oneSecondWidthSlider.getValue();
-		int msPerLineX =
-			oneSecondWidth <= 2000 ? 100 :
-			oneSecondWidth <= 4000 ? 50 :
-			oneSecondWidth <= 8000 ? 25 :
-			10;
-
-		lineChartPanel.setOneSecondWidth( oneSecondWidth );
-		lineChartPanel.setMsPerLineX( msPerLineX );
-		lineChartPanel.revalidate();
-		lineChartPanel.repaint();
-
-		if( xLabelText == null )
-			xLabelText = xLabel.getText();
-		xLabel.setText( MessageFormat.format( xLabelText, msPerLineX ) );
-	}
-	private String xLabelText;
-
-	private void clearChart() {
-		lineChartPanel.clear();
-	}
-
-	private void updateChartDelayedChanged() {
-		lineChartPanel.setUpdateDelayed( updateChartDelayedCheckBox.isSelected() );
-	}
-
 	private void showTableGridChanged() {
 		boolean showGrid = showTableGridCheckBox.isSelected();
 		table.setShowHorizontalLines( showGrid );
@@ -285,18 +228,7 @@ public class FlatSmoothScrollingTest
 		editorPane = new JEditorPane();
 		customScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		button1 = new JButton();
-		panel3 = new JPanel();
-		chartScrollPane = new JScrollPane();
-		lineChartPanel = new FlatSmoothScrollingTest.LineChartPanel();
-		panel4 = new JPanel();
-		xLabel = new JLabel();
-		JLabel rectsLabel = new JLabel();
-		JLabel yLabel = new JLabel();
-		JLabel dotsLabel = new JLabel();
-		JLabel oneSecondWidthLabel = new JLabel();
-		oneSecondWidthSlider = new JSlider();
-		updateChartDelayedCheckBox = new JCheckBox();
-		clearChartButton = new JButton();
+		lineChartPanel = new LineChartPanel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -305,8 +237,7 @@ public class FlatSmoothScrollingTest
 			"[200,grow,fill]",
 			// rows
 			"[]" +
-			"[grow,fill]" +
-			"[]"));
+			"[grow,fill]"));
 
 		//---- smoothScrollingCheckBox ----
 		smoothScrollingCheckBox.setText("Smooth scrolling");
@@ -451,79 +382,13 @@ public class FlatSmoothScrollingTest
 			}
 			splitPane1.setTopComponent(splitPane2);
 
-			//======== panel3 ========
-			{
-				panel3.setLayout(new MigLayout(
-					"insets 3,hidemode 3",
-					// columns
-					"[grow,fill]",
-					// rows
-					"[100:300,grow,fill]"));
-
-				//======== chartScrollPane ========
-				{
-					chartScrollPane.putClientProperty("JScrollPane.smoothScrolling", false);
-					chartScrollPane.setViewportView(lineChartPanel);
-				}
-				panel3.add(chartScrollPane, "cell 0 0");
-			}
-			splitPane1.setBottomComponent(panel3);
+			//---- lineChartPanel ----
+			lineChartPanel.setLegend1Text("Rectangles: scrollbar values (mouse hover shows stack)");
+			lineChartPanel.setLegend2Text("Dots: disabled blitting mode in JViewport");
+			lineChartPanel.setLegendYValueText("scroll bar value");
+			splitPane1.setBottomComponent(lineChartPanel);
 		}
 		add(splitPane1, "cell 0 1");
-
-		//======== panel4 ========
-		{
-			panel4.setLayout(new MigLayout(
-				"insets 0,hidemode 3,gapy 0",
-				// columns
-				"[fill]para" +
-				"[fill]",
-				// rows
-				"[]" +
-				"[]"));
-
-			//---- xLabel ----
-			xLabel.setText("X: time ({0}ms per line)");
-			panel4.add(xLabel, "cell 0 0");
-
-			//---- rectsLabel ----
-			rectsLabel.setText("Rectangles: scrollbar values (mouse hover shows stack)");
-			panel4.add(rectsLabel, "cell 1 0");
-
-			//---- yLabel ----
-			yLabel.setText("Y: scroll bar value (10% per line)");
-			panel4.add(yLabel, "cell 0 1");
-
-			//---- dotsLabel ----
-			dotsLabel.setText("Dots: disabled blitting mode in JViewport");
-			panel4.add(dotsLabel, "cell 1 1");
-		}
-		add(panel4, "cell 0 2");
-
-		//---- oneSecondWidthLabel ----
-		oneSecondWidthLabel.setText("Scale X:");
-		oneSecondWidthLabel.setDisplayedMnemonic('A');
-		oneSecondWidthLabel.setLabelFor(oneSecondWidthSlider);
-		add(oneSecondWidthLabel, "cell 0 2,alignx right,growx 0");
-
-		//---- oneSecondWidthSlider ----
-		oneSecondWidthSlider.setMinimum(1000);
-		oneSecondWidthSlider.setMaximum(10000);
-		oneSecondWidthSlider.addChangeListener(e -> oneSecondWidthChanged());
-		add(oneSecondWidthSlider, "cell 0 2,alignx right,growx 0,wmax 100");
-
-		//---- updateChartDelayedCheckBox ----
-		updateChartDelayedCheckBox.setText("Update chart delayed");
-		updateChartDelayedCheckBox.setMnemonic('P');
-		updateChartDelayedCheckBox.setSelected(true);
-		updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
-		add(updateChartDelayedCheckBox, "cell 0 2,alignx right,growx 0");
-
-		//---- clearChartButton ----
-		clearChartButton.setText("Clear Chart");
-		clearChartButton.setMnemonic('C');
-		clearChartButton.addActionListener(e -> clearChart());
-		add(clearChartButton, "cell 0 2,alignx right,growx 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -556,14 +421,7 @@ public class FlatSmoothScrollingTest
 	private JEditorPane editorPane;
 	private FlatSmoothScrollingTest.DebugScrollPane customScrollPane;
 	private JButton button1;
-	private JPanel panel3;
-	private JScrollPane chartScrollPane;
-	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
-	private JPanel panel4;
-	private JLabel xLabel;
-	private JSlider oneSecondWidthSlider;
-	private JCheckBox updateChartDelayedCheckBox;
-	private JButton clearChartButton;
+	private LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class ScrollBarChangeHandler ---------------------------------------
@@ -595,8 +453,9 @@ public class FlatSmoothScrollingTest
 					double value = vertical
 						? ((double) viewPosition.y) / (viewSize.height - viewport.getHeight())
 						: ((double) viewPosition.x) / (viewSize.width - viewport.getWidth());
+					int ivalue = vertical ? viewPosition.y : viewPosition.x;
 
-					lineChartPanel.addValue( value, true, chartColor, name );
+					lineChartPanel.addValue( value, ivalue, true, chartColor, name );
 				}
 			} );
 		}
@@ -606,7 +465,8 @@ public class FlatSmoothScrollingTest
 			DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) e.getSource();
 			boolean smoothScrolling = smoothScrollingCheckBox.isSelected();
 
-			lineChartPanel.addValue( getChartValue( m ), false, smoothScrolling ? chartColor : chartColor2, name );
+			lineChartPanel.addValue( getChartValue( m ), m.getValue(), false,
+				smoothScrolling ? chartColor : chartColor2, name );
 
 			long t = System.nanoTime() / 1000000;
 
@@ -673,425 +533,6 @@ public class FlatSmoothScrollingTest
 					}
 				}
 			};
-		}
-	}
-
-	//---- class LineChartPanel -----------------------------------------------
-
-	static class LineChartPanel
-		extends JComponent
-		implements Scrollable
-	{
-		private static final int NEW_SEQUENCE_TIME_LAG = 500;
-		private static final int NEW_SEQUENCE_GAP = 100;
-		private static final int HIT_OFFSET = 4;
-
-		private int oneSecondWidth = 1000;
-		private int msPerLineX = 200;
-
-		private static class Data {
-			final double value;
-			final boolean dot;
-			final long time; // in milliseconds
-			final String name;
-			final Exception stack;
-
-			Data( double value, boolean dot, long time, String name, Exception stack ) {
-				this.value = value;
-				this.dot = dot;
-				this.time = time;
-				this.name = name;
-				this.stack = stack;
-			}
-
-			@Override
-			public String toString() {
-				// for debugging
-				return "value=" + value + ", dot=" + dot + ", time=" + time + ", name=" + name;
-			}
-		}
-
-		private final Map<Color, List<Data>> color2dataMap = new HashMap<>();
-		private final Timer repaintTime;
-		private Color lastUsedChartColor;
-		private boolean updateDelayed;
-
-		private final List<Point> lastPoints = new ArrayList<>();
-		private final List<Data> lastDatas = new ArrayList<>();
-		private double lastSystemScaleFactor = 1;
-		private String lastToolTipPrinted;
-
-		LineChartPanel() {
-			int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
-
-			repaintTime = new Timer( resolution * 2, e -> repaintAndRevalidate() );
-			repaintTime.setRepeats( false );
-
-			ToolTipManager.sharedInstance().registerComponent( this );
-		}
-
-		void addValue( double value, boolean dot, Color chartColor, String name ) {
-			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, dot, System.nanoTime() / 1000000, name, new Exception() ) );
-
-			lastUsedChartColor = chartColor;
-
-			if( updateDelayed ) {
-				repaintTime.stop();
-				repaintTime.start();
-			} else
-				repaintAndRevalidate();
-		}
-
-		void clear() {
-			color2dataMap.clear();
-			lastUsedChartColor = null;
-
-			repaint();
-			revalidate();
-		}
-
-		void setUpdateDelayed( boolean updateDelayed ) {
-			this.updateDelayed = updateDelayed;
-		}
-
-		void setOneSecondWidth( int oneSecondWidth ) {
-			this.oneSecondWidth = oneSecondWidth;
-		}
-
-		void setMsPerLineX( int msPerLineX ) {
-			this.msPerLineX = msPerLineX;
-		}
-
-		private void repaintAndRevalidate() {
-			repaint();
-			revalidate();
-
-			// scroll horizontally
-			if( lastUsedChartColor != null ) {
-				// compute chart width of last used color and start of last sequence
-				int[] lastSeqX = new int[1];
-				int cw = chartWidth( color2dataMap.get( lastUsedChartColor ), lastSeqX );
-
-				// scroll to end of last sequence (of last used color)
-				int lastSeqWidth = cw - lastSeqX[0];
-				int width = Math.min( lastSeqWidth, getParent().getWidth() );
-				int x = cw - width;
-				scrollRectToVisible( new Rectangle( x, 0, width, getHeight() ) );
-			}
-		}
-
-		@Override
-		protected void paintComponent( Graphics g ) {
-			Graphics g2 = g.create();
-			try {
-				HiDPIUtils.paintAtScale1x( (Graphics2D) g2, this, this::paintImpl );
-			} finally {
-				g2.dispose();
-			}
-		}
-
-		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-			FlatUIUtils.setRenderingHints( g );
-
-			int oneSecondWidth = (int) (this.oneSecondWidth * scaleFactor);
-			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
-			int hitOffset = (int) Math.round( UIScale.scale( HIT_OFFSET ) * scaleFactor );
-
-			Color lineColor = FlatUIUtils.getUIColor( "Component.borderColor", Color.lightGray );
-			Color lineColor2 = FlatLaf.isLafDark()
-				? new HSLColor( lineColor ).adjustTone( 30 )
-				: new HSLColor( lineColor ).adjustShade( 30 );
-
-			g.translate( x, y );
-
-			// fill background
-			g.setColor( UIManager.getColor( "Table.background" ) );
-			g.fillRect( x, y, width, height );
-
-			// paint horizontal lines
-			for( int i = 1; i < 10; i++ ) {
-				int hy = (height * i) / 10;
-				g.setColor( (i != 5) ? lineColor : lineColor2 );
-				g.drawLine( 0, hy, width, hy );
-			}
-
-			// paint vertical lines
-			int perLineXWidth = Math.round( (oneSecondWidth / 1000f) * msPerLineX );
-			for( int i = 1, xv = perLineXWidth; xv < width; xv += perLineXWidth, i++ ) {
-				g.setColor( (i % 5 != 0) ? lineColor : lineColor2 );
-				g.drawLine( xv, 0, xv, height );
-			}
-
-			lastPoints.clear();
-			lastDatas.clear();
-			lastSystemScaleFactor = scaleFactor;
-
-			// paint lines
-			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
-				List<Data> chartData = e.getValue();
-				Color chartColor = e.getKey();
-				if( FlatLaf.isLafDark() )
-					chartColor = new HSLColor( chartColor ).adjustTone( 50 );
-				Color temporaryValueColor = ColorFunctions.fade( chartColor, FlatLaf.isLafDark() ? 0.7f : 0.3f );
-				Color dataPointColor = ColorFunctions.fade( chartColor, FlatLaf.isLafDark() ? 0.6f : 0.2f );
-
-				// sequence start time and x coordinate
-				long seqTime = 0;
-				int seqX = 0;
-
-				// "previous" data point time, x/y coordinates and count
-				long ptime = 0;
-				int px = 0;
-				int py = 0;
-				int pcount = 0;
-
-				boolean first = true;
-				boolean isTemporaryValue = false;
-				int lastTemporaryValueIndex = -1;
-
-				int size = chartData.size();
-				for( int i = 0; i < size; i++ ) {
-					Data data = chartData.get( i );
-
-					boolean newSeq = (data.time > ptime + NEW_SEQUENCE_TIME_LAG);
-					ptime = data.time;
-
-					if( newSeq ) {
-						// paint short horizontal line for previous sequence that has only one data point
-						if( !first && pcount == 0 ) {
-							g.setColor( chartColor );
-							g.drawLine( px, py, px + (int) Math.round( UIScale.scale( 8 ) * scaleFactor ), py );
-						}
-
-						// start new sequence
-						seqTime = data.time;
-						seqX = !first ? px + seqGapWidth : 0;
-						px = seqX;
-						pcount = 0;
-						first = false;
-						isTemporaryValue = false;
-					}
-
-					// x/y coordinates of current data point
-					int dy = (int) ((height - 1) * data.value);
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * oneSecondWidth));
-
-					// paint rectangle to indicate data point
-					g.setColor( dataPointColor );
-					g.drawRect( dx - hitOffset, dy - hitOffset, hitOffset * 2, hitOffset * 2 );
-
-					// remember data point for tooltip
-					lastPoints.add( new Point( dx, dy ) );
-					lastDatas.add( data );
-
-					if( data.dot ) {
-						int s1 = (int) Math.round( UIScale.scale( 1 ) * scaleFactor );
-						int s3 = (int) Math.round( UIScale.scale( 3 ) * scaleFactor );
-						g.setColor( chartColor );
-						g.fillRect( dx - s1, dy - s1, s3, s3 );
-						continue;
-					}
-
-					if( !newSeq ) {
-						if( isTemporaryValue && i > lastTemporaryValueIndex )
-							isTemporaryValue = false;
-
-						g.setColor( isTemporaryValue ? temporaryValueColor : chartColor );
-
-						// line in sequence
-						g.drawLine( px, py, dx, dy );
-
-						px = dx;
-						pcount++;
-
-						// check next data points for "temporary" value(s)
-						if( !isTemporaryValue ) {
-							// one or two values between two equal values are considered "temporary",
-							// which means that they are the target value for the following scroll animation
-							int stage = 0;
-							for( int j = i + 1; j < size && stage <= 2 && !isTemporaryValue; j++ ) {
-								Data nextData = chartData.get( j );
-								if( nextData.dot )
-									continue; // ignore dots
-
-								// check whether next data point is within 10 milliseconds
-								if( nextData.time > data.time + 10 )
-									break;
-
-								if( stage >= 1 && stage <= 2 && nextData.value == data.value ) {
-									isTemporaryValue = true;
-									lastTemporaryValueIndex = j;
-								}
-								stage++;
-							}
-						}
-					}
-
-					py = dy;
-				}
-			}
-		}
-
-		private int chartWidth() {
-			int width = 0;
-			for( List<Data> chartData : color2dataMap.values() )
-				width = Math.max( width, chartWidth( chartData, null ) );
-			return width;
-		}
-
-		private int chartWidth( List<Data> chartData, int[] lastSeqX ) {
-			long seqTime = 0;
-			int seqX = 0;
-			long ptime = 0;
-			int px = 0;
-
-			int size = chartData.size();
-			for( int i = 0; i < size; i++ ) {
-				Data data = chartData.get( i );
-
-				if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
-					// start new sequence
-					seqTime = data.time;
-					seqX = (i > 0) ? px + NEW_SEQUENCE_GAP : 0;
-					px = seqX;
-				} else {
-					// line in sequence
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * oneSecondWidth));
-					px = dx;
-				}
-
-				ptime = data.time;
-			}
-
-			if( lastSeqX != null )
-				lastSeqX[0] = seqX;
-
-			return px;
-		}
-
-		@Override
-		public Dimension getPreferredSize() {
-			return new Dimension( chartWidth(), 200 );
-		}
-
-		@Override
-		public Dimension getPreferredScrollableViewportSize() {
-			return new Dimension( chartWidth(), 200 );
-		}
-
-		@Override
-		public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
-			return oneSecondWidth;
-		}
-
-		@Override
-		public int getScrollableBlockIncrement( Rectangle visibleRect, int orientation, int direction ) {
-			JViewport viewport = (JViewport) SwingUtilities.getAncestorOfClass( JViewport.class, this );
-			return (viewport != null) ? viewport.getWidth() : 200;
-		}
-
-		@Override
-		public boolean getScrollableTracksViewportWidth() {
-			JViewport viewport = (JViewport) SwingUtilities.getAncestorOfClass( JViewport.class, this );
-			return (viewport != null) ? viewport.getWidth() > chartWidth() : true;
-		}
-
-		@Override
-		public boolean getScrollableTracksViewportHeight() {
-			return true;
-		}
-
-		@Override
-		public String getToolTipText( MouseEvent e ) {
-			int x = (int) Math.round( e.getX() * lastSystemScaleFactor );
-			int y = (int) Math.round( e.getY() * lastSystemScaleFactor );
-			int hitOffset = (int) Math.round( UIScale.scale( HIT_OFFSET ) * lastSystemScaleFactor );
-			StringBuilder buf = null;
-
-			int pointsCount = lastPoints.size();
-			for( int i = 0; i < pointsCount; i++ ) {
-				Point pt = lastPoints.get( i );
-
-				// check X/Y coordinates
-				if( x < pt.x - hitOffset || x > pt.x + hitOffset ||
-					y < pt.y - hitOffset || y > pt.y + hitOffset )
-				  continue;
-
-				if( buf == null ) {
-					buf = new StringBuilder( 5000 );
-					buf.append( "<html>" );
-				}
-
-				Data data = lastDatas.get( i );
-				buf.append( "<h2>" );
-				if( data.dot )
-					buf.append( "DOT: " );
-				buf.append( data.name ).append( ' ' ).append( data.value ).append( "</h2>" );
-
-				StackTraceElement[] stackTrace = data.stack.getStackTrace();
-				for( int j = 0; j < stackTrace.length; j++ ) {
-					StackTraceElement stackElement = stackTrace[j];
-					String className = stackElement.getClassName();
-					String methodName = stackElement.getMethodName();
-
-					// ignore methods from this class
-					if( className.startsWith( FlatSmoothScrollingTest.class.getName() ) )
-						continue;
-
-					int repeatCount = 0;
-					for( int k = j + 1; k < stackTrace.length; k++ ) {
-						if( !stackElement.equals( stackTrace[k] ) )
-							break;
-						repeatCount++;
-					}
-					j += repeatCount;
-
-					// append method
-					buf.append( className )
-						.append( ".<b>" )
-						.append( methodName )
-						.append( "</b> <span color=\"#888888\">" );
-					if( stackElement.getFileName() != null ) {
-						buf.append( '(' );
-						buf.append( stackElement.getFileName() );
-						if( stackElement.getLineNumber() >= 0 )
-							buf.append( ':' ).append( stackElement.getLineNumber() );
-						buf.append( ')' );
-					} else
-						buf.append( "(Unknown Source)" );
-					buf.append( "</span>" );
-					if( repeatCount > 0 )
-						buf.append( " <b>" ).append( repeatCount + 1 ).append( "x</b>" );
-					buf.append( "<br>" );
-
-					// break at some methods to make stack smaller
-					if( (className.startsWith( "java.awt.event.InvocationEvent" ) && methodName.equals( "dispatch" )) ||
-						(className.startsWith( "java.awt.Component" ) && methodName.equals( "processMouseWheelEvent" )) ||
-						(className.startsWith( "javax.swing.JComponent" ) && methodName.equals( "processKeyBinding" )) )
-					  break;
-				}
-				buf.append( "..." );
-			}
-
-			if( buf == null )
-				return null;
-
-			buf.append( "<html>" );
-			String toolTip = buf.toString();
-
-			// print to console
-			if( !Objects.equals( toolTip, lastToolTipPrinted ) ) {
-				lastToolTipPrinted = toolTip;
-
-				System.out.println( toolTip
-					.replace( "<br>", "\n" )
-					.replace( "<h2>", "\n---- " )
-					.replace( "</h2>", " ----\n" )
-					.replaceAll( "<[^>]+>", "" ) );
-			}
-
-			return buf.toString();
 		}
 	}
 

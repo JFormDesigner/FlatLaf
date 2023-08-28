@@ -21,7 +21,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.*;
 import javax.swing.border.*;
-import com.formdev.flatlaf.testing.FlatSmoothScrollingTest.LineChartPanel;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
@@ -46,9 +45,6 @@ public class FlatAnimatorTest
 	FlatAnimatorTest() {
 		initComponents();
 
-		updateChartDelayedChanged();
-
-		lineChartPanel.setOneSecondWidth( 500 );
 		mouseWheelTestPanel.lineChartPanel = lineChartPanel;
 	}
 
@@ -82,14 +78,6 @@ public class FlatAnimatorTest
 		}
 	}
 
-	private void updateChartDelayedChanged() {
-		lineChartPanel.setUpdateDelayed( updateChartDelayedCheckBox.isSelected() );
-	}
-
-	private void clearChart() {
-		lineChartPanel.clear();
-	}
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel linearLabel = new JLabel();
@@ -99,11 +87,7 @@ public class FlatAnimatorTest
 		startButton = new JButton();
 		JLabel mouseWheelTestLabel = new JLabel();
 		mouseWheelTestPanel = new FlatAnimatorTest.MouseWheelTestPanel();
-		JScrollPane lineChartScrollPane = new JScrollPane();
-		lineChartPanel = new FlatSmoothScrollingTest.LineChartPanel();
-		JLabel lineChartInfoLabel = new JLabel();
-		updateChartDelayedCheckBox = new JCheckBox();
-		JButton clearChartButton = new JButton();
+		lineChartPanel = new LineChartPanel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -116,8 +100,7 @@ public class FlatAnimatorTest
 			"[]" +
 			"[]para" +
 			"[top]" +
-			"[400,grow,fill]" +
-			"[]"));
+			"[400,grow,fill]"));
 
 		//---- linearLabel ----
 		linearLabel.setText("Linear:");
@@ -150,28 +133,9 @@ public class FlatAnimatorTest
 		mouseWheelTestPanel.setBorder(new LineBorder(Color.red));
 		add(mouseWheelTestPanel, "cell 1 3,height 100");
 
-		//======== lineChartScrollPane ========
-		{
-			lineChartScrollPane.putClientProperty("JScrollPane.smoothScrolling", false);
-			lineChartScrollPane.setViewportView(lineChartPanel);
-		}
-		add(lineChartScrollPane, "cell 0 4 2 1");
-
-		//---- lineChartInfoLabel ----
-		lineChartInfoLabel.setText("X: time (500ms per line) / Y: value (10% per line)");
-		add(lineChartInfoLabel, "cell 0 5 2 1");
-
-		//---- updateChartDelayedCheckBox ----
-		updateChartDelayedCheckBox.setText("Update chart delayed");
-		updateChartDelayedCheckBox.setMnemonic('U');
-		updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
-		add(updateChartDelayedCheckBox, "cell 0 5 2 1,alignx right,growx 0");
-
-		//---- clearChartButton ----
-		clearChartButton.setText("Clear Chart");
-		clearChartButton.setMnemonic('C');
-		clearChartButton.addActionListener(e -> clearChart());
-		add(clearChartButton, "cell 0 5 2 1,alignx right,growx 0");
+		//---- lineChartPanel ----
+		lineChartPanel.setUpdateChartDelayed(false);
+		add(lineChartPanel, "cell 0 4 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -180,8 +144,7 @@ public class FlatAnimatorTest
 	private JScrollBar easeInOutScrollBar;
 	private JButton startButton;
 	private FlatAnimatorTest.MouseWheelTestPanel mouseWheelTestPanel;
-	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
-	private JCheckBox updateChartDelayedCheckBox;
+	private LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class MouseWheelTestPanel ------------------------------------------
@@ -217,7 +180,7 @@ public class FlatAnimatorTest
 				value = startValue + Math.round( (targetValue - startValue) * fraction );
 				valueLabel.setText( String.valueOf( value ) );
 
-				lineChartPanel.addValue( value / (double) MAX_VALUE, false, Color.red, null );
+				lineChartPanel.addValue( value / (double) MAX_VALUE, value, false, Color.red, null );
 			}, () -> {
 				targetValue = -1;
 			} );
@@ -235,7 +198,7 @@ public class FlatAnimatorTest
 			// for unprecise wheels the rotation value is usually -1 or +1
 			// for precise wheels the rotation value is in range ca. -10 to +10,
 			// depending how fast the wheel is rotated
-			lineChartPanel.addValue( 0.5 + (preciseWheelRotation / 20.), true, Color.red, null );
+			lineChartPanel.addValue( 0.5 + (preciseWheelRotation / 20.), (int) (preciseWheelRotation * 1000), true, Color.red, null );
 
 			// increase/decrease target value if animation is in progress
 			int newValue = (int) ((targetValue < 0 ? value : targetValue) + (STEP * preciseWheelRotation));
@@ -252,7 +215,7 @@ public class FlatAnimatorTest
 				value = newValue;
 				valueLabel.setText( String.valueOf( value ) );
 
-				lineChartPanel.addValue( value / (double) MAX_VALUE, false, Color.red, null );
+				lineChartPanel.addValue( value / (double) MAX_VALUE, value, false, Color.red, null );
 				return;
 			}
 
