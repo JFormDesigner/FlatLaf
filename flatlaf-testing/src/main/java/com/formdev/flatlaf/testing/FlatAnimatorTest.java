@@ -180,7 +180,7 @@ public class FlatAnimatorTest
 				value = startValue + Math.round( (targetValue - startValue) * fraction );
 				valueLabel.setText( String.valueOf( value ) );
 
-				lineChartPanel.addValue( value / (double) MAX_VALUE, value, false, Color.red, null );
+				lineChartPanel.addValue( Color.red, value / (double) MAX_VALUE, value, null );
 			}, () -> {
 				targetValue = -1;
 			} );
@@ -198,7 +198,7 @@ public class FlatAnimatorTest
 			// for unprecise wheels the rotation value is usually -1 or +1
 			// for precise wheels the rotation value is in range ca. -10 to +10,
 			// depending how fast the wheel is rotated
-			lineChartPanel.addValue( 0.5 + (preciseWheelRotation / 20.), (int) (preciseWheelRotation * 1000), true, Color.red, null );
+			lineChartPanel.addDot( Color.red, 0.5 + (preciseWheelRotation / 20.), (int) (preciseWheelRotation * 1000), null, null );
 
 			// increase/decrease target value if animation is in progress
 			int newValue = (int) ((targetValue < 0 ? value : targetValue) + (STEP * preciseWheelRotation));
@@ -215,7 +215,7 @@ public class FlatAnimatorTest
 				value = newValue;
 				valueLabel.setText( String.valueOf( value ) );
 
-				lineChartPanel.addValue( value / (double) MAX_VALUE, value, false, Color.red, null );
+				lineChartPanel.addValue( Color.red, value / (double) MAX_VALUE, value, null );
 				return;
 			}
 

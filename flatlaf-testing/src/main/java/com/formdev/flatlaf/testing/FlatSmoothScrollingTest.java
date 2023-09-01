@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
+import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -51,8 +54,7 @@ public class FlatSmoothScrollingTest
 	FlatSmoothScrollingTest() {
 		initComponents();
 
-		ToolTipManager.sharedInstance().setInitialDelay( 0 );
-		ToolTipManager.sharedInstance().setDismissDelay( Integer.MAX_VALUE );
+		initializeDurationAndResolution();
 
 		// allow enabling/disabling smooth scrolling with Alt+S without moving focus to checkbox
 		registerKeyboardAction(
@@ -93,13 +95,15 @@ public class FlatSmoothScrollingTest
 		customScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( customScrollPane, false, "custom horz", Color.pink.darker() ) );
 
 		ArrayList<String> items = new ArrayList<>();
-		for( char ch = '0'; ch < 'z'; ch++ ) {
-			if( (ch > '9' && ch < 'A') || (ch > 'Z' && ch < 'a') )
-				continue;
-
-			char[] chars = new char[ch - '0' + 1];
-			Arrays.fill( chars, ch );
-			items.add( new String( chars ) );
+		for( int i = 0; i < 10; i++ ) {
+			for( int j = 0; j < 10; j++ ) {
+				char[] chars = new char[i*10 + j + 1];
+				Arrays.fill( chars, ' ' );
+				chars[chars.length - 1] = (char) ('0' + j);
+				if( i >= 5 )
+					chars[50 - 1 - ((i-5)*10) - j] = (char) ('0' + j);
+				items.add( new String( chars ) );
+			}
 		}
 
 		// list model
@@ -137,12 +141,10 @@ public class FlatSmoothScrollingTest
 			}
 			@Override
 			public int getColumnCount() {
-				return 4;
+				return (table.getAutoResizeMode() == JTable.AUTO_RESIZE_OFF) ? 100 : 2;
 			}
 			@Override
 			public Object getValueAt( int rowIndex, int columnIndex ) {
-				if( columnIndex > 0 )
-					rowIndex = (items.size() + rowIndex - ((items.size() / 4) * columnIndex)) % items.size();
 				return items.get( rowIndex );
 			}
 		} );
@@ -155,17 +157,49 @@ public class FlatSmoothScrollingTest
 		}
 
 		// text components
-		String longText = items.stream().collect( Collectors.joining( " " ) ) + ' '
-			+ items.stream().limit( 20 ).collect( Collectors.joining( " " ) );
+		String longText = "";
+		for( int i = 0; i < 100; i++ )
+			longText += String.format( "%-5d     ", i );
+		longText += "100";
 		String text = items.stream().collect( Collectors.joining( "\n" ) ) + '\n';
 		textArea.setText( longText + '\n' + text );
 		textPane.setText( text );
 		editorPane.setText( text );
 
+		// move selection to beginning in text components
 		textArea.select( 0, 0 );
 		textPane.select( 0, 0 );
 		editorPane.select( 0, 0 );
 
+		// custom scrollable
+		StringBuilder buf = new StringBuilder()
+			.append( "<html>" )
+			.append( customButton.getText() );
+		for( String item : items ) {
+			buf.append( "<br>" );
+			for( int i = 0; i < item.length(); i++ ) {
+				char ch = item.charAt( i );
+				if( ch == ' ' )
+					buf.append( "&nbsp;" );
+				else
+					buf.append( ch );
+			}
+		}
+		buf.append( "</html>" );
+		customButton.setText( buf.toString() );
+
+		// line chart
+		lineChartPanel.addMethodHighlight( JViewport.class.getName() + ".setViewPosition", "#0000bb" );
+		lineChartPanel.addMethodHighlight( JViewport.class.getName() + ".scrollRectToVisible", "#00bbbb" );
+		lineChartPanel.addMethodHighlight( JScrollBar.class.getName() + ".setValue", "#00aa00" );
+		lineChartPanel.addMethodHighlight( Animator.class.getName() + ".timingEvent", "#bb0000" );
+		lineChartPanel.addMethodHighlight( JComponent.class.getName() + ".processKeyBinding", "#bb0000" );
+		lineChartPanel.addMethodHighlight( Component.class.getName() + ".processMouseEvent", "#bb0000" );
+		lineChartPanel.addMethodHighlight( Component.class.getName() + ".processMouseWheelEvent", "#bb0000" );
+		lineChartPanel.addMethodHighlight( Component.class.getName() + ".processMouseMotionEvent", "#bb0000" );
+		lineChartPanel.addMethodHighlight( "actionPerformed", "#bbbb00" );
+
+		// request focus for list
 		EventQueue.invokeLater( () -> {
 			EventQueue.invokeLater( () -> {
 				list.requestFocusInWindow();
@@ -175,6 +209,82 @@ public class FlatSmoothScrollingTest
 
 	private void smoothScrollingChanged() {
 		UIManager.put( "ScrollPane.smoothScrolling", smoothScrollingCheckBox.isSelected() );
+	}
+
+	private void initializeDurationAndResolution() {
+		int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
+		int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
+
+		durationSlider.setValue( duration );
+		resolutionSlider.setValue( resolution );
+
+		updateDurationAndResolutionLabels( duration, resolution );
+	}
+
+	private void durationOrResolutionChanged() {
+		int duration = durationSlider.getValue();
+		int resolution = resolutionSlider.getValue();
+
+		updateDurationAndResolutionLabels( duration, resolution );
+
+		UIManager.put( "ScrollPane.smoothScrolling.duration", duration );
+		UIManager.put( "ScrollPane.smoothScrolling.resolution", resolution );
+
+		// update UI of scroll bars to force re-creation of animator
+		JScrollPane[] scrollPanes = { listScrollPane, treeScrollPane, tableScrollPane,
+			textAreaScrollPane, textPaneScrollPane, editorPaneScrollPane, customScrollPane };
+		for( JScrollPane scrollPane : scrollPanes ) {
+			scrollPane.getVerticalScrollBar().updateUI();
+			scrollPane.getHorizontalScrollBar().updateUI();
+		}
+	}
+
+	private void updateDurationAndResolutionLabels( int duration, int resolution ) {
+		durationValueLabel.setText( duration + " ms" );
+		resolutionValueLabel.setText( resolution + " ms" );
+	}
+
+	private void scrollToChanged() {
+		if( scrollToSlider.getValueIsAdjusting() )
+			return;
+
+		int value = scrollToSlider.getValue();
+		JComponent[] comps = { list, tree, table, textArea, textPane, editorPane, customButton };
+		for( JComponent c : comps ) {
+			int x = (c.getWidth() * value) / 100;
+			int y = (c.getHeight() * value) / 100;
+			c.scrollRectToVisible( new Rectangle( x, y, 1, 1 ) );
+		}
+	}
+
+	private void rowHeaderChanged() {
+		JTable rowHeader = null;
+		if( rowHeaderCheckBox.isSelected() ) {
+			rowHeader = new JTable();
+			rowHeader.setPreferredScrollableViewportSize( new Dimension( UIScale.scale( 50 ), 100 ) );
+			rowHeader.setModel( new AbstractTableModel() {
+				@Override
+				public int getRowCount() {
+					return table.getRowCount();
+				}
+				@Override
+				public int getColumnCount() {
+					return 1;
+				}
+				@Override
+				public Object getValueAt( int rowIndex, int columnIndex ) {
+					char[] chars = new char[10];
+					Arrays.fill( chars, ' ' );
+					int i = rowIndex % 10;
+					if( (rowIndex / 10) % 2 == 0 )
+						chars[i] = (char) ('0' + i);
+					else
+						chars[9 - i] = (char) ('A' + i);
+					return new String( chars );
+				}
+			} );
+		}
+		tableScrollPane.setRowHeaderView( rowHeader );
 	}
 
 	private void showTableGridChanged() {
@@ -187,6 +297,7 @@ public class FlatSmoothScrollingTest
 
 	private void autoResizeModeChanged() {
 		table.setAutoResizeMode( autoResizeModeCheckBox.isSelected() ? JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS : JTable.AUTO_RESIZE_OFF );
+		((AbstractTableModel)table.getModel()).fireTableStructureChanged();
 	}
 
 	@Override
@@ -201,12 +312,20 @@ public class FlatSmoothScrollingTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		smoothScrollingCheckBox = new JCheckBox();
+		JPanel hSpacer1 = new JPanel(null);
+		JLabel durationLabel = new JLabel();
+		durationSlider = new JSlider();
+		durationValueLabel = new JLabel();
+		JLabel resolutionLabel = new JLabel();
+		resolutionSlider = new JSlider();
+		resolutionValueLabel = new JLabel();
 		splitPane1 = new JSplitPane();
 		splitPane2 = new JSplitPane();
 		panel1 = new JPanel();
 		listLabel = new JLabel();
 		treeLabel = new JLabel();
 		tableLabel = new JLabel();
+		rowHeaderCheckBox = new JCheckBox();
 		showTableGridCheckBox = new JCheckBox();
 		autoResizeModeCheckBox = new JCheckBox();
 		listScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
@@ -215,6 +334,7 @@ public class FlatSmoothScrollingTest
 		tree = new JTree();
 		tableScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		table = new JTable();
+		scrollToSlider = new JSlider();
 		panel2 = new JPanel();
 		textAreaLabel = new JLabel();
 		textPaneLabel = new JLabel();
@@ -227,7 +347,7 @@ public class FlatSmoothScrollingTest
 		editorPaneScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		editorPane = new JEditorPane();
 		customScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
-		button1 = new JButton();
+		customButton = new JButton();
 		lineChartPanel = new LineChartPanel();
 
 		//======== this ========
@@ -245,6 +365,41 @@ public class FlatSmoothScrollingTest
 		smoothScrollingCheckBox.setMnemonic('S');
 		smoothScrollingCheckBox.addActionListener(e -> smoothScrollingChanged());
 		add(smoothScrollingCheckBox, "cell 0 0,alignx left,growx 0");
+		add(hSpacer1, "cell 0 0,growx");
+
+		//---- durationLabel ----
+		durationLabel.setText("Duration:");
+		add(durationLabel, "cell 0 0");
+
+		//---- durationSlider ----
+		durationSlider.setMaximum(5000);
+		durationSlider.setValue(200);
+		durationSlider.setSnapToTicks(true);
+		durationSlider.setMinimum(100);
+		durationSlider.setMinorTickSpacing(50);
+		durationSlider.addChangeListener(e -> durationOrResolutionChanged());
+		add(durationSlider, "cell 0 0");
+
+		//---- durationValueLabel ----
+		durationValueLabel.setText("0000 ms");
+		add(durationValueLabel, "cell 0 0,width 50");
+
+		//---- resolutionLabel ----
+		resolutionLabel.setText("Resolution:");
+		add(resolutionLabel, "cell 0 0");
+
+		//---- resolutionSlider ----
+		resolutionSlider.setMaximum(1000);
+		resolutionSlider.setMinimum(10);
+		resolutionSlider.setValue(10);
+		resolutionSlider.setMinorTickSpacing(10);
+		resolutionSlider.setSnapToTicks(true);
+		resolutionSlider.addChangeListener(e -> durationOrResolutionChanged());
+		add(resolutionSlider, "cell 0 0");
+
+		//---- resolutionValueLabel ----
+		resolutionValueLabel.setText("0000 ms");
+		add(resolutionValueLabel, "cell 0 0,width 50");
 
 		//======== splitPane1 ========
 		{
@@ -264,7 +419,8 @@ public class FlatSmoothScrollingTest
 						"[200,grow,fill]" +
 						"[200,grow,fill]" +
 						"[200,grow,fill]" +
-						"[200,grow,fill]",
+						"[200,grow,fill]" +
+						"[fill]",
 						// rows
 						"[]0" +
 						"[200,grow,fill]"));
@@ -283,6 +439,11 @@ public class FlatSmoothScrollingTest
 					tableLabel.setText("JTable:");
 					tableLabel.setHorizontalTextPosition(SwingConstants.LEADING);
 					panel1.add(tableLabel, "cell 2 0 2 1");
+
+					//---- rowHeaderCheckBox ----
+					rowHeaderCheckBox.setText("Row header");
+					rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
+					panel1.add(rowHeaderCheckBox, "cell 2 0 2 1,alignx right,growx 0");
 
 					//---- showTableGridCheckBox ----
 					showTableGridCheckBox.setText("Show table grid");
@@ -313,6 +474,13 @@ public class FlatSmoothScrollingTest
 						tableScrollPane.setViewportView(table);
 					}
 					panel1.add(tableScrollPane, "cell 2 1 2 1,width 100,height 100");
+
+					//---- scrollToSlider ----
+					scrollToSlider.setOrientation(SwingConstants.VERTICAL);
+					scrollToSlider.setValue(0);
+					scrollToSlider.setInverted(true);
+					scrollToSlider.addChangeListener(e -> scrollToChanged());
+					panel1.add(scrollToSlider, "cell 4 1");
 				}
 				splitPane2.setTopComponent(panel1);
 
@@ -369,12 +537,11 @@ public class FlatSmoothScrollingTest
 					//======== customScrollPane ========
 					{
 
-						//---- button1 ----
-						button1.setText("I'm a large button, but do not implement Scrollable interface");
-						button1.setPreferredSize(new Dimension(800, 800));
-						button1.setHorizontalAlignment(SwingConstants.LEADING);
-						button1.setVerticalAlignment(SwingConstants.TOP);
-						customScrollPane.setViewportView(button1);
+						//---- customButton ----
+						customButton.setText("I'm a large button, but do not implement Scrollable interface");
+						customButton.setHorizontalAlignment(SwingConstants.LEADING);
+						customButton.setVerticalAlignment(SwingConstants.TOP);
+						customScrollPane.setViewportView(customButton);
 					}
 					panel2.add(customScrollPane, "cell 3 1");
 				}
@@ -394,12 +561,17 @@ public class FlatSmoothScrollingTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox smoothScrollingCheckBox;
+	private JSlider durationSlider;
+	private JLabel durationValueLabel;
+	private JSlider resolutionSlider;
+	private JLabel resolutionValueLabel;
 	private JSplitPane splitPane1;
 	private JSplitPane splitPane2;
 	private JPanel panel1;
 	private JLabel listLabel;
 	private JLabel treeLabel;
 	private JLabel tableLabel;
+	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox showTableGridCheckBox;
 	private JCheckBox autoResizeModeCheckBox;
 	private FlatSmoothScrollingTest.DebugScrollPane listScrollPane;
@@ -408,6 +580,7 @@ public class FlatSmoothScrollingTest
 	private JTree tree;
 	private FlatSmoothScrollingTest.DebugScrollPane tableScrollPane;
 	private JTable table;
+	private JSlider scrollToSlider;
 	private JPanel panel2;
 	private JLabel textAreaLabel;
 	private JLabel textPaneLabel;
@@ -420,7 +593,7 @@ public class FlatSmoothScrollingTest
 	private FlatSmoothScrollingTest.DebugScrollPane editorPaneScrollPane;
 	private JEditorPane editorPane;
 	private FlatSmoothScrollingTest.DebugScrollPane customScrollPane;
-	private JButton button1;
+	private JButton customButton;
 	private LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
@@ -433,6 +606,7 @@ public class FlatSmoothScrollingTest
 		private final Color chartColor;		// for smooth scrolling
 		private final Color chartColor2;	// for non-smooth scrolling
 		private int count;
+		private int lastValue;
 		private long lastTime;
 
 		ScrollBarChangeHandler( DebugScrollPane scrollPane, boolean vertical, String name, Color chartColor ) {
@@ -442,20 +616,27 @@ public class FlatSmoothScrollingTest
 
 			// add change listener to viewport that is invoked from JViewport.setViewPosition()
 			scrollPane.getViewport().addChangeListener( e -> {
-				// add dot to chart if blit scroll mode is disabled
-				if( vertical == scrollPane.lastScrollingWasVertical &&
-					scrollPane.getViewport().getScrollMode() != JViewport.BLIT_SCROLL_MODE )
+				JViewport viewport = scrollPane.getViewport();
+				Point viewPosition = viewport.getViewPosition();
+
+				if( (vertical && viewPosition.y != scrollPane.previousViewPosition.y) ||
+					(!vertical && viewPosition.x != scrollPane.previousViewPosition.x) )
 				{
 					// calculate value from view position because scrollbar value is not yet up-to-date
-					JViewport viewport = scrollPane.getViewport();
-					Point viewPosition = viewport.getViewPosition();
 					Dimension viewSize = viewport.getViewSize();
 					double value = vertical
 						? ((double) viewPosition.y) / (viewSize.height - viewport.getHeight())
 						: ((double) viewPosition.x) / (viewSize.width - viewport.getWidth());
 					int ivalue = vertical ? viewPosition.y : viewPosition.x;
 
-					lineChartPanel.addValue( value, ivalue, true, chartColor, name );
+					// add dot to chart if blit scroll mode is disabled
+					boolean dot = (scrollPane.getViewport().getScrollMode() != JViewport.BLIT_SCROLL_MODE);
+
+					Color color = smoothScrollingCheckBox.isSelected() ? this.chartColor : chartColor2;
+					if( dot )
+						lineChartPanel.addValueWithDot( color, value, ivalue, null, name );
+					else
+						lineChartPanel.addValue( color, value, ivalue, name );
 				}
 			} );
 		}
@@ -463,25 +644,24 @@ public class FlatSmoothScrollingTest
 		@Override
 		public void stateChanged( ChangeEvent e ) {
 			DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) e.getSource();
-			boolean smoothScrolling = smoothScrollingCheckBox.isSelected();
-
-			lineChartPanel.addValue( getChartValue( m ), m.getValue(), false,
-				smoothScrolling ? chartColor : chartColor2, name );
-
+			int value = m.getValue();
+/*
+			double chartValue = (double) (value - m.getMinimum()) / (double) (m.getMaximum() - m.getExtent());
+			lineChartPanel.addValue( chartValue, value, false, false,
+				smoothScrollingCheckBox.isSelected() ? chartColor : chartColor2, name );
+*/
 			long t = System.nanoTime() / 1000000;
 
-			System.out.printf( "%s (%d):  %4d  %3d ms   %b%n",
+			System.out.printf( "%s (%d):  %4d --> %4d  %3d ms   %-5b   %s%n",
 				name, ++count,
-				m.getValue(),
+				lastValue,
+				value,
 				t - lastTime,
-				m.getValueIsAdjusting() );
+				m.getValueIsAdjusting(),
+				value > lastValue ? "down" : value < lastValue ? "up" : "" );
 
+			lastValue = value;
 			lastTime = t;
-		}
-
-		private double getChartValue( BoundedRangeModel m ) {
-			int value = m.getValue();
-			return (double) (value - m.getMinimum()) / (double) (m.getMaximum() - m.getExtent());
 		}
 	}
 
@@ -490,7 +670,7 @@ public class FlatSmoothScrollingTest
 	private static class DebugScrollPane
 		extends JScrollPane
 	{
-		boolean lastScrollingWasVertical;
+		Point previousViewPosition = new Point();
 
 		@Override
 		protected JViewport createViewport() {
@@ -504,33 +684,10 @@ public class FlatSmoothScrollingTest
 
 				@Override
 				public void setViewPosition( Point p ) {
-					// remember whether scrolling vertically or horizontally
-					Component view = getView();
-					if( view != null ) {
-						int oldY = (view instanceof JComponent)
-							? ((JComponent) view).getY()
-							: view.getBounds().y;
-
-						int newY = -p.y;
-						lastScrollingWasVertical = (oldY != newY);
-					} else
-						lastScrollingWasVertical = true;
+					// remember previous view position
+					previousViewPosition = getViewPosition();
 
 					super.setViewPosition( p );
-				}
-
-				@Override
-				public void paint( Graphics g ) {
-					super.paint( g );
-
-					if( backingStoreImage != null ) {
-						System.out.println( "---------------------------------------------" );
-						System.out.println( "WARNING: backingStoreImage was used for painting" );
-						System.out.println( "View: " + getView() );
-						System.out.println( "Clip: " + g.getClipBounds() );
-						new Exception().printStackTrace( System.out );
-						System.out.println( "---------------------------------------------" );
-					}
 				}
 			};
 		}

@@ -61,6 +61,10 @@ class LineChartPanel
 			if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing() )
 				EventQueue.invokeLater( this::clearChart );
 		} );
+
+		// show chart tooltips immediately and forever
+		ToolTipManager.sharedInstance().setInitialDelay( 0 );
+		ToolTipManager.sharedInstance().setDismissDelay( Integer.MAX_VALUE );
 	}
 
 	@Override
@@ -106,8 +110,24 @@ class LineChartPanel
 		updateChartDelayedCheckBox.setSelected( updateChartDelayed );
 	}
 
-	void addValue( double value, int ivalue, boolean dot, Color chartColor, String name ) {
-		lineChart.addValue( value, ivalue, dot, chartColor, name );
+	void addValue( Color chartColor, double value, int ivalue, String name ) {
+		lineChart.addValue( chartColor, value, ivalue, null, false, name );
+	}
+
+	void addValueWithDot( Color chartColor, double value, int ivalue, Color dotColor, String name ) {
+		if( dotColor == null )
+			dotColor = chartColor;
+		lineChart.addValue( chartColor, value, ivalue, dotColor, false, name );
+	}
+
+	void addDot( Color chartColor, double value, int ivalue, Color dotColor, String name ) {
+		if( dotColor == null )
+			dotColor = chartColor;
+		lineChart.addValue( chartColor, value, ivalue, dotColor, true, name );
+	}
+
+	void addMethodHighlight( String classAndMethod, String highlightColor ) {
+		lineChart.methodHighlightMap.put( classAndMethod, highlightColor );
 	}
 
 	private void oneSecondWidthChanged() {
@@ -255,19 +275,22 @@ class LineChartPanel
 
 		private int oneSecondWidth = 1000;
 		private int msPerLineX = 200;
+		private final HashMap<String, String> methodHighlightMap = new HashMap<>();
 
 		private static class Data {
 			final double value;
 			final int ivalue;
-			final boolean dot;
+			final Color dotColor;
+			final boolean dotOnly;
 			final long time; // in milliseconds
 			final String name;
 			final Exception stack;
 
-			Data( double value, int ivalue, boolean dot, long time, String name, Exception stack ) {
+			Data( double value, int ivalue, Color dotColor, boolean dotOnly, long time, String name, Exception stack ) {
 				this.value = value;
 				this.ivalue = ivalue;
-				this.dot = dot;
+				this.dotColor = dotColor;
+				this.dotOnly = dotOnly;
 				this.time = time;
 				this.name = name;
 				this.stack = stack;
@@ -276,7 +299,8 @@ class LineChartPanel
 			@Override
 			public String toString() {
 				// for debugging
-				return "value=" + value + ", ivalue=" + ivalue + ", dot=" + dot + ", time=" + time + ", name=" + name;
+				return "value=" + value + ", ivalue=" + ivalue + ", dotColor=" + dotColor
+					+ ", dotOnly=" + dotOnly + ", time=" + time + ", name=" + name;
 			}
 		}
 
@@ -297,9 +321,9 @@ class LineChartPanel
 			ToolTipManager.sharedInstance().registerComponent( this );
 		}
 
-		void addValue( double value, int ivalue, boolean dot, Color chartColor, String name ) {
+		void addValue( Color chartColor, double value, int ivalue, Color dotColor, boolean dotOnly, String name ) {
 			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, ivalue, dot, System.nanoTime() / 1000000, name, new Exception() ) );
+			chartData.add( new Data( value, ivalue, dotColor, dotOnly, System.nanoTime() / 1000000, name, new Exception() ) );
 
 			lastUsedChartColor = chartColor;
 
@@ -452,12 +476,13 @@ class LineChartPanel
 					lastPoints.add( new Point( dx, dy ) );
 					lastDatas.add( data );
 
-					if( data.dot ) {
+					if( data.dotColor != null ) {
 						int s1 = (int) Math.round( UIScale.scale( 1 ) * scaleFactor );
 						int s3 = (int) Math.round( UIScale.scale( 3 ) * scaleFactor );
-						g.setColor( chartColor );
+						g.setColor( data.dotColor );
 						g.fillRect( dx - s1, dy - s1, s3, s3 );
-						continue;
+						if( data.dotOnly )
+							continue;
 					}
 
 					if( !newSeq ) {
@@ -479,7 +504,7 @@ class LineChartPanel
 							int stage = 0;
 							for( int j = i + 1; j < size && stage <= 2 && !isTemporaryValue; j++ ) {
 								Data nextData = chartData.get( j );
-								if( nextData.dot )
+								if( nextData.dotOnly )
 									continue; // ignore dots
 
 								// check whether next data point is within 10 milliseconds
@@ -592,7 +617,7 @@ class LineChartPanel
 
 				Data data = lastDatas.get( i );
 				buf.append( "<h2>" );
-				if( data.dot )
+				if( data.dotOnly )
 					buf.append( "DOT: " );
 				buf.append( data.name ).append( ' ' ).append( data.ivalue ).append( "</h2>" );
 
@@ -601,6 +626,7 @@ class LineChartPanel
 					StackTraceElement stackElement = stackTrace[j];
 					String className = stackElement.getClassName();
 					String methodName = stackElement.getMethodName();
+					String classAndMethod = className + '.' + methodName;
 
 					// ignore methods from this class
 					if( className.startsWith( LineChartPanel.class.getName() ) )
@@ -614,11 +640,24 @@ class LineChartPanel
 					}
 					j += repeatCount;
 
+					String highlight = methodHighlightMap.get( classAndMethod );
+					if( highlight == null )
+						highlight = methodHighlightMap.get( className );
+					if( highlight == null )
+						highlight = methodHighlightMap.get( methodName );
+					if( highlight != null )
+						buf.append( "<span color=\"" ).append( highlight ).append( "\">" );
+
 					// append method
 					buf.append( className )
 						.append( ".<b>" )
 						.append( methodName )
-						.append( "</b> <span color=\"#888888\">" );
+						.append( "</b>" );
+					if( highlight != null )
+						buf.append( "</span>" );
+
+					// append source
+					buf.append( " <span color=\"#888888\">" );
 					if( stackElement.getFileName() != null ) {
 						buf.append( '(' );
 						buf.append( stackElement.getFileName() );
@@ -628,14 +667,19 @@ class LineChartPanel
 					} else
 						buf.append( "(Unknown Source)" );
 					buf.append( "</span>" );
+
+					// append repeat count
 					if( repeatCount > 0 )
 						buf.append( " <b>" ).append( repeatCount + 1 ).append( "x</b>" );
 					buf.append( "<br>" );
 
 					// break at some methods to make stack smaller
-					if( (className.startsWith( "java.awt.event.InvocationEvent" ) && methodName.equals( "dispatch" )) ||
-						(className.startsWith( "java.awt.Component" ) && methodName.equals( "processMouseWheelEvent" )) ||
-						(className.startsWith( "javax.swing.JComponent" ) && methodName.equals( "processKeyBinding" )) )
+					if( classAndMethod.equals( "java.awt.event.InvocationEvent.dispatch" ) ||
+						classAndMethod.equals( "java.awt.Component.processMouseEvent" ) ||
+						classAndMethod.equals( "java.awt.Component.processMouseWheelEvent" ) ||
+						classAndMethod.equals( "java.awt.Component.processMouseMotionEvent" ) ||
+						classAndMethod.equals( "javax.swing.JComponent.processKeyBinding" ) ||
+						classAndMethod.equals( "com.formdev.flatlaf.util.Animator.timingEvent" ) )
 					  break;
 				}
 				buf.append( "..." );
