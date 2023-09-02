@@ -42,18 +42,18 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: temurin  # Java 8, 11 and 17 are pre-installed on ubuntu-latest
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          gradle-home-cache-excludes: |
+            caches/jars-*/*
       - name: Check with Error Prone
         if: matrix.java == '11'
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: wrapper
-          arguments: errorprone clean -Dtoolchain=${{ matrix.toolchain }}
+        run: ./gradlew errorprone clean -Dtoolchain=${{ matrix.toolchain }}
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: wrapper
-          arguments: build -Dtoolchain=${{ matrix.toolchain }}
+        run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -88,6 +88,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
+          gradle-home-cache-excludes: |
+            caches/jars-*/*
           arguments: publish :flatlaf-theme-editor:build -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
