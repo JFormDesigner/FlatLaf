@@ -9,6 +9,8 @@ FlatLaf Change Log
   #718)
 - TextField: Fixed placeholder text painting, which did not respect horizontal
   alignment property of `JTextField`. (issue #721)
+- Popop: Fixed drop shadow if popup overlaps a heavyweight component. (Windows
+  10 only; issue #626)
 
 
 ## 3.2

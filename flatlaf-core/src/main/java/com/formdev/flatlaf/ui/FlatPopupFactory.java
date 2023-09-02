@@ -103,6 +103,10 @@ public class FlatPopupFactory
 			return popup;
 		}
 
+		// check whether popup overlaps a heavy weight component
+		if( !forceHeavyWeight && overlapsHeavyWeightComponent( owner, contents, x, y ) )
+			forceHeavyWeight = true;
+
 		// create drop shadow popup
 		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
 	}
@@ -387,6 +391,33 @@ public class FlatPopupFactory
 
 		// reset corner preference
 		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
+	}
+
+	private static boolean overlapsHeavyWeightComponent( Component owner, Component contents, int x, int y ) {
+		Window window = SwingUtilities.getWindowAncestor( owner );
+		if( window == null )
+			return false;
+
+		Rectangle r = new Rectangle( new Point( x, y ), contents.getPreferredSize() );
+		return overlapsHeavyWeightComponent( window, r );
+	}
+
+	private static boolean overlapsHeavyWeightComponent( Component parent, Rectangle r ) {
+		if( !parent.isVisible() || !r.intersects( parent.getBounds() ) )
+			return false;
+
+		if( !parent.isLightweight() && !(parent instanceof Window) )
+			return true;
+
+		if( parent instanceof Container ) {
+			Rectangle r2 = new Rectangle( r.x - parent.getX(), r.y - parent.getY(), r.width, r.height );
+			for( Component c : ((Container)parent).getComponents() ) {
+				if( overlapsHeavyWeightComponent( c, r2 ) )
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
