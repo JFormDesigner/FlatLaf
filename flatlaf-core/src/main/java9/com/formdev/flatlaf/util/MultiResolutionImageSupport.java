@@ -20,6 +20,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.AbstractMultiResolutionImage;
 import java.awt.image.BaseMultiResolutionImage;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.awt.image.MultiResolutionImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,6 +119,26 @@ public class MultiResolutionImageSupport
 			return mapAndCacheImage( mrImage );
 		}
 
+		@Override
+		public int getWidth( ImageObserver observer ) {
+			return mrImage.getWidth( observer );
+		}
+
+		@Override
+		public int getHeight( ImageObserver observer ) {
+			return mrImage.getHeight( observer );
+		}
+
+		@Override
+		public ImageProducer getSource() {
+			return mrImage.getSource();
+		}
+
+		@Override
+		public Object getProperty( String name, ImageObserver observer ) {
+			return mrImage.getProperty( name, observer );
+		}
+
 		private Image mapAndCacheImage( Image image ) {
 			return cache.computeIfAbsent( image, img -> {
 				// using ImageIcon here makes sure that the image is loaded
@@ -158,6 +180,16 @@ public class MultiResolutionImageSupport
 		@Override
 		protected Image getBaseImage() {
 			return produceAndCacheImage( dimensions[0] );
+		}
+
+		@Override
+		public int getWidth( ImageObserver observer ) {
+			return dimensions[0].width;
+		}
+
+		@Override
+		public int getHeight( ImageObserver observer ) {
+			return dimensions[0].height;
 		}
 
 		private Image produceAndCacheImage( Dimension size ) {
