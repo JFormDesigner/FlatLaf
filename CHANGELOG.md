@@ -5,6 +5,13 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Fixed memory leak in
+  `MultiResolutionImageSupport.create(int,Dimension[],Function<Dimension,Image>)`,
+  which caches images created by the producer function. Used by
+  `FlatSVGIcon.getImage()` and `FlatSVGUtils.createWindowIconImages()`. If you
+  use one of these methods, it is **strongly recommended** to upgrade to this
+  version, because if the returned image is larger and painted very often it may
+  result in an out-of-memory situation. (issue #726)
 - FileChooser: Fixed occasional NPE in `FlatShortcutsPanel` on Windows. (issue
   #718)
 - TextField: Fixed placeholder text painting, which did not respect horizontal

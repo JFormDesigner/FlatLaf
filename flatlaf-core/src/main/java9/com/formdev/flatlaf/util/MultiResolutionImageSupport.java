@@ -23,6 +23,7 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.MultiResolutionImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -134,7 +135,7 @@ public class MultiResolutionImageSupport
 	{
 		private final Dimension[] dimensions;
 		private final Function<Dimension, Image> producer;
-		private final IdentityHashMap<Dimension, Image> cache = new IdentityHashMap<>();
+		private final HashMap<Dimension, Image> cache = new HashMap<>();
 
 		ProducerMultiResolutionImage( Dimension[] dimensions, Function<Dimension, Image> producer ) {
 			this.dimensions = dimensions;
