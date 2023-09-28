@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.3-SNAPSHOT
+
+#### Fixed bugs
+
+- CheckBox and RadioButton: Fixed cut off right side when border is removed and
+  horizontal alignment is set to `right`. (issue #734)
+
+
 ## 3.2.1
 
 #### Fixed bugs

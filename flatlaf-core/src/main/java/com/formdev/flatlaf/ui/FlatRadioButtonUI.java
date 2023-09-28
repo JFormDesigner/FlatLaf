@@ -35,6 +35,7 @@ import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -278,20 +279,27 @@ public class FlatRadioButtonUI
 		int focusWidth = getIconFocusWidth( c );
 		if( focusWidth > 0 ) {
 			boolean ltr = c.getComponentOrientation().isLeftToRight();
+			int halign = ((AbstractButton)c).getHorizontalAlignment();
+			if( halign == SwingConstants.LEADING )
+				halign = ltr ? SwingConstants.LEFT : SwingConstants.RIGHT;
+			else if( halign == SwingConstants.TRAILING )
+				halign = ltr ? SwingConstants.RIGHT : SwingConstants.LEFT;
+
 			Insets insets = c.getInsets( tempInsets );
-			int leftOrRightInset = ltr ? insets.left : insets.right;
-			if( focusWidth > leftOrRightInset ) {
+			if( (focusWidth > insets.left || focusWidth > insets.right) &&
+				(halign == SwingConstants.LEFT || halign == SwingConstants.RIGHT) )
+			{
 				// The left (or right) inset is smaller than the focus width, which may be
 				// the case if insets were explicitly reduced (e.g. with an EmptyBorder).
 				// In this case the width has been increased in getPreferredSize() and
 				// here it is necessary to fix icon and text painting location.
-				int offset = focusWidth - leftOrRightInset;
-				if( !ltr )
-					offset = -offset;
+				int offset = (halign == SwingConstants.LEFT)
+					? Math.max( focusWidth - insets.left, 0 )
+					: -Math.max( focusWidth - insets.right, 0 );
 
 				// move the graphics origin to the left (or right)
 				g.translate( offset, 0 );
-				super.paint( g, c );
+				super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
 				g.translate( -offset, 0 );
 				return;
 			}
