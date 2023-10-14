@@ -336,6 +336,11 @@ public class FlatRadioButtonUI
 			: 0;
 	}
 
+	@Override
+	public int getBaseline( JComponent c, int width, int height ) {
+		return FlatButtonUI.getBaselineImpl( c, width, height );
+	}
+
 	//---- class FlatRadioButtonListener --------------------------------------
 
 	/** @since 2 */

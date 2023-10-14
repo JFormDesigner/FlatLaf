@@ -53,6 +53,8 @@ import javax.swing.plaf.ToolBarUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.basic.BasicHTML;
+import javax.swing.text.View;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
@@ -551,9 +553,45 @@ public class FlatButtonUI
 		}
 	}
 
+	/**
+	 * Similar to BasicButtonUI.paint(), but does not use zero insets for HTML text,
+	 * which is done in BasicButtonUI.layout() since Java 19.
+	 * See https://github.com/openjdk/jdk/pull/8407
+	 * and https://github.com/openjdk/jdk/pull/8407#issuecomment-1761583430
+	 */
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
+		g = FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c );
+
+		AbstractButton b = (AbstractButton) c;
+
+		// layout
+		String clippedText = layout( b, b.getFontMetrics( b.getFont() ), b.getWidth(), b.getHeight() );
+
+		// not used in FlatLaf, but invoked for compatibility with BasicButtonUI.paint()
+		clearTextShiftOffset();
+
+		// not used in FlatLaf, but invoked for compatibility with BasicButtonUI.paint()
+		ButtonModel model = b.getModel();
+		if( model.isArmed() && model.isPressed() )
+			paintButtonPressed( g, b );
+
+		// paint icon
+		if( b.getIcon() != null )
+			paintIcon( g, b, iconR );
+
+		// paint text
+		if( clippedText != null && !clippedText.isEmpty() ) {
+			View view = (View) b.getClientProperty( BasicHTML.propertyKey );
+			if( view != null )
+				view.paint( g, textR ); // HTML text
+			else
+				paintText( g, b, textR, clippedText );
+		}
+
+		// not used in FlatLaf, but invoked for compatibility with BasicButtonUI.paint()
+		if( b.isFocusPainted() && b.hasFocus() )
+			paintFocus( g, b, viewR, textR, iconR );
 	}
 
 	@Override
@@ -785,6 +823,67 @@ public class FlatButtonUI
 		Insets margin = ((AbstractButton)c).getMargin();
 		return margin instanceof UIResource && Objects.equals( margin, defaultMargin );
 	}
+
+	@Override
+	public int getBaseline( JComponent c, int width, int height ) {
+		return getBaselineImpl( c, width, height );
+	}
+
+	/**
+	 * Similar to BasicButtonUI.getBaseline(), but does not use zero insets for HTML text,
+	 * which is done in BasicButtonUI.layout() since Java 19.
+	 * See https://github.com/openjdk/jdk/pull/8407
+	 * and https://github.com/openjdk/jdk/pull/8407#issuecomment-1761583430
+	 */
+	static int getBaselineImpl( JComponent c, int width, int height ) {
+		if( width < 0 || height < 0 )
+			throw new IllegalArgumentException();
+
+		AbstractButton b = (AbstractButton) c;
+		String text = b.getText();
+		if( text == null || text.isEmpty() )
+			return -1;
+
+		FontMetrics fm = b.getFontMetrics( b.getFont() );
+		layout( b, fm, width, height );
+
+		View view = (View) b.getClientProperty( BasicHTML.propertyKey );
+		if( view != null ) {
+			// HTML text
+			int baseline = BasicHTML.getHTMLBaseline( view, textR.width, textR.height );
+			return (baseline >= 0) ? textR.y + baseline : baseline;
+		} else
+			return textR.y + fm.getAscent();
+	}
+
+	/**
+	 * Similar to BasicButtonUI.layout(), but does not use zero insets for HTML text,
+	 * which is done in BasicButtonUI.layout() since Java 19.
+	 * See https://github.com/openjdk/jdk/pull/8407
+	 * and https://github.com/openjdk/jdk/pull/8407#issuecomment-1761583430
+	 */
+	private static String layout( AbstractButton b, FontMetrics fm, int width, int height ) {
+		// compute view rectangle
+		Insets insets = b.getInsets();
+		viewR.setBounds( insets.left, insets.top,
+			width - insets.left - insets.right,
+			height - insets.top - insets.bottom );
+
+		// reset rectangles
+		textR.setBounds( 0, 0, 0, 0 );
+		iconR.setBounds( 0, 0, 0, 0 );
+
+		String text = b.getText();
+		return SwingUtilities.layoutCompoundLabel( b, fm, text, b.getIcon(),
+			b.getVerticalAlignment(), b.getHorizontalAlignment(),
+			b.getVerticalTextPosition(), b.getHorizontalTextPosition(),
+			viewR, iconR, textR,
+			(text != null) ? b.getIconTextGap() : 0 );
+	}
+
+	private static Rectangle viewR = new Rectangle();
+	private static Rectangle textR = new Rectangle();
+	private static Rectangle iconR = new Rectangle();
 
 	//---- class FlatButtonListener -------------------------------------------
 

@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button: Fixed painting icon and text at wrong location when using HTML text,
+  left/right vertical alignment and running in Java 19+. (issue #746)
 - CheckBox and RadioButton: Fixed cut off right side when border is removed and
   horizontal alignment is set to `right`. (issue #734)
 
