@@ -555,10 +555,12 @@ public class FlatFileChooserUI
 							return new ImageIcon( image );
 					}
 				}
-			} catch( IllegalAccessException ex ) {
-				// do not log because access may be denied via VM option '--illegal-access=deny'
 			} catch( Exception ex ) {
-				LoggingFacade.INSTANCE.logSevere( null, ex );
+				// do not log InaccessibleObjectException because access
+				// may be denied via VM option '--illegal-access=deny' (default in Java 16)
+				// (not catching InaccessibleObjectException here because it is new in Java 9, but FlatLaf also runs on Java 8)
+				if( !"java.lang.reflect.InaccessibleObjectException".equals( ex.getClass().getName() ) )
+					LoggingFacade.INSTANCE.logSevere( null, ex );
 			}
 
 			// get system icon in default size 16x16
