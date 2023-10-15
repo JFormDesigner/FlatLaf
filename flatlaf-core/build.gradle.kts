@@ -42,7 +42,7 @@ java {
 tasks {
 	compileJava {
 		// generate JNI headers
-		options.headerOutputDirectory.set( buildDir.resolve( "generated/jni-headers" ) )
+		options.headerOutputDirectory.set( layout.buildDirectory.dir( "generated/jni-headers" ) )
 	}
 
 	jar {

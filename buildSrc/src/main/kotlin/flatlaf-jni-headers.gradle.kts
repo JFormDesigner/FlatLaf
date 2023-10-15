@@ -26,7 +26,7 @@ tasks {
 		// depend on :flatlaf-core:compileJava because it generates the JNI headers
 		dependsOn( ":flatlaf-core:compileJava" )
 
-		from( project( ":flatlaf-core" ).buildDir.resolve( "generated/jni-headers" ) )
+		from( project( ":flatlaf-core" ).layout.buildDirectory.dir( "generated/jni-headers" ) )
 		into( "src/main/headers" )
 		include( extension.headers )
 		filter<org.apache.tools.ant.filters.FixCrLfFilter>(
