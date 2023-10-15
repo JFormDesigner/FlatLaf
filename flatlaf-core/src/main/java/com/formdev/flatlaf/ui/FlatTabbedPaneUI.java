@@ -3567,7 +3567,7 @@ public class FlatTabbedPaneUI
 	//---- class FlatSelectedTabRepainter -------------------------------------
 
 	private static class FlatSelectedTabRepainter
-		implements PropertyChangeListener//, Runnable
+		implements PropertyChangeListener
 	{
 		private static FlatSelectedTabRepainter instance;
 
@@ -3617,17 +3617,31 @@ public class FlatTabbedPaneUI
 					break;
 
 				case "activeWindow":
-					repaintSelectedTabs( keyboardFocusManager.getPermanentFocusOwner() );
+					Component permanentFocusOwner = keyboardFocusManager.getPermanentFocusOwner();
+					if( permanentFocusOwner != null )
+						repaintSelectedTabs( permanentFocusOwner );
 					break;
 			}
 		}
 
 		private void repaintSelectedTabs( Component c ) {
-			if( c instanceof JTabbedPane )
-				repaintSelectedTab( (JTabbedPane) c );
+			// Use invokeLater because this method may be invoked while UI update
+			// is in progress. This may happen if a focusable component (e.g. text field)
+			// is used as tab component (see JTabbedPane.setTabComponentAt()).
+			// uninstallTabContainer() removes all components from tabbed pane and
+			// the text field looses focus.
+			EventQueue.invokeLater( () -> {
+				// because this is invoked later, check whether component is still displayable
+				if( !c.isDisplayable() )
+					return;
 
-			while( (c = SwingUtilities.getAncestorOfClass( JTabbedPane.class, c )) != null )
-				repaintSelectedTab( (JTabbedPane) c );
+				if( c instanceof JTabbedPane )
+					repaintSelectedTab( (JTabbedPane) c );
+
+				Component c2 = c;
+				while( (c2 = SwingUtilities.getAncestorOfClass( JTabbedPane.class, c2 )) != null )
+					repaintSelectedTab( (JTabbedPane) c2 );
+			} );
 		}
 
 		private void repaintSelectedTab( JTabbedPane tabbedPane ) {

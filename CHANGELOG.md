@@ -9,6 +9,8 @@ FlatLaf Change Log
   left/right vertical alignment and running in Java 19+. (issue #746)
 - CheckBox and RadioButton: Fixed cut off right side when border is removed and
   horizontal alignment is set to `right`. (issue #734)
+- TabbedPane: Fixed NPE when using focusable component as tab component and
+  switching theme. (issue #745)
 
 
 ## 3.2.1
