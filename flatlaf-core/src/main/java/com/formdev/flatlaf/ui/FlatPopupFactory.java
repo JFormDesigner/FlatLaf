@@ -397,6 +397,10 @@ public class FlatPopupFactory
 	}
 
 	private static boolean overlapsHeavyWeightComponent( Component owner, Component contents, int x, int y ) {
+		if( owner == null ) {
+			return false;
+		}
+
 		Window window = SwingUtilities.getWindowAncestor( owner );
 		if( window == null )
 			return false;
