@@ -438,7 +438,7 @@ public class FlatPopupFactory
 	 */
 	private static void fixLinuxWaylandJava21focusIssue( Component owner ) {
 		// only necessary on Linux when running in Java 21+
-		if( !SystemInfo.isLinux || SystemInfo.javaVersion < SystemInfo.toVersion( 21, 0, 0, 0 ) )
+		if( owner == null || !SystemInfo.isLinux || SystemInfo.javaVersion < SystemInfo.toVersion( 21, 0, 0, 0 ) )
 			return;
 
 		// get window

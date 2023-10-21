@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.2.4
+
+#### Fixed bugs
+
+- Popup: Fixed potential NPE in (unusual) case that the popup invoker is `null`
+  (only on Linux with Wayland and Java 21; regression in 3.2.3). (issue #752)
+
+
 ## 3.2.3
 
 #### Fixed bugs
