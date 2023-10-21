@@ -36,6 +36,7 @@ import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowFocusListener;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -82,6 +83,8 @@ public class FlatPopupFactory
 			x = pt.x;
 			y = pt.y;
 		}
+
+		fixLinuxWaylandJava21focusIssue( owner );
 
 		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
 
@@ -418,6 +421,38 @@ public class FlatPopupFactory
 		}
 
 		return false;
+	}
+
+	/**
+	 * On Linux with Wayland, since Java 21, Swing adds a window focus listener to popup owner/invoker window,
+	 * which hides the popup as soon as the owner/invoker window looses focus.
+	 * This works fine for light-weight popups.
+	 * It also works for heavy-weight popups if the do not request focus.
+	 * Because FlatLaf always uses heavy-weight popups, all popups that request focus
+	 * are broken since Java 21.
+	 *
+	 * This method removes the problematic window focus listener.
+	 *
+	 * https://bugs.openjdk.org/browse/JDK-8280993
+	 * https://github.com/openjdk/jdk/pull/13830
+	 */
+	private static void fixLinuxWaylandJava21focusIssue( Component owner ) {
+		// only necessary on Linux when running in Java 21+
+		if( !SystemInfo.isLinux || SystemInfo.javaVersion < SystemInfo.toVersion( 21, 0, 0, 0 ) )
+			return;
+
+		// get window
+		Window window = SwingUtilities.getWindowAncestor( owner );
+		if( window == null )
+			return;
+
+		// remove window focus listener, which was added from class sun.awt.UNIXToolkit since Java 21
+		for( WindowFocusListener l : window.getWindowFocusListeners() ) {
+			if( "sun.awt.UNIXToolkit$1".equals( l.getClass().getName() ) ) {
+				window.removeWindowFocusListener( l );
+				break;
+			}
+		}
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------

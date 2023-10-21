@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.2.3
+
+#### Fixed bugs
+
+- Popup: Popups that request focus were not shown on Linux with Wayland and Java 21.
+  (issue #752)
+
+
 ## 3.2.2
 
 #### Fixed bugs
