@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.2.3
+#Version 3.2.4
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
