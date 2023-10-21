@@ -1,12 +1,20 @@
 FlatLaf Change Log
 ==================
 
+## 3.2.5
+
+#### Fixed bugs
+
+- Popup: Fixed NPE if popup invoker is `null` on Windows 10. (issue #753;
+  regression in 3.2.1 in fix for #626)
+
+
 ## 3.2.4
 
 #### Fixed bugs
 
-- Popup: Fixed potential NPE in (unusual) case that the popup invoker is `null`
-  (only on Linux with Wayland and Java 21; regression in 3.2.3). (issue #752)
+- Popup: Fixed NPE if popup invoker is `null` on Linux with Wayland and Java 21.
+  (issue #752; regression in 3.2.3)
 
 
 ## 3.2.3
