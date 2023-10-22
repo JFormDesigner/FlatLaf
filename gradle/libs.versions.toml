@@ -27,7 +27,7 @@ sigtest = "org.netbeans.tools:sigtest-maven-plugin:1.7"
 jsvg = "com.github.weisj:jsvg:1.2.0"
 
 # flatlaf-jide-oss
-jide-oss = "com.formdev:jide-oss:3.7.12"
+jide-oss = "com.formdev:jide-oss:3.7.14"
 
 # flatlaf-swingx
 swingx-all = "org.swinglabs.swingx:swingx-all:1.6.5-1"
