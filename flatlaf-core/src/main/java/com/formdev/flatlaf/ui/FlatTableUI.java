@@ -26,10 +26,12 @@ import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
@@ -151,19 +153,28 @@ public class FlatTableUI
 		if( rowHeight > 0 )
 			LookAndFeel.installProperty( table, "rowHeight", UIScale.scale( rowHeight ) );
 
-		if( !showHorizontalLines ) {
+		FlatTablePropertyWatcher watcher = FlatTablePropertyWatcher.get( table );
+		if( watcher != null )
+			watcher.enabled = false;
+
+		if( !showHorizontalLines && (watcher == null || !watcher.showHorizontalLinesChanged) ) {
 			oldShowHorizontalLines = table.getShowHorizontalLines();
 			table.setShowHorizontalLines( false );
 		}
-		if( !showVerticalLines ) {
+		if( !showVerticalLines && (watcher == null || !watcher.showVerticalLinesChanged) ) {
 			oldShowVerticalLines = table.getShowVerticalLines();
 			table.setShowVerticalLines( false );
 		}
 
-		if( intercellSpacing != null ) {
+		if( intercellSpacing != null && (watcher == null || !watcher.intercellSpacingChanged) ) {
 			oldIntercellSpacing = table.getIntercellSpacing();
 			table.setIntercellSpacing( intercellSpacing );
 		}
+
+		if( watcher != null )
+			watcher.enabled = true;
+		else
+			table.addPropertyChangeListener( new FlatTablePropertyWatcher() );
 	}
 
 	@Override
@@ -177,15 +188,25 @@ public class FlatTableUI
 
 		oldStyleValues = null;
 
+		FlatTablePropertyWatcher watcher = FlatTablePropertyWatcher.get( table );
+		if( watcher != null )
+			watcher.enabled = false;
+
 		// restore old show horizontal/vertical lines (if not modified)
-		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() )
-			table.setShowHorizontalLines( true );
-		if( !showVerticalLines && oldShowVerticalLines && !table.getShowVerticalLines() )
-			table.setShowVerticalLines( true );
+		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() &&
+			(watcher == null || !watcher.showHorizontalLinesChanged) )
+		  table.setShowHorizontalLines( true );
+		if( !showVerticalLines && oldShowVerticalLines && !table.getShowVerticalLines() &&
+			(watcher == null || !watcher.showVerticalLinesChanged) )
+		  table.setShowVerticalLines( true );
 
 		// restore old intercell spacing (if not modified)
-		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) )
-			table.setIntercellSpacing( oldIntercellSpacing );
+		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) &&
+			(watcher == null || !watcher.intercellSpacingChanged) )
+		  table.setIntercellSpacing( oldIntercellSpacing );
+
+		if( watcher != null )
+			watcher.enabled = true;
 	}
 
 	@Override
@@ -464,6 +485,48 @@ public class FlatTableUI
 					if( row % 2 != 0 )
 						g.fillRect( 0, y, tableWidth, rowHeight );
 				}
+			}
+		}
+	}
+
+	//---- class FlatTablePropertyWatcher -------------------------------------
+
+	/**
+	 * Listener that watches for change of some table properties from application code.
+	 * This information is used in {@link FlatTableUI#installDefaults()} and
+	 * {@link FlatTableUI#uninstallDefaults()} to decide whether FlatLaf modifies those properties.
+	 * If they are modified in application code, FlatLaf no longer changes them.
+	 *
+	 * The listener is added once for each table, but never removed.
+	 * So switching Laf/theme reuses existing listener.
+	 */
+	private static class FlatTablePropertyWatcher
+		implements PropertyChangeListener
+	{
+		boolean enabled = true;
+		boolean showHorizontalLinesChanged;
+		boolean showVerticalLinesChanged;
+		boolean intercellSpacingChanged;
+
+		static FlatTablePropertyWatcher get( JTable table ) {
+			for( PropertyChangeListener l : table.getPropertyChangeListeners() ) {
+				if( l instanceof FlatTablePropertyWatcher )
+					return (FlatTablePropertyWatcher) l;
+			}
+			return null;
+		}
+
+		//---- interface PropertyChangeListener ----
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			if( !enabled )
+				return;
+
+			switch( e.getPropertyName() ) {
+				case "showHorizontalLines":	showHorizontalLinesChanged = true; break;
+				case "showVerticalLines":	showVerticalLinesChanged = true; break;
+				case "rowMargin":			intercellSpacingChanged = true; break;
 			}
 		}
 	}

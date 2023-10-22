@@ -18,7 +18,6 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -116,15 +115,16 @@ class DataComponentsPanel
 		table1.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
 	}
 
-	@Override
-	public void updateUI() {
-		super.updateUI();
+	private void showHorizontalLinesPropertyChange() {
+		showHorizontalLinesCheckBox.setSelected( table1.getShowHorizontalLines() );
+	}
 
-		EventQueue.invokeLater( () -> {
-			showHorizontalLinesChanged();
-			showVerticalLinesChanged();
-			intercellSpacingChanged();
-		} );
+	private void showVerticalLinesPropertyChange() {
+		showVerticalLinesCheckBox.setSelected( table1.getShowVerticalLines() );
+	}
+
+	private void intercellSpacingPropertyChange() {
+		intercellSpacingCheckBox.setSelected( table1.getRowMargin() != 0 );
 	}
 
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
@@ -333,10 +333,10 @@ class DataComponentsPanel
 					"Not editable", "Text", "Combo", "Combo Editable", "Integer", "Boolean"
 				}
 			) {
-				Class<?>[] columnTypes = new Class<?>[] {
+				Class<?>[] columnTypes = {
 					Object.class, Object.class, String.class, String.class, Integer.class, Boolean.class
 				};
-				boolean[] columnEditable = new boolean[] {
+				boolean[] columnEditable = {
 					false, true, true, true, true, true
 				};
 				@Override
@@ -383,6 +383,9 @@ class DataComponentsPanel
 			}
 			table1.setAutoCreateRowSorter(true);
 			table1.setComponentPopupMenu(popupMenu2);
+			table1.addPropertyChangeListener("showHorizontalLines", e -> showHorizontalLinesPropertyChange());
+			table1.addPropertyChangeListener("showVerticalLines", e -> showVerticalLinesPropertyChange());
+			table1.addPropertyChangeListener("rowMargin", e -> intercellSpacingPropertyChange());
 			scrollPane5.setViewportView(table1);
 		}
 		add(scrollPane5, "cell 1 3 3 1,width 300");

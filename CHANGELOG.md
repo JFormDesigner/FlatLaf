@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.3-SNAPSHOT
+
+#### Fixed bugs
+
+- Table: Switching theme looses table grid and intercell spacing. (issues #733
+  and #750)
+
+
 ## 3.2.5
 
 #### Fixed bugs
