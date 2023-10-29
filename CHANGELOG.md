@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button and ToggleButton: Selected buttons did not use explicitly set
+  foreground color. (issue 756)
 - Table: Switching theme looses table grid and intercell spacing. (issues #733
   and #750)
 

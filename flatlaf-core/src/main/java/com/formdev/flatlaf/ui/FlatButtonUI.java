@@ -721,14 +721,15 @@ public class FlatButtonUI
 	}
 
 	protected Color getForeground( JComponent c ) {
+		Color fg = c.getForeground();
 		boolean toolBarButton = isToolBarButton( c ) || isBorderlessButton( c );
 
 		// selected state
 		if( ((AbstractButton)c).isSelected() ) {
 			return buttonStateColor( c,
 				toolBarButton
-					? (toolbarSelectedForeground != null ? toolbarSelectedForeground : c.getForeground())
-					: selectedForeground,
+					? (toolbarSelectedForeground != null ? toolbarSelectedForeground : fg)
+					: (isCustomForeground( fg ) ? fg : selectedForeground),
 				toolBarButton
 					? (toolbarDisabledSelectedForeground != null ? toolbarDisabledSelectedForeground : disabledText)
 					: (disabledSelectedForeground != null ? disabledSelectedForeground : disabledText),
@@ -740,7 +741,7 @@ public class FlatButtonUI
 		// toolbar button
 		if( toolBarButton ) {
 			return buttonStateColor( c,
-				c.getForeground(),
+				fg,
 				disabledText,
 				null,
 				toolbarHoverForeground,
@@ -751,7 +752,7 @@ public class FlatButtonUI
 		return buttonStateColor( c,
 			getForegroundBase( c, def ),
 			disabledText,
-			isCustomForeground( c.getForeground() ) ? null : (def ? defaultFocusedForeground : focusedForeground),
+			isCustomForeground( fg ) ? null : (def ? defaultFocusedForeground : focusedForeground),
 			def ? defaultHoverForeground : hoverForeground,
 			def ? defaultPressedForeground : pressedForeground );
 	}
