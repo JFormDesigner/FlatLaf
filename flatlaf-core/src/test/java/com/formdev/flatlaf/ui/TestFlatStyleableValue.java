@@ -902,6 +902,9 @@ public class TestFlatStyleableValue
 
 		testInsets( c, ui, "borderMargins", 1,2,3,4 );
 		testColor( c, ui, "gripColor", 0x123456 );
+
+		testInteger( c, ui, "separatorWidth", 123 );
+		testColor( c, ui, "separatorColor", 0x123456 );
 	}
 
 	@Test

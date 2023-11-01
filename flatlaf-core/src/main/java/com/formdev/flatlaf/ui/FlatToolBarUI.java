@@ -93,6 +93,10 @@ public class FlatToolBarUI
 	@Styleable protected Insets borderMargins;
 	@Styleable protected Color gripColor;
 
+	// for FlatToolBarSeparatorUI
+	/** @since 3.3 */ @Styleable protected Integer separatorWidth;
+	/** @since 3.3 */ @Styleable protected Color separatorColor;
+
 	private FocusTraversalPolicy focusTraversalPolicy;
 	private Boolean oldFloatable;
 	private Map<String, Object> oldStyleValues;

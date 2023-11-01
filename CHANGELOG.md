@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 3.3-SNAPSHOT
 
+#### New features and improvements
+
+- ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
+
 #### Fixed bugs
 
 - Button and ToggleButton: Selected buttons did not use explicitly set
@@ -187,7 +191,6 @@ FlatLaf Change Log
     folder and loaded from there.
   - Windows DLLs are now digitally signed with FormDev Software GmbH
     certificate.
-
 
 #### Fixed bugs
 

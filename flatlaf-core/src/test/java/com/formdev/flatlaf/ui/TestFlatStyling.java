@@ -1146,6 +1146,9 @@ public class TestFlatStyling
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );
 
+		ui.applyStyle( "separatorWidth: 6" );
+		ui.applyStyle( "separatorColor: #fff" );
+
 		// JComponent properties
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );

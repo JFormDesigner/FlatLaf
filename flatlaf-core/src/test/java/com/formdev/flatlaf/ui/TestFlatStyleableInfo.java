@@ -925,7 +925,10 @@ public class TestFlatStyleableInfo
 			"hoverButtonGroupBackground", Color.class,
 
 			"borderMargins", Insets.class,
-			"gripColor", Color.class
+			"gripColor", Color.class,
+
+			"separatorWidth", Integer.class,
+			"separatorColor", Color.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
