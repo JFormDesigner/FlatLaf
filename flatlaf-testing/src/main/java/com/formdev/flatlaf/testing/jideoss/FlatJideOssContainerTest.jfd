@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.0.0.331" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -64,7 +64,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
-					"$columnConstraints": "[][fill][]"
+					"$columnConstraints": "[][][]"
 					"$rowConstraints": "[center][][][][][]para[][]para[][][]"
 				} ) {
 					name: "tabbedPaneControlPanel"
@@ -97,7 +97,7 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "tabCountChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 0"
+						"value": "cell 1 0,width 80"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "customTabsCheckBox"
@@ -205,7 +205,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 4"
 					} )
-					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumSelector" ) {
 						name: "tabPlacementField"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
@@ -242,7 +242,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 5"
 					} )
-					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumSelector" ) {
 						name: "tabAlignmentField"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
@@ -258,7 +258,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 5"
 					} )
-					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumSelector" ) {
 						name: "tabResizeModeField"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false

@@ -412,13 +412,13 @@ public class FlatJideOssContainerTest
 		showCloseButtonOnTabCheckBox = new JCheckBox();
 		showCloseButtonOnSelectedTabCheckBox = new JCheckBox();
 		JLabel tabPlacementLabel = new JLabel();
-		tabPlacementField = new FlatTestEnumComboBox<>();
+		tabPlacementField = new FlatTestEnumSelector<>();
 		secondTabClosableCheckBox = new JCheckBox();
 		showCloseButtonOnMouseOverCheckBox = new JCheckBox();
 		JLabel tabAreaAlignmentLabel = new JLabel();
-		tabAlignmentField = new FlatTestEnumComboBox<>();
+		tabAlignmentField = new FlatTestEnumSelector<>();
 		JLabel tabResizeModeLabel = new JLabel();
-		tabResizeModeField = new FlatTestEnumComboBox<>();
+		tabResizeModeField = new FlatTestEnumSelector<>();
 		leadingComponentCheckBox = new JCheckBox();
 		customBorderCheckBox = new JCheckBox();
 		tabAreaInsetsCheckBox = new JCheckBox();
@@ -478,7 +478,7 @@ public class FlatJideOssContainerTest
 					"insets 0,hidemode 3",
 					// columns
 					"[]" +
-					"[fill]" +
+					"[]" +
 					"[]",
 					// rows
 					"[center]" +
@@ -506,7 +506,7 @@ public class FlatJideOssContainerTest
 				//---- tabCountSpinner ----
 				tabCountSpinner.setModel(new SpinnerNumberModel(4, 0, null, 1));
 				tabCountSpinner.addChangeListener(e -> tabCountChanged());
-				tabbedPaneControlPanel.add(tabCountSpinner, "cell 1 0");
+				tabbedPaneControlPanel.add(tabCountSpinner, "cell 1 0,width 80");
 
 				//---- customTabsCheckBox ----
 				customTabsCheckBox.setText("Custom tabs");
@@ -674,11 +674,11 @@ public class FlatJideOssContainerTest
 	private JCheckBox tabsClosableCheckBox;
 	private JCheckBox showCloseButtonOnTabCheckBox;
 	private JCheckBox showCloseButtonOnSelectedTabCheckBox;
-	private FlatTestEnumComboBox<TabPlacement> tabPlacementField;
+	private FlatTestEnumSelector<TabPlacement> tabPlacementField;
 	private JCheckBox secondTabClosableCheckBox;
 	private JCheckBox showCloseButtonOnMouseOverCheckBox;
-	private FlatTestEnumComboBox<JideTabAlignment> tabAlignmentField;
-	private FlatTestEnumComboBox<JideTabResizeMode> tabResizeModeField;
+	private FlatTestEnumSelector<JideTabAlignment> tabAlignmentField;
+	private FlatTestEnumSelector<JideTabResizeMode> tabResizeModeField;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox customBorderCheckBox;
 	private JCheckBox tabAreaInsetsCheckBox;
