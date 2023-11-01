@@ -15,7 +15,7 @@
 #
 
 [versions]
-junit = "5.7.2"
+junit = "5.10.0"
 
 
 [libraries]
