@@ -752,6 +752,7 @@ public class TestFlatStyleableInfo
 			"tabAreaAlignment", String.class,
 			"tabAlignment", String.class,
 			"tabWidthMode", String.class,
+			"tabRotation", String.class,
 
 			"arrowType", String.class,
 			"buttonInsets", Insets.class,

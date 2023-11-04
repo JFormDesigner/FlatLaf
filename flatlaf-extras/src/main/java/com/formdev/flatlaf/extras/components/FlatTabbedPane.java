@@ -502,6 +502,29 @@ public class FlatTabbedPane
 	}
 
 
+	// NOTE: enum names must be equal to allowed strings
+	/** @since 3.3 */ public enum TabRotation { none, auto, left, right }
+
+	/**
+	 * Returns how the tabs should be rotated.
+	 *
+	 * @since 3.3
+	 */
+	public TabRotation getTabRotation() {
+		return getClientPropertyEnumString( TABBED_PANE_TAB_ROTATION, TabRotation.class,
+			"TabbedPane.tabRotation", TabRotation.none );
+	}
+
+	/**
+	 * Specifies how the tabs should be rotated.
+	 *
+	 * @since 3.3
+	 */
+	public void setTabRotation( TabRotation tabRotation ) {
+		putClientPropertyEnumString( TABBED_PANE_TAB_ROTATION, tabRotation );
+	}
+
+
 	/**
 	 * Returns the tab icon placement (relative to tab title).
 	 */

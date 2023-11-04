@@ -937,6 +937,7 @@ public class TestFlatStyling
 		ui.applyStyle( "tabAreaAlignment: leading" );
 		ui.applyStyle( "tabAlignment: center" );
 		ui.applyStyle( "tabWidthMode: preferred" );
+		ui.applyStyle( "tabRotation: none" );
 
 		ui.applyStyle( "arrowType: chevron" );
 		ui.applyStyle( "buttonInsets: 1,2,3,4" );

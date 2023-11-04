@@ -758,6 +758,7 @@ public class TestFlatStyleableValue
 		testString( c, ui, "tabAreaAlignment", "leading" );
 		testString( c, ui, "tabAlignment", "center" );
 		testString( c, ui, "tabWidthMode", "preferred" );
+		testString( c, ui, "tabRotation", "none" );
 
 		testString( c, ui, "arrowType", "chevron" );
 		testInsets( c, ui, "buttonInsets", 1,2,3,4 );

@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TabbedPane: Support vertical tabs. (PR #758, issue #633)
 - ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
 
 #### Fixed bugs
