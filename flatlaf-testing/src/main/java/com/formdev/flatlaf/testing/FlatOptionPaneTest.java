@@ -41,11 +41,15 @@ public class FlatOptionPaneTest
 	FlatOptionPaneTest() {
 		initComponents();
 
+		JPanel panel = new JPanel();
+		panel.setBackground( Color.green );
+		panel.add( new JLabel( "label in green panel" ) );
 		customOptionPane.setMessage( new Object[] {
 			"string",
 			"multi-\nline string",
 			new JCheckBox( "check box" ),
 			new JTextField( "text field" ),
+			panel,
 			"more text",
 		} );
 		customOptionPane.setOptions( new Object[] {

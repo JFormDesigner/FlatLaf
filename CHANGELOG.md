@@ -13,6 +13,8 @@ FlatLaf Change Log
   foreground color. (issue 756)
 - Table: Switching theme looses table grid and intercell spacing. (issues #733
   and #750)
+- OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
+  #761)
 
 
 ## 3.2.5

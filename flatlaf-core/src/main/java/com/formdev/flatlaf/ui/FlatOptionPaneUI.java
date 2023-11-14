@@ -30,9 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -116,13 +114,6 @@ public class FlatOptionPaneUI
 	}
 
 	@Override
-	protected void installComponents() {
-		super.installComponents();
-
-		updateChildPanels( optionPane );
-	}
-
-	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
 		PropertyChangeListener superListener = super.createPropertyChangeListener();
 		return e -> {
@@ -155,6 +146,13 @@ public class FlatOptionPaneUI
 	protected Container createMessageArea() {
 		Container messageArea = super.createMessageArea();
 
+		// use non-UIResource OptionPane.messageAreaBorder to avoid that it is replaced when switching LaF
+		// and make panel non-opaque for OptionPane.background
+		updateAreaPanel( messageArea );
+
+		// make known sub-panels non-opaque for OptionPane.background
+		updateKnownChildPanels( messageArea );
+
 		// set icon-message gap
 		if( iconMessageGap > 0 ) {
 			Component iconMessageSeparator = SwingUtils.getComponentByName( messageArea, "OptionPane.separator" );
@@ -168,6 +166,10 @@ public class FlatOptionPaneUI
 	@Override
 	protected Container createButtonArea() {
 		Container buttonArea = super.createButtonArea();
+
+		// use non-UIResource OptionPane.buttonAreaBorder to avoid that it is replaced when switching LaF
+		// and make panel non-opaque for OptionPane.background
+		updateAreaPanel( buttonArea );
 
 		// scale button padding and subtract focusWidth
 		if( buttonArea.getLayout() instanceof ButtonAreaLayout ) {
@@ -218,22 +220,33 @@ public class FlatOptionPaneUI
 		super.addMessageComponents( container, cons, msg, maxll, internallyCreated );
 	}
 
-	private void updateChildPanels( Container c ) {
+	private void updateAreaPanel( Container area ) {
+		if( !(area instanceof JPanel) )
+			return;
+
+		// use non-UIResource border to avoid that it is replaced when switching LaF
+		// and make panel non-opaque for OptionPane.background
+		JPanel panel = (JPanel) area;
+		panel.setBorder( FlatUIUtils.nonUIResource( panel.getBorder() ) );
+		panel.setOpaque( false );
+	}
+
+	private void updateKnownChildPanels( Container c ) {
 		for( Component child : c.getComponents() ) {
-			if( child.getClass() == JPanel.class ) {
-				JPanel panel = (JPanel)child;
-
-				// make sub-panel non-opaque for OptionPane.background
-				panel.setOpaque( false );
-
-				// use non-UIResource borders to avoid that they are replaced when switching LaF
-				Border border = panel.getBorder();
-				if( border instanceof UIResource )
-					panel.setBorder( FlatUIUtils.nonUIResource( border ) );
+			if( child instanceof JPanel && child.getName() != null ) {
+				switch( child.getName() ) {
+					case "OptionPane.realBody":
+					case "OptionPane.body":
+					case "OptionPane.separator":
+					case "OptionPane.break":
+						// make known sub-panels non-opaque for OptionPane.background
+						((JPanel)child).setOpaque( false );
+						break;
+				}
 			}
 
 			if( child instanceof Container )
-				updateChildPanels( (Container) child );
+				updateKnownChildPanels( (Container) child );
 		}
 	}
 
