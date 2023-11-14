@@ -52,6 +52,8 @@ import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -115,6 +117,8 @@ public class FlatTestFrame
 		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Dark (F2)", FlatDarkLaf.class.getName() ) );
 		lafModel.addElement( new LookAndFeelInfo( "FlatLaf IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
 		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf macOS Light (F5)", FlatMacLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf macOS Dark (F6)", FlatMacDarkLaf.class.getName() ) );
 		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Test (F8)", FlatTestLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
@@ -154,6 +158,8 @@ public class FlatTestFrame
 		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F4", FlatDarculaLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F5", FlatMacLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F6", FlatMacDarkLaf.class.getName() );
 
 		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
 
