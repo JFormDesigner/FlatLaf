@@ -15,6 +15,8 @@ FlatLaf Change Log
   and #750)
 - OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
   #761)
+- Fixed broken rendering after resizing window to minimum size and then
+  increasing size again. (issue #767)
 
 
 ## 3.2.5

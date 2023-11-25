@@ -608,6 +608,10 @@ public class FlatTitlePane
 		doLayout();
 	}
 
+	void menuBarInvalidate() {
+		menuBarPlaceholder.invalidate();
+	}
+
 	@Override
 	public void paint( Graphics g ) {
 		super.paint( g );
