@@ -934,7 +934,7 @@ ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
 
 ScrollPane.arc                 20
 ScrollPane.background          #88ff88  HSL 120 100  77    javax.swing.plaf.ColorUIResource [UI]
-ScrollPane.border              [lazy] 1,10,1,10  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
+ScrollPane.border              [lazy] 1,9,1,9  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
 ScrollPane.fillUpperCorner     true
 ScrollPane.font                [active] $defaultFont [UI]
 ScrollPane.foreground          #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
@@ -1155,7 +1155,7 @@ Table.foreground               #ff0000  HSL   0 100  50    javax.swing.plaf.Colo
 Table.gridColor                #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                25
-Table.scrollPaneBorder         [lazy] 1,10,1,10  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
+Table.scrollPaneBorder         [lazy] 1,9,1,9  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
 Table.selectionBackground      #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionForeground      #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionInactiveBackground #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]

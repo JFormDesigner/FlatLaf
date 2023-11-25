@@ -496,7 +496,7 @@ public class FlatScrollPaneUI
 		return false;
 	}
 
-	private static Component getView( JScrollPane scrollPane ) {
+	static Component getView( JScrollPane scrollPane ) {
 		JViewport viewport = scrollPane.getViewport();
 		return (viewport != null) ? viewport.getView() : null;
 	}
@@ -537,13 +537,15 @@ public class FlatScrollPaneUI
 		@Override
 		public void focusGained( FocusEvent e ) {
 			// necessary to update focus border
-			scrollpane.repaint();
+			if( scrollpane.getBorder() instanceof FlatBorder )
+				scrollpane.repaint();
 		}
 
 		@Override
 		public void focusLost( FocusEvent e ) {
 			// necessary to update focus border
-			scrollpane.repaint();
+			if( scrollpane.getBorder() instanceof FlatBorder )
+				scrollpane.repaint();
 		}
 	}
 

@@ -18,7 +18,12 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import java.awt.Insets;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -26,6 +31,10 @@ import com.formdev.flatlaf.util.UIScale;
  * Border for {@link javax.swing.JScrollPane}.
  *
  * @uiDefault ScrollPane.arc				int
+ * @uiDefault ScrollPane.List.arc			int
+ * @uiDefault ScrollPane.Table.arc			int
+ * @uiDefault ScrollPane.TextComponent.arc	int
+ * @uiDefault ScrollPane.Tree.arc			int
 
  * @author Karl Tauber
  * @since 3.3
@@ -34,6 +43,22 @@ public class FlatScrollPaneBorder
 	extends FlatBorder
 {
 	@Styleable protected int arc = UIManager.getInt( "ScrollPane.arc" );
+
+	private boolean isArcStyled;
+	private final int listArc = FlatUIUtils.getUIInt( "ScrollPane.List.arc", -1 );
+	private final int tableArc = FlatUIUtils.getUIInt( "ScrollPane.Table.arc", -1 );
+	private final int textComponentArc = FlatUIUtils.getUIInt( "ScrollPane.TextComponent.arc", -1 );
+	private final int treeArc = FlatUIUtils.getUIInt( "ScrollPane.Tree.arc", -1 );
+
+	@Override
+	public Object applyStyleProperty( String key, Object value ) {
+		Object oldValue = super.applyStyleProperty( key, value );
+
+		if( "arc".equals( key ) )
+			isArcStyled = true;
+
+		return oldValue;
+	}
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
@@ -54,6 +79,21 @@ public class FlatScrollPaneBorder
 	protected int getArc( Component c ) {
 		if( isCellEditor( c ) )
 			return 0;
+
+		if( isArcStyled )
+			return arc;
+
+		if( c instanceof JScrollPane ) {
+			Component view = FlatScrollPaneUI.getView( (JScrollPane) c );
+			if( listArc >= 0 && view instanceof JList )
+				return listArc;
+			if( tableArc >= 0 && view instanceof JTable )
+				return tableArc;
+			if( textComponentArc >= 0&& view instanceof JTextComponent )
+				return textComponentArc;
+			if( treeArc >= 0 && view instanceof JTree )
+				return treeArc;
+		}
 
 		return arc;
 	}
