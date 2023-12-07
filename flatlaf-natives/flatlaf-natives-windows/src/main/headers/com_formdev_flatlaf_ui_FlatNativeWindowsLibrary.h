@@ -15,6 +15,18 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWCP_ROUND 2L
 #undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWCP_ROUNDSMALL
 #define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWCP_ROUNDSMALL 3L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_USE_IMMERSIVE_DARK_MODE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_USE_IMMERSIVE_DARK_MODE 20L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_BORDER_COLOR
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_BORDER_COLOR 34L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_CAPTION_COLOR
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_CAPTION_COLOR 35L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_TEXT_COLOR
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_TEXT_COLOR 36L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_DEFAULT
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_DEFAULT -1L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_NONE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_NONE -2L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
  * Method:    getOSBuildNumberImpl
@@ -41,11 +53,19 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
- * Method:    setWindowBorderColor
- * Signature: (JIII)Z
+ * Method:    dwmSetWindowAttributeBOOL
+ * Signature: (JIZ)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_setWindowBorderColor
-  (JNIEnv *, jclass, jlong, jint, jint, jint);
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_dwmSetWindowAttributeBOOL
+  (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    dwmSetWindowAttributeDWORD
+ * Signature: (JII)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_dwmSetWindowAttributeDWORD
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 #ifdef __cplusplus
 }

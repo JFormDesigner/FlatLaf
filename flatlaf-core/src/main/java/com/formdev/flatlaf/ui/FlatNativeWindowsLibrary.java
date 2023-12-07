@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Window;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -31,6 +32,12 @@ public class FlatNativeWindowsLibrary
 {
 	private static long osBuildNumber = Long.MIN_VALUE;
 
+	/**
+	 * Checks whether native library is loaded/available.
+	 * <p>
+	 * <b>Note</b>: It is required to invoke this method before invoking any other
+	 *              method of this class. Otherwise, the native library may not be loaded.
+	 */
 	public static boolean isLoaded() {
 		return SystemInfo.isWindows && FlatNativeLibrary.isLoaded();
 	}
@@ -93,15 +100,60 @@ public class FlatNativeWindowsLibrary
 	public native static boolean setWindowCornerPreference( long hwnd, int cornerPreference );
 
 	/**
-	 * Sets the color of the window border.
-	 * The red/green/blue values must be in range {@code 0 - 255}.
-	 * If red is {@code -1}, then the system default border color is used (useful to reset the border color).
-	 * If red is {@code -2}, then no border is painted.
-	 * <p>
-	 * Invokes Win32 API method {@code DwmSetWindowAttribute(DWMWA_BORDER_COLOR)}.
+	 * DWMWINDOWATTRIBUTE
+	 * see https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute
+	 *
+	 * @since 3.3
+	 */
+	public static final int
+		DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
+		DWMWA_BORDER_COLOR = 34,
+		DWMWA_CAPTION_COLOR = 35,
+		DWMWA_TEXT_COLOR = 36;
+
+	/**
+	 * Invokes Win32 API method {@code DwmSetWindowAttribute()} with a {@code BOOL} attribute value.
+	 * See https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmsetwindowattribute
+	 *
+	 * @since 3.3
+	 */
+	public native static boolean dwmSetWindowAttributeBOOL( long hwnd, int attribute, boolean value );
+
+	/**
+	 * Invokes Win32 API method {@code DwmSetWindowAttribute()} with a {@code DWORD} attribute value.
+	 * See https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmsetwindowattribute
+	 *
+	 * @since 3.3
+	 */
+	public native static boolean dwmSetWindowAttributeDWORD( long hwnd, int attribute, int value );
+
+	/** @since 3.3 */
+	public static final int
+		// use this constant to reset any window part colors to the system default behavior
+		DWMWA_COLOR_DEFAULT = 0xFFFFFFFF,
+		// use this constant to specify that a window part should not be rendered
+		DWMWA_COLOR_NONE = 0xFFFFFFFE;
+
+	/** @since 3.3 */
+	public static final Color COLOR_NONE = new Color( 0, true );
+
+	/**
+	 * Invokes Win32 API method {@code DwmSetWindowAttribute()} with a {@code COLORREF} attribute value.
 	 * See https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmsetwindowattribute
 	 * <p>
 	 * Supported since Windows 11 Build 22000.
+	 *
+	 * @since 3.3
 	 */
-	public native static boolean setWindowBorderColor( long hwnd, int red, int green, int blue );
+	public static boolean dwmSetWindowAttributeCOLORREF( long hwnd, int attribute, Color color ) {
+		// convert color to Windows RGB value
+		int rgb = (color == COLOR_NONE)
+			? DWMWA_COLOR_NONE
+			: (color != null
+				? (color.getRed() | (color.getGreen() << 8) | (color.getBlue() << 16))
+				: DWMWA_COLOR_DEFAULT);
+
+		// DwmSetWindowAttribute() expects COLORREF as attribute value, which is defined as DWORD
+		return dwmSetWindowAttributeDWORD( hwnd, attribute, rgb );
+	}
 }

@@ -1,0 +1,278 @@
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][left][left][left][left]"
+			"$rowConstraints": "[fill]para[][][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "modeLabel"
+				"text": "Mode:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "lightModeRadioButton"
+				"text": "Light"
+				"$buttonGroup": new FormReference( "modeButtonGroup" )
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modeChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "darkModeRadioButton"
+				"text": "Dark"
+				"$buttonGroup": new FormReference( "modeButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modeChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "borderLabel"
+				"text": "Border Color:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "borderDefaultRadioButton"
+				"text": "Default"
+				"$buttonGroup": new FormReference( "borderColorButtonGroup" )
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "borderRedRadioButton"
+				"text": "Red"
+				"$buttonGroup": new FormReference( "borderColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "borderGreenRadioButton"
+				"text": "Green"
+				"$buttonGroup": new FormReference( "borderColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "borderNoneRadioButton"
+				"text": "None"
+				"$buttonGroup": new FormReference( "borderColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "captionLabel"
+				"text": "Caption Color:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "captionDefaultRadioButton"
+				"text": "Default"
+				"$buttonGroup": new FormReference( "captionColorButtonGroup" )
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "captionGreenRadioButton"
+				"text": "Green"
+				"$buttonGroup": new FormReference( "captionColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "captionYellowRadioButton"
+				"text": "Yellow"
+				"$buttonGroup": &FormReference0 new FormReference( "captionColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 2"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "captionBlackRadioButton"
+				"text": "Black"
+				"$buttonGroup": #FormReference0
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 2"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textLabel"
+				"text": "Text Color:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "textDefaultRadioButton"
+				"text": "Default"
+				"$buttonGroup": new FormReference( "textColorButtonGroup" )
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "textColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "textRedRadioButton"
+				"text": "Red"
+				"$buttonGroup": new FormReference( "textColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "textColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "textBlueRadioButton"
+				"text": "Blue"
+				"$buttonGroup": &FormReference1 new FormReference( "textColorButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "textColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 3"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "textWhiteRadioButton"
+				"text": "White"
+				"$buttonGroup": #FormReference1
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "textColorChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 3"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "cornerLabel"
+				"text": "Corner:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "cornerDefaultRadioButton"
+				"text": "Default"
+				"$buttonGroup": new FormReference( "cornerButtonGroup" )
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cornerChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "cornerDontRoundRadioButton"
+				"text": "Don't Round"
+				"$buttonGroup": new FormReference( "cornerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cornerChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "cornerRoundRadioButton"
+				"text": "Round"
+				"$buttonGroup": new FormReference( "cornerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cornerChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "cornerRoundSmallRadioButton"
+				"text": "Round Small"
+				"$buttonGroup": new FormReference( "cornerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cornerChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4 4 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 415, 350 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "modeButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 360 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "borderColorButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 414 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "captionColorButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 468 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "textColorButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 522 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "cornerButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 576 )
+		} )
+	}
+}

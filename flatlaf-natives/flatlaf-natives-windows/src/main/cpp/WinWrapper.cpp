@@ -50,29 +50,6 @@ JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_get
 
 //---- Desktop Window Manager (DWM) -------------------------------------------
 
-// define constants that may not available in older development environments
-
-#ifndef DWMWA_COLOR_DEFAULT
-
-#define DWMWA_WINDOW_CORNER_PREFERENCE		33
-#define DWMWA_BORDER_COLOR					34
-
-typedef enum  {
-  DWMWCP_DEFAULT = 0,
-  DWMWCP_DONOTROUND = 1,
-  DWMWCP_ROUND = 2,
-  DWMWCP_ROUNDSMALL = 3
-} DWM_WINDOW_CORNER_PREFERENCE;
-
-// Use this constant to reset any window part colors to the system default behavior
-#define DWMWA_COLOR_DEFAULT 0xFFFFFFFF
-
-// Use this constant to specify that a window part should not be rendered
-#define DWMWA_COLOR_NONE    0xFFFFFFFE
-
-#endif
-
-
 extern "C"
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_setWindowCornerPreference
 	( JNIEnv* env, jclass cls, jlong hwnd, jint cornerPreference )
@@ -85,18 +62,23 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_
 }
 
 extern "C"
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_setWindowBorderColor
-	( JNIEnv* env, jclass cls, jlong hwnd, jint red, jint green, jint blue )
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_dwmSetWindowAttributeBOOL
+	( JNIEnv* env, jclass cls, jlong hwnd, jint attribute, jboolean value )
 {
 	if( hwnd == 0 )
 		return FALSE;
 
-	COLORREF attr;
-	if( red == -1 ) 
-		attr = DWMWA_COLOR_DEFAULT;
-	else if( red == -2 )
-		attr = DWMWA_COLOR_NONE;
-	else
-		attr = RGB( red, green, blue );
-	return ::DwmSetWindowAttribute( reinterpret_cast<HWND>( hwnd ), DWMWA_BORDER_COLOR, &attr, sizeof( attr ) ) == S_OK;
+	BOOL attr = value;
+	return ::DwmSetWindowAttribute( reinterpret_cast<HWND>( hwnd ), attribute, &attr, sizeof( attr ) ) == S_OK;
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_dwmSetWindowAttributeDWORD
+	( JNIEnv* env, jclass cls, jlong hwnd, jint attribute, jint value )
+{
+	if( hwnd == 0 )
+		return FALSE;
+
+	DWORD attr = value;
+	return ::DwmSetWindowAttribute( reinterpret_cast<HWND>( hwnd ), attribute, &attr, sizeof( attr ) ) == S_OK;
 }

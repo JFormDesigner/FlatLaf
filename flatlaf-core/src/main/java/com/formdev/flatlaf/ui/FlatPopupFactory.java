@@ -361,29 +361,20 @@ public class FlatPopupFactory
 		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, cornerPreference );
 
 		// set border color
-		int red = -1; // use system default color
-		int green = 0;
-		int blue = 0;
+		Color borderColor = null; // use system default color
 		if( contents instanceof JComponent ) {
 			Border border = ((JComponent)contents).getBorder();
 			border = FlatUIUtils.unwrapNonUIResourceBorder( border );
 
 			// get color from border of contents (e.g. JPopupMenu or JToolTip)
-			Color borderColor = null;
 			if( border instanceof FlatLineBorder )
 				borderColor = ((FlatLineBorder)border).getLineColor();
 			else if( border instanceof LineBorder )
 				borderColor = ((LineBorder)border).getLineColor();
 			else if( border instanceof EmptyBorder )
-				red = -2; // do not paint border
-
-			if( borderColor != null ) {
-				red = borderColor.getRed();
-				green = borderColor.getGreen();
-				blue = borderColor.getBlue();
-			}
+				borderColor = FlatNativeWindowsLibrary.COLOR_NONE; // do not paint border
 		}
-		FlatNativeWindowsLibrary.setWindowBorderColor( hwnd, red, green, blue );
+		FlatNativeWindowsLibrary.dwmSetWindowAttributeCOLORREF( hwnd, FlatNativeWindowsLibrary.DWMWA_BORDER_COLOR, borderColor );
 	}
 
 	private static void resetWindows11Border( Window popupWindow ) {
