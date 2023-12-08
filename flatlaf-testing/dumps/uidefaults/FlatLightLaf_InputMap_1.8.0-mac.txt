@@ -21,7 +21,7 @@ CheckBox.focusInputMap         [lazy] 2    javax.swing.plaf.InputMapUIResource [
 
 #---- ComboBox ----
 
-ComboBox.ancestorInputMap      [lazy] 11    javax.swing.plaf.InputMapUIResource [UI]
+ComboBox.ancestorInputMap      [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
     DOWN                  selectNext
     END                   endPassThrough
     ENTER                 enterPressed
@@ -31,7 +31,6 @@ ComboBox.ancestorInputMap      [lazy] 11    javax.swing.plaf.InputMapUIResource 
     KP_UP                 selectPrevious
     PAGE_DOWN             pageDownPassThrough
     PAGE_UP               pageUpPassThrough
-    SPACE                 spacePopup
     UP                    selectPrevious
 
 

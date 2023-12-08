@@ -15,6 +15,18 @@
 + FileChooser.useSystemExtensionHiding false
 
 
+#---- JXHeader ----
+
+- JXHeader.titleFont             [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ JXHeader.titleFont             [active] Helvetica Neue bold 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- JXTitledPanel ----
+
+- JXTitledPanel.titleFont        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ JXTitledPanel.titleFont        [active] Helvetica Neue bold 13    javax.swing.plaf.FontUIResource [UI]
+
+
 #---- Menu ----
 
 - Menu.shortcutKeys              length=1    [I
@@ -53,6 +65,18 @@
 
 - ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 + ScrollBar.thumbInsets          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- TaskPane ----
+
+- TaskPane.font                  [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ TaskPane.font                  [active] Helvetica Neue bold 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- TitlePane ----
+
+- TitlePane.small.font           [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
++ TitlePane.small.font           [active] Helvetica Neue plain 12    javax.swing.plaf.FontUIResource [UI]
 - defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 + defaultFont                    Helvetica Neue plain 13    javax.swing.plaf.FontUIResource [UI]
 
