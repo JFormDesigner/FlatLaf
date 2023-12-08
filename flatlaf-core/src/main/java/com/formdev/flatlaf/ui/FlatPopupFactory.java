@@ -163,67 +163,6 @@ public class FlatPopupFactory
 	}
 
 	/**
-	 * Shows the given popup and, if necessary, fixes the location of a heavy weight popup window.
-	 * <p>
-	 * On a dual screen setup, where screens use different scale factors, it may happen
-	 * that the window location changes when showing a heavy weight popup window.
-	 * E.g. when opening a dialog on the secondary screen and making combobox popup visible.
-	 * <p>
-	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
-	 */
-	private static void showPopupAndFixLocation( Popup popup, Window popupWindow ) {
-		if( popupWindow != null ) {
-			// remember location of heavy weight popup window
-			int x = popupWindow.getX();
-			int y = popupWindow.getY();
-
-			popup.show();
-
-			// restore popup window location if it has changed
-			// (probably scaled when screens use different scale factors)
-			if( popupWindow.getX() != x || popupWindow.getY() != y )
-				popupWindow.setLocation( x, y );
-		} else
-			popup.show();
-	}
-
-	private boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
-		Object value = getOption( owner, contents, clientKey, uiKey );
-		return (value instanceof Boolean) ? (Boolean) value : false;
-	}
-
-	private int getBorderCornerRadius( Component owner, Component contents ) {
-		String uiKey =
-			(contents instanceof BasicComboPopup) ? "ComboBox.borderCornerRadius" :
-			(contents instanceof JPopupMenu) ? "PopupMenu.borderCornerRadius" :
-			(contents instanceof JToolTip) ? "ToolTip.borderCornerRadius" :
-			"Popup.borderCornerRadius";
-
-		Object value = getOption( owner, contents, FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, uiKey );
-		return (value instanceof Integer) ? (Integer) value : 0;
-	}
-
-	/**
-	 * Get option from:
-	 * <ol>
-	 * <li>client property {@code clientKey} of {@code owner}
-	 * <li>client property {@code clientKey} of {@code contents}
-	 * <li>UI property {@code uiKey}
-	 * </ol>
-	 */
-	private Object getOption( Component owner, Component contents, String clientKey, String uiKey ) {
-		for( Component c : new Component[] { owner, contents } ) {
-			if( c instanceof JComponent ) {
-				Object value = ((JComponent)c).getClientProperty( clientKey );
-				if( value != null )
-					return value;
-			}
-		}
-
-		return UIManager.get( uiKey );
-	}
-
-	/**
 	 * There is no API in Java 8 to force creation of heavy weight popups,
 	 * but it is possible with reflection. Java 9 provides a new method.
 	 *
@@ -257,6 +196,33 @@ public class FlatPopupFactory
 			return super.getPopup( owner, contents, x, y );
 		}
 	}
+
+	private boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
+		Object value = getOption( owner, contents, clientKey, uiKey );
+		return (value instanceof Boolean) ? (Boolean) value : false;
+	}
+
+	/**
+	 * Get option from:
+	 * <ol>
+	 * <li>client property {@code clientKey} of {@code owner}
+	 * <li>client property {@code clientKey} of {@code contents}
+	 * <li>UI property {@code uiKey}
+	 * </ol>
+	 */
+	private Object getOption( Component owner, Component contents, String clientKey, String uiKey ) {
+		for( Component c : new Component[] { owner, contents } ) {
+			if( c instanceof JComponent ) {
+				Object value = ((JComponent)c).getClientProperty( clientKey );
+				if( value != null )
+					return value;
+			}
+		}
+
+		return UIManager.get( uiKey );
+	}
+
+	//---- tooltips -----------------------------------------------------------
 
 	/**
 	 * Usually ToolTipManager places a tooltip at (mouseLocation.x, mouseLocation.y + 20).
@@ -342,6 +308,8 @@ public class FlatPopupFactory
 			((JComponent)owner).getToolTipLocation( me ) != null;
 	}
 
+	//---- native rounded border ----------------------------------------------
+
 	private static boolean isWindows11BorderSupported() {
 		return SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded();
 	}
@@ -387,6 +355,19 @@ public class FlatPopupFactory
 		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
 	}
 
+	private int getBorderCornerRadius( Component owner, Component contents ) {
+		String uiKey =
+			(contents instanceof BasicComboPopup) ? "ComboBox.borderCornerRadius" :
+			(contents instanceof JPopupMenu) ? "PopupMenu.borderCornerRadius" :
+			(contents instanceof JToolTip) ? "ToolTip.borderCornerRadius" :
+			"Popup.borderCornerRadius";
+
+		Object value = getOption( owner, contents, FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, uiKey );
+		return (value instanceof Integer) ? (Integer) value : 0;
+	}
+
+	//---- fixes --------------------------------------------------------------
+
 	private static boolean overlapsHeavyWeightComponent( Component owner, Component contents, int x, int y ) {
 		if( owner == null )
 			return false;
@@ -421,7 +402,7 @@ public class FlatPopupFactory
 	 * On Linux with Wayland, since Java 21, Swing adds a window focus listener to popup owner/invoker window,
 	 * which hides the popup as soon as the owner/invoker window looses focus.
 	 * This works fine for light-weight popups.
-	 * It also works for heavy-weight popups if the do not request focus.
+	 * It also works for heavy-weight popups if they do not request focus.
 	 * Because FlatLaf always uses heavy-weight popups, all popups that request focus
 	 * are broken since Java 21.
 	 *
@@ -447,6 +428,31 @@ public class FlatPopupFactory
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Shows the given popup and, if necessary, fixes the location of a heavy weight popup window.
+	 * <p>
+	 * On a dual screen setup, where screens use different scale factors, it may happen
+	 * that the window location changes when showing a heavy weight popup window.
+	 * E.g. when opening a dialog on the secondary screen and making combobox popup visible.
+	 * <p>
+	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
+	 */
+	private static void showPopupAndFixLocation( Popup popup, Window popupWindow ) {
+		if( popupWindow != null ) {
+			// remember location of heavy weight popup window
+			int x = popupWindow.getX();
+			int y = popupWindow.getY();
+
+			popup.show();
+
+			// restore popup window location if it has changed
+			// (probably scaled when screens use different scale factors)
+			if( popupWindow.getX() != x || popupWindow.getY() != y )
+				popupWindow.setLocation( x, y );
+		} else
+			popup.show();
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
