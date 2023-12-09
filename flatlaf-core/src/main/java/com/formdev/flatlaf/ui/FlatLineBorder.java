@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import javax.swing.JComponent;
 
 /**
  * Line border for various components.
@@ -66,6 +67,9 @@ public class FlatLineBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		if( c instanceof JComponent && ((JComponent)c).getClientProperty( FlatPopupFactory.KEY_POPUP_USES_NATIVE_BORDER ) != null )
+			return;
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );

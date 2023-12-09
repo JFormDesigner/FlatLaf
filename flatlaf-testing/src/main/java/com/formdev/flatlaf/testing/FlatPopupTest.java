@@ -17,7 +17,6 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.*;
-import java.awt.Point;
 import javax.swing.*;
 import com.formdev.flatlaf.util.Animator;
 import net.miginfocom.swing.*;
@@ -86,6 +85,17 @@ public class FlatPopupTest
 			showPopup( (int) (fraction * xoffset), (int) (fraction * yoffset) );
 		} );
 		animator.start();
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( popupMenu1 != null ) {
+			SwingUtilities.updateComponentTreeUI( popupMenu1 );
+			SwingUtilities.updateComponentTreeUI( popupMenu2 );
+			SwingUtilities.updateComponentTreeUI( popupPanel );
+		}
 	}
 
 	private void initComponents() {

@@ -210,6 +210,7 @@ ComboBox.noActionOnKeyNavigation
 ComboBox.padding
 ComboBox.popupBackground
 ComboBox.popupInsets
+ComboBox.roundedBorderWidth
 ComboBox.selectionArc
 ComboBox.selectionBackground
 ComboBox.selectionForeground
@@ -604,6 +605,7 @@ Popup.dropShadowColor
 Popup.dropShadowInsets
 Popup.dropShadowOpacity
 Popup.dropShadowPainted
+Popup.roundedBorderWidth
 PopupMenu.background
 PopupMenu.border
 PopupMenu.borderColor
@@ -613,6 +615,7 @@ PopupMenu.consumeEventOnClose
 PopupMenu.font
 PopupMenu.foreground
 PopupMenu.hoverScrollArrowBackground
+PopupMenu.roundedBorderWidth
 PopupMenu.scrollArrowColor
 PopupMenu.selectedWindowInputMapBindings
 PopupMenu.selectedWindowInputMapBindings.RightToLeft
@@ -1161,6 +1164,7 @@ ToolTip.border
 ToolTip.borderCornerRadius
 ToolTip.font
 ToolTip.foreground
+ToolTip.roundedBorderWidth
 ToolTipManager.enableToolTipMode
 ToolTipUI
 Tree.ancestorInputMap

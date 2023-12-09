@@ -6,6 +6,7 @@
 
 #---- ComboBox ----
 
++ ComboBox.roundedBorderWidth    0
 + ComboBox.showPopupOnNavigation true
 
 
@@ -46,6 +47,16 @@
 + OptionPane.isYesLast           true
 
 
+#---- Popup ----
+
++ Popup.roundedBorderWidth       0
+
+
+#---- PopupMenu ----
+
++ PopupMenu.roundedBorderWidth   0
+
+
 #---- ProgressBar ----
 
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
@@ -77,6 +88,11 @@
 
 - TitlePane.small.font           [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
 + TitlePane.small.font           [active] Helvetica Neue plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- ToolTip ----
+
++ ToolTip.roundedBorderWidth     0
 - defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 + defaultFont                    Helvetica Neue plain 13    javax.swing.plaf.FontUIResource [UI]
 
