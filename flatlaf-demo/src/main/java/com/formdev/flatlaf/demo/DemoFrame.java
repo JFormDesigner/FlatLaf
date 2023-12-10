@@ -101,7 +101,7 @@ class DemoFrame
 					setTitle( null );
 
 				// add gap to left side of toolbar
-				toolBar.add( Box.createHorizontalStrut( 70 ), 0 );
+				toolBar.add( Box.createHorizontalStrut( 80 ), 0 );
 			}
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
@@ -902,6 +902,54 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem2);
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		backButton.addActionListener( e -> System.out.println( e ) );
+		backButton.addMouseListener( new MouseListener() {
+
+			@Override
+			public void mouseReleased( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m release" );
+			}
+
+			@Override
+			public void mousePressed( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m press" );
+			}
+
+			@Override
+			public void mouseExited( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m exit" );
+			}
+
+			@Override
+			public void mouseEntered( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m ent" );
+			}
+
+			@Override
+			public void mouseClicked( MouseEvent e ) {
+				// TODO Auto-generated method stub
+			System.out.println( "m click" );
+			}
+		} );
+		backButton.addMouseMotionListener( new MouseMotionListener() {
+
+			@Override
+			public void mouseMoved( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m moved" );
+			}
+
+			@Override
+			public void mouseDragged( MouseEvent e ) {
+				// TODO Auto-generated method stub
+				System.out.println( "m drag" );
+			}
+		} );
 
 		// add "Users" button to menubar
 		FlatButton usersButton = new FlatButton();

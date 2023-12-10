@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
   (JNIEnv *, jclass, jobject, jfloat, jfloat, jint);
 
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    setWindowToolbar
+ * Signature: (Ljava/awt/Window;)V
+ */
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
+  (JNIEnv *, jclass, jobject);
+
 #ifdef __cplusplus
 }
 #endif

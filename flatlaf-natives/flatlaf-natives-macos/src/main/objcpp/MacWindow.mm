@@ -87,3 +87,27 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	JNI_COCOA_EXIT()
 	return FALSE;
 }
+
+extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return;
+
+	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
+
+		NSToolbar* toolbar = [NSToolbar new];
+		nsWindow.toolbar = toolbar;
+
+		// TODO handle fullscreen
+
+		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
+	}];
+
+	JNI_COCOA_EXIT()
+}
