@@ -18,9 +18,33 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowToolbar
- * Signature: (Ljava/awt/Window;)V
+ * Signature: (Ljava/awt/Window;Z)V
  */
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
+  (JNIEnv *, jclass, jobject, jboolean);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    getWindowButtonAreaWidth
+ * Signature: (Ljava/awt/Window;)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonAreaWidth
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    getWindowTitleBarHeight
+ * Signature: (Ljava/awt/Window;)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowTitleBarHeight
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    isWindowFullScreen
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWindowFullScreen
   (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus

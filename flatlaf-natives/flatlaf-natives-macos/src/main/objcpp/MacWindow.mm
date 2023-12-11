@@ -90,7 +90,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
-	( JNIEnv* env, jclass cls, jobject window )
+	( JNIEnv* env, jclass cls, jobject window, jboolean hasToolbar )
 {
 	JNI_COCOA_ENTER()
 
@@ -101,7 +101,11 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindo
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
 		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
-		NSToolbar* toolbar = [NSToolbar new];
+		NSToolbar* toolbar = NULL;
+		if( hasToolbar ) {
+			toolbar = [NSToolbar new];
+			toolbar.showsBaselineSeparator = NO; // necessary for older macOS versions
+		}
 		nsWindow.toolbar = toolbar;
 
 		// TODO handle fullscreen
@@ -111,3 +115,82 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindo
 
 	JNI_COCOA_EXIT()
 }
+
+extern "C"
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonAreaWidth
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return -1;
+
+	// get buttons
+	NSView* buttons[3] = {
+		[nsWindow standardWindowButton:NSWindowCloseButton],
+		[nsWindow standardWindowButton:NSWindowMiniaturizeButton],
+		[nsWindow standardWindowButton:NSWindowZoomButton]
+	};
+
+	// get most left and right coordinates
+	int left = -1;
+	int right = -1;
+	for( int i = 0; i < 3; i++ ) {
+		NSView* button = buttons[i];
+		if( button == NULL )
+			continue;
+
+		int x = [button convertRect: [button bounds] toView:button.superview].origin.x;
+		int width = button.bounds.size.width;
+		if( left == -1 || x < left )
+			left = x;
+		if( right == -1 || x + width > right )
+			right = x + width;
+	}
+
+	if( left == -1 || right == -1 )
+		return -1;
+
+	// 'right' is the actual button area width (from left window edge)
+	// adding 'left' to add same empty space on right side as on left side
+	return right + left;
+
+	JNI_COCOA_EXIT()
+}
+
+extern "C"
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowTitleBarHeight
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return -1;
+
+	NSView* closeButton = [nsWindow standardWindowButton:NSWindowCloseButton];
+	if( closeButton == NULL )
+		return -1;
+
+	NSView* titlebar = closeButton.superview;
+	return titlebar.bounds.size.height;
+
+	JNI_COCOA_EXIT()
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWindowFullScreen
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return FALSE;
+
+	return (jboolean) (([nsWindow styleMask] & NSWindowStyleMaskFullScreen) != 0);
+
+	JNI_COCOA_EXIT()
+}
+

@@ -19,35 +19,45 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.LayoutManager2;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Map;
 import javax.swing.AbstractButton;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultButtonModel;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JRootPane;
 import javax.swing.JToolBar;
 import javax.swing.LayoutFocusTraversalPolicy;
 import javax.swing.RootPaneContainer;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -148,6 +158,12 @@ public class FlatToolBarUI
 			toolBar.setFloatable( false );
 		} else
 			oldFloatable = null;
+
+		// layout manager
+		LayoutManager layout = createLayout();
+		toolBar.setLayout( layout );
+		if( layout instanceof PropertyChangeListener )
+			toolBar.addPropertyChangeListener( (PropertyChangeListener) layout );
 	}
 
 	@Override
@@ -160,6 +176,8 @@ public class FlatToolBarUI
 			toolBar.setFloatable( oldFloatable );
 			oldFloatable = null;
 		}
+
+		toolBar.setLayout( null );
 	}
 
 	@Override
@@ -451,6 +469,137 @@ public class FlatToolBarUI
 		return (model instanceof DefaultButtonModel)
 			? ((DefaultButtonModel)model).getGroup()
 			: null;
+	}
+
+	/** @since 3.3 */
+	protected LayoutManager createLayout() {
+		return new FlatToolBarLayoutManager();
+	}
+
+	/**
+	 * Returns whether the given toolbar is used in window titlebar on macOS.
+	 * <p>
+	 * Returns {@code true} if:
+	 * <ul>
+	 *   <li>running on macOS
+	 *   <li>Java supports "full window content"
+	 *   <li>"full window content" is enabled for window
+	 *   <li>toolbar orientation is horizontal
+	 *   <li>toolbar is located at {@code 0,0} in window
+	 * </ul>
+	 *
+	 * @since 3.3
+	 */
+	public static boolean isMacOSMainToolbar( JToolBar toolBar ) {
+		if( !SystemInfo.isMacFullWindowContentSupported ||
+			toolBar.getOrientation() != JToolBar.HORIZONTAL ||
+			toolBar.getX() != 0 ||
+			toolBar.getY() != 0 )
+		  return false;
+
+		JRootPane rootPane = SwingUtilities.getRootPane( toolBar );
+		if( rootPane == null )
+			return false;
+
+		if( !FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) )
+			return false;
+
+		for( Component p = toolBar.getParent(); p != null && !(p instanceof Window); p = p.getParent() ) {
+			if( p.getX() != 0 || p.getY() != 0 )
+				return false;
+		}
+
+		return true;
+	}
+
+	//---- class FlatToolBarLayoutManager -------------------------------------
+
+	/**
+	 * @since 3.3
+	 */
+	protected class FlatToolBarLayoutManager
+		implements LayoutManager2, PropertyChangeListener, UIResource
+	{
+		private BoxLayout delegate;
+
+		FlatToolBarLayoutManager() {
+			initBoxLayout();
+		}
+
+		private void initBoxLayout() {
+			delegate = new BoxLayout( toolBar, (toolBar.getOrientation() == JToolBar.HORIZONTAL)
+				? BoxLayout.LINE_AXIS : BoxLayout.PAGE_AXIS );
+		}
+
+		@Override
+		public void addLayoutComponent( Component comp, Object constraints ) {
+			delegate.addLayoutComponent( comp, constraints );
+		}
+
+		@Override
+		public void addLayoutComponent( String name, Component comp ) {
+			delegate.addLayoutComponent( name, comp );
+		}
+
+		@Override
+		public void removeLayoutComponent( Component comp ) {
+			delegate.removeLayoutComponent( comp );
+		}
+
+		@Override
+		public Dimension preferredLayoutSize( Container parent ) {
+			return minimumHeightOnMacOS( delegate.preferredLayoutSize( parent ) );
+		}
+
+		@Override
+		public Dimension minimumLayoutSize( Container parent ) {
+			return minimumHeightOnMacOS( delegate.minimumLayoutSize( parent ) );
+		}
+
+		@Override
+		public Dimension maximumLayoutSize( Container target ) {
+			return minimumHeightOnMacOS( delegate.maximumLayoutSize( target ) );
+		}
+
+		private Dimension minimumHeightOnMacOS( Dimension size ) {
+			if( isMacOSMainToolbar( toolBar ) ) {
+				// get title bar height from macOS
+				int titleBarHeight = FlatNativeMacLibrary.isLoaded()
+					? FlatNativeMacLibrary.getWindowTitleBarHeight( SwingUtilities.windowForComponent( toolBar ) )
+					: -1;
+				if( titleBarHeight < 0 )
+					titleBarHeight = 28; // default height if NSWindow does not have a toolbar
+
+				size.height = Math.max( size.height, titleBarHeight );
+			}
+			return size;
+		}
+
+		@Override
+		public void layoutContainer( Container parent ) {
+			delegate.layoutContainer( parent );
+		}
+
+		@Override
+		public void invalidateLayout( Container target ) {
+			delegate.invalidateLayout( target );
+		}
+
+		@Override
+		public float getLayoutAlignmentX( Container target ) {
+			return delegate.getLayoutAlignmentX( target );
+		}
+
+		@Override
+		public float getLayoutAlignmentY( Container target ) {
+			return delegate.getLayoutAlignmentY( target );
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			if( "orientation".equals( e.getPropertyName() ) )
+				initBoxLayout();
+		}
 	}
 
 	//---- class FlatToolBarFocusTraversalPolicy ------------------------------

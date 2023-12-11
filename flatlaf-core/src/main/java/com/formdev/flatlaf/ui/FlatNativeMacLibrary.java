@@ -54,5 +54,8 @@ public class FlatNativeMacLibrary
 
 	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
 
-	public native static void setWindowToolbar( Window window );
+	public native static void setWindowToolbar( Window window, boolean hasToolbar );
+	public native static int getWindowButtonAreaWidth( Window window );
+	public native static int getWindowTitleBarHeight( Window window );
+	public native static boolean isWindowFullScreen( Window window );
 }

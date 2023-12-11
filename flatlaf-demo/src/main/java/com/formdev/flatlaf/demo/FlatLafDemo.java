@@ -120,7 +120,7 @@ public class FlatLafDemo
 			frame.setLocationRelativeTo( null );
 			if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() ) {
 				// TODO use client property
-				FlatNativeMacLibrary.setWindowToolbar( frame );
+				FlatNativeMacLibrary.setWindowToolbar( frame, true );
 			}
 			frame.setVisible( true );
 		} );

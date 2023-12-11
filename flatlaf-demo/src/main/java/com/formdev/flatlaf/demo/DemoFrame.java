@@ -46,6 +46,7 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -99,9 +100,6 @@ class DemoFrame
 					getRootPane().putClientProperty( "apple.awt.windowTitleVisible", false );
 				else
 					setTitle( null );
-
-				// add gap to left side of toolbar
-				toolBar.add( Box.createHorizontalStrut( 80 ), 0 );
 			}
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
@@ -903,8 +901,15 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
-		backButton.addActionListener( e -> System.out.println( e ) );
-		backButton.addMouseListener( new MouseListener() {
+		backButton.addActionListener( e -> {
+			FlatNativeMacLibrary.setWindowToolbar( this, true );
+		});
+		forwardButton.addActionListener( e -> {
+			FlatNativeMacLibrary.setWindowToolbar( this, false );
+		});
+
+		cutButton.addActionListener( e -> System.out.println( e ) );
+		cutButton.addMouseListener( new MouseListener() {
 
 			@Override
 			public void mouseReleased( MouseEvent e ) {
@@ -936,7 +941,7 @@ class DemoFrame
 			System.out.println( "m click" );
 			}
 		} );
-		backButton.addMouseMotionListener( new MouseMotionListener() {
+		cutButton.addMouseMotionListener( new MouseMotionListener() {
 
 			@Override
 			public void mouseMoved( MouseEvent e ) {
