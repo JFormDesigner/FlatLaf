@@ -27,7 +27,6 @@ import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
-import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -118,10 +117,6 @@ public class FlatLafDemo
 			// show frame
 			frame.pack();
 			frame.setLocationRelativeTo( null );
-			if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() ) {
-				// TODO use client property
-				FlatNativeMacLibrary.setWindowToolbar( frame, true );
-			}
 			frame.setVisible( true );
 		} );
 	}

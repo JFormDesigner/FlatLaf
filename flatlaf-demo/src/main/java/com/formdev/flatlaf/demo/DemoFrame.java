@@ -46,7 +46,6 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
-import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -90,21 +89,23 @@ class DemoFrame
 			// do not use HTML text in menu items because this is not supported in macOS screen menu
 			htmlMenuItem.setText( "some text" );
 
+			JRootPane rootPane = getRootPane();
 			if( SystemInfo.isMacFullWindowContentSupported ) {
 				// expand window content into window title bar and make title bar transparent
-				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
-				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
+				rootPane.putClientProperty( "apple.awt.fullWindowContent", true );
+				rootPane.putClientProperty( "apple.awt.transparentTitleBar", true );
+				rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, true );
 
 				// hide window title
 				if( SystemInfo.isJava_17_orLater )
-					getRootPane().putClientProperty( "apple.awt.windowTitleVisible", false );
+					rootPane.putClientProperty( "apple.awt.windowTitleVisible", false );
 				else
 					setTitle( null );
 			}
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
 			if( !SystemInfo.isJava_11_orLater )
-				getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
+				rootPane.putClientProperty( "apple.awt.fullscreenable", true );
 		}
 
 		// integrate into macOS screen menu
@@ -902,10 +903,10 @@ class DemoFrame
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		backButton.addActionListener( e -> {
-			FlatNativeMacLibrary.setWindowToolbar( this, true );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, true );
 		});
 		forwardButton.addActionListener( e -> {
-			FlatNativeMacLibrary.setWindowToolbar( this, false );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, null );
 		});
 
 		cutButton.addActionListener( e -> System.out.println( e ) );

@@ -367,6 +367,21 @@ public class FlatRootPaneUI
 				if( rootPane.isDisplayable() )
 					throw new IllegalComponentStateException( "The client property 'Window.style' must be set before the window becomes displayable." );
 				break;
+
+			case FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR:
+			case "ancestor":
+				if( SystemInfo.isMacFullWindowContentSupported &&
+					SystemInfo.isJava_17_orLater &&
+					rootPane.isDisplayable() &&
+					FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) &&
+					FlatNativeMacLibrary.isLoaded() )
+				{
+					Window window = SwingUtilities.windowForComponent( rootPane );
+					boolean enabled = FlatClientProperties.clientPropertyBoolean( rootPane,
+						FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, false );
+					FlatNativeMacLibrary.setWindowToolbar( window, enabled );
+				}
+				break;
 		}
 	}
 
