@@ -15,6 +15,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <objc/runtime.h>
 #import <jni.h>
 #import "JNIUtils.h"
 #import "JNFRunLoop.h"
@@ -98,9 +99,13 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindo
 	if( nsWindow == NULL )
 		return;
 
+	if( hasToolbar == (nsWindow.toolbar != NULL) )
+		return;
+
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
 		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
+		// add/remove toolbar
 		NSToolbar* toolbar = NULL;
 		if( hasToolbar ) {
 			toolbar = [NSToolbar new];
@@ -108,9 +113,42 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindo
 		}
 		nsWindow.toolbar = toolbar;
 
-		// TODO handle fullscreen
-
 		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
+
+		// when window becomes full screen, it is necessary to hide the toolbar
+		// because it otherwise is shown non-transparent and hides Swing components
+		static char enterObserverKey;
+		static char exitObserverKey;
+		NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+		if( hasToolbar ) {
+			NSLog( @"add observers %@", nsWindow );
+			id enterObserver = [center addObserverForName:NSWindowWillEnterFullScreenNotification
+				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+					NSLog( @"enter full screen %@", nsWindow );
+					if( nsWindow.toolbar != NULL )
+						nsWindow.toolbar.visible = NO;
+				}];
+			id exitObserver = [center addObserverForName:NSWindowDidExitFullScreenNotification
+				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+					NSLog( @"exit  full screen %@", nsWindow );
+					if( nsWindow.toolbar != NULL )
+						nsWindow.toolbar.visible = YES;
+				}];
+			objc_setAssociatedObject( nsWindow, &enterObserverKey, enterObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+			objc_setAssociatedObject( nsWindow, &exitObserverKey, exitObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+		} else {
+			NSLog( @"remove observers %@", nsWindow );
+			id enterObserver = objc_getAssociatedObject( nsWindow, &enterObserverKey );
+			id exitObserver = objc_getAssociatedObject( nsWindow, &exitObserverKey );
+			if( enterObserver != NULL ) {
+				[center removeObserver:enterObserver];
+				objc_setAssociatedObject( nsWindow, &enterObserverKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+			}
+			if( exitObserver != NULL ) {
+				[center removeObserver:exitObserver];
+				objc_setAssociatedObject( nsWindow, &exitObserverKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+			}
+		}
 	}];
 
 	JNI_COCOA_EXIT()
