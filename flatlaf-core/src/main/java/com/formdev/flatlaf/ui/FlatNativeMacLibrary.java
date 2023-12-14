@@ -23,6 +23,20 @@ import java.awt.Window;
  * <p>
  * <b>Note</b>: This is private API. Do not use!
  *
+ * <h2>Methods that use windows as parameter</h2>
+ *
+ * For all methods that accept a {@link java.awt.Window} as parameter,
+ * the underlying macOS window must be already created,
+ * otherwise the method fails. You can use following to ensure this:
+ * <pre>{@code
+ * if( !window.isDisplayable() )
+ *     window.addNotify();
+ * }</pre>
+ * or invoke the method after packing the window. E.g.
+ * <pre>{@code
+ * window.pack();
+ * }</pre>
+ *
  * @author Karl Tauber
  * @since 3.3
  */
@@ -38,22 +52,5 @@ public class FlatNativeMacLibrary
 		return FlatNativeLibrary.isLoaded();
 	}
 
-	/**
-	 * Gets the macOS window pointer (NSWindow) for the given Swing window.
-	 * <p>
-	 * Note that the underlying macOS window must be already created,
-	 * otherwise this method returns zero. Use following to ensure this:
-	 * <pre>{@code
-	 * if( !window.isDisplayable() )
-	 *     window.addNotify();
-	 * }</pre>
-	 * or invoke this method after packing the window. E.g.
-	 * <pre>{@code
-	 * window.pack();
-	 * long windowPtr = getWindowPtr( window );
-	 * }</pre>
-	 */
-	public native static long getWindowPtr( Window window );
-
-	public native static void setWindowRoundedBorder( long windowPtr, float radius, float borderWidth, int borderColor );
+	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
 }

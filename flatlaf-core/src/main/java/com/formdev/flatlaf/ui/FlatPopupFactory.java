@@ -324,13 +324,6 @@ public class FlatPopupFactory
 		if( !popupWindow.isDisplayable() )
 			popupWindow.addNotify();
 
-		// get native window handle/pointer
-		long hwnd = SystemInfo.isWindows
-			? FlatNativeWindowsLibrary.getHWND( popupWindow )
-			: FlatNativeMacLibrary.getWindowPtr( popupWindow );
-		if( hwnd == 0 )
-			return;
-
 		int borderCornerRadius = getBorderCornerRadius( owner, contents );
 		float borderWidth = getRoundedBorderWidth( owner, contents );
 
@@ -353,6 +346,9 @@ public class FlatPopupFactory
 		}
 
 		if( SystemInfo.isWindows ) {
+			// get native window handle
+			long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
+
 			// set corner preference
 			int cornerPreference = (borderCornerRadius <= 4)
 				? FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL  // 4px
@@ -366,7 +362,7 @@ public class FlatPopupFactory
 				borderWidth = 0;
 
 			// set corner radius, border width and color
-			FlatNativeMacLibrary.setWindowRoundedBorder( hwnd, borderCornerRadius,
+			FlatNativeMacLibrary.setWindowRoundedBorder( popupWindow, borderCornerRadius,
 				borderWidth, (borderColor != null) ? borderColor.getRGB() : 0 );
 		}
 	}

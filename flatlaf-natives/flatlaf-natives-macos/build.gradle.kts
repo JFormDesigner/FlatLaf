@@ -81,7 +81,7 @@ tasks {
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
 		val isARM64 = name.contains( "Arm64" )
 		val minOs = if( isARM64 ) minOsARM64 else minOsX86_64
-		val libraryName = if( isARM64 ) "flatlaf-macos-arm64.dylib" else "flatlaf-macos-x86_64.dylib"
+		val libraryName = if( isARM64 ) "libflatlaf-macos-arm64.dylib" else "libflatlaf-macos-x86_64.dylib"
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
@@ -91,14 +91,17 @@ tasks {
 		} )
 
 		doLast {
+			// sign shared library
+//			exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
+
 			// copy shared library to flatlaf-core resources
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "flatlaf-natives-macos.dylib", libraryName )
+				rename( "libflatlaf-natives-macos.dylib", libraryName )
 			}
 
-///*dump
+/*dump
 			val dylib = linkedFile.asFile.get()
 			val dylibDir = dylib.parent
 			exec { commandLine( "size", dylib ) }
@@ -123,7 +126,7 @@ tasks {
 			}
 			exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
 			exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
-//dump*/
+dump*/
 		}
 	}
 }

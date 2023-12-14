@@ -9,19 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    getWindowPtr
- * Signature: (Ljava/awt/Window;)J
- */
-JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowPtr
-  (JNIEnv *, jclass, jobject);
-
-/*
- * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
- * Signature: (JFFI)V
+ * Signature: (Ljava/awt/Window;FFI)Z
  */
-JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
-  (JNIEnv *, jclass, jlong, jfloat, jfloat, jint);
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
+  (JNIEnv *, jclass, jobject, jfloat, jfloat, jint);
 
 #ifdef __cplusplus
 }

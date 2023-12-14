@@ -24,67 +24,66 @@
  * @author Karl Tauber
  */
 
-extern "C"
-JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowPtr
-	( JNIEnv* env, jclass cls, jobject window )
-{
+NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	if( window == NULL )
 		return NULL;
-	
-	JNI_COCOA_ENTER()
+
+	// initialize field IDs (done only once because fields are static)
+	static jfieldID peerID = getFieldID( env, "java/awt/Component", "peer", "Ljava/awt/peer/ComponentPeer;" );
+	static jfieldID platformWindowID = getFieldID( env, "sun/lwawt/LWWindowPeer", "platformWindow", "Lsun/lwawt/PlatformWindow;" );
+	static jfieldID ptrID = getFieldID( env, "sun/lwawt/macosx/CFRetainedResource", "ptr", "J" );
+	if( peerID == NULL || platformWindowID == NULL || ptrID == NULL )
+		return NULL;
 
 	// get field java.awt.Component.peer
-	jfieldID peerID = env->GetFieldID( env->GetObjectClass( window ), "peer", "Ljava/awt/peer/ComponentPeer;" );
-	jobject peer = (peerID != NULL) ? env->GetObjectField( window, peerID ) : NULL;
+	jobject peer = env->GetObjectField( window, peerID );
 	if( peer == NULL )
 		return NULL;
 
 	// get field sun.lwawt.LWWindowPeer.platformWindow
-	jfieldID platformWindowID = env->GetFieldID( env->GetObjectClass( peer ), "platformWindow", "Lsun/lwawt/PlatformWindow;" );
-	jobject platformWindow = (platformWindowID != NULL) ? env->GetObjectField( peer, platformWindowID ) : NULL;
+	jobject platformWindow = env->GetObjectField( peer, platformWindowID );
 	if( platformWindow == NULL )
 		return NULL;
 
 	// get field sun.lwawt.macosx.CFRetainedResource.ptr
-	jfieldID ptrID = env->GetFieldID( env->GetObjectClass( platformWindow ), "ptr", "J" );
-	return (ptrID != NULL) ? env->GetLongField( platformWindow, ptrID ) : NULL;
-
-	JNI_COCOA_EXIT()
+	return (NSWindow *) jlong_to_ptr( env->GetLongField( platformWindow, ptrID ) );
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
-	( JNIEnv* env, jclass cls, jlong windowPtr, jfloat radius, jfloat borderWidth, jint borderColor )
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
+	( JNIEnv* env, jclass cls, jobject window, jfloat radius, jfloat borderWidth, jint borderColor )
 {
-	if( windowPtr == 0 )
-		return;
-	
 	JNI_COCOA_ENTER()
 
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return FALSE;
+
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
-		NSWindow* window = (NSWindow *) jlong_to_ptr( windowPtr );
+		nsWindow.hasShadow = YES;
+		nsWindow.contentView.wantsLayer = YES;
+		nsWindow.contentView.layer.cornerRadius = radius;
+		nsWindow.contentView.layer.masksToBounds = YES;
 
-		window.hasShadow = YES;
-		window.contentView.wantsLayer = YES;
-		window.contentView.layer.cornerRadius = radius;
-		window.contentView.layer.masksToBounds = YES;
-
-		window.contentView.layer.borderWidth = borderWidth;
+		nsWindow.contentView.layer.borderWidth = borderWidth;
 		if( borderWidth > 0 ) {
 			CGFloat red   = ((borderColor >> 16) & 0xff) / 255.;
 			CGFloat green = ((borderColor >> 8) & 0xff) / 255.;
 			CGFloat blue  = (borderColor & 0xff) / 255.;
 			CGFloat alpha = ((borderColor >> 24) & 0xff) / 255.;
 
-			window.contentView.layer.borderColor = [[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha] CGColor];
+			nsWindow.contentView.layer.borderColor = [[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha] CGColor];
 		}
 
-		window.backgroundColor = NSColor.clearColor;
-		window.opaque = NO;
+		nsWindow.backgroundColor = NSColor.clearColor;
+		nsWindow.opaque = NO;
 
-		[window.contentView.layer removeAllAnimations];
-		[window invalidateShadow];
+		[nsWindow.contentView.layer removeAllAnimations];
+		[nsWindow invalidateShadow];
 	}];
 
+	return TRUE;
+
 	JNI_COCOA_EXIT()
+	return FALSE;
 }

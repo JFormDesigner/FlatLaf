@@ -23,9 +23,9 @@
  */
 
 
-// from JNFJNI.h
+// from jlong_md.h
 #ifndef jlong_to_ptr
-#define jlong_to_ptr(a) ((void *)(uintptr_t)(a))
+  #define jlong_to_ptr(a) ((void*)(a))
 #endif
 
 
@@ -39,3 +39,6 @@
  				[ex name], [ex reason], [ex userInfo], [ex callStackSymbols] ); \
  		} \
 	}
+
+
+jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, const char* fieldSignature );
