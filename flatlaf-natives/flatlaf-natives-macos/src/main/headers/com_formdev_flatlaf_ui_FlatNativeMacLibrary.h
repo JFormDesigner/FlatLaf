@@ -18,9 +18,9 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowToolbar
- * Signature: (Ljava/awt/Window;Z)V
+ * Signature: (Ljava/awt/Window;Z)Z
  */
-JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
   (JNIEnv *, jclass, jobject, jboolean);
 
 /*

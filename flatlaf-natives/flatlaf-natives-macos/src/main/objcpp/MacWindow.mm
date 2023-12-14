@@ -25,6 +25,27 @@
  * @author Karl Tauber
  */
 
+@interface WindowData : NSObject
+	// used when window is full screen
+	@property (nonatomic) int lastWindowButtonAreaWidth;
+	@property (nonatomic) int lastWindowTitleBarHeight;
+
+	// full screen observers
+	@property (nonatomic) id willEnterFullScreenObserver;
+	@property (nonatomic) id didExitFullScreenObserver;
+@end
+
+@implementation WindowData
+@end
+
+// declare internal methods
+NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
+WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
+int getWindowButtonAreaWidth( NSWindow* nsWindow );
+int getWindowTitleBarHeight( NSWindow* nsWindow );
+bool isWindowFullScreen( NSWindow* nsWindow );
+
+
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	if( window == NULL )
 		return NULL;
@@ -48,6 +69,16 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 
 	// get field sun.lwawt.macosx.CFRetainedResource.ptr
 	return (NSWindow *) jlong_to_ptr( env->GetLongField( platformWindow, ptrID ) );
+}
+
+WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
+	static char key;
+	WindowData* windowData = objc_getAssociatedObject( nsWindow, &key );
+	if( windowData == NULL && allocate ) {
+		windowData = [WindowData new];
+		objc_setAssociatedObject( nsWindow, &key, windowData, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+	}
+	return windowData;
 }
 
 extern "C"
@@ -90,20 +121,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
 	( JNIEnv* env, jclass cls, jobject window, jboolean hasToolbar )
 {
 	JNI_COCOA_ENTER()
 
 	NSWindow* nsWindow = getNSWindow( env, cls, window );
 	if( nsWindow == NULL )
-		return;
+		return FALSE;
 
 	if( hasToolbar == (nsWindow.toolbar != NULL) )
-		return;
+		return TRUE;
+
+	WindowData* windowData = getWindowData( nsWindow, true );
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
-		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
+//		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
 		// add/remove toolbar
 		NSToolbar* toolbar = NULL;
@@ -113,45 +146,51 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindo
 		}
 		nsWindow.toolbar = toolbar;
 
-		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
+//		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
 		// when window becomes full screen, it is necessary to hide the toolbar
 		// because it otherwise is shown non-transparent and hides Swing components
-		static char enterObserverKey;
-		static char exitObserverKey;
 		NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
 		if( hasToolbar ) {
-			NSLog( @"add observers %@", nsWindow );
-			id enterObserver = [center addObserverForName:NSWindowWillEnterFullScreenNotification
+//			NSLog( @"add observers %@", nsWindow );
+			windowData.willEnterFullScreenObserver = [center addObserverForName:NSWindowWillEnterFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
-					NSLog( @"enter full screen %@", nsWindow );
-					if( nsWindow.toolbar != NULL )
+//					NSLog( @"enter full screen %@", nsWindow );
+					if( nsWindow.toolbar != NULL ) {
+						// remember button area width, which is used later when window exits full screen
+						// remembar title bar height so that "main" JToolBar keeps its height in full screen
+						windowData.lastWindowButtonAreaWidth = getWindowButtonAreaWidth( nsWindow );
+						windowData.lastWindowTitleBarHeight = getWindowTitleBarHeight( nsWindow );
+
 						nsWindow.toolbar.visible = NO;
+					}
 				}];
-			id exitObserver = [center addObserverForName:NSWindowDidExitFullScreenNotification
+			windowData.didExitFullScreenObserver = [center addObserverForName:NSWindowDidExitFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
-					NSLog( @"exit  full screen %@", nsWindow );
+//					NSLog( @"exit  full screen %@", nsWindow );
 					if( nsWindow.toolbar != NULL )
 						nsWindow.toolbar.visible = YES;
+
+					windowData.lastWindowButtonAreaWidth = 0;
+					windowData.lastWindowTitleBarHeight = 0;
 				}];
-			objc_setAssociatedObject( nsWindow, &enterObserverKey, enterObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
-			objc_setAssociatedObject( nsWindow, &exitObserverKey, exitObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
 		} else {
-			NSLog( @"remove observers %@", nsWindow );
-			id enterObserver = objc_getAssociatedObject( nsWindow, &enterObserverKey );
-			id exitObserver = objc_getAssociatedObject( nsWindow, &exitObserverKey );
-			if( enterObserver != NULL ) {
-				[center removeObserver:enterObserver];
-				objc_setAssociatedObject( nsWindow, &enterObserverKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+//			NSLog( @"remove observers %@", nsWindow );
+			if( windowData.willEnterFullScreenObserver != NULL ) {
+				[center removeObserver:windowData.willEnterFullScreenObserver];
+				windowData.willEnterFullScreenObserver = nil;
 			}
-			if( exitObserver != NULL ) {
-				[center removeObserver:exitObserver];
-				objc_setAssociatedObject( nsWindow, &exitObserverKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+			if( windowData.didExitFullScreenObserver != NULL ) {
+				[center removeObserver:windowData.didExitFullScreenObserver];
+				windowData.didExitFullScreenObserver = nil;
 			}
 		}
 	}];
 
+	return TRUE;
+
 	JNI_COCOA_EXIT()
+	return FALSE;
 }
 
 extern "C"
@@ -164,6 +203,23 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindo
 	if( nsWindow == NULL )
 		return -1;
 
+	// return zero if window is full screen because close/minimize/zoom buttons are hidden
+	if( isWindowFullScreen( nsWindow ) )
+		return 0;
+
+	// use remembered value if window is in transition from full screen to non-full screen
+	// because NSToolbar is not yet visible
+	WindowData* windowData = getWindowData( nsWindow, false );
+	if( windowData != NULL && windowData.lastWindowButtonAreaWidth > 0 )
+		return windowData.lastWindowButtonAreaWidth;
+
+	return getWindowButtonAreaWidth( nsWindow );
+
+	JNI_COCOA_EXIT()
+	return -1;
+}
+
+int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 	// get buttons
 	NSView* buttons[3] = {
 		[nsWindow standardWindowButton:NSWindowCloseButton],
@@ -193,8 +249,6 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindo
 	// 'right' is the actual button area width (from left window edge)
 	// adding 'left' to add same empty space on right side as on left side
 	return right + left;
-
-	JNI_COCOA_EXIT()
 }
 
 extern "C"
@@ -207,14 +261,24 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindo
 	if( nsWindow == NULL )
 		return -1;
 
+	// use remembered value if window is full screen because NSToolbar is hidden
+	WindowData* windowData = getWindowData( nsWindow, false );
+	if( windowData != NULL && windowData.lastWindowTitleBarHeight > 0 )
+		return windowData.lastWindowTitleBarHeight;
+
+	return getWindowTitleBarHeight( nsWindow );
+
+	JNI_COCOA_EXIT()
+	return -1;
+}
+
+int getWindowTitleBarHeight( NSWindow* nsWindow ) {
 	NSView* closeButton = [nsWindow standardWindowButton:NSWindowCloseButton];
 	if( closeButton == NULL )
 		return -1;
 
 	NSView* titlebar = closeButton.superview;
 	return titlebar.bounds.size.height;
-
-	JNI_COCOA_EXIT()
 }
 
 extern "C"
@@ -227,8 +291,12 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
 	if( nsWindow == NULL )
 		return FALSE;
 
-	return (jboolean) (([nsWindow styleMask] & NSWindowStyleMaskFullScreen) != 0);
+	return (jboolean) isWindowFullScreen( nsWindow );
 
 	JNI_COCOA_EXIT()
+	return FALSE;
 }
 
+bool isWindowFullScreen( NSWindow* nsWindow ) {
+	return ((nsWindow.styleMask & NSWindowStyleMaskFullScreen) != 0);
+}

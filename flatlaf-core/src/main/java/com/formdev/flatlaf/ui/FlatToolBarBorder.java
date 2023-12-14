@@ -116,11 +116,7 @@ public class FlatToolBarBorder
 		}
 
 		// on macOS, add some extra space to left side for close/minimize/zoom buttons (if necessary)
-		if( c instanceof JToolBar &&
-			FlatToolBarUI.isMacOSMainToolbar( (JToolBar) c ) &&
-			(!FlatNativeMacLibrary.isLoaded() ||
-			 !FlatNativeMacLibrary.isWindowFullScreen( SwingUtilities.windowForComponent( c ) )) )
-		{
+		if( c instanceof JToolBar && FlatToolBarUI.isMacOSMainToolbar( (JToolBar) c ) ) {
 			// get button area width from macOS
 			int buttonBarWidth = FlatNativeMacLibrary.isLoaded()
 				? FlatNativeMacLibrary.getWindowButtonAreaWidth( SwingUtilities.windowForComponent( c ) )
