@@ -71,6 +71,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatPopupFactory
 	extends PopupFactory
 {
+	static final String KEY_POPUP_USES_NATIVE_BORDER = "FlatLaf.internal.FlatPopupFactory.popupUsesNativeBorder";
+
 	private MethodHandle java8getPopupMethod;
 	private MethodHandle java9getPopupMethod;
 
@@ -92,17 +94,20 @@ public class FlatPopupFactory
 			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
-		if( SystemInfo.isMacOS || SystemInfo.isLinux )
-			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
+			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+			if( popup.popupWindow != null && SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() )
+				setupRoundedBorder( popup.popupWindow, owner, contents );
+			return popup;
+		}
 
 		// Windows 11 with FlatLaf native library can use rounded corners and shows drop shadow for heavy weight popups
-		int borderCornerRadius;
 		if( isWindows11BorderSupported() &&
-			(borderCornerRadius = getBorderCornerRadius( owner, contents )) > 0 )
+			getBorderCornerRadius( owner, contents ) > 0 )
 		{
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
 			if( popup.popupWindow != null )
-				setupWindows11Border( popup.popupWindow, contents, borderCornerRadius );
+				setupRoundedBorder( popup.popupWindow, owner, contents );
 			return popup;
 		}
 
@@ -197,7 +202,7 @@ public class FlatPopupFactory
 		}
 	}
 
-	private boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
+	private static boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
 		Object value = getOption( owner, contents, clientKey, uiKey );
 		return (value instanceof Boolean) ? (Boolean) value : false;
 	}
@@ -210,7 +215,7 @@ public class FlatPopupFactory
 	 * <li>UI property {@code uiKey}
 	 * </ol>
 	 */
-	private Object getOption( Component owner, Component contents, String clientKey, String uiKey ) {
+	private static Object getOption( Component owner, Component contents, String clientKey, String uiKey ) {
 		for( Component c : new Component[] { owner, contents } ) {
 			if( c instanceof JComponent ) {
 				Object value = ((JComponent)c).getClientProperty( clientKey );
@@ -314,21 +319,15 @@ public class FlatPopupFactory
 		return SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded();
 	}
 
-	private static void setupWindows11Border( Window popupWindow, Component contents, int borderCornerRadius ) {
-		// make sure that the Windows 11 window is created
+	private static void setupRoundedBorder( Window popupWindow, Component owner, Component contents ) {
+		// make sure that the native window is created
 		if( !popupWindow.isDisplayable() )
 			popupWindow.addNotify();
 
-		// get window handle
-		long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
+		int borderCornerRadius = getBorderCornerRadius( owner, contents );
+		float borderWidth = getRoundedBorderWidth( owner, contents );
 
-		// set corner preference
-		int cornerPreference = (borderCornerRadius <= 4)
-			? FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL  // 4px
-			: FlatNativeWindowsLibrary.DWMWCP_ROUND;      // 8px
-		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, cornerPreference );
-
-		// set border color
+		// get Swing border color
 		Color borderColor = null; // use system default color
 		if( contents instanceof JComponent ) {
 			Border border = ((JComponent)contents).getBorder();
@@ -341,8 +340,31 @@ public class FlatPopupFactory
 				borderColor = ((LineBorder)border).getLineColor();
 			else if( border instanceof EmptyBorder )
 				borderColor = FlatNativeWindowsLibrary.COLOR_NONE; // do not paint border
+
+			// avoid that FlatLineBorder paints the Swing border
+			((JComponent)contents).putClientProperty( KEY_POPUP_USES_NATIVE_BORDER, true );
 		}
-		FlatNativeWindowsLibrary.dwmSetWindowAttributeCOLORREF( hwnd, FlatNativeWindowsLibrary.DWMWA_BORDER_COLOR, borderColor );
+
+		if( SystemInfo.isWindows ) {
+			// get native window handle
+			long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
+
+			// set corner preference
+			int cornerPreference = (borderCornerRadius <= 4)
+				? FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL  // 4px
+				: FlatNativeWindowsLibrary.DWMWCP_ROUND;      // 8px
+			FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, cornerPreference );
+
+			// set border color
+			FlatNativeWindowsLibrary.dwmSetWindowAttributeCOLORREF( hwnd, FlatNativeWindowsLibrary.DWMWA_BORDER_COLOR, borderColor );
+		} else if( SystemInfo.isMacOS ) {
+			if( borderColor == null || borderColor == FlatNativeWindowsLibrary.COLOR_NONE )
+				borderWidth = 0;
+
+			// set corner radius, border width and color
+			FlatNativeMacLibrary.setWindowRoundedBorder( popupWindow, borderCornerRadius,
+				borderWidth, (borderColor != null) ? borderColor.getRGB() : 0 );
+		}
 	}
 
 	private static void resetWindows11Border( Window popupWindow ) {
@@ -355,7 +377,7 @@ public class FlatPopupFactory
 		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
 	}
 
-	private int getBorderCornerRadius( Component owner, Component contents ) {
+	private static int getBorderCornerRadius( Component owner, Component contents ) {
 		String uiKey =
 			(contents instanceof BasicComboPopup) ? "ComboBox.borderCornerRadius" :
 			(contents instanceof JPopupMenu) ? "PopupMenu.borderCornerRadius" :
@@ -364,6 +386,17 @@ public class FlatPopupFactory
 
 		Object value = getOption( owner, contents, FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, uiKey );
 		return (value instanceof Integer) ? (Integer) value : 0;
+	}
+
+	private static float getRoundedBorderWidth( Component owner, Component contents ) {
+		String uiKey =
+			(contents instanceof BasicComboPopup) ? "ComboBox.roundedBorderWidth" :
+			(contents instanceof JPopupMenu) ? "PopupMenu.roundedBorderWidth" :
+			(contents instanceof JToolTip) ? "ToolTip.roundedBorderWidth" :
+			"Popup.roundedBorderWidth";
+
+		Object value = getOption( owner, contents, FlatClientProperties.POPUP_ROUNDED_BORDER_WIDTH, uiKey );
+		return (value instanceof Number) ? ((Number)value).floatValue() : 0;
 	}
 
 	//---- fixes --------------------------------------------------------------
@@ -508,6 +541,9 @@ public class FlatPopupFactory
 
 		@Override
 		public void hide() {
+			if( contents instanceof JComponent )
+				((JComponent)contents).putClientProperty( KEY_POPUP_USES_NATIVE_BORDER, null );
+
 			if( delegate != null ) {
 				delegate.hide();
 				delegate = null;

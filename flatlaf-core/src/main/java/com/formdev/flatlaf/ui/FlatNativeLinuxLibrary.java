@@ -35,6 +35,12 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 class FlatNativeLinuxLibrary
 {
+	/**
+	 * Checks whether native library is loaded/available.
+	 * <p>
+	 * <b>Note</b>: It is required to invoke this method before invoking any other
+	 *              method of this class. Otherwise, the native library may not be loaded.
+	 */
 	static boolean isLoaded() {
 		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded();
 	}

@@ -5,6 +5,11 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- macOS (10.14+): Popups (`JPopupMenu`, `JComboBox`, `JToolTip`, etc.) now use
+  native macOS rounded borders. (PR #772; issue #715)
+- Native libraries: Added `libflatlaf-macos-arm64.dylib` and
+  `libflatlaf-macos-x86_64.dylib`. See also
+  https://www.formdev.com/flatlaf/native-libraries/.
 - ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
 
 #### Fixed bugs

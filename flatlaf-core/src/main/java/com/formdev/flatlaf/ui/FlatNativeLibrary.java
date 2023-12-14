@@ -81,6 +81,12 @@ class FlatNativeLibrary
 			// Instead flatlaf.dll dynamically loads jawt.dll when first used,
 			// which is guaranteed after AWT initialization.
 
+		} else if( SystemInfo.isMacOS_10_14_Mojave_orLater && (SystemInfo.isAARCH64 || SystemInfo.isX86_64) ) {
+			// macOS: requires macOS 10.14 or later (arm64 or x86_64)
+
+			classifier = SystemInfo.isAARCH64 ? "macos-arm64" : "macos-x86_64";
+			ext = "dylib";
+
 		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
 			// Linux: requires x86_64
 

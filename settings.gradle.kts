@@ -31,6 +31,7 @@ includeProject( "flatlaf-fonts-roboto",         "flatlaf-fonts/flatlaf-fonts-rob
 includeProject( "flatlaf-fonts-roboto-mono",    "flatlaf-fonts/flatlaf-fonts-roboto-mono" )
 
 includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
+includeProject( "flatlaf-natives-macos",   "flatlaf-natives/flatlaf-natives-macos" )
 includeProject( "flatlaf-natives-linux",   "flatlaf-natives/flatlaf-natives-linux" )
 includeProject( "flatlaf-natives-jna",     "flatlaf-natives/flatlaf-natives-jna" )
 

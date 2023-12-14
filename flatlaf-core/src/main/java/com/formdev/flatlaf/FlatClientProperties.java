@@ -278,18 +278,37 @@ public interface FlatClientProperties
 	 * <p>
 	 * Note that this is not available on all platforms since it requires special support.
 	 * Supported platforms:
-	 * <p>
-	 * <strong>Windows 11</strong> (x86 or x86_64): Only two corner radiuses are supported
-	 * by the OS: {@code DWMWCP_ROUND} is 8px and {@code DWMWCP_ROUNDSMALL} is 4px.
-	 * If this value is {@code 1 - 4}, then {@code DWMWCP_ROUNDSMALL} is used.
-	 * If it is {@code >= 5}, then {@code DWMWCP_ROUND} is used.
-	 * <p>
+	 * <ul>
+	 * <li><strong>Windows 11</strong>: Only two corner radiuses are supported
+	 *     by the OS: {@code DWMWCP_ROUND} is 8px and {@code DWMWCP_ROUNDSMALL} is 4px.
+	 *     If this value is {@code 1 - 4}, then {@code DWMWCP_ROUNDSMALL} is used.
+	 *     If it is {@code >= 5}, then {@code DWMWCP_ROUND} is used.
+	 * <li><strong>macOS</strong> (10.14 and later): Any corner radius is supported.
+	 * </ul>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
 	 *
 	 * @since 3.1
 	 */
 	String POPUP_BORDER_CORNER_RADIUS = "Popup.borderCornerRadius";
+
+	/**
+	 * Specifies the popup rounded border width if the component is shown in a popup
+	 * or if the component is the owner of another component that is shown in a popup.
+	 * <p>
+	 * Only used if popup uses rounded border.
+	 * <p>
+	 * Note that this is not available on all platforms since it requires special support.
+	 * Supported platforms:
+	 * <ul>
+	 * <li><strong>macOS</strong> (10.14 and later)
+	 * </ul>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.Float}<br>
+	 *
+	 * @since 3.3
+	 */
+	String POPUP_ROUNDED_BORDER_WIDTH = "Popup.roundedBorderWidth";
 
 	/**
 	 * Specifies whether a drop shadow is painted if the component is shown in a popup
