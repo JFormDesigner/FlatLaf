@@ -116,7 +116,11 @@ public class NativeLibrary
 		try {
 			// for development environment
 			if( "file".equals( libraryUrl.getProtocol() ) ) {
-				File libraryFile = new File( libraryUrl.getPath() );
+				String binPath = libraryUrl.getPath();
+				String srcPath = binPath.replace( "flatlaf-core/bin/main/", "flatlaf-core/src/main/resources/" );
+				File libraryFile = new File( srcPath ); // use from 'src' folder if available
+				if( !libraryFile.isFile() )
+					libraryFile = new File( binPath ); // use from 'bin' or 'output' folder if available
 				if( libraryFile.isFile() ) {
 					// load library without copying
 					System.load( libraryFile.getCanonicalPath() );
