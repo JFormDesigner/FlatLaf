@@ -527,21 +527,6 @@ public interface FlatClientProperties
 	 */
 	String WINDOW_STYLE_SMALL = "small";
 
-	/**
-	 * Specifies whether the window should have a large title bar.
-	 * This adds extra space around the close/minimize/zoom buttons.
-	 * Useful if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
-	 * is enabled.
-	 * <p>
-	 * (requires macOS 10.14+, Java 17+ and client property {@code apple.awt.fullWindowContent} set to {@code true})
-	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
-	 *
-	 * @since 3.3
-	 */
-	String MACOS_LARGE_WINDOW_TITLE_BAR = "FlatLaf.macOS.largeWindowTitleBar";
-
 
 	//---- JScrollBar / JScrollPane -------------------------------------------
 
@@ -1276,6 +1261,46 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TREE_PAINT_SELECTION = "JTree.paintSelection";
+
+
+	//---- macOS --------------------------------------------------------------
+
+	/**
+	 * Specifies the style of macOS window close/minimize/zoom buttons.
+	 * This does not change visual appearance but adds extra space around the buttons.
+	 * Useful if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
+	 * is enabled.
+	 * <p>
+	 * (requires macOS 10.14+ or 11+ for style 'large', Java 17+ and client property {@code apple.awt.fullWindowContent} set to {@code true})
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.lang.Boolean}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #MACOS_WINDOW_TITLE_BAR_STYLE_MEDIUM},
+	 *     {@link #MACOS_WINDOW_TITLE_BAR_STYLE_LARGE} (requires macOS 11+) or
+	 *     {@code true} (equal to 'large')
+	 *
+	 * @since 3.3
+	 */
+	String MACOS_WINDOW_BUTTON_STYLE = "FlatLaf.macOS.windowButtonStyle";
+
+	/**
+	 * Add medium space around the macOS window close/minimize/zoom buttons.
+	 *
+	 * @see #MACOS_WINDOW_BUTTON_STYLE
+	 * @since 3.3
+	 */
+	String MACOS_WINDOW_BUTTON_STYLE_MEDIUM = "medium";
+
+	/**
+	 * Add large space around the macOS window close/minimize/zoom buttons.
+	 * <p>
+	 * (requires macOS 11+; 'medium' is used on older systems)
+	 *
+	 * @see #MACOS_WINDOW_BUTTON_STYLE
+	 * @since 3.3
+	 */
+	String MACOS_WINDOW_BUTTON_STYLE_LARGE = "large";
 
 
 	//---- helper methods -----------------------------------------------------

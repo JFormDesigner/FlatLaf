@@ -94,7 +94,7 @@ class DemoFrame
 				// expand window content into window title bar and make title bar transparent
 				rootPane.putClientProperty( "apple.awt.fullWindowContent", true );
 				rootPane.putClientProperty( "apple.awt.transparentTitleBar", true );
-				rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, true );
+				rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, true );
 
 				// hide window title
 				if( SystemInfo.isJava_17_orLater )
@@ -902,15 +902,19 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
+		//TODO remove
 		backButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, true );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_LARGE );
 		});
 		forwardButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_LARGE_WINDOW_TITLE_BAR, null );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_MEDIUM );
+		});
+		cutButton.addActionListener( e -> {
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, null );
 		});
 
-		cutButton.addActionListener( e -> System.out.println( e ) );
-		cutButton.addMouseListener( new MouseListener() {
+		copyButton.addActionListener( e -> System.out.println( e ) );
+		copyButton.addMouseListener( new MouseListener() {
 
 			@Override
 			public void mouseReleased( MouseEvent e ) {
@@ -942,7 +946,7 @@ class DemoFrame
 			System.out.println( "m click" );
 			}
 		} );
-		cutButton.addMouseMotionListener( new MouseMotionListener() {
+		copyButton.addMouseMotionListener( new MouseMotionListener() {
 
 			@Override
 			public void mouseMoved( MouseEvent e ) {

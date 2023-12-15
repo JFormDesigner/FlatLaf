@@ -7,6 +7,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT 0L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM 1L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE 2L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
@@ -17,11 +23,11 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    setWindowToolbar
- * Signature: (Ljava/awt/Window;Z)Z
+ * Method:    setWindowButtonStyle
+ * Signature: (Ljava/awt/Window;I)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
-  (JNIEnv *, jclass, jobject, jboolean);
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonStyle
+  (JNIEnv *, jclass, jobject, jint);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary

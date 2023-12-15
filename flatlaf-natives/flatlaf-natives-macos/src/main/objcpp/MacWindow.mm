@@ -50,7 +50,7 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	if( window == NULL )
 		return NULL;
 
-	// initialize field IDs (done only once because fields are static)
+	// initialize field IDs (done only once because variables are static)
 	static jfieldID peerID = getFieldID( env, "java/awt/Component", "peer", "Ljava/awt/peer/ComponentPeer;" );
 	static jfieldID platformWindowID = getFieldID( env, "sun/lwawt/LWWindowPeer", "platformWindow", "Lsun/lwawt/PlatformWindow;" );
 	static jfieldID ptrID = getFieldID( env, "sun/lwawt/macosx/CFRetainedResource", "ptr", "J" );
@@ -121,8 +121,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 }
 
 extern "C"
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowToolbar
-	( JNIEnv* env, jclass cls, jobject window, jboolean hasToolbar )
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonStyle
+	( JNIEnv* env, jclass cls, jobject window, jint buttonStyle )
 {
 	JNI_COCOA_ENTER()
 
@@ -130,7 +130,20 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	if( nsWindow == NULL )
 		return FALSE;
 
-	if( hasToolbar == (nsWindow.toolbar != NULL) )
+	#define STYLE_DEFAULT com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT
+	#define STYLE_MEDIUM  com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM
+	#define STYLE_LARGE   com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE
+
+	bool isMacOS_11_orLater = @available( macOS 11, * );
+	if( !isMacOS_11_orLater && buttonStyle == STYLE_LARGE )
+		buttonStyle = STYLE_MEDIUM;
+	int oldButtonStyle = (nsWindow.toolbar != NULL)
+		? ((isMacOS_11_orLater && nsWindow.toolbarStyle == NSWindowToolbarStyleUnified)
+			? STYLE_LARGE 
+			: STYLE_MEDIUM)
+		: STYLE_DEFAULT;
+
+	if( buttonStyle == oldButtonStyle )
 		return TRUE;
 
 	WindowData* windowData = getWindowData( nsWindow, true );
@@ -140,11 +153,25 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 		// add/remove toolbar
 		NSToolbar* toolbar = NULL;
+		bool hasToolbar = (buttonStyle != STYLE_DEFAULT);
 		if( hasToolbar ) {
 			toolbar = [NSToolbar new];
 			toolbar.showsBaselineSeparator = NO; // necessary for older macOS versions
+			if( isWindowFullScreen( nsWindow ) )
+				toolbar.visible = NO;
 		}
 		nsWindow.toolbar = toolbar;
+
+		if( isMacOS_11_orLater ) {
+			nsWindow.toolbarStyle = (buttonStyle == STYLE_LARGE)
+				? NSWindowToolbarStyleUnified
+				: (buttonStyle == STYLE_MEDIUM) 
+					? NSWindowToolbarStyleUnifiedCompact
+					: NSWindowToolbarStyleAutomatic;
+		}
+
+		windowData.lastWindowButtonAreaWidth = 0;
+		windowData.lastWindowTitleBarHeight = 0;
 
 //		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
@@ -161,6 +188,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 						// remembar title bar height so that "main" JToolBar keeps its height in full screen
 						windowData.lastWindowButtonAreaWidth = getWindowButtonAreaWidth( nsWindow );
 						windowData.lastWindowTitleBarHeight = getWindowTitleBarHeight( nsWindow );
+//						NSLog(@"%d %d",windowData.lastWindowButtonAreaWidth,windowData.lastWindowTitleBarHeight);
 
 						nsWindow.toolbar.visible = NO;
 					}
