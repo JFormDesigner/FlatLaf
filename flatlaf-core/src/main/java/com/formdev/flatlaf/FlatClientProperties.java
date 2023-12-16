@@ -1276,8 +1276,8 @@ public interface FlatClientProperties
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.lang.Boolean}<br>
 	 * <strong>Allowed Values</strong>
-	 *     {@link #MACOS_WINDOW_TITLE_BAR_STYLE_MEDIUM},
-	 *     {@link #MACOS_WINDOW_TITLE_BAR_STYLE_LARGE} (requires macOS 11+) or
+	 *     {@link #MACOS_WINDOW_BUTTON_STYLE_MEDIUM},
+	 *     {@link #MACOS_WINDOW_BUTTON_STYLE_LARGE} (requires macOS 11+) or
 	 *     {@code true} (equal to 'large')
 	 *
 	 * @since 3.3
