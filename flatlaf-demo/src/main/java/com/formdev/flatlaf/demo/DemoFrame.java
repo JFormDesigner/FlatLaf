@@ -46,6 +46,7 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -960,6 +961,11 @@ class DemoFrame
 				System.out.println( "m drag" );
 			}
 		} );
+		if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() ) {
+			showToggleButton.addActionListener( e -> {
+				FlatNativeMacLibrary.windowToggleFullScreen( this );
+			} );
+		}
 
 		// add "Users" button to menubar
 		FlatButton usersButton = new FlatButton();

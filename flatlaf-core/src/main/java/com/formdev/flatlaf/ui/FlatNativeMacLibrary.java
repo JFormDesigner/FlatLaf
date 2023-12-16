@@ -63,4 +63,5 @@ public class FlatNativeMacLibrary
 	public native static int getWindowButtonAreaWidth( Window window );
 	public native static int getWindowTitleBarHeight( Window window );
 	public native static boolean isWindowFullScreen( Window window );
+	public native static boolean windowToggleFullScreen( Window window );
 }

@@ -328,3 +328,23 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
 bool isWindowFullScreen( NSWindow* nsWindow ) {
 	return ((nsWindow.styleMask & NSWindowStyleMaskFullScreen) != 0);
 }
+
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_windowToggleFullScreen
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return FALSE;
+
+	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		[nsWindow toggleFullScreen:nil];
+	}];
+
+	return TRUE;
+
+	JNI_COCOA_EXIT()
+	return FALSE;
+}

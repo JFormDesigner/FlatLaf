@@ -53,6 +53,14 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindo
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWindowFullScreen
   (JNIEnv *, jclass, jobject);
 
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    windowToggleFullScreen
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_windowToggleFullScreen
+  (JNIEnv *, jclass, jobject);
+
 #ifdef __cplusplus
 }
 #endif
