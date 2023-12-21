@@ -112,6 +112,7 @@ public abstract class FlatLaf
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
 	private boolean subMenuUsabilityHelperInstalled;
+	private boolean smoothScrollingHelperInstalled;
 
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
@@ -271,6 +272,9 @@ public abstract class FlatLaf
 
 		// install submenu usability helper
 		subMenuUsabilityHelperInstalled = SubMenuUsabilityHelper.install();
+		
+		// install smooth scrolling helper
+		smoothScrollingHelperInstalled = SmoothScrollingHelper.install();
 
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
@@ -364,6 +368,12 @@ public abstract class FlatLaf
 			subMenuUsabilityHelperInstalled = false;
 		}
 
+		// uninstall smooth scrolling helper
+		if( smoothScrollingHelperInstalled ) {
+			SmoothScrollingHelper.uninstall();
+			smoothScrollingHelperInstalled = false;
+		}
+		
 		// restore default link color
 		new HTMLEditorKit().getStyleSheet().addRule( "a, address { color: blue; }" );
 		postInitialization = null;

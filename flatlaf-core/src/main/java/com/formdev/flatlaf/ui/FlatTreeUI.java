@@ -16,9 +16,14 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.FlatClientProperties.*;
+import static com.formdev.flatlaf.FlatClientProperties.STYLE;
+import static com.formdev.flatlaf.FlatClientProperties.STYLE_CLASS;
+import static com.formdev.flatlaf.FlatClientProperties.TREE_PAINT_SELECTION;
+import static com.formdev.flatlaf.FlatClientProperties.TREE_WIDE_SELECTION;
+import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -35,16 +40,21 @@ import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.JTree.DropLocation;
+import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.JTree.DropLocation;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.ScrollBarUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+import com.formdev.flatlaf.SmoothScrollingHelper;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -347,6 +357,42 @@ public class FlatTreeUI
 		};
 	}
 
+	@Override
+	public int getRowCount( JTree tree ) {
+		// When certain events are received like page up/down while smooth scrolling is in progress, incorrect row is identified.
+		// For a page event, this would move at the top/bottom of the incorrect row.
+		// Any of these events would get the row count, so when row count is requested, we temporarily set the scrollbar target value.
+		int rowCount = super.getRowCount( tree );
+		Container parent = tree.getParent();
+		if ( parent instanceof JViewport ) {
+			JViewport viewport = (JViewport)parent;
+			// if an event is received that is not triggered by our smooth scrolling timers...
+			if( SmoothScrollingHelper.isInSmoothScrolling( viewport ) ) {
+				Container viewportParent = viewport.getParent();
+				if( viewportParent instanceof JScrollPane ) {
+					JScrollBar verticalScrollBar = ((JScrollPane)viewportParent).getVerticalScrollBar();
+					if( verticalScrollBar != null ) {
+						ScrollBarUI sbUi = verticalScrollBar.getUI();
+						if( sbUi instanceof FlatScrollBarUI ) {
+							int targetValue = ((FlatScrollBarUI)sbUi).getTargetValue();
+							// ... and if there was an active timer on the vertical scrollbar of that tree...
+							if( targetValue != Integer.MIN_VALUE ) {
+								int value = verticalScrollBar.getValue();
+								// ... then we force the value temporarily to the target value
+								SmoothScrollingHelper.setScrollBarValueWithOptionalRepaint( viewport, verticalScrollBar, targetValue );
+								SwingUtilities.invokeLater( () -> {
+									// ... and restore the smooth scrolling current value.
+									SmoothScrollingHelper.setScrollBarValueWithOptionalRepaint( viewport, verticalScrollBar, value );
+								});
+							}
+						}
+					}
+				}
+			}
+		}
+		return rowCount;
+	}
+	
 	private void repaintWideDropLocation(JTree.DropLocation loc) {
 		if( loc == null || isDropLine( loc ) )
 			return;
