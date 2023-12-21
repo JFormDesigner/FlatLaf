@@ -20,6 +20,8 @@ FlatLaf Change Log
   and #750)
 - OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
   #761)
+- Table: Fixed background of `boolean` columns when using alternating row
+  colors. (issue #780)
 - Fixed broken rendering after resizing window to minimum size and then
   increasing size again. (issue #767)
 
