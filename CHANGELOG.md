@@ -26,6 +26,10 @@ FlatLaf Change Log
   component is a Table.
 - Table: Fixed background of `boolean` columns when using alternating row
   colors. (issue #780)
+- TabbedPane:
+  - Avoid unnecessary repainting whole tabbed pane content area when layouting
+    leading/trailing components.
+  - Avoid unnecessary repainting of selected tab on temporary changes.
 - Fixed broken rendering after resizing window to minimum size and then
   increasing size again. (issue #767)
 

@@ -284,6 +284,7 @@ public class FlatTabbedPaneUI
 	private boolean blockRollover;
 	private boolean rolloverTabClose;
 	private boolean pressedTabClose;
+	private boolean inBasicLayoutContainer;
 
 	private Object[] oldRenderingHints;
 	private Map<String, Object> oldStyleValues;
@@ -814,12 +815,36 @@ public class FlatTabbedPaneUI
 		int oldIndex = getRolloverTab();
 		super.setRolloverTab( index );
 
-		if( index == oldIndex )
-			return;
+		if( index != oldIndex )
+			repaintRolloverLaterOnce( oldIndex );
+	}
 
-		// repaint old and new hover tabs
-		repaintTab( oldIndex );
-		repaintTab( index );
+	private boolean repaintRolloverPending;
+
+	/**
+	 * Repaint rollover tab, but deferred and only once.
+	 * This is to avoid unnecessary repaints in case of temporary changes to rollover tab.
+	 *
+	 * E.g. when moving mouse over a single tab, a re-layout may occur and
+	 * set rollover tab to -1, in BasicTabbedPaneUI.TabbedPaneLayout.layoutContainer() and
+	 * BasicTabbedPaneUI.TabbedPaneScrollLayout.layoutContainer(), and subsequently
+	 * change rollover tab back to previous value.
+	 */
+	private void repaintRolloverLaterOnce( int oldIndex ) {
+		if( repaintRolloverPending )
+			return;
+		repaintRolloverPending = true;
+
+		EventQueue.invokeLater( () -> {
+			repaintRolloverPending = false;
+
+			int index = getRolloverTab();
+			if( index != oldIndex ) {
+				// repaint old and new hover tabs
+				repaintTab( oldIndex );
+				repaintTab( index );
+			}
+		} );
 	}
 
 	protected boolean isRolloverTabClose() {
@@ -2283,13 +2308,27 @@ debug*/
 
 	//---- class ContainerUIResource ------------------------------------------
 
-	private static class ContainerUIResource
+	private class ContainerUIResource
 		extends JPanel
 		implements UIResource
 	{
 		private ContainerUIResource( Component c ) {
 			super( new BorderLayout() );
 			add( c );
+		}
+
+		@SuppressWarnings( "deprecation" )
+		@Override
+		public void reshape( int x, int y, int w, int h ) {
+			// Avoid that leading/trailing tab area components are temporary moved/resized
+			// to content area bounds (done in BasicTabbedPaneUI.TabbedPaneLayout.layoutContainer()
+			// and in BasicTabbedPaneUI.TabbedPaneScrollLayout.layoutContainer())
+			// and subsequently moved/resized to its final bounds within the tab area.
+			// This avoids an unnecessary repaint (and maybe re-layout) of the content area.
+			if( inBasicLayoutContainer )
+				return;
+
+			super.reshape( x, y, w, h );
 		}
 	}
 
@@ -3249,7 +3288,12 @@ debug*/
 
 		@Override
 		public void layoutContainer( Container parent ) {
-			super.layoutContainer( parent );
+			inBasicLayoutContainer = true;
+			try {
+				super.layoutContainer( parent );
+			} finally {
+				inBasicLayoutContainer = false;
+			}
 
 			Rectangle bounds = tabPane.getBounds();
 			Insets insets = tabPane.getInsets();
@@ -3454,7 +3498,12 @@ debug*/
 			// runWithOriginalLayoutManager() is necessary for correct locations
 			// of tab components layed out in TabbedPaneLayout.layoutTabComponents()
 			runWithOriginalLayoutManager( () -> {
-				delegate.layoutContainer( parent );
+				inBasicLayoutContainer = true;
+				try {
+					delegate.layoutContainer( parent );
+				} finally {
+					inBasicLayoutContainer = false;
+				}
 			} );
 
 			int tabsPopupPolicy = getTabsPopupPolicy();
