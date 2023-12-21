@@ -418,6 +418,27 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alwaysShowMnemonics", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator9"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "animationMenuItem"
+						"text": "Animation"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "animationChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "smoothScrollingMenuItem"
+						"text": "Smooth Scrolling"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smoothScrollingChanged", false ) )
+					} )
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "animatedLafChangeMenuItem"
 						"text": "Animated Laf Change"

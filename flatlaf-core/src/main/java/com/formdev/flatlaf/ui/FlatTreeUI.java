@@ -239,6 +239,22 @@ public class FlatTreeUI
 	}
 
 	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+
+		FlatScrollPaneUI.installSmoothScrollingDelegateActions( tree, false,
+			"scrollDownChangeSelection",	// PAGE_DOWN
+			"scrollUpChangeSelection",		// PAGE_UP
+			"scrollDownChangeLead",			// ctrl PAGE_DOWN
+			"scrollUpChangeLead",			// ctrl PAGE_UP
+			"scrollDownExtendSelection",	// shift PAGE_DOWN, shift ctrl PAGE_DOWN
+			"scrollUpExtendSelection",		// shift PAGE_UP, shift ctrl PAGE_UP
+			"selectNextChangeLead",			// ctrl DOWN
+			"selectPreviousChangeLead"		// ctrl UP
+		);
+	}
+
+	@Override
 	protected void updateRenderer() {
 		super.updateRenderer();
 

@@ -143,6 +143,12 @@ public class FlatTextPaneUI
 	}
 
 	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+		FlatEditorPaneUI.installKeyboardActions( getComponent() );
+	}
+
+	@Override
 	protected Caret createCaret() {
 		return new FlatCaret( null, false );
 	}
@@ -156,6 +162,11 @@ public class FlatTextPaneUI
 
 		super.propertyChange( e );
 		FlatEditorPaneUI.propertyChange( getComponent(), e, this::installStyle );
+
+		// BasicEditorPaneUI.propertyChange() re-applied actions from editor kit,
+		// which removed our delegate actions
+		if( "editorKit".equals( propertyName ) )
+			FlatEditorPaneUI.installKeyboardActions( getComponent() );
 	}
 
 	/** @since 2 */

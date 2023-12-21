@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,11 +9,11 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[fill][grow,fill]"
-			"$rowConstraints": "[][][]"
+			"$rowConstraints": "[][][]para[top][400,grow,fill]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
+				name: "linearLabel"
 				"text": "Linear:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
@@ -29,7 +29,7 @@ new FormModel {
 				"value": "cell 1 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label2"
+				name: "easeInOutLabel"
 				"text": "Ease in out:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"
@@ -54,9 +54,33 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "mouseWheelTestLabel"
+				"text": "Mouse wheel test:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$MouseWheelTestPanel" ) {
+				name: "mouseWheelTestPanel"
+				"border": new javax.swing.border.LineBorder( sfield java.awt.Color red, 1, false )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3,height 100"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.LineChartPanel" ) {
+				name: "lineChartPanel"
+				"updateChartDelayed": false
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 2 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 415, 350 )
+			"size": new java.awt.Dimension( 625, 625 )
 		} )
 	}
 }

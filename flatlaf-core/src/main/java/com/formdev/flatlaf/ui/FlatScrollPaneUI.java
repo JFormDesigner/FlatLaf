@@ -17,10 +17,12 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
@@ -31,6 +33,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -48,8 +52,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -135,18 +141,33 @@ public class FlatScrollPaneUI
 		MouseWheelListener superListener = super.createMouseWheelListener();
 		return e -> {
 			if( isSmoothScrollingEnabled() &&
-				scrollpane.isWheelScrollingEnabled() &&
-				e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-				e.getPreciseWheelRotation() != 0 &&
-				e.getPreciseWheelRotation() != e.getWheelRotation() )
+				scrollpane.isWheelScrollingEnabled() )
 			{
-				mouseWheelMovedSmooth( e );
+				if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
+					isPreciseWheelEvent( e ) )
+				{
+					// precise scrolling
+					mouseWheelMovedPrecise( e );
+				} else {
+					// smooth scrolling
+					JScrollBar scrollBar = findScrollBarToScroll( e );
+					if( scrollBar != null && scrollBar.getUI() instanceof FlatScrollBarUI ) {
+						FlatScrollBarUI ui = (FlatScrollBarUI) scrollBar.getUI();
+						ui.runAndSetValueAnimated( () -> {
+							superListener.mouseWheelMoved( e );
+						} );
+					} else
+						superListener.mouseWheelMoved( e );
+				}
 			} else
 				superListener.mouseWheelMoved( e );
 		};
 	}
 
 	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( FlatSystemProperties.SMOOTH_SCROLLING, true ) )
+			return false;
+
 		Object smoothScrolling = scrollpane.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
 		if( smoothScrolling instanceof Boolean )
 			return (Boolean) smoothScrolling;
@@ -157,19 +178,40 @@ public class FlatScrollPaneUI
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
 
-	private void mouseWheelMovedSmooth( MouseWheelEvent e ) {
+	private long lastPreciseWheelWhen;
+
+	private boolean isPreciseWheelEvent( MouseWheelEvent e ) {
+		double preciseWheelRotation = e.getPreciseWheelRotation();
+		if( preciseWheelRotation != 0 && preciseWheelRotation != e.getWheelRotation() ) {
+			// precise wheel event
+			lastPreciseWheelWhen = e.getWhen();
+			return true;
+		}
+
+		// If a non-precise wheel event occurs shortly after a precise wheel event,
+		// then it is probably still a precise wheel but the precise value
+		// is by chance an integer value (e.g. 1.0 or 2.0).
+		// Not handling this special case, would start an animation for smooth scrolling,
+		// which would be interrupted soon when the next precise wheel event occurs.
+		// This would result in jittery scrolling. E.g. on a MacBook using Trackpad or Magic Mouse.
+		if( e.getWhen() - lastPreciseWheelWhen < 1000 )
+			return true;
+
+		// non-precise wheel event
+		lastPreciseWheelWhen = 0;
+		return false;
+	}
+
+	private void mouseWheelMovedPrecise( MouseWheelEvent e ) {
 		// return if there is no viewport
 		JViewport viewport = scrollpane.getViewport();
 		if( viewport == null )
 			return;
 
 		// find scrollbar to scroll
-		JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
-		if( scrollbar == null || !scrollbar.isVisible() || e.isShiftDown() ) {
-			scrollbar = scrollpane.getHorizontalScrollBar();
-			if( scrollbar == null || !scrollbar.isVisible() )
-				return;
-		}
+		JScrollBar scrollbar = findScrollBarToScroll( e );
+		if( scrollbar == null )
+			return;
 
 		// consume event
 		e.consume();
@@ -260,6 +302,16 @@ public class FlatScrollPaneUI
 			minValue,
 			maxValue ) );
 */
+	}
+
+	private JScrollBar findScrollBarToScroll( MouseWheelEvent e ) {
+		JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+		if( scrollBar == null || !scrollBar.isVisible() || e.isShiftDown() ) {
+			scrollBar = scrollpane.getHorizontalScrollBar();
+			if( scrollBar == null || !scrollBar.isVisible() )
+				return null;
+		}
+		return scrollBar;
 	}
 
 	@Override
@@ -428,6 +480,119 @@ public class FlatScrollPaneUI
 		return false;
 	}
 
+	@Override
+	protected void syncScrollPaneWithViewport() {
+		// if the viewport has been scrolled by using JComponent.scrollRectToVisible()
+		// (e.g. by moving selection), then it is necessary to update the scroll bar values
+		if( isSmoothScrollingEnabled() ) {
+			runAndSyncScrollBarValueAnimated( scrollpane.getVerticalScrollBar(), 0, false, () -> {
+				runAndSyncScrollBarValueAnimated( scrollpane.getHorizontalScrollBar(), 1, false, () -> {
+					super.syncScrollPaneWithViewport();
+				} );
+			} );
+		} else
+			super.syncScrollPaneWithViewport();
+	}
+
+	/**
+	 * Runs the given runnable, if smooth scrolling is enabled, with disabled
+	 * viewport blitting mode and with scroll bar value set to "target" value.
+	 * This is necessary when calculating new view position during animation.
+	 * Otherwise calculation would use wrong view position and (repeating) scrolling
+	 * would be much slower than without smooth scrolling.
+	 */
+	private void runWithScrollBarsTargetValues( boolean blittingOnly, Runnable r ) {
+		if( isSmoothScrollingEnabled() ) {
+			runWithoutBlitting( scrollpane, () -> {
+				if( blittingOnly )
+					r.run();
+				else {
+					runAndSyncScrollBarValueAnimated( scrollpane.getVerticalScrollBar(), 0, true, () -> {
+						runAndSyncScrollBarValueAnimated( scrollpane.getHorizontalScrollBar(), 1, true, r );
+					} );
+				}
+			} );
+		} else
+			r.run();
+	}
+
+	private void runAndSyncScrollBarValueAnimated( JScrollBar sb, int i, boolean useTargetValue, Runnable r ) {
+		if( inRunAndSyncValueAnimated[i] || sb == null || !(sb.getUI() instanceof FlatScrollBarUI) ) {
+			r.run();
+			return;
+		}
+
+		inRunAndSyncValueAnimated[i] = true;
+
+		int oldValue = sb.getValue();
+		int oldVisibleAmount = sb.getVisibleAmount();
+		int oldMinimum = sb.getMinimum();
+		int oldMaximum = sb.getMaximum();
+
+		FlatScrollBarUI ui = (FlatScrollBarUI) sb.getUI();
+		if( useTargetValue && ui.getTargetValue() != Integer.MIN_VALUE )
+			sb.setValue( ui.getTargetValue() );
+
+		r.run();
+
+		int newValue = sb.getValue();
+
+		if( newValue != oldValue &&
+			sb.getVisibleAmount() == oldVisibleAmount &&
+			sb.getMinimum() == oldMinimum &&
+			sb.getMaximum() == oldMaximum &&
+			sb.getUI() instanceof FlatScrollBarUI )
+		{
+			ui.setValueAnimated( oldValue, newValue );
+		}
+
+		inRunAndSyncValueAnimated[i] = false;
+	}
+
+	private final boolean[] inRunAndSyncValueAnimated = new boolean[2];
+
+	/**
+	 * Runs the given runnable with disabled viewport blitting mode.
+	 * If blitting mode is enabled, the viewport immediately repaints parts of the
+	 * view if the view position is changed via JViewport.setViewPosition().
+	 * This causes scrolling artifacts if smooth scrolling is enabled and the view position
+	 * is "temporary" changed to its new target position, changed back to its old position
+	 * and again moved animated to the target position.
+	 */
+	static void runWithoutBlitting( Container scrollPane, Runnable r ) {
+		// prevent the viewport to immediately repaint using blitting
+		JViewport viewport = (scrollPane instanceof JScrollPane) ? ((JScrollPane)scrollPane).getViewport() : null;
+		boolean isBlitScrollMode = (viewport != null) ? viewport.getScrollMode() == JViewport.BLIT_SCROLL_MODE : false;
+		if( isBlitScrollMode )
+			viewport.setScrollMode( JViewport.SIMPLE_SCROLL_MODE );
+
+		try {
+			r.run();
+		} finally {
+			if( isBlitScrollMode )
+				viewport.setScrollMode( JViewport.BLIT_SCROLL_MODE );
+		}
+	}
+
+	public static void installSmoothScrollingDelegateActions( JComponent c, boolean blittingOnly, String... actionKeys ) {
+		// get shared action map, used for all components of same type
+		ActionMap map = SwingUtilities.getUIActionMap( c );
+		if( map == null )
+			return;
+
+		// install actions, but only if not already installed
+		for( String actionKey : actionKeys )
+			installSmoothScrollingDelegateAction( map, blittingOnly, actionKey );
+	}
+
+	private static void installSmoothScrollingDelegateAction( ActionMap map, boolean blittingOnly, String actionKey ) {
+		Action oldAction = map.get( actionKey );
+		if( oldAction == null || oldAction instanceof SmoothScrollingDelegateAction )
+			return; // not found or already installed
+
+		map.put( actionKey, new SmoothScrollingDelegateAction( oldAction, blittingOnly ) );
+	}
+
 	//---- class Handler ------------------------------------------------------
 
 	/**
@@ -457,6 +622,36 @@ public class FlatScrollPaneUI
 		public void focusLost( FocusEvent e ) {
 			// necessary to update focus border
 			scrollpane.repaint();
+		}
+	}
+
+	//---- class SmoothScrollingDelegateAction --------------------------------
+
+	/**
+	 * Used to run component actions with disabled blitting mode and
+	 * with scroll bar target values.
+	 */
+	private static class SmoothScrollingDelegateAction
+		extends FlatUIAction
+	{
+		private final boolean blittingOnly;
+
+		private SmoothScrollingDelegateAction( Action delegate, boolean blittingOnly ) {
+			super( delegate );
+			this.blittingOnly = blittingOnly;
+		}
+
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			Object source = e.getSource();
+			JScrollPane scrollPane = (source instanceof Component)
+				? (JScrollPane) SwingUtilities.getAncestorOfClass( JScrollPane.class, (Component) source )
+				: null;
+			if( scrollPane != null && scrollPane.getUI() instanceof FlatScrollPaneUI ) {
+				((FlatScrollPaneUI)scrollPane.getUI()).runWithScrollBarsTargetValues( blittingOnly,
+					() -> delegate.actionPerformed( e ) );
+			} else
+				delegate.actionPerformed( e );
 		}
 	}
 }

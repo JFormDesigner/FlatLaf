@@ -3520,10 +3520,8 @@ public class FlatTabbedPaneUI
 	//---- class RunWithOriginalLayoutManagerDelegateAction -------------------
 
 	private static class RunWithOriginalLayoutManagerDelegateAction
-		implements Action
+		extends FlatUIAction
 	{
-		private final Action delegate;
-
 		static void install( ActionMap map, String key ) {
 			Action oldAction = map.get( key );
 			if( oldAction == null || oldAction instanceof RunWithOriginalLayoutManagerDelegateAction )
@@ -3533,23 +3531,8 @@ public class FlatTabbedPaneUI
 		}
 
 		private RunWithOriginalLayoutManagerDelegateAction( Action delegate ) {
-			this.delegate = delegate;
+			super( delegate );
 		}
-
-		@Override
-		public Object getValue( String key ) {
-			return delegate.getValue( key );
-		}
-
-		@Override
-		public boolean isEnabled() {
-			return delegate.isEnabled();
-		}
-
-		@Override public void putValue( String key, Object value ) {}
-		@Override public void setEnabled( boolean b ) {}
-		@Override public void addPropertyChangeListener( PropertyChangeListener listener ) {}
-		@Override public void removePropertyChangeListener( PropertyChangeListener listener ) {}
 
 		@Override
 		public void actionPerformed( ActionEvent e ) {

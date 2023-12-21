@@ -25,6 +25,7 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -156,6 +157,9 @@ public class IJThemesPanel
 	}
 
 	private void updateThemesList() {
+		if( Beans.isDesignTime() )
+			return; // disable if running in GUI builder
+
 		int filterLightDark = filterComboBox.getSelectedIndex();
 		boolean showLight = (filterLightDark != 2);
 		boolean showDark = (filterLightDark != 1);

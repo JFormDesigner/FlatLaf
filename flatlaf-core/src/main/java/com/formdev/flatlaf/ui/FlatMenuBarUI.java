@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -149,7 +148,7 @@ public class FlatMenuBarUI
 			map = new ActionMapUIResource();
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
-		map.put( "takeFocus", new TakeFocus() );
+		map.put( "takeFocus", new TakeFocus( "takeFocus" ) );
 	}
 
 	/** @since 2 */
@@ -373,8 +372,12 @@ public class FlatMenuBarUI
 	 * On other platforms, the popup of the first menu is shown.
 	 */
 	private static class TakeFocus
-		extends AbstractAction
+		extends FlatUIAction
 	{
+		public TakeFocus( String name ) {
+			super( name );
+		}
+
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			JMenuBar menuBar = (JMenuBar) e.getSource();

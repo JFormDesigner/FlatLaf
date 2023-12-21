@@ -17,7 +17,11 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.*;
+import javax.swing.border.*;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import net.miginfocom.swing.*;
@@ -40,6 +44,8 @@ public class FlatAnimatorTest
 
 	FlatAnimatorTest() {
 		initComponents();
+
+		mouseWheelTestPanel.lineChartPanel = lineChartPanel;
 	}
 
 	private void start() {
@@ -74,11 +80,14 @@ public class FlatAnimatorTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		JLabel label1 = new JLabel();
+		JLabel linearLabel = new JLabel();
 		linearScrollBar = new JScrollBar();
-		JLabel label2 = new JLabel();
+		JLabel easeInOutLabel = new JLabel();
 		easeInOutScrollBar = new JScrollBar();
 		startButton = new JButton();
+		JLabel mouseWheelTestLabel = new JLabel();
+		mouseWheelTestPanel = new FlatAnimatorTest.MouseWheelTestPanel();
+		lineChartPanel = new LineChartPanel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -89,20 +98,22 @@ public class FlatAnimatorTest
 			// rows
 			"[]" +
 			"[]" +
-			"[]"));
+			"[]para" +
+			"[top]" +
+			"[400,grow,fill]"));
 
-		//---- label1 ----
-		label1.setText("Linear:");
-		add(label1, "cell 0 0");
+		//---- linearLabel ----
+		linearLabel.setText("Linear:");
+		add(linearLabel, "cell 0 0");
 
 		//---- linearScrollBar ----
 		linearScrollBar.setOrientation(Adjustable.HORIZONTAL);
 		linearScrollBar.setBlockIncrement(1);
 		add(linearScrollBar, "cell 1 0");
 
-		//---- label2 ----
-		label2.setText("Ease in out:");
-		add(label2, "cell 0 1");
+		//---- easeInOutLabel ----
+		easeInOutLabel.setText("Ease in out:");
+		add(easeInOutLabel, "cell 0 1");
 
 		//---- easeInOutScrollBar ----
 		easeInOutScrollBar.setOrientation(Adjustable.HORIZONTAL);
@@ -113,6 +124,18 @@ public class FlatAnimatorTest
 		startButton.setText("Start");
 		startButton.addActionListener(e -> start());
 		add(startButton, "cell 0 2");
+
+		//---- mouseWheelTestLabel ----
+		mouseWheelTestLabel.setText("Mouse wheel test:");
+		add(mouseWheelTestLabel, "cell 0 3");
+
+		//---- mouseWheelTestPanel ----
+		mouseWheelTestPanel.setBorder(new LineBorder(Color.red));
+		add(mouseWheelTestPanel, "cell 1 3,height 100");
+
+		//---- lineChartPanel ----
+		lineChartPanel.setUpdateChartDelayed(false);
+		add(lineChartPanel, "cell 0 4 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -120,5 +143,89 @@ public class FlatAnimatorTest
 	private JScrollBar linearScrollBar;
 	private JScrollBar easeInOutScrollBar;
 	private JButton startButton;
+	private FlatAnimatorTest.MouseWheelTestPanel mouseWheelTestPanel;
+	private LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class MouseWheelTestPanel ------------------------------------------
+
+	static class MouseWheelTestPanel
+		extends JPanel
+		implements MouseWheelListener
+	{
+		private static final int MAX_VALUE = 1000;
+		private static final int STEP = 100;
+
+		private final JLabel valueLabel;
+		private final Animator animator;
+
+		LineChartPanel lineChartPanel;
+
+		private int value;
+		private int startValue;
+		private int targetValue = -1;
+
+		MouseWheelTestPanel() {
+			super( new BorderLayout() );
+			valueLabel = new JLabel( String.valueOf( value ), SwingConstants.CENTER );
+			valueLabel.setFont( valueLabel.getFont().deriveFont( (float) valueLabel.getFont().getSize() * 2 ) );
+			add( valueLabel, BorderLayout.CENTER );
+			add( new JLabel( " " ), BorderLayout.NORTH );
+			add( new JLabel( "(move mouse into rectangle and rotate mouse wheel)", SwingConstants.CENTER ), BorderLayout.SOUTH );
+
+			int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
+			int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
+
+			animator = new Animator( duration, fraction -> {
+				value = startValue + Math.round( (targetValue - startValue) * fraction );
+				valueLabel.setText( String.valueOf( value ) );
+
+				lineChartPanel.addValue( Color.red, value / (double) MAX_VALUE, value, null );
+			}, () -> {
+				targetValue = -1;
+			} );
+			animator.setResolution( resolution );
+			animator.setInterpolator( new CubicBezierEasing( 0.5f, 0.5f, 0.5f, 1 ) );
+
+			addMouseWheelListener( this );
+		}
+
+		@Override
+		public void mouseWheelMoved( MouseWheelEvent e ) {
+			double preciseWheelRotation = e.getPreciseWheelRotation();
+
+			// add a dot in the middle of the chart for the wheel rotation
+			// for unprecise wheels the rotation value is usually -1 or +1
+			// for precise wheels the rotation value is in range ca. -10 to +10,
+			// depending how fast the wheel is rotated
+			lineChartPanel.addDot( Color.red, 0.5 + (preciseWheelRotation / 20.), (int) (preciseWheelRotation * 1000), null, null );
+
+			// increase/decrease target value if animation is in progress
+			int newValue = (int) ((targetValue < 0 ? value : targetValue) + (STEP * preciseWheelRotation));
+			newValue = Math.min( Math.max( newValue, 0 ), MAX_VALUE );
+
+			if( preciseWheelRotation != 0 &&
+				preciseWheelRotation != e.getWheelRotation() )
+			{
+				// do not use animation for precise scrolling (e.g. with trackpad)
+
+				// stop running animation (if any)
+				animator.stop();
+
+				value = newValue;
+				valueLabel.setText( String.valueOf( value ) );
+
+				lineChartPanel.addValue( Color.red, value / (double) MAX_VALUE, value, null );
+				return;
+			}
+
+			// start next animation at the current value
+			startValue = value;
+			targetValue = newValue;
+
+			// restart animator
+			animator.cancel();
+			animator.start();
+		}
+	}
 }

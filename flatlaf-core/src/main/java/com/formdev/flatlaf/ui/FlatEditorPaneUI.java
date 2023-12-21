@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import javax.swing.text.Caret;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -146,6 +147,21 @@ public class FlatEditorPaneUI
 	}
 
 	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+		installKeyboardActions( getComponent() );
+	}
+
+	static void installKeyboardActions( JTextComponent c ) {
+		FlatScrollPaneUI.installSmoothScrollingDelegateActions( c, false,
+			/* page-down */ DefaultEditorKit.pageDownAction,						// PAGE_DOWN
+			/* page-up */ DefaultEditorKit.pageUpAction,							// PAGE_UP
+			/* DefaultEditorKit.selectionPageDownAction */ "selection-page-down",	// shift PAGE_DOWN
+			/* DefaultEditorKit.selectionPageUpAction */ "selection-page-up"		// shift PAGE_UP
+		);
+	}
+
+	@Override
 	protected Caret createCaret() {
 		return new FlatCaret( null, false );
 	}
@@ -159,6 +175,11 @@ public class FlatEditorPaneUI
 
 		super.propertyChange( e );
 		propertyChange( getComponent(), e, this::installStyle );
+
+		// BasicEditorPaneUI.propertyChange() re-applied actions from editor kit,
+		// which removed our delegate actions
+		if( "editorKit".equals( propertyName ) )
+			installKeyboardActions( getComponent() );
 	}
 
 	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Runnable installStyle ) {

@@ -142,6 +142,12 @@ public class FlatTextAreaUI
 	}
 
 	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+		FlatEditorPaneUI.installKeyboardActions( getComponent() );
+	}
+
+	@Override
 	protected Caret createCaret() {
 		return new FlatCaret( null, false );
 	}

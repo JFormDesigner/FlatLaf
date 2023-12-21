@@ -133,6 +133,14 @@ public interface FlatSystemProperties
 	String ANIMATION = "flatlaf.animation";
 
 	/**
+	 * Specifies whether smooth scrolling is enabled.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 */
+	String SMOOTH_SCROLLING = "flatlaf.smoothScrolling";
+
+	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
