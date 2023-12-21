@@ -28,7 +28,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -195,8 +194,7 @@ public class FlatBorder
 	protected boolean isEnabled( Component c ) {
 		if( c instanceof JScrollPane ) {
 			// check whether view component is disabled
-			JViewport viewport = ((JScrollPane)c).getViewport();
-			Component view = (viewport != null) ? viewport.getView() : null;
+			Component view = FlatScrollPaneUI.getView( (JScrollPane) c );
 			if( view != null && !isEnabled( view ) )
 				return false;
 		}

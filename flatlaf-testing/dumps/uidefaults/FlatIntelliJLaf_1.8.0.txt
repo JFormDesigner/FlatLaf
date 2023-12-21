@@ -107,8 +107,8 @@
 
 #---- ScrollPane ----
 
-- ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
-+ ScrollPane.border              [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+- ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
++ ScrollPane.border              [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
 
 
 #---- Spinner ----
@@ -119,8 +119,8 @@
 
 #---- Table ----
 
-- Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
-+ Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+- Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
++ Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
 
 
 #---- TextField ----

@@ -10,6 +10,7 @@ FlatLaf Change Log
 - Native libraries: Added `libflatlaf-macos-arm64.dylib` and
   `libflatlaf-macos-x86_64.dylib`. See also
   https://www.formdev.com/flatlaf/native-libraries/.
+- ScrollPane: Support rounded border. (PR #713)
 - ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
 
 #### Fixed bugs
@@ -20,6 +21,8 @@ FlatLaf Change Log
   and #750)
 - OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
   #761)
+- ScrollPane: Styling ScrollPane border properties did not work if view
+  component is a Table.
 - Table: Fixed background of `boolean` columns when using alternating row
   colors. (issue #780)
 - Fixed broken rendering after resizing window to minimum size and then

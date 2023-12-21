@@ -760,7 +760,7 @@ public class TestFlatStyling
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
 		// border
-		flatBorder( style -> ui.applyStyle( style ) );
+		flatScrollPaneBorder( style -> ui.applyStyle( style ) );
 
 		ui.applyStyle( "showButtons: true" );
 
@@ -1237,15 +1237,19 @@ public class TestFlatStyling
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
-
 		applyStyle.accept( "roundRect: true" );
+	}
+
+	private void flatScrollPaneBorder( Consumer<String> applyStyle ) {
+		flatBorder( applyStyle );
+
+		applyStyle.accept( "arc: 6" );
 	}
 
 	private void flatTextBorder( Consumer<String> applyStyle ) {
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
-
 		applyStyle.accept( "roundRect: true" );
 	}
 

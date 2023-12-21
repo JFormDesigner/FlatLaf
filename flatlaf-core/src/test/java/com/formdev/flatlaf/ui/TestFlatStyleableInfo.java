@@ -601,7 +601,7 @@ public class TestFlatStyleableInfo
 		);
 
 		// border
-		flatBorder( expected );
+		flatScrollPaneBorder( expected );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -1008,8 +1008,15 @@ public class TestFlatStyleableInfo
 
 		expectedMap( expected,
 			"arc", int.class,
-
 			"roundRect", Boolean.class
+		);
+	}
+
+	private void flatScrollPaneBorder( Map<String, Class<?>> expected ) {
+		flatBorder( expected );
+
+		expectedMap( expected,
+			"arc", int.class
 		);
 	}
 
@@ -1018,7 +1025,6 @@ public class TestFlatStyleableInfo
 
 		expectedMap( expected,
 			"arc", int.class,
-
 			"roundRect", Boolean.class
 		);
 	}

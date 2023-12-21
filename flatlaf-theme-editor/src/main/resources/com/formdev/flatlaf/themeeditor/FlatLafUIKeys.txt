@@ -720,8 +720,13 @@ ScrollBar.trackHighlight
 ScrollBar.trackInsets
 ScrollBar.width
 ScrollBarUI
+ScrollPane.List.arc
+ScrollPane.Table.arc
+ScrollPane.TextComponent.arc
+ScrollPane.Tree.arc
 ScrollPane.ancestorInputMap
 ScrollPane.ancestorInputMap.RightToLeft
+ScrollPane.arc
 ScrollPane.background
 ScrollPane.border
 ScrollPane.fillUpperCorner
