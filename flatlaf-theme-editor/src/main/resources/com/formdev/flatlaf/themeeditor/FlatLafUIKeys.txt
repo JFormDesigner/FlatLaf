@@ -889,6 +889,7 @@ TabbedPane.tabAreaAlignment
 TabbedPane.tabAreaInsets
 TabbedPane.tabHeight
 TabbedPane.tabInsets
+TabbedPane.tabRotation
 TabbedPane.tabRunOverlay
 TabbedPane.tabSelectionArc
 TabbedPane.tabSelectionHeight

@@ -952,6 +952,59 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_ICON_PLACEMENT = "JTabbedPane.tabIconPlacement";
 
 	/**
+	 * Specifies the rotation of the tabs (title, icon, etc).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link SwingConstants#LEFT},
+	 *     {@link SwingConstants#RIGHT},
+	 *     {@link #TABBED_PANE_TAB_ROTATION_NONE}, (default)
+	 *     {@link #TABBED_PANE_TAB_ROTATION_AUTO},
+	 *     {@link #TABBED_PANE_TAB_ROTATION_LEFT} or
+	 *     {@link #TABBED_PANE_TAB_ROTATION_RIGHT}
+	 *
+	 * @since 3.3
+	 */
+	String TABBED_PANE_TAB_ROTATION = "JTabbedPane.tabRotation";
+
+	/**
+	 * Tabs are not rotated.
+	 *
+	 * @see #TABBED_PANE_TAB_ROTATION
+	 * @since 3.3
+	 */
+	String TABBED_PANE_TAB_ROTATION_NONE = "none";
+
+	/**
+	 * Tabs are rotated depending on tab placement.
+	 * <p>
+	 * For top and bottom tab placement, the tabs are not rotated.<br>
+	 * For left tab placement, the tabs are rotated counter clockwise.<br>
+	 * For right tab placement, the tabs are rotated clockwise.
+	 *
+	 * @see #TABBED_PANE_TAB_ROTATION
+	 * @since 3.3
+	 */
+	String TABBED_PANE_TAB_ROTATION_AUTO = "auto";
+
+	/**
+	 * Tabs are rotated counter clockwise.
+	 *
+	 * @see #TABBED_PANE_TAB_ROTATION
+	 * @since 3.3
+	 */
+	String TABBED_PANE_TAB_ROTATION_LEFT = "left";
+
+	/**
+	 * Tabs are rotated clockwise.
+	 *
+	 * @see #TABBED_PANE_TAB_ROTATION
+	 * @since 3.3
+	 */
+	String TABBED_PANE_TAB_ROTATION_RIGHT = "right";
+
+	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
 	 * For top and bottom tab placement, the laid out component size will be

@@ -49,6 +49,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -164,6 +165,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
  * @uiDefault TabbedPane.tabAlignment					String	leading, center (default) or trailing
  * @uiDefault TabbedPane.tabWidthMode					String	preferred (default), equal or compact
+ * @uiDefault TabbedPane.tabRotation					String	none (default), auto, left or right
  * @uiDefault ScrollPane.smoothScrolling				boolean
  * @uiDefault TabbedPane.closeIcon						Icon
  *
@@ -198,9 +200,14 @@ public class FlatTabbedPaneUI
 	// tab area alignment
 	protected static final int FILL = 100;
 
+	// tab width mode
 	protected static final int WIDTH_MODE_PREFERRED = 0;
 	protected static final int WIDTH_MODE_EQUAL = 1;
 	protected static final int WIDTH_MODE_COMPACT = 2;
+
+	// tab rotation
+	/** @since 3.3 */ protected static final int NONE = -1;
+	/** @since 3.3 */ protected static final int AUTO = -2;
 
 	private static Set<KeyStroke> focusForwardTraversalKeys;
 	private static Set<KeyStroke> focusBackwardTraversalKeys;
@@ -245,6 +252,7 @@ public class FlatTabbedPaneUI
 	@Styleable(type=String.class) private int tabAreaAlignment;
 	@Styleable(type=String.class) private int tabAlignment;
 	@Styleable(type=String.class) private int tabWidthMode;
+	/** @since 3.3 */ @Styleable(type=String.class) private int tabRotation;
 	protected Icon closeIcon;
 
 	@Styleable protected String arrowType;
@@ -375,6 +383,7 @@ public class FlatTabbedPaneUI
 		tabAreaAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAreaAlignment" ), LEADING );
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
 		tabWidthMode = parseTabWidthMode( UIManager.getString( "TabbedPane.tabWidthMode" ) );
+		tabRotation = parseTabRotation( UIManager.getString( "TabbedPane.tabRotation" ) );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 		closeIconShared = true;
 
@@ -680,6 +689,7 @@ public class FlatTabbedPaneUI
 				case "tabAreaAlignment": value = parseAlignment( (String) value, LEADING ); break;
 				case "tabAlignment": value = parseAlignment( (String) value, CENTER ); break;
 				case "tabWidthMode": value = parseTabWidthMode( (String) value ); break;
+				case "tabRotation": value = parseTabRotation( (String) value ); break;
 
 				case "tabIconPlacement": value = parseTabIconPlacement( (String) value ); break;
 			}
@@ -770,6 +780,15 @@ public class FlatTabbedPaneUI
 					case WIDTH_MODE_COMPACT:	return TABBED_PANE_TAB_WIDTH_MODE_COMPACT;
 				}
 
+			case "tabRotation":
+				switch( tabRotation ) {
+					default:
+					case NONE:					return TABBED_PANE_TAB_ROTATION_NONE;
+					case AUTO:					return TABBED_PANE_TAB_ROTATION_AUTO;
+					case LEFT:					return TABBED_PANE_TAB_ROTATION_LEFT;
+					case RIGHT:					return TABBED_PANE_TAB_ROTATION_RIGHT;
+				}
+
 			case "tabIconPlacement":
 				switch( tabIconPlacement ) {
 					default:
@@ -856,11 +875,19 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
+		return (getRealTabRotation( tabPlacement ) == NONE)
+			? calculateTabWidthImpl( tabPlacement, tabIndex, metrics, false )
+			: calculateTabHeightImpl( tabPlacement, tabIndex, metrics.getHeight(), true );
+	}
+
+	private int calculateTabWidthImpl( int tabPlacement, int tabIndex, FontMetrics metrics, boolean rotated ) {
 		int tabWidthMode = getTabWidthMode();
-		if( tabWidthMode == WIDTH_MODE_EQUAL && isHorizontalTabPlacement() && !inCalculateEqual ) {
+		if( tabWidthMode == WIDTH_MODE_EQUAL && isHorizontalOrRotated( tabPlacement ) && !inCalculateEqual ) {
 			inCalculateEqual = true;
 			try {
-				return calculateMaxTabWidth( tabPlacement );
+				return isHorizontalTabPlacement( tabPlacement )
+					? calculateMaxTabWidth( tabPlacement )
+					: calculateMaxTabHeight( tabPlacement );
 			} finally {
 				inCalculateEqual = false;
 			}
@@ -873,7 +900,7 @@ public class FlatTabbedPaneUI
 		Icon icon;
 		if( tabWidthMode == WIDTH_MODE_COMPACT &&
 			tabIndex != tabPane.getSelectedIndex() &&
-			isHorizontalTabPlacement() &&
+			isHorizontalOrRotated( tabPlacement ) &&
 			tabPane.getTabComponentAt( tabIndex ) == null &&
 			(icon = getIconForTab( tabIndex )) != null )
 		{
@@ -899,8 +926,16 @@ public class FlatTabbedPaneUI
 
 				Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
 				tabWidth += tabInsets.left + tabInsets.right;
-			} else
+			} else {
 				tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+
+				// tab components are not rotated
+				Component tabComponent;
+				if( rotated && (tabComponent = tabPane.getTabComponentAt( tabIndex )) != null ) {
+					Dimension prefSize = tabComponent.getPreferredSize();
+					tabWidth = tabWidth - prefSize.width + prefSize.height;
+				}
+			}
 		}
 
 		// make tab wider if closable
@@ -920,6 +955,12 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, int fontHeight ) {
+		return (getRealTabRotation( tabPlacement ) == NONE)
+			? calculateTabHeightImpl( tabPlacement, tabIndex, fontHeight, false )
+			: calculateTabWidthImpl( tabPlacement, tabIndex, getFontMetrics(), true );
+	}
+
+	private int calculateTabHeightImpl( int tabPlacement, int tabIndex, int fontHeight, boolean rotated ) {
 		int tabHeight;
 
 		Icon icon;
@@ -939,8 +980,16 @@ public class FlatTabbedPaneUI
 
 			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
 			tabHeight += tabInsets.top + tabInsets.bottom;
-		} else
+		} else {
 			tabHeight = super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */;
+
+			// tab components are not rotated
+			Component tabComponent;
+			if( rotated && (tabComponent = tabPane.getTabComponentAt( tabIndex )) != null ) {
+				Dimension prefSize = tabComponent.getPreferredSize();
+				tabHeight = tabHeight - prefSize.height + prefSize.width;
+			}
+		}
 
 		return Math.max( tabHeight, scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight ) ) );
 	}
@@ -971,6 +1020,16 @@ public class FlatTabbedPaneUI
 		return scale( (value instanceof Insets)
 			? (Insets) value
 			: super.getTabInsets( tabPlacement, tabIndex ) );
+	}
+
+	/** @since 3.3 */
+	protected Insets getTabInsetsRotated( int tabPlacement, int tabIndex, int rotation ) {
+		Insets insets = getTabInsets( tabPlacement, tabIndex );
+		switch( rotation ) {
+			case LEFT:	return new Insets( insets.right, insets.top, insets.left, insets.bottom );
+			case RIGHT:	return new Insets( insets.left, insets.bottom, insets.right, insets.top );
+			default:	return insets;
+		}
 	}
 
 	@Override
@@ -1012,7 +1071,7 @@ public class FlatTabbedPaneUI
 
 		// increase insets for wrap layout if using leading/trailing components
 		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT ) {
-			if( isHorizontalTabPlacement() ) {
+			if( isHorizontalTabPlacement( tabPlacement ) ) {
 				insets.left += getLeadingPreferredWidth();
 				insets.right += getTrailingPreferredWidth();
 			} else {
@@ -1045,7 +1104,7 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int getTabLabelShiftX( int tabPlacement, int tabIndex, boolean isSelected ) {
-		if( isTabClosable( tabIndex ) ) {
+		if( isTabClosable( tabIndex ) && getRealTabRotation( tabPlacement ) == NONE ) {
 			int shift = closeIcon.getIconWidth() / 2;
 			return isLeftToRight() ? -shift : shift;
 		}
@@ -1054,6 +1113,10 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int getTabLabelShiftY( int tabPlacement, int tabIndex, boolean isSelected ) {
+		if( isTabClosable( tabIndex ) && getRealTabRotation( tabPlacement ) != NONE ) {
+			int shift = closeIcon.getIconHeight() / 2;
+			return isLeftToRight() ? shift : -shift;
+		}
 		return 0;
 	}
 
@@ -1128,10 +1191,30 @@ public class FlatTabbedPaneUI
 		Icon icon = getIconForTab( tabIndex );
 		Font font = tabPane.getFont();
 		FontMetrics metrics = tabPane.getFontMetrics( font );
-		boolean isCompact = (icon != null && !isSelected && getTabWidthMode() == WIDTH_MODE_COMPACT && isHorizontalTabPlacement());
+		boolean isCompact = (icon != null && !isSelected && getTabWidthMode() == WIDTH_MODE_COMPACT && isHorizontalOrRotated( tabPlacement ));
 		if( isCompact )
 			title = null;
 		String clippedTitle = layoutAndClipLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
+
+/*debug
+		g.setColor( Color.red );
+		g.drawRect( tabRect.x, tabRect.y, tabRect.width - 1, tabRect.height - 1 );
+		g.setColor( Color.green );
+		Rectangle tabRect2 = FlatUIUtils.subtractInsets( tabRect, getTabInsetsRotated( tabPlacement, tabIndex, getRealTabRotation( tabPlacement ) ) );
+		g.drawRect( tabRect2.x, tabRect2.y, tabRect2.width - 1, tabRect2.height - 1 );
+		g.setColor( Color.blue );
+		g.drawRect( iconRect.x, iconRect.y, iconRect.width - 1, iconRect.height - 1 );
+		g.setColor( Color.magenta );
+		g.drawRect( textRect.x, textRect.y, textRect.width - 1, textRect.height - 1 );
+		g.setColor( Color.orange );
+		Rectangle closeHitArea = getTabCloseHitArea( tabIndex );
+		if( moreTabsButton != null ) {
+			Point viewPosition = tabViewport.getViewPosition();
+			closeHitArea.x -= tabViewport.getX() - viewPosition.x;
+			closeHitArea.y -= tabViewport.getY() - viewPosition.y;
+		}
+		g.drawRect( closeHitArea.x, closeHitArea.y, closeHitArea.width - 1, closeHitArea.height - 1 );
+debug*/
 
 		// special title clipping for scroll layout where title of last visible tab on right side may be truncated
 		if( tabViewport != null && (tabPlacement == TOP || tabPlacement == BOTTOM) ) {
@@ -1160,16 +1243,68 @@ public class FlatTabbedPaneUI
 			// html
 			View view = getTextViewForTab( tabIndex );
 			if( view != null ) {
-				view.paint( g, textRect );
+				AffineTransform oldTransform = rotateGraphics( g, tabPlacement, textRect );
+				Rectangle textRect2 = (oldTransform != null)
+					? new Rectangle( textRect.x, textRect.y, textRect.height, textRect.width )
+					: textRect;
+
+				view.paint( g, textRect2 );
+
+				if( oldTransform != null )
+					((Graphics2D)g).setTransform( oldTransform );
 				return;
 			}
+
+			// rotate text if necessary
+			AffineTransform oldTransform = rotateGraphics( g, tabPlacement, textRect );
 
 			// plain text
 			int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
 			g.setColor( getTabForeground( tabPlacement, tabIndex, isSelected ) );
 			FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
 				textRect.x, textRect.y + metrics.getAscent() );
+
+			if( oldTransform != null )
+				((Graphics2D)g).setTransform( oldTransform );
 		} );
+	}
+
+	@Override
+	protected void paintIcon( Graphics g, int tabPlacement, int tabIndex, Icon icon, Rectangle iconRect, boolean isSelected ) {
+		if( icon == null )
+			return;
+
+		// clip icon painting (also done in JDK since Java 10)
+		Shape oldClip = g.getClip();
+		((Graphics2D)g).clip( iconRect );
+
+		// rotate icon if necessary
+		AffineTransform oldTransform = rotateGraphics( g, tabPlacement, iconRect );
+
+		// paint icon
+		icon.paintIcon( tabPane, g, iconRect.x, iconRect.y );
+
+		if( oldTransform != null )
+			((Graphics2D)g).setTransform( oldTransform );
+		g.setClip( oldClip );
+	}
+
+	private AffineTransform rotateGraphics( Graphics g, int tabPlacement, Rectangle r ) {
+		Graphics2D g2 = (Graphics2D) g;
+		AffineTransform oldTransform = null;
+
+		int rotation = getRealTabRotation( tabPlacement );
+		if( rotation == LEFT ) {
+			oldTransform = g2.getTransform();
+			g2.translate( 0, r.height );
+			g2.rotate( Math.toRadians( 270 ), r.x, r.y );
+		} else if( rotation == RIGHT ) {
+			oldTransform = g2.getTransform();
+			g2.translate( r.width, 0 );
+			g2.rotate( Math.toRadians( 90 ), r.x, r.y );
+		}
+
+		return oldTransform;
 	}
 
 	/** @since 3.1 */
@@ -1518,7 +1653,7 @@ public class FlatTabbedPaneUI
 				Rectangle2D.intersect( tabViewport.getBounds(), innerTabRect, innerTabRect );
 
 			Rectangle2D.Float gap = null;
-			if( isHorizontalTabPlacement() ) {
+			if( isHorizontalTabPlacement( tabPlacement ) ) {
 				if( innerTabRect.width > 0 ) {
 					float y2 = (tabPlacement == TOP) ? y : y + h - csh;
 					gap = new Rectangle2D.Float( innerTabRect.x, y2, innerTabRect.width, csh );
@@ -1553,7 +1688,7 @@ public class FlatTabbedPaneUI
 			// (left and right if horizontal, top and bottom if vertical)
 			Shape oldClip = g.getClip();
 			Rectangle vr = tabViewport.getBounds();
-			if( isHorizontalTabPlacement() )
+			if( isHorizontalTabPlacement( tabPlacement ) )
 				g.clipRect( vr.x, 0, vr.width, tabPane.getHeight() );
 			else
 				g.clipRect( 0, vr.y, tabPane.getWidth(), vr.height );
@@ -1572,13 +1707,24 @@ public class FlatTabbedPaneUI
 	protected String layoutAndClipLabel( int tabPlacement, FontMetrics metrics, int tabIndex,
 		String title, Icon icon, Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
+		int rotation = getRealTabRotation( tabPlacement );
+		boolean leftToRight = isLeftToRight();
+
 		// remove tab insets and space for close button from the tab rectangle
 		// to get correctly clipped title
-		tabRect = FlatUIUtils.subtractInsets( tabRect, getTabInsets( tabPlacement, tabIndex ) );
+		tabRect = FlatUIUtils.subtractInsets( tabRect, getTabInsetsRotated( tabPlacement, tabIndex, rotation ) );
 		if( isTabClosable( tabIndex ) ) {
-			tabRect.width -= closeIcon.getIconWidth();
-			if( !isLeftToRight() )
-				tabRect.x += closeIcon.getIconWidth();
+			if( rotation == NONE ) {
+				int iconWidth = closeIcon.getIconWidth();
+				tabRect.width -= iconWidth;
+				if( !leftToRight )
+					tabRect.x += iconWidth;
+			} else {
+				int iconHeight = closeIcon.getIconHeight();
+				tabRect.height -= iconHeight;
+				if( (rotation == LEFT && leftToRight) || (rotation == RIGHT && !leftToRight) )
+					tabRect.y += iconHeight;
+			}
 		}
 
 		// icon placement
@@ -1602,14 +1748,62 @@ public class FlatTabbedPaneUI
 			tabPane.putClientProperty( "html", view );
 
 		// layout label
-		String clippedTitle = SwingUtilities.layoutCompoundLabel( tabPane, metrics, title, icon,
-			CENTER, getTabAlignment( tabIndex ), verticalTextPosition, horizontalTextPosition,
-			tabRect, iconRect, textRect, scale( textIconGapUnscaled ) );
+		String clippedTitle = (rotation == NONE)
+			? SwingUtilities.layoutCompoundLabel( tabPane, metrics, title, icon,
+				CENTER, getTabAlignment( tabIndex ), verticalTextPosition, horizontalTextPosition,
+				tabRect, iconRect, textRect, scale( textIconGapUnscaled ) )
+			: layoutVerticalCompoundLabel( rotation, tabPane, metrics, title, icon,
+				CENTER, getTabAlignment( tabIndex ), verticalTextPosition, horizontalTextPosition,
+				tabRect, iconRect, textRect, scale( textIconGapUnscaled ) );
 
 		// remove temporary client property
 		tabPane.putClientProperty( "html", null );
 
 		return clippedTitle;
+	}
+
+	private String layoutVerticalCompoundLabel( int rotation, JComponent c, FontMetrics fm, String text, Icon icon,
+		int verticalAlignment, int horizontalAlignment, int verticalTextPosition, int horizontalTextPosition,
+		Rectangle viewR, Rectangle iconR, Rectangle textR, int textIconGap )
+	{
+		// layout non-rotated
+		Rectangle viewR2 = new Rectangle( viewR.height, viewR.width );
+		String clippedTitle = SwingUtilities.layoutCompoundLabel( c, fm, text, icon,
+			verticalAlignment, horizontalAlignment, verticalTextPosition, horizontalTextPosition,
+			viewR2, iconR, textR, textIconGap );
+
+		// rotate icon and text rectangles
+		if( rotation == LEFT ) {
+			rotateLeft( viewR, iconR );
+			rotateLeft( viewR, textR );
+		} else {
+			rotateRight( viewR, iconR );
+			rotateRight( viewR, textR );
+		}
+
+		return clippedTitle;
+	}
+
+	private void rotateLeft( Rectangle viewR, Rectangle r ) {
+		int x = viewR.x + r.y;
+		int y = viewR.y + (viewR.height - (r.x + r.width));
+		r.setBounds( x, y, r.height, r.width );
+	}
+
+	private void rotateRight( Rectangle viewR, Rectangle r ) {
+		int x = viewR.x + (viewR.width - (r.y + r.height));
+		int y = viewR.y + r.x;
+		r.setBounds( x, y, r.height, r.width );
+	}
+
+	/** @since 3.3 */
+	protected int getRealTabRotation( int tabPlacement ) {
+		int rotation = getTabRotation();
+		int realRotation = (rotation == AUTO)
+			? (tabPlacement == LEFT ? LEFT : (tabPlacement == RIGHT ? RIGHT : NONE))
+			: (rotation == LEFT || rotation == RIGHT ? rotation : NONE);
+		assert realRotation == NONE || realRotation == LEFT || realRotation == RIGHT;
+		return realRotation;
 	}
 
 	@Override
@@ -1646,13 +1840,23 @@ public class FlatTabbedPaneUI
 	protected Rectangle getTabCloseBounds( int tabIndex, int x, int y, int w, int h, Rectangle dest ) {
 		int iconWidth = closeIcon.getIconWidth();
 		int iconHeight = closeIcon.getIconHeight();
-		Insets tabInsets = getTabInsets( tabPane.getTabPlacement(), tabIndex );
+		int tabPlacement = tabPane.getTabPlacement();
+		int rotation = getRealTabRotation( tabPlacement );
+		Insets tabInsets = getTabInsetsRotated( tabPlacement, tabIndex, rotation );
+		boolean leftToRight = isLeftToRight();
 
 		// use one-third of right/left tab insets as gap between tab text and close button
-		dest.x = isLeftToRight()
-			? (x + w - (tabInsets.right / 3 * 2) - iconWidth)
-			: (x + (tabInsets.left / 3 * 2));
-		dest.y = y + (h - iconHeight) / 2;
+		if( rotation == NONE ) {
+			dest.x = leftToRight
+				? (x + w - (tabInsets.right / 3 * 2) - iconWidth)		// right
+				: (x + (tabInsets.left / 3 * 2));						// left
+			dest.y = y + (h - iconHeight) / 2;
+		} else {
+			dest.x = x + (w - iconWidth) / 2;
+			dest.y = ((rotation == RIGHT && leftToRight) || (rotation == LEFT && !leftToRight))
+				? (y + h - (tabInsets.bottom / 3 * 2) - iconHeight)		// bottom
+				: (y + (tabInsets.top / 3 * 2));						// top
+		}
 		dest.width = iconWidth;
 		dest.height = iconHeight;
 		return dest;
@@ -1661,7 +1865,9 @@ public class FlatTabbedPaneUI
 	protected Rectangle getTabCloseHitArea( int tabIndex ) {
 		Rectangle tabRect = getTabBounds( tabPane, tabIndex );
 		Rectangle tabCloseRect = getTabCloseBounds( tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, calcRect );
-		return new Rectangle( tabCloseRect.x, tabRect.y, tabCloseRect.width, tabRect.height );
+		return (getRealTabRotation( tabPane.getTabPlacement() ) == NONE)
+			? new Rectangle( tabCloseRect.x, tabRect.y, tabCloseRect.width, tabRect.height )
+			: new Rectangle( tabRect.x, tabCloseRect.y, tabRect.width, tabCloseRect.height );
 	}
 
 	protected boolean isTabClosable( int tabIndex ) {
@@ -1729,9 +1935,17 @@ public class FlatTabbedPaneUI
 		return tabPane.getComponentOrientation().isLeftToRight();
 	}
 
-	protected boolean isHorizontalTabPlacement() {
-		int tabPlacement = tabPane.getTabPlacement();
+	/** @since 3.3 */
+	protected boolean isHorizontalTabPlacement( int tabPlacement ) {
 		return tabPlacement == TOP || tabPlacement == BOTTOM;
+	}
+
+	/**
+	 * Returns {@code true} if tab placement is top/bottom and text is painted horizontally or
+	 * if tab placement is left/right and text is painted vertically (rotated).
+	 */
+	private boolean isHorizontalOrRotated( int tabPlacement ) {
+		return isHorizontalTabPlacement( tabPlacement ) == (getRealTabRotation( tabPlacement ) == NONE);
 	}
 
 	protected boolean isSmoothScrollingEnabled() {
@@ -1812,6 +2026,17 @@ public class FlatTabbedPaneUI
 			: tabWidthMode;
 	}
 
+	/** @since 3.3 */
+	protected int getTabRotation() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_ROTATION );
+		if( value instanceof Integer )
+			return (Integer) value;
+
+		return (value instanceof String)
+			? parseTabRotation( (String) value )
+			: tabRotation;
+	}
+
 	/** @since 2 */
 	protected static int parseTabType( String str ) {
 		if( str == null )
@@ -1890,6 +2115,20 @@ public class FlatTabbedPaneUI
 			case TABBED_PANE_TAB_WIDTH_MODE_PREFERRED:	return WIDTH_MODE_PREFERRED;
 			case TABBED_PANE_TAB_WIDTH_MODE_EQUAL:		return WIDTH_MODE_EQUAL;
 			case TABBED_PANE_TAB_WIDTH_MODE_COMPACT:	return WIDTH_MODE_COMPACT;
+		}
+	}
+
+	/** @since 3.3 */
+	protected static int parseTabRotation( String str ) {
+		if( str == null )
+			return WIDTH_MODE_PREFERRED;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_TAB_ROTATION_NONE:		return NONE;
+			case TABBED_PANE_TAB_ROTATION_AUTO:		return AUTO;
+			case TABBED_PANE_TAB_ROTATION_LEFT:		return LEFT;
+			case TABBED_PANE_TAB_ROTATION_RIGHT:	return RIGHT;
 		}
 	}
 
@@ -2432,7 +2671,7 @@ public class FlatTabbedPaneUI
 				? targetViewPosition
 				: tabViewport.getViewPosition();
 			Dimension viewSize = tabViewport.getViewSize();
-			boolean horizontal = isHorizontalTabPlacement();
+			boolean horizontal = isHorizontalTabPlacement( tabPane.getTabPlacement() );
 			int x = viewPosition.x;
 			int y = viewPosition.y;
 			if( horizontal )
@@ -2839,6 +3078,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
 				case TABBED_PANE_TAB_ALIGNMENT:
 				case TABBED_PANE_TAB_WIDTH_MODE:
+				case TABBED_PANE_TAB_ROTATION:
 				case TABBED_PANE_TAB_ICON_PLACEMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
@@ -2974,8 +3214,8 @@ public class FlatTabbedPaneUI
 		}
 
 		protected Dimension calculateTabAreaSize() {
-			boolean horizontal = isHorizontalTabPlacement();
 			int tabPlacement = tabPane.getTabPlacement();
+			boolean horizontal = isHorizontalTabPlacement( tabPlacement );
 			FontMetrics metrics = getFontMetrics();
 			int fontHeight = metrics.getHeight();
 
@@ -3172,7 +3412,7 @@ public class FlatTabbedPaneUI
 			Dimension size = super.calculateTabAreaSize();
 
 			// limit width/height in scroll layout
-			if( isHorizontalTabPlacement() )
+			if( isHorizontalTabPlacement( tabPane.getTabPlacement() ) )
 				size.width = Math.min( size.width, scale( 100 ) );
 			else
 				size.height = Math.min( size.height, scale( 100 ) );
@@ -3230,7 +3470,7 @@ public class FlatTabbedPaneUI
 			// because methods scrollForward() and scrollBackward() in class
 			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left
 			boolean leftToRight = isLeftToRight();
-			if( !leftToRight && isHorizontalTabPlacement() ) {
+			if( !leftToRight && isHorizontalTabPlacement( tabPane.getTabPlacement() ) ) {
 				useMoreTabsButton = true;
 				useScrollButtons = false;
 			}

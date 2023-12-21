@@ -1087,6 +1087,7 @@ TabbedPane.tabAreaAlignment    leading
 TabbedPane.tabAreaInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabHeight           32
 TabbedPane.tabInsets           4,12,4,12    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.tabRotation         none
 TabbedPane.tabRunOverlay       0
 TabbedPane.tabSelectionArc     0
 TabbedPane.tabSelectionHeight  3

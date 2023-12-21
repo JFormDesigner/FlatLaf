@@ -11,6 +11,7 @@ FlatLaf Change Log
   `libflatlaf-macos-x86_64.dylib`. See also
   https://www.formdev.com/flatlaf/native-libraries/.
 - ScrollPane: Support rounded border. (PR #713)
+- TabbedPane: Support vertical tabs. (PR #758, issue #633)
 - ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
 
 #### Fixed bugs
