@@ -3303,81 +3303,17 @@ debug*/
 			// tab area bounds
 			Rectangle tr = getTabAreaLayoutBounds( tabPlacement, tabAreaInsets );
 
-			// layout leading and trailing components in tab area
+			// layout tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
 				// fix x-locations of tabs in right-to-left component orientation
 				if( !leftToRight )
 					shiftTabs( tabPane.getInsets().left + tabAreaInsets.right + getTrailingPreferredWidth(), 0 );
 
-				int leadingWidth = getLeadingPreferredWidth();
-				int trailingWidth = getTrailingPreferredWidth();
-
-				// apply tab area alignment
-				if( runCount == 1 && rects.length > 0 ) {
-					int availWidth = tr.width - leadingWidth - trailingWidth - tabAreaInsets.left - tabAreaInsets.right;
-					int totalTabWidth = rectsTotalWidth( leftToRight );
-					int diff = availWidth - totalTabWidth;
-
-					switch( tabAreaAlignment ) {
-						case LEADING:
-							trailingWidth += diff;
-							break;
-
-						case TRAILING:
-							shiftTabs( leftToRight ? diff : -diff, 0 );
-							leadingWidth += diff;
-							break;
-
-						case CENTER:
-							shiftTabs( (leftToRight ? diff : -diff) / 2, 0 );
-							leadingWidth += diff / 2;
-							trailingWidth += diff - (diff / 2);
-							break;
-
-						case FILL:
-							stretchTabsWidth( diff, leftToRight );
-							break;
-					}
-				} else if( rects.length == 0 )
-					trailingWidth = tr.width - leadingWidth;
-
 				// layout left and right components
-				layoutLeftAndRightComponents( tr, leadingWidth, trailingWidth, leftToRight );
+				layoutLeftAndRightComponents( tr, tabAreaAlignment, tabAreaInsets, (runCount == 1), true, leftToRight );
 			} else { // LEFT and RIGHT tab placement
-				int topHeight = getLeadingPreferredHeight();
-				int bottomHeight = getTrailingPreferredHeight();
-
-				// apply tab area alignment
-				if( runCount == 1 && rects.length > 0 ) {
-					int availHeight = tr.height - topHeight - bottomHeight - tabAreaInsets.top - tabAreaInsets.bottom;
-					int totalTabHeight = rectsTotalHeight();
-					int diff = availHeight - totalTabHeight;
-
-					switch( tabAreaAlignment ) {
-						case LEADING:
-							bottomHeight += diff;
-							break;
-
-						case TRAILING:
-							shiftTabs( 0, diff );
-							topHeight += diff;
-							break;
-
-						case CENTER:
-							shiftTabs( 0, diff / 2 );
-							topHeight += diff / 2;
-							bottomHeight += diff - (diff / 2);
-							break;
-
-						case FILL:
-							stretchTabsHeight( diff );
-							break;
-					}
-				} else if( rects.length == 0 )
-					bottomHeight = tr.height - topHeight;
-
 				// layout top and bottom components
-				layoutTopAndBottomComponents( tr, topHeight, bottomHeight );
+				layoutTopAndBottomComponents( tr, tabAreaAlignment, tabAreaInsets, (runCount == 1), true );
 			}
 		}
 
@@ -3418,23 +3354,99 @@ debug*/
 			return tr;
 		}
 
-		void layoutLeftAndRightComponents( Rectangle tr, int leadingWidth, int trailingWidth, boolean leftToRight ) {
+		Rectangle layoutLeftAndRightComponents( Rectangle tr, int tabAreaAlignment, Insets tabAreaInsets,
+			boolean useTabAreaAlignment, boolean shiftTabs, boolean leftToRight )
+		{
+			int leadingWidth = getLeadingPreferredWidth();
+			int trailingWidth = getTrailingPreferredWidth();
+
+			// apply tab area alignment
+			if( useTabAreaAlignment && rects.length > 0 ) {
+				int availWidth = tr.width - leadingWidth - trailingWidth - tabAreaInsets.left - tabAreaInsets.right;
+				int totalTabWidth = rectsTotalWidth( leftToRight );
+				int diff = availWidth - totalTabWidth;
+
+				switch( tabAreaAlignment ) {
+					case LEADING:
+						trailingWidth += diff;
+						break;
+
+					case TRAILING:
+						if( shiftTabs )
+							shiftTabs( leftToRight ? diff : -diff, 0 );
+						leadingWidth += diff;
+						break;
+
+					case CENTER:
+						if( shiftTabs )
+							shiftTabs( (leftToRight ? diff : -diff) / 2, 0 );
+						leadingWidth += diff / 2;
+						trailingWidth += diff - (diff / 2);
+						break;
+
+					case FILL:
+						stretchTabsWidth( diff, leftToRight );
+						break;
+				}
+			} else if( rects.length == 0 )
+				trailingWidth = tr.width - leadingWidth;
+
 			// layout left component
 			Container leftComponent = leftToRight ? leadingComponent : trailingComponent;
-			if( leftComponent != null ) {
-				int leftWidth = leftToRight ? leadingWidth : trailingWidth;
+			int leftWidth = leftToRight ? leadingWidth : trailingWidth;
+			if( leftComponent != null )
 				leftComponent.setBounds( tr.x, tr.y, leftWidth, tr.height );
-			}
 
 			// layout right component
 			Container rightComponent = leftToRight ? trailingComponent : leadingComponent;
-			if( rightComponent != null ) {
-				int rightWidth = leftToRight ? trailingWidth : leadingWidth;
+			int rightWidth = leftToRight ? trailingWidth : leadingWidth;
+			if( rightComponent != null )
 				rightComponent.setBounds( tr.x + tr.width - rightWidth, tr.y, rightWidth, tr.height );
-			}
+
+			// return new tab area bounds reduced by left/right components and applied tab area alignment
+			Rectangle r = new Rectangle( tr );
+			r.x += leftWidth;
+			r.width -= leftWidth + rightWidth;
+			return r;
 		}
 
-		void layoutTopAndBottomComponents( Rectangle tr, int topHeight, int bottomHeight ) {
+		Rectangle layoutTopAndBottomComponents( Rectangle tr, int tabAreaAlignment, Insets tabAreaInsets,
+			boolean useTabAreaAlignment, boolean shiftTabs )
+		{
+			int topHeight = getLeadingPreferredHeight();
+			int bottomHeight = getTrailingPreferredHeight();
+
+			// apply tab area alignment
+			if( useTabAreaAlignment && rects.length > 0 ) {
+				int availHeight = tr.height - topHeight - bottomHeight - tabAreaInsets.top - tabAreaInsets.bottom;
+				int totalTabHeight = rectsTotalHeight();
+				int diff = availHeight - totalTabHeight;
+
+				switch( tabAreaAlignment ) {
+					case LEADING:
+						bottomHeight += diff;
+						break;
+
+					case TRAILING:
+						if( shiftTabs )
+							shiftTabs( 0, diff );
+						topHeight += diff;
+						break;
+
+					case CENTER:
+						if( shiftTabs )
+							shiftTabs( 0, diff / 2 );
+						topHeight += diff / 2;
+						bottomHeight += diff - (diff / 2);
+						break;
+
+					case FILL:
+						stretchTabsHeight( diff );
+						break;
+				}
+			} else if( rects.length == 0 )
+				bottomHeight = tr.height - topHeight;
+
 			// layout top component
 			if( leadingComponent != null )
 				leadingComponent.setBounds( tr.x, tr.y, tr.width, topHeight );
@@ -3442,6 +3454,12 @@ debug*/
 			// layout bottom component
 			if( trailingComponent != null )
 				trailingComponent.setBounds( tr.x, tr.y + tr.height - bottomHeight, tr.width, bottomHeight );
+
+			// return new tab area bounds reduced by top/bottom components and applied tab area alignment
+			Rectangle r = new Rectangle( tr );
+			r.y += topHeight;
+			r.height -= topHeight + bottomHeight;
+			return r;
 		}
 	}
 
@@ -3594,49 +3612,19 @@ debug*/
 						tabViewport.setViewPosition( new Point( 0, viewPosition.y ) );
 				}
 
-				int leadingWidth = getLeadingPreferredWidth();
-				int trailingWidth = getTrailingPreferredWidth();
-				int availWidth = tr.width - leadingWidth - trailingWidth - tabAreaInsets.left - tabAreaInsets.right;
+				int availWidth = tr.width - getLeadingPreferredWidth() - getTrailingPreferredWidth() - tabAreaInsets.left - tabAreaInsets.right;
 				int totalTabWidth = (rects.length > 0) ? rectsTotalWidth( leftToRight ) : 0;
 
-				// apply tab area alignment
-				if( totalTabWidth < availWidth && rects.length > 0 ) {
-					int diff = availWidth - totalTabWidth;
-					switch( tabAreaAlignment ) {
-						case LEADING:
-							trailingWidth += diff;
-							break;
-
-						case TRAILING:
-							leadingWidth += diff;
-							break;
-
-						case CENTER:
-							leadingWidth += diff / 2;
-							trailingWidth += diff - (diff / 2);
-							break;
-
-						case FILL:
-							stretchTabsWidth( diff, leftToRight );
-							totalTabWidth = rectsTotalWidth( leftToRight );
-							break;
-					}
-				} else if( rects.length == 0 )
-					trailingWidth = tr.width - leadingWidth;
-
 				// layout left and right components
-				layoutLeftAndRightComponents( tr, leadingWidth, trailingWidth, leftToRight );
+				boolean useTabAreaAlignment = (totalTabWidth < availWidth);
+				Rectangle tr2 = layoutLeftAndRightComponents( tr, tabAreaAlignment, tabAreaInsets, useTabAreaAlignment, false, leftToRight );
 
 				// layout tab viewport and buttons
 				if( rects.length > 0 ) {
-					int leftWidth = leftToRight ? leadingWidth : trailingWidth;
-					int rightWidth = leftToRight ? trailingWidth : leadingWidth;
-					int txi = tr.x + leftWidth + (leftToRight ? tabAreaInsets.left : tabAreaInsets.right);
-					int twi = tr.width - leftWidth - rightWidth - tabAreaInsets.left - tabAreaInsets.right;
-
-					// layout viewport and buttons
-					int x = txi;
-					int w = twi;
+					int x = tr2.x + (leftToRight ? tabAreaInsets.left : tabAreaInsets.right);
+					int w = tr2.width - tabAreaInsets.left - tabAreaInsets.right;
+					int y = tr2.y;
+					int h = tr2.height;
 
 					if( w < totalTabWidth ) {
 						// available width is too small for all tabs --> need buttons
@@ -3644,7 +3632,7 @@ debug*/
 						// layout more button on trailing side
 						if( useMoreTabsButton ) {
 							int buttonWidth = moreTabsButton.getPreferredSize().width;
-							moreTabsButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, tr.y, buttonWidth, tr.height );
+							moreTabsButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
 							x += leftToRight ? 0 : buttonWidth;
 							w -= buttonWidth;
 							moreTabsButtonVisible = true;
@@ -3653,7 +3641,7 @@ debug*/
 							// layout forward button on trailing side
 							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
 								int buttonWidth = forwardButton.getPreferredSize().width;
-								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, tr.y, buttonWidth, tr.height );
+								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
 								x += leftToRight ? 0 : buttonWidth;
 								w -= buttonWidth;
 								forwardButtonVisible = true;
@@ -3664,11 +3652,11 @@ debug*/
 								int buttonWidth = backwardButton.getPreferredSize().width;
 								if( trailingScrollButtons ) {
 									// on trailing side
-									backwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, tr.y, buttonWidth, tr.height );
+									backwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
 									x += leftToRight ? 0 : buttonWidth;
 								} else {
 									// on leading side
-									backwardButton.setBounds( leftToRight ? x : (x + w - buttonWidth), tr.y, buttonWidth, tr.height );
+									backwardButton.setBounds( leftToRight ? x : (x + w - buttonWidth), y, buttonWidth, h );
 									x += leftToRight ? buttonWidth : 0;
 								}
 								w -= buttonWidth;
@@ -3677,7 +3665,7 @@ debug*/
 						}
 					}
 
-					tabViewport.setBounds( x, tr.y, w, tr.height );
+					tabViewport.setBounds( x, y, w, h );
 
 					if( !leftToRight ) {
 						// layout viewport so that we can get correct view width below
@@ -3695,47 +3683,19 @@ debug*/
 						tabViewport.setViewPosition( new Point( viewPosition.x, 0 ) );
 				}
 
-				int topHeight = getLeadingPreferredHeight();
-				int bottomHeight = getTrailingPreferredHeight();
-				int availHeight = tr.height - topHeight - bottomHeight - tabAreaInsets.top - tabAreaInsets.bottom;
+				int availHeight = tr.height - getLeadingPreferredHeight() - getTrailingPreferredHeight() - tabAreaInsets.top - tabAreaInsets.bottom;
 				int totalTabHeight = (rects.length > 0) ? rectsTotalHeight() : 0;
 
-				// apply tab area alignment
-				if( totalTabHeight < availHeight && rects.length > 0 ) {
-					int diff = availHeight - totalTabHeight;
-					switch( tabAreaAlignment ) {
-						case LEADING:
-							bottomHeight += diff;
-							break;
-
-						case TRAILING:
-							topHeight += diff;
-							break;
-
-						case CENTER:
-							topHeight += diff / 2;
-							bottomHeight += diff - (diff / 2);
-							break;
-
-						case FILL:
-							stretchTabsHeight( diff );
-							totalTabHeight = rectsTotalHeight();
-							break;
-					}
-				} else if( rects.length == 0 )
-					bottomHeight = tr.height - topHeight;
-
 				// layout top and bottom components
-				layoutTopAndBottomComponents( tr, topHeight, bottomHeight );
+				boolean useTabAreaAlignment = (totalTabHeight < availHeight);
+				Rectangle tr2 = layoutTopAndBottomComponents( tr, tabAreaAlignment, tabAreaInsets, useTabAreaAlignment, false );
 
 				// layout tab viewport and buttons
 				if( rects.length > 0 ) {
-					int tyi = tr.y + topHeight + tabAreaInsets.top;
-					int thi = tr.height - topHeight - bottomHeight - tabAreaInsets.top - tabAreaInsets.bottom;
-
-					// layout viewport and buttons
-					int y = tyi;
-					int h = thi;
+					int y = tr2.y + tabAreaInsets.top;
+					int h = tr2.height - tabAreaInsets.top - tabAreaInsets.bottom;
+					int x = tr2.x;
+					int w = tr2.width;
 
 					if( h < totalTabHeight ) {
 						// available height is too small for all tabs --> need buttons
@@ -3743,7 +3703,7 @@ debug*/
 						// layout more button on bottom side
 						if( useMoreTabsButton ) {
 							int buttonHeight = moreTabsButton.getPreferredSize().height;
-							moreTabsButton.setBounds( tr.x, y + h - buttonHeight, tr.width, buttonHeight );
+							moreTabsButton.setBounds( x, y + h - buttonHeight, w, buttonHeight );
 							h -= buttonHeight;
 							moreTabsButtonVisible = true;
 						}
@@ -3751,7 +3711,7 @@ debug*/
 							// layout forward button on bottom side
 							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
 								int buttonHeight = forwardButton.getPreferredSize().height;
-								forwardButton.setBounds( tr.x, y + h - buttonHeight, tr.width, buttonHeight );
+								forwardButton.setBounds( x, y + h - buttonHeight, w, buttonHeight );
 								h -= buttonHeight;
 								forwardButtonVisible = true;
 							}
@@ -3761,10 +3721,10 @@ debug*/
 								int buttonHeight = backwardButton.getPreferredSize().height;
 								if( trailingScrollButtons ) {
 									// on bottom side
-									backwardButton.setBounds( tr.x, y + h - buttonHeight, tr.width, buttonHeight );
+									backwardButton.setBounds( x, y + h - buttonHeight, w, buttonHeight );
 								} else {
 									// on top side
-									backwardButton.setBounds( tr.x, y, tr.width, buttonHeight );
+									backwardButton.setBounds( x, y, w, buttonHeight );
 									y += buttonHeight;
 								}
 								h -= buttonHeight;
@@ -3773,7 +3733,7 @@ debug*/
 						}
 					}
 
-					tabViewport.setBounds( tr.x, y, tr.width, h );
+					tabViewport.setBounds( x, y, w, h );
 				}
 			}
 
