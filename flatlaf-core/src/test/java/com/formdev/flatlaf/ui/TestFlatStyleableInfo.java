@@ -692,7 +692,9 @@ public class TestFlatStyleableInfo
 			"oneTouchArrowColor", Color.class,
 			"oneTouchHoverArrowColor", Color.class,
 			"oneTouchPressedArrowColor", Color.class,
-
+			
+			"hoverColor", Color.class,
+			"showHover", boolean.class,
 			"style", String.class,
 			"gripColor", Color.class,
 			"gripDotCount", int.class,
