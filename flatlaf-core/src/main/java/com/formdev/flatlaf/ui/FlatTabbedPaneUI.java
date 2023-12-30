@@ -2230,11 +2230,6 @@ debug*/
 			// fix x location in rects
 			rects[i].x += sx;
 			rects[i].y += sy;
-
-			// fix tab component location
-			Component c = tabPane.getTabComponentAt( i );
-			if( c != null )
-				c.setLocation( c.getX() + sx, c.getY() + sy );
 		}
 	}
 
@@ -2242,11 +2237,6 @@ debug*/
 		int rsw = sw / rects.length;
 		int x = rects[0].x - (leftToRight ? 0 : rsw);
 		for( int i = 0; i < rects.length; i++ ) {
-			// fix tab component location
-			Component c = tabPane.getTabComponentAt( i );
-			if( c != null )
-				c.setLocation( x + (c.getX() - rects[i].x) + (rsw / 2), c.getY() );
-
 			// fix x location and width in rects
 			rects[i].x = x;
 			rects[i].width += rsw;
@@ -2268,11 +2258,6 @@ debug*/
 		int rsh = sh / rects.length;
 		int y = rects[0].y;
 		for( int i = 0; i < rects.length; i++ ) {
-			// fix tab component location
-			Component c = tabPane.getTabComponentAt( i );
-			if( c != null )
-				c.setLocation( c.getX(), y + (c.getY() - rects[i].y) + (rsh / 2) );
-
 			// fix y location and height in rects
 			rects[i].y = y;
 			rects[i].height += rsh;
@@ -3218,6 +3203,29 @@ debug*/
 
 	//---- class FlatTabbedPaneLayout -----------------------------------------
 
+	/**
+	 * Layout manager for wrap tab layout policy (and base class for scroll tab layout policy).
+	 * <p>
+	 * Component hierarchy for wrap tab layout policy:
+	 * <pre>{@code
+	 * JTabbedPane
+	 *    +- 1...n tab content components
+	 *    +- (optional) BasicTabbedPaneUI.TabContainer (extends JPanel)
+	 *    |  +- 1..n tab components (shown in tab area)
+	 *    +- (optional) ContainerUIResource (extends JPanel)
+	 *    |  +- leading component
+	 *    +- (optional) ContainerUIResource (extends JPanel)
+	 *       +- trailing component
+	 * }</pre>
+	 * <p>
+	 * Instead of using {@code super.layoutContainer(Container)} and fixing some
+	 * component bounds, this class implements {@code layoutContainer(Container)}
+	 * and moves/resizes components only once.
+	 * This avoids that some components are moved/resized twice, which would unnecessary
+	 * repaint and relayout tabbed pane. In some special case this resulted in
+	 * "endless" layouting and repainting when using nested tabbed panes (top and
+	 * bottom tab placement) and RSyntaxTextArea (with enabled line-wrapping) as tab content.
+	 */
 	protected class FlatTabbedPaneLayout
 		extends TabbedPaneLayout
 	{
@@ -3252,6 +3260,10 @@ debug*/
 			return true;
 		}
 
+		/**
+		 * Calculate preferred size of the tab area.
+		 * Used only if {@link #isContentEmpty()} returns {@code true}.
+		 */
 		protected Dimension calculateTabAreaSize() {
 			int tabPlacement = tabPane.getTabPlacement();
 			boolean horizontal = isHorizontalTabPlacement( tabPlacement );
@@ -3286,15 +3298,44 @@ debug*/
 				height + insets.bottom + insets.top + tabAreaInsets.top + tabAreaInsets.bottom );
 		}
 
+		@SuppressWarnings( "deprecation" )
 		@Override
 		public void layoutContainer( Container parent ) {
-			inBasicLayoutContainer = true;
-			try {
-				super.layoutContainer( parent );
-			} finally {
-				inBasicLayoutContainer = false;
-			}
+			setRolloverTab( -1 );
+			calculateLayoutInfo();
 
+			// update visible component
+			boolean shouldChangeFocus = false;
+			int selectedIndex = tabPane.getSelectedIndex();
+			if( selectedIndex >= 0 ) {
+				// change visible component only if tab content is not null
+				// (see comments in JTabbedPane.fireStateChanged()
+				// and in BasicTabbedPaneUI.TabbedPaneLayout.layoutContainer())
+				Component oldComp = getVisibleComponent();
+				Component newComp = tabPane.getComponentAt( selectedIndex );
+				if( newComp != null && newComp != oldComp ) {
+					shouldChangeFocus = (SwingUtilities.findFocusOwner( oldComp ) != null);
+					setVisibleComponent( newComp );
+				}
+			} else
+				setVisibleComponent( null );
+
+			// layout
+			layoutContainerImpl();
+
+			// for compatibility with super class; usually not done here
+			// because already done in JTabbedPane.fireStateChanged()
+			if( shouldChangeFocus ) {
+				// use action because BasicTabbedPaneUI.requestFocusForVisibleComponent()
+				// and SwingUtilities2.tabbedPaneChangeFocusTo() are internal methods
+				Action action = tabPane.getActionMap().get( "requestFocusForVisibleComponent" );
+				if( action != null )
+					action.actionPerformed( new ActionEvent( tabPane, ActionEvent.ACTION_PERFORMED, null ) );
+			}
+		}
+
+		/** @since 3.3 */
+		protected void layoutContainerImpl() {
 			int tabPlacement = tabPane.getTabPlacement();
 			int tabAreaAlignment = getTabAreaAlignment();
 			Insets tabAreaInsets = getRealTabAreaInsets( tabPlacement );
@@ -3315,10 +3356,148 @@ debug*/
 				// layout top and bottom components
 				layoutTopAndBottomComponents( tr, tabAreaAlignment, tabAreaInsets, (runCount == 1), true );
 			}
+
+			// layout content area components
+			// (must be done after layouting tab area, which updates tab rectangles,
+			// which are used to layout tab components in layoutTabComponents())
+			layoutChildComponents();
 		}
 
-		Rectangle getTabAreaLayoutBounds( int tabPlacement, Insets tabAreaInsets ) {
+		/** @since 3.3 */
+		protected void layoutChildComponents() {
+			if( tabPane.getComponentCount() == 0 )
+				return;
+
+			Rectangle contentAreaBounds = getContentAreaLayoutBounds( tabPane.getTabPlacement(), tabAreaInsets );
+			for( Component c : tabPane.getComponents() )
+				layoutChildComponent( c, contentAreaBounds );
+		}
+
+		/** @since 3.3 */
+		protected void layoutChildComponent( Component c, Rectangle contentAreaBounds ) {
+			if( c == leadingComponent || c == trailingComponent )
+				return;
+
+			if( isTabContainer( c ) )
+				layoutTabContainer( c );
+			else
+				c.setBounds( contentAreaBounds );
+		}
+
+		boolean isTabContainer( Component c ) {
+			return c.getClass().getName().equals( "javax.swing.plaf.basic.BasicTabbedPaneUI$TabContainer" );
+		}
+
+		/**
+		 * Layouts container used for custom components in tabs.
+		 */
+		private void layoutTabContainer( Component tabContainer ) {
+			int tabPlacement = tabPane.getTabPlacement();
 			Rectangle bounds = tabPane.getBounds();
+			Insets insets = tabPane.getInsets();
+			Insets contentInsets = getContentBorderInsets( tabPlacement );
+
+			boolean horizontal = isHorizontalTabPlacement( tabPlacement );
+			int tabAreaWidth = !horizontal ? calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth ) : 0;
+			int tabAreaHeight = horizontal ? calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight ) : 0;
+			int w = (tabAreaWidth != 0)
+				? tabAreaWidth + insets.left + insets.right + contentInsets.left + contentInsets.right
+				: bounds.width;
+			int h = (tabAreaHeight != 0)
+				? tabAreaHeight + insets.top + insets.bottom + contentInsets.top + contentInsets.bottom
+				: bounds.height;
+
+			int x = (tabPlacement == RIGHT) ? bounds.width - w : 0;
+			int y = (tabPlacement == BOTTOM) ? bounds.height - h : 0;
+
+			tabContainer.setBounds( x, y, w, h );
+
+			// layout tab components in tab container
+			layoutTabComponents( tabContainer );
+		}
+
+		/**
+		 * Layouts custom components in tabs.
+		 */
+		void layoutTabComponents( Component tabContainer ) {
+			if( tabContainer instanceof Container && ((Container)tabContainer).getComponentCount() == 0 )
+				return;
+
+			int tabPlacement = tabPane.getTabPlacement();
+			int selectedTabIndex = tabPane.getSelectedIndex();
+			Rectangle r = new Rectangle();
+			int deltaX = -tabContainer.getX();
+			int deltaY = -tabContainer.getY();
+
+			if( isScrollTabLayout() ) {
+				// convert delta x,y from JTabbedPane coordinate space to ScrollableTabPanel coordinate space
+				Point viewPosition = tabViewport.getViewPosition();
+				deltaX = deltaX - tabViewport.getX() + viewPosition.x;
+				deltaY = deltaY - tabViewport.getY() + viewPosition.y;
+			}
+
+			int tabCount = tabPane.getTabCount();
+			for( int i = 0; i < tabCount; i++ ) {
+				Component c = tabPane.getTabComponentAt( i );
+				if( c == null )
+					continue;
+
+				// outer bounds
+				Rectangle tabBounds = getTabBounds( i, r );
+				Insets tabInsets = getTabInsets( tabPlacement, i );
+				int ox = tabBounds.x + tabInsets.left + deltaX;
+				int oy = tabBounds.y + tabInsets.top + deltaY;
+				int ow = tabBounds.width - tabInsets.left - tabInsets.right;
+				int oh = tabBounds.height - tabInsets.top - tabInsets.bottom;
+
+				// center
+				Dimension prefSize = c.getPreferredSize();
+				int x = ox + ((ow - prefSize.width) / 2);
+				int y = oy + ((oh - prefSize.height) / 2);
+
+				// shift
+				boolean selected = (i == selectedTabIndex);
+				x += getTabLabelShiftX( tabPlacement, i, selected );
+				y += getTabLabelShiftY( tabPlacement, i, selected );
+
+				c.setBounds( x, y, prefSize.width, prefSize.height );
+			}
+		}
+
+		/**
+		 * Returns bounds for content components.
+		 */
+		Rectangle getContentAreaLayoutBounds( int tabPlacement, Insets tabAreaInsets ) {
+			int tabPaneWidth = tabPane.getWidth();
+			int tabPaneHeight = tabPane.getHeight();
+			Insets insets = tabPane.getInsets();
+			Insets contentInsets = getContentBorderInsets( tabPlacement );
+
+			boolean horizontal = isHorizontalTabPlacement( tabPlacement );
+			int tabAreaWidth = !horizontal ? calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth ) : 0;
+			int tabAreaHeight = horizontal ? calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight ) : 0;
+
+			Rectangle cr = new Rectangle();
+			cr.x = insets.left + contentInsets.left;
+			cr.y = insets.top + contentInsets.top;
+			cr.width = tabPaneWidth - insets.left - insets.right - contentInsets.left - contentInsets.right - tabAreaWidth;
+			cr.height = tabPaneHeight - insets.top - insets.bottom - contentInsets.top - contentInsets.bottom - tabAreaHeight;
+			if( tabPlacement == TOP )
+				cr.y += tabAreaHeight;
+			else if( tabPlacement == LEFT )
+				cr.x += tabAreaWidth;
+			return cr;
+		}
+
+		/**
+		 * Returns bounds for leading/trailing components and tab area.
+		 *
+		 * Note: Returns bounds for first tabs row only.
+		 * For multi-rows tabs in wrap mode, the returned bounds does not include full tab area.
+		 */
+		Rectangle getTabAreaLayoutBounds( int tabPlacement, Insets tabAreaInsets ) {
+			int tabPaneWidth = tabPane.getWidth();
+			int tabPaneHeight = tabPane.getHeight();
 			Insets insets = tabPane.getInsets();
 
 			Rectangle tr = new Rectangle();
@@ -3334,8 +3513,8 @@ debug*/
 				tr.x = insets.left;
 				tr.y = (tabPlacement == TOP)
 					? insets.top + tabAreaInsets.top
-					: (bounds.height - insets.bottom - tabAreaInsets.bottom - tabAreaHeight);
-				tr.width = bounds.width - insets.left - insets.right;
+					: (tabPaneHeight - insets.bottom - tabAreaInsets.bottom - tabAreaHeight);
+				tr.width = tabPaneWidth - insets.left - insets.right;
 				tr.height = tabAreaHeight;
 			} else { // LEFT and RIGHT tab placement
 				// tab area width (maxTabWidth is zero if tab count is zero)
@@ -3346,10 +3525,10 @@ debug*/
 				// tab area bounds
 				tr.x = (tabPlacement == LEFT)
 					? insets.left + tabAreaInsets.left
-					: (bounds.width - insets.right - tabAreaInsets.right - tabAreaWidth);
+					: (tabPaneWidth - insets.right - tabAreaInsets.right - tabAreaWidth);
 				tr.y = insets.top;
 				tr.width = tabAreaWidth;
-				tr.height = bounds.height - insets.top - insets.bottom;
+				tr.height = tabPaneHeight - insets.top - insets.bottom;
 			}
 			return tr;
 		}
@@ -3468,7 +3647,32 @@ debug*/
 	/**
 	 * Layout manager used for scroll tab layout policy.
 	 * <p>
-	 * Although this class delegates all methods to the original layout manager
+	 * Component hierarchy for scroll tab layout policy:
+	 * <pre>{@code
+	 * JTabbedPane
+	 *    +- 1...n tab content components
+	 *    +- BasicTabbedPaneUI.ScrollableTabViewport (extends JViewport)
+	 *    |  +- BasicTabbedPaneUI.ScrollableTabPanel (extends JPanel)
+	 *    |     +- (optional) BasicTabbedPaneUI.TabContainer (extends JPanel)
+	 *    |        +- 1..n tab components (shown in tab area)
+	 *    +- FlatScrollableTabButton (scroll forward)
+	 *    +- FlatScrollableTabButton (scroll backward)
+	 *    +- FlatMoreTabsButton
+	 *    +- (optional) ContainerUIResource (extends JPanel)
+	 *    |  +- leading component
+	 *    +- (optional) ContainerUIResource (extends JPanel)
+	 *       +- trailing component
+	 * }</pre>
+	 * <p>
+	 * Instead of using {@code super.layoutContainer(Container)} and fixing some
+	 * component bounds, this class implements {@code layoutContainer(Container)}
+	 * and moves/resizes components only once.
+	 * This avoids that some components are moved/resized twice, which would unnecessary
+	 * repaint and relayout tabbed pane. In some special case this resulted in
+	 * "endless" layouting and repainting when using nested tabbed panes (top and
+	 * bottom tab placement) and RSyntaxTextArea (with enabled line-wrapping) as tab content.
+	 * <p>
+	 * Although this class delegates nearly all methods to the original layout manager
 	 * {@code BasicTabbedPaneUI.TabbedPaneScrollLayout}, which extends
 	 * {@link BasicTabbedPaneUI.TabbedPaneLayout}, it is necessary that this class
 	 * also extends {@link TabbedPaneLayout} to avoid a {@code ClassCastException}
@@ -3529,20 +3733,11 @@ debug*/
 			delegate.removeLayoutComponent( comp );
 		}
 
+		/** @since 3.3 */
 		@Override
-		public void layoutContainer( Container parent ) {
-			// delegate to original layout manager and let it layout tabs and buttons
-			//
-			// runWithOriginalLayoutManager() is necessary for correct locations
-			// of tab components layed out in TabbedPaneLayout.layoutTabComponents()
-			runWithOriginalLayoutManager( () -> {
-				inBasicLayoutContainer = true;
-				try {
-					delegate.layoutContainer( parent );
-				} finally {
-					inBasicLayoutContainer = false;
-				}
-			} );
+		protected void layoutContainerImpl() {
+			// layout content area components
+			layoutChildComponents();
 
 			int tabsPopupPolicy = getTabsPopupPolicy();
 			int scrollButtonsPolicy = getScrollButtonsPolicy();
@@ -3737,6 +3932,17 @@ debug*/
 				}
 			}
 
+			// layout tab components in tab container
+			Component view = tabViewport.getView();
+			if( view instanceof Container && ((Container)view).getComponentCount() > 0 ) {
+				for( Component c : ((Container)view).getComponents() ) {
+					if( isTabContainer( c ) ) {
+						layoutTabComponents( c );
+						break;
+					}
+				}
+			}
+
 			// show/hide viewport and buttons
 			tabViewport.setVisible( rects.length > 0 );
 			moreTabsButton.setVisible( moreTabsButtonVisible );
@@ -3744,6 +3950,15 @@ debug*/
 			forwardButton.setVisible( forwardButtonVisible );
 
 			scrollBackwardButtonPrefSize = backwardButton.getPreferredSize();
+		}
+
+		/** @since 3.3 */
+		@Override
+		protected void layoutChildComponent( Component c, Rectangle contentAreaBounds ) {
+			if( c == tabViewport || c instanceof FlatTabAreaButton || c == leadingComponent || c == trailingComponent )
+				return;
+
+			c.setBounds( contentAreaBounds );
 		}
 	}
 

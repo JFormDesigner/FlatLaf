@@ -28,12 +28,16 @@ FlatLaf Change Log
   colors. (issue #780)
 - TableHeader: No longer temporary replace header cell renderer while painting.
   This avoids a `StackOverflowError` in case that custom renderer does this too.
-  (see [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835)).
+  (see [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835))
   This also improves compatibility with custom table header implementations.
 - TabbedPane:
   - Avoid unnecessary repainting whole tabbed pane content area when layouting
     leading/trailing components.
   - Avoid unnecessary repainting of selected tab on temporary changes.
+  - Fixed "endless" layouting and repainting when using nested tabbed panes (top
+    and bottom tab placement) and RSyntaxTextArea (with enabled line-wrapping)
+    as tab content. (see
+    [jadx issue #2030](https://github.com/skylot/jadx/issues/2030))
 - Fixed broken rendering after resizing window to minimum size and then
   increasing size again. (issue #767)
 
