@@ -17,20 +17,26 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
-import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -54,27 +60,15 @@ public class FlatNativeWindowBorder
 		!SystemInfo.isWinPE &&
 		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_WINDOW_DECORATIONS, true );
 
-	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
-	private static final boolean canUseJBRCustomDecorations =
-		canUseWindowDecorations &&
-		SystemInfo.isJetBrainsJVM_11_orLater &&
-		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false );
-
 	private static Boolean supported;
 	private static Provider nativeProvider;
 
 	public static boolean isSupported() {
-		if( canUseJBRCustomDecorations )
-			return JBRCustomDecorations.isSupported();
-
 		initialize();
 		return supported;
 	}
 
 	static Object install( JRootPane rootPane ) {
-		if( canUseJBRCustomDecorations )
-			return JBRCustomDecorations.install( rootPane );
-
 		if( !isSupported() )
 			return null;
 
@@ -163,11 +157,6 @@ public class FlatNativeWindowBorder
 	}
 
 	static void uninstall( JRootPane rootPane, Object data ) {
-		if( canUseJBRCustomDecorations ) {
-			JBRCustomDecorations.uninstall( rootPane, data );
-			return;
-		}
-
 		if( !isSupported() )
 			return;
 
@@ -215,9 +204,6 @@ public class FlatNativeWindowBorder
 	}
 
 	public static boolean hasCustomDecoration( Window window ) {
-		if( canUseJBRCustomDecorations )
-			return JBRCustomDecorations.hasCustomDecoration( window );
-
 		if( !isSupported() )
 			return false;
 
@@ -225,11 +211,6 @@ public class FlatNativeWindowBorder
 	}
 
 	public static void setHasCustomDecoration( Window window, boolean hasCustomDecoration ) {
-		if( canUseJBRCustomDecorations ) {
-			JBRCustomDecorations.setHasCustomDecoration( window, hasCustomDecoration );
-			return;
-		}
-
 		if( !isSupported() )
 			return;
 
@@ -240,11 +221,6 @@ public class FlatNativeWindowBorder
 		List<Rectangle> hitTestSpots, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
 		Rectangle maximizeButtonBounds, Rectangle closeButtonBounds )
 	{
-		if( canUseJBRCustomDecorations ) {
-			JBRCustomDecorations.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
-			return;
-		}
-
 		if( !isSupported() )
 			return;
 
@@ -253,7 +229,7 @@ public class FlatNativeWindowBorder
 	}
 
 	static boolean showWindow( Window window, int cmd ) {
-		if( canUseJBRCustomDecorations || !isSupported() )
+		if( !isSupported() )
 			return false;
 
 		return nativeProvider.showWindow( window, cmd );
@@ -320,20 +296,36 @@ public class FlatNativeWindowBorder
 	 * No longer needed since Windows 11.
 	 */
 	static class WindowTopBorder
-		extends JBRCustomDecorations.JBRWindowTopBorder
+		extends BorderUIResource.EmptyBorderUIResource
 	{
 		private static WindowTopBorder instance;
 
-		static JBRWindowTopBorder getInstance() {
-			if( canUseJBRCustomDecorations )
-				return JBRWindowTopBorder.getInstance();
+		private final Color activeLightColor = new Color( 0x707070 );
+		private final Color activeDarkColor = new Color( 0x2D2E2F );
+		private final Color inactiveLightColor = new Color( 0xaaaaaa );
+		private final Color inactiveDarkColor = new Color( 0x494A4B );
 
+		private boolean colorizationAffectsBorders;
+		private Color activeColor;
+
+		static WindowTopBorder getInstance() {
 			if( instance == null )
 				instance = new WindowTopBorder();
 			return instance;
 		}
 
-		@Override
+		WindowTopBorder() {
+			super( 1, 0, 0, 0 );
+
+			update();
+			installListeners();
+        }
+
+        void update() {
+			colorizationAffectsBorders = isColorizationColorAffectsBorders();
+			activeColor = calculateActiveBorderColor();
+		}
+
 		void installListeners() {
 			nativeProvider.addChangeListener( e -> {
 				update();
@@ -346,19 +338,69 @@ public class FlatNativeWindowBorder
 			} );
 		}
 
-		@Override
 		boolean isColorizationColorAffectsBorders() {
 			return nativeProvider.isColorizationColorAffectsBorders();
 		}
 
-		@Override
 		Color getColorizationColor() {
 			return nativeProvider.getColorizationColor();
 		}
 
-		@Override
 		int getColorizationColorBalance() {
 			return nativeProvider.getColorizationColorBalance();
+		}
+
+		private Color calculateActiveBorderColor() {
+			if( !colorizationAffectsBorders )
+				return null;
+
+			Color colorizationColor = getColorizationColor();
+			if( colorizationColor != null ) {
+				int colorizationColorBalance = getColorizationColorBalance();
+				if( colorizationColorBalance < 0 || colorizationColorBalance > 100 )
+					colorizationColorBalance = 100;
+
+				if( colorizationColorBalance == 0 )
+					return new Color( 0xD9D9D9 );
+				if( colorizationColorBalance == 100 )
+					return colorizationColor;
+
+				float alpha = colorizationColorBalance / 100.0f;
+				float remainder = 1 - alpha;
+				int r = Math.round( colorizationColor.getRed() * alpha + 0xD9 * remainder );
+				int g = Math.round( colorizationColor.getGreen() * alpha + 0xD9 * remainder );
+				int b = Math.round( colorizationColor.getBlue() * alpha + 0xD9 * remainder );
+
+				// avoid potential IllegalArgumentException in Color constructor
+				r = Math.min( Math.max( r, 0 ), 255 );
+				g = Math.min( Math.max( g, 0 ), 255 );
+				b = Math.min( Math.max( b, 0 ), 255 );
+
+				return new Color( r, g, b );
+			}
+
+			Color activeBorderColor = (Color) Toolkit.getDefaultToolkit().getDesktopProperty( "win.frame.activeBorderColor" );
+			return (activeBorderColor != null) ? activeBorderColor : UIManager.getColor( "MenuBar.borderColor" );
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Window window = SwingUtilities.windowForComponent( c );
+			boolean active = window != null && window.isActive();
+			boolean dark = FlatLaf.isLafDark();
+
+			g.setColor( active
+				? (activeColor != null ? activeColor : (dark ? activeDarkColor : activeLightColor))
+				: (dark ? inactiveDarkColor : inactiveLightColor) );
+			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
+		}
+
+		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
+			g.fillRect( x, y, width, 1 );
+		}
+
+		void repaintBorder( Component c ) {
+			c.repaint( 0, 0, c.getWidth(), 1 );
 		}
 	}
 }

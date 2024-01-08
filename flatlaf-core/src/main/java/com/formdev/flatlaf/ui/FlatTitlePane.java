@@ -839,10 +839,6 @@ public class FlatTitlePane
 			window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
 	}
 
-	private boolean hasJBRCustomDecoration() {
-		return window != null && JBRCustomDecorations.hasCustomDecoration( window );
-	}
-
 	/**
 	 * Returns whether windows uses native window border and has custom decorations enabled.
 	 */
@@ -900,10 +896,7 @@ public class FlatTitlePane
 					iconBounds.width += iconInsets.right;
 			}
 
-			if( hasJBRCustomDecoration() )
-				hitTestSpots.add( iconBounds );
-			else
-				appIconBounds = iconBounds;
+			appIconBounds = iconBounds;
 		} else if( showIconBesideTitle && titleLabel.getIcon() != null && titleLabel.getUI() instanceof FlatTitleLabelUI ) {
 			FlatTitleLabelUI ui = (FlatTitleLabelUI) titleLabel.getUI();
 
@@ -931,10 +924,7 @@ public class FlatTitlePane
 				iconR.width += 2;
 				iconR.height += 2;
 
-				if( hasJBRCustomDecoration() )
-					hitTestSpots.add( iconR );
-				else
-					appIconBounds = iconR;
+				appIconBounds = iconR;
 			}
 		}
 

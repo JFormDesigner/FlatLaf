@@ -42,6 +42,14 @@ FlatLaf Change Log
 - Fixed broken rendering after resizing window to minimum size and then
   increasing size again. (issue #767)
 
+#### Incompatibilities
+
+- Removed support for JetBrains custom decorations, which required
+  [JetBrains Runtime](https://github.com/JetBrains/JetBrainsRuntime/wiki) (JBR)
+  8 or 11. It did not work for JBR 17. System property
+  `flatlaf.useJetBrainsCustomDecorations` is now ignored. **Note**: FlatLaf
+  window decorations continue to work with JBR.
+
 
 ## 3.2.5
 

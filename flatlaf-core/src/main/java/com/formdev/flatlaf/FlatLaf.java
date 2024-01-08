@@ -183,17 +183,11 @@ public abstract class FlatLaf
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
 	 * This method returns {@code true} on Windows 10/11 (see exception below)
-	 * and on Linux, {@code false} otherwise.
+	 * and on Linux, otherwise returns {@code false}.
 	 * <p>
-	 * Returns also {@code false} on Windows 10/11 if:
-	 * <ul>
-	 * <li>FlatLaf native window border support is available (requires Windows 10/11)</li>
-	 * <li>running in
-	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
-	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
-	 * and JBR supports custom window decorations
-	 * </li>
-	 * </ul>
+	 * Returns also {@code false} on Windows 10/11 if
+	 * FlatLaf native window border support is available (requires Windows 10/11).
+	 * <p>
 	 * In these cases, custom decorations are enabled by the root pane.
 	 * Usage of {@link JFrame#setDefaultLookAndFeelDecorated(boolean)} or
 	 * {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} is not necessary.

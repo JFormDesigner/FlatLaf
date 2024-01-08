@@ -103,7 +103,10 @@ public interface FlatSystemProperties
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code false} (since v2; was {@code true} in v1)
+	 *
+	 * @deprecated No longer used since FlatLaf 3.3. Retained for API compatibility.
 	 */
+	@Deprecated
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
 	/**
