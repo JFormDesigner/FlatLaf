@@ -689,12 +689,13 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = expectedMap(
 			"arrowType", String.class,
+			"draggingColor", Color.class,
+			"hoverColor", Color.class,
+			"pressedColor", Color.class,
 			"oneTouchArrowColor", Color.class,
 			"oneTouchHoverArrowColor", Color.class,
 			"oneTouchPressedArrowColor", Color.class,
-			
-			"hoverColor", Color.class,
-			"showHover", boolean.class,
+
 			"style", String.class,
 			"gripColor", Color.class,
 			"gripDotCount", int.class,

@@ -870,6 +870,9 @@ public class TestFlatStyling
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 
 		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "draggingColor: #fff" );
+		ui.applyStyle( "hoverColor: #fff" );
+		ui.applyStyle( "pressedColor: #fff" );
 		ui.applyStyle( "oneTouchArrowColor: #fff" );
 		ui.applyStyle( "oneTouchHoverArrowColor: #fff" );
 		ui.applyStyle( "oneTouchPressedArrowColor: #fff" );

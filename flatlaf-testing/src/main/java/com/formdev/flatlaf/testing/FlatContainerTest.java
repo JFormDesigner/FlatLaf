@@ -76,6 +76,13 @@ public class FlatContainerTest
 		tabScrollChanged();
 	}
 
+	private void continuousLayoutChanged() {
+		boolean continuousLayout = continuousLayoutCheckBox.isSelected();
+		splitPane1.setContinuousLayout( continuousLayout );
+		splitPane2.setContinuousLayout( continuousLayout );
+		splitPane3.setContinuousLayout( continuousLayout );
+	}
+
 	private void showOnlyOne() {
 		boolean showOnlyOne = showOnlyOneCheckBox.isSelected();
 
@@ -519,11 +526,12 @@ public class FlatContainerTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
 		JLabel splitPaneLabel = new JLabel();
-		JSplitPane splitPane3 = new JSplitPane();
-		JSplitPane splitPane1 = new JSplitPane();
+		continuousLayoutCheckBox = new JCheckBox();
+		splitPane3 = new JSplitPane();
+		splitPane1 = new JSplitPane();
 		FlatContainerTest.Panel1 panel15 = new FlatContainerTest.Panel1();
 		FlatContainerTest.Panel2 panel21 = new FlatContainerTest.Panel2();
-		JSplitPane splitPane2 = new JSplitPane();
+		splitPane2 = new JSplitPane();
 		JPanel panel12 = new JPanel();
 		JLabel label3 = new JLabel();
 		JPanel panel13 = new JPanel();
@@ -600,6 +608,12 @@ public class FlatContainerTest
 			//---- splitPaneLabel ----
 			splitPaneLabel.setText("JSplitPane:");
 			panel9.add(splitPaneLabel, cc.xy(1, 1));
+
+			//---- continuousLayoutCheckBox ----
+			continuousLayoutCheckBox.setText("Continuous Layout");
+			continuousLayoutCheckBox.setSelected(true);
+			continuousLayoutCheckBox.addActionListener(e -> continuousLayoutChanged());
+			panel9.add(continuousLayoutCheckBox, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
 			//======== splitPane3 ========
 			{
@@ -929,6 +943,10 @@ public class FlatContainerTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JCheckBox continuousLayoutCheckBox;
+	private JSplitPane splitPane3;
+	private JSplitPane splitPane1;
+	private JSplitPane splitPane2;
 	private JCheckBox showOnlyOneCheckBox;
 	private FlatTabbedPane tabbedPane1;
 	private FlatTabbedPane tabbedPane3;
