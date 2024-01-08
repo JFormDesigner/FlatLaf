@@ -370,7 +370,11 @@ public class FlatFileChooserUI
 
 			// get system icon
 			if( f != null ) {
-				icon = getFileChooser().getFileSystemView().getSystemIcon( f );
+				try {
+					icon = getFileChooser().getFileSystemView().getSystemIcon( f );
+				} catch( NullPointerException ex ) {
+					// Java 21 may throw a NPE for exe files that use default Windows exe icon
+				}
 
 				if( icon != null ) {
 					if( icon instanceof ImageIcon )
@@ -540,31 +544,36 @@ public class FlatFileChooserUI
 			if( doNotUseSystemIcons() )
 				return new FlatFileViewDirectoryIcon();
 
-			// Java 17+ supports getting larger system icons
 			try {
-				if( SystemInfo.isJava_17_orLater ) {
-					Method m = fsv.getClass().getMethod( "getSystemIcon", File.class, int.class, int.class );
-					return (Icon) m.invoke( fsv, file, iconSize.width, iconSize.height );
-				} else if( iconSize.width > 16 || iconSize.height > 16 ) {
-					Class<?> cls = Class.forName( "sun.awt.shell.ShellFolder" );
-					if( cls.isInstance( file ) ) {
-						Method m = file.getClass().getMethod( "getIcon", boolean.class );
-						m.setAccessible( true );
-						Image image = (Image) m.invoke( file, true );
-						if( image != null )
-							return new ImageIcon( image );
+				// Java 17+ supports getting larger system icons
+				try {
+					if( SystemInfo.isJava_17_orLater ) {
+						Method m = fsv.getClass().getMethod( "getSystemIcon", File.class, int.class, int.class );
+						return (Icon) m.invoke( fsv, file, iconSize.width, iconSize.height );
+					} else if( iconSize.width > 16 || iconSize.height > 16 ) {
+						Class<?> cls = Class.forName( "sun.awt.shell.ShellFolder" );
+						if( cls.isInstance( file ) ) {
+							Method m = file.getClass().getMethod( "getIcon", boolean.class );
+							m.setAccessible( true );
+							Image image = (Image) m.invoke( file, true );
+							if( image != null )
+								return new ImageIcon( image );
+						}
 					}
+				} catch( Exception ex ) {
+					// do not log InaccessibleObjectException because access
+					// may be denied via VM option '--illegal-access=deny' (default in Java 16)
+					// (not catching InaccessibleObjectException here because it is new in Java 9, but FlatLaf also runs on Java 8)
+					if( !"java.lang.reflect.InaccessibleObjectException".equals( ex.getClass().getName() ) )
+						LoggingFacade.INSTANCE.logSevere( null, ex );
 				}
-			} catch( Exception ex ) {
-				// do not log InaccessibleObjectException because access
-				// may be denied via VM option '--illegal-access=deny' (default in Java 16)
-				// (not catching InaccessibleObjectException here because it is new in Java 9, but FlatLaf also runs on Java 8)
-				if( !"java.lang.reflect.InaccessibleObjectException".equals( ex.getClass().getName() ) )
-					LoggingFacade.INSTANCE.logSevere( null, ex );
-			}
 
-			// get system icon in default size 16x16
-			return fsv.getSystemIcon( file );
+				// get system icon in default size 16x16
+				return fsv.getSystemIcon( file );
+			} catch( NullPointerException ex ) {
+				// Java 21 may throw a NPE for exe files that use default Windows exe icon
+				return new FlatFileViewDirectoryIcon();
+			}
 		}
 
 		protected void directoryChanged( File file ) {

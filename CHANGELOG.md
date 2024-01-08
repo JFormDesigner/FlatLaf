@@ -19,12 +19,15 @@ FlatLaf Change Log
 
 - Button and ToggleButton: Selected buttons did not use explicitly set
   foreground color. (issue 756)
-- Table: Switching theme looses table grid and intercell spacing. (issues #733
-  and #750)
+- FileChooser: Catch NPE in Java 21 when getting icon for `.exe` files that use
+  default Windows exe icon. (see
+  [JDK-8320692](https://bugs.openjdk.org/browse/JDK-8320692))
 - OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
   #761)
 - ScrollPane: Styling ScrollPane border properties did not work if view
   component is a Table.
+- Table: Switching theme looses table grid and intercell spacing. (issues #733
+  and #750)
 - Table: Fixed background of `boolean` columns when using alternating row
   colors. (issue #780)
 - TableHeader: No longer temporary replace header cell renderer while painting.
