@@ -30,9 +30,6 @@ import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -78,6 +75,7 @@ import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.JavaCompatibility2;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.GrayFilter;
@@ -1289,8 +1287,8 @@ public abstract class FlatLaf
 	 * @since 2.5
 	 */
 	public static Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		StyleableUI ui = getStyleableUI( c );
-		return (ui != null) ? ui.getStyleableInfos( c ) : null;
+		ComponentUI ui = JavaCompatibility2.getUI( c );
+		return (ui instanceof StyleableUI) ? ((StyleableUI)ui).getStyleableInfos( c ) : null;
 	}
 
 	/**
@@ -1302,40 +1300,9 @@ public abstract class FlatLaf
 	 */
 	@SuppressWarnings( "unchecked" )
 	public static <T> T getStyleableValue( JComponent c, String key ) {
-		StyleableUI ui = getStyleableUI( c );
-		return (ui != null) ? (T) ui.getStyleableValue( c, key ) : null;
+		ComponentUI ui = JavaCompatibility2.getUI( c );
+		return (ui instanceof StyleableUI) ? (T) ((StyleableUI)ui).getStyleableValue( c, key ) : null;
 	}
-
-	private static StyleableUI getStyleableUI( JComponent c ) {
-		if( !getUIMethodInitialized ) {
-			getUIMethodInitialized = true;
-
-			if( SystemInfo.isJava_9_orLater ) {
-				try {
-					// JComponent.getUI() is available since Java 9
-					getUIMethod = MethodHandles.lookup().findVirtual( JComponent.class, "getUI",
-						MethodType.methodType( ComponentUI.class ) );
-				} catch( Exception ex ) {
-					// ignore
-				}
-			}
-		}
-
-		try {
-			Object ui;
-			if( getUIMethod != null )
-				ui = getUIMethod.invoke( c );
-			else
-				ui = c.getClass().getMethod( "getUI" ).invoke( c );
-			return (ui instanceof StyleableUI) ? (StyleableUI) ui : null;
-		} catch( Throwable ex ) {
-			// ignore
-			return null;
-		}
-	}
-
-	private static boolean getUIMethodInitialized;
-	private static MethodHandle getUIMethod;
 
 	/**
 	 * Returns the preferred font family to be used for (nearly) all fonts; or {@code null}.
