@@ -837,6 +837,8 @@ public class FlatTabbedPaneUI
 
 		EventQueue.invokeLater( () -> {
 			repaintRolloverPending = false;
+			if( tabPane == null )
+				return;
 
 			int index = getRolloverTab();
 			if( index != oldIndex ) {
@@ -1167,6 +1169,33 @@ public class FlatTabbedPaneUI
 
 		paintContentBorder( g, tabPlacement, selectedIndex );
 
+		// fill tabs area background
+		// - for rounded cards use partly rounded rectangle
+		if( tabsOpaque && !tabPane.isOpaque() && tabPane.getTabCount() > 0 ) {
+			Rectangle tr = null;
+			if( isScrollTabLayout() ) {
+				// scroll layout: use tab viewport bounds and add visible buttons
+				tr = tabViewport.getBounds();
+				for( Component child : tabPane.getComponents() ) {
+					if( child instanceof FlatTabAreaButton && child.isVisible() )
+						tr = tr.union( child.getBounds() );
+				}
+			} else {
+				// wrap layout: use union of all tab rectangles
+				for( Rectangle r : rects )
+					tr = (tr != null) ? tr.union( r ) : r;
+			}
+
+			if( tr != null ) {
+				g.setColor( tabPane.getBackground() );
+
+				if( (getTabType() == TAB_TYPE_CARD) && cardTabArc > 0 ) {
+					((Graphics2D)g).fill( createCardTabOuterPath( tabPlacement, tr.x, tr.y, tr.width, tr.height ) );
+				} else
+					g.fillRect( tr.x, tr.y, tr.width, tr.height );
+			}
+		}
+
 		if( !isScrollTabLayout() )
 			paintTabArea( g, tabPlacement, selectedIndex );
 	}
@@ -1362,18 +1391,6 @@ debug*/
 	{
 		boolean isCard = (getTabType() == TAB_TYPE_CARD);
 
-		// fill whole tab background if tab is rounded or has insets
-		if( (!isCard && tabArc > 0) ||
-			(isCard && cardTabArc > 0) ||
-			(!isCard && selectedInsets != null &&
-			 (selectedInsets.top != 0 || selectedInsets.left != 0 ||
-			  selectedInsets.bottom != 0 || selectedInsets.right != 0)) )
-		{
-			Color background = tabPane.getBackgroundAt( tabIndex );
-			g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
-			g.fillRect( x, y, w, h );
-		}
-
 		// apply insets
 		if( !isCard && selectedInsets != null ) {
 			Insets insets = new Insets( 0, 0, 0, 0 );
@@ -1387,14 +1404,16 @@ debug*/
 
 		// paint tab background
 		Color background = getTabBackground( tabPlacement, tabIndex, isSelected );
-		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
-		if( !isCard && tabArc > 0 ) {
-			float arc = scale( (float) tabArc ) / 2f;
-			FlatUIUtils.paintSelection( (Graphics2D) g, x, y, w, h, null, arc, arc, arc, arc, 0 );
-		} else if( isCard && cardTabArc > 0 )
-			((Graphics2D)g).fill( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
-		else
-			g.fillRect( x, y, w, h );
+		if( background != tabPane.getBackground() ) {
+			g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
+			if( !isCard && tabArc > 0 ) {
+				float arc = scale( (float) tabArc ) / 2f;
+				FlatUIUtils.paintSelection( (Graphics2D) g, x, y, w, h, null, arc, arc, arc, arc, 0 );
+			} else if( isCard && cardTabArc > 0 )
+				((Graphics2D)g).fill( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
+			else
+				g.fillRect( x, y, w, h );
+		}
 	}
 
 	/** @since 2 */
@@ -2338,17 +2357,6 @@ debug*/
 		@Override
 		protected Color deriveBackground( Color background ) {
 			return FlatUIUtils.deriveColor( background, tabPane.getBackground() );
-		}
-
-		@Override
-		public void paint( Graphics g ) {
-			// fill button background
-			if( tabsOpaque || tabPane.isOpaque() ) {
-				g.setColor( tabPane.getBackground() );
-				g.fillRect( 0, 0, getWidth(), getHeight() );
-			}
-
-			super.paint( g );
 		}
 
 		@Override
