@@ -360,6 +360,9 @@ public class FlatTableHeaderUI
 			Icon oldIcon = null;
 			int oldHorizontalTextPosition = -1;
 
+			// needed when we have to restore the label background after hover and the renderer is opaque
+			boolean restoreBackground = false;
+			
 			// hover and pressed background/foreground
 			TableColumn draggedColumn = header.getDraggedColumn();
 			Color background = null;
@@ -377,6 +380,7 @@ public class FlatTableHeaderUI
 			if( background != null ) {
 				oldBackground = l.getBackground();
 				oldOpaque = l.isOpaque();
+				restoreBackground = true;
 				l.setBackground( FlatUIUtils.deriveColor( background, header.getBackground() ) );
 				l.setOpaque( true );
 			}
@@ -415,7 +419,7 @@ public class FlatTableHeaderUI
 			}
 
 			// restore modified renderer component properties
-			if( oldBackground != null )
+			if( restoreBackground )
 				l.setBackground( oldBackground );
 			if( oldForeground != null )
 				l.setForeground( oldForeground );
