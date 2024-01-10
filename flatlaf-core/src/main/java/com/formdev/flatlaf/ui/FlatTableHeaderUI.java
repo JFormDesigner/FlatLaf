@@ -356,13 +356,10 @@ public class FlatTableHeaderUI
 			JLabel l = (JLabel) c;
 			Color oldBackground = null;
 			Color oldForeground = null;
-			Boolean oldOpaque = null;
+			boolean oldOpaque = false;
 			Icon oldIcon = null;
 			int oldHorizontalTextPosition = -1;
 
-			// needed when we have to restore the label background after hover and the renderer is opaque
-			boolean restoreBackground = false;
-			
 			// hover and pressed background/foreground
 			TableColumn draggedColumn = header.getDraggedColumn();
 			Color background = null;
@@ -380,7 +377,6 @@ public class FlatTableHeaderUI
 			if( background != null ) {
 				oldBackground = l.getBackground();
 				oldOpaque = l.isOpaque();
-				restoreBackground = true;
 				l.setBackground( FlatUIUtils.deriveColor( background, header.getBackground() ) );
 				l.setOpaque( true );
 			}
@@ -419,12 +415,12 @@ public class FlatTableHeaderUI
 			}
 
 			// restore modified renderer component properties
-			if( restoreBackground )
+			if( background != null ) {
 				l.setBackground( oldBackground );
-			if( oldForeground != null )
-				l.setForeground( oldForeground );
-			if( oldOpaque != null )
 				l.setOpaque( oldOpaque );
+			}
+			if( foreground != null )
+				l.setForeground( oldForeground );
 			if( oldIcon != null )
 				l.setIcon( oldIcon );
 			if( oldHorizontalTextPosition >= 0 )
