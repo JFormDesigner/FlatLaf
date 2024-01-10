@@ -299,15 +299,10 @@ public class FlatUIUtils
 		if( c == null )
 			return false;
 
-		// check whether used in cell editor (check 3 levels up)
-		Component c2 = c;
-		for( int i = 0; i <= 2 && c2 != null; i++ ) {
-			Container parent = c2.getParent();
-			if( parent instanceof JTable && ((JTable)parent).getEditorComponent() == c2 )
-				return true;
-
-			c2 = parent;
-		}
+		// check whether used as table cell editor
+		Container parent = c.getParent();
+		if( parent instanceof JTable && ((JTable)parent).getEditorComponent() == c )
+			return true;
 
 		// check whether used as cell editor
 		//   Table.editor is set in JTable.GenericEditor constructor

@@ -26,10 +26,12 @@ FlatLaf Change Log
   #761)
 - ScrollPane: Styling ScrollPane border properties did not work if view
   component is a Table.
-- Table: Switching theme looses table grid and intercell spacing. (issues #733
-  and #750)
-- Table: Fixed background of `boolean` columns when using alternating row
-  colors. (issue #780)
+- Table:
+  - Switching theme looses table grid and intercell spacing. (issues #733 and
+    #750)
+  - Fixed background of `boolean` columns when using alternating row colors.
+    (issue #780)
+  - Fixed border arc of components in complex table cell editors. (issue #786)
 - TableHeader: No longer temporary replace header cell renderer while painting.
   This avoids a `StackOverflowError` in case that custom renderer does this too.
   (see [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835))
