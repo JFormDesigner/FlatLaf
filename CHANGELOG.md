@@ -33,10 +33,13 @@ FlatLaf Change Log
   - Fixed background of `boolean` columns when using alternating row colors.
     (issue #780)
   - Fixed border arc of components in complex table cell editors. (issue #786)
-- TableHeader: No longer temporary replace header cell renderer while painting.
-  This avoids a `StackOverflowError` in case that custom renderer does this too.
-  (see [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835))
-  This also improves compatibility with custom table header implementations.
+- TableHeader:
+  - No longer temporary replace header cell renderer while painting. This avoids
+    a `StackOverflowError` in case that custom renderer does this too. (see
+    [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835)) This
+    also improves compatibility with custom table header implementations.
+  - Header cell renderer background/foreground colors were not restored after
+    hover if renderer uses `null` for background/foreground. (PR #790)
 - TabbedPane:
   - Avoid unnecessary repainting whole tabbed pane content area when layouting
     leading/trailing components.

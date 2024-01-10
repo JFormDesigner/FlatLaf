@@ -356,7 +356,7 @@ public class FlatTableHeaderUI
 			JLabel l = (JLabel) c;
 			Color oldBackground = null;
 			Color oldForeground = null;
-			Boolean oldOpaque = null;
+			boolean oldOpaque = false;
 			Icon oldIcon = null;
 			int oldHorizontalTextPosition = -1;
 
@@ -415,12 +415,12 @@ public class FlatTableHeaderUI
 			}
 
 			// restore modified renderer component properties
-			if( oldBackground != null )
+			if( background != null ) {
 				l.setBackground( oldBackground );
-			if( oldForeground != null )
-				l.setForeground( oldForeground );
-			if( oldOpaque != null )
 				l.setOpaque( oldOpaque );
+			}
+			if( foreground != null )
+				l.setForeground( oldForeground );
 			if( oldIcon != null )
 				l.setIcon( oldIcon );
 			if( oldHorizontalTextPosition >= 0 )
