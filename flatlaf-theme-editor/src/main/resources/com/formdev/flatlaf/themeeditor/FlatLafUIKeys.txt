@@ -827,9 +827,11 @@ SplitPaneDivider.gripColor
 SplitPaneDivider.gripDotCount
 SplitPaneDivider.gripDotSize
 SplitPaneDivider.gripGap
+SplitPaneDivider.hoverColor
 SplitPaneDivider.oneTouchArrowColor
 SplitPaneDivider.oneTouchHoverArrowColor
 SplitPaneDivider.oneTouchPressedArrowColor
+SplitPaneDivider.pressedColor
 SplitPaneDivider.style
 SplitPaneUI
 TabbedPane.ancestorInputMap

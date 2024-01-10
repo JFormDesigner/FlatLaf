@@ -16,7 +16,9 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -67,6 +69,8 @@ import com.formdev.flatlaf.util.UIScale;
  * <!-- FlatSplitPaneUI -->
  *
  * @uiDefault Component.arrowType						String	chevron (default) or triangle
+ * @uiDefault SplitPaneDivider.hoverColor				Color	optional
+ * @uiDefault SplitPaneDivider.pressedColor				Color	optional
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
  * @uiDefault SplitPaneDivider.oneTouchPressedArrowColor Color
@@ -83,6 +87,7 @@ public class FlatSplitPaneUI
 	implements StyleableUI
 {
 	@Styleable protected String arrowType;
+	/** @since 3.3 */ @Styleable protected Color draggingColor;
 	@Styleable protected Color oneTouchArrowColor;
 	@Styleable protected Color oneTouchHoverArrowColor;
 	@Styleable protected Color oneTouchPressedArrowColor;
@@ -104,6 +109,8 @@ public class FlatSplitPaneUI
 	protected void installDefaults() {
 		arrowType = UIManager.getString( "Component.arrowType" );
 
+		draggingColor = UIManager.getColor( "SplitPaneDivider.draggingColor" );
+
 		// get one-touch colors before invoking super.installDefaults() because they are
 		// used in there on LaF switching
 		oneTouchArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchArrowColor" );
@@ -116,6 +123,8 @@ public class FlatSplitPaneUI
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
+
+		draggingColor = null;
 
 		oneTouchArrowColor = null;
 		oneTouchHoverArrowColor = null;
@@ -183,12 +192,49 @@ public class FlatSplitPaneUI
 		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
+	@Override
+	protected Component createDefaultNonContinuousLayoutDivider() {
+		// only used for non-continuous layout if left or right component is heavy weight
+		return new Canvas() {
+			@Override
+			public void paint( Graphics g ) {
+				if( !isContinuousLayout() && getLastDragLocation() != -1 )
+					paintDragDivider( g, 0 );
+			}
+		};
+	}
+
+	@Override
+	public void finishedPaintingChildren( JSplitPane sp, Graphics g ) {
+		if( sp == splitPane && getLastDragLocation() != -1 && !isContinuousLayout() && !draggingHW )
+			paintDragDivider( g, getLastDragLocation() );
+	}
+
+	private void paintDragDivider( Graphics g, int dividerLocation ) {
+		// divider bounds
+		boolean horizontal = (getOrientation() == JSplitPane.HORIZONTAL_SPLIT);
+		int x = horizontal ? dividerLocation : 0;
+		int y = !horizontal ? dividerLocation : 0;
+		int width = horizontal ? dividerSize : splitPane.getWidth();
+		int height = !horizontal ? dividerSize : splitPane.getHeight();
+
+		// paint background
+		g.setColor( FlatUIUtils.deriveColor( draggingColor, splitPane.getBackground() ) );
+		g.fillRect( x, y, width, height );
+
+		// paint divider style (e.g. grip)
+		if( divider instanceof FlatSplitPaneDivider )
+			((FlatSplitPaneDivider)divider).paintStyle( g, x, y, width, height );
+	}
+
 	//---- class FlatSplitPaneDivider -----------------------------------------
 
 	protected class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
 		@Styleable protected String style = UIManager.getString( "SplitPaneDivider.style" );
+		/** @since 3.3 */ @Styleable protected Color hoverColor = UIManager.getColor( "SplitPaneDivider.hoverColor" );
+		/** @since 3.3 */ @Styleable protected Color pressedColor = UIManager.getColor( "SplitPaneDivider.pressedColor" );
 		@Styleable protected Color gripColor = UIManager.getColor( "SplitPaneDivider.gripColor" );
 		@Styleable protected int gripDotCount = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotCount", 3 );
 		@Styleable protected int gripDotSize = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotSize", 3 );
@@ -251,15 +297,31 @@ public class FlatSplitPaneUI
 
 		@Override
 		public void paint( Graphics g ) {
+			// paint hover or pressed background
+			Color hoverOrPressedColor = (isContinuousLayout() && dragger != null)
+				? pressedColor
+				: (isMouseOver() && dragger == null
+					? hoverColor
+					: null);
+			if( hoverOrPressedColor != null ) {
+				g.setColor( FlatUIUtils.deriveColor( hoverOrPressedColor, splitPane.getBackground() ) );
+				g.fillRect( 0, 0, getWidth(), getHeight() );
+			}
+
 			super.paint( g );
 
+			paintStyle( g, 0, 0, getWidth(), getHeight() );
+		}
+
+		/** @since 3.3 */
+		protected void paintStyle( Graphics g, int x, int y, int width, int height ) {
 			if( "plain".equals( style ) )
 				return;
 
 			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 			g.setColor( gripColor );
-			paintGrip( g, 0, 0, getWidth(), getHeight() );
+			paintGrip( g, x, y, width, height );
 
 			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
@@ -284,6 +346,29 @@ public class FlatSplitPaneUI
 			return (orientation == JSplitPane.VERTICAL_SPLIT)
 				? location == (splitPane.getHeight() - getHeight() - insets.bottom)
 				: location == (splitPane.getWidth() - getWidth() - insets.right);
+		}
+
+		@Override
+		protected void setMouseOver( boolean mouseOver ) {
+			super.setMouseOver( mouseOver );
+			repaintIfNecessary();
+		}
+
+		@Override
+		protected void prepareForDragging() {
+			super.prepareForDragging();
+			repaintIfNecessary();
+		}
+
+		@Override
+		protected void finishDraggingTo( int location ) {
+			super.finishDraggingTo( location );
+			repaintIfNecessary();
+		}
+
+		private void repaintIfNecessary() {
+			if( hoverColor != null || pressedColor != null )
+				repaint();
 		}
 
 		//---- class FlatOneTouchButton ---------------------------------------

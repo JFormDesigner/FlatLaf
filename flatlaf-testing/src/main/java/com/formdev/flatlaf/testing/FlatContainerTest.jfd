@@ -22,13 +22,32 @@ new FormModel {
 					name: "splitPaneLabel"
 					"text": "JSplitPane:"
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "continuousLayoutCheckBox"
+					"text": "Continuous Layout"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "continuousLayoutChanged", false ) )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 3
+					"gridY": 1
+					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints RIGHT
+				} )
 				add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
 					name: "splitPane3"
 					"resizeWeight": 0.5
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 					add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
 						name: "splitPane1"
 						"resizeWeight": 0.5
 						"oneTouchExpandable": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 						add( new FormComponent( "com.formdev.flatlaf.testing.FlatContainerTest$Panel1" ) {
 							name: "panel15"
 							"background": new java.awt.Color( 217, 163, 67, 255 )
@@ -49,6 +68,9 @@ new FormModel {
 						"orientation": 0
 						"resizeWeight": 0.5
 						"oneTouchExpandable": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 							name: "panel12"
 							"background": new java.awt.Color( 242, 101, 34, 255 )

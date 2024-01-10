@@ -699,6 +699,9 @@ public class TestFlatStyleableValue
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 
 		testString( c, ui, "arrowType", "chevron" );
+		testColor( c, ui, "draggingColor", 0x123456 );
+		testColor( c, ui, "hoverColor", 0x123456 );
+		testColor( c, ui, "pressedColor", 0x123456 );
 		testColor( c, ui, "oneTouchArrowColor", 0x123456 );
 		testColor( c, ui, "oneTouchHoverArrowColor", 0x123456 );
 		testColor( c, ui, "oneTouchPressedArrowColor", 0x123456 );
