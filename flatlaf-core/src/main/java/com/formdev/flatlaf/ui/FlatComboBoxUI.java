@@ -926,7 +926,7 @@ public class FlatComboBoxUI
 		protected void configurePopup() {
 			super.configurePopup();
 
-			// make opaque to avoid that background shines thru border (e.g. at 150% scaling)
+			// make opaque to avoid that background shines through border (e.g. at 150% scaling)
 			setOpaque( true );
 
 			// set popup border
@@ -944,7 +944,7 @@ public class FlatComboBoxUI
 			if( popupBackground != null )
 				list.setBackground( popupBackground );
 
-			// set popup background because it may shine thru when scaled (e.g. at 150%)
+			// set popup background because it may shine through when scaled (e.g. at 150%)
 			// use non-UIResource to avoid that it is overwritten when making
 			// popup visible (see JPopupMenu.setInvoker()) in theme editor preview
 			setBackground( FlatUIUtils.nonUIResource( list.getBackground() ) );
@@ -1090,7 +1090,7 @@ public class FlatComboBoxUI
 		}
 
 		// using synchronized to avoid problems with code that modifies combo box
-		// (model, selection, etc) not on AWT thread (which should be not done)
+		// (model, selection, etc.) not on AWT thread (which should be not done)
 		synchronized void install( Component c, int focusWidth ) {
 			if( !(c instanceof JComponent) )
 				return;
@@ -1242,7 +1242,7 @@ public class FlatComboBoxUI
 	 * Key selection manager that delegates to the default manager.
 	 * Shows the popup if Space key is pressed and "typed characters" buffer is empty.
 	 * If items contain spaces (e.g. "a b") it is still possible to select them
-	 * by pressing keys a, Space and b.
+	 * by pressing keys 'a', 'Space' and 'b'.
 	 */
 	private class FlatKeySelectionManager
 		implements JComboBox.KeySelectionManager, UIResource

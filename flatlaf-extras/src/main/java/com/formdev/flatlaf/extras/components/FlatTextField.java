@@ -105,7 +105,7 @@ public class FlatTextField
 	 * The component should be not opaque because the text field border is painted
 	 * slightly inside the usually visible border in some cases.
 	 * E.g. when focused (in some themes) or when an outline color is specified
-	 * (see {@link #setOutline(Object)}.
+	 * (see {@link #setOutline(Object)}).
 	 *
 	 * @since 2
 	 */
@@ -134,7 +134,7 @@ public class FlatTextField
 	 * The component should be not opaque because the text field border is painted
 	 * slightly inside the usually visible border in some cases.
 	 * E.g. when focused (in some themes) or when an outline color is specified
-	 * (see {@link #setOutline(Object)}.
+	 * (see {@link #setOutline(Object)}).
 	 *
 	 * @since 2
 	 */

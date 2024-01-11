@@ -18,8 +18,8 @@ package com.formdev.flatlaf.extras.resources;
 
 /**
  * The only purpose of this file is to add a .class file to this package to make it non-empty.
- * Otherwise the compiler outputs a warning because this package is opend in module-info.java.
- * Also when using --patch-module (e.g. from an IDE), an error would occur for empty packages.
+ * Otherwise, the compiler outputs a warning because this package is opened in module-info.java.
+ * Also, when using --patch-module (e.g. from an IDE), an error would occur for empty packages.
  *
  * @author Karl Tauber
  */

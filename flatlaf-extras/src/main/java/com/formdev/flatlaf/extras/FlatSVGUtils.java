@@ -46,10 +46,10 @@ public class FlatSVGUtils
 	 * then a single multi-resolution image is returned that creates images on demand
 	 * for requested sizes from SVG.
 	 * This has the advantage that only images for used sizes are created.
-	 * Also if unusual sizes are requested (e.g. 18x18), then they are created from SVG.
+	 * Also, if unusual sizes are requested (e.g. 18x18), then they are created from SVG.
 	 * <p>
 	 * If using Java modules, the package containing the SVG must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #createWindowIconImages(URL)}.
+	 * Otherwise, use {@link #createWindowIconImages(URL)}.
 	 *
 	 * @param svgName the name of the SVG resource (a '/'-separated path)
 	 * @return list of icon images with different sizes (16x16, 20x20, 24x24, 28x28, 32x32, 48x48 and 64x64)
@@ -69,7 +69,7 @@ public class FlatSVGUtils
 	 * then a single multi-resolution image is returned that creates images on demand
 	 * for requested sizes from SVG.
 	 * This has the advantage that only images for used sizes are created.
-	 * Also if unusual sizes are requested (e.g. 18x18), then they are created from SVG.
+	 * Also, if unusual sizes are requested (e.g. 18x18), then they are created from SVG.
 	 * <p>
 	 * This method is useful if using Java modules and the package containing the SVG
 	 * is not opened in {@code module-info.java}.
@@ -92,7 +92,7 @@ public class FlatSVGUtils
 					// any size is created on demand when
 					// MultiResolutionImage.getResolutionVariant(double destImageWidth, double destImageHeight)
 					// is invoked.
-					// This sizes are only used by MultiResolutionImage.getResolutionVariants().
+					// These sizes are only used by MultiResolutionImage.getResolutionVariants().
 					new Dimension( 16, 16 ),	// 100%
 					new Dimension( 20, 20 ),	// 125%
 					new Dimension( 24, 24 ),	// 150%
@@ -120,7 +120,7 @@ public class FlatSVGUtils
 	 * Creates a buffered image and renders the given SVG into it.
 	 * <p>
 	 * If using Java modules, the package containing the SVG must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #svg2image(URL, int, int)}.
+	 * Otherwise, use {@link #svg2image(URL, int, int)}.
 	 *
 	 * @param svgName the name of the SVG resource (a '/'-separated path)
 	 * @param width the width of the image
@@ -154,7 +154,7 @@ public class FlatSVGUtils
 	 * Creates a buffered image and renders the given SVG into it.
 	 * <p>
 	 * If using Java modules, the package containing the SVG must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #svg2image(URL, float)}.
+	 * Otherwise, use {@link #svg2image(URL, float)}.
 	 *
 	 * @param svgName the name of the SVG resource (a '/'-separated path)
 	 * @param scaleFactor the amount by which the SVG size is scaled

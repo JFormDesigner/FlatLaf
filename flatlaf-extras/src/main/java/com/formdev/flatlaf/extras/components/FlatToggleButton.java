@@ -31,14 +31,14 @@ public class FlatToggleButton
 	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
-	 * Returns type of a button.
+	 * Returns type of button.
 	 */
 	public ButtonType getButtonType() {
 		return getClientPropertyEnumString( BUTTON_TYPE, ButtonType.class, null, ButtonType.none );
 	}
 
 	/**
-	 * Specifies type of a button.
+	 * Specifies type of button.
 	 */
 	public void setButtonType( ButtonType buttonType ) {
 		if( buttonType == ButtonType.none )

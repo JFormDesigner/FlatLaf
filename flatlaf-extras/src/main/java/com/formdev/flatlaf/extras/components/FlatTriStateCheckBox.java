@@ -30,8 +30,8 @@ import com.formdev.flatlaf.FlatLaf;
  * <p>
  * The initial state is {@link State#INDETERMINATE}.
  * <p>
- * By default the third state is allowed and clicking on the checkbox cycles thru all
- * three states. If you want that the user can cycle only thru two states, disallow
+ * By default, the third state is allowed and clicking on the checkbox cycles through all
+ * three states. If you want that the user can cycle only through two states, disallow
  * intermediate state using {@link #setAllowIndeterminate(boolean)}. Then you can still
  * set the indeterminate state via API if necessary, but the user can not.
  * <p>

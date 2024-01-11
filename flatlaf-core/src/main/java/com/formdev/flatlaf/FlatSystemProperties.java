@@ -183,7 +183,7 @@ public interface FlatSystemProperties
 	 * in system properties {@code sun.boot.library.path} and {@code java.library.path}.
 	 * (supported since FlatLaf 2.6)
 	 * <p>
-	 * If the native library can not loaded from the given path (or via {@link System#loadLibrary(String)}),
+	 * If the native library can not be loaded from the given path (or via {@link System#loadLibrary(String)}),
 	 * then the embedded native library is extracted to the temporary directory and loaded from there.
 	 *
 	 * @since 2

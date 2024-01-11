@@ -204,7 +204,7 @@ class TabsPanel
 	private void closeButtonStyleChanged() {
 		// WARNING:
 		//   Do not use this trick to style individual tabbed panes in own code.
-		//   Instead use one styling for all tabbed panes in your application.
+		//   Instead, use one styling for all tabbed panes in your application.
 		if( circleCloseButton.isSelected() ) {
 			UIManager.put( "TabbedPane.closeArc", 999 );
 			UIManager.put( "TabbedPane.closeCrossFilledSize", 5.5f );

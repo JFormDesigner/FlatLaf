@@ -4,7 +4,7 @@ FlatLaf addon for SwingX
 This addon for FlatLaf adds support for **some** widely used SwingX components.
 
 Many SwingX components that do not use UI delegates (e.g. `JXButton`, `JXLabel`,
-`JXList`, `JXStatusBar`, etc) work with FlatLaf without adaptation.
+`JXList`, `JXStatusBar`, etc.) work with FlatLaf without adaptation.
 
 Following SwingX components, which use UI delegates, are currently supported by
 this addon:
@@ -35,7 +35,7 @@ build script:
     artifactId:  flatlaf-swingx
     version:     (see button below)
 
-Otherwise download `flatlaf-swingx-<version>.jar` here:
+Otherwise, download `flatlaf-swingx-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx)
 

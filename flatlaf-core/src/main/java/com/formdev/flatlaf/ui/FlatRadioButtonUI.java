@@ -263,7 +263,7 @@ public class FlatRadioButtonUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		// fill background even if not opaque if
+		// fill background even if not opaque and if:
 		// - contentAreaFilled is true and
 		// - if background color is different to default background color
 		// (this paints selection if using the component as cell renderer)

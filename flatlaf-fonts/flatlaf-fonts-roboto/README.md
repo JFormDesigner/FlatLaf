@@ -97,6 +97,6 @@ build script:
     artifactId:  flatlaf-fonts-roboto
     version:     (see button below)
 
-Otherwise download `flatlaf-fonts-roboto-<version>.jar` here:
+Otherwise, download `flatlaf-fonts-roboto-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto)

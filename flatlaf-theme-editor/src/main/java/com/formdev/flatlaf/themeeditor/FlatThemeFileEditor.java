@@ -401,7 +401,7 @@ class FlatThemeFileEditor
 		if( !themesDir.isDirectory() )
 			return propertiesFiles;
 
-		// get files from "themes" sub-directory
+		// get files from "themes" subdirectory
 		File[] themesFiles = getPropertiesFiles( themesDir );
 		File[] allFiles = new File[propertiesFiles.length + themesFiles.length];
 		System.arraycopy( propertiesFiles, 0, allFiles, 0, propertiesFiles.length );

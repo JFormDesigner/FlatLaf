@@ -204,7 +204,7 @@ public class UIScale
 		if( SystemInfo.isWindows ) {
 			// Special handling for Windows to be compatible with OS scaling,
 			// which distinguish between "screen scaling" and "text scaling".
-			//  - Windows "screen scaling" scales everything (text, icon, gaps, etc)
+			//  - Windows "screen scaling" scales everything (text, icon, gaps, etc.)
 			//    and may have different scaling factors for each screen.
 			//  - Windows "text scaling" increases only the font size, but on all screens.
 			//

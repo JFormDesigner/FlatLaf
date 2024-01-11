@@ -245,7 +245,7 @@ public class FlatScrollBarUI
 								// because scroll bars do not receive mouse exited event.
 								// The scroll pane, including its scroll bars, is not part
 								// of the component hierarchy and does not receive mouse events
-								// directly. Instead LWComponentPeer receives mouse events
+								// directly. Instead, LWComponentPeer receives mouse events
 								// and delegates them to peers, but entered/exited events
 								// are sent only for the whole scroll pane.
 								// Exited event is only sent when mouse leaves scroll pane.

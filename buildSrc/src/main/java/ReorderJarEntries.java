@@ -45,7 +45,7 @@ public class ReorderJarEntries
 			// 1st pass: copy .properties files
 			copyFiles( zipOutStream, jarFile, name -> name.endsWith( ".properties" ) );
 
-			// 2st pass: copy other files
+			// 2nd pass: copy other files
 			copyFiles( zipOutStream, jarFile, name -> !name.endsWith( ".properties" ) );
 		}
 

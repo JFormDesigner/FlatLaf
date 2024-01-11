@@ -1264,7 +1264,7 @@ debug*/
 		public void mouseClicked( MouseEvent e ) {
 			// on Linux, when using native library, the mouse clicked event
 			// is usually not sent and maximize/restore is done in mouse pressed event
-			// this check is here for the case that a mouse clicked event comes thru for some reason
+			// this check is here for the case that a mouse clicked event comes through for some reason
 			if( linuxNativeMove && SystemInfo.isLinux && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
 				// see comment in mousePressed()
 				if( lastSingleClickWhen != 0 && (e.getWhen() - lastSingleClickWhen) <= getMultiClickInterval() ) {

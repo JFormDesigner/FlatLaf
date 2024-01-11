@@ -33,7 +33,7 @@ public interface FlatClientProperties
 	//---- JButton ------------------------------------------------------------
 
 	/**
-	 * Specifies type of a button.
+	 * Specifies type of button.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
@@ -421,10 +421,10 @@ public interface FlatClientProperties
 	String TITLE_BAR_SHOW_TITLE = "JRootPane.titleBarShowTitle";
 
 	/**
-	 * Specifies whether the "iconfify" button should be shown in the window title bar
+	 * Specifies whether the "iconify" button should be shown in the window title bar
 	 * (requires enabled window decorations). Default is {@code true}.
 	 * <p>
-	 * Setting this shows/hides the "iconfify" button
+	 * Setting this shows/hides the "iconify" button
 	 * for the {@code JFrame} that contains the root pane.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
@@ -506,7 +506,7 @@ public interface FlatClientProperties
 	 * On macOS, Java supports this out of the box.
 	 * <p>
 	 * Note that this client property must be set before the window becomes displayable.
-	 * Otherwise an {@link IllegalComponentStateException} is thrown.
+	 * Otherwise, an {@link IllegalComponentStateException} is thrown.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
@@ -952,7 +952,7 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_ICON_PLACEMENT = "JTabbedPane.tabIconPlacement";
 
 	/**
-	 * Specifies the rotation of the tabs (title, icon, etc).
+	 * Specifies the rotation of the tabs (title, icon, etc.).
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.String}<br>
@@ -980,7 +980,7 @@ public interface FlatClientProperties
 	 * Tabs are rotated depending on tab placement.
 	 * <p>
 	 * For top and bottom tab placement, the tabs are not rotated.<br>
-	 * For left tab placement, the tabs are rotated counter clockwise.<br>
+	 * For left tab placement, the tabs are rotated counter-clockwise.<br>
 	 * For right tab placement, the tabs are rotated clockwise.
 	 *
 	 * @see #TABBED_PANE_TAB_ROTATION
@@ -989,7 +989,7 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_ROTATION_AUTO = "auto";
 
 	/**
-	 * Tabs are rotated counter clockwise.
+	 * Tabs are rotated counter-clockwise.
 	 *
 	 * @see #TABBED_PANE_TAB_ROTATION
 	 * @since 3.3

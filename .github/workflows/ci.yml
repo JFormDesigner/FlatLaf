@@ -19,7 +19,7 @@ jobs:
         # test against
         # - Java 8 (minimum requirement)
         # - Java LTS versions (11, 17, ...)
-        # - lastest Java version(s)
+        # - latest Java version(s)
         java:
           - 8
           - 11  # LTS

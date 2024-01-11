@@ -183,7 +183,7 @@ public class FlatTableUI
 		else
 			table.addPropertyChangeListener( new FlatTablePropertyWatcher() );
 
-		// installl boolean renderer
+		// install boolean renderer
 		oldBooleanRenderer = table.getDefaultRenderer( Boolean.class );
 		if( oldBooleanRenderer instanceof UIResource )
 			table.setDefaultRenderer( Boolean.class, new FlatBooleanRenderer() );
@@ -222,11 +222,11 @@ public class FlatTableUI
 		if( watcher != null )
 			watcher.enabled = true;
 
-		// uninstalll boolean renderer
+		// uninstall boolean renderer
 		if( table.getDefaultRenderer( Boolean.class ) instanceof FlatBooleanRenderer ) {
 			if( oldBooleanRenderer instanceof Component ) {
-				// because the old renderer component was not attached to any component hierearchy,
-				// its UI was not yet updated and it is necessary to do it here
+				// because the old renderer component was not attached to any component hierarchy,
+				// its UI was not yet updated, and it is necessary to do it here
 				SwingUtilities.updateComponentTreeUI( (Component) oldBooleanRenderer );
 			}
 			table.setDefaultRenderer( Boolean.class, oldBooleanRenderer );

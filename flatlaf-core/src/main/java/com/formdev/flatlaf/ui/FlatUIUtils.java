@@ -729,7 +729,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Creates a (rounded) rectangle used to paint components (border, background, etc).
+	 * Creates a (rounded) rectangle used to paint components (border, background, etc.).
 	 * The given arc diameter is limited to min(width,height).
 	 */
 	public static Shape createComponentRectangle( float x, float y, float w, float h, float arc ) {

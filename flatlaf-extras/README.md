@@ -33,7 +33,7 @@ build script:
     artifactId:  flatlaf-extras
     version:     (see button below)
 
-Otherwise download `flatlaf-extras-<version>.jar` here:
+Otherwise, download `flatlaf-extras-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras)
 

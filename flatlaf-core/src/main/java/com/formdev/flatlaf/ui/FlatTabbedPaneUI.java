@@ -484,7 +484,7 @@ public class FlatTabbedPaneUI
 
 		// At this point, BasicTabbedPaneUI already has installed
 		// TabbedPaneScrollLayout (in super.createLayoutManager()) and
-		// ScrollableTabSupport, ScrollableTabViewport, ScrollableTabPanel, etc
+		// ScrollableTabSupport, ScrollableTabViewport, ScrollableTabPanel, etc.
 		// (in super.installComponents()).
 
 		// install own layout manager that delegates to original layout manager
