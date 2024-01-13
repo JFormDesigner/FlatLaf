@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -271,7 +272,7 @@ public class FlatMenuUI
 				if( !isHover() )
 					selectionBackground = getStyleFromMenuBarUI( ui -> ui.selectionBackground, menuBarSelectionBackground, selectionBackground );
 
-				JMenuBar menuBar = (JMenuBar) menuItem.getParent();
+				Container menuBar = menuItem.getParent();
 				JRootPane rootPane = SwingUtilities.getRootPane( menuBar );
 				if( rootPane != null && rootPane.getParent() instanceof Window &&
 					rootPane.getJMenuBar() == menuBar &&
@@ -321,12 +322,17 @@ public class FlatMenuUI
 		}
 
 		private <T> T getStyleFromMenuBarUI( Function<FlatMenuBarUI, T> f, T defaultValue ) {
-			MenuBarUI ui = ((JMenuBar)menuItem.getParent()).getUI();
-			if( !(ui instanceof FlatMenuBarUI) )
-				return defaultValue;
-
-			T value = f.apply( (FlatMenuBarUI) ui );
-			return (value != null) ? value : defaultValue;
+			Container menuItemParent = menuItem.getParent();
+			if( menuItemParent instanceof JMenuBar ) {
+				MenuBarUI ui = ((JMenuBar) menuItemParent).getUI();
+				if( ui instanceof FlatMenuBarUI ) {
+					T value = f.apply( (FlatMenuBarUI) ui );
+					if( value != null ) {
+						return value;
+					}
+				}
+			}
+			return defaultValue;
 		}
 	}
 }
