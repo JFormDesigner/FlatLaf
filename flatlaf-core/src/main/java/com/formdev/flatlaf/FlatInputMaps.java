@@ -71,7 +71,7 @@ class FlatInputMaps
 			);
 		}
 
-		// join ltr and rtl bindings to fix up/down/etc keys in right-to-left component orientation
+		// join ltr and rtl bindings to fix up/down/etc. keys in right-to-left component orientation
 		Object[] bindings = (Object[]) defaults.get( "PopupMenu.selectedWindowInputMapBindings" );
 		Object[] rtlBindings = (Object[]) defaults.get( "PopupMenu.selectedWindowInputMapBindings.RightToLeft" );
 		if( bindings != null && rtlBindings != null ) {

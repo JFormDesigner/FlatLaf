@@ -720,8 +720,13 @@ ScrollBar.trackHighlight
 ScrollBar.trackInsets
 ScrollBar.width
 ScrollBarUI
+ScrollPane.List.arc
+ScrollPane.Table.arc
+ScrollPane.TextComponent.arc
+ScrollPane.Tree.arc
 ScrollPane.ancestorInputMap
 ScrollPane.ancestorInputMap.RightToLeft
+ScrollPane.arc
 ScrollPane.background
 ScrollPane.border
 ScrollPane.fillUpperCorner
@@ -822,9 +827,11 @@ SplitPaneDivider.gripColor
 SplitPaneDivider.gripDotCount
 SplitPaneDivider.gripDotSize
 SplitPaneDivider.gripGap
+SplitPaneDivider.hoverColor
 SplitPaneDivider.oneTouchArrowColor
 SplitPaneDivider.oneTouchHoverArrowColor
 SplitPaneDivider.oneTouchPressedArrowColor
+SplitPaneDivider.pressedColor
 SplitPaneDivider.style
 SplitPaneUI
 TabbedPane.ancestorInputMap
@@ -884,6 +891,7 @@ TabbedPane.tabAreaAlignment
 TabbedPane.tabAreaInsets
 TabbedPane.tabHeight
 TabbedPane.tabInsets
+TabbedPane.tabRotation
 TabbedPane.tabRunOverlay
 TabbedPane.tabSelectionArc
 TabbedPane.tabSelectionHeight

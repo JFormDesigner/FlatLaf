@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -28,16 +29,15 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -113,6 +113,11 @@ public class FlatTableHeaderUI
 	@Override
 	public void installUI( JComponent c ) {
 		super.installUI( c );
+
+		// replace cell renderer pane
+		header.remove( rendererPane );
+		rendererPane = new FlatTableHeaderCellRendererPane();
+		header.add( rendererPane );
 
 		installStyle();
 	}
@@ -265,16 +270,8 @@ public class FlatTableHeaderUI
 			}
 		}
 
-		// temporary use own default renderer
-		FlatTableCellHeaderRenderer tempRenderer = new FlatTableCellHeaderRenderer( header.getDefaultRenderer() );
-		header.setDefaultRenderer( tempRenderer );
-
 		// paint header
 		super.paint( g, c );
-
-		// restore default renderer
-		tempRenderer.reset();
-		header.setDefaultRenderer( tempRenderer.delegate );
 	}
 
 	private boolean isSystemDefaultRenderer( Object headerRenderer ) {
@@ -332,119 +329,129 @@ public class FlatTableHeaderUI
 		return false;
 	}
 
-	//---- class FlatTableCellHeaderRenderer ----------------------------------
+	//---- class FlatTableHeaderCellRendererPane ------------------------------
 
 	/**
-	 * A delegating header renderer that is only used to paint hover and pressed
-	 * background/foreground and to paint sort arrows at top, bottom or left position.
+	 * Cell renderer pane that is used to paint hover and pressed background/foreground
+	 * and to paint sort arrows at top, bottom or left position.
 	 */
-	private class FlatTableCellHeaderRenderer
-		implements TableCellRenderer, Border, UIResource
+	private class FlatTableHeaderCellRendererPane
+		extends CellRendererPane
 	{
-		private final TableCellRenderer delegate;
+		private final Icon ascendingSortIcon;
+		private final Icon descendingSortIcon;
 
-		private JLabel l;
-		private Color oldBackground;
-		private Color oldForeground;
-		private Boolean oldOpaque;
-		private int oldHorizontalTextPosition = -1;
-		private Border origBorder;
-		private Icon sortIcon;
-
-		FlatTableCellHeaderRenderer( TableCellRenderer delegate ) {
-			this.delegate = delegate;
+		public FlatTableHeaderCellRendererPane() {
+			ascendingSortIcon = UIManager.getIcon( "Table.ascendingSortIcon" );
+			descendingSortIcon = UIManager.getIcon( "Table.descendingSortIcon" );
 		}
 
 		@Override
-		public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column )
-		{
-			Component c = delegate.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
-			if( !(c instanceof JLabel) )
-				return c;
+		public void paintComponent( Graphics g, Component c, Container p, int x, int y, int w, int h, boolean shouldValidate ) {
+			if( !(c instanceof JLabel) ) {
+				super.paintComponent( g, c, p, x, y, w, h, shouldValidate );
+				return;
+			}
 
-			l = (JLabel) c;
+			JLabel l = (JLabel) c;
+			Color oldBackground = null;
+			Color oldForeground = null;
+			boolean oldOpaque = false;
+			Icon oldIcon = null;
+			int oldHorizontalTextPosition = -1;
 
 			// hover and pressed background/foreground
 			TableColumn draggedColumn = header.getDraggedColumn();
 			Color background = null;
 			Color foreground = null;
-			if( draggedColumn != null && header.getTable().convertColumnIndexToView( draggedColumn.getModelIndex() ) == column ) {
+			if( draggedColumn != null &&
+				header.getTable().convertColumnIndexToView( draggedColumn.getModelIndex() )
+					== getColumn( x - header.getDraggedDistance(), w ) )
+			{
 				background = pressedBackground;
 				foreground = pressedForeground;
-			} else if( getRolloverColumn() == column ) {
+			} else if( getRolloverColumn() >= 0 && getRolloverColumn() == getColumn( x, w ) ) {
 				background = hoverBackground;
 				foreground = hoverForeground;
 			}
 			if( background != null ) {
-				if( oldBackground == null )
-					oldBackground = l.getBackground();
-				if( oldOpaque == null )
-					oldOpaque = l.isOpaque();
+				oldBackground = l.getBackground();
+				oldOpaque = l.isOpaque();
 				l.setBackground( FlatUIUtils.deriveColor( background, header.getBackground() ) );
 				l.setOpaque( true );
 			}
 			if( foreground != null ) {
-				if( oldForeground == null )
-					oldForeground = l.getForeground();
+				oldForeground = l.getForeground();
 				l.setForeground( FlatUIUtils.deriveColor( foreground, header.getForeground() ) );
 			}
 
-			// sort icon
-			if( sortIconPosition == SwingConstants.LEFT ) {
-				// left
-				if( oldHorizontalTextPosition < 0 )
+			// sort icon position
+			Icon icon = l.getIcon();
+			boolean isSortIcon = (icon != null && (icon == ascendingSortIcon || icon == descendingSortIcon));
+			if( isSortIcon ) {
+				if( sortIconPosition == SwingConstants.LEFT ) {
+					// left
 					oldHorizontalTextPosition = l.getHorizontalTextPosition();
-				l.setHorizontalTextPosition( SwingConstants.RIGHT );
-			} else if( sortIconPosition == SwingConstants.TOP || sortIconPosition == SwingConstants.BOTTOM ) {
-				// top or bottom
-				sortIcon = l.getIcon();
-				origBorder = l.getBorder();
-				l.setIcon( null );
-				l.setBorder( this );
+					l.setHorizontalTextPosition( SwingConstants.RIGHT );
+				} else if( sortIconPosition == SwingConstants.TOP || sortIconPosition == SwingConstants.BOTTOM ) {
+					// top or bottom
+					oldIcon = icon;
+					l.setIcon( null );
+				}
 			}
 
-			return l;
-		}
+			// paint renderer component
+			super.paintComponent( g, c, p, x, y, w, h, shouldValidate );
 
-		void reset() {
-			if( l == null )
-				return;
+			// paint top or bottom sort icon
+			if( isSortIcon && (sortIconPosition == SwingConstants.TOP || sortIconPosition == SwingConstants.BOTTOM) ) {
+				int xi = x + ((w - icon.getIconWidth()) / 2);
+				int yi = (sortIconPosition == SwingConstants.TOP)
+					? y + UIScale.scale( 1 )
+					: y + height - icon.getIconHeight()
+						- 1 // for gap
+						- (int) (1 * UIScale.getUserScaleFactor()); // for bottom border
+				icon.paintIcon( c, g, xi, yi );
+			}
 
-			if( oldBackground != null )
+			// restore modified renderer component properties
+			if( background != null ) {
 				l.setBackground( oldBackground );
-			if( oldForeground != null )
-				l.setForeground( oldForeground );
-			if( oldOpaque != null )
 				l.setOpaque( oldOpaque );
+			}
+			if( foreground != null )
+				l.setForeground( oldForeground );
+			if( oldIcon != null )
+				l.setIcon( oldIcon );
 			if( oldHorizontalTextPosition >= 0 )
 				l.setHorizontalTextPosition( oldHorizontalTextPosition );
 		}
 
-		@Override
-		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			if( origBorder != null )
-				origBorder.paintBorder( c, g, x, y, width, height );
+		/**
+		 * Get column index for given coordinates.
+		 */
+		private int getColumn( int x, int width ) {
+			TableColumnModel columnModel = header.getColumnModel();
+			int columnCount = columnModel.getColumnCount();
+			boolean ltr = header.getComponentOrientation().isLeftToRight();
+			int cx = ltr ? 0 : getWidthInRightToLef();
 
-			if( sortIcon != null ) {
-				int xi = x + ((width - sortIcon.getIconWidth()) / 2);
-				int yi = (sortIconPosition == SwingConstants.TOP)
-					? y + UIScale.scale( 1 )
-					: y + height - sortIcon.getIconHeight()
-						- 1 // for gap
-						- (int) (1 * UIScale.getUserScaleFactor()); // for bottom border
-				sortIcon.paintIcon( c, g, xi, yi );
+			for( int i = 0; i < columnCount; i++ ) {
+				int cw = columnModel.getColumn( i ).getWidth();
+				if( x == cx - (ltr ? 0 : cw) && width == cw )
+					return i;
+
+				cx += ltr ? cw : -cw;
 			}
+			return -1;
 		}
 
-		@Override
-		public Insets getBorderInsets( Component c ) {
-			return (origBorder != null) ? origBorder.getBorderInsets( c ) : new Insets( 0, 0, 0, 0 );
-		}
-
-		@Override
-		public boolean isBorderOpaque() {
-			return (origBorder != null) ? origBorder.isBorderOpaque() : false;
+		// similar to JTableHeader.getWidthInRightToLeft()
+		private int getWidthInRightToLef() {
+			JTable table = header.getTable();
+			return (table != null && table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF)
+				? table.getWidth()
+				: header.getWidth();
 		}
 	}
 

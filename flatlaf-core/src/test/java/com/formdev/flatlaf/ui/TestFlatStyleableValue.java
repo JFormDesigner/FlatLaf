@@ -625,7 +625,7 @@ public class TestFlatStyleableValue
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
 		// border
-		flatBorder( c, ui );
+		flatScrollPaneBorder( c, ui );
 
 		testBoolean( c, ui, "showButtons", true );
 	}
@@ -699,6 +699,9 @@ public class TestFlatStyleableValue
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 
 		testString( c, ui, "arrowType", "chevron" );
+		testColor( c, ui, "draggingColor", 0x123456 );
+		testColor( c, ui, "hoverColor", 0x123456 );
+		testColor( c, ui, "pressedColor", 0x123456 );
 		testColor( c, ui, "oneTouchArrowColor", 0x123456 );
 		testColor( c, ui, "oneTouchHoverArrowColor", 0x123456 );
 		testColor( c, ui, "oneTouchPressedArrowColor", 0x123456 );
@@ -758,6 +761,7 @@ public class TestFlatStyleableValue
 		testString( c, ui, "tabAreaAlignment", "leading" );
 		testString( c, ui, "tabAlignment", "center" );
 		testString( c, ui, "tabWidthMode", "preferred" );
+		testString( c, ui, "tabRotation", "none" );
 
 		testString( c, ui, "arrowType", "chevron" );
 		testInsets( c, ui, "buttonInsets", 1,2,3,4 );
@@ -968,15 +972,19 @@ public class TestFlatStyleableValue
 		flatBorder( c, ui );
 
 		testInteger( c, ui, "arc", 123 );
-
 		testBoolean( c, ui, "roundRect", true );
+	}
+
+	private void flatScrollPaneBorder( JComponent c, StyleableUI ui ) {
+		flatBorder( c, ui );
+
+		testInteger( c, ui, "arc", 123 );
 	}
 
 	private void flatTextBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
 		testInteger( c, ui, "arc", 123 );
-
 		testBoolean( c, ui, "roundRect", true );
 	}
 
@@ -1038,6 +1046,17 @@ public class TestFlatStyleableValue
 		flatBorder( border );
 
 		testValue( border, "arc", 6 );
+		testValue( border, "roundRect", true );
+	}
+
+	@Test
+	void flatScrollPaneBorder() {
+		FlatScrollPaneBorder border = new FlatScrollPaneBorder();
+
+		// FlatScrollPaneBorder extends FlatBorder
+		flatBorder( border );
+
+		testValue( border, "arc", 6 );
 	}
 
 	@Test
@@ -1048,6 +1067,7 @@ public class TestFlatStyleableValue
 		flatBorder( border );
 
 		testValue( border, "arc", 6 );
+		testValue( border, "roundRect", true );
 	}
 
 	@Test

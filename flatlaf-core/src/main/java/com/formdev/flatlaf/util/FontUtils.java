@@ -80,7 +80,7 @@ public class FontUtils
 
 	/**
 	 * Loads a font family previously registered via {@link #registerFontFamilyLoader(String, Runnable)}.
-	 * If the family is already loaded or no londer is registered for that family, nothing happens.
+	 * If the family is already loaded or no loader is registered for that family, nothing happens.
 	 */
 	public static void loadFontFamily( String family ) {
 		if( !hasLoaders() )
@@ -109,7 +109,7 @@ public class FontUtils
 	}
 
 	/**
-	 * Returns all font familiy names available in the graphics environment.
+	 * Returns all font family names available in the graphics environment.
 	 * This invokes {@link GraphicsEnvironment#getAvailableFontFamilyNames()} and
 	 * appends families registered for lazy loading via {@link #registerFontFamilyLoader(String, Runnable)}
 	 * to the result.

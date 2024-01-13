@@ -119,7 +119,7 @@ public class FlatDesktop
 				(proxy, method, args) -> {
 					// Use invokeLater to release the listener firing for the case
 					// that the action listener shows a modal dialog.
-					// This (hopefully) prevents application hunging.
+					// This (hopefully) prevents application hanging.
 					EventQueue.invokeLater( () -> {
 						handler.run();
 					} );

@@ -837,7 +837,7 @@ public class FlatDisabledIconsTest
 
 			// Calculate the average.
 			// Sun's formula: Math.min(1.0f, (1f - avg) / (100.0f / 35.0f) + avg);
-			// The following formula uses less operations and hence is faster.
+			// The following formula uses fewer operations and hence is faster.
 			avg = Math.min(1.0f, 0.35f + 0.65f * avg);
 			// Convert back into RGB.
 			return (int) (alpha * 255f) << 24 |

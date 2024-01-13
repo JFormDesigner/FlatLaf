@@ -20,7 +20,7 @@ build script:
     artifactId:  flatlaf-intellij-themes
     version:     (see button below)
 
-Otherwise download `flatlaf-intellij-themes-<version>.jar` here:
+Otherwise, download `flatlaf-intellij-themes-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-intellij-themes/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-intellij-themes)
 

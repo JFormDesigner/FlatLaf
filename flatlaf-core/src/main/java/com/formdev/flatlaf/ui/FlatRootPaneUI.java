@@ -50,7 +50,6 @@ import javax.swing.plaf.RootPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -156,10 +155,6 @@ public class FlatRootPaneUI
 			if( background == null || background instanceof UIResource )
 				parent.setBackground( UIManager.getColor( "control" ) );
 		}
-
-		// enable dark window appearance on macOS when running in JetBrains Runtime
-		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater )
-			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", FlatLaf.isLafDark() );
 	}
 
 	@Override

@@ -18,7 +18,6 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import java.awt.Graphics;
-import java.lang.reflect.Method;
 import javax.swing.JComponent;
 import javax.swing.JViewport;
 import javax.swing.plaf.ComponentUI;
@@ -48,14 +47,9 @@ public class FlatViewportUI
 
 		Component view = ((JViewport)c).getView();
 		if( view instanceof JComponent ) {
-			try {
-				Method m = view.getClass().getMethod( "getUI" );
-				Object ui = m.invoke( view );
-				if( ui instanceof ViewportPainter )
-					((ViewportPainter)ui).paintViewport( g, (JComponent) view, (JViewport) c );
-			} catch( Exception ex ) {
-				// ignore
-			}
+			ComponentUI ui = JavaCompatibility2.getUI( (JComponent) view );
+			if( ui instanceof ViewportPainter )
+				((ViewportPainter)ui).paintViewport( g, (JComponent) view, (JViewport) c );
 		}
 	}
 

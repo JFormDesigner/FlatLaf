@@ -1,0 +1,249 @@
+JFDML JFormDesigner: "8.1.1.0.298" Java: "19.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[200,grow,fill]"
+			"$rowConstraints": "[grow,fill][]"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+				name: "splitPane2"
+				"orientation": 0
+				"resizeWeight": 0.5
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[200,grow,fill][200,grow,fill][200,grow,fill][200,grow,fill]"
+					"$rowConstraints": "[]0[200,grow,fill]"
+					"$layoutConstraints": "ltr,insets 3,hidemode 3"
+				} ) {
+					name: "panel1"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "listLabel"
+						"text": "JList:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,aligny top,growy 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "paddingLabel"
+						"text": "Padding:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,alignx trailing,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "paddingField"
+						"text": "0"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,alignx trailing,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "treeLabel"
+						"text": "JTree:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "tableLabel"
+						"text": "JTable:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0 2 1"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "autoResizeModeCheckBox"
+						"text": "Auto-resize mode"
+						"selected": true
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0 2 1,alignx right,growx 0"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "listScrollPane"
+						add( new FormComponent( "javax.swing.JList" ) {
+							name: "list"
+							auxiliary() {
+								"JavaCodeGenerator.typeParameters": "String"
+								"JavaCodeGenerator.variableLocal": false
+							}
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1,growx"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "treeScrollPane"
+						add( new FormComponent( "javax.swing.JTree" ) {
+							name: "tree"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "tableScrollPane"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "table"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 1 2 1,width 100,height 100"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "left"
+				} )
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[200,grow,fill][200,grow,fill][200,grow,fill][200,grow,fill]"
+					"$rowConstraints": "[]0[200,grow,fill]"
+					"$layoutConstraints": "ltr,insets 3,hidemode 3"
+				} ) {
+					name: "panel2"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textAreaLabel"
+						"text": "JTextArea:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textPaneLabel"
+						"text": "JTextPane:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "editorPaneLabel"
+						"text": "JEditorPane:"
+						"horizontalTextPosition": 10
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "customLabel"
+						"text": "Custom:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 0"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "textAreaScrollPane"
+						add( new FormComponent( "javax.swing.JTextArea" ) {
+							name: "textArea"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "textPaneScrollPane"
+						add( new FormComponent( "javax.swing.JTextPane" ) {
+							name: "textPane"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "editorPaneScrollPane"
+						add( new FormComponent( "javax.swing.JEditorPane" ) {
+							name: "editorPane"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 1"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "customScrollPane"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button1"
+							"text": "I'm a large button, but do not implement Scrollable interface"
+							"preferredSize": new java.awt.Dimension( 800, 800 )
+							"horizontalAlignment": 10
+							"verticalAlignment": 1
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 1"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "right"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][grow,fill]para[][][]"
+				"$rowConstraints": "[][]"
+			} ) {
+				name: "panel3"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "arcLabel"
+					"text": "Arc:"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "arcSlider"
+					"maximum": 40
+					"value": 20
+					"snapToTicks": true
+					"majorTickSpacing": 10
+					"minorTickSpacing": 1
+					"paintTicks": true
+					"paintLabels": true
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arcSliderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "cornersCheckBox"
+					"text": "Corners"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cornersChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "columnHeaderCheckBox"
+					"text": "Column Header"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "columnHeaderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "horizontalScrollBarCheckBox"
+					"text": "Horizontal ScrollBar"
+					"selected": true
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "horizontalScrollBarChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "viewportBorderCheckBox"
+					"text": "Viewport border"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "viewportBorderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowHeaderCheckBox"
+					"text": "Row Header"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "verticalScrollBarCheckBox"
+					"text": "Vertical ScrollBar"
+					"selected": true
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "verticalScrollBarChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 875, 715 )
+		} )
+	}
+}

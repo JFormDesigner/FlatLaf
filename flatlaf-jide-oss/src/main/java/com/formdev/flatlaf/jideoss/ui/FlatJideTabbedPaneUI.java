@@ -477,7 +477,7 @@ public class FlatJideTabbedPaneUI
 	}
 
 	/**
-	 * Actually does the nearly the same as super.paintContentBorder() but
+	 * Actually does nearly the same as super.paintContentBorder() but
 	 *   - not invoking paintContentBorder*Edge() methods
 	 *   - repaint selection
 	 */

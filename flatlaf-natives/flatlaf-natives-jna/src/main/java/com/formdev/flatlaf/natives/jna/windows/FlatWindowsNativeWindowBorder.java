@@ -122,7 +122,7 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	/**
-	 * Tell the window whether the application wants use custom decorations.
+	 * Tell the window whether the application wants to use custom decorations.
 	 * If {@code true}, the Windows 10 title bar is hidden (including minimize,
 	 * maximize and close buttons), but not the resize borders (including drop shadow).
 	 */

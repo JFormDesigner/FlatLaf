@@ -57,11 +57,11 @@ public class FlatTreeOpenIcon
 			double arc = 1.5;
 			double arc2 = 0.5;
 			path = FlatUIUtils.createPath( false,
-				// bottom-left of opend part
+				// bottom-left of opened part
 				2,13.5,
-				// top-left of opend part
+				// top-left of opened part
 				FlatUIUtils.ROUNDED, 4.5,7.5, arc,
-				// top-right of opend part
+				// top-right of opened part
 				FlatUIUtils.ROUNDED, 15.5,7.5, arc2,
 
 				// bottom-right

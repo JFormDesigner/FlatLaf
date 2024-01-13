@@ -133,8 +133,8 @@ public class FlatAnimatedLafChange
 	}
 
 	/**
-	 * Starts an animation that shows the snapshot (created by {@link #showSnapshot()}
-	 * with an decreasing alpha. At the end, the snapshot is removed and the new UI is shown.
+	 * Starts an animation that shows the snapshot (created by {@link #showSnapshot()})
+	 * with a decreasing alpha. At the end, the snapshot is removed and the new UI is shown.
 	 * Invoke after updating UI.
 	 */
 	public static void hideSnapshotWithAnimation() {

@@ -103,7 +103,10 @@ public interface FlatSystemProperties
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code false} (since v2; was {@code true} in v1)
+	 *
+	 * @deprecated No longer used since FlatLaf 3.3. Retained for API compatibility.
 	 */
+	@Deprecated
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
 	/**
@@ -180,7 +183,7 @@ public interface FlatSystemProperties
 	 * in system properties {@code sun.boot.library.path} and {@code java.library.path}.
 	 * (supported since FlatLaf 2.6)
 	 * <p>
-	 * If the native library can not loaded from the given path (or via {@link System#loadLibrary(String)}),
+	 * If the native library can not be loaded from the given path (or via {@link System#loadLibrary(String)}),
 	 * then the embedded native library is extracted to the temporary directory and loaded from there.
 	 *
 	 * @since 2

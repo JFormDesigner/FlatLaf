@@ -217,7 +217,7 @@ class FlatFindReplaceBar
 		context.setReplaceWith( replaceField.getText() );
 
 		// make sure that search wrap is disabled because otherwise it is easy
-		// to have endeless loop when replacing e.g. "a" with "aa"
+		// to have endless loop when replacing e.g. "a" with "aa"
 		boolean oldSearchWrap = context.getSearchWrap();
 		context.setSearchWrap( false );
 

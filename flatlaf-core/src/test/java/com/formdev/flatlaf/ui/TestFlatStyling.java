@@ -760,7 +760,7 @@ public class TestFlatStyling
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
 		// border
-		flatBorder( style -> ui.applyStyle( style ) );
+		flatScrollPaneBorder( style -> ui.applyStyle( style ) );
 
 		ui.applyStyle( "showButtons: true" );
 
@@ -870,6 +870,9 @@ public class TestFlatStyling
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 
 		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "draggingColor: #fff" );
+		ui.applyStyle( "hoverColor: #fff" );
+		ui.applyStyle( "pressedColor: #fff" );
 		ui.applyStyle( "oneTouchArrowColor: #fff" );
 		ui.applyStyle( "oneTouchHoverArrowColor: #fff" );
 		ui.applyStyle( "oneTouchPressedArrowColor: #fff" );
@@ -937,6 +940,7 @@ public class TestFlatStyling
 		ui.applyStyle( "tabAreaAlignment: leading" );
 		ui.applyStyle( "tabAlignment: center" );
 		ui.applyStyle( "tabWidthMode: preferred" );
+		ui.applyStyle( "tabRotation: none" );
 
 		ui.applyStyle( "arrowType: chevron" );
 		ui.applyStyle( "buttonInsets: 1,2,3,4" );
@@ -1237,15 +1241,19 @@ public class TestFlatStyling
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
-
 		applyStyle.accept( "roundRect: true" );
+	}
+
+	private void flatScrollPaneBorder( Consumer<String> applyStyle ) {
+		flatBorder( applyStyle );
+
+		applyStyle.accept( "arc: 6" );
 	}
 
 	private void flatTextBorder( Consumer<String> applyStyle ) {
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
-
 		applyStyle.accept( "roundRect: true" );
 	}
 

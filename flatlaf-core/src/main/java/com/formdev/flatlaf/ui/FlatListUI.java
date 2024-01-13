@@ -411,7 +411,7 @@ public class FlatListUI
 				int leftIndex = locationToIndex( list, new Point( r.x - 1, r.y ) );
 				int rightIndex = locationToIndex( list, new Point( r.x + r.width, r.y ) );
 
-				// special handling for the case that last column contains less cells than the other columns
+				// special handling for the case that last column contains fewer cells than the other columns
 				boolean ltr = list.getComponentOrientation().isLeftToRight();
 				if( !ltr && leftIndex >= 0 && leftIndex != row && leftIndex == locationToIndex( list, new Point( r.x - 1, r.y - 1 ) ) )
 					leftIndex = -1;

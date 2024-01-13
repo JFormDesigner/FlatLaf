@@ -78,7 +78,7 @@ class FlatNativeLibrary
 			//
 			// To avoid this, flatlaf.dll is not linked to jawt.dll,
 			// which avoids loading jawt.dll when flatlaf.dll is loaded.
-			// Instead flatlaf.dll dynamically loads jawt.dll when first used,
+			// Instead, flatlaf.dll dynamically loads jawt.dll when first used,
 			// which is guaranteed after AWT initialization.
 
 		} else if( SystemInfo.isMacOS_10_14_Mojave_orLater && (SystemInfo.isAARCH64 || SystemInfo.isX86_64) ) {

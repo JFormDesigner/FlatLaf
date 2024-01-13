@@ -557,7 +557,7 @@ public class FlatUIDefaultsInspector
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		panel = new JPanel();
 		filterPanel = new JPanel();
-		flterLabel = new JLabel();
+		filterLabel = new JLabel();
 		filterField = new FlatTextField();
 		valueTypeLabel = new JLabel();
 		valueTypeField = new JComboBox<>();
@@ -580,11 +580,11 @@ public class FlatUIDefaultsInspector
 				((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
 				((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-				//---- flterLabel ----
-				flterLabel.setText("Filter:");
-				flterLabel.setLabelFor(filterField);
-				flterLabel.setDisplayedMnemonic('F');
-				filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+				//---- filterLabel ----
+				filterLabel.setText("Filter:");
+				filterLabel.setLabelFor(filterField);
+				filterLabel.setDisplayedMnemonic('F');
+				filterPanel.add(filterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 10), 0, 0));
 
@@ -668,7 +668,7 @@ public class FlatUIDefaultsInspector
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JPanel panel;
 	private JPanel filterPanel;
-	private JLabel flterLabel;
+	private JLabel filterLabel;
 	private FlatTextField filterField;
 	private JLabel valueTypeLabel;
 	private JComboBox<String> valueTypeField;

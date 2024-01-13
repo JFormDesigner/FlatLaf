@@ -601,7 +601,7 @@ public class TestFlatStyleableInfo
 		);
 
 		// border
-		flatBorder( expected );
+		flatScrollPaneBorder( expected );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -689,6 +689,9 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = expectedMap(
 			"arrowType", String.class,
+			"draggingColor", Color.class,
+			"hoverColor", Color.class,
+			"pressedColor", Color.class,
 			"oneTouchArrowColor", Color.class,
 			"oneTouchHoverArrowColor", Color.class,
 			"oneTouchPressedArrowColor", Color.class,
@@ -752,6 +755,7 @@ public class TestFlatStyleableInfo
 			"tabAreaAlignment", String.class,
 			"tabAlignment", String.class,
 			"tabWidthMode", String.class,
+			"tabRotation", String.class,
 
 			"arrowType", String.class,
 			"buttonInsets", Insets.class,
@@ -1008,8 +1012,15 @@ public class TestFlatStyleableInfo
 
 		expectedMap( expected,
 			"arc", int.class,
-
 			"roundRect", Boolean.class
+		);
+	}
+
+	private void flatScrollPaneBorder( Map<String, Class<?>> expected ) {
+		flatBorder( expected );
+
+		expectedMap( expected,
+			"arc", int.class
 		);
 	}
 
@@ -1018,7 +1029,6 @@ public class TestFlatStyleableInfo
 
 		expectedMap( expected,
 			"arc", int.class,
-
 			"roundRect", Boolean.class
 		);
 	}

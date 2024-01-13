@@ -81,6 +81,6 @@ build script:
     artifactId:  flatlaf-fonts-jetbrains-mono
     version:     (see button below)
 
-Otherwise download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
+Otherwise, download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono)

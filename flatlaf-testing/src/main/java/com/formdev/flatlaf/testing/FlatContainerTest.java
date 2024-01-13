@@ -32,6 +32,7 @@ import com.formdev.flatlaf.extras.components.FlatTabbedPane.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
+import com.jgoodies.forms.factories.CC;
 import com.jgoodies.forms.layout.*;
 import net.miginfocom.swing.*;
 
@@ -62,6 +63,7 @@ public class FlatContainerTest
 		tabAreaAlignmentField.init( TabAreaAlignment.class, true );
 		tabAlignmentField.init( TabAlignment.class, true );
 		tabWidthModeField.init( TabWidthMode.class, true );
+		tabRotationField.init( TabRotation.class, true );
 
 		tabCountChanged();
 
@@ -72,6 +74,25 @@ public class FlatContainerTest
 
 		tabScrollCheckBox.setSelected( true );
 		tabScrollChanged();
+	}
+
+	private void continuousLayoutChanged() {
+		boolean continuousLayout = continuousLayoutCheckBox.isSelected();
+		splitPane1.setContinuousLayout( continuousLayout );
+		splitPane2.setContinuousLayout( continuousLayout );
+		splitPane3.setContinuousLayout( continuousLayout );
+	}
+
+	private void showOnlyOne() {
+		boolean showOnlyOne = showOnlyOneCheckBox.isSelected();
+
+		tabbedPane2.setVisible( !showOnlyOne );
+		tabbedPane3.setVisible( !showOnlyOne );
+		tabbedPane4.setVisible( !showOnlyOne );
+
+		int span = showOnlyOne ? 3 : 1;
+		FormLayout formLayout = (FormLayout) tabbedPane1.getParent().getLayout();
+		formLayout.setConstraints( tabbedPane1, CC.xywh( 1, 7, span, span ) );
 	}
 
 	private void tabScrollChanged() {
@@ -314,6 +335,12 @@ public class FlatContainerTest
 			tabbedPane.setTabWidthMode( value );
 	}
 
+	private void tabRotationChanged() {
+		TabRotation value = tabRotationField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabRotation( value );
+	}
+
 	private void tabTypeChanged() {
 		TabType value = tabTypeComboBox.getSelectedValue();
 		for( FlatTabbedPane tabbedPane : allTabbedPanes )
@@ -499,16 +526,18 @@ public class FlatContainerTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
 		JLabel splitPaneLabel = new JLabel();
-		JSplitPane splitPane3 = new JSplitPane();
-		JSplitPane splitPane1 = new JSplitPane();
+		continuousLayoutCheckBox = new JCheckBox();
+		splitPane3 = new JSplitPane();
+		splitPane1 = new JSplitPane();
 		FlatContainerTest.Panel1 panel15 = new FlatContainerTest.Panel1();
 		FlatContainerTest.Panel2 panel21 = new FlatContainerTest.Panel2();
-		JSplitPane splitPane2 = new JSplitPane();
+		splitPane2 = new JSplitPane();
 		JPanel panel12 = new JPanel();
 		JLabel label3 = new JLabel();
 		JPanel panel13 = new JPanel();
 		JLabel label4 = new JLabel();
 		JLabel tabbedPaneLabel = new JLabel();
+		showOnlyOneCheckBox = new JCheckBox();
 		tabbedPane1 = new FlatTabbedPane();
 		tabbedPane3 = new FlatTabbedPane();
 		tabbedPane2 = new FlatTabbedPane();
@@ -520,19 +549,19 @@ public class FlatContainerTest
 		customTabsCheckBox = new JCheckBox();
 		htmlTabsCheckBox = new JCheckBox();
 		multiLineTabsCheckBox = new JCheckBox();
+		JLabel tabPlacementLabel = new JLabel();
+		tabPlacementField = new FlatTestEnumSelector<>();
+		tabBackForegroundCheckBox = new JCheckBox();
 		JLabel tabsPopupPolicyLabel = new JLabel();
 		tabsPopupPolicyField = new FlatTestEnumSelector<>();
-		tabBackForegroundCheckBox = new JCheckBox();
-		JLabel scrollButtonsPolicyLabel = new JLabel();
-		scrollButtonsPolicyField = new FlatTestEnumSelector<>();
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
 		iconPlacementField = new FlatTestEnumSelector<>();
+		JLabel scrollButtonsPolicyLabel = new JLabel();
+		scrollButtonsPolicyField = new FlatTestEnumSelector<>();
+		tabsClosableCheckBox = new JCheckBox();
 		JLabel scrollButtonsPlacementLabel = new JLabel();
 		scrollButtonsPlacementField = new FlatTestEnumSelector<>();
-		tabsClosableCheckBox = new JCheckBox();
-		JLabel tabPlacementLabel = new JLabel();
-		tabPlacementField = new FlatTestEnumSelector<>();
 		secondTabClosableCheckBox = new FlatTriStateCheckBox();
 		JLabel tabAreaAlignmentLabel = new JLabel();
 		tabAreaAlignmentField = new FlatTestEnumSelector<>();
@@ -540,6 +569,8 @@ public class FlatContainerTest
 		tabWidthModeField = new FlatTestEnumSelector<>();
 		JLabel tabAlignmentLabel = new JLabel();
 		tabAlignmentField = new FlatTestEnumSelector<>();
+		JLabel tabRotationLabel = new JLabel();
+		tabRotationField = new FlatTestEnumSelector<>();
 		JLabel tabTypeLabel = new JLabel();
 		tabTypeComboBox = new FlatTestEnumSelector<>();
 		leadingComponentCheckBox = new JCheckBox();
@@ -577,6 +608,12 @@ public class FlatContainerTest
 			//---- splitPaneLabel ----
 			splitPaneLabel.setText("JSplitPane:");
 			panel9.add(splitPaneLabel, cc.xy(1, 1));
+
+			//---- continuousLayoutCheckBox ----
+			continuousLayoutCheckBox.setText("Continuous Layout");
+			continuousLayoutCheckBox.setSelected(true);
+			continuousLayoutCheckBox.addActionListener(e -> continuousLayoutChanged());
+			panel9.add(continuousLayoutCheckBox, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
 			//======== splitPane3 ========
 			{
@@ -636,6 +673,12 @@ public class FlatContainerTest
 			//---- tabbedPaneLabel ----
 			tabbedPaneLabel.setText("JTabbedPane:");
 			panel9.add(tabbedPaneLabel, cc.xy(1, 5));
+
+			//---- showOnlyOneCheckBox ----
+			showOnlyOneCheckBox.setText("show only one tabbed pane");
+			showOnlyOneCheckBox.setMnemonic('W');
+			showOnlyOneCheckBox.addActionListener(e -> showOnlyOne());
+			panel9.add(showOnlyOneCheckBox, cc.xy(3, 5, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 			panel9.add(tabbedPane1, cc.xy(1, 7));
 
 			//======== tabbedPane3 ========
@@ -713,26 +756,26 @@ public class FlatContainerTest
 				multiLineTabsCheckBox.addActionListener(e -> htmlTabsChanged());
 				tabbedPaneControlPanel.add(multiLineTabsCheckBox, "cell 2 0 2 1");
 
-				//---- tabsPopupPolicyLabel ----
-				tabsPopupPolicyLabel.setText("Tabs popup policy:");
-				tabbedPaneControlPanel.add(tabsPopupPolicyLabel, "cell 0 1");
+				//---- tabPlacementLabel ----
+				tabPlacementLabel.setText("Tab placement:");
+				tabbedPaneControlPanel.add(tabPlacementLabel, "cell 0 1");
 
-				//---- tabsPopupPolicyField ----
-				tabsPopupPolicyField.addActionListener(e -> tabsPopupPolicyChanged());
-				tabbedPaneControlPanel.add(tabsPopupPolicyField, "cell 1 1");
+				//---- tabPlacementField ----
+				tabPlacementField.addActionListener(e -> tabPlacementChanged());
+				tabbedPaneControlPanel.add(tabPlacementField, "cell 1 1");
 
 				//---- tabBackForegroundCheckBox ----
 				tabBackForegroundCheckBox.setText("Tab back/foreground");
 				tabBackForegroundCheckBox.addActionListener(e -> tabBackForegroundChanged());
 				tabbedPaneControlPanel.add(tabBackForegroundCheckBox, "cell 2 1 2 1");
 
-				//---- scrollButtonsPolicyLabel ----
-				scrollButtonsPolicyLabel.setText("Scroll buttons policy:");
-				tabbedPaneControlPanel.add(scrollButtonsPolicyLabel, "cell 0 2");
+				//---- tabsPopupPolicyLabel ----
+				tabsPopupPolicyLabel.setText("Tabs popup policy:");
+				tabbedPaneControlPanel.add(tabsPopupPolicyLabel, "cell 0 2");
 
-				//---- scrollButtonsPolicyField ----
-				scrollButtonsPolicyField.addActionListener(e -> scrollButtonsPolicyChanged());
-				tabbedPaneControlPanel.add(scrollButtonsPolicyField, "cell 1 2");
+				//---- tabsPopupPolicyField ----
+				tabsPopupPolicyField.addActionListener(e -> tabsPopupPolicyChanged());
+				tabbedPaneControlPanel.add(tabsPopupPolicyField, "cell 1 2");
 
 				//---- tabIconsCheckBox ----
 				tabIconsCheckBox.setText("Tab icons");
@@ -750,26 +793,26 @@ public class FlatContainerTest
 				iconPlacementField.addActionListener(e -> iconPlacementChanged());
 				tabbedPaneControlPanel.add(iconPlacementField, "cell 2 2 2 1");
 
-				//---- scrollButtonsPlacementLabel ----
-				scrollButtonsPlacementLabel.setText("Scroll buttons placement:");
-				tabbedPaneControlPanel.add(scrollButtonsPlacementLabel, "cell 0 3");
+				//---- scrollButtonsPolicyLabel ----
+				scrollButtonsPolicyLabel.setText("Scroll buttons policy:");
+				tabbedPaneControlPanel.add(scrollButtonsPolicyLabel, "cell 0 3");
 
-				//---- scrollButtonsPlacementField ----
-				scrollButtonsPlacementField.addActionListener(e -> scrollButtonsPlacementChanged());
-				tabbedPaneControlPanel.add(scrollButtonsPlacementField, "cell 1 3");
+				//---- scrollButtonsPolicyField ----
+				scrollButtonsPolicyField.addActionListener(e -> scrollButtonsPolicyChanged());
+				tabbedPaneControlPanel.add(scrollButtonsPolicyField, "cell 1 3");
 
 				//---- tabsClosableCheckBox ----
 				tabsClosableCheckBox.setText("Tabs closable");
 				tabsClosableCheckBox.addActionListener(e -> tabsClosableChanged());
 				tabbedPaneControlPanel.add(tabsClosableCheckBox, "cell 2 3 2 1");
 
-				//---- tabPlacementLabel ----
-				tabPlacementLabel.setText("Tab placement:");
-				tabbedPaneControlPanel.add(tabPlacementLabel, "cell 0 4");
+				//---- scrollButtonsPlacementLabel ----
+				scrollButtonsPlacementLabel.setText("Scroll buttons placement:");
+				tabbedPaneControlPanel.add(scrollButtonsPlacementLabel, "cell 0 4");
 
-				//---- tabPlacementField ----
-				tabPlacementField.addActionListener(e -> tabPlacementChanged());
-				tabbedPaneControlPanel.add(tabPlacementField, "cell 1 4");
+				//---- scrollButtonsPlacementField ----
+				scrollButtonsPlacementField.addActionListener(e -> scrollButtonsPlacementChanged());
+				tabbedPaneControlPanel.add(scrollButtonsPlacementField, "cell 1 4");
 
 				//---- secondTabClosableCheckBox ----
 				secondTabClosableCheckBox.setText("Second Tab closable");
@@ -799,6 +842,14 @@ public class FlatContainerTest
 				//---- tabAlignmentField ----
 				tabAlignmentField.addActionListener(e -> tabAlignmentChanged());
 				tabbedPaneControlPanel.add(tabAlignmentField, "cell 1 6");
+
+				//---- tabRotationLabel ----
+				tabRotationLabel.setText("Tab rotation:");
+				tabbedPaneControlPanel.add(tabRotationLabel, "cell 2 6");
+
+				//---- tabRotationField ----
+				tabRotationField.addActionListener(e -> tabRotationChanged());
+				tabbedPaneControlPanel.add(tabRotationField, "cell 3 6");
 
 				//---- tabTypeLabel ----
 				tabTypeLabel.setText("Tab type:");
@@ -892,6 +943,11 @@ public class FlatContainerTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JCheckBox continuousLayoutCheckBox;
+	private JSplitPane splitPane3;
+	private JSplitPane splitPane1;
+	private JSplitPane splitPane2;
+	private JCheckBox showOnlyOneCheckBox;
 	private FlatTabbedPane tabbedPane1;
 	private FlatTabbedPane tabbedPane3;
 	private FlatTabbedPane tabbedPane2;
@@ -901,19 +957,20 @@ public class FlatContainerTest
 	private JCheckBox customTabsCheckBox;
 	private JCheckBox htmlTabsCheckBox;
 	private JCheckBox multiLineTabsCheckBox;
-	private FlatTestEnumSelector<TabsPopupPolicy> tabsPopupPolicyField;
+	private FlatTestEnumSelector<TabPlacement> tabPlacementField;
 	private JCheckBox tabBackForegroundCheckBox;
-	private FlatTestEnumSelector<ScrollButtonsPolicy> scrollButtonsPolicyField;
+	private FlatTestEnumSelector<TabsPopupPolicy> tabsPopupPolicyField;
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
 	private FlatTestEnumSelector<TabIconPlacement> iconPlacementField;
-	private FlatTestEnumSelector<ScrollButtonsPlacement> scrollButtonsPlacementField;
+	private FlatTestEnumSelector<ScrollButtonsPolicy> scrollButtonsPolicyField;
 	private JCheckBox tabsClosableCheckBox;
-	private FlatTestEnumSelector<TabPlacement> tabPlacementField;
+	private FlatTestEnumSelector<ScrollButtonsPlacement> scrollButtonsPlacementField;
 	private FlatTriStateCheckBox secondTabClosableCheckBox;
 	private FlatTestEnumSelector<TabAreaAlignment> tabAreaAlignmentField;
 	private FlatTestEnumSelector<TabWidthMode> tabWidthModeField;
 	private FlatTestEnumSelector<TabAlignment> tabAlignmentField;
+	private FlatTestEnumSelector<TabRotation> tabRotationField;
 	private FlatTestEnumSelector<TabType> tabTypeComboBox;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox customBorderCheckBox;

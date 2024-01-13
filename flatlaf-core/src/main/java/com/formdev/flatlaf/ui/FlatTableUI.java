@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -34,12 +35,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
@@ -118,6 +124,7 @@ public class FlatTableUI
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
+	private TableCellRenderer oldBooleanRenderer;
 
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
@@ -175,6 +182,13 @@ public class FlatTableUI
 			watcher.enabled = true;
 		else
 			table.addPropertyChangeListener( new FlatTablePropertyWatcher() );
+
+		// install boolean renderer
+		oldBooleanRenderer = table.getDefaultRenderer( Boolean.class );
+		if( oldBooleanRenderer instanceof UIResource )
+			table.setDefaultRenderer( Boolean.class, new FlatBooleanRenderer() );
+		else
+			oldBooleanRenderer = null;
 	}
 
 	@Override
@@ -207,6 +221,17 @@ public class FlatTableUI
 
 		if( watcher != null )
 			watcher.enabled = true;
+
+		// uninstall boolean renderer
+		if( table.getDefaultRenderer( Boolean.class ) instanceof FlatBooleanRenderer ) {
+			if( oldBooleanRenderer instanceof Component ) {
+				// because the old renderer component was not attached to any component hierarchy,
+				// its UI was not yet updated, and it is necessary to do it here
+				SwingUtilities.updateComponentTreeUI( (Component) oldBooleanRenderer );
+			}
+			table.setDefaultRenderer( Boolean.class, oldBooleanRenderer );
+		}
+		oldBooleanRenderer = null;
 	}
 
 	@Override
@@ -528,6 +553,30 @@ public class FlatTableUI
 				case "showVerticalLines":	showVerticalLinesChanged = true; break;
 				case "rowMargin":			intercellSpacingChanged = true; break;
 			}
+		}
+	}
+
+	//---- class FlatBooleanRenderer ------------------------------------------
+
+	private static class FlatBooleanRenderer
+		extends DefaultTableCellRenderer
+		implements UIResource
+	{
+		private boolean selected;
+
+		FlatBooleanRenderer() {
+			setHorizontalAlignment( SwingConstants.CENTER );
+			setIcon( new FlatCheckBoxIcon() {
+				@Override
+				protected boolean isSelected( Component c ) {
+					return selected;
+				}
+			} );
+		}
+
+		@Override
+		protected void setValue( Object value ) {
+			selected = (value != null && (Boolean) value);
 		}
 	}
 }

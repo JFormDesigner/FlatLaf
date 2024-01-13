@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.2.4
+#Version 3.3
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -23,6 +23,7 @@ fld public final static java.lang.String PLACEHOLDER_TEXT = "JTextField.placehol
 fld public final static java.lang.String POPUP_BORDER_CORNER_RADIUS = "Popup.borderCornerRadius"
 fld public final static java.lang.String POPUP_DROP_SHADOW_PAINTED = "Popup.dropShadowPainted"
 fld public final static java.lang.String POPUP_FORCE_HEAVY_WEIGHT = "Popup.forceHeavyWeight"
+fld public final static java.lang.String POPUP_ROUNDED_BORDER_WIDTH = "Popup.roundedBorderWidth"
 fld public final static java.lang.String PROGRESS_BAR_LARGE_HEIGHT = "JProgressBar.largeHeight"
 fld public final static java.lang.String PROGRESS_BAR_SQUARE = "JProgressBar.square"
 fld public final static java.lang.String SCROLL_BAR_SHOW_BUTTONS = "JScrollBar.showButtons"
@@ -67,6 +68,11 @@ fld public final static java.lang.String TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT = "JT
 fld public final static java.lang.String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight"
 fld public final static java.lang.String TABBED_PANE_TAB_ICON_PLACEMENT = "JTabbedPane.tabIconPlacement"
 fld public final static java.lang.String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets"
+fld public final static java.lang.String TABBED_PANE_TAB_ROTATION = "JTabbedPane.tabRotation"
+fld public final static java.lang.String TABBED_PANE_TAB_ROTATION_AUTO = "auto"
+fld public final static java.lang.String TABBED_PANE_TAB_ROTATION_LEFT = "left"
+fld public final static java.lang.String TABBED_PANE_TAB_ROTATION_NONE = "none"
+fld public final static java.lang.String TABBED_PANE_TAB_ROTATION_RIGHT = "right"
 fld public final static java.lang.String TABBED_PANE_TAB_TYPE = "JTabbedPane.tabType"
 fld public final static java.lang.String TABBED_PANE_TAB_TYPE_CARD = "card"
 fld public final static java.lang.String TABBED_PANE_TAB_TYPE_UNDERLINED = "underlined"
@@ -241,7 +247,7 @@ meth public void setExtraDefaults(java.util.Map<java.lang.String,java.lang.Strin
 meth public void uninitialize()
 meth public void unregisterUIDefaultsGetter(java.util.function.Function<java.lang.Object,java.lang.Object>)
 supr javax.swing.plaf.basic.BasicLookAndFeel
-hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,getUIMethod,getUIMethodInitialized,globalExtraDefaults,mnemonicHandler,oldPopupFactory,postInitialization,preferredFontFamily,preferredLightFontFamily,preferredMonospacedFontFamily,preferredSemiboldFontFamily,subMenuUsabilityHelperInstalled,systemColorGetter,uiDefaultsGetters,updateUIPending
+hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,globalExtraDefaults,mnemonicHandler,oldPopupFactory,postInitialization,preferredFontFamily,preferredLightFontFamily,preferredMonospacedFontFamily,preferredSemiboldFontFamily,subMenuUsabilityHelperInstalled,systemColorGetter,uiDefaultsGetters,updateUIPending
 hcls ActiveFont,FlatUIDefaults,ImageIconUIResource
 
 CLSS public abstract interface static com.formdev.flatlaf.FlatLaf$DisabledIconProvider
@@ -282,6 +288,7 @@ fld public final static java.lang.String UI_SCALE_ALLOW_SCALE_DOWN = "flatlaf.ui
 fld public final static java.lang.String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled"
 fld public final static java.lang.String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flatlaf.updateUIOnSystemFontChange"
 fld public final static java.lang.String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations"
+ anno 0 java.lang.Deprecated()
 fld public final static java.lang.String USE_NATIVE_LIBRARY = "flatlaf.useNativeLibrary"
 fld public final static java.lang.String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection"
 fld public final static java.lang.String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont"

@@ -46,7 +46,6 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
-import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -931,12 +930,6 @@ class DemoFrame
 			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
 			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
 			showTitleBarIconMenuItem.setSelected( UIManager.getBoolean( "TitlePane.showIcon" ) );
-
-			if( JBRCustomDecorations.isSupported() ) {
-				// If the JetBrains Runtime is used, it forces the use of it's own custom
-				// window decoration, which can not disabled.
-				windowDecorationsCheckBoxMenuItem.setEnabled( false );
-			}
 		} else {
 			unsupported( windowDecorationsCheckBoxMenuItem );
 			unsupported( menuBarEmbeddedCheckBoxMenuItem );

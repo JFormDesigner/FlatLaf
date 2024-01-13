@@ -62,7 +62,7 @@ build script:
     artifactId:  flatlaf
     version:     (see button below)
 
-Otherwise download `flatlaf-<version>.jar` here:
+Otherwise, download `flatlaf-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf)
 
@@ -141,7 +141,6 @@ details and downloads.
 Buzz
 ----
 
-- [What others say about FlatLaf on Twitter](https://twitter.com/search?f=live&q=flatlaf)
 - [FlatLaf 3.1 (and 3.0) announcement on Reddit](https://www.reddit.com/r/java/comments/12xgrsu/flatlaf_31_and_30_swing_look_and_feel/)
 - [FlatLaf 1.0 announcement on Reddit](https://www.reddit.com/r/java/comments/lsbcwe/flatlaf_10_swing_look_and_feel/)
 - [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)

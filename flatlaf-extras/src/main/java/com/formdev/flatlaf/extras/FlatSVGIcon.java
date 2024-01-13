@@ -87,7 +87,7 @@ public class FlatSVGIcon
 	 * in the tag {@code <svg>} are used as icon size.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -106,7 +106,7 @@ public class FlatSVGIcon
 	 * in the tag {@code <svg>} are used as icon size.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -124,7 +124,7 @@ public class FlatSVGIcon
 	 * The icon is scaled if the given size is different to the size specified in the SVG file.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -144,7 +144,7 @@ public class FlatSVGIcon
 	 * The icon is scaled if the given size is different to the size specified in the SVG file.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -166,7 +166,7 @@ public class FlatSVGIcon
 	 * by the given scale factor.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -187,7 +187,7 @@ public class FlatSVGIcon
 	 * by the given scale factor.
 	 * <p>
 	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * Otherwise, use {@link #FlatSVGIcon(URL)}.
 	 * <p>
 	 * This is cheap operation because the icon is only loaded when used.
 	 *
@@ -259,7 +259,7 @@ public class FlatSVGIcon
 	 * <p>
 	 * The input stream is loaded, parsed and closed immediately.
 	 *
-	 * @param in the input stream for reading a SVG resource
+	 * @param in the input stream for reading an SVG resource
 	 * @throws IOException if an I/O exception occurs
 	 * @since 2
 	 */

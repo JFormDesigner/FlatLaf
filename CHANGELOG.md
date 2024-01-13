@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.3-SNAPSHOT
+## 3.3
 
 #### New features and improvements
 
@@ -10,18 +10,54 @@ FlatLaf Change Log
 - Native libraries: Added `libflatlaf-macos-arm64.dylib` and
   `libflatlaf-macos-x86_64.dylib`. See also
   https://www.formdev.com/flatlaf/native-libraries/.
+- ScrollPane: Support rounded border. (PR #713)
+- SplitPane: Support divider hover and pressed background colors. (PR #788)
+- TabbedPane: Support vertical tabs. (PR #758, issue #633)
+- TabbedPane: Paint rounded tab area background for rounded cards. (issue #717)
 - ToolBar: Added styling properties `separatorWidth` and `separatorColor`.
 
 #### Fixed bugs
 
 - Button and ToggleButton: Selected buttons did not use explicitly set
   foreground color. (issue 756)
-- Table: Switching theme looses table grid and intercell spacing. (issues #733
-  and #750)
+- FileChooser: Catch NPE in Java 21 when getting icon for `.exe` files that use
+  default Windows exe icon. (see
+  [JDK-8320692](https://bugs.openjdk.org/browse/JDK-8320692))
 - OptionPane: Fixed styling custom panel background in `JOptionPane`. (issue
   #761)
+- ScrollPane: Styling ScrollPane border properties did not work if view
+  component is a Table.
+- Table:
+  - Switching theme looses table grid and intercell spacing. (issues #733 and
+    #750)
+  - Fixed background of `boolean` columns when using alternating row colors.
+    (issue #780)
+  - Fixed border arc of components in complex table cell editors. (issue #786)
+- TableHeader:
+  - No longer temporary replace header cell renderer while painting. This avoids
+    a `StackOverflowError` in case that custom renderer does this too. (see
+    [NetBeans issue #6835](https://github.com/apache/netbeans/issues/6835)) This
+    also improves compatibility with custom table header implementations.
+  - Header cell renderer background/foreground colors were not restored after
+    hover if renderer uses `null` for background/foreground. (PR #790)
+- TabbedPane:
+  - Avoid unnecessary repainting whole tabbed pane content area when layouting
+    leading/trailing components.
+  - Avoid unnecessary repainting of selected tab on temporary changes.
+  - Fixed "endless" layouting and repainting when using nested tabbed panes (top
+    and bottom tab placement) and RSyntaxTextArea (with enabled line-wrapping)
+    as tab content. (see
+    [jadx issue #2030](https://github.com/skylot/jadx/issues/2030))
 - Fixed broken rendering after resizing window to minimum size and then
   increasing size again. (issue #767)
+
+#### Incompatibilities
+
+- Removed support for JetBrains custom decorations, which required
+  [JetBrains Runtime](https://github.com/JetBrains/JetBrainsRuntime/wiki) (JBR)
+  8 or 11. It did not work for JBR 17. System property
+  `flatlaf.useJetBrainsCustomDecorations` is now ignored. **Note**: FlatLaf
+  window decorations continue to work with JBR.
 
 
 ## 3.2.5

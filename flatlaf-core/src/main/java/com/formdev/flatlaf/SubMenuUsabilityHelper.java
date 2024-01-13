@@ -172,7 +172,7 @@ debug*/
 		targetTopY = popupLocation.y;
 		targetBottomY = popupLocation.y + popupSize.height;
 
-		// install own event queue to supress mouse events when mouse is moved within safe triangle
+		// install own event queue to suppress mouse events when mouse is moved within safe triangle
 		if( subMenuEventQueue == null )
 			subMenuEventQueue = new SubMenuEventQueue();
 

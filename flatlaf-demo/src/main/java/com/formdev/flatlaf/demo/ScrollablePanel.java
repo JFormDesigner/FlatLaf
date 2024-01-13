@@ -34,7 +34,7 @@ public class ScrollablePanel
 {
 	@Override
 	public Dimension getPreferredScrollableViewportSize() {
-		return UIScale.scale( new Dimension( 400, 400 ) );
+		return new Dimension( getPreferredSize().width, UIScale.scale( 400 ) );
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ScrollablePanel
 
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
-		return false;
+		return true;
 	}
 
 	@Override
