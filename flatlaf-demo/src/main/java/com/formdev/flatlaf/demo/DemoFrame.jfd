@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.1.0.348" Java: "21.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -12,56 +12,66 @@ new FormModel {
 			"defaultCloseOperation": 2
 			"$locationPolicy": 2
 			"$sizePolicy": 2
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
-				name: "toolBar"
-				"margin": new java.awt.Insets( 3, 3, 3, 3 )
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "backButton"
-					"toolTipText": "Back"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/back.svg" )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "toolBarPanel"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "macFullWindowContentButtonsPlaceholder"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "West"
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "forwardButton"
-					"toolTipText": "Forward"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/forward.svg" )
-				} )
-				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
-					name: "separator5"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "cutButton"
-					"toolTipText": "Cut"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-cut.svg" )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "copyButton"
-					"toolTipText": "Copy"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/copy.svg" )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "pasteButton"
-					"toolTipText": "Paste"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-paste.svg" )
-				} )
-				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
-					name: "separator6"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "refreshButton"
-					"toolTipText": "Refresh"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/refresh.svg" )
-				} )
-				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
-					name: "separator7"
-				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
-					name: "showToggleButton"
-					"selected": true
-					"toolTipText": "Show Details"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/show.svg" )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "toolBar"
+					"margin": new java.awt.Insets( 3, 3, 3, 3 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "backButton"
+						"toolTipText": "Back"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/back.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "forwardButton"
+						"toolTipText": "Forward"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/forward.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+						name: "separator5"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cutButton"
+						"toolTipText": "Cut"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-cut.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "copyButton"
+						"toolTipText": "Copy"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/copy.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "pasteButton"
+						"toolTipText": "Paste"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/menu-paste.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+						name: "separator6"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "refreshButton"
+						"toolTipText": "Refresh"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/refresh.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+						name: "separator7"
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "showToggleButton"
+						"selected": true
+						"toolTipText": "Show Details"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/show.svg" )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

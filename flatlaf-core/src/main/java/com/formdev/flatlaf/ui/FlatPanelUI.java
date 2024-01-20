@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
@@ -23,6 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -69,6 +71,8 @@ public class FlatPanelUI
 		super.installUI( c );
 
 		c.addPropertyChangeListener( this );
+		if( c.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER ) != null )
+			FullWindowContentSupport.registerPlaceholder( c );
 
 		installStyle( (JPanel) c );
 	}
@@ -78,8 +82,18 @@ public class FlatPanelUI
 		super.uninstallUI( c );
 
 		c.removePropertyChangeListener( this );
+		if( c.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER ) != null )
+			FullWindowContentSupport.unregisterPlaceholder( c );
 
 		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installDefaults( JPanel p ) {
+		super.installDefaults( p );
+
+		if( p.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER ) != null )
+			LookAndFeel.installProperty( p, "opaque", false );
 	}
 
 	/** @since 2.0.1 */
@@ -97,6 +111,17 @@ public class FlatPanelUI
 					installStyle( c );
 				c.revalidate();
 				c.repaint();
+				break;
+
+			case FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER:
+				JPanel p = (JPanel) e.getSource();
+				if( e.getOldValue() != null )
+					FullWindowContentSupport.unregisterPlaceholder( p );
+				if( e.getNewValue() != null )
+					FullWindowContentSupport.registerPlaceholder( p );
+
+				// make panel non-opaque for placeholders
+				LookAndFeel.installProperty( p, "opaque", e.getNewValue() == null );
 				break;
 		}
 	}
@@ -161,5 +186,20 @@ public class FlatPanelUI
 		}
 
 		paint( g, c );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		Object value = c.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER );
+		if( value != null )
+			return FullWindowContentSupport.getPlaceholderPreferredSize( c, (String) value );
+
+		return super.getPreferredSize( c );
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		if( c.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER ) != null )
+			FullWindowContentSupport.debugPaint( g, c );
 	}
 }

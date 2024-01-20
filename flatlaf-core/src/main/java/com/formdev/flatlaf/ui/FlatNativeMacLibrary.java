@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Rectangle;
 import java.awt.Window;
 
 /**
@@ -54,14 +55,14 @@ public class FlatNativeMacLibrary
 
 	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
 
+	/** @since 3.4 */
 	public static final int
 		BUTTON_STYLE_DEFAULT = 0,
 		BUTTON_STYLE_MEDIUM = 1,
 		BUTTON_STYLE_LARGE = 2;
 
-	public native static boolean setWindowButtonStyle( Window window, int buttonStyle );
-	public native static int getWindowButtonAreaWidth( Window window );
-	public native static int getWindowTitleBarHeight( Window window );
-	public native static boolean isWindowFullScreen( Window window );
-	public native static boolean windowToggleFullScreen( Window window );
+	/** @since 3.4 */ public native static boolean setWindowButtonStyle( Window window, int buttonStyle );
+	/** @since 3.4 */ public native static Rectangle getWindowButtonsBounds( Window window );
+	/** @since 3.4 */ public native static boolean isWindowFullScreen( Window window );
+	/** @since 3.4 */ public native static boolean toggleWindowFullScreen( Window window );
 }

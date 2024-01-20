@@ -89,6 +89,7 @@ public class FlatRootPaneUI
 	private LayoutManager oldLayout;
 	private PropertyChangeListener ancestorListener;
 	private ComponentListener componentListener;
+	private ComponentListener macFullWindowContentListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -207,6 +208,9 @@ public class FlatRootPaneUI
 			};
 			root.addPropertyChangeListener( "ancestor", ancestorListener );
 		}
+
+		if( SystemInfo.isMacFullWindowContentSupported )
+			macFullWindowContentListener = FullWindowContentSupport.macInstallListeners( root );
 	}
 
 	@Override
@@ -222,6 +226,11 @@ public class FlatRootPaneUI
 			}
 			root.removePropertyChangeListener( "ancestor", ancestorListener );
 			ancestorListener = null;
+		}
+
+		if( SystemInfo.isMacFullWindowContentSupported ) {
+			FullWindowContentSupport.macUninstallListeners( root, macFullWindowContentListener );
+			macFullWindowContentListener = null;
 		}
 	}
 
@@ -359,6 +368,10 @@ public class FlatRootPaneUI
 					titlePane.titleBarColorsChanged();
 				break;
 
+			case FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS:
+				FullWindowContentSupport.revalidatePlaceholders( rootPane );
+				break;
+
 			case FlatClientProperties.GLASS_PANE_FULL_HEIGHT:
 				rootPane.revalidate();
 				break;
@@ -371,26 +384,30 @@ public class FlatRootPaneUI
 			case FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE:
 			case "ancestor":
 				if( SystemInfo.isMacFullWindowContentSupported &&
-					SystemInfo.isJava_17_orLater &&
 					rootPane.isDisplayable() &&
-					FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) &&
-					FlatNativeMacLibrary.isLoaded() )
+					FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) )
 				{
-					int buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_DEFAULT;
-					Object value = rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE );
-					switch( String.valueOf( value ) ) {
-						case FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_MEDIUM:
-							buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_MEDIUM;
-							break;
+					// set window button style
+					if( SystemInfo.isJava_17_orLater && FlatNativeMacLibrary.isLoaded() ) {
+						int buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_DEFAULT;
+						Object value = rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE );
+						switch( String.valueOf( value ) ) {
+							case FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_MEDIUM:
+								buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_MEDIUM;
+								break;
 
-						case "true":
-						case FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_LARGE:
-							buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_LARGE;
-							break;
+							case "true":
+							case FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_LARGE:
+								buttonStyle = FlatNativeMacLibrary.BUTTON_STYLE_LARGE;
+								break;
+						}
+
+						Window window = SwingUtilities.windowForComponent( rootPane );
+						FlatNativeMacLibrary.setWindowButtonStyle( window, buttonStyle );
 					}
 
-					Window window = SwingUtilities.windowForComponent( rootPane );
-					FlatNativeMacLibrary.setWindowButtonStyle( window, buttonStyle );
+					// update buttons bounds client property
+					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
 				}
 				break;
 		}

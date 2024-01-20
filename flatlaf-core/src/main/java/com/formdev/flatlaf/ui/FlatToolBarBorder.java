@@ -25,7 +25,6 @@ import java.awt.Rectangle;
 import java.util.function.Function;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ToolBarUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -113,18 +112,6 @@ public class FlatToolBarBorder
 					insets.right += gripInset;
 			} else
 				insets.top += gripInset;
-		}
-
-		// on macOS, add some extra space to left side for close/minimize/zoom buttons (if necessary)
-		if( c instanceof JToolBar && FlatToolBarUI.isMacOSMainToolbar( (JToolBar) c ) ) {
-			// get button area width from macOS
-			int buttonBarWidth = FlatNativeMacLibrary.isLoaded()
-				? FlatNativeMacLibrary.getWindowButtonAreaWidth( SwingUtilities.windowForComponent( c ) )
-				: -1;
-			if( buttonBarWidth < 0 )
-				buttonBarWidth = 68; // default width if NSWindow does not have a toolbar
-
-			insets.left += buttonBarWidth;
 		}
 
 		return insets;

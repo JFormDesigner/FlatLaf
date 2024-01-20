@@ -51,9 +51,9 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 		return NULL;
 
 	// initialize field IDs (done only once because variables are static)
-	static jfieldID peerID = getFieldID( env, "java/awt/Component", "peer", "Ljava/awt/peer/ComponentPeer;" );
-	static jfieldID platformWindowID = getFieldID( env, "sun/lwawt/LWWindowPeer", "platformWindow", "Lsun/lwawt/PlatformWindow;" );
-	static jfieldID ptrID = getFieldID( env, "sun/lwawt/macosx/CFRetainedResource", "ptr", "J" );
+	static jfieldID peerID = getFieldID( env, "java/awt/Component", "peer", "Ljava/awt/peer/ComponentPeer;", false );
+	static jfieldID platformWindowID = getFieldID( env, "sun/lwawt/LWWindowPeer", "platformWindow", "Lsun/lwawt/PlatformWindow;", false );
+	static jfieldID ptrID = getFieldID( env, "sun/lwawt/macosx/CFRetainedResource", "ptr", "J", false );
 	if( peerID == NULL || platformWindowID == NULL || ptrID == NULL )
 		return NULL;
 
@@ -148,7 +148,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 	WindowData* windowData = getWindowData( nsWindow, true );
 
-	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 //		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
 		// add/remove toolbar
@@ -222,29 +222,48 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 }
 
 extern "C"
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonAreaWidth
+JNIEXPORT jobject JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonsBounds
 	( JNIEnv* env, jclass cls, jobject window )
 {
 	JNI_COCOA_ENTER()
 
 	NSWindow* nsWindow = getNSWindow( env, cls, window );
 	if( nsWindow == NULL )
-		return -1;
+		return NULL;
 
-	// return zero if window is full screen because close/minimize/zoom buttons are hidden
-	if( isWindowFullScreen( nsWindow ) )
-		return 0;
-
-	// use remembered value if window is in transition from full screen to non-full screen
-	// because NSToolbar is not yet visible
 	WindowData* windowData = getWindowData( nsWindow, false );
-	if( windowData != NULL && windowData.lastWindowButtonAreaWidth > 0 )
-		return windowData.lastWindowButtonAreaWidth;
+	int width = 0;
+	int height = 0;
 
-	return getWindowButtonAreaWidth( nsWindow );
+	// get width
+	if( isWindowFullScreen( nsWindow ) ) {
+		// use zero if window is full screen because close/minimize/zoom buttons are hidden
+		width = 0;
+	} else if( windowData != NULL && windowData.lastWindowButtonAreaWidth > 0 ) {
+		// use remembered value if window is in transition from full screen to non-full screen
+		// because NSToolbar is not yet visible
+		width = windowData.lastWindowButtonAreaWidth;
+	} else
+		width = getWindowButtonAreaWidth( nsWindow );
+
+	// get height
+	if( windowData != NULL && windowData.lastWindowTitleBarHeight > 0 ) {
+		// use remembered value if window is full screen because NSToolbar is hidden
+		height = windowData.lastWindowTitleBarHeight;
+	} else
+		height = getWindowTitleBarHeight( nsWindow );
+
+	// initialize class and method ID (done only once because variables are static)
+	static jclass cls = findClass( env, "java/awt/Rectangle", true );
+	static jmethodID methodID = getMethodID( env, cls, "<init>", "(IIII)V", false );
+	if( cls == NULL || methodID == NULL )
+		return NULL;
+
+	// create and return Rectangle
+	return env->NewObject( cls, methodID, 0, 0, width, height );
 
 	JNI_COCOA_EXIT()
-	return -1;
+	return NULL;
 }
 
 int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
@@ -279,27 +298,6 @@ int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 	return right + left;
 }
 
-extern "C"
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowTitleBarHeight
-	( JNIEnv* env, jclass cls, jobject window )
-{
-	JNI_COCOA_ENTER()
-
-	NSWindow* nsWindow = getNSWindow( env, cls, window );
-	if( nsWindow == NULL )
-		return -1;
-
-	// use remembered value if window is full screen because NSToolbar is hidden
-	WindowData* windowData = getWindowData( nsWindow, false );
-	if( windowData != NULL && windowData.lastWindowTitleBarHeight > 0 )
-		return windowData.lastWindowTitleBarHeight;
-
-	return getWindowTitleBarHeight( nsWindow );
-
-	JNI_COCOA_EXIT()
-	return -1;
-}
-
 int getWindowTitleBarHeight( NSWindow* nsWindow ) {
 	NSView* closeButton = [nsWindow standardWindowButton:NSWindowCloseButton];
 	if( closeButton == NULL )
@@ -330,7 +328,7 @@ bool isWindowFullScreen( NSWindow* nsWindow ) {
 }
 
 extern "C"
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_windowToggleFullScreen
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_toggleWindowFullScreen
 	( JNIEnv* env, jclass cls, jobject window )
 {
 	JNI_COCOA_ENTER()

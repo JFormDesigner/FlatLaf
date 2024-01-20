@@ -31,18 +31,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    getWindowButtonAreaWidth
- * Signature: (Ljava/awt/Window;)I
+ * Method:    getWindowButtonsBounds
+ * Signature: (Ljava/awt/Window;)Ljava/awt/Rectangle;
  */
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonAreaWidth
-  (JNIEnv *, jclass, jobject);
-
-/*
- * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    getWindowTitleBarHeight
- * Signature: (Ljava/awt/Window;)I
- */
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowTitleBarHeight
+JNIEXPORT jobject JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonsBounds
   (JNIEnv *, jclass, jobject);
 
 /*
@@ -55,10 +47,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    windowToggleFullScreen
+ * Method:    toggleWindowFullScreen
  * Signature: (Ljava/awt/Window;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_windowToggleFullScreen
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_toggleWindowFullScreen
   (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus
