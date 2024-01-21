@@ -95,7 +95,7 @@ class DemoFrame
 				// expand window content into window title bar and make title bar transparent
 				rootPane.putClientProperty( "apple.awt.fullWindowContent", true );
 				rootPane.putClientProperty( "apple.awt.transparentTitleBar", true );
-				rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, true );
+				rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE );
 
 				// hide window title
 				if( SystemInfo.isJava_17_orLater )
@@ -922,13 +922,13 @@ class DemoFrame
 
 		//TODO remove
 		backButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_LARGE );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE );
 		});
 		forwardButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE_MEDIUM );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM );
 		});
 		cutButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTON_STYLE, null );
+			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, null );
 		});
 
 		copyButton.addActionListener( e -> System.out.println( e ) );
@@ -1025,7 +1025,7 @@ class DemoFrame
 			animatedLafChangeMenuItem.setSelected( false );
 
 		// on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
-		macFullWindowContentButtonsPlaceholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
+		macFullWindowContentButtonsPlaceholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen" );
 
 		// remove contentPanel bottom insets
 		MigLayout layout = (MigLayout) contentPanel.getLayout();

@@ -32,6 +32,7 @@
 
 	// full screen observers
 	@property (nonatomic) id willEnterFullScreenObserver;
+	@property (nonatomic) id willExitFullScreenObserver;
 	@property (nonatomic) id didExitFullScreenObserver;
 @end
 
@@ -41,6 +42,7 @@
 // declare internal methods
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
 WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
+void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden );
 int getWindowButtonAreaWidth( NSWindow* nsWindow );
 int getWindowTitleBarHeight( NSWindow* nsWindow );
 bool isWindowFullScreen( NSWindow* nsWindow );
@@ -121,8 +123,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 }
 
 extern "C"
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonStyle
-	( JNIEnv* env, jclass cls, jobject window, jint buttonStyle )
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonsSpacing
+	( JNIEnv* env, jclass cls, jobject window, jint buttonsSpacing )
 {
 	JNI_COCOA_ENTER()
 
@@ -130,20 +132,20 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	if( nsWindow == NULL )
 		return FALSE;
 
-	#define STYLE_DEFAULT com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT
-	#define STYLE_MEDIUM  com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM
-	#define STYLE_LARGE   com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE
+	#define SPACING_DEFAULT com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_DEFAULT
+	#define SPACING_MEDIUM  com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM
+	#define SPACING_LARGE   com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE
 
 	bool isMacOS_11_orLater = @available( macOS 11, * );
-	if( !isMacOS_11_orLater && buttonStyle == STYLE_LARGE )
-		buttonStyle = STYLE_MEDIUM;
-	int oldButtonStyle = (nsWindow.toolbar != NULL)
+	if( !isMacOS_11_orLater && buttonsSpacing == SPACING_LARGE )
+		buttonsSpacing = SPACING_MEDIUM;
+	int oldButtonsSpacing = (nsWindow.toolbar != NULL)
 		? ((isMacOS_11_orLater && nsWindow.toolbarStyle == NSWindowToolbarStyleUnified)
-			? STYLE_LARGE 
-			: STYLE_MEDIUM)
-		: STYLE_DEFAULT;
+			? SPACING_LARGE
+			: SPACING_MEDIUM)
+		: SPACING_DEFAULT;
 
-	if( buttonStyle == oldButtonStyle )
+	if( buttonsSpacing == oldButtonsSpacing )
 		return TRUE;
 
 	WindowData* windowData = getWindowData( nsWindow, true );
@@ -153,8 +155,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 		// add/remove toolbar
 		NSToolbar* toolbar = NULL;
-		bool hasToolbar = (buttonStyle != STYLE_DEFAULT);
-		if( hasToolbar ) {
+		bool needsToolbar = (buttonsSpacing != SPACING_DEFAULT);
+		if( needsToolbar ) {
 			toolbar = [NSToolbar new];
 			toolbar.showsBaselineSeparator = NO; // necessary for older macOS versions
 			if( isWindowFullScreen( nsWindow ) )
@@ -163,9 +165,9 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 		nsWindow.toolbar = toolbar;
 
 		if( isMacOS_11_orLater ) {
-			nsWindow.toolbarStyle = (buttonStyle == STYLE_LARGE)
+			nsWindow.toolbarStyle = (buttonsSpacing == SPACING_LARGE)
 				? NSWindowToolbarStyleUnified
-				: (buttonStyle == STYLE_MEDIUM) 
+				: (buttonsSpacing == SPACING_MEDIUM)
 					? NSWindowToolbarStyleUnifiedCompact
 					: NSWindowToolbarStyleAutomatic;
 		}
@@ -178,7 +180,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 		// when window becomes full screen, it is necessary to hide the toolbar
 		// because it otherwise is shown non-transparent and hides Swing components
 		NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
-		if( hasToolbar ) {
+		if( needsToolbar && windowData.willEnterFullScreenObserver == NULL ) {
 //			NSLog( @"add observers %@", nsWindow );
 			windowData.willEnterFullScreenObserver = [center addObserverForName:NSWindowWillEnterFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
@@ -188,25 +190,39 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 						// remembar title bar height so that "main" JToolBar keeps its height in full screen
 						windowData.lastWindowButtonAreaWidth = getWindowButtonAreaWidth( nsWindow );
 						windowData.lastWindowTitleBarHeight = getWindowTitleBarHeight( nsWindow );
-//						NSLog(@"%d %d",windowData.lastWindowButtonAreaWidth,windowData.lastWindowTitleBarHeight);
+//						NSLog( @"%d %d", windowData.lastWindowButtonAreaWidth, windowData.lastWindowTitleBarHeight );
 
 						nsWindow.toolbar.visible = NO;
 					}
 				}];
+
+			windowData.willExitFullScreenObserver = [center addObserverForName:NSWindowWillExitFullScreenNotification
+				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+//					NSLog( @"will exit  full screen %@", nsWindow );
+					if( nsWindow.toolbar != NULL )
+						setWindowButtonsHidden( nsWindow, true );
+				}];
+
 			windowData.didExitFullScreenObserver = [center addObserverForName:NSWindowDidExitFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
 //					NSLog( @"exit  full screen %@", nsWindow );
-					if( nsWindow.toolbar != NULL )
+					if( nsWindow.toolbar != NULL ) {
+						setWindowButtonsHidden( nsWindow, false );
 						nsWindow.toolbar.visible = YES;
+					}
 
 					windowData.lastWindowButtonAreaWidth = 0;
 					windowData.lastWindowTitleBarHeight = 0;
 				}];
-		} else {
+		} else if( !needsToolbar ) {
 //			NSLog( @"remove observers %@", nsWindow );
 			if( windowData.willEnterFullScreenObserver != NULL ) {
 				[center removeObserver:windowData.willEnterFullScreenObserver];
 				windowData.willEnterFullScreenObserver = nil;
+			}
+			if( windowData.willExitFullScreenObserver != NULL ) {
+				[center removeObserver:windowData.willExitFullScreenObserver];
+				windowData.willExitFullScreenObserver = nil;
 			}
 			if( windowData.didExitFullScreenObserver != NULL ) {
 				[center removeObserver:windowData.didExitFullScreenObserver];
@@ -219,6 +235,21 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 	JNI_COCOA_EXIT()
 	return FALSE;
+}
+
+void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden ) {
+	// get buttons
+	NSView* buttons[3] = {
+		[nsWindow standardWindowButton:NSWindowCloseButton],
+		[nsWindow standardWindowButton:NSWindowMiniaturizeButton],
+		[nsWindow standardWindowButton:NSWindowZoomButton]
+	};
+
+	for( int i = 0; i < 3; i++ ) {
+		NSView* button = buttons[i];
+		if( button != NULL )
+			button.hidden = hidden;
+	}
 }
 
 extern "C"

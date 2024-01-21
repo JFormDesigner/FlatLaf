@@ -7,12 +7,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT
-#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_DEFAULT 0L
-#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM
-#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_MEDIUM 1L
-#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE
-#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTON_STYLE_LARGE 2L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_DEFAULT
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_DEFAULT 0L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM 1L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE 2L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
@@ -23,10 +23,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
- * Method:    setWindowButtonStyle
+ * Method:    setWindowButtonsSpacing
  * Signature: (Ljava/awt/Window;I)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonStyle
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonsSpacing
   (JNIEnv *, jclass, jobject, jint);
 
 /*

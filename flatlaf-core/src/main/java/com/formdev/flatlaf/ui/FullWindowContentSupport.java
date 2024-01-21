@@ -48,32 +48,41 @@ class FullWindowContentSupport
 		JRootPane rootPane;
 		Rectangle bounds;
 
-		if( options.startsWith( SystemInfo.isMacOS ? "mac" : "win" ) &&
-			c.isDisplayable() &&
-			(rootPane = SwingUtilities.getRootPane( c )) != null &&
-			(bounds = (Rectangle) rootPane.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS )) != null )
-		{
-			// On macOS, the client property is updated very late when toggling full screen,
-			// which results in "jumping" layout after full screen toggle finished.
-			// To avoid that, get up-to-date buttons bounds from macOS.
-			if( SystemInfo.isMacFullWindowContentSupported && FlatNativeMacLibrary.isLoaded() ) {
-				Rectangle r = FlatNativeMacLibrary.getWindowButtonsBounds( SwingUtilities.windowForComponent( c ) );
-				if( r != null )
-					bounds = r;
-			}
+		if( !options.startsWith( SystemInfo.isMacOS ? "mac" : "win" ) ||
+			!c.isDisplayable() ||
+			(rootPane = SwingUtilities.getRootPane( c )) == null ||
+			(bounds = (Rectangle) rootPane.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS )) == null )
+		  return new Dimension( 0, 0 );
 
-			if( options.length() > 3 ) {
-				if( options.contains( "horizontal" ) )
-					return new Dimension( bounds.width, 0 );
-				if( options.contains( "vertical" ) )
-					return new Dimension( 0, bounds.height );
-			}
-
-			return bounds.getSize();
+		if( options.length() > 3 ) {
+			if( (options.contains( "leftToRight" ) && !c.getComponentOrientation().isLeftToRight()) ||
+				(options.contains( "rightToLeft" ) && c.getComponentOrientation().isLeftToRight()) )
+			  return new Dimension( 0, 0 );
 		}
 
-		// default to 0,0
-		return new Dimension();
+		// On macOS, the client property is updated very late when toggling full screen,
+		// which results in "jumping" layout after full screen toggle finished.
+		// To avoid that, get up-to-date buttons bounds from macOS.
+		if( SystemInfo.isMacFullWindowContentSupported && FlatNativeMacLibrary.isLoaded() ) {
+			Rectangle r = FlatNativeMacLibrary.getWindowButtonsBounds( SwingUtilities.windowForComponent( c ) );
+			if( r != null )
+				bounds = r;
+		}
+
+		int width = bounds.width;
+		int height = bounds.height;
+
+		if( options.length() > 3 ) {
+			if( width == 0 && options.contains( "zeroInFullScreen" ) )
+				height = 0;
+
+			if( options.contains( "horizontal" ) )
+				height = 0;
+			if( options.contains( "vertical" ) )
+				width = 0;
+		}
+
+		return new Dimension( width, height );
 	}
 
 	static void registerPlaceholder( JComponent c ) {
@@ -151,14 +160,15 @@ class FullWindowContentSupport
 	}
 
 	static void macUpdateFullWindowContentButtonsBoundsProperty( JRootPane rootPane ) {
-		if( !SystemInfo.isMacFullWindowContentSupported ||
-			!rootPane.isDisplayable() ||
-			!FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) )
-		  return;
+		if( !SystemInfo.isMacFullWindowContentSupported || !rootPane.isDisplayable() )
+			return;
 
-		Rectangle bounds = FlatNativeMacLibrary.isLoaded()
-			? FlatNativeMacLibrary.getWindowButtonsBounds( SwingUtilities.windowForComponent( rootPane ) )
-			: new Rectangle( 68, 28 ); // default size
+		Rectangle bounds = null;
+		if( FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) ) {
+			bounds = FlatNativeMacLibrary.isLoaded()
+				? FlatNativeMacLibrary.getWindowButtonsBounds( SwingUtilities.windowForComponent( rootPane ) )
+				: new Rectangle( 68, 28 ); // default size
+		}
 		rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, bounds );
 	}
 
@@ -166,18 +176,35 @@ class FullWindowContentSupport
 		if( !UIManager.getBoolean( KEY_DEBUG_SHOW_PLACEHOLDERS ) )
 			return;
 
-		int width = c.getWidth() - 1;
-		int height = c.getHeight() - 1;
+		int width = c.getWidth();
+		int height = c.getHeight();
 		if( width <= 0 || height <= 0 )
 			return;
 
+		// draw red figure
 		g.setColor( Color.red );
-		g.drawRect( 0, 0, width, height );
+		debugPaintRect( g, new Rectangle( width, height ) );
+
+		// draw magenta figure if buttons bounds are not equal to placeholder bounds
+		JRootPane rootPane;
+		Rectangle bounds;
+		if( (rootPane = SwingUtilities.getRootPane( c )) != null &&
+			(bounds = (Rectangle) rootPane.getClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS )) != null &&
+			(bounds.width != width || bounds.height != height) )
+		{
+			g.setColor( Color.magenta );
+			debugPaintRect( g, SwingUtilities.convertRectangle( rootPane, bounds, c ) );
+		}
+	}
+
+	private static void debugPaintRect( Graphics g, Rectangle r ) {
+		// draw rectangle
+		g.drawRect( r.x, r.y, r.width - 1, r.height - 1 );
 
 		// draw diagonal cross
 		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
-		g.drawLine( 0, 0, width, height );
-		g.drawLine( 0, height, width, 0 );
+		g.drawLine( r.x, r.y, r.width - 1, r.height - 1 );
+		g.drawLine( r.x, r.height - 1, r.width - 1, r.y );
 		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 }

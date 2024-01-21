@@ -282,20 +282,24 @@ public interface FlatClientProperties
 	 * You're responsible to layout that panel at the top-left or top-right corner,
 	 * depending on platform, where the iconfify/maximize/close buttons are located.
 	 * <p>
-	 * Syntax of the value string is: {@code "win|mac [horizontal|vertical]"}.
+	 * Syntax of the value string is: {@code "win|mac [horizontal|vertical] [zeroInFullScreen] [leftToRight|rightToLeft]"}.
 	 * <p>
 	 * The string must start with {@code "win"} (for Windows or Linux) or
 	 * with {@code "mac"} (for macOS) and specifies the platform where the placeholder
 	 * should be used. On macOS, you need the placeholder in the top-left corner,
-	 * but on Windows/Linux you need it in the top-right corner. So if fullWindowContent mode
-	 * is supported on both platforms, you can add two placeholders to your layout
+	 * but on Windows/Linux you need it in the top-right corner. So if your application supports
+	 * fullWindowContent mode on both platforms, you can add two placeholders to your layout
 	 * and FlatLaf automatically uses only one of them. The other gets size {@code 0,0}.
 	 * <p>
-	 * Optionally, you can append {@code " horizontal"} or {@code " vertical"} to the value string
-	 * to specify that the placeholder preferred size should be limited to one orientation.
-	 * E.g. {@code "win horizontal"} means that the placeholder preferred width is
-	 * equal to iconfify/maximize/close buttons width, but preferred height is zero.
-	 * <p>
+	 * Optionally, you can append following options to the value string (separated by space characters):
+	 * <ul>
+	 *   <li>{@code "horizontal"} - preferred height is zero
+	 *   <li>{@code "vertical"} - preferred width is zero
+	 *   <li>{@code "zeroInFullScreen"} - in full-screen mode on macOS, preferred size is {@code 0,0}
+	 *   <li>{@code "leftToRight"} - in right-to-left component orientation, preferred size is {@code 0,0}
+	 *   <li>{@code "rightToLeft"} - in left-to-right component orientation, preferred size is {@code 0,0}
+	 * </ul>
+	 *
 	 * Example for adding placeholder to top-left corner on macOS:
 	 * <pre>{@code
 	 * JPanel placeholder = new JPanel();
@@ -1350,41 +1354,39 @@ public interface FlatClientProperties
 	//---- macOS --------------------------------------------------------------
 
 	/**
-	 * Specifies the style of macOS window close/minimize/zoom buttons.
-	 * This does not change visual appearance but adds extra space around the buttons.
+	 * Specifies the spacing around the macOS window close/minimize/zoom buttons.
 	 * Useful if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
 	 * is enabled.
 	 * <p>
-	 * (requires macOS 10.14+ or 11+ for style 'large', Java 17+ and client property {@code apple.awt.fullWindowContent} set to {@code true})
+	 * (requires macOS 10.14+ for "medium" spacing and macOS 11+ for "large" spacing, requires Java 17+)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
-	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.lang.Boolean}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong>
-	 *     {@link #MACOS_WINDOW_BUTTON_STYLE_MEDIUM},
-	 *     {@link #MACOS_WINDOW_BUTTON_STYLE_LARGE} (requires macOS 11+) or
-	 *     {@code true} (equal to 'large')
+	 *     {@link #MACOS_WINDOW_BUTTONS_SPACING_MEDIUM} or
+	 *     {@link #MACOS_WINDOW_BUTTONS_SPACING_LARGE} (requires macOS 11+)
 	 *
-	 * @since 3.3
+	 * @since 3.4
 	 */
-	String MACOS_WINDOW_BUTTON_STYLE = "FlatLaf.macOS.windowButtonStyle";
+	String MACOS_WINDOW_BUTTONS_SPACING = "FlatLaf.macOS.windowButtonsSpacing";
 
 	/**
-	 * Add medium space around the macOS window close/minimize/zoom buttons.
+	 * Add medium spacing around the macOS window close/minimize/zoom buttons.
 	 *
-	 * @see #MACOS_WINDOW_BUTTON_STYLE
-	 * @since 3.3
+	 * @see #MACOS_WINDOW_BUTTONS_SPACING
+	 * @since 3.4
 	 */
-	String MACOS_WINDOW_BUTTON_STYLE_MEDIUM = "medium";
+	String MACOS_WINDOW_BUTTONS_SPACING_MEDIUM = "medium";
 
 	/**
-	 * Add large space around the macOS window close/minimize/zoom buttons.
+	 * Add large spacing around the macOS window close/minimize/zoom buttons.
 	 * <p>
-	 * (requires macOS 11+; 'medium' is used on older systems)
+	 * (requires macOS 11+; "medium" is used on older systems)
 	 *
-	 * @see #MACOS_WINDOW_BUTTON_STYLE
-	 * @since 3.3
+	 * @see #MACOS_WINDOW_BUTTONS_SPACING
+	 * @since 3.4
 	 */
-	String MACOS_WINDOW_BUTTON_STYLE_LARGE = "large";
+	String MACOS_WINDOW_BUTTONS_SPACING_LARGE = "large";
 
 
 	//---- helper methods -----------------------------------------------------
