@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.4-SNAPSHOT
+
+#### Fixed bugs
+
+- JIDE CommandMenuBar: Fixed `ClassCastException` when JIDE command bar displays
+  `JideMenu` in popup. (PR #794)
+
+
 ## 3.3
 
 #### New features and improvements
