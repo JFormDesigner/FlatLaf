@@ -377,6 +377,7 @@ LRESULT FlatWndProc::WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lP
 			// (using MONITOR_DEFAULTTONEAREST finds right monitor when restoring from minimized)
 			HMONITOR hMonitor = ::MonitorFromWindow( hwnd, MONITOR_DEFAULTTONEAREST );
 			MONITORINFO monitorInfo{ 0 };
+			monitorInfo.cbSize = sizeof( monitorInfo );
 			::GetMonitorInfo( hMonitor, &monitorInfo );
 
 			// If there's a taskbar on any side of the monitor, reduce our size
@@ -537,7 +538,6 @@ void FlatWndProc::setMenuItemState( HMENU systemMenu, int item, bool enabled ) {
 	MENUITEMINFO mii{ 0 };
 	mii.cbSize = sizeof( mii );
 	mii.fMask = MIIM_STATE;
-	mii.fType = MFT_STRING;
 	mii.fState = enabled ? MF_ENABLED : MF_DISABLED;
 	::SetMenuItemInfo( systemMenu, item, FALSE, &mii );
 }
