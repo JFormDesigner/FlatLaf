@@ -117,13 +117,32 @@ class FlatNativeLibrary
 				if( library.isLoaded() )
 					return library;
 
-				LoggingFacade.INSTANCE.logSevere( "Did not find library " + libraryName + " in java.library.path, using extracted library instead", null );
+				LoggingFacade.INSTANCE.logSevere( "Did not find library '" + System.mapLibraryName( libraryName )
+					+ "' in java.library.path '" + System.getProperty( "java.library.path" )
+					+ "', using extracted library instead", null );
 			} else {
+				// try standard library naming scheme
+				// (same as in flatlaf.jar in package 'com/formdev/flatlaf/natives')
 				File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
 				if( libraryFile.exists() )
 					return new NativeLibrary( libraryFile, true );
 
-				LoggingFacade.INSTANCE.logSevere( "Did not find external library " + libraryFile + ", using extracted library instead", null );
+				// try Maven naming scheme
+				// (see https://www.formdev.com/flatlaf/native-libraries/)
+				String libraryName2 = null;
+				File jarFile = getJarFile();
+				if( jarFile != null ) {
+					libraryName2 = buildLibraryName( jarFile, classifier, ext );
+					File libraryFile2 = new File( libraryPath, libraryName2 );
+					if( libraryFile2.exists() )
+						return new NativeLibrary( libraryFile2, true );
+				}
+
+				LoggingFacade.INSTANCE.logSevere( "Did not find library '"
+					+ libraryFile.getName()
+					+ (libraryName2 != null ? ("' or '" + libraryName2) : "")
+					+ "' in '" + libraryFile.getParentFile().getAbsolutePath()
+					+ "', using extracted library instead", null );
 			}
 		}
 
@@ -151,6 +170,33 @@ class FlatNativeLibrary
 	 *     flatlaf-3.1-linux-x86_64.so
 	 */
 	private static File findLibraryBesideJar( String classifier, String ext ) {
+		// get location of FlatLaf jar (or fat/uber application jar)
+		File jarFile = getJarFile();
+		if( jarFile == null )
+			return null;
+
+		// build library file
+		String libraryName = buildLibraryName( jarFile, classifier, ext );
+		File parent = jarFile.getParentFile();
+
+		// check whether native library exists in same directory as jar
+		File libraryFile = new File( parent, libraryName );
+		if( libraryFile.isFile() )
+			return libraryFile;
+
+		// if jar is in "lib" directory, then also check whether native library exists
+		// in "../bin" directory
+		if( parent.getName().equalsIgnoreCase( "lib" ) ) {
+			libraryFile = new File( parent.getParentFile(), "bin/" + libraryName );
+			if( libraryFile.isFile() )
+				return libraryFile;
+		}
+
+		// native library not found
+		return null;
+	}
+
+	private static File getJarFile() {
 		try {
 			// get location of FlatLaf jar
 			CodeSource codeSource = FlatNativeLibrary.class.getProtectionDomain().getCodeSource();
@@ -168,31 +214,19 @@ class FlatNativeLibrary
 			if( !jarFile.isFile() )
 				return null;
 
-			// build library file
-			String jarName = jarFile.getName();
-			String jarBasename = jarName.substring( 0, jarName.lastIndexOf( '.' ) );
-			File parent = jarFile.getParentFile();
-			String libraryName = jarBasename
-				+ (jarBasename.contains( "flatlaf" ) ? "" : "-flatlaf")
-				+ '-' + classifier + '.' + ext;
-
-			// check whether native library exists in same directory as jar
-			File libraryFile = new File( parent, libraryName );
-			if( libraryFile.isFile() )
-				return libraryFile;
-
-			// if jar is in "lib" directory, then also check whether library exists
-			// in "../bin" directory
-			if( parent.getName().equalsIgnoreCase( "lib" ) ) {
-				libraryFile = new File( parent.getParentFile(), "bin/" + libraryName );
-				if( libraryFile.isFile() )
-					return libraryFile;
-			}
+			return jarFile;
 		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere( ex.getMessage(), ex );
+			return null;
 		}
+	}
 
-		return null;
+	private static String buildLibraryName( File jarFile, String classifier, String ext ) {
+		String jarName = jarFile.getName();
+		String jarBasename = jarName.substring( 0, jarName.lastIndexOf( '.' ) );
+		return jarBasename
+			+ (jarBasename.contains( "flatlaf" ) ? "" : "-flatlaf")
+			+ '-' + classifier + '.' + ext;
 	}
 
 	private static void loadJAWT() {

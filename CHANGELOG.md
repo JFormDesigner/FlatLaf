@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## 3.4-SNAPSHOT
 
+#### New features and improvements
+
+- Native libraries: System property `flatlaf.nativeLibraryPath` now supports
+  loading native libraries named the same as on Maven central. Improved log
+  messages for loading fails.
+
 #### Fixed bugs
 
 - JIDE CommandMenuBar: Fixed `ClassCastException` when JIDE command bar displays
