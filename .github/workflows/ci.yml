@@ -9,6 +9,14 @@ on:
       - '*'
     tags:
       - '[0-9]*'
+    paths-ignore:
+      - '**.md'
+      - '.*'
+      - '**/.settings/**'
+      - 'flatlaf-core/svg/**'
+      - 'flatlaf-testing/dumps/**'
+      - 'flatlaf-testing/misc/**'
+      - 'images/**'
 
 jobs:
   build:

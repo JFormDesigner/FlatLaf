@@ -13,6 +13,8 @@ on:
             - 'flatlaf-natives/**'
             - '.github/workflows/natives.yml'
             - 'gradle/wrapper/gradle-wrapper.properties'
+            - '!**.md'
+            - '!**/.settings/**'
 
 jobs:
     Natives:

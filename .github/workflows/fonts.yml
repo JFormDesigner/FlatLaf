@@ -13,6 +13,8 @@ on:
             - 'flatlaf-fonts/**'
             - '.github/workflows/fonts.yml'
             - 'gradle/wrapper/gradle-wrapper.properties'
+            - '!**.md'
+            - '!**/.settings/**'
 
 jobs:
     Fonts:
