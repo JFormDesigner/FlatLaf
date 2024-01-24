@@ -192,7 +192,8 @@ public class HiDPIUtils
 
 				case "Inter":
 				case "Inter Light":
-				case "Inter Semi Bold":
+				case "Inter Semi Bold":	// Inter v3
+				case "Inter SemiBold":	// Inter v4
 				case "Roboto":
 				case "Roboto Light":
 				case "Roboto Medium":

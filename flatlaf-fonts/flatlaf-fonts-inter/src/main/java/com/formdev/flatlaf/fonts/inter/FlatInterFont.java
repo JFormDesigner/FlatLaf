@@ -117,7 +117,7 @@ public class FlatInterFont
 	 * new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
 	 * }</pre>
 	 */
-	public static final String FAMILY_SEMIBOLD = "Inter Semi Bold";
+	public static final String FAMILY_SEMIBOLD = "Inter SemiBold";
 
 	/**
 	 * Use for {@link #installStyle(String)} to install single font style.
