@@ -1,0 +1,37 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: PR Snapshots
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '.*'
+      - '**/.settings/**'
+      - 'flatlaf-core/svg/**'
+      - 'flatlaf-testing/dumps/**'
+      - 'flatlaf-testing/misc/**'
+      - 'images/**'
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    if: github.repository == 'JFormDesigner/FlatLaf'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: temurin  # pre-installed on ubuntu-latest
+          cache: gradle
+
+      - name: Publish PR snapshot to oss.sonatype.org
+        run: >
+          ./gradlew publish -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
+          -Pgithub.event.pull_request.number=${{ github.event.pull_request.number }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}

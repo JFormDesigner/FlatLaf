@@ -18,6 +18,12 @@ import net.ltgt.gradle.errorprone.errorprone
 
 version = property( if( hasProperty( "release" ) ) "flatlaf.releaseVersion" else "flatlaf.developmentVersion" ) as String
 
+// for PR snapshots change version to 'PR-<pr_number>-SNAPSHOT'
+val pullRequestNumber = findProperty( "github.event.pull_request.number" )
+if( pullRequestNumber != null )
+	version = "PR-${pullRequestNumber}-SNAPSHOT"
+
+
 allprojects {
 	version = rootProject.version
 
