@@ -270,6 +270,80 @@ public interface FlatClientProperties
 	String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption";
 
 
+	//---- Panel --------------------------------------------------------------
+
+	/**
+	 * Marks the panel as placeholder for the iconfify/maximize/close buttons
+	 * in fullWindowContent mode.
+	 * <p>
+	 * If fullWindowContent mode is enabled, the preferred size of the panel is equal
+	 * to the size of the iconfify/maximize/close buttons. Otherwise is is {@code 0,0}.
+	 * <p>
+	 * You're responsible to layout that panel at the top-left or top-right corner,
+	 * depending on platform, where the iconfify/maximize/close buttons are located.
+	 * <p>
+	 * Syntax of the value string is: {@code "win|mac [horizontal|vertical] [zeroInFullScreen] [leftToRight|rightToLeft]"}.
+	 * <p>
+	 * The string must start with {@code "win"} (for Windows or Linux) or
+	 * with {@code "mac"} (for macOS) and specifies the platform where the placeholder
+	 * should be used. On macOS, you need the placeholder in the top-left corner,
+	 * but on Windows/Linux you need it in the top-right corner. So if your application supports
+	 * fullWindowContent mode on both platforms, you can add two placeholders to your layout
+	 * and FlatLaf automatically uses only one of them. The other gets size {@code 0,0}.
+	 * <p>
+	 * Optionally, you can append following options to the value string (separated by space characters):
+	 * <ul>
+	 *   <li>{@code "horizontal"} - preferred height is zero
+	 *   <li>{@code "vertical"} - preferred width is zero
+	 *   <li>{@code "zeroInFullScreen"} - in full-screen mode on macOS, preferred size is {@code 0,0}
+	 *   <li>{@code "leftToRight"} - in right-to-left component orientation, preferred size is {@code 0,0}
+	 *   <li>{@code "rightToLeft"} - in left-to-right component orientation, preferred size is {@code 0,0}
+	 * </ul>
+	 *
+	 * Example for adding placeholder to top-left corner on macOS:
+	 * <pre>{@code
+	 * JPanel placeholder = new JPanel();
+	 * placeholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
+     *
+     * JToolBar toolBar = new JToolBar();
+     * // add tool bar items
+     *
+	 * JPanel toolBarPanel = new JPanel( new BorderLayout() );
+	 * toolBarPanel.add( placeholder, BorderLayout.WEST );
+	 * toolBarPanel.add( toolBar, BorderLayout.CENTER );
+	 *
+	 * frame.getContentPane().add( toolBarPanel, BorderLayout.NORTH );
+	 * }</pre>
+	 *
+	 * Or add placeholder as first item to the tool bar:
+	 * <pre>{@code
+	 * JPanel placeholder = new JPanel();
+	 * placeholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
+	 *
+	 * JToolBar toolBar = new JToolBar();
+	 * toolBar.add( placeholder );
+	 * // add tool bar items
+	 *
+	 * frame.getContentPane().add( toolBar, BorderLayout.NORTH );
+	 * }</pre>
+	 *
+	 * If a tabbed pane is located at the top, you can add the placeholder
+	 * as leading component to that tabbed pane:
+	 * <pre>{@code
+	 * JPanel placeholder = new JPanel();
+	 * placeholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
+	 *
+	 * tabbedPane.putClientProperty( FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, placeholder );
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JPanel}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 *
+	 * @since 3.4
+	 */
+	String FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER = "FlatLaf.fullWindowContent.buttonsPlaceholder";
+
+
 	//---- Popup --------------------------------------------------------------
 
 	/**
@@ -387,6 +461,20 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
+
+	/**
+	 * Contains the current bounds of the iconfify/maximize/close buttons
+	 * (in root pane coordinates) if fullWindowContent mode is enabled.
+	 * Otherwise its value is {@code null}.
+	 * <p>
+	 * <b>Note</b>: Do not set this client property. It is set by FlatLaf.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Rectangle}
+	 *
+	 * @since 3.4
+	 */
+	String FULL_WINDOW_CONTENT_BUTTONS_BOUNDS = "FlatLaf.fullWindowContent.buttonsBounds";
 
 	/**
 	 * Specifies whether the window icon should be shown in the window title bar
@@ -1261,6 +1349,44 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TREE_PAINT_SELECTION = "JTree.paintSelection";
+
+
+	//---- macOS --------------------------------------------------------------
+
+	/**
+	 * Specifies the spacing around the macOS window close/minimize/zoom buttons.
+	 * Useful if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
+	 * is enabled.
+	 * <p>
+	 * (requires macOS 10.14+ for "medium" spacing and macOS 11+ for "large" spacing, requires Java 17+)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #MACOS_WINDOW_BUTTONS_SPACING_MEDIUM} or
+	 *     {@link #MACOS_WINDOW_BUTTONS_SPACING_LARGE} (requires macOS 11+)
+	 *
+	 * @since 3.4
+	 */
+	String MACOS_WINDOW_BUTTONS_SPACING = "FlatLaf.macOS.windowButtonsSpacing";
+
+	/**
+	 * Add medium spacing around the macOS window close/minimize/zoom buttons.
+	 *
+	 * @see #MACOS_WINDOW_BUTTONS_SPACING
+	 * @since 3.4
+	 */
+	String MACOS_WINDOW_BUTTONS_SPACING_MEDIUM = "medium";
+
+	/**
+	 * Add large spacing around the macOS window close/minimize/zoom buttons.
+	 * <p>
+	 * (requires macOS 11+; "medium" is used on older systems)
+	 *
+	 * @see #MACOS_WINDOW_BUTTONS_SPACING
+	 * @since 3.4
+	 */
+	String MACOS_WINDOW_BUTTONS_SPACING_LARGE = "large";
 
 
 	//---- helper methods -----------------------------------------------------

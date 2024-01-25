@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- macOS: Support larger window title bar close/minimize/zoom buttons spacing in
+  [full window content](https://www.formdev.com/flatlaf/macos/#full_window_content)
+  mode and introduced "buttons placeholder". (PR #779)
 - Native libraries: System property `flatlaf.nativeLibraryPath` now supports
   loading native libraries named the same as on Maven central. Improved log
   messages for loading fails.

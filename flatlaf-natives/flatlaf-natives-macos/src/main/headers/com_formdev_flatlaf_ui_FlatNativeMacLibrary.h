@@ -7,6 +7,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_DEFAULT
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_DEFAULT 0L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM 1L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE 2L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
@@ -14,6 +20,38 @@ extern "C" {
  */
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
   (JNIEnv *, jclass, jobject, jfloat, jfloat, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    setWindowButtonsSpacing
+ * Signature: (Ljava/awt/Window;I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonsSpacing
+  (JNIEnv *, jclass, jobject, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    getWindowButtonsBounds
+ * Signature: (Ljava/awt/Window;)Ljava/awt/Rectangle;
+ */
+JNIEXPORT jobject JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWindowButtonsBounds
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    isWindowFullScreen
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWindowFullScreen
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    toggleWindowFullScreen
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_toggleWindowFullScreen
+  (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus
 }

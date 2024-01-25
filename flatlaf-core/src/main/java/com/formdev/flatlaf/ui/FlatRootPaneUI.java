@@ -89,6 +89,7 @@ public class FlatRootPaneUI
 	private LayoutManager oldLayout;
 	private PropertyChangeListener ancestorListener;
 	private ComponentListener componentListener;
+	private ComponentListener macFullWindowContentListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -207,6 +208,9 @@ public class FlatRootPaneUI
 			};
 			root.addPropertyChangeListener( "ancestor", ancestorListener );
 		}
+
+		if( SystemInfo.isMacFullWindowContentSupported )
+			macFullWindowContentListener = FullWindowContentSupport.macInstallListeners( root );
 	}
 
 	@Override
@@ -222,6 +226,11 @@ public class FlatRootPaneUI
 			}
 			root.removePropertyChangeListener( "ancestor", ancestorListener );
 			ancestorListener = null;
+		}
+
+		if( SystemInfo.isMacFullWindowContentSupported ) {
+			FullWindowContentSupport.macUninstallListeners( root, macFullWindowContentListener );
+			macFullWindowContentListener = null;
 		}
 	}
 
@@ -359,6 +368,10 @@ public class FlatRootPaneUI
 					titlePane.titleBarColorsChanged();
 				break;
 
+			case FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS:
+				FullWindowContentSupport.revalidatePlaceholders( rootPane );
+				break;
+
 			case FlatClientProperties.GLASS_PANE_FULL_HEIGHT:
 				rootPane.revalidate();
 				break;
@@ -366,6 +379,50 @@ public class FlatRootPaneUI
 			case FlatClientProperties.WINDOW_STYLE:
 				if( rootPane.isDisplayable() )
 					throw new IllegalComponentStateException( "The client property 'Window.style' must be set before the window becomes displayable." );
+				break;
+
+			case "ancestor":
+				// FlatNativeMacLibrary.setWindowButtonsSpacing() and
+				// FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty()
+				// require a native window, but setting the client properties
+				// "apple.awt.fullWindowContent" or FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING
+				// is usually done before the native window is created
+				// --> try again when native window is created
+				if( !SystemInfo.isMacOS || e.getNewValue() == null )
+					break;
+
+				// fall through
+
+			case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING:
+				if( SystemInfo.isMacOS ) {
+					// set window buttons spacing
+					if( SystemInfo.isJava_17_orLater && rootPane.isDisplayable() && FlatNativeMacLibrary.isLoaded() ) {
+						int buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT;
+						String value = (String) rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING );
+						if( value != null ) {
+							switch( value ) {
+								case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM:
+									buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_MEDIUM;
+									break;
+
+								case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE:
+									buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_LARGE;
+									break;
+							}
+						}
+
+						Window window = SwingUtilities.windowForComponent( rootPane );
+						FlatNativeMacLibrary.setWindowButtonsSpacing( window, buttonsSpacing );
+					}
+
+					// update buttons bounds client property
+					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
+				}
+				break;
+
+			case "apple.awt.fullWindowContent":
+				if( SystemInfo.isMacOS )
+					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
 				break;
 		}
 	}

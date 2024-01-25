@@ -16,7 +16,9 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Rectangle;
 import java.awt.Window;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Native methods for macOS.
@@ -49,8 +51,19 @@ public class FlatNativeMacLibrary
 	 *              method of this class. Otherwise, the native library may not be loaded.
 	 */
 	public static boolean isLoaded() {
-		return FlatNativeLibrary.isLoaded();
+		return SystemInfo.isMacOS && FlatNativeLibrary.isLoaded();
 	}
 
 	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
+
+	/** @since 3.4 */
+	public static final int
+		BUTTONS_SPACING_DEFAULT = 0,
+		BUTTONS_SPACING_MEDIUM = 1,
+		BUTTONS_SPACING_LARGE = 2;
+
+	/** @since 3.4 */ public native static boolean setWindowButtonsSpacing( Window window, int buttonsSpacing );
+	/** @since 3.4 */ public native static Rectangle getWindowButtonsBounds( Window window );
+	/** @since 3.4 */ public native static boolean isWindowFullScreen( Window window );
+	/** @since 3.4 */ public native static boolean toggleWindowFullScreen( Window window );
 }

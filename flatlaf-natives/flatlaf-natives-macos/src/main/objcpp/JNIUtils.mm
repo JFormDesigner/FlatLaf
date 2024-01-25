@@ -21,8 +21,8 @@
  * @author Karl Tauber
  */
 
-jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, const char* fieldSignature ) {
-//	NSLog( @"getFieldID %s %s %s", className, fieldName, fieldSignature );
+jclass findClass( JNIEnv *env, const char* className, bool globalRef ) {
+//	NSLog( @"findClass %s", className );
 
 	jclass cls = env->FindClass( className );
 	if( cls == NULL ) {
@@ -32,7 +32,22 @@ jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, 
 		return NULL;
 	}
 
-	jfieldID fieldID = env->GetFieldID( cls, fieldName, fieldSignature );
+	if( globalRef )
+		cls = reinterpret_cast<jclass>( env->NewGlobalRef( cls ) );
+
+	return cls;
+}
+
+jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, const char* fieldSignature, bool staticField ) {
+//	NSLog( @"getFieldID %s %s %s", className, fieldName, fieldSignature );
+
+	jclass cls = findClass( env, className, false );
+	if( cls == NULL )
+		return NULL;
+
+	jfieldID fieldID = staticField
+		? env->GetStaticFieldID( cls, fieldName, fieldSignature )
+		: env->GetFieldID( cls, fieldName, fieldSignature );
 	if( fieldID == NULL ) {
 		NSLog( @"FlatLaf: failed to lookup field '%s' of type '%s' in class '%s'", fieldName, fieldSignature, className );
 		env->ExceptionDescribe(); // print stack trace
@@ -41,4 +56,23 @@ jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, 
 	}
 
 	return fieldID;
+}
+
+jmethodID getMethodID( JNIEnv *env, jclass cls, const char* methodName, const char* methodSignature, bool staticMethod ) {
+//	NSLog( @"getMethodID %s %s", methodName, methodSignature );
+
+	if( cls == NULL )
+		return NULL;
+
+	jmethodID methodID = staticMethod
+		? env->GetStaticMethodID( cls, methodName, methodSignature )
+		: env->GetMethodID( cls, methodName, methodSignature );
+	if( methodID == NULL ) {
+		NSLog( @"FlatLaf: failed to lookup method '%s' of type '%s'", methodName, methodSignature );
+		env->ExceptionDescribe(); // print stack trace
+		env->ExceptionClear();
+		return NULL;
+	}
+
+	return methodID;
 }
