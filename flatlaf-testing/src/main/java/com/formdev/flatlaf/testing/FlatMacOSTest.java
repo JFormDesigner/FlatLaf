@@ -75,6 +75,14 @@ public class FlatMacOSTest
 		updateNativeButtonBounds();
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( nativeButtonsBoundsField != null )
+			updateNativeButtonBounds();
+	}
+
 	private void fullWindowContentChanged() {
 		getRootPane().putClientProperty( "apple.awt.fullWindowContent", fullWindowContentCheckBox.isSelected() );
 	}

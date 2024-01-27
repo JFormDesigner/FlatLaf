@@ -172,6 +172,13 @@ class FullWindowContentSupport
 		rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, bounds );
 	}
 
+	static void macUninstallFullWindowContentButtonsBoundsProperty( JRootPane rootPane ) {
+		if( !SystemInfo.isMacFullWindowContentSupported )
+			return;
+
+		rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, null );
+	}
+
 	static void debugPaint( Graphics g, JComponent c ) {
 		if( !UIManager.getBoolean( KEY_DEBUG_SHOW_PLACEHOLDERS ) )
 			return;

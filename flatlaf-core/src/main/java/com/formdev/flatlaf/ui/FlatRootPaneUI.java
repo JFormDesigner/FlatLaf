@@ -50,6 +50,7 @@ import javax.swing.plaf.RootPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -107,6 +108,7 @@ public class FlatRootPaneUI
 			installBorder();
 
 		installNativeWindowBorder();
+		macInstallFullWindowContentSupport();
 	}
 
 	protected void installBorder() {
@@ -123,6 +125,7 @@ public class FlatRootPaneUI
 
 		uninstallNativeWindowBorder();
 		uninstallClientDecorations();
+		macUninstallFullWindowContentSupport();
 		rootPane = null;
 	}
 
@@ -324,6 +327,61 @@ public class FlatRootPaneUI
 		titlePane = newTitlePane;
 	}
 
+	private void macInstallFullWindowContentSupport() {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		// set window buttons spacing
+		if( isMacButtonsSpacingSupported() && rootPane.isDisplayable() ) {
+			int buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT;
+			String value = (String) rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING );
+			if( value != null ) {
+				switch( value ) {
+					case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM:
+						buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_MEDIUM;
+						break;
+
+					case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE:
+						buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_LARGE;
+						break;
+				}
+			}
+
+			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow(), buttonsSpacing );
+		}
+
+		// update buttons bounds client property
+		FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
+	}
+
+	private void macUninstallFullWindowContentSupport() {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		// do not uninstall when switching to another FlatLaf theme
+		if( UIManager.getLookAndFeel() instanceof FlatLaf )
+			return;
+
+		// reset window buttons spacing
+		if( isMacButtonsSpacingSupported() )
+			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow(), FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT );
+
+		// remove buttons bounds client property
+		FullWindowContentSupport.macUninstallFullWindowContentButtonsBoundsProperty( rootPane );
+	}
+
+	private boolean isMacButtonsSpacingSupported() {
+		return SystemInfo.isMacOS && SystemInfo.isJava_17_orLater && FlatNativeMacLibrary.isLoaded();
+	}
+
+	private Window getParentWindow() {
+		// not using SwingUtilities.windowForComponent() or SwingUtilities.getWindowAncestor()
+		// here because root panes may be nested and used anywhere (e.g. in JInternalFrame)
+		// but we're only interested in the "root" root pane, which is a direct child of the window
+		Container parent = rootPane.getParent();
+		return (parent instanceof Window) ? (Window) parent : null;
+	}
+
 	@Override
 	public void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
@@ -388,40 +446,16 @@ public class FlatRootPaneUI
 				// "apple.awt.fullWindowContent" or FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING
 				// is usually done before the native window is created
 				// --> try again when native window is created
-				if( !SystemInfo.isMacOS || e.getNewValue() == null )
-					break;
-
-				// fall through
+				if( e.getNewValue() instanceof Window )
+					macInstallFullWindowContentSupport();
+				break;
 
 			case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING:
-				if( SystemInfo.isMacOS ) {
-					// set window buttons spacing
-					if( SystemInfo.isJava_17_orLater && rootPane.isDisplayable() && FlatNativeMacLibrary.isLoaded() ) {
-						int buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT;
-						String value = (String) rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING );
-						if( value != null ) {
-							switch( value ) {
-								case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM:
-									buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_MEDIUM;
-									break;
-
-								case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE:
-									buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_LARGE;
-									break;
-							}
-						}
-
-						Window window = SwingUtilities.windowForComponent( rootPane );
-						FlatNativeMacLibrary.setWindowButtonsSpacing( window, buttonsSpacing );
-					}
-
-					// update buttons bounds client property
-					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
-				}
+				macInstallFullWindowContentSupport();
 				break;
 
 			case "apple.awt.fullWindowContent":
-				if( SystemInfo.isMacOS )
+				if( SystemInfo.isMacFullWindowContentSupported )
 					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
 				break;
 		}
