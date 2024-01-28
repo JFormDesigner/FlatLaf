@@ -16,6 +16,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- macOS: Setting window background (of undecorated window) to translucent color
+  (alpha < 255) did not show the window translucent. (issue #705)
 - JIDE CommandMenuBar: Fixed `ClassCastException` when JIDE command bar displays
   `JideMenu` in popup. (PR #794)
 

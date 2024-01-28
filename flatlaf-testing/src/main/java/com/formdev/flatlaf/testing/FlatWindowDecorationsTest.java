@@ -77,6 +77,14 @@ public class FlatWindowDecorationsTest
 	}
 
 	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( translucentWindowBackgroundCheckBox != null )
+			translucentWindowBackgroundChanged();
+	}
+
+	@Override
 	public void addNotify() {
 		super.addNotify();
 
@@ -234,6 +242,27 @@ public class FlatWindowDecorationsTest
 				((JMenu)c).setOpaque( colorize );
 				c.setBackground( menuBackground );
 			}
+		}
+	}
+
+	private void translucentWindowBackgroundChanged() {
+		boolean selected = translucentWindowBackgroundCheckBox.isSelected();
+		if( selected && !undecoratedCheckBox.isSelected() ) {
+			undecoratedCheckBox.setSelected( true );
+			undecoratedChanged();
+		}
+		undecoratedCheckBox.setEnabled( !selected );
+
+		Color background = selected
+			? new Color( 100, 0, 0, 100 )
+			: UIManager.getColor( "control" );
+
+		Window window = SwingUtilities.windowForComponent( this );
+		window.setBackground( background );
+
+		for( Component c = this; c != null; c = c.getParent() ) {
+			if( c instanceof JComponent )
+				LookAndFeel.installProperty( (JComponent) c, "opaque", !selected );
 		}
 	}
 
@@ -543,6 +572,7 @@ debug*/
 		colorizeTitleBarCheckBox = new JCheckBox();
 		colorizeMenuBarCheckBox = new JCheckBox();
 		colorizeMenusCheckBox = new JCheckBox();
+		translucentWindowBackgroundCheckBox = new JCheckBox();
 		JButton openDialogButton = new JButton();
 		JButton openFrameButton = new JButton();
 		typeNormalRadioButton = new JRadioButton();
@@ -885,6 +915,7 @@ debug*/
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]para" +
 				"[]"));
 
 			//---- unifiedBackgroundCheckBox ----
@@ -906,6 +937,11 @@ debug*/
 			colorizeMenusCheckBox.setText("colorize menus");
 			colorizeMenusCheckBox.addActionListener(e -> colorizeMenus());
 			panel5.add(colorizeMenusCheckBox, "cell 0 3");
+
+			//---- translucentWindowBackgroundCheckBox ----
+			translucentWindowBackgroundCheckBox.setText("translucent window background");
+			translucentWindowBackgroundCheckBox.addActionListener(e -> translucentWindowBackgroundChanged());
+			panel5.add(translucentWindowBackgroundCheckBox, "cell 0 4");
 		}
 		add(panel5, "cell 2 1");
 
@@ -1169,6 +1205,7 @@ debug*/
 	private JCheckBox colorizeTitleBarCheckBox;
 	private JCheckBox colorizeMenuBarCheckBox;
 	private JCheckBox colorizeMenusCheckBox;
+	private JCheckBox translucentWindowBackgroundCheckBox;
 	private JRadioButton typeNormalRadioButton;
 	private JRadioButton typeUtilityRadioButton;
 	private JRadioButton typeSmallRadioButton;

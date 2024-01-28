@@ -30,6 +30,7 @@ import java.awt.LayoutManager2;
 import java.awt.Window;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.function.Function;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -85,6 +86,7 @@ public class FlatRootPaneUI
 	private Object nativeWindowBorderData;
 	private LayoutManager oldLayout;
 	private ComponentListener macFullWindowContentListener;
+	private PropertyChangeListener macWindowBackgroundListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -153,6 +155,8 @@ public class FlatRootPaneUI
 			if( background == null || background instanceof UIResource )
 				parent.setBackground( UIManager.getColor( "control" ) );
 		}
+
+		macClearBackgroundForTranslucentWindow( c );
 	}
 
 	@Override
@@ -174,6 +178,7 @@ public class FlatRootPaneUI
 
 		if( SystemInfo.isMacFullWindowContentSupported )
 			macFullWindowContentListener = FullWindowContentSupport.macInstallListeners( root );
+		macInstallWindowBackgroundListener( root );
 	}
 
 	@Override
@@ -184,6 +189,7 @@ public class FlatRootPaneUI
 			FullWindowContentSupport.macUninstallListeners( root, macFullWindowContentListener );
 			macFullWindowContentListener = null;
 		}
+		macUninstallWindowBackgroundListener( root );
 	}
 
 	/** @since 1.1.2 */
@@ -296,7 +302,7 @@ public class FlatRootPaneUI
 				}
 			}
 
-			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow(), buttonsSpacing );
+			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), buttonsSpacing );
 		}
 
 		// update buttons bounds client property
@@ -313,7 +319,7 @@ public class FlatRootPaneUI
 
 		// reset window buttons spacing
 		if( isMacButtonsSpacingSupported() )
-			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow(), FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT );
+			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT );
 
 		// remove buttons bounds client property
 		FullWindowContentSupport.macUninstallFullWindowContentButtonsBoundsProperty( rootPane );
@@ -323,11 +329,60 @@ public class FlatRootPaneUI
 		return SystemInfo.isMacOS && SystemInfo.isJava_17_orLater && FlatNativeMacLibrary.isLoaded();
 	}
 
-	private Window getParentWindow() {
+	private void macInstallWindowBackgroundListener( JRootPane c ) {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		Window window = getParentWindow( c );
+		if( window != null && macWindowBackgroundListener == null ) {
+			macWindowBackgroundListener = e -> macClearBackgroundForTranslucentWindow( c );
+			window.addPropertyChangeListener( "background", macWindowBackgroundListener );
+		}
+	}
+
+	private void macUninstallWindowBackgroundListener( JRootPane c ) {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		Window window = getParentWindow( c );
+		if( window != null && macWindowBackgroundListener != null ) {
+			window.removePropertyChangeListener( "background", macWindowBackgroundListener );
+			macWindowBackgroundListener = null;
+		}
+	}
+
+	/**
+	 * When setting window background to translucent color (alpha < 255),
+	 * Swing paints that window translucent on Windows and Linux, but not on macOS.
+	 * The reason for this is that FlatLaf sets the background color of the root pane,
+	 * and Swing behaves a bit differently on macOS than on other platforms in that case.
+	 * Other L&Fs do not set root pane background, which is {@code null} by default.
+	 * <p>
+	 * To fix this problem, set the root pane background to {@code null}
+	 * if windows uses a translucent background.
+	 */
+	private void macClearBackgroundForTranslucentWindow( JRootPane c ) {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		Window window = getParentWindow( c );
+		if( window != null ) {
+			Color windowBackground = window.getBackground();
+			if( windowBackground != null &&
+				windowBackground.getAlpha() < 255 &&
+				c.getBackground() instanceof UIResource )
+			{
+				// clear root pane background
+				c.setBackground( null );
+			}
+		}
+	}
+
+	private Window getParentWindow( JRootPane c ) {
 		// not using SwingUtilities.windowForComponent() or SwingUtilities.getWindowAncestor()
 		// here because root panes may be nested and used anywhere (e.g. in JInternalFrame)
 		// but we're only interested in the "root" root pane, which is a direct child of the window
-		Container parent = rootPane.getParent();
+		Container parent = c.getParent();
 		return (parent instanceof Window) ? (Window) parent : null;
 	}
 
@@ -389,6 +444,12 @@ public class FlatRootPaneUI
 				break;
 
 			case "ancestor":
+				if( e.getNewValue() instanceof Window )
+					macClearBackgroundForTranslucentWindow( rootPane );
+
+				macUninstallWindowBackgroundListener( rootPane );
+				macInstallWindowBackgroundListener( rootPane );
+
 				// FlatNativeMacLibrary.setWindowButtonsSpacing() and
 				// FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty()
 				// require a native window, but setting the client properties

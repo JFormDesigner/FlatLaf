@@ -32,8 +32,10 @@ public class FlatTestPanel
 		int width = getWidth();
 		int height = getHeight();
 
-		g.setColor( super.getBackground() );
-		g.fillRect( 0, 0, width, height );
+		if( isOpaque() ) {
+			g.setColor( super.getBackground() );
+			g.fillRect( 0, 0, width, height );
+		}
 
 		if( isPaintBackgroundPattern() ) {
 			g.setColor( Color.magenta );
