@@ -46,7 +46,6 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
-import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -919,70 +918,6 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem2);
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
-
-		//TODO remove
-		backButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE );
-		});
-		forwardButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM );
-		});
-		cutButton.addActionListener( e -> {
-			rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, null );
-		});
-
-		copyButton.addActionListener( e -> System.out.println( e ) );
-		copyButton.addMouseListener( new MouseListener() {
-
-			@Override
-			public void mouseReleased( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m release" );
-			}
-
-			@Override
-			public void mousePressed( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m press" );
-			}
-
-			@Override
-			public void mouseExited( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m exit" );
-			}
-
-			@Override
-			public void mouseEntered( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m ent" );
-			}
-
-			@Override
-			public void mouseClicked( MouseEvent e ) {
-				// TODO Auto-generated method stub
-			System.out.println( "m click" );
-			}
-		} );
-		copyButton.addMouseMotionListener( new MouseMotionListener() {
-
-			@Override
-			public void mouseMoved( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m moved" );
-			}
-
-			@Override
-			public void mouseDragged( MouseEvent e ) {
-				// TODO Auto-generated method stub
-				System.out.println( "m drag" );
-			}
-		} );
-		if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() ) {
-			showToggleButton.addActionListener( e -> {
-				FlatNativeMacLibrary.toggleWindowFullScreen( this );
-			} );
-		}
 
 		// add "Users" button to menubar
 		FlatButton usersButton = new FlatButton();
