@@ -74,7 +74,7 @@ new FormModel {
 					"value": "Center"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "North"
+				"value": "First"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets dialog,hidemode 3"
@@ -115,7 +115,7 @@ new FormModel {
 						"title": "Option Pane"
 					} )
 					add( new FormComponent( "com.formdev.flatlaf.demo.extras.ExtrasPanel" ) {
-						name: "extrasPanel1"
+						name: "extrasPanel"
 					}, new FormLayoutConstraints( null ) {
 						"title": "Extras"
 					} )
@@ -131,19 +131,32 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "South"
+				"value": "Last"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
-				name: "themesPanel"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-					"JavaCodeGenerator.variableModifiers": 0
-				}
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "themesPanelPanel"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "winFullWindowContentButtonsPlaceholder"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
+					name: "themesPanel"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.variableModifiers": 0
+					}
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "East"
+				"value": "After"
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
-				name: "menuBar1"
+				name: "menuBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "fileMenu"
 					"text": "File"

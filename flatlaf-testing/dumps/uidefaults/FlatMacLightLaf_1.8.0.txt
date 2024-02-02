@@ -1278,7 +1278,6 @@ TitlePane.inactiveBackground   #ececec  HSL   0   0  93    javax.swing.plaf.Colo
 TitlePane.inactiveForeground   #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.maximizeIcon         [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
 TitlePane.menuBarEmbedded      true
-TitlePane.menuBarResizeHeight  4
 TitlePane.menuBarTitleGap      40
 TitlePane.menuBarTitleMinimumGap 12
 TitlePane.noIconLeftGap        8

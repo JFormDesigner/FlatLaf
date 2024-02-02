@@ -266,7 +266,9 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 *
 	 * @since 2.5
+	 * @deprecated No longer used since FlatLaf 3.4. Retained for API compatibility.
 	 */
+	@Deprecated
 	String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption";
 
 
@@ -274,7 +276,7 @@ public interface FlatClientProperties
 
 	/**
 	 * Marks the panel as placeholder for the iconfify/maximize/close buttons
-	 * in fullWindowContent mode.
+	 * in fullWindowContent mode. See {@link #FULL_WINDOW_CONTENT}.
 	 * <p>
 	 * If fullWindowContent mode is enabled, the preferred size of the panel is equal
 	 * to the size of the iconfify/maximize/close buttons. Otherwise is is {@code 0,0}.
@@ -461,6 +463,32 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
+
+	/**
+	 * Specifies whether the content pane (and the glass pane) should be extended
+	 * into the window title bar area
+	 * (requires enabled window decorations). Default is {@code false}.
+	 * <p>
+	 * On macOS, use client property {@code apple.awt.fullWindowContent}
+	 * (see <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">macOS Full window content</a>).
+	 * <p>
+	 * Setting this enables/disables full window content
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * If {@code true}, the content pane (and the glass pane) is extended into
+	 * the title bar area. The window icon and title are hidden.
+	 * Only the iconfify/maximize/close buttons stay visible in the upper right corner
+	 * (and overlap the content pane).
+	 * <p>
+	 * The user can left-click-and-drag on the title bar area to move the window,
+	 * except when clicking on a component that processes mouse events (e.g. buttons or menus).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3.4
+	 */
+	String FULL_WINDOW_CONTENT = "FlatLaf.fullWindowContent";
 
 	/**
 	 * Contains the current bounds of the iconfify/maximize/close buttons

@@ -269,15 +269,28 @@ public class FlatRootPaneUI
 
 	// layer title pane under frame content layer to allow placing menu bar over title pane
 	protected final static Integer TITLE_PANE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 1;
+	private final static Integer TITLE_PANE_MOUSE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 2;
+
+	// for fullWindowContent mode, layer title pane over frame content layer to allow placing title bar buttons over content
+	/** @since 3.4 */
+	protected final static Integer TITLE_PANE_FULL_WINDOW_CONTENT_LAYER = JLayeredPane.FRAME_CONTENT_LAYER + 1;
+
+	private Integer getLayerForTitlePane() {
+		return isFullWindowContent( rootPane ) ? TITLE_PANE_FULL_WINDOW_CONTENT_LAYER : TITLE_PANE_LAYER;
+	}
 
 	protected void setTitlePane( FlatTitlePane newTitlePane ) {
 		JLayeredPane layeredPane = rootPane.getLayeredPane();
 
-		if( titlePane != null )
+		if( titlePane != null ) {
 			layeredPane.remove( titlePane );
+			layeredPane.remove( titlePane.mouseLayer );
+		}
 
-		if( newTitlePane != null )
-			layeredPane.add( newTitlePane, TITLE_PANE_LAYER );
+		if( newTitlePane != null ) {
+			layeredPane.add( newTitlePane, getLayerForTitlePane() );
+			layeredPane.add( newTitlePane.mouseLayer, TITLE_PANE_MOUSE_LAYER );
+		}
 
 		titlePane = newTitlePane;
 	}
@@ -430,6 +443,17 @@ public class FlatRootPaneUI
 					titlePane.titleBarColorsChanged();
 				break;
 
+			case FlatClientProperties.FULL_WINDOW_CONTENT:
+				if( titlePane != null ) {
+					rootPane.getLayeredPane().setLayer( titlePane, getLayerForTitlePane() );
+					titlePane.updateIcon();
+					titlePane.updateVisibility();
+					titlePane.updateFullWindowContentButtonsBoundsProperty();
+				}
+				FullWindowContentSupport.revalidatePlaceholders( rootPane );
+				rootPane.revalidate();
+				break;
+
 			case FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS:
 				FullWindowContentSupport.revalidatePlaceholders( rootPane );
 				break;
@@ -471,11 +495,14 @@ public class FlatRootPaneUI
 		}
 	}
 
+	/** @since 3.4 */
+	protected static boolean isFullWindowContent( JRootPane rootPane ) {
+		return FlatClientProperties.clientPropertyBoolean( rootPane, FlatClientProperties.FULL_WINDOW_CONTENT, false );
+	}
+
 	protected static boolean isMenuBarEmbedded( JRootPane rootPane ) {
-		RootPaneUI ui = rootPane.getUI();
-		return ui instanceof FlatRootPaneUI &&
-			((FlatRootPaneUI)ui).titlePane != null &&
-			((FlatRootPaneUI)ui).titlePane.isMenuBarEmbedded();
+		FlatTitlePane titlePane = getTitlePane( rootPane );
+		return titlePane != null && titlePane.isMenuBarEmbedded();
 	}
 
 	/** @since 2.4 */
@@ -511,23 +538,21 @@ public class FlatRootPaneUI
 		private Dimension computeLayoutSize( Container parent, Function<Component, Dimension> getSizeFunc ) {
 			JRootPane rootPane = (JRootPane) parent;
 
-			Dimension titlePaneSize = (titlePane != null)
-				? getSizeFunc.apply( titlePane )
-				: new Dimension();
 			Dimension contentSize = (rootPane.getContentPane() != null)
 				? getSizeFunc.apply( rootPane.getContentPane() )
-				: rootPane.getSize();
+				: rootPane.getSize(); // same as in JRootPane.RootLayout.preferredLayoutSize()
 
 			int width = contentSize.width; // title pane width is not considered here
-			int height = titlePaneSize.height + contentSize.height;
+			int height = contentSize.height;
+			if( titlePane != null && !isFullWindowContent( rootPane ) )
+				height += getSizeFunc.apply( titlePane ).height;
 			if( titlePane == null || !titlePane.isMenuBarEmbedded() ) {
 				JMenuBar menuBar = rootPane.getJMenuBar();
-				Dimension menuBarSize = (menuBar != null && menuBar.isVisible())
-					? getSizeFunc.apply( menuBar )
-					: new Dimension();
-
-				width = Math.max( width, menuBarSize.width );
-				height += menuBarSize.height;
+				if( menuBar != null && menuBar.isVisible() ) {
+					Dimension menuBarSize = getSizeFunc.apply( menuBar );
+					width = Math.max( width, menuBarSize.width );
+					height += menuBarSize.height;
+				}
 			}
 
 			Insets insets = rootPane.getInsets();
@@ -552,12 +577,23 @@ public class FlatRootPaneUI
 			if( rootPane.getLayeredPane() != null )
 				rootPane.getLayeredPane().setBounds( x, y, width, height );
 
-			// title pane
+			// title pane (is a child of layered pane)
 			int nextY = 0;
 			if( titlePane != null ) {
 				int prefHeight = !isFullScreen ? titlePane.getPreferredSize().height : 0;
-				titlePane.setBounds( 0, 0, width, prefHeight );
-				nextY += prefHeight;
+				boolean isFullWindowContent = isFullWindowContent( rootPane );
+				if( isFullWindowContent && !UIManager.getBoolean( FlatTitlePane.KEY_DEBUG_SHOW_RECTANGLES ) ) {
+					// place title bar into top-right corner
+					int tw = Math.min( titlePane.getPreferredSize().width, width );
+					int tx = titlePane.getComponentOrientation().isLeftToRight() ? width - tw : 0;
+					titlePane.setBounds( tx, 0, tw, prefHeight );
+				} else
+					titlePane.setBounds( 0, 0, width, prefHeight );
+
+				titlePane.mouseLayer.setBounds( 0, 0, width, prefHeight );
+
+				if( !isFullWindowContent )
+					nextY += prefHeight;
 			}
 
 			// glass pane
@@ -568,7 +604,7 @@ public class FlatRootPaneUI
 				rootPane.getGlassPane().setBounds( x, y + offset, width, height - offset );
 			}
 
-			// menu bar
+			// menu bar (is a child of layered pane)
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null && menuBar.isVisible() ) {
 				boolean embedded = !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded();
@@ -576,13 +612,23 @@ public class FlatRootPaneUI
 					titlePane.validate();
 					menuBar.setBounds( titlePane.getMenuBarBounds() );
 				} else {
+					int mx = 0;
+					int mw = width;
+					if( titlePane != null && isFullWindowContent( rootPane ) ) {
+						// make menu bar width smaller to avoid that it overlaps title bar buttons
+						int tw = Math.min( titlePane.getPreferredSize().width, width );
+						mw -= tw;
+						if( !titlePane.getComponentOrientation().isLeftToRight() )
+							mx = tw;
+					}
+
 					Dimension prefSize = menuBar.getPreferredSize();
-					menuBar.setBounds( 0, nextY, width, prefSize.height );
+					menuBar.setBounds( mx, nextY, mw, prefSize.height );
 					nextY += prefSize.height;
 				}
 			}
 
-			// content pane
+			// content pane (is a child of layered pane)
 			Container contentPane = rootPane.getContentPane();
 			if( contentPane != null )
 				contentPane.setBounds( 0, nextY, width, Math.max( height - nextY, 0 ) );

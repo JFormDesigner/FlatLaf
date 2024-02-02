@@ -73,6 +73,7 @@ class DemoFrame
 		initComponents();
 		updateFontMenuItems();
 		initAccentColors();
+		initFullWindowContent();
 		controlBar.initialize( this, tabbedPane );
 
 		setIconImages( FlatSVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
@@ -101,9 +102,6 @@ class DemoFrame
 					rootPane.putClientProperty( "apple.awt.windowTitleVisible", false );
 				else
 					setTitle( null );
-
-				// uncomment this line to see title bar buttons placeholders in fullWindowContent mode
-//				UIManager.put( "FlatLaf.debug.panel.showPlaceholders", true );
 			}
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
@@ -463,9 +461,37 @@ class DemoFrame
 			accentColorButtons[i].setVisible( isAccentColorSupported );
 	}
 
+	private void initFullWindowContent() {
+		if( !supportsFlatLafWindowDecorations() )
+			return;
+
+		// create fullWindowContent mode toggle button
+		Icon expandIcon = new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/expand.svg" );
+		Icon collapseIcon = new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/collapse.svg" );
+		JToggleButton fullWindowContentButton = new JToggleButton( expandIcon );
+		fullWindowContentButton.setToolTipText( "Toggle full window content" );
+		fullWindowContentButton.addActionListener( e -> {
+			boolean fullWindowContent = fullWindowContentButton.isSelected();
+			fullWindowContentButton.setIcon( fullWindowContent ? collapseIcon : expandIcon );
+			menuBar.setVisible( !fullWindowContent );
+			toolBar.setVisible( !fullWindowContent );
+			getRootPane().putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT, fullWindowContent );
+		} );
+
+		// add fullWindowContent mode toggle button to tabbed pane
+		JToolBar trailingToolBar = new JToolBar();
+		trailingToolBar.add( Box.createGlue() );
+		trailingToolBar.add( fullWindowContentButton );
+		tabbedPane.putClientProperty( FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingToolBar );
+	}
+
+	private boolean supportsFlatLafWindowDecorations() {
+		return FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated());
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		JMenuBar menuBar1 = new JMenuBar();
+		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
 		JMenuItem openMenuItem = new JMenuItem();
@@ -528,8 +554,10 @@ class DemoFrame
 		DataComponentsPanel dataComponentsPanel = new DataComponentsPanel();
 		TabsPanel tabsPanel = new TabsPanel();
 		OptionPanePanel optionPanePanel = new OptionPanePanel();
-		ExtrasPanel extrasPanel1 = new ExtrasPanel();
+		ExtrasPanel extrasPanel = new ExtrasPanel();
 		controlBar = new ControlBar();
+		JPanel themesPanelPanel = new JPanel();
+		JPanel winFullWindowContentButtonsPlaceholder = new JPanel();
 		themesPanel = new IJThemesPanel();
 
 		//======== this ========
@@ -538,7 +566,7 @@ class DemoFrame
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		//======== menuBar1 ========
+		//======== menuBar ========
 		{
 
 			//======== fileMenu ========
@@ -583,7 +611,7 @@ class DemoFrame
 				exitMenuItem.addActionListener(e -> exitActionPerformed());
 				fileMenu.add(exitMenuItem);
 			}
-			menuBar1.add(fileMenu);
+			menuBar.add(fileMenu);
 
 			//======== editMenu ========
 			{
@@ -636,7 +664,7 @@ class DemoFrame
 				deleteMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(deleteMenuItem);
 			}
-			menuBar1.add(editMenu);
+			menuBar.add(editMenu);
 
 			//======== viewMenu ========
 			{
@@ -736,7 +764,7 @@ class DemoFrame
 				radioButtonMenuItem3.addActionListener(e -> menuItemActionPerformed(e));
 				viewMenu.add(radioButtonMenuItem3);
 			}
-			menuBar1.add(viewMenu);
+			menuBar.add(viewMenu);
 
 			//======== fontMenu ========
 			{
@@ -760,7 +788,7 @@ class DemoFrame
 				decrFontMenuItem.addActionListener(e -> decrFont());
 				fontMenu.add(decrFontMenuItem);
 			}
-			menuBar1.add(fontMenu);
+			menuBar.add(fontMenu);
 
 			//======== optionsMenu ========
 			{
@@ -812,7 +840,7 @@ class DemoFrame
 				showUIDefaultsInspectorMenuItem.addActionListener(e -> showUIDefaultsInspector());
 				optionsMenu.add(showUIDefaultsInspectorMenuItem);
 			}
-			menuBar1.add(optionsMenu);
+			menuBar.add(optionsMenu);
 
 			//======== helpMenu ========
 			{
@@ -825,9 +853,9 @@ class DemoFrame
 				aboutMenuItem.addActionListener(e -> aboutActionPerformed());
 				helpMenu.add(aboutMenuItem);
 			}
-			menuBar1.add(helpMenu);
+			menuBar.add(helpMenu);
 		}
-		setJMenuBar(menuBar1);
+		setJMenuBar(menuBar);
 
 		//======== toolBarPanel ========
 		{
@@ -884,7 +912,7 @@ class DemoFrame
 			}
 			toolBarPanel.add(toolBar, BorderLayout.CENTER);
 		}
-		contentPane.add(toolBarPanel, BorderLayout.NORTH);
+		contentPane.add(toolBarPanel, BorderLayout.PAGE_START);
 
 		//======== contentPanel ========
 		{
@@ -904,13 +932,25 @@ class DemoFrame
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
 				tabbedPane.addTab("Tabs", tabsPanel);
 				tabbedPane.addTab("Option Pane", optionPanePanel);
-				tabbedPane.addTab("Extras", extrasPanel1);
+				tabbedPane.addTab("Extras", extrasPanel);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
 		}
 		contentPane.add(contentPanel, BorderLayout.CENTER);
-		contentPane.add(controlBar, BorderLayout.SOUTH);
-		contentPane.add(themesPanel, BorderLayout.EAST);
+		contentPane.add(controlBar, BorderLayout.PAGE_END);
+
+		//======== themesPanelPanel ========
+		{
+			themesPanelPanel.setLayout(new BorderLayout());
+
+			//======== winFullWindowContentButtonsPlaceholder ========
+			{
+				winFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
+			}
+			themesPanelPanel.add(winFullWindowContentButtonsPlaceholder, BorderLayout.NORTH);
+			themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
+		}
+		contentPane.add(themesPanelPanel, BorderLayout.LINE_END);
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -925,8 +965,8 @@ class DemoFrame
 		usersButton.setButtonType( ButtonType.toolBarButton );
 		usersButton.setFocusable( false );
 		usersButton.addActionListener( e -> JOptionPane.showMessageDialog( null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE ) );
-		menuBar1.add( Box.createGlue() );
-		menuBar1.add( usersButton );
+		menuBar.add( Box.createGlue() );
+		menuBar.add( usersButton );
 
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
@@ -938,7 +978,7 @@ class DemoFrame
 		for( int i = 1; i <= 100; i++ )
 			scrollingPopupMenu.add( "Item " + i );
 
-		if( FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated()) ) {
+		if( supportsFlatLafWindowDecorations() ) {
 			if( SystemInfo.isLinux )
 				unsupported( windowDecorationsCheckBoxMenuItem );
 			else
@@ -959,8 +999,16 @@ class DemoFrame
 		if( "false".equals( System.getProperty( "flatlaf.animatedLafChange" ) ) )
 			animatedLafChangeMenuItem.setSelected( false );
 
+
 		// on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
 		macFullWindowContentButtonsPlaceholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen" );
+
+		// on Windows/Linux, panel above themesPanel is a placeholder for title bar buttons in fullWindowContent mode
+		winFullWindowContentButtonsPlaceholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "win" );
+
+		// uncomment this line to see title bar buttons placeholders in fullWindowContent mode
+//		UIManager.put( "FlatLaf.debug.panel.showPlaceholders", true );
+
 
 		// remove contentPanel bottom insets
 		MigLayout layout = (MigLayout) contentPanel.getLayout();
@@ -982,6 +1030,7 @@ class DemoFrame
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JMenuBar menuBar;
 	private JMenuItem exitMenuItem;
 	private JMenu scrollingPopupMenu;
 	private JMenuItem htmlMenuItem;
