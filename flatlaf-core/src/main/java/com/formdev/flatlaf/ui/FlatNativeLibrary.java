@@ -22,6 +22,7 @@ import java.security.CodeSource;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -224,6 +225,10 @@ class FlatNativeLibrary
 	private static String buildLibraryName( File jarFile, String classifier, String ext ) {
 		String jarName = jarFile.getName();
 		String jarBasename = jarName.substring( 0, jarName.lastIndexOf( '.' ) );
+
+		// remove classifier "no-natives" (if used)
+		jarBasename = StringUtils.removeTrailing( jarBasename, "-no-natives" );
+
 		return jarBasename
 			+ (jarBasename.contains( "flatlaf" ) ? "" : "-flatlaf")
 			+ '-' + classifier + '.' + ext;

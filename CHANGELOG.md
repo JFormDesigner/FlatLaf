@@ -8,9 +8,16 @@ FlatLaf Change Log
 - macOS: Support larger window title bar close/minimize/zoom buttons spacing in
   [full window content](https://www.formdev.com/flatlaf/macos/#full_window_content)
   mode and introduced "buttons placeholder". (PR #779)
-- Native libraries: System property `flatlaf.nativeLibraryPath` now supports
-  loading native libraries named the same as on Maven central. Improved log
-  messages for loading fails.
+- Native libraries:
+  - System property `flatlaf.nativeLibraryPath` now supports loading native
+    libraries named the same as on Maven central.
+  - Published `flatlaf-<version>-no-natives.jar` to Maven Central. This JAR is
+    equal to `flatlaf-<version>.jar`, except that it does not contain the
+    FlatLaf native libraries. The Maven "classifier" to use this JAR is
+    `no-natives`. You need to distribute the FlatLaf native libraries with your
+    application.
+    See https://www.formdev.com/flatlaf/native-libraries/ for more details.
+  - Improved log messages for loading fails.
 - Fonts: Updated **Inter** to
   [v4.0](https://github.com/rsms/inter/releases/tag/v4.0).
 
