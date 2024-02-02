@@ -178,19 +178,37 @@ class FlatNativeLibrary
 
 		// build library file
 		String libraryName = buildLibraryName( jarFile, classifier, ext );
-		File parent = jarFile.getParentFile();
+		File jarDir = jarFile.getParentFile();
 
 		// check whether native library exists in same directory as jar
-		File libraryFile = new File( parent, libraryName );
+		File libraryFile = new File( jarDir, libraryName );
 		if( libraryFile.isFile() )
 			return libraryFile;
 
 		// if jar is in "lib" directory, then also check whether native library exists
 		// in "../bin" directory
-		if( parent.getName().equalsIgnoreCase( "lib" ) ) {
-			libraryFile = new File( parent.getParentFile(), "bin/" + libraryName );
+		if( jarDir.getName().equalsIgnoreCase( "lib" ) ) {
+			libraryFile = new File( jarDir.getParentFile(), "bin/" + libraryName );
 			if( libraryFile.isFile() )
 				return libraryFile;
+		}
+
+		// special case: support Gradle cache when running in development environment
+		//   <user-home>/.gradle/caches/modules-2/files-2.1/com.formdev/flatlaf/<version>/<hash-1>/flatlaf-<version>.jar
+		//   <user-home>/.gradle/caches/modules-2/files-2.1/com.formdev/flatlaf/<version>/<hash-2>/flatlaf-<version>-windows-x86_64.dll
+		String path = jarDir.getAbsolutePath().replace( '\\', '/' );
+		if( path.contains( "/.gradle/caches/" ) ) {
+			File versionDir = jarDir.getParentFile();
+			if( libraryName.contains( versionDir.getName() ) ) {
+				File[] dirs = versionDir.listFiles();
+				if( dirs != null ) {
+					for( File dir : dirs ) {
+						libraryFile = new File( dir, libraryName );
+						if( libraryFile.isFile() )
+							return libraryFile;
+					}
+				}
+			}
 		}
 
 		// native library not found
