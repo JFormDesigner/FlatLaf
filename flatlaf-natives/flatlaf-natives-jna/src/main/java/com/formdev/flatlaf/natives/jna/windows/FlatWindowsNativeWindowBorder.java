@@ -164,7 +164,7 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
-	public void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> hitTestCallback,
+	public void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> captionHitTestCallback,
 		Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
 		Rectangle closeButtonBounds )
 	{
@@ -173,7 +173,7 @@ public class FlatWindowsNativeWindowBorder
 			return;
 
 		wndProc.titleBarHeight = titleBarHeight;
-		wndProc.hitTestCallback = hitTestCallback;
+		wndProc.captionHitTestCallback = captionHitTestCallback;
 		wndProc.appIconBounds = cloneRectange( appIconBounds );
 		wndProc.minimizeButtonBounds = cloneRectange( minimizeButtonBounds );
 		wndProc.maximizeButtonBounds = cloneRectange( maximizeButtonBounds );
@@ -351,7 +351,7 @@ public class FlatWindowsNativeWindowBorder
 
 		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
-		private Predicate<Point> hitTestCallback;
+		private Predicate<Point> captionHitTestCallback;
 		private Rectangle appIconBounds;
 		private Rectangle minimizeButtonBounds;
 		private Rectangle maximizeButtonBounds;
@@ -684,7 +684,7 @@ public class FlatWindowsNativeWindowBorder
 				// that processes mouse events (e.g. buttons, menus, etc)
 				//   - Windows ignores mouse events in this area
 				try {
-					if( hitTestCallback != null && hitTestCallback.test( pt ) )
+					if( captionHitTestCallback != null && !captionHitTestCallback.test( pt ) )
 						return new LRESULT( HTCLIENT );
 				} catch( Throwable ex ) {
 					// ignore

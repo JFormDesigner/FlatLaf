@@ -219,13 +219,13 @@ public class FlatNativeWindowBorder
 	}
 
 	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight,
-		Predicate<Point> hitTestCallback, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
+		Predicate<Point> captionHitTestCallback, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
 		Rectangle maximizeButtonBounds, Rectangle closeButtonBounds )
 	{
 		if( !isSupported() )
 			return;
 
-		nativeProvider.updateTitleBarInfo( window, titleBarHeight, hitTestCallback,
+		nativeProvider.updateTitleBarInfo( window, titleBarHeight, captionHitTestCallback,
 			appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 	}
 
@@ -271,7 +271,7 @@ public class FlatNativeWindowBorder
 	{
 		boolean hasCustomDecoration( Window window );
 		void setHasCustomDecoration( Window window, boolean hasCustomDecoration );
-		void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> hitTestCallback,
+		void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> captionHitTestCallback,
 			Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
 			Rectangle closeButtonBounds );
 

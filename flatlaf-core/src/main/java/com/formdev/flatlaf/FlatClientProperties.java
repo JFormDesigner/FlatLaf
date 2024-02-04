@@ -257,18 +257,39 @@ public interface FlatClientProperties
 	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
 
 	/**
-	 * Specifies whether a component in an embedded menu bar should behave as caption
+	 * Specifies whether a component shown in a window title bar area should behave as caption
 	 * (left-click allows moving window, right-click shows window system menu).
-	 * The component does not receive mouse pressed/released/clicked/dragged events,
+	 * The caption component does not receive mouse pressed/released/clicked/dragged events,
 	 * but it gets mouse entered/exited/moved events.
 	 * <p>
+	 * Since 3.4, this client property also supports using a function that can check
+	 * whether a given location in the component should behave as caption.
+	 * Useful for components that do not use mouse input on whole component bounds.
+	 *
+	 * <pre>{@code
+	 * myComponent.putClientProperty( "JComponent.titleBarCaption",
+	 *     (Function<Point, Boolean>) pt -> {
+	 *         // parameter pt contains mouse location (in myComponent coordinates)
+	 *         // return true if the component is not interested in mouse input at the given location
+	 *         // return false if the component wants process mouse input at the given location
+	 *         // return null if the component children should be checked
+	 *         return ...; // check here
+	 *     } );
+	 * }</pre>
+	 * <b>Warning</b>:
+	 * <ul>
+	 *   <li>This function is invoked often when mouse is moved over window title bar area
+	 *       and should therefore return quickly.
+	 *   <li>This function is invoked on 'AWT-Windows' thread (not 'AWT-EventQueue' thread)
+	 *       while processing Windows messages.
+	 *       It <b>must not</b> change any component property or layout because this could cause a dead lock.
+	 * </ul>
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 * <strong>Value type</strong> {@link java.lang.Boolean} or {@link java.util.function.Function}&lt;Point, Boolean&gt;
 	 *
 	 * @since 2.5
-	 * @deprecated No longer used since FlatLaf 3.4. Retained for API compatibility.
 	 */
-	@Deprecated
 	String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption";
 
 

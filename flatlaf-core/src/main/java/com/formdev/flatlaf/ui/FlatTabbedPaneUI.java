@@ -182,7 +182,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
-	implements StyleableUI
+	implements StyleableUI, FlatTitlePane.TitleBarCaptionHitTest
 {
 	// tab type
 	/** @since 2 */ protected static final int TAB_TYPE_UNDERLINED = 0;
@@ -2298,6 +2298,17 @@ debug*/
 	private int rectsTotalHeight() {
 		int last = rects.length - 1;
 		return (rects[last].y + rects[last].height) - rects[0].y;
+	}
+
+	//---- interface FlatTitlePane.TitleBarCaptionHitTest ----
+
+	/** @since 3.4 */
+	@Override
+	public Boolean isTitleBarCaptionAt( int x, int y ) {
+		if( tabForCoordinate( tabPane, x, y ) >= 0 )
+			return false;
+
+		return null; // check children
 	}
 
 	//---- class TabCloseButton -----------------------------------------------

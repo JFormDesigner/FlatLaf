@@ -49,6 +49,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -65,6 +66,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
+import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder.WindowTopBorder;
@@ -314,7 +316,7 @@ public class FlatTitlePane
 				}
 
 				// clear hit-test cache
-				lastHitTestTime = 0;
+				lastCaptionHitTestTime = 0;
 			}
 		} );
 
@@ -1004,10 +1006,10 @@ public class FlatTitlePane
 		Rectangle closeButtonBounds = boundsInWindow( closeButton );
 
 		// clear hit-test cache
-		lastHitTestTime = 0;
+		lastCaptionHitTestTime = 0;
 
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
-			this::hitTest, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
+			this::captionHitTest, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 
 		debugTitleBarHeight = titleBarHeight;
 		debugAppIconBounds = appIconBounds;
@@ -1024,18 +1026,8 @@ public class FlatTitlePane
 			: null;
 	}
 
-	protected Rectangle getNativeHitTestSpot( JComponent c ) {
-		Dimension size = c.getSize();
-		if( size.width <= 0 || size.height <= 0 )
-			return null;
-
-		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
-		Rectangle r = new Rectangle( location, size );
-		return r;
-	}
-
 	/**
-	 * Returns wheter there is a component at the given location, that processes
+	 * Returns whether there is a component at the given location, that processes
 	 * mouse events. E.g. buttons, menus, etc.
 	 * <p>
 	 * Note:
@@ -1046,12 +1038,12 @@ public class FlatTitlePane
 	 *       while processing Windows messages.
 	 * </ul>
 	 */
-	private boolean hitTest( Point pt ) {
+	private boolean captionHitTest( Point pt ) {
 		// Windows invokes this method every ~200ms, even if the mouse has not moved
 		long time = System.currentTimeMillis();
-		if( pt.x == lastHitTestX && pt.y == lastHitTestY && time < lastHitTestTime + 300 ) {
-			lastHitTestTime = time;
-			return lastHitTestResult;
+		if( pt.x == lastCaptionHitTestX && pt.y == lastCaptionHitTestY && time < lastCaptionHitTestTime + 300 ) {
+			lastCaptionHitTestTime = time;
+			return lastCaptionHitTestResult;
 		}
 
 		// convert pt from window coordinates to layeredPane coordinates
@@ -1063,35 +1055,70 @@ public class FlatTitlePane
 			y -= c.getY();
 		}
 
-		lastHitTestX = pt.x;
-		lastHitTestY = pt.y;
-		lastHitTestTime = time;
-		lastHitTestResult = isComponentWithMouseListenerAt( layeredPane, x, y );
-		return lastHitTestResult;
+		lastCaptionHitTestX = pt.x;
+		lastCaptionHitTestY = pt.y;
+		lastCaptionHitTestTime = time;
+		lastCaptionHitTestResult = isTitleBarCaptionAt( layeredPane, x, y );
+		return lastCaptionHitTestResult;
 	}
 
-	private boolean isComponentWithMouseListenerAt( Component c, int x, int y ) {
+	private boolean isTitleBarCaptionAt( Component c, int x, int y ) {
 		if( !c.isDisplayable() || !c.isVisible() || !c.contains( x, y ) || c == mouseLayer )
-			return false;
+			return true; // continue checking with next component
 
-		if( c.getMouseListeners().length > 0 ||
-			c.getMouseMotionListeners().length > 0 ||
-			c.getMouseWheelListeners().length > 0 )
-		  return true;
+		if( c.isEnabled() &&
+			(c.getMouseListeners().length > 0 ||
+			 c.getMouseMotionListeners().length > 0) )
+		{
+			if( !(c instanceof JComponent) )
+				return false; // assume that this is not a caption because the component has mouse listeners
 
+			// check client property boolean value
+			Object caption = ((JComponent)c).getClientProperty( COMPONENT_TITLE_BAR_CAPTION );
+			if( caption instanceof Boolean )
+				return (boolean) caption;
+
+			// if component is not fully layouted, do not invoke function
+			// because it is too dangerous that the function tries to layout the component,
+			// which could cause a dead lock
+			if( !c.isValid() )
+				return false; // assume that this is not a caption because the component has mouse listeners
+
+			if( caption instanceof Function ) {
+				// check client property function value
+				@SuppressWarnings( "unchecked" )
+				Function<Point, Boolean> hitTest = (Function<Point, Boolean>) caption;
+				Boolean result = hitTest.apply( new Point( x, y ) );
+				if( result != null )
+					return result;
+			} else {
+				// check component UI
+				ComponentUI ui = JavaCompatibility2.getUI( (JComponent) c );
+				if( !(ui instanceof TitleBarCaptionHitTest) )
+					return false; // assume that this is not a caption because the component has mouse listeners
+
+				Boolean result = ((TitleBarCaptionHitTest)ui).isTitleBarCaptionAt( x, y );
+				if( result != null )
+					return result;
+			}
+
+			// else continue checking children
+		}
+
+		// check children
 		if( c instanceof Container ) {
 			for( Component child : ((Container)c).getComponents() ) {
-				if( isComponentWithMouseListenerAt( child, x - child.getX(), y - child.getY() ) )
-					return true;
+				if( !isTitleBarCaptionAt( child, x - child.getX(), y - child.getY() ) )
+					return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
-	private int lastHitTestX;
-	private int lastHitTestY;
-	private long lastHitTestTime;
-	private boolean lastHitTestResult;
+	private int lastCaptionHitTestX;
+	private int lastCaptionHitTestY;
+	private long lastCaptionHitTestTime;
+	private boolean lastCaptionHitTestResult;
 
 	private int debugTitleBarHeight;
 	private Rectangle debugAppIconBounds;
@@ -1489,5 +1516,28 @@ debug*/
 
 		@Override public void componentMoved( ComponentEvent e ) {}
 		@Override public void componentHidden( ComponentEvent e ) {}
+	}
+
+	//---- interface TitleBarCaptionHitTest -----------------------------------
+
+	/**
+	 * For custom components use {@link FlatClientProperties#COMPONENT_TITLE_BAR_CAPTION}
+	 * instead of this interface.
+	 *
+	 * @since 3.4
+	 */
+	public interface TitleBarCaptionHitTest {
+		/**
+		 * Invoked for a component that is enabled and has mouse listeners,
+		 * to check whether it processes mouse input at the given x/y location.
+		 * Useful for components that do not use mouse input on whole component bounds.
+		 * E.g. a tabbed pane with a few tabs has some empty space beside the tabs
+		 * that can be used to move the window.
+		 *
+		 * @return {@code true} if the component is not interested in mouse input at the given location
+		 *         {@code false} if the component wants process mouse input at the given location
+		 *         {@code null} if the component children should be checked
+		 */
+		Boolean isTitleBarCaptionAt( int x, int y );
 	}
 }
