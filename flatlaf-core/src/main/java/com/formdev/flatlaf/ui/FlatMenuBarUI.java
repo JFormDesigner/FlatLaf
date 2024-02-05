@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -39,7 +38,6 @@ import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
@@ -144,12 +142,10 @@ public class FlatMenuBarUI
 	protected void installKeyboardActions() {
 		super.installKeyboardActions();
 
+		// get shared action map, used for all menu bars
 		ActionMap map = SwingUtilities.getUIActionMap( menuBar );
-		if( map == null ) {
-			map = new ActionMapUIResource();
-			SwingUtilities.replaceUIActionMap( menuBar, map );
-		}
-		map.put( "takeFocus", new TakeFocus() );
+		if( map != null && !(map.get( "takeFocus" ) instanceof TakeFocusAction) )
+			map.put( "takeFocus", new TakeFocusAction( "takeFocus" ) );
 	}
 
 	/** @since 2 */
@@ -365,16 +361,20 @@ public class FlatMenuBarUI
 		}
 	}
 
-	//---- class TakeFocus ----------------------------------------------------
+	//---- class TakeFocusAction ----------------------------------------------
 
 	/**
 	 * Activates the menu bar and shows mnemonics.
 	 * On Windows, the popup of the first menu is not shown.
 	 * On other platforms, the popup of the first menu is shown.
 	 */
-	private static class TakeFocus
-		extends AbstractAction
+	private static class TakeFocusAction
+		extends FlatUIAction
 	{
+		TakeFocusAction( String name ) {
+			super( name );
+		}
+
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			JMenuBar menuBar = (JMenuBar) e.getSource();
