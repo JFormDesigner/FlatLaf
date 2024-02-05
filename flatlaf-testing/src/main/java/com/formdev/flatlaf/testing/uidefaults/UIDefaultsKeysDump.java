@@ -68,6 +68,20 @@ public class UIDefaultsKeysDump
 		collectKeys( FlatDarculaLaf.class.getName(), keys );
 		collectKeys( FlatTestLaf.class.getName(), keys );
 
+		// remove unused keys (defined in BasicLookAndFeel)
+		keys.remove( "Button.textIconGap" );
+		keys.remove( "Button.textShiftOffset" );
+		keys.remove( "CheckBox.textIconGap" );
+		keys.remove( "CheckBox.textShiftOffset" );
+		keys.remove( "RadioButton.textIconGap" );
+		keys.remove( "RadioButton.textShiftOffset" );
+		keys.remove( "TabbedPane.contentOpaque" );
+		keys.remove( "TabbedPane.selectedTabPadInsets" );
+		keys.remove( "TabbedPane.shadow" );
+		keys.remove( "TabbedPane.tabsOverlapBorder" );
+		keys.remove( "ToggleButton.textIconGap" );
+		keys.remove( "ToggleButton.textShiftOffset" );
+
 		// write key file
 		try( Writer fileWriter = new BufferedWriter( new OutputStreamWriter(
 			new FileOutputStream( keysFile ), StandardCharsets.UTF_8 ) ) )

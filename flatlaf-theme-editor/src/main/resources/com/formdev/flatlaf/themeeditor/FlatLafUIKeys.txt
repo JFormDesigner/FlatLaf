@@ -64,8 +64,6 @@ Button.selectedForeground
 Button.shadow
 Button.startBackground
 Button.startBorderColor
-Button.textIconGap
-Button.textShiftOffset
 Button.toolbar.disabledSelectedBackground
 Button.toolbar.disabledSelectedForeground
 Button.toolbar.hoverBackground
@@ -149,8 +147,6 @@ CheckBox.icon[filled].selectedBorderColor
 CheckBox.icon[filled].selectedBorderWidth
 CheckBox.margin
 CheckBox.rollover
-CheckBox.textIconGap
-CheckBox.textShiftOffset
 CheckBoxMenuItem.acceleratorForeground
 CheckBoxMenuItem.acceleratorSelectionForeground
 CheckBoxMenuItem.arrowIcon
@@ -655,8 +651,6 @@ RadioButton.light
 RadioButton.margin
 RadioButton.rollover
 RadioButton.shadow
-RadioButton.textIconGap
-RadioButton.textShiftOffset
 RadioButtonMenuItem.acceleratorForeground
 RadioButtonMenuItem.acceleratorSelectionForeground
 RadioButtonMenuItem.arrowIcon
@@ -855,7 +849,6 @@ TabbedPane.closePressedBackground
 TabbedPane.closePressedForeground
 TabbedPane.closeSize
 TabbedPane.contentAreaColor
-TabbedPane.contentOpaque
 TabbedPane.contentSeparatorHeight
 TabbedPane.darkShadow
 TabbedPane.disabledForeground
@@ -881,9 +874,7 @@ TabbedPane.selectedBackground
 TabbedPane.selectedForeground
 TabbedPane.selectedInsets
 TabbedPane.selectedLabelShift
-TabbedPane.selectedTabPadInsets
 TabbedPane.selectionFollowsFocus
-TabbedPane.shadow
 TabbedPane.showTabSeparators
 TabbedPane.tabAlignment
 TabbedPane.tabArc
@@ -901,7 +892,6 @@ TabbedPane.tabSeparatorsFullHeight
 TabbedPane.tabType
 TabbedPane.tabWidthMode
 TabbedPane.tabsOpaque
-TabbedPane.tabsOverlapBorder
 TabbedPane.tabsPopupPolicy
 TabbedPane.textIconGap
 TabbedPane.underlineColor
@@ -1130,8 +1120,6 @@ ToggleButton.tab.selectedBackground
 ToggleButton.tab.selectedForeground
 ToggleButton.tab.underlineColor
 ToggleButton.tab.underlineHeight
-ToggleButton.textIconGap
-ToggleButton.textShiftOffset
 ToggleButton.toolbar.disabledSelectedBackground
 ToggleButton.toolbar.disabledSelectedForeground
 ToggleButton.toolbar.hoverBackground
