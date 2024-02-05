@@ -41,6 +41,8 @@ dependencies {
 	implementation( libs.jide.oss )
 	implementation( libs.glazedlists )
 	implementation( libs.netbeans.api.awt )
+
+	components.all<TargetJvmVersion8Rule>()
 }
 
 applyLafs()
@@ -56,5 +58,15 @@ fun applyLafs() {
 		val parts = value.split( ';' )
 		if( parts.size >= 3 )
 			dependencies.implementation( parts[2] )
+	}
+}
+
+// rule that overrides 'org.gradle.jvm.version' with '8'
+// (required for Radiance, which requires Java 9, but FlatLaf build uses Java 8)
+abstract class TargetJvmVersion8Rule : ComponentMetadataRule {
+	override fun execute( context: ComponentMetadataContext ) {
+		context.details.allVariants {
+			attributes.attribute( TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8 )
+		}
 	}
 }

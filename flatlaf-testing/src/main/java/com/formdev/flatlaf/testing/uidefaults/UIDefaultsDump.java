@@ -119,10 +119,9 @@ public class UIDefaultsDump
 //
 //		dump( "com.jgoodies.looks.plastic.PlasticLookAndFeel", dir, false );
 //		dump( "com.jgoodies.looks.windows.WindowsLookAndFeel", dir, false );
-//		dump( "com.alee.laf.WebLookAndFeel", dir, false );
 //		try {
-//			EventQueue.invokeAndWait( () -> {
-//				dump( "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel", dir, false );
+//			SwingUtilities.invokeAndWait( () -> {
+//				dump( "org.pushingpixels.radiance.theming.api.skin.RadianceGraphiteAquaLookAndFeel", dir, false );
 //			} );
 //		} catch( Exception ex ) {
 //			// TODO Auto-generated catch block
@@ -673,7 +672,7 @@ public class UIDefaultsDump
 
 			switch( borderClassName ) {
 				case "com.apple.laf.AquaToolBarUI$ToolBarBorder":
-				case "org.pushingpixels.substance.internal.utils.border.SubstanceToolBarBorder":
+				case "org.pushingpixels.radiance.theming.internal.utils.border.RadianceToolBarBorder":
 					c = new JToolBar();
 					break;
 
