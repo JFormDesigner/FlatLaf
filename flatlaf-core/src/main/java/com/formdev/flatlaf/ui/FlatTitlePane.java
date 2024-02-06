@@ -359,11 +359,14 @@ public class FlatTitlePane
 			buttonPanel.add( maximizeButton );
 			buttonPanel.add( restoreButton );
 		}
-		buttonPanel.addComponentListener( new ComponentAdapter() {
+		buttonPanel.add( closeButton );
+
+		ComponentListener l = new ComponentAdapter() {
 			@Override public void componentResized( ComponentEvent e ) { updateFullWindowContentButtonsBoundsProperty(); }
 			@Override public void componentMoved( ComponentEvent e ) { updateFullWindowContentButtonsBoundsProperty(); }
-		} );
-		buttonPanel.add( closeButton );
+		};
+		buttonPanel.addComponentListener( l );
+		addComponentListener( l );
 	}
 
 	protected JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
