@@ -1,0 +1,37 @@
+JFDML JFormDesigner: "8.2.0.0.331" Java: "21" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[][grow]"
+			"$rowConstraints": "[top]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "colorChooserLabel"
+				"text": "JColorChooser:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel2"
+				"border": new javax.swing.border.MatteBorder( 4, 4, 4, 4, sfield java.awt.Color red )
+				add( new FormComponent( "javax.swing.JColorChooser" ) {
+					name: "colorChooser1"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 790, 790 )
+		} )
+	}
+}
