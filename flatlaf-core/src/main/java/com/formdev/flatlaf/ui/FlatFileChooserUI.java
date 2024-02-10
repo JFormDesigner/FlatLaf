@@ -429,7 +429,7 @@ public class FlatFileChooserUI
 			iconFunction = (Function<File, Icon>) UIManager.get( "FileChooser.shortcuts.iconFunction" );
 
 			FileSystemView fsv = fc.getFileSystemView();
-			File[] files = getChooserShortcutPanelFiles( fsv );
+			File[] files = JavaCompatibility2.getChooserShortcutPanelFiles( fsv );
 			if( filesFunction != null )
 				files = filesFunction.apply( files );
 
@@ -496,32 +496,6 @@ public class FlatFileChooserUI
 			button.setPreferredSize( buttonSize );
 			button.setMaximumSize( buttonSize );
 			return button;
-		}
-
-		protected File[] getChooserShortcutPanelFiles( FileSystemView fsv ) {
-			try {
-				if( SystemInfo.isJava_12_orLater ) {
-					Method m = fsv.getClass().getMethod( "getChooserShortcutPanelFiles" );
-					File[] files = (File[]) m.invoke( fsv );
-
-					// on macOS and Linux, files consists only of the user home directory
-					if( files.length == 1 && files[0].equals( new File( System.getProperty( "user.home" ) ) ) )
-						files = new File[0];
-
-					return files;
-				} else if( SystemInfo.isWindows ) {
-					Class<?> cls = Class.forName( "sun.awt.shell.ShellFolder" );
-					Method m = cls.getMethod( "get", String.class );
-					return (File[]) m.invoke( null, "fileChooserShortcutPanelFolders" );
-				}
-			} catch( IllegalAccessException ex ) {
-				// do not log because access may be denied via VM option '--illegal-access=deny'
-			} catch( Exception ex ) {
-				LoggingFacade.INSTANCE.logSevere( null, ex );
-			}
-
-			// fallback
-			return new File[0];
 		}
 
 		protected String getDisplayName( FileSystemView fsv, File file ) {
