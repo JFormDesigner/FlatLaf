@@ -21,12 +21,15 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.function.Function;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatFileChooserHomeFolderIcon;
 import com.formdev.flatlaf.ui.JavaCompatibility2;
 import net.miginfocom.swing.*;
@@ -74,6 +77,7 @@ public class FlatFileChooserTest
 
 		dialogTypeField.init( DialogType.class, false );
 		fileSelectionModeField.init( FileSelectionMode.class, false );
+		localesField.init( Locales.class, false );
 
 		showControlButtonsCheckBox.setSelected( fileChooser1.getControlButtonsAreShown() );
 		multiSelectionCheckBox.setSelected( fileChooser1.isMultiSelectionEnabled() );
@@ -153,7 +157,8 @@ public class FlatFileChooserTest
 
 	private final FileFilter TEXT_FILTER = new FileNameExtensionFilter( "Text Files", "txt", "md" );
 	private final FileFilter IMAGES_FILTER = new FileNameExtensionFilter( "Images", "png", "git", "jpg", "jpeg" );
-	private final FileFilter LONG_DESC_FILTER = new FileNameExtensionFilter( "Some long description (.png, .gif, .jpg, .svg)", "png", "gif", "jpg", "jpeg" );
+	private final FileFilter LONG_DESC_FILTER = new FileNameExtensionFilter( "Some long description (.abc, .def, .ghi, .jkl)", "dummy" );
+	private final FileFilter EXTRA_LONG_DESC_FILTER = new FileNameExtensionFilter( "Some super extra long description (.abc, .def, .ghi, .jkl, .mno, .pqr, .stu)", "dummy" );
 
 	private void filterChanged() {
 		boolean all = filterAllFilesCheckBox.isSelected();
@@ -163,6 +168,7 @@ public class FlatFileChooserTest
 		addRemoveFilter( filterTextFilesCheckBox.isSelected(), TEXT_FILTER );
 		addRemoveFilter( filterImagesCheckBox.isSelected(), IMAGES_FILTER );
 		addRemoveFilter( filterLongDescCheckBox.isSelected(), LONG_DESC_FILTER );
+		addRemoveFilter( filterExtraLongDescCheckBox.isSelected(), EXTRA_LONG_DESC_FILTER );
 	}
 
 	private void addRemoveFilter( boolean add, FileFilter filter ) {
@@ -170,6 +176,25 @@ public class FlatFileChooserTest
 			fileChooser1.addChoosableFileFilter( filter );
 		else
 			fileChooser1.removeChoosableFileFilter( filter );
+	}
+
+	private void localesChanged() {
+		Locales value = localesField.getSelectedValue();
+		Locale locale = (value != null) ? value.value : Locale.ENGLISH;
+
+		SwingUtilities.invokeLater( () -> {
+			Locale.setDefault( locale );
+			JComponent.setDefaultLocale( locale );
+			fileChooser1.setLocale( locale );
+			ResourceBundle.clearCache();
+
+			try {
+				UIManager.setLookAndFeel( UIManager.getLookAndFeel().getClass().getName() );
+				FlatLaf.updateUI();
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+			}
+		} );
 	}
 
 	private void printShortcutFiles() {
@@ -232,9 +257,12 @@ public class FlatFileChooserTest
 		filterTextFilesCheckBox = new JCheckBox();
 		filterImagesCheckBox = new JCheckBox();
 		filterLongDescCheckBox = new JCheckBox();
+		filterExtraLongDescCheckBox = new JCheckBox();
 		printShortcutFilesButton = new JButton();
 		printComboBoxFilesButton = new JButton();
 		printRootsButton = new JButton();
+		JLabel localesLabel = new JLabel();
+		localesField = new FlatTestEnumSelector<>();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JLabel label3 = new JLabel();
@@ -256,6 +284,7 @@ public class FlatFileChooserTest
 			"[grow]",
 			// rows
 			"[grow,fill]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -375,6 +404,11 @@ public class FlatFileChooserTest
 		filterLongDescCheckBox.addActionListener(e -> filterChanged());
 		add(filterLongDescCheckBox, "cell 1 6 2 1");
 
+		//---- filterExtraLongDescCheckBox ----
+		filterExtraLongDescCheckBox.setText("Extra Long description");
+		filterExtraLongDescCheckBox.addActionListener(e -> filterChanged());
+		add(filterExtraLongDescCheckBox, "cell 1 6 2 1");
+
 		//---- printShortcutFilesButton ----
 		printShortcutFilesButton.setText("Print Shortcut Files");
 		printShortcutFilesButton.addActionListener(e -> printShortcutFiles());
@@ -390,49 +424,57 @@ public class FlatFileChooserTest
 		printRootsButton.addActionListener(e -> printRoots());
 		add(printRootsButton, "cell 1 7 2 1");
 
+		//---- localesLabel ----
+		localesLabel.setText("Locales:");
+		add(localesLabel, "cell 0 8");
+
+		//---- localesField ----
+		localesField.addActionListener(e -> localesChanged());
+		add(localesField, "cell 1 8 2 1");
+
 		//---- label1 ----
 		label1.setText("icons:");
-		add(label1, "cell 0 8");
+		add(label1, "cell 0 9");
 
 		//---- label2 ----
 		label2.setIcon(UIManager.getIcon("FileView.directoryIcon"));
-		add(label2, "cell 1 8 2 1");
+		add(label2, "cell 1 9 2 1");
 
 		//---- label3 ----
 		label3.setIcon(UIManager.getIcon("FileView.fileIcon"));
-		add(label3, "cell 1 8 2 1");
+		add(label3, "cell 1 9 2 1");
 
 		//---- label4 ----
 		label4.setIcon(UIManager.getIcon("FileView.computerIcon"));
-		add(label4, "cell 1 8 2 1");
+		add(label4, "cell 1 9 2 1");
 
 		//---- label5 ----
 		label5.setIcon(UIManager.getIcon("FileView.hardDriveIcon"));
-		add(label5, "cell 1 8 2 1");
+		add(label5, "cell 1 9 2 1");
 
 		//---- label6 ----
 		label6.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
-		add(label6, "cell 1 8 2 1");
+		add(label6, "cell 1 9 2 1");
 
 		//---- label7 ----
 		label7.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
-		add(label7, "cell 1 8 2 1");
+		add(label7, "cell 1 9 2 1");
 
 		//---- label8 ----
 		label8.setIcon(UIManager.getIcon("FileChooser.upFolderIcon"));
-		add(label8, "cell 1 8 2 1");
+		add(label8, "cell 1 9 2 1");
 
 		//---- label9 ----
 		label9.setIcon(UIManager.getIcon("FileChooser.homeFolderIcon"));
-		add(label9, "cell 1 8 2 1");
+		add(label9, "cell 1 9 2 1");
 
 		//---- label10 ----
 		label10.setIcon(UIManager.getIcon("FileChooser.detailsViewIcon"));
-		add(label10, "cell 1 8 2 1");
+		add(label10, "cell 1 9 2 1");
 
 		//---- label11 ----
 		label11.setIcon(UIManager.getIcon("FileChooser.listViewIcon"));
-		add(label11, "cell 1 8 2 1");
+		add(label11, "cell 1 9 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -453,9 +495,11 @@ public class FlatFileChooserTest
 	private JCheckBox filterTextFilesCheckBox;
 	private JCheckBox filterImagesCheckBox;
 	private JCheckBox filterLongDescCheckBox;
+	private JCheckBox filterExtraLongDescCheckBox;
 	private JButton printShortcutFilesButton;
 	private JButton printComboBoxFilesButton;
 	private JButton printRootsButton;
+	private FlatTestEnumSelector<Locales> localesField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- enum DialogType ----------------------------------------------------
@@ -482,6 +526,30 @@ public class FlatFileChooserTest
 		public final int value;
 
 		FileSelectionMode( int value ) {
+			this.value = value;
+		}
+	}
+
+	//---- enum Locales -------------------------------------------------------
+
+	// locales supported by Swing
+	// (see https://github.com/openjdk/jdk/tree/master/src/java.desktop/share/classes/com/sun/swing/internal/plaf/metal/resources)
+	enum Locales {
+		english( Locale.ENGLISH ),
+		german( Locale.GERMAN ),
+		spanish( new Locale( "es" ) ),
+		french( Locale.FRENCH ),
+		italian( Locale.ITALIAN ),
+		japanese( Locale.JAPANESE ),
+		korean( Locale.KOREAN ),
+		brazilian_portuguese( new Locale( "pt", "BR" ) ),
+		swedish( new Locale( "sv" ) ),
+		simplified_chinese( Locale.SIMPLIFIED_CHINESE ),
+		traditional_chinese( Locale.TRADITIONAL_CHINESE );
+
+		public final Locale value;
+
+		Locales( Locale value ) {
 			this.value = value;
 		}
 	}
