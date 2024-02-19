@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.3
+#Version 3.4
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -12,7 +12,13 @@ fld public final static java.lang.String BUTTON_TYPE_TOOLBAR_BUTTON = "toolBarBu
 fld public final static java.lang.String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner"
 fld public final static java.lang.String COMPONENT_ROUND_RECT = "JComponent.roundRect"
 fld public final static java.lang.String COMPONENT_TITLE_BAR_CAPTION = "JComponent.titleBarCaption"
+fld public final static java.lang.String FULL_WINDOW_CONTENT = "FlatLaf.fullWindowContent"
+fld public final static java.lang.String FULL_WINDOW_CONTENT_BUTTONS_BOUNDS = "FlatLaf.fullWindowContent.buttonsBounds"
+fld public final static java.lang.String FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER = "FlatLaf.fullWindowContent.buttonsPlaceholder"
 fld public final static java.lang.String GLASS_PANE_FULL_HEIGHT = "JRootPane.glassPaneFullHeight"
+fld public final static java.lang.String MACOS_WINDOW_BUTTONS_SPACING = "FlatLaf.macOS.windowButtonsSpacing"
+fld public final static java.lang.String MACOS_WINDOW_BUTTONS_SPACING_LARGE = "large"
+fld public final static java.lang.String MACOS_WINDOW_BUTTONS_SPACING_MEDIUM = "medium"
 fld public final static java.lang.String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded"
 fld public final static java.lang.String MINIMUM_HEIGHT = "JComponent.minimumHeight"
 fld public final static java.lang.String MINIMUM_WIDTH = "JComponent.minimumWidth"
