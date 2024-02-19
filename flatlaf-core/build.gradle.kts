@@ -78,6 +78,10 @@ tasks {
 		dependsOn( "jarNoNatives" )
 	}
 
+	withType<Sign>().configureEach {
+		dependsOn( "jarNoNatives" )
+	}
+
 	check {
 		dependsOn( "sigtestCheck" )
 	}
