@@ -124,7 +124,7 @@ tasks.withType<Sign>().configureEach {
 }
 
 // check whether parallel build is enabled
-tasks.withType<PublishToMavenRepository>().configureEach {
+tasks.withType<AbstractPublishToMaven>().configureEach {
 	doFirst {
 		if( System.getProperty( "org.gradle.parallel" ) == "true" )
 			throw RuntimeException( "Publishing does not work correctly with enabled parallel build. Disable parallel build with VM option '-Dorg.gradle.parallel=false'." )

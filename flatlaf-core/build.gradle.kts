@@ -74,7 +74,7 @@ tasks {
 		exclude( "com/formdev/flatlaf/natives/**" )
 	}
 
-	withType<PublishToMavenRepository>().configureEach {
+	withType<AbstractPublishToMaven>().configureEach {
 		dependsOn( "jarNoNatives" )
 	}
 
