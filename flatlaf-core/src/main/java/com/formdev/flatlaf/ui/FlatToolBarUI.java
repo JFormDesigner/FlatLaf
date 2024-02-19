@@ -82,7 +82,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
-	implements StyleableUI
+	implements StyleableUI, FlatTitlePane.TitleBarCaptionHitTest
 {
 	/** @since 1.4 */ @Styleable protected boolean focusableButtons;
 	/** @since 2 */ @Styleable protected boolean arrowKeysOnlyNavigation;
@@ -451,6 +451,15 @@ public class FlatToolBarUI
 		return (model instanceof DefaultButtonModel)
 			? ((DefaultButtonModel)model).getGroup()
 			: null;
+	}
+
+	//---- interface FlatTitlePane.TitleBarCaptionHitTest ----
+
+	/** @since 3.4 */
+	@Override
+	public Boolean isTitleBarCaptionAt( int x, int y ) {
+		// necessary because BasicToolBarUI adds some mouse listeners for dragging when toolbar is floatable
+		return null; // check children
 	}
 
 	//---- class FlatToolBarFocusTraversalPolicy ------------------------------

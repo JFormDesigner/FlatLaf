@@ -257,13 +257,36 @@ public interface FlatClientProperties
 	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
 
 	/**
-	 * Specifies whether a component in an embedded menu bar should behave as caption
+	 * Specifies whether a component shown in a window title bar area should behave as caption
 	 * (left-click allows moving window, right-click shows window system menu).
-	 * The component does not receive mouse pressed/released/clicked/dragged events,
+	 * The caption component does not receive mouse pressed/released/clicked/dragged events,
 	 * but it gets mouse entered/exited/moved events.
 	 * <p>
+	 * Since 3.4, this client property also supports using a function that can check
+	 * whether a given location in the component should behave as caption.
+	 * Useful for components that do not use mouse input on whole component bounds.
+	 *
+	 * <pre>{@code
+	 * myComponent.putClientProperty( "JComponent.titleBarCaption",
+	 *     (Function<Point, Boolean>) pt -> {
+	 *         // parameter pt contains mouse location (in myComponent coordinates)
+	 *         // return true if the component is not interested in mouse input at the given location
+	 *         // return false if the component wants process mouse input at the given location
+	 *         // return null if the component children should be checked
+	 *         return ...; // check here
+	 *     } );
+	 * }</pre>
+	 * <b>Warning</b>:
+	 * <ul>
+	 *   <li>This function is invoked often when mouse is moved over window title bar area
+	 *       and should therefore return quickly.
+	 *   <li>This function is invoked on 'AWT-Windows' thread (not 'AWT-EventQueue' thread)
+	 *       while processing Windows messages.
+	 *       It <b>must not</b> change any component property or layout because this could cause a dead lock.
+	 * </ul>
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 * <strong>Value type</strong> {@link java.lang.Boolean} or {@link java.util.function.Function}&lt;Point, Boolean&gt;
 	 *
 	 * @since 2.5
 	 */
@@ -274,7 +297,7 @@ public interface FlatClientProperties
 
 	/**
 	 * Marks the panel as placeholder for the iconfify/maximize/close buttons
-	 * in fullWindowContent mode.
+	 * in fullWindowContent mode. See {@link #FULL_WINDOW_CONTENT}.
 	 * <p>
 	 * If fullWindowContent mode is enabled, the preferred size of the panel is equal
 	 * to the size of the iconfify/maximize/close buttons. Otherwise is is {@code 0,0}.
@@ -461,6 +484,32 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
+
+	/**
+	 * Specifies whether the content pane (and the glass pane) should be extended
+	 * into the window title bar area
+	 * (requires enabled window decorations). Default is {@code false}.
+	 * <p>
+	 * On macOS, use client property {@code apple.awt.fullWindowContent}
+	 * (see <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">macOS Full window content</a>).
+	 * <p>
+	 * Setting this enables/disables full window content
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * If {@code true}, the content pane (and the glass pane) is extended into
+	 * the title bar area. The window icon and title are hidden.
+	 * Only the iconfify/maximize/close buttons stay visible in the upper right corner
+	 * (and overlap the content pane).
+	 * <p>
+	 * The user can left-click-and-drag on the title bar area to move the window,
+	 * except when clicking on a component that processes mouse events (e.g. buttons or menus).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3.4
+	 */
+	String FULL_WINDOW_CONTENT = "FlatLaf.fullWindowContent";
 
 	/**
 	 * Contains the current bounds of the iconfify/maximize/close buttons

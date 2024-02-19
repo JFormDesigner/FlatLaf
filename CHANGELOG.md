@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- FlatLaf window decorations (Windows 10/11 and Linux): Support "full window
+  content" mode, which allows you to extend the content into the window title
+  bar. (PR #801)
 - macOS: Support larger window title bar close/minimize/zoom buttons spacing in
   [full window content](https://www.formdev.com/flatlaf/macos/#full_window_content)
   mode and introduced "buttons placeholder". (PR #779)

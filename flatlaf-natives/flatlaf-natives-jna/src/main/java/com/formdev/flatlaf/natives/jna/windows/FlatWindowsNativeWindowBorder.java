@@ -32,8 +32,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -164,7 +164,7 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
-	public void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+	public void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> captionHitTestCallback,
 		Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
 		Rectangle closeButtonBounds )
 	{
@@ -173,7 +173,7 @@ public class FlatWindowsNativeWindowBorder
 			return;
 
 		wndProc.titleBarHeight = titleBarHeight;
-		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
+		wndProc.captionHitTestCallback = captionHitTestCallback;
 		wndProc.appIconBounds = cloneRectange( appIconBounds );
 		wndProc.minimizeButtonBounds = cloneRectange( minimizeButtonBounds );
 		wndProc.maximizeButtonBounds = cloneRectange( maximizeButtonBounds );
@@ -351,7 +351,7 @@ public class FlatWindowsNativeWindowBorder
 
 		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
-		private Rectangle[] hitTestSpots;
+		private Predicate<Point> captionHitTestCallback;
 		private Rectangle appIconBounds;
 		private Rectangle minimizeButtonBounds;
 		private Rectangle maximizeButtonBounds;
@@ -644,53 +644,65 @@ public class FlatWindowsNativeWindowBorder
 
 			// scale-down mouse x/y because Swing coordinates/values may be scaled on a HiDPI screen
 			Point pt = scaleDown( x, y );
-			int sx = pt.x;
-			int sy = pt.y;
 
 			// return HTSYSMENU if mouse is over application icon
 			//   - left-click on HTSYSMENU area shows system menu
 			//   - double-left-click sends WM_CLOSE
-			if( contains( appIconBounds, sx, sy ) )
+			if( contains( appIconBounds, pt ) )
 				return new LRESULT( HTSYSMENU );
 
 			// return HTMINBUTTON if mouse is over minimize button
 			//   - hovering mouse over HTMINBUTTON area shows tooltip on Windows 10/11
-			if( contains( minimizeButtonBounds, sx, sy ) )
+			if( contains( minimizeButtonBounds, pt ) )
 				return new LRESULT( HTMINBUTTON );
 
 			// return HTMAXBUTTON if mouse is over maximize/restore button
 			//   - hovering mouse over HTMAXBUTTON area shows tooltip on Windows 10
 			//   - hovering mouse over HTMAXBUTTON area shows snap layouts menu on Windows 11
 			//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
-			if( contains( maximizeButtonBounds, sx, sy ) )
+			if( contains( maximizeButtonBounds, pt ) )
 				return new LRESULT( HTMAXBUTTON );
 
 			// return HTCLOSE if mouse is over close button
 			//   - hovering mouse over HTCLOSE area shows tooltip on Windows 10/11
-			if( contains( closeButtonBounds, sx, sy ) )
+			if( contains( closeButtonBounds, pt ) )
 				return new LRESULT( HTCLOSE );
 
 			int resizeBorderHeight = getResizeHandleHeight();
 			boolean isOnResizeBorder = (y < resizeBorderHeight) &&
 				(User32.INSTANCE.GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
-			boolean isOnTitleBar = (sy < titleBarHeight);
 
+			// return HTTOP if mouse is over top resize border
+			//   - hovering mouse shows vertical resize cursor
+			//   - left-click and drag vertically resizes window
+			if( isOnResizeBorder )
+				return new LRESULT( HTTOP );
+
+			boolean isOnTitleBar = (pt.y < titleBarHeight);
 			if( isOnTitleBar ) {
-				// use a second reference to the array to avoid that it can be changed
-				// in another thread while processing the array
-				Rectangle[] hitTestSpots2 = hitTestSpots;
-				for( Rectangle spot : hitTestSpots2 ) {
-					if( spot.contains( sx, sy ) )
+				// return HTCLIENT if mouse is over any Swing component in title bar
+				// that processes mouse events (e.g. buttons, menus, etc)
+				//   - Windows ignores mouse events in this area
+				try {
+					if( captionHitTestCallback != null && !captionHitTestCallback.test( pt ) )
 						return new LRESULT( HTCLIENT );
+				} catch( Throwable ex ) {
+					// ignore
 				}
-				return new LRESULT( isOnResizeBorder ? HTTOP : HTCAPTION );
+
+				// return HTCAPTION if mouse is over title bar
+				//   - right-click shows system menu
+				//   - double-left-click maximizes/restores window size
+				return new LRESULT( HTCAPTION );
 			}
 
-			return new LRESULT( isOnResizeBorder ? HTTOP : HTCLIENT );
+			// return HTCLIENT
+			//   - Windows ignores mouse events in this area
+			return new LRESULT( HTCLIENT );
 		}
 
-		private boolean contains( Rectangle rect, int x, int y ) {
-			return (rect != null && rect.contains( x, y ) );
+		private boolean contains( Rectangle rect, Point pt ) {
+			return (rect != null && rect.contains( pt ) );
 		}
 
 		/**

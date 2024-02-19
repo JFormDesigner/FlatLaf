@@ -1039,7 +1039,6 @@ TitlePane.inactiveBackground
 TitlePane.inactiveForeground
 TitlePane.maximizeIcon
 TitlePane.menuBarEmbedded
-TitlePane.menuBarResizeHeight
 TitlePane.menuBarTitleGap
 TitlePane.menuBarTitleMinimumGap
 TitlePane.noIconLeftGap
@@ -1071,7 +1070,6 @@ TitlePane.small.iconifyIcon
 TitlePane.small.inactiveBackground
 TitlePane.small.inactiveForeground
 TitlePane.small.maximizeIcon
-TitlePane.small.menuBarResizeHeight
 TitlePane.small.menuBarTitleGap
 TitlePane.small.menuBarTitleMinimumGap
 TitlePane.small.noIconLeftGap

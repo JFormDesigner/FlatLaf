@@ -21,11 +21,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
-import java.util.List;
+import java.util.function.Predicate;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
@@ -218,13 +219,13 @@ public class FlatNativeWindowBorder
 	}
 
 	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight,
-		List<Rectangle> hitTestSpots, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
+		Predicate<Point> captionHitTestCallback, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
 		Rectangle maximizeButtonBounds, Rectangle closeButtonBounds )
 	{
 		if( !isSupported() )
 			return;
 
-		nativeProvider.updateTitleBarInfo( window, titleBarHeight, hitTestSpots,
+		nativeProvider.updateTitleBarInfo( window, titleBarHeight, captionHitTestCallback,
 			appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 	}
 
@@ -270,7 +271,7 @@ public class FlatNativeWindowBorder
 	{
 		boolean hasCustomDecoration( Window window );
 		void setHasCustomDecoration( Window window, boolean hasCustomDecoration );
-		void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+		void updateTitleBarInfo( Window window, int titleBarHeight, Predicate<Point> captionHitTestCallback,
 			Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
 			Rectangle closeButtonBounds );
 

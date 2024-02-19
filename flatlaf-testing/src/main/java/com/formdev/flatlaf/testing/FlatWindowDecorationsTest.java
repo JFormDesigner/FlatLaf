@@ -41,6 +41,9 @@ import net.miginfocom.swing.*;
 public class FlatWindowDecorationsTest
 	extends FlatTestPanel
 {
+	// same as in FlatTitlePane
+	private static final String KEY_DEBUG_SHOW_RECTANGLES = "FlatLaf.debug.titlebar.showRectangles";
+
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			if( SystemInfo.isLinux ) {
@@ -51,7 +54,7 @@ public class FlatWindowDecorationsTest
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
 			frame.applyComponentOrientationToFrame = true;
-			UIManager.put( "FlatLaf.debug.titlebar.showRectangles", true );
+			UIManager.put( KEY_DEBUG_SHOW_RECTANGLES, true );
 
 			Class<?> cls = FlatWindowDecorationsTest.class;
 			List<Image> images = Arrays.asList(
@@ -116,6 +119,14 @@ public class FlatWindowDecorationsTest
 			updateDecorationStyleRadioButtons( rootPane );
 			rootPane.addPropertyChangeListener( "windowDecorationStyle", e -> {
 				updateDecorationStyleRadioButtons( rootPane );
+			} );
+			rootPane.addPropertyChangeListener( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, e -> {
+				Rectangle bounds = (Rectangle) e.getNewValue();
+				if( bounds != null ) {
+					fullWindowContentButtonsBoundsField.setText( bounds.width + ", " + bounds.height
+						+ "   @ " + bounds.x + ", " + bounds.y );
+				} else
+					fullWindowContentButtonsBoundsField.setText( "null" );
 			} );
 		}
 	}
@@ -309,9 +320,18 @@ debug*/
 		JLabel caption = new JLabel( "Caption" );
 		caption.setBackground( Color.green );
 		caption.setOpaque( true );
-		caption.putClientProperty( FlatClientProperties.COMPONENT_TITLE_BAR_CAPTION, true );
 
 		menuBar.add( caption );
+		menuBar.revalidate();
+	}
+
+	private void addTextField() {
+		JTextField textField = new JTextField( "text", 10 );
+
+		JPanel panel = new JPanel( new GridBagLayout() );
+		panel.add( textField, new GridBagConstraints() );
+
+		menuBar.add( panel );
 		menuBar.revalidate();
 	}
 
@@ -515,13 +535,31 @@ debug*/
 			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_CLOSE, showCloseCheckBox.isSelected() ? null : false );
 	}
 
+	private void fullWindowContentChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null ) {
+			boolean selected = fullWindowContentCheckBox.isSelected();
+			rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT, selected ? true : null );
+
+			showIconCheckBox.setEnabled( !selected );
+			showTitleCheckBox.setEnabled( !selected );
+		}
+	}
+
 	private JRootPane getWindowRootPane() {
 		Window window = SwingUtilities.windowForComponent( this );
-		if( window instanceof JFrame )
-			return ((JFrame)window).getRootPane();
-		else if( window instanceof JDialog )
-			return ((JDialog)window).getRootPane();
-		return null;
+		return (window instanceof RootPaneContainer)
+			? ((RootPaneContainer)window).getRootPane()
+			: null;
+	}
+
+	private void showRectangles() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null ) {
+			UIManager.put( KEY_DEBUG_SHOW_RECTANGLES, showRectanglesCheckBox.isSelected() );
+			rootPane.revalidate();
+			rootPane.repaint();
+		}
 	}
 
 	private void initComponents() {
@@ -538,6 +576,9 @@ debug*/
 		showIconifyCheckBox = new JCheckBox();
 		showMaximizeCheckBox = new JCheckBox();
 		showCloseCheckBox = new JCheckBox();
+		fullWindowContentCheckBox = new JCheckBox();
+		JLabel fullWindowContentButtonsBoundsLabel = new JLabel();
+		fullWindowContentButtonsBoundsField = new JLabel();
 		JPanel panel6 = new JPanel();
 		menuBarCheckBox = new JCheckBox();
 		menuBarEmbeddedCheckBox = new JCheckBox();
@@ -548,6 +589,7 @@ debug*/
 		addMenuButton = new JButton();
 		addGlueButton = new JButton();
 		addCaptionButton = new JButton();
+		addTextFieldButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
 		changeTitleButton = new JButton();
@@ -578,6 +620,7 @@ debug*/
 		typeNormalRadioButton = new JRadioButton();
 		typeUtilityRadioButton = new JRadioButton();
 		typeSmallRadioButton = new JRadioButton();
+		showRectanglesCheckBox = new JCheckBox();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -616,6 +659,7 @@ debug*/
 			// rows
 			"[fill]" +
 			"[fill]" +
+			"[]" +
 			"[]"));
 
 		//======== panel7 ========
@@ -673,6 +717,8 @@ debug*/
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]rel" +
+				"[]rel" +
 				"[]"));
 
 			//---- showIconCheckBox ----
@@ -703,6 +749,19 @@ debug*/
 			showCloseCheckBox.setSelected(true);
 			showCloseCheckBox.addActionListener(e -> showCloseChanged());
 			panel4.add(showCloseCheckBox, "cell 0 4");
+
+			//---- fullWindowContentCheckBox ----
+			fullWindowContentCheckBox.setText("full window content");
+			fullWindowContentCheckBox.addActionListener(e -> fullWindowContentChanged());
+			panel4.add(fullWindowContentCheckBox, "cell 0 5");
+
+			//---- fullWindowContentButtonsBoundsLabel ----
+			fullWindowContentButtonsBoundsLabel.setText("Buttons bounds:");
+			panel4.add(fullWindowContentButtonsBoundsLabel, "cell 0 6");
+
+			//---- fullWindowContentButtonsBoundsField ----
+			fullWindowContentButtonsBoundsField.setText("null");
+			panel4.add(fullWindowContentButtonsBoundsField, "cell 0 6");
 		}
 		add(panel4, "cell 1 0");
 
@@ -761,6 +820,7 @@ debug*/
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]unrel" +
 				"[]"));
 
@@ -779,20 +839,25 @@ debug*/
 			addCaptionButton.addActionListener(e -> addCaption());
 			panel3.add(addCaptionButton, "cell 0 2");
 
+			//---- addTextFieldButton ----
+			addTextFieldButton.setText("Add text field");
+			addTextFieldButton.addActionListener(e -> addTextField());
+			panel3.add(addTextFieldButton, "cell 0 3");
+
 			//---- removeMenuButton ----
 			removeMenuButton.setText("Remove menu");
 			removeMenuButton.addActionListener(e -> removeMenu());
-			panel3.add(removeMenuButton, "cell 0 3");
+			panel3.add(removeMenuButton, "cell 0 4");
 
 			//---- changeMenuButton ----
 			changeMenuButton.setText("Change menu");
 			changeMenuButton.addActionListener(e -> changeMenu());
-			panel3.add(changeMenuButton, "cell 0 4");
+			panel3.add(changeMenuButton, "cell 0 5");
 
 			//---- changeTitleButton ----
 			changeTitleButton.setText("Change title");
 			changeTitleButton.addActionListener(e -> changeTitle());
-			panel3.add(changeTitleButton, "cell 0 5");
+			panel3.add(changeTitleButton, "cell 0 6");
 		}
 		add(panel3, "cell 3 0 1 2,aligny top,growy 0");
 
@@ -968,6 +1033,12 @@ debug*/
 		//---- typeSmallRadioButton ----
 		typeSmallRadioButton.setText("Small");
 		add(typeSmallRadioButton, "cell 0 2 3 1");
+
+		//---- showRectanglesCheckBox ----
+		showRectanglesCheckBox.setText("Show debug title bar rectangles");
+		showRectanglesCheckBox.setSelected(true);
+		showRectanglesCheckBox.addActionListener(e -> showRectangles());
+		add(showRectanglesCheckBox, "cell 0 3");
 
 		//======== menuBar ========
 		{
@@ -1176,6 +1247,8 @@ debug*/
 	private JCheckBox showIconifyCheckBox;
 	private JCheckBox showMaximizeCheckBox;
 	private JCheckBox showCloseCheckBox;
+	private JCheckBox fullWindowContentCheckBox;
+	private JLabel fullWindowContentButtonsBoundsField;
 	private JCheckBox menuBarCheckBox;
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox menuBarVisibleCheckBox;
@@ -1184,6 +1257,7 @@ debug*/
 	private JButton addMenuButton;
 	private JButton addGlueButton;
 	private JButton addCaptionButton;
+	private JButton addTextFieldButton;
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
 	private JButton changeTitleButton;
@@ -1209,6 +1283,7 @@ debug*/
 	private JRadioButton typeNormalRadioButton;
 	private JRadioButton typeUtilityRadioButton;
 	private JRadioButton typeSmallRadioButton;
+	private JCheckBox showRectanglesCheckBox;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

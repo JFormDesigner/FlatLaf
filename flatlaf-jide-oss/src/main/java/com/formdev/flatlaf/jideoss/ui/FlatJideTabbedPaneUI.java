@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.jideoss.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.COMPONENT_TITLE_BAR_CAPTION;
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
 import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
@@ -30,6 +31,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseListener;
@@ -37,6 +39,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.function.Function;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -98,6 +101,25 @@ public class FlatJideTabbedPaneUI
 		LookAndFeelFactory.installJideExtension();
 
 		return new FlatJideTabbedPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		c.putClientProperty( COMPONENT_TITLE_BAR_CAPTION,
+			(Function<Point, Boolean>) pt -> {
+				if( tabForCoordinate( _tabPane, pt.x, pt.y ) >= 0 )
+					return false;
+
+				return null; // check children
+			} );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+		c.putClientProperty( COMPONENT_TITLE_BAR_CAPTION, null );
 	}
 
 	@Override
