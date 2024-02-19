@@ -1121,6 +1121,7 @@ Table.dropCellBackground       [lazy] #003f99  HSL 215 100  30    javax.swing.pl
 Table.dropCellForeground       [lazy] #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Table.dropLineColor            [lazy] #0069ff  HSL 215 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.dropLineShortColor       [lazy] #66a5ff  HSL 215 100  70    javax.swing.plaf.ColorUIResource [UI]
+Table.editorSelectAllOnStartEditing true
 Table.focusCellBackground      #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#0069ff  HSL 215 100  50    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
@@ -1129,6 +1130,7 @@ Table.font                     [active] $defaultFont [UI]
 Table.foreground               #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #3c3c3c  HSL   0   0  24    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
+Table.paintOutsideAlternateRows false
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatScrollPaneBorder [UI]
 Table.selectionBackground      #0054cc  HSL 215 100  40    javax.swing.plaf.ColorUIResource [UI]

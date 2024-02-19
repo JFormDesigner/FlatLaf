@@ -24,15 +24,19 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
@@ -89,6 +93,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
  * @uiDefault Table.paintOutsideAlternateRows			boolean
+ * @uiDefault Table.editorSelectAllOnStartEditing		boolean
  *
  * <!-- FlatTableCellBorder -->
  *
@@ -282,6 +287,18 @@ public class FlatTableUI
 				} );
 			}
 		};
+	}
+
+	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+
+		if( UIManager.getBoolean( "Table.editorSelectAllOnStartEditing" ) ) {
+			// get shared action map, used for all tables
+			ActionMap map = SwingUtilities.getUIActionMap( table );
+			if( map != null )
+				StartEditingAction.install( map, "startEditing" );
+		}
 	}
 
 	/** @since 2 */
@@ -577,6 +594,38 @@ public class FlatTableUI
 		@Override
 		protected void setValue( Object value ) {
 			selected = (value != null && (Boolean) value);
+		}
+	}
+
+	//---- class StartEditingAction -------------------------------------------
+
+	private static class StartEditingAction
+		extends FlatUIAction
+	{
+		static void install( ActionMap map, String key ) {
+			Action oldAction = map.get( key );
+			if( oldAction == null || oldAction instanceof StartEditingAction )
+				return; // not found or already installed
+
+			map.put( key, new StartEditingAction( oldAction ) );
+		}
+
+		private StartEditingAction( Action delegate ) {
+			super( delegate );
+		}
+
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			JTable table = (JTable) e.getSource();
+
+			Component oldEditorComp = table.getEditorComponent();
+
+			delegate.actionPerformed( e );
+
+			// select all text in editor if editing starts with F2 key
+			Component editorComp = table.getEditorComponent();
+			if( oldEditorComp == null && editorComp instanceof JTextField )
+				((JTextField)editorComp).selectAll();
 		}
 	}
 }

@@ -20,6 +20,8 @@ FlatLaf Change Log
   - Improved log messages for loading fails.
 - Fonts: Updated **Inter** to
   [v4.0](https://github.com/rsms/inter/releases/tag/v4.0).
+- Table: Select all text in cell editor when starting editing using `F2` key.
+  (issue 652)
 
 #### Fixed bugs
 

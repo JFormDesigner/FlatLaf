@@ -322,7 +322,7 @@ OS     Windows 10
 #---- javax.swing.JMenuBar ----
 
 1       javax.swing.plaf.basic.LazyActionMap [UI]
-    takeFocus                            com.formdev.flatlaf.ui.FlatMenuBarUI$TakeFocus (null)
+    takeFocus                            com.formdev.flatlaf.ui.FlatMenuBarUI$TakeFocusAction
 
 
 #---- javax.swing.JMenuItem ----
@@ -613,7 +613,7 @@ OS     Windows 10
     selectPreviousRowCell                javax.swing.plaf.basic.BasicTableUI$Actions
     selectPreviousRowChangeLead          javax.swing.plaf.basic.BasicTableUI$Actions
     selectPreviousRowExtendSelection     javax.swing.plaf.basic.BasicTableUI$Actions
-    startEditing                         javax.swing.plaf.basic.BasicTableUI$Actions
+    startEditing                         com.formdev.flatlaf.ui.FlatTableUI$StartEditingAction
     toggleAndAnchor                      javax.swing.plaf.basic.BasicTableUI$Actions
 
 

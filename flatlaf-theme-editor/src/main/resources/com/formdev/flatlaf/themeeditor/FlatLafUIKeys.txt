@@ -910,6 +910,7 @@ Table.dropCellBackground
 Table.dropCellForeground
 Table.dropLineColor
 Table.dropLineShortColor
+Table.editorSelectAllOnStartEditing
 Table.focusCellBackground
 Table.focusCellForeground
 Table.focusCellHighlightBorder
@@ -918,6 +919,7 @@ Table.font
 Table.foreground
 Table.gridColor
 Table.intercellSpacing
+Table.paintOutsideAlternateRows
 Table.rowHeight
 Table.scrollPaneBorder
 Table.selectionBackground
