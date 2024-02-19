@@ -60,6 +60,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+import javax.swing.tree.DefaultTreeCellEditor;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
@@ -302,6 +303,10 @@ public class FlatUIUtils
 		// check whether used as table cell editor
 		Container parent = c.getParent();
 		if( parent instanceof JTable && ((JTable)parent).getEditorComponent() == c )
+			return true;
+
+		// check whether used as tree cell editor
+		if( parent instanceof DefaultTreeCellEditor.EditorContainer )
 			return true;
 
 		// check whether used as cell editor
