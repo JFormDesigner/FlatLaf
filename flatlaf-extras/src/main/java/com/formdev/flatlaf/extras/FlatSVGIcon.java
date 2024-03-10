@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.LinearGradientPaint;
 import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
 import java.io.File;
@@ -980,8 +981,16 @@ public class FlatSVGIcon
 
 		@Override
 		public void setPaint( Paint paint ) {
-			if( paint instanceof Color )
+			if( paint instanceof Color ) {
 				paint = filterColor( (Color) paint );
+			} else if( paint instanceof LinearGradientPaint ) {
+				LinearGradientPaint oldPaint = (LinearGradientPaint) paint;
+				paint = new LinearGradientPaint( oldPaint.getStartPoint(),
+					oldPaint.getEndPoint(),
+					oldPaint.getFractions(),
+					filterColors( oldPaint.getColors() ),
+					oldPaint.getCycleMethod() );
+			}
 			super.setPaint( paint );
 		}
 
@@ -1000,6 +1009,14 @@ public class FlatSVGIcon
 				color = (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
 			}
 			return color;
+		}
+
+		private Color[] filterColors( Color[] colors ) {
+			Color[] newColor = new Color[colors.length];
+			for( int i = 0; i < colors.length; i++ ) {
+				newColor[i] = filterColor( colors[i] );
+			}
+			return newColor;
 		}
 	}
 }
