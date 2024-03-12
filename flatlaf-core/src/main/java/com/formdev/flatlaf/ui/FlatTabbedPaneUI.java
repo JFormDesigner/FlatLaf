@@ -3767,9 +3767,20 @@ debug*/
 			boolean hideDisabledScrollButtons = (scrollButtonsPolicy == AS_NEEDED_SINGLE && scrollButtonsPlacement == BOTH);
 			boolean trailingScrollButtons = (scrollButtonsPlacement == TRAILING);
 
-			// for right-to-left always use "more tabs" button for horizontal scrolling
+			// For right-to-left, always use "more tabs" button for horizontal scrolling
 			// because methods scrollForward() and scrollBackward() in class
-			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left
+			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left.
+			//
+			// One problem is that BasicTabbedPaneUI.getClosestTab(), which is used
+			// to compute leadingTabIndex, does not work for right-to-left because is uses "binary" search
+			// on rects[] to find tab, but rects[] is ordered in reverse order for right-to-left.
+			// So leadingTabIndex is either zero or tabCount.
+			// Therefore increasing/decreasing leadingTabIndex in scrollForward()
+			// and scrollBackward() does not work as expected.
+			// Also backward/forward scroll buttons are not correctly enabled/disabled.
+			//
+			// Fixing this would require replacing nearly whole functionality of class
+			// BasicTabbedPaneUI.ScrollableTabSupport, which is not possible because it is private.
 			boolean leftToRight = isLeftToRight();
 			if( !leftToRight && isHorizontalTabPlacement( tabPane.getTabPlacement() ) ) {
 				useMoreTabsButton = true;
@@ -3863,8 +3874,7 @@ debug*/
 							// layout forward button on trailing side
 							if( !hideDisabledScrollButtons || viewSize.width - viewPosition.x > w ) {
 								int buttonWidth = forwardButton.getPreferredSize().width;
-								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
-								x += leftToRight ? 0 : buttonWidth;
+								forwardButton.setBounds( x + w - buttonWidth, y, buttonWidth, h );
 								w -= buttonWidth;
 								forwardButtonVisible = true;
 							}
@@ -3874,12 +3884,11 @@ debug*/
 								int buttonWidth = backwardButton.getPreferredSize().width;
 								if( trailingScrollButtons ) {
 									// on trailing side
-									backwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
-									x += leftToRight ? 0 : buttonWidth;
+									backwardButton.setBounds( x + w - buttonWidth, y, buttonWidth, h );
 								} else {
 									// on leading side
-									backwardButton.setBounds( leftToRight ? x : (x + w - buttonWidth), y, buttonWidth, h );
-									x += leftToRight ? buttonWidth : 0;
+									backwardButton.setBounds( x, y, buttonWidth, h );
+									x += buttonWidth;
 								}
 								w -= buttonWidth;
 								backwardButtonVisible = true;
