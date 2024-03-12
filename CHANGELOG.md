@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 3.5-SNAPSHOT
+
+#### Fixed bugs
+
+- Extras: `FlatSVGIcon` color filters now support linear gradients. (PR #817)
+
+
 ## 3.4
 
 #### New features and improvements

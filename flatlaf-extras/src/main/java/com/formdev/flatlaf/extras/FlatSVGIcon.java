@@ -985,11 +985,12 @@ public class FlatSVGIcon
 				paint = filterColor( (Color) paint );
 			else if( paint instanceof LinearGradientPaint ) {
 				LinearGradientPaint oldPaint = (LinearGradientPaint) paint;
-				paint = new LinearGradientPaint( oldPaint.getStartPoint(),
-					oldPaint.getEndPoint(),
-					oldPaint.getFractions(),
-					filterColors( oldPaint.getColors() ),
-					oldPaint.getCycleMethod() );
+				Color[] newColors = filterColors( oldPaint.getColors() );
+				if( newColors != null ) {
+					paint = new LinearGradientPaint( oldPaint.getStartPoint(), oldPaint.getEndPoint(),
+						oldPaint.getFractions(), newColors, oldPaint.getCycleMethod(),
+						oldPaint.getColorSpace(), oldPaint.getTransform() );
+				}
 			}
 			super.setPaint( paint );
 		}
@@ -1013,9 +1014,12 @@ public class FlatSVGIcon
 
 		private Color[] filterColors( Color[] colors ) {
 			Color[] newColors = new Color[colors.length];
-			for( int i = 0; i < colors.length; i++ )
+			boolean changed = false;
+			for( int i = 0; i < colors.length; i++ ) {
 				newColors[i] = filterColor( colors[i] );
-			return newColors;
+				changed = (changed || newColors[i] != colors[i]);
+			}
+			return changed ? newColors : null;
 		}
 	}
 }

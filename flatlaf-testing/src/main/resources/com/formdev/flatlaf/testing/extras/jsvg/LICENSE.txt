@@ -1,0 +1,3 @@
+The SVG icons in this folder are from JSVG,
+which is licensed under the MIT License
+See: https://github.com/weisJ/jsvg

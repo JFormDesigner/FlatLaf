@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing.extras;
 
+import java.awt.*;
 import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.components.*;
@@ -75,11 +76,21 @@ public class FlatExtrasTest
 		disabledTabbedPane2.setIconAt( 0, icon );
 		disabledTabbedPane2.setDisabledIconAt( 0, disabledIcon );
 
+		addJSVGIcon( "linearGradient.svg", 64, 128 );
+		addJSVGIcon( "stripes.svg", 128, 128 );
+		addJSVGIcon( "gradientText0.svg", 128, 128 );
+		addJSVGIcon( "gradientText1.svg", 128, 128 );
+		addJSVGIcon( "gradientText2.svg", 128, 128 );
+
 		disabledChanged();
 	}
 
 	private void addSVGIcon( String name ) {
 		svgIconsPanel.add( new JLabel( new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/" + name ) ) );
+	}
+
+	private void addJSVGIcon( String name, int width, int height ) {
+		gradientIconsPanel.add( new JLabel( new FlatSVGIcon( "com/formdev/flatlaf/testing/extras/jsvg/" + name, width, height ) ) );
 	}
 
 	private void triStateCheckBox1Changed() {
@@ -104,6 +115,9 @@ public class FlatExtrasTest
 		disabledLabel2.setEnabled( enabled );
 		disabledButton2.setEnabled( enabled );
 		disabledTabbedPane2.setEnabledAt( 0, enabled );
+
+		for( Component c : gradientIconsPanel.getComponents() )
+			c.setEnabled( enabled );
 	}
 
 	@Override
@@ -141,6 +155,7 @@ public class FlatExtrasTest
 		disabledButton2 = new JButton();
 		disabledTabbedPane2 = new JTabbedPane();
 		label6 = new JLabel();
+		gradientIconsPanel = new JPanel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -150,6 +165,7 @@ public class FlatExtrasTest
 			"[]" +
 			"[left]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -251,6 +267,12 @@ public class FlatExtrasTest
 		label6.setText("setIcon() and setDisabledIcon()");
 		label6.setEnabled(false);
 		add(label6, "cell 1 6 2 1,gapx 20");
+
+		//======== gradientIconsPanel ========
+		{
+			gradientIconsPanel.setLayout(new FlowLayout());
+		}
+		add(gradientIconsPanel, "cell 1 7 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -275,5 +297,6 @@ public class FlatExtrasTest
 	private JButton disabledButton2;
 	private JTabbedPane disabledTabbedPane2;
 	private JLabel label6;
+	private JPanel gradientIconsPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

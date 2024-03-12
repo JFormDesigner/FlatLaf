@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.0.0.331" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -6,7 +6,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[][][left]"
-			"$rowConstraints": "[][][][][][][]"
+			"$rowConstraints": "[][][][][][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -143,9 +143,14 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 6 2 1,gapx 20"
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+				name: "gradientIconsPanel"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 7 2 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 595, 470 )
+			"size": new java.awt.Dimension( 645, 470 )
 		} )
 	}
 }
