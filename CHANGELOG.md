@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- TabbedPane: Fixed swapped back and forward scroll buttons when using
+  `TabbedPane.scrollButtonsPlacement = trailing` (regression in FlatLaf 3.3).
 - Extras: `FlatSVGIcon` color filters now support linear gradients. (PR #817)
 
 

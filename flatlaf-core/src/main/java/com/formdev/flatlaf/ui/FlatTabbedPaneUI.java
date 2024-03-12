@@ -3851,12 +3851,23 @@ debug*/
 							w -= buttonWidth;
 							moreTabsButtonVisible = true;
 						}
+
+						// layout scroll buttons
 						if( useScrollButtons ) {
 							// the tabViewport view size is set in
 							// BasicTabbedPaneUI.TabbedPaneScrollLayout.calculateTabRects(),
 							// which is called from calculateLayoutInfo()
 							Point viewPosition = tabViewport.getViewPosition();
 							Dimension viewSize = tabViewport.getViewSize();
+
+							// layout forward button on trailing side
+							if( !hideDisabledScrollButtons || viewSize.width - viewPosition.x > w ) {
+								int buttonWidth = forwardButton.getPreferredSize().width;
+								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
+								x += leftToRight ? 0 : buttonWidth;
+								w -= buttonWidth;
+								forwardButtonVisible = true;
+							}
 
 							// layout backward button
 							if( !hideDisabledScrollButtons || viewPosition.x > 0 ) {
@@ -3872,15 +3883,6 @@ debug*/
 								}
 								w -= buttonWidth;
 								backwardButtonVisible = true;
-							}
-
-							// layout forward button on trailing side
-							if( !hideDisabledScrollButtons || viewSize.width - viewPosition.x > w ) {
-								int buttonWidth = forwardButton.getPreferredSize().width;
-								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, y, buttonWidth, h );
-								x += leftToRight ? 0 : buttonWidth;
-								w -= buttonWidth;
-								forwardButtonVisible = true;
 							}
 						}
 					}
@@ -3927,12 +3929,22 @@ debug*/
 							h -= buttonHeight;
 							moreTabsButtonVisible = true;
 						}
+
+						// layout scroll buttons
 						if( useScrollButtons ) {
 							// the tabViewport view size is set in
 							// BasicTabbedPaneUI.TabbedPaneScrollLayout.calculateTabRects(),
 							// which is called from calculateLayoutInfo()
 							Point viewPosition = tabViewport.getViewPosition();
 							Dimension viewSize = tabViewport.getViewSize();
+
+							// layout forward button on bottom side
+							if( !hideDisabledScrollButtons || viewSize.height - viewPosition.y > h ) {
+								int buttonHeight = forwardButton.getPreferredSize().height;
+								forwardButton.setBounds( x, y + h - buttonHeight, w, buttonHeight );
+								h -= buttonHeight;
+								forwardButtonVisible = true;
+							}
 
 							// layout backward button
 							if( !hideDisabledScrollButtons || viewPosition.y > 0 ) {
@@ -3947,14 +3959,6 @@ debug*/
 								}
 								h -= buttonHeight;
 								backwardButtonVisible = true;
-							}
-
-							// layout forward button on bottom side
-							if( !hideDisabledScrollButtons || viewSize.height - viewPosition.y > h ) {
-								int buttonHeight = forwardButton.getPreferredSize().height;
-								forwardButton.setBounds( x, y + h - buttonHeight, w, buttonHeight );
-								h -= buttonHeight;
-								forwardButtonVisible = true;
 							}
 						}
 					}
