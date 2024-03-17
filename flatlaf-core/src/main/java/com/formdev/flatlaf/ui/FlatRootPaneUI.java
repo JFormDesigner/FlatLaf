@@ -270,6 +270,7 @@ public class FlatRootPaneUI
 	// layer title pane under frame content layer to allow placing menu bar over title pane
 	protected final static Integer TITLE_PANE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 1;
 	private final static Integer TITLE_PANE_MOUSE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 2;
+	private final static Integer WINDOW_TOP_BORDER_LAYER = Integer.MAX_VALUE;
 
 	// for fullWindowContent mode, layer title pane over frame content layer to allow placing title bar buttons over content
 	/** @since 3.4 */
@@ -285,11 +286,15 @@ public class FlatRootPaneUI
 		if( titlePane != null ) {
 			layeredPane.remove( titlePane );
 			layeredPane.remove( titlePane.mouseLayer );
+			if( titlePane.windowTopBorderLayer != null )
+				layeredPane.remove( titlePane.windowTopBorderLayer );
 		}
 
 		if( newTitlePane != null ) {
 			layeredPane.add( newTitlePane, getLayerForTitlePane() );
 			layeredPane.add( newTitlePane.mouseLayer, TITLE_PANE_MOUSE_LAYER );
+			if( newTitlePane.windowTopBorderLayer != null && newTitlePane.isWindowTopBorderNeeded() && isFullWindowContent( rootPane ) )
+				layeredPane.add( newTitlePane.windowTopBorderLayer, WINDOW_TOP_BORDER_LAYER );
 		}
 
 		titlePane = newTitlePane;
@@ -446,6 +451,13 @@ public class FlatRootPaneUI
 			case FlatClientProperties.FULL_WINDOW_CONTENT:
 				if( titlePane != null ) {
 					rootPane.getLayeredPane().setLayer( titlePane, getLayerForTitlePane() );
+					if( titlePane.windowTopBorderLayer != null ) {
+						JLayeredPane layeredPane = rootPane.getLayeredPane();
+						if( titlePane.isWindowTopBorderNeeded() && isFullWindowContent( rootPane ) )
+							layeredPane.add( titlePane.windowTopBorderLayer, WINDOW_TOP_BORDER_LAYER );
+						else
+							layeredPane.remove( titlePane.windowTopBorderLayer );
+					}
 					titlePane.updateIcon();
 					titlePane.updateVisibility();
 					titlePane.updateFullWindowContentButtonsBoundsProperty();
@@ -591,6 +603,12 @@ public class FlatRootPaneUI
 					titlePane.setBounds( 0, 0, width, prefHeight );
 
 				titlePane.mouseLayer.setBounds( 0, 0, width, prefHeight );
+				if( titlePane.windowTopBorderLayer != null ) {
+					boolean show = isFullWindowContent && !titlePane.isWindowMaximized() && !isFullScreen;
+					if( show )
+						titlePane.windowTopBorderLayer.setBounds( 0, 0, width, 1 );
+					titlePane.windowTopBorderLayer.setVisible( show );
+				}
 
 				if( !isFullWindowContent )
 					nextY += prefHeight;

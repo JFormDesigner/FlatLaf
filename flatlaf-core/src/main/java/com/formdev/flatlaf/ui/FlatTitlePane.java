@@ -110,6 +110,7 @@ public class FlatTitlePane
 	extends JComponent
 {
 	static final String KEY_DEBUG_SHOW_RECTANGLES = "FlatLaf.debug.titlebar.showRectangles";
+	private static final boolean isWindows_10 = SystemInfo.isWindows_10_orLater && !SystemInfo.isWindows_11_orLater;
 
 	/** @since 2.5 */ protected final Font titleFont;
 	protected final Color activeBackground;
@@ -166,6 +167,16 @@ public class FlatTitlePane
 	 */
 	final JPanel mouseLayer;
 
+	/**
+	 * This panel paint a border at the top of the window in fullWindowContent mode,
+	 * if FlatLaf window decorations are enabled.
+	 * Only used on Windows 10.
+	 * <p>
+	 * This panel is not a child of the title pane.
+	 * Instead it is added by FlatRootPaneUI to the layered pane at a layer over all other layers.
+	 */
+	final JPanel windowTopBorderLayer;
+
 	public FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
@@ -206,6 +217,14 @@ public class FlatTitlePane
 		mouseLayer.setOpaque( false );
 		mouseLayer.addMouseListener( handler );
 		mouseLayer.addMouseMotionListener( handler );
+
+		if( isWindows_10 && FlatNativeWindowBorder.isSupported() ) {
+			windowTopBorderLayer = new JPanel();
+			windowTopBorderLayer.setVisible( false );
+			windowTopBorderLayer.setOpaque( false );
+			windowTopBorderLayer.setBorder( FlatUIUtils.nonUIResource( FlatNativeWindowBorder.WindowTopBorder.getInstance() ) );
+		} else
+			windowTopBorderLayer = null;
 
 		applyComponentOrientation( rootPane.getComponentOrientation() );
 	}
@@ -919,6 +938,10 @@ public class FlatTitlePane
 		return window != null && FlatNativeWindowBorder.hasCustomDecoration( window );
 	}
 
+	boolean isWindowTopBorderNeeded() {
+		return isWindows_10 && hasNativeCustomDecoration();
+	}
+
 	// used to invoke updateNativeTitleBarHeightAndHitTestSpots() only once from latest invokeLater()
 	private int laterCounter;
 
@@ -1146,7 +1169,7 @@ public class FlatTitlePane
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
+			if( isWindowTopBorderNeeded() && !isWindowMaximized() )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -1165,7 +1188,7 @@ public class FlatTitlePane
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized() )
+			if( isWindowTopBorderNeeded() && !isWindowMaximized() && !isFullWindowContent() )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
@@ -1329,7 +1352,7 @@ public class FlatTitlePane
 			activeChanged( true );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
+			if( isWindowTopBorderNeeded() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
@@ -1340,7 +1363,7 @@ public class FlatTitlePane
 			activeChanged( false );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
+			if( isWindowTopBorderNeeded() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
