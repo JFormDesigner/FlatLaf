@@ -141,7 +141,8 @@ public class FlatStylingSupport
 		Object style = getStyle( c );
 		Object styleClass = getStyleClass( c );
 		Object styleForClasses = getStyleForClasses( styleClass, type );
-		return joinStyles( styleForClasses, style );
+		Object styleForType = getStyleForType( type );
+		return joinStyles( joinStyles( styleForType, styleForClasses ), style );
 	}
 
 	/**
@@ -208,6 +209,28 @@ public class FlatStylingSupport
 		return joinStyles(
 			UIManager.get( "[style]." + styleClass ),
 			UIManager.get( "[style]" + type + '.' + styleClass ) );
+	}
+
+	/**
+	 * Returns the styles for the given type.
+	 * <p>
+	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
+	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * The key must be in syntax: {@code [style]type}.
+	 * E.g. in FlatLaf properties file:
+	 * <pre>{@code
+	 * [style]Button = borderColor: #08f; background: #08f; foreground: #fff
+	 * }</pre>
+	 * or in Java code:
+	 * <pre>{@code
+	 * UIManager.put( "[style]Button", "borderColor: #08f; background: #08f; foreground: #fff" );
+	 * }</pre>
+	 *
+	 * @param type the type of the component
+	 * @return the styles
+	 */
+	public static Object getStyleForType( String type ) {
+		return UIManager.get( "[style]" + type );
 	}
 
 	/**
@@ -590,22 +613,34 @@ public class FlatStylingSupport
 		String getterName = buildMethodName( "get", name );
 		String setterName = buildMethodName( "set", name );
 
-		try {
-			Method getter;
+		for(;;) {
 			try {
-				getter = cls.getMethod( getterName );
+				Method getter;
+				try {
+					getter = cls.getMethod( getterName );
+				} catch( NoSuchMethodException ex ) {
+					getter = cls.getMethod( buildMethodName( "is", name ) );
+				}
+				Method setter = cls.getMethod( setterName, getter.getReturnType() );
+				Object oldValue = getter.invoke( obj );
+				setter.invoke( obj, convertToEnum( value, getter.getReturnType() ) );
+				return oldValue;
 			} catch( NoSuchMethodException ex ) {
-				getter = cls.getMethod( buildMethodName( "is", name ) );
+				throw new UnknownStyleException( name );
+			} catch( Exception ex ) {
+				if( ex instanceof IllegalAccessException ) {
+					// this may happen for private subclasses of public Swing classes
+					// that override public property getter/setter
+					// e.g. class JSlider.SmartHashtable.LabelUIResource.getForeground()
+					// --> try again with superclass
+					cls = cls.getSuperclass();
+					if( cls != null && cls != Object.class )
+						continue;
+				}
+
+				throw new IllegalArgumentException( "failed to invoke property methods '" + cls.getName() + "."
+					+ getterName + "()' or '" + setterName + "(...)'", ex );
 			}
-			Method setter = cls.getMethod( setterName, getter.getReturnType() );
-			Object oldValue = getter.invoke( obj );
-			setter.invoke( obj, convertToEnum( value, getter.getReturnType() ) );
-			return oldValue;
-		} catch( NoSuchMethodException ex ) {
-			throw new UnknownStyleException( name );
-		} catch( Exception ex ) {
-			throw new IllegalArgumentException( "failed to invoke property methods '" + cls.getName() + "."
-				+ getterName + "()' or '" + setterName + "(...)'", ex );
 		}
 	}
 
