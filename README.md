@@ -311,6 +311,9 @@ Applications using FlatLaf
 
 - ![New](images/new.svg) ![Sponsor](images/sponsor.svg)
   [BGBlitz](https://www.bgblitz.com/) (**commercial**) - professional Backgammon
+- ![New](images/new.svg) [MCreator](https://github.com/MCreator/MCreator) - 
+  software used to make Minecraft Java Edition mods, Minecraft Bedrock Edition Add-Ons, 
+  and data packs without programming knowledge
 - ![New](images/new.svg) [MapTool](https://github.com/RPTools/maptool) - virtual
   Tabletop for playing role-playing games
 - [MegaMek](https://github.com/MegaMek/megamek),
