@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.testing.jideoss;
 
 import java.awt.*;
+import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -138,6 +139,20 @@ public class FlatJideOssContainerTest
 
 			case 3:
 				tabbedPane.addTab( "Tab 4", new JLabel( "non-opaque content", SwingConstants.CENTER ) );
+				break;
+
+			case 4:
+				tabbedPane.addTab( "Tab 5", new JLabel( "random background content", SwingConstants.CENTER ) {
+					Random random = new Random();
+
+					@Override
+					protected void paintComponent( Graphics g ) {
+						g.setColor( new Color( random.nextInt() ) );
+						g.fillRect( 0, 0, getWidth(), getHeight() );
+
+						super.paintComponent( g );
+					}
+				} );
 				break;
 
 			default:
