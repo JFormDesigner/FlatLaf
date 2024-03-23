@@ -27,8 +27,8 @@ plugins {
 val sigtest = configurations.create( "sigtest" )
 
 dependencies {
-	testImplementation( libs.bundles.junit )
-	testRuntimeOnly( libs.junit.engine )
+	testImplementation( libs.junit )
+	testRuntimeOnly( libs.junit.launcher )
 
 	// https://github.com/jtulach/netbeans-apitest
 	sigtest( libs.sigtest )

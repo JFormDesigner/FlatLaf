@@ -15,7 +15,7 @@
 #
 
 [versions]
-junit = "5.10.0"
+junit = "5.10.2"
 
 
 [libraries]
@@ -50,16 +50,12 @@ jna = "net.java.dev.jna:jna:5.12.1"
 jna-platform = "net.java.dev.jna:jna-platform:5.12.1"
 
 # junit
-junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
 # errorprone
 errorprone = "com.google.errorprone:error_prone_core:2.20.0"
 
-
-[bundles]
-junit = [ "junit-api", "junit-params" ]
 
 [plugins]
 errorprone = { id = "net.ltgt.errorprone", version = "3.1.0" }

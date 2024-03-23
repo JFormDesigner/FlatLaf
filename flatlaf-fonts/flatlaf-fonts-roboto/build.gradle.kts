@@ -33,8 +33,8 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 
-	testImplementation( libs.bundles.junit )
-	testRuntimeOnly( libs.junit.engine )
+	testImplementation( libs.junit )
+	testRuntimeOnly( libs.junit.launcher )
 }
 
 flatlafModuleInfo {
