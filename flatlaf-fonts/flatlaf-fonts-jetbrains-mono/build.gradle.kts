@@ -73,8 +73,8 @@ publishing {
 			pom {
 				licenses {
 					license {
-						name.set( "SIL OPEN FONT LICENSE Version 1.1" )
-						url.set( "https://choosealicense.com/licenses/ofl-1.1/" )
+						name = "SIL OPEN FONT LICENSE Version 1.1"
+						url = "https://choosealicense.com/licenses/ofl-1.1/"
 					}
 				}
 			}

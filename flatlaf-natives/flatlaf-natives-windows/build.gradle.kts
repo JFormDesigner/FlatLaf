@@ -29,11 +29,11 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines.set( listOf(
+	targetMachines = listOf(
 		machines.windows.x86,
 		machines.windows.x86_64,
 		machines.windows.architecture( "aarch64" )
-	) )
+	)
 }
 
 var javaHome = System.getProperty( "java.home" )

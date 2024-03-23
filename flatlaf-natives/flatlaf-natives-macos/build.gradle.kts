@@ -30,10 +30,10 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines.set( listOf(
+	targetMachines = listOf(
 		machines.macOS.architecture( "arm64" ),
 		machines.macOS.x86_64
-	) )
+	)
 }
 
 var javaHome = System.getProperty( "java.home" )

@@ -44,34 +44,34 @@ publishing {
 
 			pom {
 				afterEvaluate {
-					this@pom.name.set( extension.name )
-					this@pom.description.set( extension.description )
+					this@pom.name = extension.name
+					this@pom.description = extension.description
 				}
-				url.set( "https://github.com/JFormDesigner/FlatLaf" )
+				url = "https://github.com/JFormDesigner/FlatLaf"
 
 				licenses {
 					license {
-						name.set( "The Apache License, Version 2.0" )
-						url.set( "https://www.apache.org/licenses/LICENSE-2.0.txt" )
+						name = "The Apache License, Version 2.0"
+						url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
 					}
 				}
 
 				developers {
 					developer {
-						name.set( "Karl Tauber" )
-						organization.set( "FormDev Software GmbH" )
-						organizationUrl.set( "https://www.formdev.com/" )
+						name = "Karl Tauber"
+						organization = "FormDev Software GmbH"
+						organizationUrl = "https://www.formdev.com/"
 					}
 				}
 
 				scm {
-					connection.set( "scm:git:git://github.com/JFormDesigner/FlatLaf.git" )
-					url.set( "https://github.com/JFormDesigner/FlatLaf" )
+					connection = "scm:git:git://github.com/JFormDesigner/FlatLaf.git"
+					url = "https://github.com/JFormDesigner/FlatLaf"
 				}
 
 				issueManagement {
-					system.set( "GitHub" )
-					url.set( "https://github.com/JFormDesigner/FlatLaf/issues" )
+					system = "GitHub"
+					url = "https://github.com/JFormDesigner/FlatLaf/issues"
 				}
 			}
 

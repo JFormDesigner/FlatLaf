@@ -21,6 +21,6 @@ plugins {
 val toolchainJavaVersion = System.getProperty( "toolchain" )
 if( !toolchainJavaVersion.isNullOrEmpty() ) {
 	java.toolchain {
-		languageVersion.set( JavaLanguageVersion.of( toolchainJavaVersion ) )
+		languageVersion = JavaLanguageVersion.of( toolchainJavaVersion )
 	}
 }

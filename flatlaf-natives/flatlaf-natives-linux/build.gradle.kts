@@ -25,7 +25,7 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines.set( listOf( machines.linux.x86_64 ) )
+	targetMachines = listOf( machines.linux.x86_64 )
 }
 
 var javaHome = System.getProperty( "java.home" )

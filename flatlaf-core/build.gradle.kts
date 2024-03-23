@@ -42,11 +42,11 @@ java {
 tasks {
 	compileJava {
 		// generate JNI headers
-		options.headerOutputDirectory.set( layout.buildDirectory.dir( "generated/jni-headers" ) )
+		options.headerOutputDirectory = layout.buildDirectory.dir( "generated/jni-headers" )
 	}
 
 	jar {
-		archiveBaseName.set( "flatlaf" )
+		archiveBaseName = "flatlaf"
 
 		doLast {
 			ReorderJarEntries.reorderJarEntries( outputs.files.singleFile );
@@ -54,20 +54,20 @@ tasks {
 	}
 
 	named<Jar>( "sourcesJar" ) {
-		archiveBaseName.set( "flatlaf" )
+		archiveBaseName = "flatlaf"
 	}
 
 	named<Jar>( "javadocJar" ) {
-		archiveBaseName.set( "flatlaf" )
+		archiveBaseName = "flatlaf"
 	}
 
 	register<Zip>( "jarNoNatives" ) {
 		group = "build"
 		dependsOn( "jar" )
 
-		archiveBaseName.set( "flatlaf" )
-		archiveClassifier.set( "no-natives" )
-		archiveExtension.set( "jar" )
+		archiveBaseName = "flatlaf"
+		archiveClassifier = "no-natives"
+		archiveExtension = "jar"
 		destinationDirectory = layout.buildDirectory.dir( "libs" )
 
 		from( zipTree( jar.get().archiveFile.get().asFile ) )

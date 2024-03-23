@@ -27,7 +27,7 @@ library {
 		}
 		with( linkTask.get() ) {
 			if( name.contains( "Release" ) )
-				debuggable.set( false )
+				debuggable = false
 		}
 	}
 }
