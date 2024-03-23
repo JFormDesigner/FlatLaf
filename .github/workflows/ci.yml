@@ -32,10 +32,11 @@ jobs:
           - 8
           - 11  # LTS
           - 17  # LTS
+          - 21  # LTS
         toolchain: [""]
         include:
-          - java: 17
-            toolchain: 21  # latest
+          - java: 21
+            toolchain: 22  # latest
 
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +48,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: temurin  # Java 8, 11 and 17 are pre-installed on ubuntu-latest
+          distribution: temurin  # Java 8, 11, 17 and 21 are pre-installed on ubuntu-latest
           cache: gradle
 
       - name: Check with Error Prone
