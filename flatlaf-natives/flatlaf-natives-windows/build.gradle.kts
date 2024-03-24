@@ -22,6 +22,7 @@ plugins {
 
 flatlafJniHeaders {
 	headers = listOf(
+		"com_formdev_flatlaf_ui_FlatNativeLibrary.h",
 		"com_formdev_flatlaf_ui_FlatNativeWindowsLibrary.h",
 		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder.h",
 		"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"

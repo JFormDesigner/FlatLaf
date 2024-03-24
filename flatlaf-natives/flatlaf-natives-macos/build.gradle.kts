@@ -26,7 +26,10 @@ plugins {
 }
 
 flatlafJniHeaders {
-	headers = listOf( "com_formdev_flatlaf_ui_FlatNativeMacLibrary.h" )
+	headers = listOf(
+		"com_formdev_flatlaf_ui_FlatNativeLibrary.h",
+		"com_formdev_flatlaf_ui_FlatNativeMacLibrary.h"
+	)
 }
 
 library {

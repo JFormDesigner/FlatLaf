@@ -15,6 +15,11 @@ FlatLaf Change Log
   - `FlatSVGIcon` color filters now support linear gradients. (PR #817)
   - Added support for `JSplitPane.expandableSide` client property to
     `FlatSplitPane`.
+- Native libraries: Added API version check to test whether native library
+  matches the JAR (bad builds could e.g. ship a newer JAR with an older
+  incompatible native library) and to test whether native methods can be invoked
+  (some security software allows loading native library but blocks method
+  invocation).
 
 
 ## 3.4

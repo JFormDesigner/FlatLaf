@@ -89,7 +89,7 @@ class FlatWindowsNativeWindowBorder
 			return null;
 
 		// check whether native library was successfully loaded
-		if( !FlatNativeLibrary.isLoaded() )
+		if( !FlatNativeWindowsLibrary.isLoaded() )
 			return null;
 
 		// create new instance

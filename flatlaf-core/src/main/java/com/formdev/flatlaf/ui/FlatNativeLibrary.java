@@ -37,16 +37,18 @@ class FlatNativeLibrary
 	private static boolean initialized;
 	private static NativeLibrary nativeLibrary;
 
+	private native static int getApiVersion();
+
 	/**
 	 * Loads native library (if available) and returns whether loaded successfully.
 	 * Returns {@code false} if no native library is available.
 	 */
-	static synchronized boolean isLoaded() {
-		initialize();
+	static synchronized boolean isLoaded( int apiVersion ) {
+		initialize( apiVersion );
 		return (nativeLibrary != null) ? nativeLibrary.isLoaded() : false;
 	}
 
-	private static void initialize() {
+	private static void initialize( int apiVersion ) {
 		if( initialized )
 			return;
 		initialized = true;
@@ -104,7 +106,26 @@ class FlatNativeLibrary
 			return; // no native library available for current OS or CPU architecture
 
 		// load native library
-		nativeLibrary = createNativeLibrary( classifier, ext );
+		NativeLibrary nativeLibrary = createNativeLibrary( classifier, ext );
+		if( !nativeLibrary.isLoaded() )
+			return;
+
+		// check API version (and check whether library works)
+		try {
+			int actualApiVersion = getApiVersion();
+			if( actualApiVersion != apiVersion ) {
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Wrong API version in native library (expected "
+					+ apiVersion + ", actual " + actualApiVersion + "). Ignoring native library.", null );
+				return;
+			}
+		} catch( Throwable ex ) {
+			// could be a UnsatisfiedLinkError in case that loading native library
+			// from temp directory was blocked by some OS security mechanism
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to get API version of native library. Ignoring native library.", ex );
+			return;
+		}
+
+		FlatNativeLibrary.nativeLibrary = nativeLibrary;
 	}
 
 	private static NativeLibrary createNativeLibrary( String classifier, String ext ) {
@@ -118,9 +139,9 @@ class FlatNativeLibrary
 				if( library.isLoaded() )
 					return library;
 
-				LoggingFacade.INSTANCE.logSevere( "Did not find library '" + System.mapLibraryName( libraryName )
-					+ "' in java.library.path '" + System.getProperty( "java.library.path" )
-					+ "', using extracted library instead", null );
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '" + System.mapLibraryName( libraryName )
+					+ "' not found in java.library.path '" + System.getProperty( "java.library.path" )
+					+ "'. Using extracted native library instead.", null );
 			} else {
 				// try standard library naming scheme
 				// (same as in flatlaf.jar in package 'com/formdev/flatlaf/natives')
@@ -139,11 +160,11 @@ class FlatNativeLibrary
 						return new NativeLibrary( libraryFile2, true );
 				}
 
-				LoggingFacade.INSTANCE.logSevere( "Did not find library '"
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '"
 					+ libraryFile.getName()
 					+ (libraryName2 != null ? ("' or '" + libraryName2) : "")
-					+ "' in '" + libraryFile.getParentFile().getAbsolutePath()
-					+ "', using extracted library instead", null );
+					+ "' not found in '" + libraryFile.getParentFile().getAbsolutePath()
+					+ "'. Using extracted native library instead.", null );
 			}
 		}
 

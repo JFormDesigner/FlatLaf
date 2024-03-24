@@ -35,6 +35,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 class FlatNativeLinuxLibrary
 {
+	private static int API_VERSION_LINUX = 3001;
+
 	/**
 	 * Checks whether native library is loaded/available.
 	 * <p>
@@ -42,7 +44,7 @@ class FlatNativeLinuxLibrary
 	 *              method of this class. Otherwise, the native library may not be loaded.
 	 */
 	static boolean isLoaded() {
-		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded();
+		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded( API_VERSION_LINUX );
 	}
 
 	// direction for _NET_WM_MOVERESIZE message

@@ -30,6 +30,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeWindowsLibrary
 {
+	private static int API_VERSION_WINDOWS = 1001;
+
 	private static long osBuildNumber = Long.MIN_VALUE;
 
 	/**
@@ -39,7 +41,7 @@ public class FlatNativeWindowsLibrary
 	 *              method of this class. Otherwise, the native library may not be loaded.
 	 */
 	public static boolean isLoaded() {
-		return SystemInfo.isWindows && FlatNativeLibrary.isLoaded();
+		return SystemInfo.isWindows && FlatNativeLibrary.isLoaded( API_VERSION_WINDOWS );
 	}
 
 	/**

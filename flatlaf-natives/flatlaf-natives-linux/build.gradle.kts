@@ -21,7 +21,10 @@ plugins {
 }
 
 flatlafJniHeaders {
-	headers = listOf( "com_formdev_flatlaf_ui_FlatNativeLinuxLibrary.h" )
+	headers = listOf(
+		"com_formdev_flatlaf_ui_FlatNativeLibrary.h",
+		"com_formdev_flatlaf_ui_FlatNativeLinuxLibrary.h"
+	)
 }
 
 library {
