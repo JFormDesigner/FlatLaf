@@ -5,11 +5,16 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- SplitPane: Update divider when client property `JSplitPane.expandableSide`
+  changed.
 - TabbedPane: Fixed swapped back and forward scroll buttons when using
   `TabbedPane.scrollButtonsPlacement = trailing` (regression in FlatLaf 3.3).
-- Extras: `FlatSVGIcon` color filters now support linear gradients. (PR #817)
 - Fixed missing window top border on Windows 10 in "full window content" mode.
   (issue 809)
+- Extras:
+  - `FlatSVGIcon` color filters now support linear gradients. (PR #817)
+  - Added support for `JSplitPane.expandableSide` client property to
+    `FlatSplitPane`.
 
 
 ## 3.4

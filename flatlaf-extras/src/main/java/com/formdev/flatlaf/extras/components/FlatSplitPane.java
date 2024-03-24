@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JSplitPane;
 
 /**
@@ -26,6 +27,29 @@ import javax.swing.JSplitPane;
  */
 public class FlatSplitPane
 	extends JSplitPane
-	implements FlatStyleableComponent
+	implements FlatComponentExtension, FlatStyleableComponent
 {
+	// NOTE: enum names must be equal to allowed strings
+	/** @since 3.4.1 */ public enum ExpandableSide { both, left, right }
+
+	/**
+	 * Returns what side of the spilt pane is allowed to expand
+	 * via one-touch expanding arrow buttons.
+	 *
+	 * @since 3.4.1
+	 */
+	public ExpandableSide getExpandableSide() {
+		return getClientPropertyEnumString( SPLIT_PANE_EXPANDABLE_SIDE, ExpandableSide.class,
+			null, ExpandableSide.both );
+	}
+
+	/**
+	 * Specifies what side of the spilt pane is allowed to expand
+	 * via one-touch expanding arrow buttons.
+	 *
+	 * @since 3.4.1
+	 */
+	public void setExpandableSide( ExpandableSide expandableSide ) {
+		putClientPropertyEnumString( SPLIT_PANE_EXPANDABLE_SIDE, expandableSide );
+	}
 }

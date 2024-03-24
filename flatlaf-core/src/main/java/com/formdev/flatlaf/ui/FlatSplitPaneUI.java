@@ -301,6 +301,10 @@ public class FlatSplitPaneUI
 					// necessary to show/hide one-touch buttons on expand/collapse
 					doLayout();
 					break;
+
+				case FlatClientProperties.SPLIT_PANE_EXPANDABLE_SIDE:
+					revalidate();
+					break;
 			}
 		}
 
