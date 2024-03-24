@@ -707,12 +707,12 @@ public class FlatSVGIcon
 		darkLaf = FlatLaf.isLafDark();
 	}
 
-	/** @since 3.5 */
+	/** @since 3.4.1 */
 	public static boolean isSVGDocumentEnabled() {
 		return svgCacheEnabled;
 	}
 
-	/** @since 3.5 */
+	/** @since 3.4.1 */
 	public static void setSVGDocumentEnabled( boolean svgCacheEnabled ) {
 		FlatSVGIcon.svgCacheEnabled = svgCacheEnabled;
 
@@ -720,7 +720,7 @@ public class FlatSVGIcon
 			clearSVGDocumentCache();
 	}
 
-	/** @since 3.5 */
+	/** @since 3.4.1 */
 	public static void clearSVGDocumentCache() {
 		svgCache.clear();
 	}
