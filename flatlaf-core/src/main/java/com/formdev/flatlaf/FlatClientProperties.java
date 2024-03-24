@@ -103,6 +103,17 @@ public interface FlatClientProperties
 	String BUTTON_TYPE_BORDERLESS = "borderless";
 
 	/**
+	 * Specifies whether the button preferred size will be made square (quadratically).
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String SQUARE_SIZE = "JButton.squareSize";
+
+
+	//---- JCheckBox ----------------------------------------------------------
+
+	/**
 	 * Specifies selected state of a checkbox.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JCheckBox}<br>
@@ -117,14 +128,6 @@ public interface FlatClientProperties
 	 * @see #SELECTED_STATE
 	 */
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
-
-	/**
-	 * Specifies whether the button preferred size will be made square (quadratically).
-	 * <p>
-	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
-	 */
-	String SQUARE_SIZE = "JButton.squareSize";
 
 
 	//---- JComponent ---------------------------------------------------------
@@ -984,7 +987,7 @@ public interface FlatClientProperties
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong>
-	 *     {@link SwingConstants#LEADING} (default)
+	 *     {@link SwingConstants#LEADING} (default),
 	 *     {@link SwingConstants#TRAILING},
 	 *     {@link SwingConstants#CENTER},
 	 *     {@link #TABBED_PANE_ALIGN_LEADING} (default),
@@ -1096,7 +1099,7 @@ public interface FlatClientProperties
 	 * <strong>Allowed Values</strong>
 	 *     {@link SwingConstants#LEFT},
 	 *     {@link SwingConstants#RIGHT},
-	 *     {@link #TABBED_PANE_TAB_ROTATION_NONE}, (default)
+	 *     {@link #TABBED_PANE_TAB_ROTATION_NONE} (default),
 	 *     {@link #TABBED_PANE_TAB_ROTATION_AUTO},
 	 *     {@link #TABBED_PANE_TAB_ROTATION_LEFT} or
 	 *     {@link #TABBED_PANE_TAB_ROTATION_RIGHT}
@@ -1345,8 +1348,8 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
-	 * <strong>SupportedValues:</strong>
-	 *     {@link SwingConstants#BOTTOM} (default)
+	 * <strong>Allowed Values</strong>
+	 *     {@link SwingConstants#BOTTOM} (default),
 	 *     {@link SwingConstants#TOP},
 	 *     {@link SwingConstants#LEFT} or
 	 *     {@link SwingConstants#RIGHT}
