@@ -13,6 +13,8 @@ FlatLaf Change Log
   (issue 809)
 - Extras:
   - `FlatSVGIcon` color filters now support linear gradients. (PR #817)
+  - `FlatSVGIcon`: Use log level `CONFIG` instead of `SEVERE` and allow
+    disabling logging. (issue #823)
   - Added support for `JSplitPane.expandableSide` client property to
     `FlatSplitPane`.
 - Native libraries: Added API version check to test whether native library

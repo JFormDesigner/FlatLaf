@@ -63,6 +63,7 @@ public class FlatSVGIcon
 	extends ImageIcon
 	implements DisabledIconProvider
 {
+	private static boolean loggingEnabled = true;
 	private static boolean svgCacheEnabled = true;
 	// cache that uses soft references for values, which allows freeing SVG documents if no longer used
 	private static final SoftCache<String, SVGDocument> svgCache = new SoftCache<>();
@@ -273,7 +274,8 @@ public class FlatSVGIcon
 
 			if( document == null ) {
 				loadFailed = true;
-				LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load SVG icon from input stream", null );
+				if( loggingEnabled )
+					LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: failed to load SVG icon from input stream", null );
 			}
 		}
 	}
@@ -477,7 +479,8 @@ public class FlatSVGIcon
 
 			if( url == null ) {
 				loadFailed = true;
-				LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
+				if( loggingEnabled )
+					LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
 				return;
 			}
 		}
@@ -508,7 +511,8 @@ public class FlatSVGIcon
 		SVGDocument document = svgLoader.load( url );
 
 		if( document == null ) {
-			LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load '" + url + "'", null );
+			if( loggingEnabled )
+				LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: failed to load '" + url + "'", null );
 			return null;
 		}
 
@@ -705,6 +709,16 @@ public class FlatSVGIcon
 
 	private static void lafChanged() {
 		darkLaf = FlatLaf.isLafDark();
+	}
+
+	/** @since 3.4.1 */
+	public static boolean isLoggingEnabled() {
+		return loggingEnabled;
+	}
+
+	/** @since 3.4.1 */
+	public static void setLoggingEnabled( boolean loggingEnabled ) {
+		FlatSVGIcon.loggingEnabled = loggingEnabled;
 	}
 
 	/** @since 3.4.1 */
