@@ -52,21 +52,27 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	if( window == NULL )
 		return NULL;
 
+	// initialize class IDs (done only once because variables are static)
+	static jclass lwWindowPeerClass = findClass( env, "sun/lwawt/LWWindowPeer", true );
+	static jclass cfRetainedResourceClass = findClass( env, "sun/lwawt/macosx/CFRetainedResource", true );
+	if( lwWindowPeerClass == NULL || cfRetainedResourceClass == NULL )
+		return NULL;
+
 	// initialize field IDs (done only once because variables are static)
-	static jfieldID peerID = getFieldID( env, "java/awt/Component", "peer", "Ljava/awt/peer/ComponentPeer;", false );
-	static jfieldID platformWindowID = getFieldID( env, "sun/lwawt/LWWindowPeer", "platformWindow", "Lsun/lwawt/PlatformWindow;", false );
-	static jfieldID ptrID = getFieldID( env, "sun/lwawt/macosx/CFRetainedResource", "ptr", "J", false );
+	static jfieldID peerID = getFieldID( env, findClass( env, "java/awt/Component", false ), "peer", "Ljava/awt/peer/ComponentPeer;", false );
+	static jfieldID platformWindowID = getFieldID( env, lwWindowPeerClass, "platformWindow", "Lsun/lwawt/PlatformWindow;", false );
+	static jfieldID ptrID = getFieldID( env, cfRetainedResourceClass, "ptr", "J", false );
 	if( peerID == NULL || platformWindowID == NULL || ptrID == NULL )
 		return NULL;
 
 	// get field java.awt.Component.peer
 	jobject peer = env->GetObjectField( window, peerID );
-	if( peer == NULL )
+	if( peer == NULL || !env->IsInstanceOf( peer, lwWindowPeerClass ) )
 		return NULL;
 
 	// get field sun.lwawt.LWWindowPeer.platformWindow
 	jobject platformWindow = env->GetObjectField( peer, platformWindowID );
-	if( platformWindow == NULL )
+	if( platformWindow == NULL || !env->IsInstanceOf( platformWindow, cfRetainedResourceClass ) )
 		return NULL;
 
 	// get field sun.lwawt.macosx.CFRetainedResource.ptr

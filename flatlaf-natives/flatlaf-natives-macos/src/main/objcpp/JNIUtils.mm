@@ -38,10 +38,9 @@ jclass findClass( JNIEnv *env, const char* className, bool globalRef ) {
 	return cls;
 }
 
-jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, const char* fieldSignature, bool staticField ) {
-//	NSLog( @"getFieldID %s %s %s", className, fieldName, fieldSignature );
+jfieldID getFieldID( JNIEnv *env, jclass cls, const char* fieldName, const char* fieldSignature, bool staticField ) {
+//	NSLog( @"getFieldID %s %s", fieldName, fieldSignature );
 
-	jclass cls = findClass( env, className, false );
 	if( cls == NULL )
 		return NULL;
 
@@ -49,7 +48,7 @@ jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, 
 		? env->GetStaticFieldID( cls, fieldName, fieldSignature )
 		: env->GetFieldID( cls, fieldName, fieldSignature );
 	if( fieldID == NULL ) {
-		NSLog( @"FlatLaf: failed to lookup field '%s' of type '%s' in class '%s'", fieldName, fieldSignature, className );
+		NSLog( @"FlatLaf: failed to lookup field '%s' of type '%s'", fieldName, fieldSignature );
 		env->ExceptionDescribe(); // print stack trace
 		env->ExceptionClear();
 		return NULL;

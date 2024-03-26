@@ -22,6 +22,7 @@ FlatLaf Change Log
   incompatible native library) and to test whether native methods can be invoked
   (some security software allows loading native library but blocks method
   invocation).
+- macOS: Fixed crash when running in WebSwing. (issue #826; regression in 3.4)
 
 
 ## 3.4

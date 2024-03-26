@@ -42,5 +42,5 @@
 
 
 jclass findClass( JNIEnv *env, const char* className, bool globalRef );
-jfieldID getFieldID( JNIEnv *env, const char* className, const char* fieldName, const char* fieldSignature, bool staticField );
+jfieldID getFieldID( JNIEnv *env, jclass cls, const char* fieldName, const char* fieldSignature, bool staticField );
 jmethodID getMethodID( JNIEnv *env, jclass cls, const char* methodName, const char* methodSignature, bool staticMethod );
