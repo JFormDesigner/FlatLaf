@@ -48,7 +48,7 @@ public abstract class FlatDefaultsAddon
 	public InputStream getDefaults( Class<?> lafClass ) {
 		Class<?> addonClass = this.getClass();
 		String propertiesName = '/' + addonClass.getPackage().getName().replace( '.', '/' )
-			+ '/' + lafClass.getSimpleName() + ".properties";
+			+ '/' + UIDefaultsLoader.simpleClassName( lafClass ) + ".properties";
 		return addonClass.getResourceAsStream( propertiesName );
 	}
 

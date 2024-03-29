@@ -161,7 +161,7 @@ class UIDefaultsLoader
 						classLoader = FlatLaf.class.getClassLoader();
 
 					for( Class<?> lafClass : lafClasses ) {
-						String propertiesName = packageName + '/' + lafClass.getSimpleName() + ".properties";
+						String propertiesName = packageName + '/' + simpleClassName( lafClass ) + ".properties";
 						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
 							if( in != null )
 								properties.load( in );
@@ -171,7 +171,7 @@ class UIDefaultsLoader
 					// load from package URL
 					URL packageUrl = (URL) source;
 					for( Class<?> lafClass : lafClasses ) {
-						URL propertiesUrl = new URL( packageUrl + lafClass.getSimpleName() + ".properties" );
+						URL propertiesUrl = new URL( packageUrl + simpleClassName( lafClass ) + ".properties" );
 
 						try( InputStream in = propertiesUrl.openStream() ) {
 							properties.load( in );
@@ -183,7 +183,7 @@ class UIDefaultsLoader
 					// load from folder
 					File folder = (File) source;
 					for( Class<?> lafClass : lafClasses ) {
-						File propertiesFile = new File( folder, lafClass.getSimpleName() + ".properties" );
+						File propertiesFile = new File( folder, simpleClassName( lafClass ) + ".properties" );
 						if( !propertiesFile.isFile() )
 							continue;
 
@@ -292,6 +292,14 @@ class UIDefaultsLoader
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
+	}
+
+	/**
+	 * Similar to Class.getSimpleName(), but includes enclosing class for nested classes.
+	 */
+	static String simpleClassName( Class<?> cls ) {
+		String className = cls.getName();
+		return className.substring( className.lastIndexOf( '.' ) + 1 );
 	}
 
 	static void logParseError( String key, String value, RuntimeException ex, boolean severe ) {

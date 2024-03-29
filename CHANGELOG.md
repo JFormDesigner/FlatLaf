@@ -24,6 +24,13 @@ FlatLaf Change Log
   invocation).
 - macOS: Fixed crash when running in WebSwing. (issue #826; regression in 3.4)
 
+#### Incompatibilities
+
+- File names of custom properties files for nested Laf classes now must include
+  name of enclosing class name. E.g. nested Laf class `IntelliJTheme.ThemeLaf`
+  used `ThemeLaf.properties` in previous versions, but now needs to be named
+  `IntelliJTheme$ThemeLaf.properties`.
+
 
 ## 3.4
 
