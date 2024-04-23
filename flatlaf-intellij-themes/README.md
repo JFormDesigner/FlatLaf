@@ -28,10 +28,10 @@ Otherwise, download `flatlaf-intellij-themes-<version>.jar` here:
 How to use?
 -----------
 
-Choose a theme (see list below) and invoke its `install` method. E.g.:
+Choose a theme (see list below) and invoke its `setup` method. E.g.:
 
 ~~~java
-FlatArcOrangeIJTheme.install();
+FlatArcOrangeIJTheme.setup();
 ~~~
 
 
