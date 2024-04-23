@@ -31,7 +31,7 @@ How to use?
 Choose a theme (see list below) and invoke its `install` method. E.g.:
 
 ~~~java
-FlatArcOrangeIJTheme.install();
+FlatArcOrangeIJTheme.setup();
 ~~~
 
 
