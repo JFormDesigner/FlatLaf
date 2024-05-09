@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## 3.5-SNAPSHOT
+
+#### Incompatibilities
+
+- ProgressBar: Log warning (including stack trace) when uninstalling
+  indeterminate progress bar UI or using JProgressBar.setIndeterminate(false)
+  not on AWT thread, because this may throw NPE in FlatProgressBarUI.paint().
+  (issues #841 and #830)
+
+
 ## 3.4.1
 
 #### Fixed bugs
