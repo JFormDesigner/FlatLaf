@@ -160,29 +160,30 @@ public class FlatPanelUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
+		int arc = (this.arc >= 0)
+			? this.arc
+			: ((c.getBorder() instanceof FlatLineBorder)
+				? ((FlatLineBorder)c.getBorder()).getArc()
+				: 0);
+
 		// fill background
 		if( c.isOpaque() ) {
-			int width = c.getWidth();
-			int height = c.getHeight();
-			int arc = (this.arc >= 0)
-				? this.arc
-				: ((c.getBorder() instanceof FlatLineBorder)
-					? ((FlatLineBorder)c.getBorder()).getArc()
-					: 0);
-
-			// fill background with parent color to avoid garbage in rounded corners
-			if( arc > 0 )
-				FlatUIUtils.paintParentBackground( g, c );
-
-			g.setColor( c.getBackground() );
 			if( arc > 0 ) {
-				// fill rounded rectangle if having rounded corners
-				Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
-				FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, width, height,
-					0, UIScale.scale( arc ) );
-				FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
-			} else
-				g.fillRect( 0, 0, width, height );
+				// fill background with parent color to avoid garbage in rounded corners
+				FlatUIUtils.paintParentBackground( g, c );
+			} else {
+				g.setColor( c.getBackground() );
+				g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+			}
+		}
+
+		// fill rounded rectangle if having rounded corners
+		if( arc > 0 ) {
+			g.setColor( c.getBackground() );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, c.getWidth(), c.getHeight(),
+				0, UIScale.scale( arc ) );
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		paint( g, c );

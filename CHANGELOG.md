@@ -9,6 +9,8 @@ FlatLaf Change Log
   indeterminate progress bar UI or using JProgressBar.setIndeterminate(false)
   not on AWT thread, because this may throw NPE in FlatProgressBarUI.paint().
   (issues #841 and #830)
+- Panel: Rounded background of panel with rounded corners is now painted even if
+  panel is not opaque. (issue #840)
 
 
 ## 3.4.1
@@ -20,7 +22,7 @@ FlatLaf Change Log
 - TabbedPane: Fixed swapped back and forward scroll buttons when using
   `TabbedPane.scrollButtonsPlacement = trailing` (regression in FlatLaf 3.3).
 - Fixed missing window top border on Windows 10 in "full window content" mode.
-  (issue 809)
+  (issue #809)
 - Extras:
   - `FlatSVGIcon` color filters now support linear gradients. (PR #817)
   - `FlatSVGIcon`: Use log level `CONFIG` instead of `SEVERE` and allow
@@ -65,7 +67,7 @@ FlatLaf Change Log
 - Fonts: Updated **Inter** to
   [v4.0](https://github.com/rsms/inter/releases/tag/v4.0).
 - Table: Select all text in cell editor when starting editing using `F2` key.
-  (issue 652)
+  (issue #652)
 
 #### Fixed bugs
 
@@ -93,7 +95,7 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - Button and ToggleButton: Selected buttons did not use explicitly set
-  foreground color. (issue 756)
+  foreground color. (issue #756)
 - FileChooser: Catch NPE in Java 21 when getting icon for `.exe` files that use
   default Windows exe icon. (see
   [JDK-8320692](https://bugs.openjdk.org/browse/JDK-8320692))
@@ -846,7 +848,7 @@ FlatLaf Change Log
 - Native window decorations (Windows 10 only):
   - Fixed occasional application crash in `flatlaf-windows.dll`. (issue #357)
   - When window is initially shown, fill background with window background color
-    (instead of white), which avoids flickering in dark themes. (issue 339)
+    (instead of white), which avoids flickering in dark themes. (issue #339)
   - When resizing a window at the right/bottom edge, then first fill the new
     space with the window background color (instead of black) before the layout
     is updated.
