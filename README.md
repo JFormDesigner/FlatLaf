@@ -71,6 +71,24 @@ See also
 for instructions on how to redistribute FlatLaf native libraries with your
 application.
 
+Proguard/Shadow JAR
+--------
+
+If you are using [Gradle Shadow JAR Plugin](https://github.com/johnrengelman/shadow) to build the jar for your application and `minimize()` function to minimize the size in the configurations of `shadowJar` task, then you will get an exception `java.lang.Error: no ComponentUI class for:` when running the jar, that's because Swing and Flatlaf both use Reflection, one way to fix this issue without removing the `minimize()` is to exclude Flatlaf from being minimized by using the following:
+
+```groovy
+
+shadowJar {
+    // Your shadow configurations
+    minimize {
+        // Exclude the entire FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
+        exclude(dependency("com.formdev:flatlaf:.*"))
+    }
+}
+
+```
+
+Use a similar solution if you use other tools like Proguard, for [more details](https://github.com/JFormDesigner/FlatLaf/issues/648#issuecomment-1441547550)
 
 ### Snapshots
 
