@@ -355,6 +355,7 @@ public class TestFlatStyleableValue
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 
 		testColor( c, ui, "disabledForeground", 0x123456 );
+		testInteger( c, ui, "arc", 123 );
 	}
 
 	@Test

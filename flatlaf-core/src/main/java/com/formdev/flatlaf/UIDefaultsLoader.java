@@ -638,14 +638,18 @@ class UIDefaultsLoader
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
 			Insets insets = parseInsets( value );
-			ColorUIResource lineColor = (parts.size() >= 5)
+			ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
 				: null;
-			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty()) ? parseFloat( parts.get( 5 ) ) : 1f;
-			int arc = (parts.size() >= 7) ? parseInteger( parts.get( 6 ) ) : 0;
+			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
+				? parseFloat( parts.get( 5 ) )
+				: 1f;
+			int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
+				? parseInteger( parts.get( 6 ) )
+				: 0;
 
 			return (LazyValue) t -> {
-				return (lineColor != null)
+				return (lineColor != null || arc > 0)
 					? new FlatLineBorder( insets, lineColor, lineThickness, arc )
 					: new FlatEmptyBorder( insets );
 			};

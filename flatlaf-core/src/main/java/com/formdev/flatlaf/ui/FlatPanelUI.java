@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -160,11 +161,18 @@ public class FlatPanelUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		int arc = (this.arc >= 0)
-			? this.arc
-			: ((c.getBorder() instanceof FlatLineBorder)
-				? ((FlatLineBorder)c.getBorder()).getArc()
+		fillRoundedBackground( g, c, arc );
+		paint( g, c );
+	}
+
+	/** @since 3.5 */
+	public static void fillRoundedBackground( Graphics g, JComponent c, int arc ) {
+		if( arc < 0 ) {
+			Border border = c.getBorder();
+			arc = ((border instanceof FlatLineBorder)
+				? ((FlatLineBorder)border).getArc()
 				: 0);
+		}
 
 		// fill background
 		if( c.isOpaque() ) {
@@ -185,8 +193,6 @@ public class FlatPanelUI
 				0, UIScale.scale( arc ) );
 			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
-
-		paint( g, c );
 	}
 
 	@Override

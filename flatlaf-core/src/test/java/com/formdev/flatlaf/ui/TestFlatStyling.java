@@ -412,6 +412,7 @@ public class TestFlatStyling
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 
 		ui.applyStyle( c, "disabledForeground: #fff" );
+		ui.applyStyle( c, "arc: 8" );
 
 		// JComponent properties
 		ui.applyStyle( c, "background: #fff" );

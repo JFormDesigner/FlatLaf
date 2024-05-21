@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.404" Java: "17.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.2.0.9999" Java: "21.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[][][][][]"
-			"$rowConstraints": "[][][][][][][][][][][][100,top]"
+			"$rowConstraints": "[][][][][][][][][][][][100,top][50,top][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -467,6 +467,62 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11 4 1,grow"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "panelLabel"
+				"text": "JPanel:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 12"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel5"
+				"$client.FlatLaf.style": "arc: 16; background: darken($Panel.background,5%)"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label9"
+					"text": "rounded background"
+					"horizontalAlignment": 0
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12 4 1,growy,width 150"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel4"
+				"$client.FlatLaf.style": "border: 1,1,1,1,@disabledForeground,1,16; background: darken($Panel.background,5%)"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label8"
+					"text": "rounded border"
+					"horizontalAlignment": 0
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12 4 1,growy,width 150"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelLabel"
+				"text": "JLabel:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 13"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label13"
+				"text": "rounded background"
+				"$client.FlatLaf.style": "arc: 999; border: 2,10,2,10"
+				"background": new java.awt.Color( 184, 228, 243, 255 )
+				"foreground": new java.awt.Color( 19, 91, 118, 255 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 13 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label10"
+				"text": "rounded border"
+				"$client.FlatLaf.style": "border: 2,10,2,10,#135b76,1,999"
+				"background": new java.awt.Color( 184, 228, 243, 255 )
+				"foreground": new java.awt.Color( 19, 91, 118, 255 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 13 4 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 700, 550 )
@@ -474,7 +530,7 @@ new FormModel {
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "buttonGroup1"
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 560 )
+			"location": new java.awt.Point( 0, 600 )
 		} )
 	}
 }

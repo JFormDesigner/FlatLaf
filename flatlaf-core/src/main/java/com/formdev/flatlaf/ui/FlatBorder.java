@@ -277,7 +277,7 @@ public class FlatBorder
 	}
 
 	/**
-	 * Returns the (unscaled) arc diameter of the border.
+	 * Returns the (unscaled) arc diameter of the border corners.
 	 */
 	protected int getArc( Component c ) {
 		return 0;

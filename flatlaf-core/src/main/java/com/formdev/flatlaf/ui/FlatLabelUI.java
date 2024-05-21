@@ -64,6 +64,9 @@ public class FlatLabelUI
 {
 	@Styleable protected Color disabledForeground;
 
+	// only used via styling (not in UI defaults)
+	/** @since 3.5 */ @Styleable protected int arc = -1;
+
 	private final boolean shared;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
@@ -242,6 +245,12 @@ public class FlatLabelUI
 		}
 
 		return false;
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		FlatPanelUI.fillRoundedBackground( g, c, arc );
+		paint( g, c );
 	}
 
 	static Graphics createGraphicsHTMLTextYCorrection( Graphics g, JComponent c ) {

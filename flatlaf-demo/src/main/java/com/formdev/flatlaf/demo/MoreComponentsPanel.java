@@ -118,6 +118,14 @@ class MoreComponentsPanel
 		JLabel label5 = new JLabel();
 		JPanel panel13 = new JPanel();
 		JLabel label6 = new JLabel();
+		JLabel panelLabel = new JLabel();
+		JPanel panel5 = new JPanel();
+		JLabel label9 = new JLabel();
+		JPanel panel4 = new JPanel();
+		JLabel label8 = new JLabel();
+		JLabel labelLabel = new JLabel();
+		JLabel label13 = new JLabel();
+		JLabel label10 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -140,7 +148,9 @@ class MoreComponentsPanel
 			"[]" +
 			"[]" +
 			"[]" +
-			"[100,top]"));
+			"[100,top]" +
+			"[50,top]" +
+			"[]"));
 
 		//---- scrollPaneLabel ----
 		scrollPaneLabel.setText("JScrollPane:");
@@ -441,7 +451,7 @@ class MoreComponentsPanel
 
 				//======== panel10 ========
 				{
-					panel10.setBackground(new Color(217, 163, 67));
+					panel10.setBackground(new Color(0xd9a343));
 					panel10.setLayout(new BorderLayout());
 
 					//---- label1 ----
@@ -454,7 +464,7 @@ class MoreComponentsPanel
 
 				//======== panel11 ========
 				{
-					panel11.setBackground(new Color(98, 181, 67));
+					panel11.setBackground(new Color(0x62b543));
 					panel11.setLayout(new BorderLayout());
 
 					//---- label2 ----
@@ -474,7 +484,7 @@ class MoreComponentsPanel
 
 				//======== panel12 ========
 				{
-					panel12.setBackground(new Color(242, 101, 34));
+					panel12.setBackground(new Color(0xf26522));
 					panel12.setLayout(new BorderLayout());
 
 					//---- label5 ----
@@ -487,7 +497,7 @@ class MoreComponentsPanel
 
 				//======== panel13 ========
 				{
-					panel13.setBackground(new Color(64, 182, 224));
+					panel13.setBackground(new Color(0x40b6e0));
 					panel13.setLayout(new BorderLayout());
 
 					//---- label6 ----
@@ -501,6 +511,52 @@ class MoreComponentsPanel
 			splitPane3.setRightComponent(splitPane2);
 		}
 		add(splitPane3, "cell 1 11 4 1,grow");
+
+		//---- panelLabel ----
+		panelLabel.setText("JPanel:");
+		add(panelLabel, "cell 0 12");
+
+		//======== panel5 ========
+		{
+			panel5.putClientProperty("FlatLaf.style", "arc: 16; background: darken($Panel.background,5%)");
+			panel5.setLayout(new BorderLayout());
+
+			//---- label9 ----
+			label9.setText("rounded background");
+			label9.setHorizontalAlignment(SwingConstants.CENTER);
+			panel5.add(label9, BorderLayout.CENTER);
+		}
+		add(panel5, "cell 1 12 4 1,growy,width 150");
+
+		//======== panel4 ========
+		{
+			panel4.putClientProperty("FlatLaf.style", "border: 1,1,1,1,@disabledForeground,1,16; background: darken($Panel.background,5%)");
+			panel4.setLayout(new BorderLayout());
+
+			//---- label8 ----
+			label8.setText("rounded border");
+			label8.setHorizontalAlignment(SwingConstants.CENTER);
+			panel4.add(label8, BorderLayout.CENTER);
+		}
+		add(panel4, "cell 1 12 4 1,growy,width 150");
+
+		//---- labelLabel ----
+		labelLabel.setText("JLabel:");
+		add(labelLabel, "cell 0 13");
+
+		//---- label13 ----
+		label13.setText("rounded background");
+		label13.putClientProperty("FlatLaf.style", "arc: 999; border: 2,10,2,10");
+		label13.setBackground(new Color(0xb8e4f3));
+		label13.setForeground(new Color(0x135b76));
+		add(label13, "cell 1 13 4 1");
+
+		//---- label10 ----
+		label10.setText("rounded border");
+		label10.putClientProperty("FlatLaf.style", "border: 2,10,2,10,#135b76,1,999");
+		label10.setBackground(new Color(0xb8e4f3));
+		label10.setForeground(new Color(0x135b76));
+		add(label10, "cell 1 13 4 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();

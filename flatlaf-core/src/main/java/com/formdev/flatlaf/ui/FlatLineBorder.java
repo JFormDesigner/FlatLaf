@@ -26,10 +26,14 @@ import javax.swing.JComponent;
 
 /**
  * Line border for various components.
- *
+ * <p>
  * Paints a scaled (usually 1px thick) line around the component.
  * The line thickness is not added to the border insets.
  * The insets should be at least have line thickness (usually 1,1,1,1).
+ * <p>
+ * For {@link javax.swing.JPanel} and {@link javax.swing.JLabel}, this border
+ * can be used paint rounded background (if line color is {@code null}) or
+ * paint rounded line border with rounded background.
  *
  * @author Karl Tauber
  */
@@ -52,15 +56,28 @@ public class FlatLineBorder
 		this.arc = arc;
 	}
 
+	/** @since 3.5 */
+	public FlatLineBorder( Insets insets, int arc ) {
+		this( insets, null, 0, arc );
+	}
+
 	public Color getLineColor() {
 		return lineColor;
 	}
 
+	/**
+	 * Returns the (unscaled) line thickness used to paint the border.
+	 * The line thickness does not affect the border insets.
+	 */
 	public float getLineThickness() {
 		return lineThickness;
 	}
 
-	/** @since 2 */
+	/**
+	 * Returns the (unscaled) arc diameter of the border corners.
+	 *
+	 * @since 2
+	 */
 	public int getArc() {
 		return arc;
 	}
@@ -70,11 +87,16 @@ public class FlatLineBorder
 		if( c instanceof JComponent && ((JComponent)c).getClientProperty( FlatPopupFactory.KEY_POPUP_USES_NATIVE_BORDER ) != null )
 			return;
 
+		Color lineColor = getLineColor();
+		float lineThickness = getLineThickness();
+		if( lineColor == null || lineThickness <= 0 )
+			return;
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height,
-				0, 0, 0, scale( getLineThickness() ), scale( getArc() ), null, getLineColor(), null );
+				0, 0, 0, scale( lineThickness ), scale( getArc() ), null, lineColor, null );
 		} finally {
 			g2.dispose();
 		}

@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 3.5-SNAPSHOT
 
+#### New features and improvements
+
+- Label: Support painting background with rounded corners. (issue #842)
+
 #### Incompatibilities
 
 - ProgressBar: Log warning (including stack trace) when uninstalling

@@ -253,7 +253,8 @@ public class TestFlatStyleableInfo
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
-			"disabledForeground", Color.class
+			"disabledForeground", Color.class,
+			"arc", int.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
