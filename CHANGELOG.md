@@ -6,6 +6,8 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Label: Support painting background with rounded corners. (issue #842)
+- Popup: Fixed flicker of popups (e.g. tooltips) while they are moving (e.g.
+  following mouse pointer). (issues #832 and #672)
 
 #### Incompatibilities
 

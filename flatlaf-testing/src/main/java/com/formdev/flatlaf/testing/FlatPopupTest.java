@@ -17,8 +17,12 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.Random;
 import javax.swing.*;
+import javax.swing.border.*;
 import com.formdev.flatlaf.util.Animator;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -27,7 +31,8 @@ import net.miginfocom.swing.*;
 public class FlatPopupTest
 	extends FlatTestPanel
 {
-	private Popup popup;
+	private Popup[] popups;
+	private JPanel[] popupPanels;
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -54,19 +59,25 @@ public class FlatPopupTest
 
 	private void showPopup( int xoffset, int yoffset ) {
 		hidePopup();
+		createPopupPanels();
+		int xoffset2 = popupPanels[0].getPreferredSize().width + UIScale.scale( 10 );
 
 		Point pt = showPopupButton.getLocationOnScreen();
-		popup = PopupFactory.getSharedInstance().getPopup( showPopupButton, popupPanel,
-			pt.x + xoffset, pt.y + showPopupButton.getHeight() + yoffset );
-		popup.show();
+		popups = new Popup[popupPanels.length];
+		for( int i = 0; i < popupPanels.length; i++ ) {
+			popups[i] = PopupFactory.getSharedInstance().getPopup( this, popupPanels[i],
+				pt.x + xoffset + (xoffset2 * i), pt.y + showPopupButton.getHeight() + yoffset );
+			popups[i].show();
+		}
 	}
 
 	private void hidePopup() {
-		if( popup == null )
+		if( popups == null )
 			return;
 
-		popup.hide();
-		popup = null;
+		for( Popup popup : popups )
+			popup.hide();
+		popups = null;
 	}
 
 	private void movePopupDown() {
@@ -80,11 +91,27 @@ public class FlatPopupTest
 	private void movePopup( int xoffset, int yoffset ) {
 		showPopup();
 
-		Animator animator = new Animator( 1000, fraction -> {
-			System.out.println(fraction);
+		Animator animator = new Animator( 1500, fraction -> {
+//			System.out.println(fraction);
 			showPopup( (int) (fraction * xoffset), (int) (fraction * yoffset) );
 		} );
 		animator.start();
+	}
+
+	private void createPopupPanels() {
+		int count = (int) countField.getValue();
+		if( popupPanels != null && popupPanels.length == count )
+			return;
+
+		Random random = new Random();
+		popupPanels = new JPanel[count];
+		for( int i = 0; i < popupPanels.length; i++ ) {
+			JLabel l = new JLabel( "popup " + (i + 1) );
+			JPanel p = new JPanel();
+			p.setBackground( new Color( random.nextInt( 0xffffff ) ) );
+			p.add( l );
+			popupPanels[i] = p;
+		}
 	}
 
 	@Override
@@ -94,8 +121,15 @@ public class FlatPopupTest
 		if( popupMenu1 != null ) {
 			SwingUtilities.updateComponentTreeUI( popupMenu1 );
 			SwingUtilities.updateComponentTreeUI( popupMenu2 );
-			SwingUtilities.updateComponentTreeUI( popupPanel );
 		}
+		if( popupPanels != null ) {
+			for( JPanel popupPanel : popupPanels )
+				SwingUtilities.updateComponentTreeUI( popupPanel );
+		}
+	}
+
+	private void countChanged() {
+		// TODO add your code here
 	}
 
 	private void initComponents() {
@@ -107,16 +141,17 @@ public class FlatPopupTest
 		showPopupButton = new JButton();
 		hidePopupButton = new JButton();
 		movePopupDownButton = new JButton();
-		movePopuprightButton = new JButton();
+		movePopupRightButton = new JButton();
+		countLabel = new JLabel();
+		countField = new JSpinner();
 		label4 = new JLabel();
+		movingToolTipPanel = new MovingToolTipPanel();
 		popupMenu1 = new JPopupMenu();
 		menuItem1 = new JMenuItem();
 		menuItem2 = new JMenuItem();
 		menu1 = new JMenu();
 		menuItem3 = new JMenuItem();
 		menuItem4 = new JMenuItem();
-		popupPanel = new JPanel();
-		label3 = new JLabel();
 		popupMenu2 = new JPopupMenu();
 		menuItem5 = new JMenuItem();
 		menuItem6 = new JMenuItem();
@@ -146,14 +181,18 @@ public class FlatPopupTest
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
-			"[fill]",
+			"[fill]" +
+			"[fill]" +
+			"[fill]" +
+			"[grow,fill]",
 			// rows
 			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
-			"[]"));
+			"[]" +
+			"[grow,fill]"));
 
 		//---- label1 ----
 		label1.setText("Label with light-weight tooltip");
@@ -190,14 +229,24 @@ public class FlatPopupTest
 		movePopupDownButton.addActionListener(e -> movePopupDown());
 		add(movePopupDownButton, "cell 2 4");
 
-		//---- movePopuprightButton ----
-		movePopuprightButton.setText("move right");
-		movePopuprightButton.addActionListener(e -> movePopupRight());
-		add(movePopuprightButton, "cell 3 4");
+		//---- movePopupRightButton ----
+		movePopupRightButton.setText("move right");
+		movePopupRightButton.addActionListener(e -> movePopupRight());
+		add(movePopupRightButton, "cell 3 4");
+
+		//---- countLabel ----
+		countLabel.setText("Count:");
+		add(countLabel, "cell 4 4");
+
+		//---- countField ----
+		countField.setModel(new SpinnerNumberModel(1, 1, null, 1));
+		countField.addChangeListener(e -> countChanged());
+		add(countField, "cell 5 4");
 
 		//---- label4 ----
 		label4.setText("(switches to heavy-weight when moving outside of window)");
 		add(label4, "cell 0 5 4 1,alignx right,growx 0");
+		add(movingToolTipPanel, "cell 0 6 7 1");
 
 		//======== popupMenu1 ========
 		{
@@ -223,21 +272,6 @@ public class FlatPopupTest
 				menu1.add(menuItem4);
 			}
 			popupMenu1.add(menu1);
-		}
-
-		//======== popupPanel ========
-		{
-			popupPanel.setBackground(new Color(153, 255, 153));
-			popupPanel.setLayout(new MigLayout(
-				"hidemode 3",
-				// columns
-				"[fill]",
-				// rows
-				"[]"));
-
-			//---- label3 ----
-			label3.setText("popup");
-			popupPanel.add(label3, "cell 0 0");
 		}
 
 		//======== popupMenu2 ========
@@ -336,16 +370,17 @@ public class FlatPopupTest
 	private JButton showPopupButton;
 	private JButton hidePopupButton;
 	private JButton movePopupDownButton;
-	private JButton movePopuprightButton;
+	private JButton movePopupRightButton;
+	private JLabel countLabel;
+	private JSpinner countField;
 	private JLabel label4;
+	private MovingToolTipPanel movingToolTipPanel;
 	private JPopupMenu popupMenu1;
 	private JMenuItem menuItem1;
 	private JMenuItem menuItem2;
 	private JMenu menu1;
 	private JMenuItem menuItem3;
 	private JMenuItem menuItem4;
-	private JPanel popupPanel;
-	private JLabel label3;
 	private JPopupMenu popupMenu2;
 	private JMenuItem menuItem5;
 	private JMenuItem menuItem6;
@@ -368,4 +403,45 @@ public class FlatPopupTest
 	private JMenuItem menuItem22;
 	private JMenuItem menuItem23;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class MovingToolTipPanel -------------------------------------------
+
+	private static class MovingToolTipPanel
+		extends JPanel
+	{
+		private MovingToolTipPanel() {
+			initComponents();
+		}
+
+		@Override
+		public String getToolTipText( MouseEvent e ) {
+			return e.getX() + "," + e.getY();
+		}
+
+		@Override
+		public Point getToolTipLocation( MouseEvent e ) {
+			// multiply Y by two to make it possible to move tooltip outside of window,
+			// which forces use of heavy weight popups for all Lafs
+			return new Point( e.getX() , e.getY() * 2 );
+		}
+
+		private void initComponents() {
+			// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+			label6 = new JLabel();
+
+			//======== this ========
+			setBorder(new LineBorder(Color.red));
+			setToolTipText("text");
+			setLayout(new FlowLayout());
+
+			//---- label6 ----
+			label6.setText("moving tooltip area");
+			add(label6);
+			// JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+		}
+
+		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
+		private JLabel label6;
+		// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+	}
 }

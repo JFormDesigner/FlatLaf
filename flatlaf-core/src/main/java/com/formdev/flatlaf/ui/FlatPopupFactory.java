@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.AWTEvent;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -41,6 +42,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -76,6 +78,8 @@ public class FlatPopupFactory
 	private MethodHandle java8getPopupMethod;
 	private MethodHandle java9getPopupMethod;
 
+	private final ArrayList<NonFlashingPopup> stillShownHeavyWeightPopups = new ArrayList<>();
+
 	@Override
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
@@ -88,14 +92,27 @@ public class FlatPopupFactory
 
 		fixLinuxWaylandJava21focusIssue( owner );
 
+		// reuse a heavy weight popup window, which is still shown on screen,
+		// to avoid flicker when popup (e.g. tooltip) is moving while mouse is moved
+		for( NonFlashingPopup popup : stillShownHeavyWeightPopups ) {
+			if( popup.delegate != null &&
+				popup.owner == owner &&
+				(popup.contents == contents ||
+				 (popup.contents instanceof JToolTip && contents instanceof JToolTip)) )
+			{
+				stillShownHeavyWeightPopups.remove( popup );
+				return reuseStillShownHeavyWeightPopups( popup, contents, x, y );
+			}
+		}
+
 		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
 
 		if( !isOptionEnabled( owner, contents, FlatClientProperties.POPUP_DROP_SHADOW_PAINTED, "Popup.dropShadowPainted" ) || SystemInfo.isProjector || SystemInfo.isWebswing )
-			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), contents );
+			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
-			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
 			if( popup.popupWindow != null && SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() )
 				setupRoundedBorder( popup.popupWindow, owner, contents );
 			return popup;
@@ -105,7 +122,7 @@ public class FlatPopupFactory
 		if( isWindows11BorderSupported() &&
 			getBorderCornerRadius( owner, contents ) > 0 )
 		{
-			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
+			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
 			if( popup.popupWindow != null )
 				setupRoundedBorder( popup.popupWindow, owner, contents );
 			return popup;
@@ -225,6 +242,24 @@ public class FlatPopupFactory
 		}
 
 		return UIManager.get( uiKey );
+	}
+
+	/**
+	 * Reuse a heavy weight popup window, which is still shown on screen,
+	 * by updating window location and contents.
+	 * This avoid flicker when popup (e.g. a tooltip) is moving while mouse is moved.
+	 * E.g. overridden JComponent.getToolTipLocation(MouseEvent).
+	 * See ToolTipManager.checkForTipChange(MouseEvent).
+	 */
+	private static NonFlashingPopup reuseStillShownHeavyWeightPopups(
+		NonFlashingPopup reusePopup, Component contents, int ownerX, int ownerY )
+	{
+		// clone popup because PopupFactory.getPopup() should not return old instance
+		NonFlashingPopup popup = reusePopup.cloneForReuse();
+
+		// update popup location, size and contents
+		popup.reset( contents, ownerX, ownerY );
+		return popup;
 	}
 
 	//---- tooltips -----------------------------------------------------------
@@ -490,18 +525,31 @@ public class FlatPopupFactory
 
 	//---- class NonFlashingPopup ---------------------------------------------
 
-	private static class NonFlashingPopup
+	/**
+	 * Fixes popup background flashing effect when using dark theme on light platform theme,
+	 * where the light popup background is shown for a fraction of a second before
+	 * the dark popup content is shown.
+	 * This is fixed by setting popup background to content background.
+	 * <p>
+	 * Defers hiding of heavy weight popup window for an event cycle,
+	 * which allows reusing popup window to avoid flicker when "moving" popup.
+	 */
+	private class NonFlashingPopup
 		extends Popup
 	{
 		private Popup delegate;
+		Component owner;
 		private Component contents;
 
 		// heavy weight
-		protected Window popupWindow;
+		Window popupWindow;
 		private Color oldPopupWindowBackground;
 
-		NonFlashingPopup( Popup delegate, Component contents ) {
+		private boolean disposed;
+
+		NonFlashingPopup( Popup delegate, Component owner, Component contents ) {
 			this.delegate = delegate;
+			this.owner = owner;
 			this.contents = contents;
 
 			popupWindow = SwingUtilities.windowForComponent( contents );
@@ -515,8 +563,27 @@ public class FlatPopupFactory
 			}
 		}
 
+		private NonFlashingPopup( NonFlashingPopup reusePopup ) {
+			delegate = reusePopup.delegate;
+			owner = reusePopup.owner;
+			contents = reusePopup.contents;
+			popupWindow = reusePopup.popupWindow;
+			oldPopupWindowBackground = reusePopup.oldPopupWindowBackground;
+		}
+
+		NonFlashingPopup cloneForReuse() {
+			return new NonFlashingPopup( this );
+		}
+
 		@Override
-		public void show() {
+		public final void show() {
+			if( disposed )
+				return;
+
+			showImpl();
+		}
+
+		void showImpl() {
 			if( delegate != null ) {
 				showPopupAndFixLocation( delegate, popupWindow );
 
@@ -540,13 +607,36 @@ public class FlatPopupFactory
 		}
 
 		@Override
-		public void hide() {
+		public final void hide() {
+			if( disposed )
+				return;
+			disposed = true;
+
+			// immediately hide non-heavy weight popups or combobox popups
+			if( !(popupWindow instanceof JWindow) || contents instanceof BasicComboPopup ) {
+				hideImpl();
+				return;
+			}
+
+			// defer hiding of heavy weight popup window for an event cycle,
+			// which allows reusing popup window to avoid flicker when "moving" popup
+			((JWindow)popupWindow).getContentPane().removeAll();
+			stillShownHeavyWeightPopups.add( this );
+			EventQueue.invokeLater( () -> {
+				// hide popup if it was not reused
+				if( stillShownHeavyWeightPopups.remove( this ) )
+					hideImpl();
+			} );
+		}
+
+		void hideImpl() {
 			if( contents instanceof JComponent )
 				((JComponent)contents).putClientProperty( KEY_POPUP_USES_NATIVE_BORDER, null );
 
 			if( delegate != null ) {
 				delegate.hide();
 				delegate = null;
+				owner = null;
 				contents = null;
 			}
 
@@ -557,6 +647,30 @@ public class FlatPopupFactory
 				popupWindow = null;
 			}
 		}
+
+		void reset( Component contents, int ownerX, int ownerY ) {
+			// update popup window location
+			popupWindow.setLocation( ownerX, ownerY );
+
+			// replace component in content pane
+			Container contentPane = ((JWindow)popupWindow).getContentPane();
+			contentPane.removeAll();
+			contentPane.add( contents, BorderLayout.CENTER );
+			popupWindow.invalidate();
+			popupWindow.validate();
+			popupWindow.pack();
+
+			// update client property on contents
+			if( this.contents != contents ) {
+				Object old = (this.contents instanceof JComponent)
+					? ((JComponent)this.contents).getClientProperty( KEY_POPUP_USES_NATIVE_BORDER )
+					: null;
+				if( contents instanceof JComponent )
+					((JComponent)contents).putClientProperty( KEY_POPUP_USES_NATIVE_BORDER, old );
+
+				this.contents = contents;
+			}
+		}
 	}
 
 	//---- class DropShadowPopup ----------------------------------------------
@@ -564,8 +678,6 @@ public class FlatPopupFactory
 	private class DropShadowPopup
 		extends NonFlashingPopup
 	{
-		private final Component owner;
-
 		// light weight
 		private JComponent lightComp;
 		private Border oldBorder;
@@ -580,11 +692,11 @@ public class FlatPopupFactory
 		// heavy weight
 		private Popup dropShadowDelegate;
 		private Window dropShadowWindow;
+		private JPanel dropShadowPanel2;
 		private Color oldDropShadowWindowBackground;
 
 		DropShadowPopup( Popup delegate, Component owner, Component contents ) {
-			super( delegate, contents );
-			this.owner = owner;
+			super( delegate, owner, contents );
 
 			Dimension size = contents.getPreferredSize();
 			if( size.width <= 0 || size.height <= 0 )
@@ -600,24 +712,24 @@ public class FlatPopupFactory
 				// the drop shadow and is positioned behind the popup window.
 
 				// create panel that paints the drop shadow
-				JPanel dropShadowPanel = new JPanel();
-				dropShadowPanel.setBorder( createDropShadowBorder() );
-				dropShadowPanel.setOpaque( false );
+				dropShadowPanel2 = new JPanel();
+				dropShadowPanel2.setBorder( createDropShadowBorder() );
+				dropShadowPanel2.setOpaque( false );
 
 				// set preferred size of drop shadow panel
 				Dimension prefSize = popupWindow.getPreferredSize();
-				Insets insets = dropShadowPanel.getInsets();
-				dropShadowPanel.setPreferredSize( new Dimension(
+				Insets insets = dropShadowPanel2.getInsets();
+				dropShadowPanel2.setPreferredSize( new Dimension(
 					prefSize.width + insets.left + insets.right,
 					prefSize.height + insets.top + insets.bottom ) );
 
 				// create heavy weight popup for drop shadow
 				int x = popupWindow.getX() - insets.left;
 				int y = popupWindow.getY() - insets.top;
-				dropShadowDelegate = getPopupForScreenOfOwner( owner, dropShadowPanel, x, y, true );
+				dropShadowDelegate = getPopupForScreenOfOwner( owner, dropShadowPanel2, x, y, true );
 
 				// make drop shadow popup window translucent
-				dropShadowWindow = SwingUtilities.windowForComponent( dropShadowPanel );
+				dropShadowWindow = SwingUtilities.windowForComponent( dropShadowPanel2 );
 				if( dropShadowWindow != null ) {
 					oldDropShadowWindowBackground = dropShadowWindow.getBackground();
 					dropShadowWindow.setBackground( new Color( 0, true ) );
@@ -654,6 +766,23 @@ public class FlatPopupFactory
 			}
 		}
 
+		private DropShadowPopup( DropShadowPopup reusePopup ) {
+			super( reusePopup );
+
+			// not necessary to clone fields used for light/medium weight popups
+
+			// heavy weight
+			dropShadowDelegate = reusePopup.dropShadowDelegate;
+			dropShadowWindow = reusePopup.dropShadowWindow;
+			dropShadowPanel2 = reusePopup.dropShadowPanel2;
+			oldDropShadowWindowBackground = reusePopup.oldDropShadowWindowBackground;
+		}
+
+		@Override
+		NonFlashingPopup cloneForReuse() {
+			return new DropShadowPopup( this );
+		}
+
 		private Border createDropShadowBorder() {
 			return new FlatDropShadowBorder(
 				UIManager.getColor( "Popup.dropShadowColor" ),
@@ -662,14 +791,14 @@ public class FlatPopupFactory
 		}
 
 		@Override
-		public void show() {
+		void showImpl() {
 			if( dropShadowDelegate != null )
 				showPopupAndFixLocation( dropShadowDelegate, dropShadowWindow );
 
 			if( mediumWeightPanel != null )
 				showMediumWeightDropShadow();
 
-			super.show();
+			super.showImpl();
 
 			// fix location of light weight popup in case it has left or top drop shadow
 			if( lightComp != null ) {
@@ -680,10 +809,11 @@ public class FlatPopupFactory
 		}
 
 		@Override
-		public void hide() {
+		void hideImpl() {
 			if( dropShadowDelegate != null ) {
 				dropShadowDelegate.hide();
 				dropShadowDelegate = null;
+				dropShadowPanel2 = null;
 			}
 
 			if( mediumWeightPanel != null ) {
@@ -692,7 +822,7 @@ public class FlatPopupFactory
 				mediumWeightPanel = null;
 			}
 
-			super.hide();
+			super.hideImpl();
 
 			if( dropShadowWindow != null ) {
 				dropShadowWindow.setBackground( oldDropShadowWindowBackground );
@@ -775,6 +905,26 @@ public class FlatPopupFactory
 		private void resizeMediumWeightDropShadow() {
 			if( dropShadowPanel != null && mediumWeightPanel != null )
 				dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+		}
+
+		@Override
+		void reset( Component contents, int ownerX, int ownerY ) {
+			super.reset( contents, ownerX, ownerY );
+
+			if( dropShadowWindow != null ) {
+				// set preferred size of drop shadow panel
+				Dimension prefSize = popupWindow.getPreferredSize();
+				Insets insets = dropShadowPanel2.getInsets();
+				int w = prefSize.width + insets.left + insets.right;
+				int h = prefSize.height + insets.top + insets.bottom;
+				dropShadowPanel2.setPreferredSize( new Dimension( w, h ) );
+
+				// update drop shadow popup window location and size
+				int x = popupWindow.getX() - insets.left;
+				int y = popupWindow.getY() - insets.top;
+				dropShadowWindow.setBounds( x, y, w, h );
+				dropShadowWindow.pack();
+			}
 		}
 	}
 }
