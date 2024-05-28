@@ -9,6 +9,12 @@ FlatLaf Change Log
 - Popup: Fixed flicker of popups (e.g. tooltips) while they are moving (e.g.
   following mouse pointer). (issues #832 and #672)
 
+#### Fixed bugs
+
+- FlatLaf window decorations: Window top border on Windows 10 in "full window
+  content" mode was not fully repainted when activating or deactivating window.
+  (issue #809)
+
 #### Incompatibilities
 
 - ProgressBar: Log warning (including stack trace) when uninstalling

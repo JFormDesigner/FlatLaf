@@ -222,7 +222,7 @@ public class FlatTitlePane
 			windowTopBorderLayer = new JPanel();
 			windowTopBorderLayer.setVisible( false );
 			windowTopBorderLayer.setOpaque( false );
-			windowTopBorderLayer.setBorder( FlatUIUtils.nonUIResource( FlatNativeWindowBorder.WindowTopBorder.getInstance() ) );
+			windowTopBorderLayer.setBorder( FlatUIUtils.nonUIResource( WindowTopBorder.getInstance() ) );
 		} else
 			windowTopBorderLayer = null;
 
@@ -743,16 +743,6 @@ public class FlatTitlePane
 			? FlatUIUtils.getParentBackground( this )
 			: getBackground() );
 		g.fillRect( 0, 0, getWidth(), getHeight() );
-	}
-
-	protected void repaintWindowBorder() {
-		int width = rootPane.getWidth();
-		int height = rootPane.getHeight();
-		Insets insets = rootPane.getInsets();
-		rootPane.repaint( 0, 0, width, insets.top ); // top
-		rootPane.repaint( 0, 0, insets.left, height ); // left
-		rootPane.repaint( 0, height - insets.bottom, width, insets.bottom ); // bottom
-		rootPane.repaint( width - insets.right, 0, insets.right, height ); // right
 	}
 
 	/**
@@ -1352,10 +1342,7 @@ public class FlatTitlePane
 			activeChanged( true );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( isWindowTopBorderNeeded() )
-				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
-
-			repaintWindowBorder();
+			repaintBorder();
 		}
 
 		@Override
@@ -1363,10 +1350,22 @@ public class FlatTitlePane
 			activeChanged( false );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( isWindowTopBorderNeeded() )
+			repaintBorder();
+		}
+
+		private void repaintBorder() {
+			// Windows 10 top border
+			if( windowTopBorderLayer != null && windowTopBorderLayer.isShowing())
+				WindowTopBorder.getInstance().repaintBorder( windowTopBorderLayer );
+			else if( isWindowTopBorderNeeded() && !isWindowMaximized() && !isFullWindowContent() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
-			repaintWindowBorder();
+			// Window border used for non-native window decorations
+			if( rootPane.getBorder() instanceof FlatRootPaneUI.FlatWindowBorder ) {
+				// not repainting four areas on the four sides because RepaintManager
+				// unions dirty regions, which also results in repaint of whole rootpane
+				rootPane.repaint();
+			}
 		}
 
 		@Override
