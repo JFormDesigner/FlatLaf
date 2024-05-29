@@ -340,7 +340,8 @@ public class FlatTestFrame
 		if( menuBarFactory != null )
 			setJMenuBar( menuBarFactory.apply( content ) );
 
-		contentPanel.add( content );
+		addContentToContentPanel();
+
 		pack();
 		setLocationRelativeTo( null );
 		setVisible( true );
@@ -348,6 +349,27 @@ public class FlatTestFrame
 		EventQueue.invokeLater( () -> {
 			closeButton.requestFocusInWindow();
 		} );
+	}
+
+	private void addContentToContentPanel() {
+		if( content instanceof JScrollPane ) {
+			contentPanel.add( content );
+			return;
+		}
+
+		Dimension contentSize = content.getPreferredSize();
+		int buttonBarHeight = buttonBar.getPreferredSize().height;
+		Rectangle screenBounds = getGraphicsConfiguration().getBounds();
+
+		// add scroll pane if content is larger than screen
+		if( contentSize.width > screenBounds.width ||
+			contentSize.height + buttonBarHeight > screenBounds.height )
+		{
+			JScrollPane scrollPane = new JScrollPane( content );
+			scrollPane.setBorder( BorderFactory.createEmptyBorder() );
+			contentPanel.add( scrollPane );
+		} else
+			contentPanel.add( content );
 	}
 
 	private void selectLookAndFeel( String lafClassName ) {
@@ -697,9 +719,9 @@ public class FlatTestFrame
 	}
 
 	private void recreateContent() {
-		contentPanel.remove( content );
+		contentPanel.removeAll();
 		content = contentFactory.get();
-		contentPanel.add( content );
+		addContentToContentPanel();
 
 		if( rightToLeftCheckBox.isSelected() )
 			rightToLeftChanged();
