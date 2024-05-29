@@ -136,6 +136,14 @@ public class FlatMenuUI
 		oldStyleValues = null;
 	}
 
+	@Override
+	protected void installComponents( JMenuItem menuItem ) {
+		super.installComponents( menuItem );
+
+		// update HTML renderer if necessary
+		FlatHTML.updateRendererCSSFontBaseSize( menuItem );
+	}
+
 	protected FlatMenuItemRenderer createRenderer() {
 		return new FlatMenuRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
 	}
@@ -167,7 +175,9 @@ public class FlatMenuUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		return FlatStylingSupport.createPropertyChangeListener( c, this::installStyle, super.createPropertyChangeListener( c ) );
+		return FlatHTML.createPropertyChangeListener(
+			FlatStylingSupport.createPropertyChangeListener( c, this::installStyle,
+				super.createPropertyChangeListener( c ) ) );
 	}
 
 	/** @since 2 */

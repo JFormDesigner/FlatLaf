@@ -21,12 +21,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicButtonListener;
 import org.jdesktop.swingx.plaf.basic.BasicHyperlinkUI;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatHTML;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -61,6 +64,11 @@ public class FlatHyperlinkUI
 	}
 
 	@Override
+	protected BasicButtonListener createButtonListener( AbstractButton b ) {
+		return new FlatHyperlinkListener( b );
+	}
+
+	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		FlatButtonUI.paintText( g, b, textRect, text, b.isEnabled() ? b.getForeground() : disabledText );
 
@@ -78,5 +86,22 @@ public class FlatHyperlinkUI
 			rect.width, UIScale.scale( 1f ) ) );
 
 		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+	}
+
+	//---- class FlatHyperlinkListener ----------------------------------------
+
+	/** @since 3.5 */
+	protected class FlatHyperlinkListener
+		extends BasicHyperlinkListener
+	{
+		protected FlatHyperlinkListener( AbstractButton b ) {
+			super( b );
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			super.propertyChange( e );
+			FlatHTML.propertyChange( e );
+		}
 	}
 }

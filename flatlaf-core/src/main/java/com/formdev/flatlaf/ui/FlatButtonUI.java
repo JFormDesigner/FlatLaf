@@ -300,6 +300,10 @@ public class FlatButtonUI
 
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
+			case BasicHTML.propertyKey:
+				FlatHTML.updateRendererCSSFontBaseSize( b );
+				break;
+
 			case SQUARE_SIZE:
 			case MINIMUM_WIDTH:
 			case MINIMUM_HEIGHT:

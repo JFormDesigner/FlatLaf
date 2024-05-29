@@ -14,6 +14,10 @@ FlatLaf Change Log
 - FlatLaf window decorations: Window top border on Windows 10 in "full window
   content" mode was not fully repainted when activating or deactivating window.
   (issue #809)
+- HTML: Fixed font sizes for HTML tags `<h1>`...`<h6>`, `<code>`, `<kbd>`,
+  `<big>`, `<small>` and `<samp>` in HTML text for components Button, CheckBox,
+  RadioButton, MenuItem (and subclasses), JideLabel, JideButton, JXBusyLabel and
+  JXHyperlink. Also fixed for Label and ToolTip if using Java 11+.
 
 #### Incompatibilities
 

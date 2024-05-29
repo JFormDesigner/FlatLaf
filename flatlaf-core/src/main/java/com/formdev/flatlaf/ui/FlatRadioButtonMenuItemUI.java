@@ -23,6 +23,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -102,13 +103,23 @@ public class FlatRadioButtonMenuItemUI
 		oldStyleValues = null;
 	}
 
+	@Override
+	protected void installComponents( JMenuItem menuItem ) {
+		super.installComponents( menuItem );
+
+		// update HTML renderer if necessary
+		FlatHTML.updateRendererCSSFontBaseSize( menuItem );
+	}
+
 	protected FlatMenuItemRenderer createRenderer() {
 		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
 	}
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		return FlatStylingSupport.createPropertyChangeListener( c, this::installStyle, super.createPropertyChangeListener( c ) );
+		return FlatHTML.createPropertyChangeListener(
+			FlatStylingSupport.createPropertyChangeListener( c, this::installStyle,
+				super.createPropertyChangeListener( c ) ) );
 	}
 
 	/** @since 2 */

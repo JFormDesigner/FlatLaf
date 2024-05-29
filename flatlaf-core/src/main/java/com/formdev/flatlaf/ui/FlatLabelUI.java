@@ -22,11 +22,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -113,16 +109,13 @@ public class FlatLabelUI
 		super.installComponents( c );
 
 		// update HTML renderer if necessary
-		updateHTMLRenderer( c, c.getText(), false );
+		FlatHTML.updateRendererCSSFontBaseSize( c );
 	}
 
 	@Override
 	public void propertyChange( PropertyChangeEvent e ) {
 		String name = e.getPropertyName();
-		if( name == "text" || name == "font" || name == "foreground" ) {
-			JLabel label = (JLabel) e.getSource();
-			updateHTMLRenderer( label, label.getText(), true );
-		} else if( name.equals( FlatClientProperties.STYLE ) || name.equals( FlatClientProperties.STYLE_CLASS ) ) {
+		if( name.equals( FlatClientProperties.STYLE ) || name.equals( FlatClientProperties.STYLE_CLASS ) ) {
 			JLabel label = (JLabel) e.getSource();
 			if( shared && FlatStylingSupport.hasStyleProperty( label ) ) {
 				// unshare component UI if necessary
@@ -132,8 +125,10 @@ public class FlatLabelUI
 				installStyle( label );
 			label.revalidate();
 			label.repaint();
-		} else
-			super.propertyChange( e );
+		}
+
+		super.propertyChange( e );
+		FlatHTML.propertyChange( e );
 	}
 
 	/** @since 2 */
@@ -166,85 +161,6 @@ public class FlatLabelUI
 	@Override
 	public Object getStyleableValue( JComponent c, String key ) {
 		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
-	}
-
-	/**
-	 * Checks whether text contains HTML tags that use "absolute-size" keywords
-	 * (e.g. "x-large") for font-size in default style sheet
-	 * (see javax/swing/text/html/default.css).
-	 * If yes, adds a special CSS rule (BASE_SIZE) to the HTML text, which
-	 * re-calculates font sizes based on current component font size.
-	 */
-	static void updateHTMLRenderer( JComponent c, String text, boolean always ) {
-		if( BasicHTML.isHTMLString( text ) &&
-			c.getClientProperty( "html.disable" ) != Boolean.TRUE &&
-			needsFontBaseSize( text ) )
-		{
-			// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
-			String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
-
-			String lowerText = text.toLowerCase( Locale.ENGLISH );
-			int headIndex;
-			int styleIndex;
-
-			int insertIndex;
-			if( (headIndex = lowerText.indexOf( "<head>" )) >= 0 ) {
-				// there is a <head> tag --> insert after <head> tag
-				insertIndex = headIndex + "<head>".length();
-			} else if( (styleIndex = lowerText.indexOf( "<style>" )) >= 0 ) {
-				// there is a <style> tag --> insert before <style> tag
-				insertIndex = styleIndex;
-			} else {
-				// no <head> or <style> tag --> insert <head> tag after <html> tag
-				style = "<head>" + style + "</head>";
-				insertIndex = "<html>".length();
-			}
-
-			text = text.substring( 0, insertIndex )
-				+ style
-				+ text.substring( insertIndex );
-		} else if( !always )
-			return; // not necessary to invoke BasicHTML.updateRenderer()
-
-		BasicHTML.updateRenderer( c, text );
-	}
-
-	private static Set<String> tagsUseFontSizeSet;
-
-	private static boolean needsFontBaseSize( String text ) {
-		if( tagsUseFontSizeSet == null ) {
-			// tags that use font-size in javax/swing/text/html/default.css
-			tagsUseFontSizeSet = new HashSet<>( Arrays.asList(
-				"h1", "h2", "h3", "h4", "h5", "h6", "code", "kbd", "big", "small", "samp" ) );
-		}
-
-		// search for tags in HTML text
-		int textLength = text.length();
-		for( int i = 6; i < textLength - 1; i++ ) {
-			if( text.charAt( i ) == '<' ) {
-				switch( text.charAt( i + 1 ) ) {
-					// first letters of tags in tagsUseFontSizeSet
-					case 'b': case 'B':
-					case 'c': case 'C':
-					case 'h': case 'H':
-					case 'k': case 'K':
-					case 's': case 'S':
-						int tagBegin = i + 1;
-						for( i += 2; i < textLength; i++ ) {
-							if( !Character.isLetterOrDigit( text.charAt( i ) ) ) {
-								String tag = text.substring( tagBegin, i ).toLowerCase( Locale.ENGLISH );
-								if( tagsUseFontSizeSet.contains( tag ) )
-									return true;
-
-								break;
-							}
-						}
-						break;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	@Override

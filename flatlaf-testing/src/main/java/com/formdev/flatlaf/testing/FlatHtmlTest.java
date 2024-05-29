@@ -18,8 +18,10 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
+import com.jidesoft.swing.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
 
@@ -51,6 +53,58 @@ public class FlatHtmlTest
 		textPane2.setText( html2 );
 
 		increaseFontSize();
+	}
+
+	private void changeHtmlText() {
+		changeHtmlText( this );
+	}
+
+	private void changeHtmlText( Component c ) {
+		if( c instanceof AbstractButton )
+			((AbstractButton)c).setText( changeHtmlText( ((AbstractButton)c).getText() ) );
+		else if( c instanceof JLabel )
+			((JLabel)c).setText( changeHtmlText( ((JLabel)c).getText() ) );
+		else if( c instanceof JTextComponent )
+			((JTextComponent)c).setText( changeHtmlText( ((JTextComponent)c).getText() ) );
+		else if( c instanceof JToolTip )
+			((JToolTip)c).setTipText( changeHtmlText( ((JToolTip)c).getTipText() ) );
+		else if( c instanceof JComboBox ) {
+			@SuppressWarnings( "unchecked" )
+			JComboBox<String> cb = (JComboBox<String>) c;
+			DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cb.getModel();
+			String text = model.getElementAt( 0 );
+			String newText = changeHtmlText( text );
+			if( newText != text ) {
+				model.insertElementAt( newText, 1 );
+				model.removeElementAt( 0 );
+			}
+		}
+
+		if( c instanceof Container ) {
+			for( Component child : ((Container)c).getComponents() )
+				changeHtmlText( child );
+		}
+	}
+
+	private String changeHtmlText( String text ) {
+		String htmlTag = "<html>";
+		if( !text.startsWith( htmlTag ) )
+			return text;
+
+		String bodyTag = "<body>";
+		int bodyIndex = text.indexOf( bodyTag );
+		if( bodyIndex < 0 )
+			bodyIndex = htmlTag.length();
+		else
+			bodyIndex += bodyTag.length();
+
+		int insertIndex = text.indexOf( '>', bodyIndex );
+		if( insertIndex < 0 )
+			insertIndex = bodyIndex;
+		else
+			insertIndex++;
+
+		return text.substring( 0, insertIndex ) + "X" + text.substring( insertIndex );
 	}
 
 	private void initComponents() {
@@ -88,14 +142,28 @@ public class FlatHtmlTest
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JLabel label14 = new JLabel();
-		JLabel label15 = new JLabel();
-		JLabel label16 = new JLabel();
+		JToolTip toolTip3 = new JToolTip();
+		JToolTip toolTip4 = new JToolTip();
 		JLabel label17 = new JLabel();
 		JComboBox<String> comboBox1 = new JComboBox<>();
 		JComboBox<String> comboBox2 = new JComboBox<>();
+		JLabel label56 = new JLabel();
+		JXBusyLabel xBusyLabel1 = new JXBusyLabel();
+		JXBusyLabel xBusyLabel2 = new JXBusyLabel();
 		JLabel label18 = new JLabel();
 		JXHyperlink xHyperlink1 = new JXHyperlink();
 		JXHyperlink xHyperlink2 = new JXHyperlink();
+		JLabel label33 = new JLabel();
+		JideLabel jideLabel1 = new JideLabel();
+		JideLabel jideLabel2 = new JideLabel();
+		JLabel label16 = new JLabel();
+		JideButton jideButton1 = new JideButton();
+		JideButton jideButton2 = new JideButton();
+		JLabel label54 = new JLabel();
+		JideToggleButton jideToggleButton1 = new JideToggleButton();
+		JideToggleButton jideToggleButton2 = new JideToggleButton();
+		JButton changeHtmlTextButton = new JButton();
+		JLabel label15 = new JLabel();
 		label1 = new JLabel();
 		JScrollPane scrollPane15 = new JScrollPane();
 		editorPane1 = new JEditorPane();
@@ -143,13 +211,10 @@ public class FlatHtmlTest
 		JLabel label47 = new JLabel();
 		JLabel label53 = new JLabel();
 		JLabel label48 = new JLabel();
-		JLabel label54 = new JLabel();
-		JLabel label56 = new JLabel();
-		JLabel label57 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"ltr,insets dialog,hidemode 3",
+			"flowy,ltr,insets dialog,hidemode 3",
 			// columns
 			"[grow,sizegroup 1,fill]" +
 			"[grow,sizegroup 1,fill]" +
@@ -196,6 +261,12 @@ public class FlatHtmlTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]unrel" +
+				"[]" +
+				"[]unrel" +
+				"[]" +
+				"[]" +
+				"[]para" +
 				"[]" +
 				"[]"));
 
@@ -204,7 +275,7 @@ public class FlatHtmlTest
 			panel1.add(label5, "cell 0 0");
 
 			//---- label6 ----
-			label6.setText("<html>Some <b>Bold</b> Text");
+			label6.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			panel1.add(label6, "cell 1 0");
 
 			//---- label7 ----
@@ -212,11 +283,11 @@ public class FlatHtmlTest
 			panel1.add(label7, "cell 2 0");
 
 			//---- label3 ----
-			label3.setText("JButon:");
+			label3.setText("JButton:");
 			panel1.add(label3, "cell 0 1");
 
 			//---- button1 ----
-			button1.setText("<html>Some <b>Bold</b> Text");
+			button1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			panel1.add(button1, "cell 1 1");
 
 			//---- button2 ----
@@ -228,7 +299,7 @@ public class FlatHtmlTest
 			panel1.add(label11, "cell 0 2");
 
 			//---- toggleButton1 ----
-			toggleButton1.setText("<html>Some <b>Bold</b> Text");
+			toggleButton1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			toggleButton1.setSelected(true);
 			panel1.add(toggleButton1, "cell 1 2");
 
@@ -242,7 +313,7 @@ public class FlatHtmlTest
 			panel1.add(label12, "cell 0 3");
 
 			//---- checkBox1 ----
-			checkBox1.setText("<html>Some <b>Bold</b> Text");
+			checkBox1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			panel1.add(checkBox1, "cell 1 3");
 
 			//---- checkBox2 ----
@@ -254,7 +325,7 @@ public class FlatHtmlTest
 			panel1.add(label13, "cell 0 4");
 
 			//---- radioButton1 ----
-			radioButton1.setText("<html>Some <b>Bold</b> Text");
+			radioButton1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			panel1.add(radioButton1, "cell 1 4");
 
 			//---- radioButton2 ----
@@ -267,7 +338,7 @@ public class FlatHtmlTest
 
 			//======== menu1 ========
 			{
-				menu1.setText("<html>Some <b>Bold</b> Text");
+				menu1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			}
 			panel1.add(menu1, "cell 1 5");
 
@@ -282,7 +353,7 @@ public class FlatHtmlTest
 			panel1.add(label4, "cell 0 6");
 
 			//---- menuItem1 ----
-			menuItem1.setText("<html>Some <b>Bold</b> Text");
+			menuItem1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			panel1.add(menuItem1, "cell 1 6");
 
 			//---- menuItem2 ----
@@ -294,7 +365,7 @@ public class FlatHtmlTest
 			panel1.add(label9, "cell 0 7");
 
 			//---- checkBoxMenuItem1 ----
-			checkBoxMenuItem1.setText("<html>Some <b>Bold</b> Text");
+			checkBoxMenuItem1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			checkBoxMenuItem1.setSelected(true);
 			panel1.add(checkBoxMenuItem1, "cell 1 7");
 
@@ -308,7 +379,7 @@ public class FlatHtmlTest
 			panel1.add(label10, "cell 0 8");
 
 			//---- radioButtonMenuItem1 ----
-			radioButtonMenuItem1.setText("<html>Some <b>Bold</b> Text");
+			radioButtonMenuItem1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
 			radioButtonMenuItem1.setSelected(true);
 			panel1.add(radioButtonMenuItem1, "cell 1 8");
 
@@ -321,15 +392,13 @@ public class FlatHtmlTest
 			label14.setText("JToolTip:");
 			panel1.add(label14, "cell 0 9");
 
-			//---- label15 ----
-			label15.setText("(move mouse here)");
-			label15.setToolTipText("<html>Some <b>Bold</b> Text");
-			panel1.add(label15, "cell 1 9");
+			//---- toolTip3 ----
+			toolTip3.setTipText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(toolTip3, "cell 1 9");
 
-			//---- label16 ----
-			label16.setText("(move mouse here)");
-			label16.setToolTipText("Some text");
-			panel1.add(label16, "cell 2 9");
+			//---- toolTip4 ----
+			toolTip4.setTipText("Some text");
+			panel1.add(toolTip4, "cell 2 9");
 
 			//---- label17 ----
 			label17.setText("JComboBox:");
@@ -337,7 +406,7 @@ public class FlatHtmlTest
 
 			//---- comboBox1 ----
 			comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
-				"<html>Some <b>Bold</b> Text",
+				"<html>Some <b>Bold</b> Text <kbd>kbd</kbd>",
 				"abc",
 				"def"
 			}));
@@ -351,19 +420,76 @@ public class FlatHtmlTest
 			}));
 			panel1.add(comboBox2, "cell 2 10");
 
+			//---- label56 ----
+			label56.setText("JXBusyLabel:");
+			panel1.add(label56, "cell 0 11");
+
+			//---- xBusyLabel1 ----
+			xBusyLabel1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(xBusyLabel1, "cell 1 11");
+
+			//---- xBusyLabel2 ----
+			xBusyLabel2.setText("Some text");
+			panel1.add(xBusyLabel2, "cell 2 11");
+
 			//---- label18 ----
 			label18.setText("JXHyperlink:");
-			panel1.add(label18, "cell 0 11");
+			panel1.add(label18, "cell 0 12");
 
 			//---- xHyperlink1 ----
-			xHyperlink1.setText("<html>Some <b>Bold</b> Text");
-			panel1.add(xHyperlink1, "cell 1 11");
+			xHyperlink1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(xHyperlink1, "cell 1 12");
 
 			//---- xHyperlink2 ----
 			xHyperlink2.setText("Some text");
-			panel1.add(xHyperlink2, "cell 2 11");
+			panel1.add(xHyperlink2, "cell 2 12");
+
+			//---- label33 ----
+			label33.setText("JideLabel:");
+			panel1.add(label33, "cell 0 13");
+
+			//---- jideLabel1 ----
+			jideLabel1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(jideLabel1, "cell 1 13");
+
+			//---- jideLabel2 ----
+			jideLabel2.setText("Some text");
+			panel1.add(jideLabel2, "cell 2 13");
+
+			//---- label16 ----
+			label16.setText("JideButton:");
+			panel1.add(label16, "cell 0 14");
+
+			//---- jideButton1 ----
+			jideButton1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(jideButton1, "cell 1 14");
+
+			//---- jideButton2 ----
+			jideButton2.setText("Some text");
+			panel1.add(jideButton2, "cell 2 14");
+
+			//---- label54 ----
+			label54.setText("JideToggleButton:");
+			panel1.add(label54, "cell 0 15");
+
+			//---- jideToggleButton1 ----
+			jideToggleButton1.setText("<html>Some <b>Bold</b> Text <kbd>kbd</kbd>");
+			panel1.add(jideToggleButton1, "cell 1 15");
+
+			//---- jideToggleButton2 ----
+			jideToggleButton2.setText("Some text");
+			panel1.add(jideToggleButton2, "cell 2 15");
+
+			//---- changeHtmlTextButton ----
+			changeHtmlTextButton.setText("Change HTML Text");
+			changeHtmlTextButton.addActionListener(e -> changeHtmlText());
+			panel1.add(changeHtmlTextButton, "cell 0 16");
+
+			//---- label15 ----
+			label15.setText("(use to check whether CSS is updated on text changes)");
+			panel1.add(label15, "cell 0 17 3 1");
 		}
-		add(panel1, "cell 4 0 1 2,aligny top,growy 0");
+		add(panel1, "cell 4 0 1 3,aligny top,growy 0");
 
 		//---- label1 ----
 		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p><address>Address</address><hr><table border=\"1\"><tr><th>Col 1</th><th>Col 2</th></tr><tr><td>abc</td><td>def</td></tr></table><ul><li>item 1</li><li>item 2</li></ul></html>");
@@ -439,10 +565,6 @@ public class FlatHtmlTest
 				"[]" +
 				"[]" +
 				"[]" +
-				"[]" +
-				"[]" +
-				"[]para" +
-				"[]para" +
 				"[]" +
 				"[]" +
 				"[]"));
@@ -582,20 +704,8 @@ public class FlatHtmlTest
 			//---- label48 ----
 			label48.setText("<html><address>address</address></html>");
 			panel2.add(label48, "cell 1 5");
-
-			//---- label54 ----
-			label54.setText("Test whether inserted rule affects display:");
-			panel2.add(label54, "cell 0 7 7 1");
-
-			//---- label56 ----
-			label56.setText("<html><head><style>body { color: red }</style></head>leading <big>red</big> trailing</html>");
-			panel2.add(label56, "cell 0 8 7 1");
-
-			//---- label57 ----
-			label57.setText("<html><style>body { color: red }</style><p>leading <big>red</big> trailing</p></html>");
-			panel2.add(label57, "cell 0 9 7 1");
 		}
-		add(panel2, "cell 4 2");
+		add(panel2, "cell 4 0 1 3");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

@@ -18,11 +18,13 @@ package com.formdev.flatlaf.jideoss.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatHTML;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.basic.BasicJideLabelUI;
@@ -63,6 +65,20 @@ public class FlatJideLabelUI
 	protected void uninstallDefaults( JLabel c ) {
 		super.uninstallDefaults( c );
 		defaults_initialized = false;
+	}
+
+	@Override
+	protected void installComponents( JLabel c ) {
+		super.installComponents( c );
+
+		// update HTML renderer if necessary
+		FlatHTML.updateRendererCSSFontBaseSize( c );
+	}
+
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		FlatHTML.propertyChange( e );
 	}
 
 	@Override

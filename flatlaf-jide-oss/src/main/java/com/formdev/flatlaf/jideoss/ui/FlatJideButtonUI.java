@@ -16,9 +16,14 @@
 
 package com.formdev.flatlaf.jideoss.ui;
 
+import java.beans.PropertyChangeEvent;
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicButtonListener;
+import com.formdev.flatlaf.ui.FlatHTML;
 import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.plaf.basic.BasicJideButtonListener;
 import com.jidesoft.plaf.basic.BasicJideButtonUI;
 
 /**
@@ -36,5 +41,27 @@ public class FlatJideButtonUI
 		LookAndFeelFactory.installJideExtension();
 
 		return new FlatJideButtonUI();
+	}
+
+	@Override
+	protected BasicButtonListener createButtonListener( AbstractButton b ) {
+		return new FlatJideButtonListener( b );
+	}
+
+	//---- class FlatJideButtonListener ---------------------------------------
+
+	/** @since 3.5 */
+	protected class FlatJideButtonListener
+		extends BasicJideButtonListener
+	{
+		protected FlatJideButtonListener( AbstractButton b ) {
+			super( b );
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			super.propertyChange( e );
+			FlatHTML.propertyChange( e );
+		}
 	}
 }

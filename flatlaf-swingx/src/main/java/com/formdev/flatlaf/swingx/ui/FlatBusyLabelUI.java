@@ -18,6 +18,7 @@ package com.formdev.flatlaf.swingx.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
@@ -25,6 +26,7 @@ import javax.swing.plaf.ComponentUI;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.plaf.basic.BasicBusyLabelUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatHTML;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 //TODO scale busy spinner
@@ -68,6 +70,20 @@ public class FlatBusyLabelUI
 		super.uninstallDefaults( c );
 
 		disabledForeground = null;
+	}
+
+	@Override
+	protected void installComponents( JLabel c ) {
+		super.installComponents( c );
+
+		// update HTML renderer if necessary
+		FlatHTML.updateRendererCSSFontBaseSize( c );
+	}
+
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		FlatHTML.propertyChange( e );
 	}
 
 	@Override

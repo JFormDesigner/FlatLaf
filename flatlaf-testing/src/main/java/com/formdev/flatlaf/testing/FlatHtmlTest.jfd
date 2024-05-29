@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.2.0.9999" Java: "21.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$layoutConstraints": "flowy,ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[grow,sizegroup 1,fill][grow,sizegroup 1,fill][grow,sizegroup 1,fill][grow,sizegroup 1,fill][fill]"
 			"$rowConstraints": "[][fill][grow,fill]"
 		} ) {
@@ -39,7 +39,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
 				"$columnConstraints": "[fill][fill][fill]"
-				"$rowConstraints": "[][][][][][][][][][][][]"
+				"$rowConstraints": "[][][][][][][][][][][]unrel[][]unrel[][][]para[][]"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -50,7 +50,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label6"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0"
 				} )
@@ -62,13 +62,13 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
-					"text": "JButon:"
+					"text": "JButton:"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
@@ -86,7 +86,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "toggleButton1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 					"selected": true
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 2"
@@ -106,7 +106,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "checkBox1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 3"
 				} )
@@ -124,7 +124,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 4"
 				} )
@@ -142,7 +142,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "menu1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 5"
 				} )
@@ -160,7 +160,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JMenuItem" ) {
 					name: "menuItem1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 6"
 				} )
@@ -178,7 +178,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 					name: "checkBoxMenuItem1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 					"selected": true
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 7"
@@ -198,7 +198,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 					name: "radioButtonMenuItem1"
-					"text": "<html>Some <b>Bold</b> Text"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 					"selected": true
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 8"
@@ -216,17 +216,15 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 9"
 				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label15"
-					"text": "(move mouse here)"
-					"toolTipText": "<html>Some <b>Bold</b> Text"
+				add( new FormComponent( "javax.swing.JToolTip" ) {
+					name: "toolTip3"
+					"tipText": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 9"
 				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label16"
-					"text": "(move mouse here)"
-					"toolTipText": "Some text"
+				add( new FormComponent( "javax.swing.JToolTip" ) {
+					name: "toolTip4"
+					"tipText": "Some text"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 9"
 				} )
@@ -239,8 +237,8 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "comboBox1"
 					"model": new javax.swing.DefaultComboBoxModel {
-						selectedItem: "<html>Some <b>Bold</b> Text"
-						addElement( "<html>Some <b>Bold</b> Text" )
+						selectedItem: "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
+						addElement( "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>" )
 						addElement( "abc" )
 						addElement( "def" )
 					}
@@ -259,25 +257,110 @@ new FormModel {
 					"value": "cell 2 10"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label18"
-					"text": "JXHyperlink:"
+					name: "label56"
+					"text": "JXBusyLabel:"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 11"
 				} )
-				add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
-					name: "xHyperlink1"
-					"text": "<html>Some <b>Bold</b> Text"
+				add( new FormComponent( "org.jdesktop.swingx.JXBusyLabel" ) {
+					name: "xBusyLabel1"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 11"
+				} )
+				add( new FormComponent( "org.jdesktop.swingx.JXBusyLabel" ) {
+					name: "xBusyLabel2"
+					"text": "Some text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 11"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label18"
+					"text": "JXHyperlink:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 12"
+				} )
+				add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+					name: "xHyperlink1"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 12"
 				} )
 				add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
 					name: "xHyperlink2"
 					"text": "Some text"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 2 11"
+					"value": "cell 2 12"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label33"
+					"text": "JideLabel:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 13"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideLabel" ) {
+					name: "jideLabel1"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 13"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideLabel" ) {
+					name: "jideLabel2"
+					"text": "Some text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 13"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label16"
+					"text": "JideButton:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 14"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideButton" ) {
+					name: "jideButton1"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 14"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideButton" ) {
+					name: "jideButton2"
+					"text": "Some text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 14"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label54"
+					"text": "JideToggleButton:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 15"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideToggleButton" ) {
+					name: "jideToggleButton1"
+					"text": "<html>Some <b>Bold</b> Text <kbd>kbd</kbd>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 15"
+				} )
+				add( new FormComponent( "com.jidesoft.swing.JideToggleButton" ) {
+					name: "jideToggleButton2"
+					"text": "Some text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 15"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "changeHtmlTextButton"
+					"text": "Change HTML Text"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeHtmlText", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 16"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label15"
+					"text": "(use to check whether CSS is updated on text changes)"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 17 3 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 0 1 2,aligny top,growy 0"
+				"value": "cell 4 0 1 3,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
@@ -372,7 +455,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
 				"$columnConstraints": "[fill]para[fill][fill][fill][fill][fill][fill]"
-				"$rowConstraints": "[][][][][][]para[]para[][][]"
+				"$rowConstraints": "[][][][][][]"
 			} ) {
 				name: "panel2"
 				auxiliary() {
@@ -582,30 +665,12 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 5"
 				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label54"
-					"text": "Test whether inserted rule affects display:"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 7 7 1"
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label56"
-					"text": "<html><head><style>body { color: red }</style></head>leading <big>red</big> trailing</html>"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 8 7 1"
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label57"
-					"text": "<html><style>body { color: red }</style><p>leading <big>red</big> trailing</p></html>"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 9 7 1"
-				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 2"
+				"value": "cell 4 0 1 3"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 905, 815 )
+			"size": new java.awt.Dimension( 905, 880 )
 		} )
 	}
 }

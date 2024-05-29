@@ -40,6 +40,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonListener;
+import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
@@ -159,6 +160,10 @@ public class FlatRadioButtonUI
 	/** @since 2 */
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
+			case BasicHTML.propertyKey:
+				FlatHTML.updateRendererCSSFontBaseSize( b );
+				break;
+
 			case FlatClientProperties.STYLE:
 			case FlatClientProperties.STYLE_CLASS:
 				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {

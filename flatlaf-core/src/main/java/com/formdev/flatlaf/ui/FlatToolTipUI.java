@@ -61,7 +61,7 @@ public class FlatToolTipUI
 		super.installUI( c );
 
 		// update HTML renderer if necessary
-		FlatLabelUI.updateHTMLRenderer( c, ((JToolTip)c).getTipText(), false );
+		FlatHTML.updateRendererCSSFontBaseSize( c );
 	}
 
 	@Override
@@ -81,11 +81,7 @@ public class FlatToolTipUI
 	/** @since 2.0.1 */
 	@Override
 	public void propertyChange( PropertyChangeEvent e ) {
-		String name = e.getPropertyName();
-		if( name == "tiptext" || name == "font" || name == "foreground" ) {
-			JToolTip toolTip = (JToolTip) e.getSource();
-			FlatLabelUI.updateHTMLRenderer( toolTip, toolTip.getTipText(), false );
-		}
+		FlatHTML.propertyChange( e );
 	}
 
 	@Override
