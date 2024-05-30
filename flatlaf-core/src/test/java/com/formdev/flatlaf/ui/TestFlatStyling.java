@@ -1295,12 +1295,16 @@ public class TestFlatStyling
 		border.applyStyleProperty( "disabledBorderColor", Color.WHITE );
 		border.applyStyleProperty( "focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "hoverBorderColor", Color.WHITE );
+		border.applyStyleProperty( "pressedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "selectedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "disabledSelectedBorderColor", Color.WHITE );
 
 		border.applyStyleProperty( "default.borderWidth", 2 );
 		border.applyStyleProperty( "default.borderColor", Color.WHITE );
 		border.applyStyleProperty( "default.focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "default.focusColor", Color.WHITE );
 		border.applyStyleProperty( "default.hoverBorderColor", Color.WHITE );
+		border.applyStyleProperty( "default.pressedBorderColor", Color.WHITE );
 
 		border.applyStyleProperty( "toolbar.focusWidth", 1.5f );
 		border.applyStyleProperty( "toolbar.focusColor", Color.WHITE );

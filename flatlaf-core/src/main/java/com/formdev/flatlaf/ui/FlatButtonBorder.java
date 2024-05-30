@@ -42,6 +42,9 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.disabledBorderColor		Color
  * @uiDefault Button.focusedBorderColor			Color
  * @uiDefault Button.hoverBorderColor			Color	optional
+ * @uiDefault Button.pressedBorderColor			Color	optional
+ * @uiDefault Button.selectedBorderColor		Color	optional
+ * @uiDefault Button.disabledSelectedBorderColor Color	optional
  *
  * @uiDefault Button.default.borderWidth		int or float
  * @uiDefault Button.default.borderColor		Color
@@ -49,6 +52,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.endBorderColor		Color	optional; if set, a gradient paint is used
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
+ * @uiDefault Button.default.pressedBorderColor	Color	optional
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  *
  * @uiDefault Button.toolbar.focusWidth			int or float		optional; default is 1.5
@@ -65,6 +69,9 @@ public class FlatButtonBorder
 
 	protected Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
 	@Styleable protected Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color pressedBorderColor = UIManager.getColor( "Button.pressedBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color selectedBorderColor = UIManager.getColor( "Button.selectedBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color disabledSelectedBorderColor = UIManager.getColor( "Button.disabledSelectedBorderColor" );
 
 	@Styleable(dot=true) protected float defaultBorderWidth = FlatUIUtils.getUIFloat( "Button.default.borderWidth", 1 );
 	@Styleable(dot=true) protected Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
@@ -72,6 +79,7 @@ public class FlatButtonBorder
 	@Styleable(dot=true) protected Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	@Styleable(dot=true) protected Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	@Styleable(dot=true) protected Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
+	/** @since 3.5 */ @Styleable(dot=true) protected Color defaultPressedBorderColor = UIManager.getColor( "Button.default.pressedBorderColor" );
 
 	/** @since 1.4 */ @Styleable(dot=true) protected float toolbarFocusWidth = FlatUIUtils.getUIFloat( "Button.toolbar.focusWidth", 1.5f );
 	/** @since 1.4 */ @Styleable(dot=true) protected Color toolbarFocusColor = UIManager.getColor( "Button.toolbar.focusColor" );
@@ -139,12 +147,13 @@ public class FlatButtonBorder
 	@Override
 	protected Paint getBorderColor( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
+		boolean selected = (c instanceof AbstractButton && ((AbstractButton)c).isSelected());
 		Paint color = FlatButtonUI.buttonStateColor( c,
-			def ? defaultBorderColor : borderColor,
-			disabledBorderColor,
+			def ? defaultBorderColor : ((selected && selectedBorderColor != null) ? selectedBorderColor : borderColor),
+			(selected && disabledSelectedBorderColor != null) ? disabledSelectedBorderColor : disabledBorderColor,
 			def ? defaultFocusedBorderColor : focusedBorderColor,
 			def ? defaultHoverBorderColor : hoverBorderColor,
-			null );
+			def ? defaultPressedBorderColor : pressedBorderColor );
 
 		// change to gradient paint if start/end colors are specified
 		Color startBg = def ? defaultBorderColor : borderColor;

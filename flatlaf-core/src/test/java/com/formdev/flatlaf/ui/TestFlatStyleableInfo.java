@@ -994,12 +994,16 @@ public class TestFlatStyleableInfo
 			"disabledBorderColor", Color.class,
 			"focusedBorderColor", Color.class,
 			"hoverBorderColor", Color.class,
+			"pressedBorderColor", Color.class,
+			"selectedBorderColor", Color.class,
+			"disabledSelectedBorderColor", Color.class,
 
 			"default.borderWidth", float.class,
 			"default.borderColor", Color.class,
 			"default.focusedBorderColor", Color.class,
 			"default.focusColor", Color.class,
 			"default.hoverBorderColor", Color.class,
+			"default.pressedBorderColor", Color.class,
 
 			"toolbar.focusWidth", float.class,
 			"toolbar.focusColor", Color.class,

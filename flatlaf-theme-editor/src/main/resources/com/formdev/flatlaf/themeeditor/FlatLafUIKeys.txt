@@ -29,6 +29,7 @@ Button.default.hoverBackground
 Button.default.hoverBorderColor
 Button.default.hoverForeground
 Button.default.pressedBackground
+Button.default.pressedBorderColor
 Button.default.pressedForeground
 Button.default.startBackground
 Button.default.startBorderColor
@@ -37,6 +38,7 @@ Button.disabledBackground
 Button.disabledBorderColor
 Button.disabledForeground
 Button.disabledSelectedBackground
+Button.disabledSelectedBorderColor
 Button.disabledSelectedForeground
 Button.disabledText
 Button.endBackground
@@ -57,9 +59,11 @@ Button.light
 Button.margin
 Button.minimumWidth
 Button.pressedBackground
+Button.pressedBorderColor
 Button.pressedForeground
 Button.rollover
 Button.selectedBackground
+Button.selectedBorderColor
 Button.selectedForeground
 Button.shadow
 Button.startBackground

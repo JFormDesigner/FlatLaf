@@ -956,12 +956,16 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "disabledBorderColor", 0x123456 );
 		testColor( c, ui, "focusedBorderColor", 0x123456 );
 		testColor( c, ui, "hoverBorderColor", 0x123456 );
+		testColor( c, ui, "pressedBorderColor", 0x123456 );
+		testColor( c, ui, "selectedBorderColor", 0x123456 );
+		testColor( c, ui, "disabledSelectedBorderColor", 0x123456 );
 
 		testFloat( c, ui, "default.borderWidth", 1.23f );
 		testColor( c, ui, "default.borderColor", 0x123456 );
 		testColor( c, ui, "default.focusedBorderColor", 0x123456 );
 		testColor( c, ui, "default.focusColor", 0x123456 );
 		testColor( c, ui, "default.hoverBorderColor", 0x123456 );
+		testColor( c, ui, "default.pressedBorderColor", 0x123456 );
 
 		testFloat( c, ui, "toolbar.focusWidth", 1.23f );
 		testColor( c, ui, "toolbar.focusColor", 0x123456 );
@@ -1026,12 +1030,16 @@ public class TestFlatStyleableValue
 		testValue( border, "disabledBorderColor", Color.WHITE );
 		testValue( border, "focusedBorderColor", Color.WHITE );
 		testValue( border, "hoverBorderColor", Color.WHITE );
+		testValue( border, "pressedBorderColor", Color.WHITE );
+		testValue( border, "selectedBorderColor", Color.WHITE );
+		testValue( border, "disabledSelectedBorderColor", Color.WHITE );
 
 		testValue( border, "default.borderWidth", 2f );
 		testValue( border, "default.borderColor", Color.WHITE );
 		testValue( border, "default.focusedBorderColor", Color.WHITE );
 		testValue( border, "default.focusColor", Color.WHITE );
 		testValue( border, "default.hoverBorderColor", Color.WHITE );
+		testValue( border, "default.pressedBorderColor", Color.WHITE );
 
 		testValue( border, "toolbar.focusWidth", 1.5f );
 		testValue( border, "toolbar.focusColor", Color.WHITE );
