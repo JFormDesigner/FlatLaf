@@ -51,7 +51,7 @@ public class FlatJideButtonUI
 	//---- class FlatJideButtonListener ---------------------------------------
 
 	/** @since 3.5 */
-	protected class FlatJideButtonListener
+	protected static class FlatJideButtonListener
 		extends BasicJideButtonListener
 	{
 		protected FlatJideButtonListener( AbstractButton b ) {

@@ -91,7 +91,7 @@ public class FlatHyperlinkUI
 	//---- class FlatHyperlinkListener ----------------------------------------
 
 	/** @since 3.5 */
-	protected class FlatHyperlinkListener
+	protected static class FlatHyperlinkListener
 		extends BasicHyperlinkListener
 	{
 		protected FlatHyperlinkListener( AbstractButton b ) {
