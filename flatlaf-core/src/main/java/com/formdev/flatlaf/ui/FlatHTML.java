@@ -16,12 +16,15 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.Document;
 import javax.swing.text.LabelView;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.View;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
@@ -68,6 +71,34 @@ public class FlatHTML
 		clearViewCaches( view );
 
 //		dumpViews( view, 0 );
+	}
+
+	/**
+	 * Updates foreground in style sheet of the HTML view.
+	 * Adds "body { color: #<foreground-hex>; }"
+	 */
+	public static void updateRendererCSSForeground( View view, Color foreground ) {
+		Document doc = view.getDocument();
+		if( !(doc instanceof HTMLDocument) || foreground == null )
+			return;
+
+		// add foreground rule if necessary
+		//  - use tag 'body' because BasicHTML.createHTMLView() also uses this tag
+		//    to set font and color styles to component font/color
+		//    see: SwingUtilities2.displayPropertiesToCSS()
+		//  - this color is not used if component is disabled;
+		//    JTextComponent.getDisabledTextColor() is used for disabled text components;
+		//    UIManager.getColor("textInactiveText") is used for other disabled components
+		//    see: javax.swing.text.GlyphView.paint()
+		Style bodyStyle = ((HTMLDocument)doc).getStyle( "body" );
+		if( bodyStyle == null ) {
+			StyleSheet styleSheet = ((HTMLDocument)doc).getStyleSheet();
+			styleSheet.addRule( String.format( "body { color: #%06x; }", foreground.getRGB() & 0xffffff ) );
+			clearViewCaches( view );
+		} else if( !foreground.equals( bodyStyle.getAttribute( StyleConstants.Foreground ) ) ) {
+			bodyStyle.addAttribute( StyleConstants.Foreground, foreground );
+			clearViewCaches( view );
+		}
 	}
 
 	/**

@@ -14,6 +14,8 @@ FlatLaf Change Log
 - FlatLaf window decorations: Window top border on Windows 10 in "full window
   content" mode was not fully repainted when activating or deactivating window.
   (issue #809)
+- Button and ToggleButton: UI properties `[Toggle]Button.selectedForeground` and
+  `[Toggle]Button.pressedForeground` did not work for HTML text. (issue #848)
 - HTML: Fixed font sizes for HTML tags `<h1>`...`<h6>`, `<code>`, `<kbd>`,
   `<big>`, `<small>` and `<samp>` in HTML text for components Button, CheckBox,
   RadioButton, MenuItem (and subclasses), JideLabel, JideButton, JXBusyLabel and

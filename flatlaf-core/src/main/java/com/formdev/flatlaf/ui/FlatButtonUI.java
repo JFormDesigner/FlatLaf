@@ -587,9 +587,16 @@ public class FlatButtonUI
 		// paint text
 		if( clippedText != null && !clippedText.isEmpty() ) {
 			View view = (View) b.getClientProperty( BasicHTML.propertyKey );
-			if( view != null )
+			if( view != null ) {
+				// update foreground color in HTML view, which is necessary
+				// for selected and pressed states
+				// (only for enabled buttons, because UIManager.getColor("textInactiveText")
+				// is used for disabled components; see: javax.swing.text.GlyphView.paint())
+				if( b.isEnabled() )
+					FlatHTML.updateRendererCSSForeground( view, getForeground( b ) );
+
 				view.paint( g, textR ); // HTML text
-			else
+			} else
 				paintText( g, b, textR, clippedText );
 		}
 
@@ -635,8 +642,6 @@ public class FlatButtonUI
 	}
 
 	public static void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text, Color foreground ) {
-		if(foreground == null)
-			foreground=Color.red;
 		FontMetrics fm = b.getFontMetrics( b.getFont() );
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? b.getDisplayedMnemonicIndex() : -1;
 
