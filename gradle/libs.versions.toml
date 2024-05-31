@@ -38,7 +38,7 @@ miglayout-swing = "com.miglayout:miglayout-swing:5.3"
 jgoodies-forms = "com.jgoodies:jgoodies-forms:1.9.0"
 
 # flatlaf-theme-editor
-fifesoft-rsyntaxtextarea = "com.fifesoft:rsyntaxtextarea:3.3.4"
+fifesoft-rsyntaxtextarea = "com.fifesoft:rsyntaxtextarea:3.4.0"
 fifesoft-autocomplete = "com.fifesoft:autocomplete:3.3.1"
 
 # flatlaf-testing
