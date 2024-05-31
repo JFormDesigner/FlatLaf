@@ -10,6 +10,7 @@ FlatLaf Change Log
 - Label: Support painting background with rounded corners. (issue #842)
 - Popup: Fixed flicker of popups (e.g. tooltips) while they are moving (e.g.
   following mouse pointer). (issues #832 and #672)
+- Theme Editor: On macOS, use larger window title bar. (PR #779)
 
 #### Fixed bugs
 

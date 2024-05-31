@@ -25,6 +25,7 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
@@ -191,22 +192,20 @@ class FlatThemeFileEditor
 
 			if( SystemInfo.isMacFullWindowContentSupported ) {
 				// expand window content into window title bar and make title bar transparent
-				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
-				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
+				rootPane.putClientProperty( "apple.awt.fullWindowContent", true );
+				rootPane.putClientProperty( "apple.awt.transparentTitleBar", true );
+				rootPane.putClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE );
 
 				// hide window title
 				if( SystemInfo.isJava_17_orLater )
-					getRootPane().putClientProperty( "apple.awt.windowTitleVisible", false );
+					rootPane.putClientProperty( "apple.awt.windowTitleVisible", false );
 				else
 					setTitle( null );
-
-				// add gap to left side of toolbar
-				controlPanel.add( Box.createHorizontalStrut( 70 ), 0 );
 			}
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
 			if( !SystemInfo.isJava_11_orLater )
-				getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
+				rootPane.putClientProperty( "apple.awt.fullscreenable", true );
 		}
 
 		// integrate into macOS screen menu
@@ -1021,6 +1020,7 @@ class FlatThemeFileEditor
 		helpMenu = new JMenu();
 		aboutMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
+		JPanel macFullWindowContentButtonsPlaceholder = new JPanel();
 		directoryLabel = new JLabel();
 		directoryField = new FlatThemeFileEditor.DirectoryComboBox();
 		openDirectoryButton = new JButton();
@@ -1224,13 +1224,19 @@ class FlatThemeFileEditor
 		//======== controlPanel ========
 		{
 			controlPanel.setLayout(new MigLayout(
-				"hidemode 3",
+				"insets panel,hidemode 3",
 				// columns
 				"[fill]" +
 				"[grow,fill]" +
 				"[fill]",
 				// rows
 				"[]"));
+
+			//======== macFullWindowContentButtonsPlaceholder ========
+			{
+				macFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
+			}
+			controlPanel.add(macFullWindowContentButtonsPlaceholder, "west");
 
 			//---- directoryLabel ----
 			directoryLabel.setText("Directory:");
@@ -1264,6 +1270,9 @@ class FlatThemeFileEditor
 		lafButtonGroup.add(lightLafMenuItem);
 		lafButtonGroup.add(darkLafMenuItem);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		// on macOS, panel on left side of control bar is a placeholder for title bar buttons in fullWindowContent mode
+		macFullWindowContentButtonsPlaceholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
