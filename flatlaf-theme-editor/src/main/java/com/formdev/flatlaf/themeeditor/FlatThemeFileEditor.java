@@ -929,6 +929,12 @@ class FlatThemeFileEditor
 						y = Math.max( Math.min( y, r.height - h ), r.y );
 					}
 
+					// On macOS, the window may be empty if it spans the whole screen height
+					// and client property apple.awt.fullWindowContent is set to true.
+					// Invoking addNotify() before setting window bounds fixes this issue.
+					if( SystemInfo.isMacOS && !isDisplayable() )
+						addNotify();
+
 					setBounds( x, y, w, h );
 					return;
 				} catch( NumberFormatException ex ) {

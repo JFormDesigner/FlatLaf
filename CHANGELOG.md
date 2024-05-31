@@ -22,6 +22,7 @@ FlatLaf Change Log
   `<big>`, `<small>` and `<samp>` in HTML text for components Button, CheckBox,
   RadioButton, MenuItem (and subclasses), JideLabel, JideButton, JXBusyLabel and
   JXHyperlink. Also fixed for Label and ToolTip if using Java 11+.
+- Theme Editor: Fixed occasional empty window on startup on macOS.
 
 #### Incompatibilities
 
