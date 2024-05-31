@@ -995,8 +995,12 @@ public class TestFlatStyleableInfo
 			"focusedBorderColor", Color.class,
 			"hoverBorderColor", Color.class,
 			"pressedBorderColor", Color.class,
+
 			"selectedBorderColor", Color.class,
 			"disabledSelectedBorderColor", Color.class,
+			"focusedSelectedBorderColor", Color.class,
+			"hoverSelectedBorderColor", Color.class,
+			"pressedSelectedBorderColor", Color.class,
 
 			"default.borderWidth", float.class,
 			"default.borderColor", Color.class,

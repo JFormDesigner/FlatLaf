@@ -43,8 +43,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.focusedBorderColor			Color
  * @uiDefault Button.hoverBorderColor			Color	optional
  * @uiDefault Button.pressedBorderColor			Color	optional
+ *
  * @uiDefault Button.selectedBorderColor		Color	optional
  * @uiDefault Button.disabledSelectedBorderColor Color	optional
+ * @uiDefault Button.focusedSelectedBorderColor	Color	optional
+ * @uiDefault Button.hoverSelectedBorderColor	Color	optional
+ * @uiDefault Button.pressedSelectedBorderColor	Color	optional
  *
  * @uiDefault Button.default.borderWidth		int or float
  * @uiDefault Button.default.borderColor		Color
@@ -70,8 +74,12 @@ public class FlatButtonBorder
 	protected Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
 	@Styleable protected Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
 	/** @since 3.5 */ @Styleable protected Color pressedBorderColor = UIManager.getColor( "Button.pressedBorderColor" );
+
 	/** @since 3.5 */ @Styleable protected Color selectedBorderColor = UIManager.getColor( "Button.selectedBorderColor" );
 	/** @since 3.5 */ @Styleable protected Color disabledSelectedBorderColor = UIManager.getColor( "Button.disabledSelectedBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color focusedSelectedBorderColor = UIManager.getColor( "Button.focusedSelectedBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color hoverSelectedBorderColor = UIManager.getColor( "Button.hoverSelectedBorderColor" );
+	/** @since 3.5 */ @Styleable protected Color pressedSelectedBorderColor = UIManager.getColor( "Button.pressedSelectedBorderColor" );
 
 	@Styleable(dot=true) protected float defaultBorderWidth = FlatUIUtils.getUIFloat( "Button.default.borderWidth", 1 );
 	@Styleable(dot=true) protected Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
@@ -151,9 +159,9 @@ public class FlatButtonBorder
 		Paint color = FlatButtonUI.buttonStateColor( c,
 			def ? defaultBorderColor : ((selected && selectedBorderColor != null) ? selectedBorderColor : borderColor),
 			(selected && disabledSelectedBorderColor != null) ? disabledSelectedBorderColor : disabledBorderColor,
-			def ? defaultFocusedBorderColor : focusedBorderColor,
-			def ? defaultHoverBorderColor : hoverBorderColor,
-			def ? defaultPressedBorderColor : pressedBorderColor );
+			def ? defaultFocusedBorderColor : ((selected && focusedSelectedBorderColor != null) ? focusedSelectedBorderColor : focusedBorderColor),
+			def ? defaultHoverBorderColor : ((selected && hoverSelectedBorderColor != null) ? hoverSelectedBorderColor : hoverBorderColor),
+			def ? defaultPressedBorderColor : ((selected && pressedSelectedBorderColor != null) ? pressedSelectedBorderColor : pressedBorderColor) );
 
 		// change to gradient paint if start/end colors are specified
 		Color startBg = def ? defaultBorderColor : borderColor;

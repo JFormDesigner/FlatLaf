@@ -96,12 +96,14 @@ Button.endBorderColor          #ff0000  HSL   0 100  50    javax.swing.plaf.Colo
 Button.focusedBackground       #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #466d94  HSL 210  36  43    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedForeground       #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
+Button.focusedSelectedBorderColor #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Button.font                    [active] $defaultFont [UI]
 Button.foreground              #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.highlight               #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBorderColor        #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverForeground         #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
+Button.hoverSelectedBorderColor #aaaaaa  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
 Button.innerFocusWidth         1
 Button.light                   #e3e3e3  HSL   0   0  89    javax.swing.plaf.ColorUIResource [UI]
@@ -110,6 +112,7 @@ Button.minimumWidth            72
 Button.pressedBackground       #ffc800  HSL  47 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.pressedBorderColor      #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
 Button.pressedForeground       #0080ff  HSL 210 100  50    javax.swing.plaf.ColorUIResource [UI]
+Button.pressedSelectedBorderColor #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]
 Button.rollover                true
 Button.selectedBackground      #ffbbbb  HSL   0 100  87    javax.swing.plaf.ColorUIResource [UI]
 Button.selectedBorderColor     #ff00ff  HSL 300 100  50    javax.swing.plaf.ColorUIResource [UI]

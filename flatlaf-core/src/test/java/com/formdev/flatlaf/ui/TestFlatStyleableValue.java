@@ -957,8 +957,12 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "focusedBorderColor", 0x123456 );
 		testColor( c, ui, "hoverBorderColor", 0x123456 );
 		testColor( c, ui, "pressedBorderColor", 0x123456 );
+
 		testColor( c, ui, "selectedBorderColor", 0x123456 );
 		testColor( c, ui, "disabledSelectedBorderColor", 0x123456 );
+		testColor( c, ui, "focusedSelectedBorderColor", 0x123456 );
+		testColor( c, ui, "hoverSelectedBorderColor", 0x123456 );
+		testColor( c, ui, "pressedSelectedBorderColor", 0x123456 );
 
 		testFloat( c, ui, "default.borderWidth", 1.23f );
 		testColor( c, ui, "default.borderColor", 0x123456 );
@@ -1031,8 +1035,12 @@ public class TestFlatStyleableValue
 		testValue( border, "focusedBorderColor", Color.WHITE );
 		testValue( border, "hoverBorderColor", Color.WHITE );
 		testValue( border, "pressedBorderColor", Color.WHITE );
+
 		testValue( border, "selectedBorderColor", Color.WHITE );
 		testValue( border, "disabledSelectedBorderColor", Color.WHITE );
+		testValue( border, "focusedSelectedBorderColor", Color.WHITE );
+		testValue( border, "hoverSelectedBorderColor", Color.WHITE );
+		testValue( border, "pressedSelectedBorderColor", Color.WHITE );
 
 		testValue( border, "default.borderWidth", 2f );
 		testValue( border, "default.borderColor", Color.WHITE );

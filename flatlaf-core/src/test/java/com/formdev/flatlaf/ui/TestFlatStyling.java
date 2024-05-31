@@ -1296,8 +1296,12 @@ public class TestFlatStyling
 		border.applyStyleProperty( "focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "hoverBorderColor", Color.WHITE );
 		border.applyStyleProperty( "pressedBorderColor", Color.WHITE );
+
 		border.applyStyleProperty( "selectedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "disabledSelectedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "focusedSelectedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "hoverSelectedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "pressedSelectedBorderColor", Color.WHITE );
 
 		border.applyStyleProperty( "default.borderWidth", 2 );
 		border.applyStyleProperty( "default.borderColor", Color.WHITE );

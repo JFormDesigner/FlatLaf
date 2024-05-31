@@ -47,12 +47,14 @@ Button.focusInputMap
 Button.focusedBackground
 Button.focusedBorderColor
 Button.focusedForeground
+Button.focusedSelectedBorderColor
 Button.font
 Button.foreground
 Button.highlight
 Button.hoverBackground
 Button.hoverBorderColor
 Button.hoverForeground
+Button.hoverSelectedBorderColor
 Button.iconTextGap
 Button.innerFocusWidth
 Button.light
@@ -61,6 +63,7 @@ Button.minimumWidth
 Button.pressedBackground
 Button.pressedBorderColor
 Button.pressedForeground
+Button.pressedSelectedBorderColor
 Button.rollover
 Button.selectedBackground
 Button.selectedBorderColor
