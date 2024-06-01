@@ -517,7 +517,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label10"
 				"text": "rounded border"
-				"$client.FlatLaf.style": "border: 2,10,2,10,#135b76,1,999"
+				"$client.FlatLaf.style": "arc: 999; border: 2,10,2,10,#135b76"
 				"background": new java.awt.Color( 184, 228, 243, 255 )
 				"foreground": new java.awt.Color( 19, 91, 118, 255 )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

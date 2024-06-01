@@ -23,6 +23,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.plaf.ComponentUI;
 
 /**
  * Line border for various components.
@@ -45,7 +48,7 @@ public class FlatLineBorder
 	/** @since 2 */ private final int arc;
 
 	public FlatLineBorder( Insets insets, Color lineColor ) {
-		this( insets, lineColor, 1f, 0 );
+		this( insets, lineColor, 1f, -1 );
 	}
 
 	/** @since 2 */
@@ -92,11 +95,26 @@ public class FlatLineBorder
 		if( lineColor == null || lineThickness <= 0 )
 			return;
 
+		int arc = getArc();
+		if( arc < 0 ) {
+			// get arc from label or panel
+			ComponentUI ui = (c instanceof JLabel)
+				? ((JLabel)c).getUI()
+				: (c instanceof JPanel ? ((JPanel)c).getUI() : null);
+			if( ui instanceof FlatLabelUI )
+				arc = ((FlatLabelUI)ui).arc;
+			else if( ui instanceof FlatPanelUI )
+				arc = ((FlatPanelUI)ui).arc;
+
+			if( arc < 0 )
+				arc = 0;
+		}
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height,
-				0, 0, 0, scale( lineThickness ), scale( getArc() ), null, lineColor, null );
+				0, 0, 0, scale( lineThickness ), scale( arc ), null, lineColor, null );
 		} finally {
 			g2.dispose();
 		}

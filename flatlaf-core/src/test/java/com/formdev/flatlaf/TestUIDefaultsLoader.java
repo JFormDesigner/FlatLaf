@@ -86,7 +86,7 @@ public class TestUIDefaultsLoader
 		assertBorderEquals( new FlatEmptyBorder( insets ), "1,2,3,4" );
 		assertBorderEquals( new FlatEmptyBorder( insets ), "1,2,3,4,,," );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red ), "1,2,3,4,#f00" );
-		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 0 ), "1,2,3,4,#f00,2.5" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, -1 ), "1,2,3,4,#f00,2.5" );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 6 ), "1,2,3,4,#f00,2.5,6" );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 1, 6 ), "1,2,3,4,#f00,,6" );
 		assertBorderEquals( new FlatLineBorder( insets, null, 1, 6 ), "1,2,3,4,,,6" );

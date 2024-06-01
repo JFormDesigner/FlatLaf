@@ -646,7 +646,7 @@ class UIDefaultsLoader
 				: 1f;
 			int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
 				? parseInteger( parts.get( 6 ) )
-				: 0;
+				: -1;
 
 			return (LazyValue) t -> {
 				return (lineColor != null || arc > 0)

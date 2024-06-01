@@ -553,7 +553,7 @@ class MoreComponentsPanel
 
 		//---- label10 ----
 		label10.setText("rounded border");
-		label10.putClientProperty("FlatLaf.style", "border: 2,10,2,10,#135b76,1,999");
+		label10.putClientProperty("FlatLaf.style", "arc: 999; border: 2,10,2,10,#135b76");
 		label10.setBackground(new Color(0xb8e4f3));
 		label10.setForeground(new Color(0x135b76));
 		add(label10, "cell 1 13 4 1");
