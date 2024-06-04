@@ -75,7 +75,7 @@ public class FlatHTML
 
 	/**
 	 * Updates foreground in style sheet of the HTML view.
-	 * Adds "body { color: #<foreground-hex>; }"
+	 * Adds "body { color: #&lt;foreground-hex&gt;; }"
 	 */
 	public static void updateRendererCSSForeground( View view, Color foreground ) {
 		Document doc = view.getDocument();
