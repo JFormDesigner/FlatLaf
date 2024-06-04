@@ -25,6 +25,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
@@ -132,6 +135,7 @@ public class FlatTableUI
 	private TableCellRenderer oldBooleanRenderer;
 
 	private PropertyChangeListener propertyChangeListener;
+	private ComponentListener outsideAlternateRowsListener;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -266,6 +270,11 @@ public class FlatTableUI
 
 		table.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+
+		if( outsideAlternateRowsListener != null ) {
+			table.removeComponentListener( outsideAlternateRowsListener );
+			outsideAlternateRowsListener = null;
+		}
 	}
 
 	@Override
@@ -513,8 +522,6 @@ public class FlatTableUI
 		boolean paintOutside = UIManager.getBoolean( "Table.paintOutsideAlternateRows" );
 		Color alternateColor;
 		if( paintOutside && (alternateColor = UIManager.getColor( "Table.alternateRowColor" )) != null ) {
-			g.setColor( alternateColor );
-
 			int rowCount = table.getRowCount();
 
 			// paint alternating empty rows below the table
@@ -523,10 +530,56 @@ public class FlatTableUI
 				int tableWidth = table.getWidth();
 				int rowHeight = table.getRowHeight();
 
+				g.setColor( alternateColor );
+
+				int x = viewport.getComponentOrientation().isLeftToRight() ? 0 : viewportWidth - tableWidth;
 				for( int y = tableHeight, row = rowCount; y < viewportHeight; y += rowHeight, row++ ) {
 					if( row % 2 != 0 )
-						g.fillRect( 0, y, tableWidth, rowHeight );
+						g.fillRect( x, y, tableWidth, rowHeight );
 				}
+
+				// add listener on demand
+				if( outsideAlternateRowsListener == null && table.getAutoResizeMode() == JTable.AUTO_RESIZE_OFF ) {
+					outsideAlternateRowsListener = new FlatOutsideAlternateRowsListener();
+					table.addComponentListener( outsideAlternateRowsListener );
+				}
+			}
+		}
+	}
+
+	//---- class OutsideAlternateRowsListener ---------------------------------
+
+	/**
+	 * Used if table auto-resize-mode is off to repaint outside alternate rows
+	 * when table width changed (column resized) or component orientation changed.
+	 */
+	private class FlatOutsideAlternateRowsListener
+		extends ComponentAdapter
+	{
+		@Override
+		public void componentHidden( ComponentEvent e ) {
+			Container viewport = SwingUtilities.getUnwrappedParent( table );
+			if( viewport instanceof JViewport )
+				viewport.repaint();
+		}
+
+		@Override
+		public void componentMoved( ComponentEvent e ) {
+			repaintAreaBelowTable();
+		}
+
+		@Override
+		public void componentResized( ComponentEvent e ) {
+			repaintAreaBelowTable();
+		}
+
+		private void repaintAreaBelowTable() {
+			Container viewport = SwingUtilities.getUnwrappedParent( table );
+			if( viewport instanceof JViewport ) {
+				int viewportHeight = viewport.getHeight();
+				int tableHeight = table.getHeight();
+				if( tableHeight < viewportHeight )
+					viewport.repaint( 0, tableHeight, viewport.getWidth(), viewportHeight - tableHeight );
 			}
 		}
 	}

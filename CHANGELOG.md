@@ -23,6 +23,10 @@ FlatLaf Change Log
   `<big>`, `<small>` and `<samp>` in HTML text for components Button, CheckBox,
   RadioButton, MenuItem (and subclasses), JideLabel, JideButton, JXBusyLabel and
   JXHyperlink. Also fixed for Label and ToolTip if using Java 11+.
+- Table: Fixed painting of alternating rows below table if auto-resize mode is
+  `JTable.AUTO_RESIZE_OFF` and table width is smaller than scroll pane (was not
+  updated when table width changed and was painted on wrong side in
+  right-to-left component orientation).
 - Theme Editor: Fixed occasional empty window on startup on macOS.
 
 #### Incompatibilities
@@ -88,8 +92,8 @@ FlatLaf Change Log
   - Improved log messages for loading fails.
 - Fonts: Updated **Inter** to
   [v4.0](https://github.com/rsms/inter/releases/tag/v4.0).
-- Table: Select all text in cell editor when starting editing using `F2` key.
-  (issue #652)
+- Table: Select all text in cell editor when starting editing using `F2` key on
+  Windows or Linux. (issue #652)
 
 #### Fixed bugs
 
