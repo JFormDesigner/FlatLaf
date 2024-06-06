@@ -74,21 +74,89 @@ application.
 Proguard/Shadow JAR
 --------
 
-If you are using [Gradle Shadow JAR Plugin](https://github.com/johnrengelman/shadow) to build the jar for your application and `minimize()` function to minimize the size in the configurations of `shadowJar` task, then you will get an exception `java.lang.Error: no ComponentUI class for:` when running the jar, that's because Swing and Flatlaf both use Reflection, one way to fix this issue without removing the `minimize()` is to exclude Flatlaf from being minimized by using the following:
+Flatlaf and Swing Desktop both use reflections in the code and other features like dynamic class loading, and
+minimization/shrinking tools like Proguard/Shadow JAR won't be able to see these references. Explicit rules are
+necessary to retain these classes.
+
+If you're trying to run the application without excluding Flatlaf from minimization, you will get a runtime error:
+```
+java.lang.Error: no ComponentUI class for: javax.swing.<component>
+```
+
+At the moment, we don't have support for minimization tools; however, the issue can be
+solved very easily by excluding FlatLaf from minimization; the steps will depend on the tool you're using.
+
+The steps are **not guaranteed**, in most cases, it should work.
+
+<details>
+	<summary>Proguard</summary>
+
+1. First of all, make sure you're including `java.desktop.jmod` and `java.base.jmod` by `libraryjars` using Proguard
+   rules, this is needed so Proguard can have access to the JDK modules that are being used in your application,
+   this step is not specific to Flatlaf, `java.desktop.jmod` is needed when using Java Swing/Desktop in general.
+
+   An example of using Proguard in Gradle Kotlin DSL:
+
+    ```kotlin
+    tasks.register<proguard.gradle.ProGuardTask>("minimizedJar") {
+    
+            // Your Proguard configurations
+    
+            // Automatically handle the Java version of this build.
+            val javaHome = System.getProperty("java.home")
+            if (System.getProperty("java.version").startsWith("1.")) {
+                // Before Java 9, runtime classes are packaged in a single JAR file.
+                libraryjars("$javaHome/lib/rt.jar")
+            } else {
+                // Starting from Java 9, runtime classes are packaged in modular JMOD files.
+                libraryjars(
+                    mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
+                    "$javaHome/jmods/java.base.jmod",
+                )
+                // Needed to support Java Swing/Desktop
+                libraryjars(
+                    mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
+                    "$javaHome/jmods/java.desktop.jmod",
+                )
+            }
+        }
+    ```
+
+2. Include the following in your Proguard configurations/rules, which is usually in `proguard.pro` file:
+    ```
+    # Exclude the FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
+    -keep class com.formdev.flatlaf.** { *; }
+    -dontwarn com.formdev.flatlaf.**
+    ```
+
+Try to run the application now and test anything that uses Flatlaf.
+
+</details>
+
+<details>
+    <summary>Shadow JAR Minimization</summary>
+
+[Gradle Shadow JAR Plugin](https://github.com/johnrengelman/shadow) is primarily
+for building fat JAR for your application, it has a `minimize()` function to minimize the JAR
+in the configurations of `shadowJar` task, use the following snippet in your `build.gradle` (or `build.gradle.kts`)
 
 ```groovy
 
 shadowJar {
     // Your shadow configurations
     minimize {
-        // Exclude the entire FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
+        // Exclude the FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
         exclude(dependency("com.formdev:flatlaf:.*"))
     }
 }
 
 ```
 
-Use a similar solution if you use other tools like Proguard, for [more details](https://github.com/JFormDesigner/FlatLaf/issues/648#issuecomment-1441547550)
+Try to run the application now and test anything that uses Flatlaf.
+
+</details>
+
+Use a similar solution for other tools.
 
 ### Snapshots
 
