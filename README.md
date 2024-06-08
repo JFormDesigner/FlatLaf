@@ -109,15 +109,25 @@ The steps are **not guaranteed**, in most cases, it should work.
                 libraryjars("$javaHome/lib/rt.jar")
             } else {
                 // Starting from Java 9, runtime classes are packaged in modular JMOD files.
-                libraryjars(
-                    mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
-                    "$javaHome/jmods/java.base.jmod",
-                )
-                // Needed to support Java Swing/Desktop
-                libraryjars(
-                    mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
-                    "$javaHome/jmods/java.desktop.jmod",
-                )
+               fun includeJdkModule(jModFileNameWithoutExtension: String) {
+                   val jModFilePath = Paths.get(javaHome, "jmods", "$jModFileNameWithoutExtension.jmod").toString()
+                   val jModFile = File(jModFilePath)
+                   if (!jModFile.exists()) {
+                       throw FileNotFoundException("The '$jModFile' at '$jModFilePath' doesn't exist.")
+                   }
+                   libraryjars(
+                       mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
+                       jModFilePath,
+                   )
+               }
+   
+               val javaModules =
+                   listOf(
+                       "java.base",
+                       // Needed to support Java Swing/Desktop
+                       "java.desktop",
+                   )
+               javaModules.forEach { includeJdkModule(it) }
             }
         }
     ```
