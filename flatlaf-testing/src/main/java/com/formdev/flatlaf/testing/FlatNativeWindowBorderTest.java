@@ -36,6 +36,8 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
@@ -161,6 +163,8 @@ public class FlatNativeWindowBorderTest
 		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F4", FlatDarculaLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F5", FlatMacLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F6", FlatMacDarkLaf.class.getName() );
 
 		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
 
@@ -170,8 +174,8 @@ public class FlatNativeWindowBorderTest
 			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
 		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 	}
 
 	private void updateInfo() {

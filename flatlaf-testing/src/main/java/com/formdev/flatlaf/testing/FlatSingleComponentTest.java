@@ -22,13 +22,13 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -42,6 +42,8 @@ import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
@@ -63,8 +65,9 @@ public class FlatSingleComponentTest
 
 	public static void main( String[] args ) {
 		DemoPrefs.init( PREFS_ROOT_PATH );
+		DemoPrefs.initSystemScale();
 
-		// set scale factor
+		// set user scale factor
 		if( System.getProperty( FlatSystemProperties.UI_SCALE ) == null ) {
 			String scaleFactor = DemoPrefs.getState().get( KEY_SCALE_FACTOR, null );
 			if( scaleFactor != null )
@@ -95,7 +98,8 @@ public class FlatSingleComponentTest
 		JComponent c = createSingleComponent();
 
 		Container contentPane = getContentPane();
-		contentPane.setLayout( new MigLayout( null, null, "[][grow]") );
+		contentPane.setLayout( new MigLayout( null, null,
+			c instanceof JScrollPane ? "[grow,fill][]" : "[][grow]" ) );
 		contentPane.add( c );
 
 		infoLabel = new JLabel();
@@ -107,6 +111,8 @@ public class FlatSingleComponentTest
 		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F4", FlatDarculaLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F5", FlatMacLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F6", FlatMacDarkLaf.class.getName() );
 
 		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
 
@@ -116,42 +122,37 @@ public class FlatSingleComponentTest
 			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
 		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 
-		// register Alt+F1, F2, ... keys to change scale factor
-		registerScaleFactor( "alt F1", "1" );
-		registerScaleFactor( "alt F2", "1.25" );
-		registerScaleFactor( "alt F3", "1.5" );
-		registerScaleFactor( "alt F4", "1.75" );
-		registerScaleFactor( "alt F5", "2" );
-		registerScaleFactor( "alt F6", "2.5" );
-		registerScaleFactor( "alt F7", "3" );
-		registerScaleFactor( "alt F8", "3.5" );
-		registerScaleFactor( "alt F9", "4" );
-		registerScaleFactor( "alt F10", "5" );
-		registerScaleFactor( "alt F11", "6" );
-		registerScaleFactor( "alt F12", null );
+		// register Alt+F1, F2, ... keys to change user scale factor
+		registerScaleFactor( "alt F1", null );
+		registerScaleFactor( "alt F2", "1" );
+		registerScaleFactor( "alt F3", "1.25" );
+		registerScaleFactor( "alt F4", "1.5" );
+		registerScaleFactor( "alt F5", "1.75" );
+		registerScaleFactor( "alt F6", "2" );
+		registerScaleFactor( "alt F7", "2.5" );
+		registerScaleFactor( "alt F8", "3" );
+		registerScaleFactor( "alt F9", "3.5" );
+		registerScaleFactor( "alt F10", "4" );
+		registerScaleFactor( "alt F11", "5" );
+		registerScaleFactor( "alt F12", "6" );
+
+		// register Alt+Shift+F1, F2, ... keys to change system scale factor
+		DemoPrefs.registerSystemScaleFactors( this );
 
 		// register Alt+R key to toggle component orientation
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> {
-				applyComponentOrientation( getComponentOrientation().isLeftToRight()
-					? ComponentOrientation.RIGHT_TO_LEFT
-					: ComponentOrientation.LEFT_TO_RIGHT );
-				revalidate();
-				repaint();
-			},
-			KeyStroke.getKeyStroke( "alt R" ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( "alt R", () -> {
+			applyComponentOrientation( getComponentOrientation().isLeftToRight()
+				? ComponentOrientation.RIGHT_TO_LEFT
+				: ComponentOrientation.LEFT_TO_RIGHT );
+			revalidate();
+			repaint();
+		} );
 
 		// register ESC key to close frame
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> {
-				dispose();
-			},
-			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( "ESCAPE", () -> dispose() );
 
 		// update info
 		addWindowListener( new WindowAdapter() {
@@ -199,17 +200,21 @@ public class FlatSingleComponentTest
 			+ ")" );
 	}
 
-	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+	private void registerKey( String keyStrokeStr, Runnable runnable ) {
 		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
 		if( keyStroke == null )
 			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
 
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> {
-				applyLookAndFeel( lafClassName );
+				runnable.run();
 			},
 			keyStroke,
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+		registerKey( keyStrokeStr, () -> applyLookAndFeel( lafClassName ) );
 	}
 
 	private void applyLookAndFeel( String lafClassName ) {
@@ -222,16 +227,7 @@ public class FlatSingleComponentTest
 	}
 
 	private void registerScaleFactor( String keyStrokeStr, String scaleFactor ) {
-		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
-		if( keyStroke == null )
-			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
-
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> {
-				applyScaleFactor( scaleFactor );
-			},
-			keyStroke,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( keyStrokeStr, () -> applyScaleFactor( scaleFactor ) );
 	}
 
 	private void applyScaleFactor( String scaleFactor ) {

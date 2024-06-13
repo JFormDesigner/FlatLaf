@@ -140,8 +140,8 @@ class ControlBar
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.apple.laf.AquaLookAndFeel" );
 		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F12, MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F12, MetalLookAndFeel.class.getName() );
 
 		// register Alt+UP and Alt+DOWN to switch to previous/next theme
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
@@ -152,6 +152,9 @@ class ControlBar
 			e -> frame.themesPanel.selectNextTheme(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		// register Alt+Shift+F1, F2, ... keys to change system scale factor
+		DemoPrefs.registerSystemScaleFactors( frame );
 
 		// register ESC key to close frame
 		((JComponent)frame.getContentPane()).registerKeyboardAction(

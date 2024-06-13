@@ -70,9 +70,10 @@ public class FlatLafDemo
 		if( FlatLafDemo.screenshotsMode && !SystemInfo.isJava_9_orLater && System.getProperty( "flatlaf.uiScale" ) == null )
 			System.setProperty( "flatlaf.uiScale", "2x" );
 
-		SwingUtilities.invokeLater( () -> {
-			DemoPrefs.init( PREFS_ROOT_PATH );
+		DemoPrefs.init( PREFS_ROOT_PATH );
+		DemoPrefs.initSystemScale();
 
+		SwingUtilities.invokeLater( () -> {
 			// install fonts for lazy loading
 			FlatInterFont.installLazy();
 			FlatJetBrainsMonoFont.installLazy();

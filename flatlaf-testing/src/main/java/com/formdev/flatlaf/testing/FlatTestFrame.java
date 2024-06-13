@@ -19,7 +19,6 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
@@ -81,6 +80,7 @@ public class FlatTestFrame
 //		System.setProperty( "awt.useSystemAAFontSettings", "off" );
 
 		DemoPrefs.init( PREFS_ROOT_PATH );
+		DemoPrefs.initSystemScale();
 
 		// set scale factor
 		if( System.getProperty( FlatSystemProperties.UI_SCALE ) == null ) {
@@ -169,41 +169,23 @@ public class FlatTestFrame
 			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
 		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
+
+		// register Alt+Shift+F1, F2, ... keys to change system scale factor
+		DemoPrefs.registerSystemScaleFactors( this );
 
 		// register Ctrl+0, Ctrl++ and Ctrl+- to change font size
-		int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> restoreFont(),
-			KeyStroke.getKeyStroke( KeyEvent.VK_0, menuShortcutKeyMask ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> incrFont(),
-			KeyStroke.getKeyStroke( KeyEvent.VK_PLUS, menuShortcutKeyMask ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> decrFont(),
-			KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, menuShortcutKeyMask ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( SystemInfo.isMacOS ? "meta 0" : "ctrl 0", () -> restoreFont() );
+		registerKey( SystemInfo.isMacOS ? "meta PLUS" : "ctrl PLUS", () -> incrFont() );
+		registerKey( SystemInfo.isMacOS ? "meta MINUS" : "ctrl MINUS", () -> decrFont() );
 
 		// register Alt+UP and Alt+DOWN to switch to previous/next theme
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> themesPanel.selectPreviousTheme(),
-			KeyStroke.getKeyStroke( KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> themesPanel.selectNextTheme(),
-			KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( "alt UP", () -> themesPanel.selectPreviousTheme() );
+		registerKey( "alt DOWN", () -> themesPanel.selectNextTheme() );
 
 		// register ESC key to close frame
-		((JComponent)getContentPane()).registerKeyboardAction(
-			e -> {
-				dispose();
-			},
-			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		registerKey( "ESCAPE", () -> dispose() );
 
 		// make the "close" button the default button
 		getRootPane().setDefaultButton( closeButton );
@@ -274,17 +256,21 @@ public class FlatTestFrame
 			setTitle( newTitle );
 	}
 
-	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+	private void registerKey( String keyStrokeStr, Runnable runnable ) {
 		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
 		if( keyStroke == null )
 			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
 
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> {
-				selectLookAndFeel( lafClassName );
+				runnable.run();
 			},
 			keyStroke,
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+		registerKey( keyStrokeStr, () -> selectLookAndFeel( lafClassName ) );
 	}
 
 	private void loadLafs( DefaultComboBoxModel<LookAndFeelInfo> lafModel ) {

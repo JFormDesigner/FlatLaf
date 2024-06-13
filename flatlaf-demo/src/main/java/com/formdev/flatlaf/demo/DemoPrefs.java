@@ -19,6 +19,10 @@ package com.formdev.flatlaf.demo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.prefs.Preferences;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -27,6 +31,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * @author Karl Tauber
@@ -35,6 +40,7 @@ public class DemoPrefs
 {
 	public static final String KEY_LAF = "laf";
 	public static final String KEY_LAF_THEME = "lafTheme";
+	public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
 
 	public static final String RESOURCE_PREFIX = "res:";
 	public static final String FILE_PREFIX = "file:";
@@ -95,5 +101,67 @@ public class DemoPrefs
 			if( "lookAndFeel".equals( e.getPropertyName() ) )
 				state.put( KEY_LAF, UIManager.getLookAndFeel().getClass().getName() );
 		} );
+	}
+
+	public static void initSystemScale() {
+		if( System.getProperty( "sun.java2d.uiScale" ) == null ) {
+			String scaleFactor = getState().get( KEY_SYSTEM_SCALE_FACTOR, null );
+			if( scaleFactor != null )
+				System.setProperty( "sun.java2d.uiScale", scaleFactor );
+		}
+	}
+
+	/**
+	 * register Alt+Shift+F1, F2, ... F12 keys to change system scale factor
+	 */
+	public static void registerSystemScaleFactors( JFrame frame ) {
+		registerSystemScaleFactor( frame, "alt shift F1", null );
+		registerSystemScaleFactor( frame, "alt shift F2", "1" );
+
+		if( SystemInfo.isWindows ) {
+			registerSystemScaleFactor( frame, "alt shift F3", "1.25" );
+			registerSystemScaleFactor( frame, "alt shift F4", "1.5" );
+			registerSystemScaleFactor( frame, "alt shift F5", "1.75" );
+			registerSystemScaleFactor( frame, "alt shift F6", "2" );
+			registerSystemScaleFactor( frame, "alt shift F7", "2.25" );
+			registerSystemScaleFactor( frame, "alt shift F8", "2.5" );
+			registerSystemScaleFactor( frame, "alt shift F9", "2.75" );
+			registerSystemScaleFactor( frame, "alt shift F10", "3" );
+			registerSystemScaleFactor( frame, "alt shift F11", "3.5" );
+			registerSystemScaleFactor( frame, "alt shift F12", "4" );
+		} else {
+			// Java on macOS and Linux supports only integer scale factors
+			registerSystemScaleFactor( frame, "alt shift F3", "2" );
+			registerSystemScaleFactor( frame, "alt shift F4", "3" );
+			registerSystemScaleFactor( frame, "alt shift F5", "4" );
+
+		}
+	}
+
+	private static void registerSystemScaleFactor( JFrame frame, String keyStrokeStr, String scaleFactor ) {
+		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
+		if( keyStroke == null )
+			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
+
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> applySystemScaleFactor( frame, scaleFactor ),
+			keyStroke,
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private static void applySystemScaleFactor( JFrame frame, String scaleFactor ) {
+		if( JOptionPane.showConfirmDialog( frame,
+				"Change system scale factor to "
+				+ (scaleFactor != null ? scaleFactor : "default")
+				+ " and exit?",
+				frame.getTitle(), JOptionPane.YES_NO_OPTION ) != JOptionPane.YES_OPTION )
+			return;
+
+		if( scaleFactor != null )
+			DemoPrefs.getState().put( KEY_SYSTEM_SCALE_FACTOR, scaleFactor );
+		else
+			DemoPrefs.getState().remove( KEY_SYSTEM_SCALE_FACTOR );
+
+		System.exit( 0 );
 	}
 }
