@@ -17,14 +17,19 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
@@ -227,6 +232,38 @@ public class FlatRoundedScrollPaneTest
 		}
 	}
 
+	private void emptyViewportChanged() {
+		boolean empty = emptyViewportCheckBox.isSelected();
+		for( JScrollPane scrollPane : allJScrollPanes ) {
+			JViewport viewport = scrollPane.getViewport();
+			Component view = viewport.getView();
+			if( empty ) {
+				scrollPane.putClientProperty( getClass().getName(), view );
+				JComponent emptyView = new JComponent() {
+				};
+				emptyView.setBorder( new EmptyViewBorder() );
+				emptyView.setFocusable( true );
+				emptyView.addMouseListener( new MouseAdapter() {
+					@Override
+					public void mousePressed( MouseEvent e ) {
+						emptyView.requestFocusInWindow();
+					}
+				} );
+				viewport.setView( emptyView );
+			} else {
+				Object oldView = scrollPane.getClientProperty( getClass().getName() );
+				scrollPane.putClientProperty( getClass().getName(), null );
+				if( oldView instanceof Component )
+					viewport.setView( (Component) oldView );
+				else
+					viewport.setView( null );
+			}
+			viewport.setOpaque( !empty );
+			scrollPane.revalidate();
+			scrollPane.repaint();
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		splitPane2 = new JSplitPane();
@@ -265,6 +302,7 @@ public class FlatRoundedScrollPaneTest
 		viewportBorderCheckBox = new JCheckBox();
 		rowHeaderCheckBox = new JCheckBox();
 		verticalScrollBarCheckBox = new JCheckBox();
+		emptyViewportCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -420,6 +458,7 @@ public class FlatRoundedScrollPaneTest
 				"[]",
 				// rows
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- arcLabel ----
@@ -468,6 +507,11 @@ public class FlatRoundedScrollPaneTest
 			verticalScrollBarCheckBox.setSelected(true);
 			verticalScrollBarCheckBox.addActionListener(e -> verticalScrollBarChanged());
 			panel3.add(verticalScrollBarCheckBox, "cell 4 1");
+
+			//---- emptyViewportCheckBox ----
+			emptyViewportCheckBox.setText("Empty viewport");
+			emptyViewportCheckBox.addActionListener(e -> emptyViewportChanged());
+			panel3.add(emptyViewportCheckBox, "cell 2 2");
 		}
 		add(panel3, "cell 0 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -509,6 +553,7 @@ public class FlatRoundedScrollPaneTest
 	private JCheckBox viewportBorderCheckBox;
 	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox verticalScrollBarCheckBox;
+	private JCheckBox emptyViewportCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Corner -------------------------------------------------------
@@ -523,6 +568,31 @@ public class FlatRoundedScrollPaneTest
 		@Override
 		public void setBackground( Color bg ) {
 			// do not change background when checkbox "explicit colors" is selected
+		}
+	}
+
+	//---- class EmptyViewBorder ----------------------------------------------
+
+	private static class EmptyViewBorder
+		extends EmptyBorder
+	{
+		public EmptyViewBorder() {
+			super( 0, 0, 0, 0 );
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			g.setColor( Color.red );
+			int x2 = x + width - 1;
+			int y2 = y + height - 1;
+			for( int px = x; px <= x2; px += 4 ) {
+				g.fillRect( px, y, 1, 1 );
+				g.fillRect( px, y2, 1, 1 );
+			}
+			for( int py = y; py <= y2; py += 4 ) {
+				g.fillRect( x, py, 1, 1 );
+				g.fillRect( x2, py, 1, 1 );
+			}
 		}
 	}
 }

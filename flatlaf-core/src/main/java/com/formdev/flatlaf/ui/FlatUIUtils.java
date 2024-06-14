@@ -602,27 +602,54 @@ public class FlatUIUtils
 		float focusWidth, float focusWidthFraction, float focusInnerWidth, float borderWidth, float arc,
 		Paint focusColor, Paint borderColor, Paint background )
 	{
+		paintOutlinedComponent( g, x, y, width, height, focusWidth, focusWidthFraction, focusInnerWidth,
+			borderWidth, arc, focusColor, borderColor, background, false );
+	}
+
+	static void paintOutlinedComponent( Graphics2D g, int x, int y, int width, int height,
+		float focusWidth, float focusWidthFraction, float focusInnerWidth, float borderWidth, float arc,
+		Paint focusColor, Paint borderColor, Paint background, boolean scrollPane )
+	{
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
-		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+		if( (int) systemScaleFactor != systemScaleFactor ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
 			HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintOutlinedComponentImpl( g2d, x2, y2, width2, height2,
 						(float) (focusWidth * scaleFactor), focusWidthFraction, (float) (focusInnerWidth * scaleFactor),
 						(float) (borderWidth * scaleFactor), (float) (arc * scaleFactor),
-						focusColor, borderColor, background );
+						focusColor, borderColor, background, scrollPane, scaleFactor );
 				} );
 			return;
 		}
 
 		paintOutlinedComponentImpl( g, x, y, width, height, focusWidth, focusWidthFraction, focusInnerWidth,
-			borderWidth, arc, focusColor, borderColor, background );
+			borderWidth, arc, focusColor, borderColor, background, scrollPane, systemScaleFactor );
 	}
 
+	@SuppressWarnings( "SelfAssignment" ) // Error Prone
 	private static void paintOutlinedComponentImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float focusWidthFraction, float focusInnerWidth, float borderWidth, float arc,
-		Paint focusColor, Paint borderColor, Paint background )
+		Paint focusColor, Paint borderColor, Paint background, boolean scrollPane, double scaleFactor )
 	{
+		// Special handling for scrollpane and fractional scale factors (e.g. 1.25 - 1.75),
+		// where Swing scales one "logical" pixel (border insets) to either one or two physical pixels.
+		// Antialiasing is used to paint the border, which usually needs two physical pixels
+		// at small scale factors. 1px for the solid border and another 1px for antialiasing.
+		// But scrollpane view is painted over the border, which results in a painted border
+		// that is 1px thick at some sides and 2px thick at other sides.
+		if( scrollPane && scaleFactor != (int) scaleFactor ) {
+			if( focusWidth > 0 ) {
+				// reduce outer border thickness (focusWidth) so that inner side of
+				// component border (focusWidth + borderWidth) is at a full pixel
+				int totalWidth = (int) (focusWidth + borderWidth);
+				focusWidth = totalWidth - borderWidth;
+			} else {// if( scaleFactor > 1 && scaleFactor < 2 ) {
+				// reduce component border thickness (borderWidth) to full pixels
+				borderWidth = (int) borderWidth;
+			}
+		}
+
 		// outside bounds of the border and the background
 		float x1 = x + focusWidth;
 		float y1 = y + focusWidth;
@@ -780,7 +807,7 @@ public class FlatUIUtils
 
 		if( arcTopLeft > 0 || arcTopRight > 0 || arcBottomLeft > 0 || arcBottomRight > 0 ) {
 			double systemScaleFactor = UIScale.getSystemScaleFactor( g );
-			if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+			if( systemScaleFactor != (int) systemScaleFactor ) {
 				// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
 				HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 					(g2d, x2, y2, width2, height2, scaleFactor) -> {

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.1.0.298" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -169,7 +169,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][grow,fill]para[][][]"
-				"$rowConstraints": "[][]"
+				"$rowConstraints": "[][][]"
 			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -237,6 +237,13 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "verticalScrollBarChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 4 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "emptyViewportCheckBox"
+					"text": "Empty viewport"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "emptyViewportChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 2"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"

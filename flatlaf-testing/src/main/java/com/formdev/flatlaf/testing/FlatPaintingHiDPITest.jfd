@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.0.0.0.122" Java: "17.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -108,7 +108,7 @@ new FormModel {
 				"paintTicks": true
 				"majorTickSpacing": 50
 				"snapToTicks": true
-				"minorTickSpacing": 10
+				"minorTickSpacing": 5
 				"minimum": -100
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
@@ -131,7 +131,7 @@ new FormModel {
 				"paintLabels": true
 				"majorTickSpacing": 50
 				"snapToTicks": true
-				"minorTickSpacing": 10
+				"minorTickSpacing": 5
 				"minimum": -100
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false

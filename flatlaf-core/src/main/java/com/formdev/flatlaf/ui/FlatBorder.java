@@ -135,7 +135,7 @@ public class FlatBorder
 			Paint borderColor = (outlineColor != null) ? outlineColor : getBorderColor( c );
 			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height,
 				focusWidth, 1, focusInnerWidth, borderWidth, arc,
-				focusColor, borderColor, null );
+				focusColor, borderColor, null, c instanceof JScrollPane );
 		} finally {
 			g2.dispose();
 		}

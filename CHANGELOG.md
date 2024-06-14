@@ -23,6 +23,8 @@ FlatLaf Change Log
   `<big>`, `<small>` and `<samp>` in HTML text for components Button, CheckBox,
   RadioButton, MenuItem (and subclasses), JideLabel, JideButton, JXBusyLabel and
   JXHyperlink. Also fixed for Label and ToolTip if using Java 11+.
+- ScrollPane: Fixed/improved border painting at 125% - 175% scaling to avoid
+  different border thicknesses. (issue #743)
 - Table: Fixed painting of alternating rows below table if auto-resize mode is
   `JTable.AUTO_RESIZE_OFF` and table width is smaller than scroll pane (was not
   updated when table width changed and was painted on wrong side in

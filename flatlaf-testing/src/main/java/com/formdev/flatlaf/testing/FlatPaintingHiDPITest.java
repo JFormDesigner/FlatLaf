@@ -40,8 +40,13 @@ public class FlatPaintingHiDPITest
 
 	FlatPaintingHiDPITest() {
 		initComponents();
-		reset();
 		sliderChanged();
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		reset();
 	}
 
 	private void sliderChanged() {
@@ -212,7 +217,7 @@ public class FlatPaintingHiDPITest
 		scaleXSlider.setPaintTicks(true);
 		scaleXSlider.setMajorTickSpacing(50);
 		scaleXSlider.setSnapToTicks(true);
-		scaleXSlider.setMinorTickSpacing(10);
+		scaleXSlider.setMinorTickSpacing(5);
 		scaleXSlider.setMinimum(-100);
 		scaleXSlider.addChangeListener(e -> sliderChanged());
 		add(scaleXSlider, "cell 1 4");
@@ -228,7 +233,7 @@ public class FlatPaintingHiDPITest
 		scaleYSlider.setPaintLabels(true);
 		scaleYSlider.setMajorTickSpacing(50);
 		scaleYSlider.setSnapToTicks(true);
-		scaleYSlider.setMinorTickSpacing(10);
+		scaleYSlider.setMinorTickSpacing(5);
 		scaleYSlider.setMinimum(-100);
 		scaleYSlider.addChangeListener(e -> sliderChanged());
 		add(scaleYSlider, "cell 1 5");

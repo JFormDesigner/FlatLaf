@@ -422,7 +422,7 @@ debug*/
 		Color thumbColor, Color thumbBorderColor, Color focusedColor, float thumbBorderWidth, int focusWidth )
 	{
 		double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
-		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+		if( systemScaleFactor != (int) systemScaleFactor ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
