@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,6 +33,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.function.Function;
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -46,6 +48,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
@@ -164,6 +167,7 @@ public class FlatFileChooserUI
 {
 	private final FlatFileView fileView = new FlatFileView();
 	private FlatShortcutsPanel shortcutsPanel;
+	private JScrollPane shortcutsScrollPane;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatFileChooserUI( (JFileChooser) c );
@@ -183,7 +187,10 @@ public class FlatFileChooserUI
 			FlatShortcutsPanel panel = createShortcutsPanel( fc );
 			if( panel.getComponentCount() > 0 ) {
 				shortcutsPanel = panel;
-				fc.add( shortcutsPanel, BorderLayout.LINE_START );
+				shortcutsScrollPane = new JScrollPane( shortcutsPanel,
+					JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
+				shortcutsScrollPane.setBorder( BorderFactory.createEmptyBorder() );
+				fc.add( shortcutsScrollPane, BorderLayout.LINE_START );
 				fc.addPropertyChangeListener( shortcutsPanel );
 			}
 		}
@@ -196,6 +203,7 @@ public class FlatFileChooserUI
 		if( shortcutsPanel != null ) {
 			fc.removePropertyChangeListener( shortcutsPanel );
 			shortcutsPanel = null;
+			shortcutsScrollPane = null;
 		}
 	}
 
@@ -324,7 +332,7 @@ public class FlatFileChooserUI
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension prefSize = super.getPreferredSize( c );
 		Dimension minSize = getMinimumSize( c );
-		int shortcutsPanelWidth = (shortcutsPanel != null) ? shortcutsPanel.getPreferredSize().width : 0;
+		int shortcutsPanelWidth = (shortcutsScrollPane != null) ? shortcutsScrollPane.getPreferredSize().width : 0;
 		return new Dimension(
 			Math.max( prefSize.width, minSize.width + shortcutsPanelWidth ),
 			Math.max( prefSize.height, minSize.height ) );
@@ -401,7 +409,7 @@ public class FlatFileChooserUI
 	/** @since 2.3 */
 	public static class FlatShortcutsPanel
 		extends JToolBar
-		implements PropertyChangeListener
+		implements PropertyChangeListener, Scrollable
 	{
 		private final JFileChooser fc;
 
@@ -420,6 +428,7 @@ public class FlatFileChooserUI
 			super( JToolBar.VERTICAL );
 			this.fc = fc;
 			setFloatable( false );
+			putClientProperty( FlatClientProperties.STYLE, "hoverButtonGroupBackground: null" );
 
 			buttonSize = UIScale.scale( getUIDimension( "FileChooser.shortcuts.buttonSize", 84, 64 ) );
 			iconSize = getUIDimension( "FileChooser.shortcuts.iconSize", 32, 32 );
@@ -461,7 +470,7 @@ public class FlatFileChooserUI
 					icon = new ShortcutIcon( icon, iconSize.width, iconSize.height );
 
 				// create button
-				JToggleButton button = createButton( name, icon );
+				JToggleButton button = createButton( name, icon, file.toString() );
 				File f = file;
 				button.addActionListener( e -> {
 					fc.setCurrentDirectory( f );
@@ -487,8 +496,10 @@ public class FlatFileChooserUI
 			return size;
 		}
 
-		protected JToggleButton createButton( String name, Icon icon ) {
+		/** @since 3.5 */
+		protected JToggleButton createButton( String name, Icon icon, String toolTip ) {
 			JToggleButton button = new JToggleButton( name, icon );
+			button.setToolTipText( toolTip );
 			button.setVerticalTextPosition( SwingConstants.BOTTOM );
 			button.setHorizontalTextPosition( SwingConstants.CENTER );
 			button.setAlignmentX( Component.CENTER_ALIGNMENT );
@@ -566,6 +577,8 @@ public class FlatFileChooserUI
 			buttonGroup.clearSelection();
 		}
 
+		//---- interface PropertyChangeListener ----
+
 		@Override
 		public void propertyChange( PropertyChangeEvent e ) {
 			switch( e.getPropertyName() ) {
@@ -573,6 +586,41 @@ public class FlatFileChooserUI
 					directoryChanged( fc.getCurrentDirectory() );
 					break;
 			}
+		}
+
+		//---- interface Scrollable ----
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			if( getComponentCount() > 0 ) {
+				Insets insets = getInsets();
+				int height = (getComponent( 0 ).getPreferredSize().height * 5) + insets.top + insets.bottom;
+				return new Dimension( getPreferredSize().width, height );
+			}
+			return getPreferredSize();
+		}
+
+		@Override
+		public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
+			if( orientation == SwingConstants.VERTICAL && getComponentCount() > 0 )
+				return getComponent( 0 ).getPreferredSize().height;
+
+			return getScrollableBlockIncrement( visibleRect, orientation, direction ) / 10;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement( Rectangle visibleRect, int orientation, int direction ) {
+			return (orientation == SwingConstants.VERTICAL) ? visibleRect.height : visibleRect.width;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
 		}
 	}
 

@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.Beans;
+import java.util.Objects;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -83,6 +84,17 @@ public class FlatTestEnumSelector<E>
 				return (E) ((JToggleButton)c).getClientProperty( "FlatTestEnumSelector.value" );
 		}
 		return null;
+	}
+
+	public void setSelectedValue( E value ) {
+		for( Component c : toolBar.getComponents() ) {
+			if( c instanceof JToggleButton &&
+				Objects.equals( value, ((JToggleButton)c).getClientProperty( "FlatTestEnumSelector.value" ) ) )
+			{
+				((JToggleButton)c).setSelected( true );
+				return;
+			}
+		}
 	}
 
 	public void addActionListener( ActionListener l ) {

@@ -5,11 +5,12 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Button and ToggleButton: Added missing border colors for pressed and selected
-  states. (issue #848)
+- Button and ToggleButton: Added border colors for pressed and selected states.
+  (issue #848)
 - Label: Support painting background with rounded corners. (issue #842)
 - Popup: Fixed flicker of popups (e.g. tooltips) while they are moving (e.g.
   following mouse pointer). (issues #832 and #672)
+- FileChooser: Wrap shortcuts in scroll pane. (issue #828)
 - Theme Editor: On macOS, use larger window title bar. (PR #779)
 
 #### Fixed bugs

@@ -40,6 +40,8 @@ import net.miginfocom.swing.*;
 public class FlatFileChooserTest
 	extends FlatTestPanel
 {
+	private static ShortcutsCount shortcutsCount = ShortcutsCount.home;
+
 	public static void main( String[] args ) {
 //		Locale.setDefault( Locale.FRENCH );
 //		Locale.setDefault( Locale.GERMAN );
@@ -52,8 +54,21 @@ public class FlatFileChooserTest
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatFileChooserTest" );
 
 			UIManager.put( "FileChooser.shortcuts.filesFunction", (Function<File[], File[]>) files -> {
+				if( shortcutsCount == null )
+					return files;
+				if( shortcutsCount == ShortcutsCount.empty )
+					return new File[0];
+
 				ArrayList<File> list = new ArrayList<>( Arrays.asList( files ) );
-				list.add( 0, new File( System.getProperty( "user.home" ) ) );
+				if( shortcutsCount == ShortcutsCount.home )
+					list.add( 0, new File( System.getProperty( "user.home" ) ) );
+				else {
+					File home = new File( System.getProperty( "user.home" ) );
+					File[] homeFiles = home.listFiles();
+					int count = shortcutsCount.value;
+					for( int i = 0; i < count; i++ )
+						list.add( i < homeFiles.length ? homeFiles[i] : new File( "Dummy " + i ) );
+				}
 				return list.toArray( new File[list.size()] );
 			} );
 
@@ -78,6 +93,8 @@ public class FlatFileChooserTest
 		dialogTypeField.init( DialogType.class, false );
 		fileSelectionModeField.init( FileSelectionMode.class, false );
 		localesField.init( Locales.class, false );
+		shortcutsCountField.init( ShortcutsCount.class, true );
+		shortcutsCountField.setSelectedValue( shortcutsCount );
 
 		showControlButtonsCheckBox.setSelected( fileChooser1.getControlButtonsAreShown() );
 		multiSelectionCheckBox.setSelected( fileChooser1.isMultiSelectionEnabled() );
@@ -197,6 +214,11 @@ public class FlatFileChooserTest
 		} );
 	}
 
+	private void shortcutsCountChanged() {
+		shortcutsCount = shortcutsCountField.getSelectedValue();
+		fileChooser1.updateUI();
+	}
+
 	private void printShortcutFiles() {
 		printFiles( JavaCompatibility2.getChooserShortcutPanelFiles( fileChooser1.getFileSystemView() ) );
 	}
@@ -263,6 +285,8 @@ public class FlatFileChooserTest
 		printRootsButton = new JButton();
 		JLabel localesLabel = new JLabel();
 		localesField = new FlatTestEnumSelector<>();
+		JLabel label12 = new JLabel();
+		shortcutsCountField = new FlatTestEnumSelector<>();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JLabel label3 = new JLabel();
@@ -284,6 +308,7 @@ public class FlatFileChooserTest
 			"[grow]",
 			// rows
 			"[grow,fill]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -432,49 +457,57 @@ public class FlatFileChooserTest
 		localesField.addActionListener(e -> localesChanged());
 		add(localesField, "cell 1 8 2 1");
 
+		//---- label12 ----
+		label12.setText("Shortcuts:");
+		add(label12, "cell 0 9");
+
+		//---- shortcutsCountField ----
+		shortcutsCountField.addActionListener(e -> shortcutsCountChanged());
+		add(shortcutsCountField, "cell 1 9 2 1");
+
 		//---- label1 ----
 		label1.setText("icons:");
-		add(label1, "cell 0 9");
+		add(label1, "cell 0 10");
 
 		//---- label2 ----
 		label2.setIcon(UIManager.getIcon("FileView.directoryIcon"));
-		add(label2, "cell 1 9 2 1");
+		add(label2, "cell 1 10 2 1");
 
 		//---- label3 ----
 		label3.setIcon(UIManager.getIcon("FileView.fileIcon"));
-		add(label3, "cell 1 9 2 1");
+		add(label3, "cell 1 10 2 1");
 
 		//---- label4 ----
 		label4.setIcon(UIManager.getIcon("FileView.computerIcon"));
-		add(label4, "cell 1 9 2 1");
+		add(label4, "cell 1 10 2 1");
 
 		//---- label5 ----
 		label5.setIcon(UIManager.getIcon("FileView.hardDriveIcon"));
-		add(label5, "cell 1 9 2 1");
+		add(label5, "cell 1 10 2 1");
 
 		//---- label6 ----
 		label6.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
-		add(label6, "cell 1 9 2 1");
+		add(label6, "cell 1 10 2 1");
 
 		//---- label7 ----
 		label7.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
-		add(label7, "cell 1 9 2 1");
+		add(label7, "cell 1 10 2 1");
 
 		//---- label8 ----
 		label8.setIcon(UIManager.getIcon("FileChooser.upFolderIcon"));
-		add(label8, "cell 1 9 2 1");
+		add(label8, "cell 1 10 2 1");
 
 		//---- label9 ----
 		label9.setIcon(UIManager.getIcon("FileChooser.homeFolderIcon"));
-		add(label9, "cell 1 9 2 1");
+		add(label9, "cell 1 10 2 1");
 
 		//---- label10 ----
 		label10.setIcon(UIManager.getIcon("FileChooser.detailsViewIcon"));
-		add(label10, "cell 1 9 2 1");
+		add(label10, "cell 1 10 2 1");
 
 		//---- label11 ----
 		label11.setIcon(UIManager.getIcon("FileChooser.listViewIcon"));
-		add(label11, "cell 1 9 2 1");
+		add(label11, "cell 1 10 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -500,6 +533,7 @@ public class FlatFileChooserTest
 	private JButton printComboBoxFilesButton;
 	private JButton printRootsButton;
 	private FlatTestEnumSelector<Locales> localesField;
+	private FlatTestEnumSelector<ShortcutsCount> shortcutsCountField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- enum DialogType ----------------------------------------------------
@@ -550,6 +584,28 @@ public class FlatFileChooserTest
 		public final Locale value;
 
 		Locales( Locale value ) {
+			this.value = value;
+		}
+	}
+
+	//---- enum ShortcutsCount ------------------------------------------------
+
+	enum ShortcutsCount {
+		empty( -1 ),
+		home( -2 ),
+		zero( 0 ),
+		one( 1 ),
+		two( 2 ),
+		three( 3 ),
+		four( 4 ),
+		five( 5 ),
+		ten( 10 ),
+		twenty( 20 ),
+		thirty( 30 );
+
+		public final int value;
+
+		ShortcutsCount( int value ) {
 			this.value = value;
 		}
 	}
