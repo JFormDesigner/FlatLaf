@@ -31,6 +31,8 @@ FlatLaf Change Log
   updated when table width changed and was painted on wrong side in
   right-to-left component orientation).
 - Theme Editor: Fixed occasional empty window on startup on macOS.
+- FlatLaf window decorations: Fixed black line sometimes painted on top of
+  (native) window border on Windows 11. (issue #852)
 
 #### Incompatibilities
 

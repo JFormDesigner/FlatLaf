@@ -20,6 +20,7 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <shellapi.h>
+#include <dwmapi.h>
 #include <jawt.h>
 #include <jawt_md.h>
 #include "FlatWndProc.h"
@@ -76,6 +77,7 @@ jmethodID FlatWndProc::isFullscreenMID;
 jmethodID FlatWndProc::fireStateChangedLaterOnceMID;
 
 HWNDMap* FlatWndProc::hwndMap;
+DWORD FlatWndProc::osBuildNumber = 0;
 
 #define java_awt_Frame_ICONIFIED			1
 #define java_awt_Frame_MAXIMIZED_BOTH		(4 | 2)
@@ -105,6 +107,14 @@ HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
 		hwndMap = new HWNDMap();
 		if( hwndMap == NULL )
 			return 0;
+	}
+
+	// get OS build number
+	if( osBuildNumber == 0 ) {
+		OSVERSIONINFO info;
+		info.dwOSVersionInfoSize = sizeof( info );
+		if( ::GetVersionEx( &info ) )
+			osBuildNumber = info.dwBuildNumber;
 	}
 
 	// get window handle
@@ -391,6 +401,13 @@ LRESULT FlatWndProc::WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lP
 			if( hasAutohideTaskbar( ABE_RIGHT, monitorInfo.rcMonitor ) )
 				params->rgrc[0].right--;
 		}
+	} else if( osBuildNumber >= 22000 ) {
+		// For Windows 11, add border thickness to top, which is necessary to make the whole Java area visible.
+		// This also avoids that a black line is sometimes painted on top window border.
+		// Note: Do not increase top on Windows 10 because this would not hide Windows title bar.
+		UINT borderThickness = 0;
+		if( ::DwmGetWindowAttribute( hwnd, DWMWA_VISIBLE_FRAME_BORDER_THICKNESS, &borderThickness, sizeof( borderThickness ) ) == S_OK )
+			params->rgrc[0].top += borderThickness;
 	}
 
 	return lResult;

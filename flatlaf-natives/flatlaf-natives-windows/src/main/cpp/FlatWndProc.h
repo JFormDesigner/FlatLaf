@@ -35,6 +35,7 @@ private:
 	static jmethodID fireStateChangedLaterOnceMID;
 
 	static HWNDMap* hwndMap;
+	static DWORD osBuildNumber;
 
 	JavaVM* jvm;
 	JNIEnv* env; // attached to AWT-Windows/Win32 thread

@@ -60,8 +60,11 @@ import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinDef.UINT_PTR;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
+import com.sun.jna.platform.win32.WinError;
 import com.sun.jna.platform.win32.WinUser.HMONITOR;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
 
 //
@@ -615,6 +618,14 @@ public class FlatWindowsNativeWindowBorder
 					if( hasAutohideTaskbar( ABE_RIGHT, monitorInfo.rcMonitor ) )
 						params.rgrc[0].right--;
 				}
+			} else if( SystemInfo.isWindows_11_orLater ) {
+				// For Windows 11, add border thickness to top, which is necessary to make the whole Java area visible.
+				// This also avoids that a black line is sometimes painted on top window border.
+				// Note: Do not increase top on Windows 10 because this would not hide Windows title bar.
+				IntByReference borderThickness = new IntByReference();
+				if( DWMApi.INSTANCE.DwmGetWindowAttribute( hwnd, DWMApi.DWMWA_VISIBLE_FRAME_BORDER_THICKNESS,
+						borderThickness.getPointer(), 4 ) == WinError.S_OK.intValue() )
+					params.rgrc[0].top += borderThickness.getValue();
 			}
 
 			// write changed params back to native memory
@@ -896,6 +907,18 @@ public class FlatWindowsNativeWindowBorder
 		GDI32Ex INSTANCE = Native.load( "gdi32", GDI32Ex.class, W32APIOptions.DEFAULT_OPTIONS );
 
 		HBRUSH CreateSolidBrush( DWORD color );
+	}
+
+	//---- interface DWMApi ---------------------------------------------------
+
+	private interface DWMApi
+		extends StdCallLibrary
+	{
+		DWMApi INSTANCE = Native.load( "dwmapi", DWMApi.class, W32APIOptions.DEFAULT_OPTIONS );
+
+		int DWMWA_VISIBLE_FRAME_BORDER_THICKNESS = 37;
+
+		int DwmGetWindowAttribute( HWND hwnd, int dwAttribute, Pointer pvAttribute, int cbAttribute );
 	}
 
 	//---- class NCCALCSIZE_PARAMS --------------------------------------------
