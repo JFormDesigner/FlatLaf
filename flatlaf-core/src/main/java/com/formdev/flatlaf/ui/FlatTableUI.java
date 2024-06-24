@@ -24,6 +24,8 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -95,6 +97,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.intercellSpacing					Dimension
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
+ * @uiDefault Table.selectionInsets						Insets
+ * @uiDefault Table.selectionArc						int
  * @uiDefault Table.paintOutsideAlternateRows			boolean
  * @uiDefault Table.editorSelectAllOnStartEditing		boolean
  *
@@ -123,6 +127,8 @@ public class FlatTableUI
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
+	/** @since 3.5 */ @Styleable protected Insets selectionInsets;
+	/** @since 3.5 */ @Styleable protected int selectionArc;
 
 	// for FlatTableCellBorder
 	/** @since 2 */ @Styleable protected Insets cellMargins;
@@ -162,6 +168,8 @@ public class FlatTableUI
 		selectionForeground = UIManager.getColor( "Table.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Table.selectionInactiveForeground" );
+		selectionInsets = UIManager.getInsets( "Table.selectionInsets" );
+		selectionArc = UIManager.getInt( "Table.selectionArc" );
 
 		toggleSelectionColors();
 
@@ -477,6 +485,10 @@ public class FlatTableUI
 			};
 		}
 
+		// rounded selection or selection insets
+		if( selectionArc > 0 || (selectionInsets != null && !FlatUIUtils.isInsetsEmpty( selectionInsets )) )
+			g = new RoundedSelectionGraphics( g, UIManager.getColor( "Table.alternateRowColor" ) );
+
 		super.paint( g, c );
 	}
 
@@ -535,7 +547,7 @@ public class FlatTableUI
 				int x = viewport.getComponentOrientation().isLeftToRight() ? 0 : viewportWidth - tableWidth;
 				for( int y = tableHeight, row = rowCount; y < viewportHeight; y += rowHeight, row++ ) {
 					if( row % 2 != 0 )
-						g.fillRect( x, y, tableWidth, rowHeight );
+						paintAlternateRowBackground( g, -1, -1, x, y, tableWidth, rowHeight );
 				}
 
 				// add listener on demand
@@ -544,6 +556,239 @@ public class FlatTableUI
 					table.addComponentListener( outsideAlternateRowsListener );
 				}
 			}
+		}
+	}
+
+	/**
+	 * Paints (rounded) alternate row background.
+	 * Supports {@link #selectionArc} and {@link #selectionInsets}.
+	 * <p>
+	 * <b>Note:</b> This method is only invoked if either selection arc
+	 *              is greater than zero or if selection insets are not empty.
+	 *
+	 * @since 3.5
+	 */
+	protected void paintAlternateRowBackground( Graphics g, int row, int column, int x, int y, int width, int height ) {
+		Insets insets = (selectionInsets != null) ? (Insets) selectionInsets.clone() : null;
+		float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
+		arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
+
+		if( column >= 0 ) {
+			// selection insets
+
+			// selection arc
+			if( column > 0 ) {
+				if( insets != null )
+					insets.left = 0;
+
+				if( table.getComponentOrientation().isLeftToRight() )
+					arcTopLeft = arcBottomLeft = 0;
+				else
+					arcTopRight = arcBottomRight = 0;
+			}
+			if( column < table.getColumnCount() - 1 ) {
+				if( insets != null )
+					insets.right = 0;
+
+				if( table.getComponentOrientation().isLeftToRight() )
+					arcTopRight = arcBottomRight = 0;
+				else
+					arcTopLeft = arcBottomLeft = 0;
+			}
+		}
+
+		FlatUIUtils.paintSelection( (Graphics2D) g, x, y, width, height,
+			UIScale.scale( insets ), arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight, 0 );
+	}
+
+	//TODO test if scaled (on Windows)
+
+	/**
+	 * Paints (rounded) cell selection.
+	 * Supports {@link #selectionArc} and {@link #selectionInsets}.
+	 * <p>
+	 * <b>Note:</b> This method is only invoked if either selection arc
+	 *              is greater than zero or if selection insets are not empty.
+	 *
+	 * @since 3.5
+	 */
+	protected void paintCellSelection( Graphics g, int row, int column, int x, int y, int width, int height ) {
+		boolean rowSelAllowed = table.getRowSelectionAllowed();
+		boolean colSelAllowed = table.getColumnSelectionAllowed();
+		boolean rowSelOnly = rowSelAllowed && !colSelAllowed;
+		boolean colSelOnly = colSelAllowed && !rowSelAllowed;
+		boolean cellOnlySel = rowSelAllowed && colSelAllowed;
+
+		// get selection state of surrounding cells
+		boolean leftSelected    = (column > 0 && (rowSelOnly || table.isCellSelected( row, column - 1 )));
+		boolean topSelected     = (row    > 0 && (colSelOnly || table.isCellSelected( row - 1, column )));
+		boolean rightSelected   = (column < table.getColumnCount() - 1 && (rowSelOnly || table.isCellSelected( row, column + 1 )));
+		boolean bottomSelected  = (row    < table.getRowCount() - 1    && (colSelOnly || table.isCellSelected( row + 1, column )));
+		if( !table.getComponentOrientation().isLeftToRight() ) {
+			boolean temp = leftSelected;
+			leftSelected = rightSelected;
+			rightSelected = temp;
+		}
+
+		// selection insets
+		// (insets are applied to whole row if row-only selection is used,
+		//  or to whole column if column-only selection is used,
+		//  or to cell if cell selection is used)
+		Insets insets = (selectionInsets != null) ? (Insets) selectionInsets.clone() : null;
+		if( insets != null ) {
+			if( rowSelOnly && leftSelected )
+				insets.left = 0;
+			if( rowSelOnly && rightSelected )
+				insets.right = 0;
+			if( colSelOnly && topSelected )
+				insets.top = 0;
+			if( colSelOnly && bottomSelected )
+				insets.bottom = 0;
+		}
+
+		// selection arc
+		float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
+		arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
+		if( selectionArc > 0 ) {
+			// note that intercellSpacing is not considered as a gap because
+			// grid lines are usually painted to intercell space
+			boolean hasRowGap = (rowSelOnly || cellOnlySel) && insets != null && (insets.top != 0 || insets.bottom != 0);
+			boolean hasColGap = (colSelOnly || cellOnlySel) && insets != null && (insets.left != 0 || insets.right != 0);
+
+			if( leftSelected && !hasColGap )
+				arcTopLeft = arcBottomLeft = 0;
+			if( rightSelected && !hasColGap )
+				arcTopRight = arcBottomRight = 0;
+			if( topSelected && !hasRowGap )
+				arcTopLeft = arcTopRight = 0;
+			if( bottomSelected && !hasRowGap )
+				arcBottomLeft = arcBottomRight = 0;
+		}
+
+		FlatUIUtils.paintSelection( (Graphics2D) g, x, y, width, height,
+			UIScale.scale( insets ), arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight, 0 );
+	}
+
+	/**
+	 * Paints a cell selection at the given coordinates.
+	 * The selection color must be set on the graphics context.
+	 * <p>
+	 * This method is intended for use in custom cell renderers to support
+	 * {@link #selectionArc} and {@link #selectionInsets}.
+	 *
+	 * @since 3.5
+	 */
+	public static void paintCellSelection( JTable table, Graphics g, int row, int column, int x, int y, int width, int height ) {
+		if( !(table.getUI() instanceof FlatTableUI) )
+			return;
+
+		FlatTableUI ui = (FlatTableUI) table.getUI();
+		ui.paintCellSelection( g, row, column, x, y, width, height );
+	}
+
+	//---- class RoundedSelectionGraphics -------------------------------------
+
+	/**
+	 * Because selection painting is done in the cell renderer, it would be
+	 * necessary to require a FlatLaf specific renderer to implement rounded selection.
+	 * Using a LaF specific renderer was avoided because often a custom renderer is
+	 * already used in applications. Then either the rounded selection is not used,
+	 * or the application has to be changed to extend a FlatLaf renderer.
+	 * <p>
+	 * To solve this, a graphics proxy is used that paints rounded selection
+	 * if row/column/cell is selected and the renderer wants to fill the background.
+	 */
+	private class RoundedSelectionGraphics
+		extends Graphics2DProxy
+	{
+		private final Color alternateRowColor;
+
+		// used to avoid endless loop in case that paintCellSelection() invokes
+		// g.fillRect() with full bounds (selectionInsets is 0,0,0,0)
+		private boolean inPaintSelection;
+
+		RoundedSelectionGraphics( Graphics delegate, Color alternateRowColor ) {
+			super( (Graphics2D) delegate );
+			this.alternateRowColor = alternateRowColor;
+		}
+
+		@Override
+		public Graphics create() {
+			return new RoundedSelectionGraphics( super.create(), alternateRowColor );
+		}
+
+		@Override
+		public Graphics create( int x, int y, int width, int height ) {
+			return new RoundedSelectionGraphics( super.create( x, y, width, height ), alternateRowColor );
+		}
+
+		@Override
+		public void fillRect( int x, int y, int width, int height ) {
+			if( fillCellSelection( x, y, width, height ) )
+				return;
+
+			super.fillRect( x, y, width, height );
+		}
+
+		@Override
+		public void fill( Shape shape ) {
+			if( shape instanceof Rectangle2D ) {
+				Rectangle2D r = (Rectangle2D) shape;
+				double x = r.getX();
+				double y = r.getY();
+				double width = r.getWidth();
+				double height = r.getHeight();
+				if( x == (int) x && y == (int) y && width == (int) width && height == (int) height ) {
+					if( fillCellSelection( (int) x, (int) y, (int) width, (int) height ) )
+						return;
+				}
+			}
+
+			super.fill( shape );
+		}
+
+		private boolean fillCellSelection( int x, int y, int width, int height ) {
+			if( inPaintSelection )
+				return false;
+
+			Color color;
+			Component rendererComponent;
+			if( x == 0 && y == 0 &&
+				((color = getColor()) == table.getSelectionBackground() ||
+				 (alternateRowColor != null && color == alternateRowColor)) &&
+				(rendererComponent = findActiveRendererComponent()) != null &&
+				width == rendererComponent.getWidth() &&
+				height == rendererComponent.getHeight() )
+			{
+				Point location = rendererComponent.getLocation();
+				int row = table.rowAtPoint( location );
+				int column = table.columnAtPoint( location );
+				if( row >= 0 && column >= 0 ) {
+					inPaintSelection = true;
+					if( color == table.getSelectionBackground() )
+						paintCellSelection( this, row, column, x, y, width, height );
+					else
+						paintAlternateRowBackground( this, row, column, x, y, width, height );
+					inPaintSelection = false;
+
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * A CellRendererPane may contain multiple components, if multiple renderers
+		 * are used. Inactive renderer components have size {@code 0x0}.
+		 */
+		private Component findActiveRendererComponent() {
+			int count = rendererPane.getComponentCount();
+			for( int i = 0; i < count; i++ ) {
+				Component c = rendererPane.getComponent( i );
+				if( c.getWidth() > 0 && c.getHeight() > 0 )
+					return c;
+			}
+			return null;
 		}
 	}
 

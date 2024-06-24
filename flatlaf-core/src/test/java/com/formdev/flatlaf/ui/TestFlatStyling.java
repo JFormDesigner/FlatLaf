@@ -987,6 +987,8 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "selectionInactiveBackground: #fff" );
 		ui.applyStyle( "selectionInactiveForeground: #fff" );
+		ui.applyStyle( "selectionInsets: 1,2,3,4" );
+		ui.applyStyle( "selectionArc: 8" );
 
 		// FlatTableCellBorder
 		ui.applyStyle( "cellMargins: 1,2,3,4" );

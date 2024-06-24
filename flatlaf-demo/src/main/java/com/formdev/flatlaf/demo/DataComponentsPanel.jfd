@@ -343,9 +343,19 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
 				"$columnConstraints": "[]"
-				"$rowConstraints": "[]0[]0[]0[]0[]0[]0[]0"
+				"$rowConstraints": "[]0[]0[]0[]0[]0[]0[]0[]0[]0"
 			} ) {
 				name: "tableOptionsPanel"
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "roundedSelectionCheckBox"
+					"text": "rounded selection"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "roundedSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showHorizontalLinesCheckBox"
 					"text": "show horizontal lines"
@@ -354,7 +364,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHorizontalLinesChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
+					"value": "cell 0 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showVerticalLinesCheckBox"
@@ -364,7 +374,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showVerticalLinesChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
+					"value": "cell 0 2"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "intercellSpacingCheckBox"
@@ -374,7 +384,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "intercellSpacingChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2"
+					"value": "cell 0 3"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "redGridColorCheckBox"
@@ -384,7 +394,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redGridColorChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 3"
+					"value": "cell 0 4"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "rowSelectionCheckBox"
@@ -395,7 +405,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowSelectionChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 4"
+					"value": "cell 0 5"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "columnSelectionCheckBox"
@@ -405,7 +415,17 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "columnSelectionChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 5"
+					"value": "cell 0 6"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "alternatingRowsCheckBox"
+					"text": "alternating rows"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alternatingRowsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "dndCheckBox"
@@ -416,7 +436,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 6"
+					"value": "cell 0 8"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3"
