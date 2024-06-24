@@ -421,6 +421,7 @@ public class FlatTableUI
 
 			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
 			double lineThickness = (1. / systemScaleFactor) * (int) systemScaleFactor;
+			double lineOffset = (1. - lineThickness) + 0.05; // adding 0.05 to fix line location in some cases
 
 			// Java 8 uses drawLine() to paint grid lines
 			// Java 9+ uses fillRect() to paint grid lines (except for dragged column)
@@ -463,11 +464,11 @@ public class FlatTableUI
 					// reduce line thickness to avoid unstable painted line thickness
 					if( lineThickness != 1 ) {
 						if( horizontalLines && height == 1 && wasInvokedFromPaintGrid() ) {
-							super.fill( new Rectangle2D.Double( x, y, width, lineThickness ) );
+							super.fill( new Rectangle2D.Double( x, y + lineOffset, width, lineThickness ) );
 							return;
 						}
 						if( verticalLines && width == 1 && y == 0 && wasInvokedFromPaintGrid() ) {
-							super.fill( new Rectangle2D.Double( x, y, lineThickness, height ) );
+							super.fill( new Rectangle2D.Double( x + lineOffset, y, lineThickness, height ) );
 							return;
 						}
 					}
