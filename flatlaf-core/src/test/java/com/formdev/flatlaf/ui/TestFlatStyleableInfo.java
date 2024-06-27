@@ -800,6 +800,8 @@ public class TestFlatStyleableInfo
 			"selectionForeground", Color.class,
 			"selectionInactiveBackground", Color.class,
 			"selectionInactiveForeground", Color.class,
+			"selectionInsets", Insets.class,
+			"selectionArc", int.class,
 
 			// FlatTableCellBorder
 			"cellMargins", Insets.class,

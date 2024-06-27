@@ -25,6 +25,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.ColorFunctions;
 import net.miginfocom.swing.*;
 
 /**
@@ -93,10 +95,12 @@ class DataComponentsPanel
 
 	private void rowSelectionChanged() {
 		table1.setRowSelectionAllowed( rowSelectionCheckBox.isSelected() );
+		roundedSelectionChanged();
 	}
 
 	private void columnSelectionChanged() {
 		table1.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
+		roundedSelectionChanged();
 	}
 
 	private void showHorizontalLinesChanged() {
@@ -127,6 +131,28 @@ class DataComponentsPanel
 		intercellSpacingCheckBox.setSelected( table1.getRowMargin() != 0 );
 	}
 
+	private void roundedSelectionChanged() {
+		String style = null;
+		if( roundedSelectionCheckBox.isSelected() ) {
+			style = rowSelectionCheckBox.isSelected()
+				? "selectionArc: 6; selectionInsets: 0,1,0,1"
+				: "selectionArc: 6";
+		}
+		table1.putClientProperty( FlatClientProperties.STYLE, style );
+	}
+
+	private void alternatingRowsChanged() {
+		Color alternateRowColor = null;
+		if( alternatingRowsCheckBox.isSelected() ) {
+			Color background = table1.getBackground();
+			alternateRowColor = FlatLaf.isLafDark()
+				? ColorFunctions.lighten( background, 0.05f )
+				: ColorFunctions.darken( background, 0.05f );
+		}
+		UIManager.put( "Table.alternateRowColor", alternateRowColor );
+		table1.repaint();
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -151,12 +177,14 @@ class DataComponentsPanel
 		JScrollPane scrollPane5 = new JScrollPane();
 		table1 = new JTable();
 		JPanel tableOptionsPanel = new JPanel();
+		roundedSelectionCheckBox = new JCheckBox();
 		showHorizontalLinesCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
 		redGridColorCheckBox = new JCheckBox();
 		rowSelectionCheckBox = new JCheckBox();
 		columnSelectionCheckBox = new JCheckBox();
+		alternatingRowsCheckBox = new JCheckBox();
 		dndCheckBox = new JCheckBox();
 		JPopupMenu popupMenu2 = new JPopupMenu();
 		JMenuItem menuItem3 = new JMenuItem();
@@ -403,44 +431,56 @@ class DataComponentsPanel
 				"[]0" +
 				"[]0" +
 				"[]0" +
+				"[]0" +
+				"[]0" +
 				"[]0"));
+
+			//---- roundedSelectionCheckBox ----
+			roundedSelectionCheckBox.setText("rounded selection");
+			roundedSelectionCheckBox.addActionListener(e -> roundedSelectionChanged());
+			tableOptionsPanel.add(roundedSelectionCheckBox, "cell 0 0");
 
 			//---- showHorizontalLinesCheckBox ----
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
 			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
-			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 0");
+			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 1");
 
 			//---- showVerticalLinesCheckBox ----
 			showVerticalLinesCheckBox.setText("show vertical lines");
 			showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
-			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 1");
+			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 2");
 
 			//---- intercellSpacingCheckBox ----
 			intercellSpacingCheckBox.setText("intercell spacing");
 			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
-			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 2");
+			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 3");
 
 			//---- redGridColorCheckBox ----
 			redGridColorCheckBox.setText("red grid color");
 			redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
-			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 3");
+			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 4");
 
 			//---- rowSelectionCheckBox ----
 			rowSelectionCheckBox.setText("row selection");
 			rowSelectionCheckBox.setSelected(true);
 			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
-			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 4");
+			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 5");
 
 			//---- columnSelectionCheckBox ----
 			columnSelectionCheckBox.setText("column selection");
 			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
-			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 5");
+			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 6");
+
+			//---- alternatingRowsCheckBox ----
+			alternatingRowsCheckBox.setText("alternating rows");
+			alternatingRowsCheckBox.addActionListener(e -> alternatingRowsChanged());
+			tableOptionsPanel.add(alternatingRowsCheckBox, "cell 0 7");
 
 			//---- dndCheckBox ----
 			dndCheckBox.setText("enable drag and drop");
 			dndCheckBox.setMnemonic('D');
 			dndCheckBox.addActionListener(e -> dndChanged());
-			tableOptionsPanel.add(dndCheckBox, "cell 0 6");
+			tableOptionsPanel.add(dndCheckBox, "cell 0 8");
 		}
 		add(tableOptionsPanel, "cell 4 3");
 
@@ -477,12 +517,14 @@ class DataComponentsPanel
 	private JTree tree3;
 	private JTree tree2;
 	private JTable table1;
+	private JCheckBox roundedSelectionCheckBox;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
 	private JCheckBox redGridColorCheckBox;
 	private JCheckBox rowSelectionCheckBox;
 	private JCheckBox columnSelectionCheckBox;
+	private JCheckBox alternatingRowsCheckBox;
 	private JCheckBox dndCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

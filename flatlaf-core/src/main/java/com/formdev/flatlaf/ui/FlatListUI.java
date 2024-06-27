@@ -324,8 +324,7 @@ public class FlatListUI
 			(rendererComponent instanceof DefaultListCellRenderer ||
 			 rendererComponent instanceof BasicComboBoxRenderer) &&
 			(selectionArc > 0 ||
-			 (selectionInsets != null &&
-			  (selectionInsets.top != 0 || selectionInsets.left != 0 || selectionInsets.bottom != 0 || selectionInsets.right != 0))) )
+			 (selectionInsets != null && !FlatUIUtils.isInsetsEmpty( selectionInsets ))) )
 		{
 			// Because selection painting is done in the cell renderer, it would be
 			// necessary to require a FlatLaf specific renderer to implement rounded selection.
@@ -374,7 +373,15 @@ public class FlatListUI
 		rendererPane.paintComponent( g, rendererComponent, list, cx, rowBounds.y, cw, rowBounds.height, true );
 	}
 
-	/** @since 3 */
+	/**
+	 * Paints (rounded) cell selection.
+	 * Supports {@link #selectionArc} and {@link #selectionInsets}.
+	 * <p>
+	 * <b>Note:</b> This method is only invoked if either selection arc
+	 *              is greater than zero or if selection insets are not empty.
+	 *
+	 * @since 3
+	 */
 	protected void paintCellSelection( Graphics g, int row, int x, int y, int width, int height ) {
 		float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
 		arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
@@ -440,7 +447,8 @@ public class FlatListUI
 	 * Paints a cell selection at the given coordinates.
 	 * The selection color must be set on the graphics context.
 	 * <p>
-	 * This method is intended for use in custom cell renderers.
+	 * This method is intended for use in custom cell renderers
+	 * to support {@link #selectionArc} and {@link #selectionInsets}.
 	 *
 	 * @since 3
 	 */
