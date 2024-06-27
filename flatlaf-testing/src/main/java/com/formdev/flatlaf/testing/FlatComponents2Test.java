@@ -132,6 +132,14 @@ public class FlatComponents2Test
 		initTableEditors( table1 );
 		initTableEditors( xTable1 );
 
+		// table selection listeners
+		table1.getSelectionModel().addListSelectionListener( e -> {
+			System.out.printf( "row sel     %d-%d   adj=%b\n", e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting() );
+		} );
+		table1.getColumnModel().getSelectionModel().addListSelectionListener( e -> {
+			System.out.printf( "column sel  %d-%d   adj=%b\n", e.getFirstIndex(), e.getLastIndex(), e.getValueIsAdjusting() );
+		} );
+
 		// JXTable
 		Highlighter simpleStriping = HighlighterFactory.createSimpleStriping();
 		PatternPredicate patternPredicate = new PatternPredicate( "^J", 2 );

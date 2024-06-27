@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -43,16 +44,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
+import javax.swing.ListSelectionModel;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -142,6 +150,8 @@ public class FlatTableUI
 
 	private PropertyChangeListener propertyChangeListener;
 	private ComponentListener outsideAlternateRowsListener;
+	private ListSelectionListener rowSelectionListener;
+	private TableColumnModelListener columnSelectionListener;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -257,6 +267,28 @@ public class FlatTableUI
 
 		propertyChangeListener = e -> {
 			switch( e.getPropertyName() ) {
+				case "selectionModel":
+					if( rowSelectionListener != null ) {
+						Object oldModel = e.getOldValue();
+						Object newModel = e.getNewValue();
+						if( oldModel != null )
+							((ListSelectionModel)oldModel).removeListSelectionListener( rowSelectionListener );
+						if( newModel != null )
+							((ListSelectionModel)newModel).addListSelectionListener( rowSelectionListener );
+					}
+					break;
+
+				case "columnModel":
+					if( columnSelectionListener != null ) {
+						Object oldModel = e.getOldValue();
+						Object newModel = e.getNewValue();
+						if( oldModel != null )
+							((TableColumnModel)oldModel).removeColumnModelListener( columnSelectionListener );
+						if( newModel != null )
+							((TableColumnModel)newModel).addColumnModelListener( columnSelectionListener );
+					}
+					break;
+
 				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
 					toggleSelectionColors();
 					break;
@@ -270,6 +302,9 @@ public class FlatTableUI
 			}
 		};
 		table.addPropertyChangeListener( propertyChangeListener );
+
+		if( selectionArc > 0 )
+			installRepaintRoundedSelectionListeners();
 	}
 
 	@Override
@@ -282,6 +317,14 @@ public class FlatTableUI
 		if( outsideAlternateRowsListener != null ) {
 			table.removeComponentListener( outsideAlternateRowsListener );
 			outsideAlternateRowsListener = null;
+		}
+		if( rowSelectionListener != null ) {
+			table.getSelectionModel().removeListSelectionListener( rowSelectionListener );
+			rowSelectionListener = null;
+		}
+		if( columnSelectionListener != null ) {
+			table.getColumnModel().removeColumnModelListener( columnSelectionListener );
+			columnSelectionListener = null;
 		}
 	}
 
@@ -359,6 +402,8 @@ public class FlatTableUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( "rowHeight".equals( key ) && value instanceof Integer )
 			value = UIScale.scale( (Integer) value );
+		else if( "selectionArc".equals( key ) && value instanceof Integer && (Integer) value > 0 )
+			installRepaintRoundedSelectionListeners();
 
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, table, key, value );
 	}
@@ -602,8 +647,6 @@ public class FlatTableUI
 			UIScale.scale( insets ), arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight, 0 );
 	}
 
-	//TODO test if scaled (on Windows)
-
 	/**
 	 * Paints (rounded) cell selection.
 	 * Supports {@link #selectionArc} and {@link #selectionInsets}.
@@ -685,6 +728,69 @@ public class FlatTableUI
 
 		FlatTableUI ui = (FlatTableUI) table.getUI();
 		ui.paintCellSelection( g, row, column, x, y, width, height );
+	}
+
+	private void installRepaintRoundedSelectionListeners() {
+		if( rowSelectionListener == null ) {
+			rowSelectionListener = this::repaintRoundedRowSelection;
+			table.getSelectionModel().addListSelectionListener( rowSelectionListener );
+		}
+
+		if( columnSelectionListener == null ) {
+			columnSelectionListener = new TableColumnModelListener() {
+				@Override
+				public void columnSelectionChanged( ListSelectionEvent e ) {
+					repaintRoundedColumnSelection( e );
+				}
+				@Override public void columnRemoved( TableColumnModelEvent e ) {}
+				@Override public void columnMoved( TableColumnModelEvent e ) {}
+				@Override public void columnMarginChanged( ChangeEvent e ) {}
+				@Override public void columnAdded( TableColumnModelEvent e ) {}
+			};
+			table.getColumnModel().addColumnModelListener( columnSelectionListener );
+		}
+	}
+
+	private void repaintRoundedRowSelection( ListSelectionEvent e ) {
+		if( selectionArc <= 0 || !table.getRowSelectionAllowed() )
+			return;
+
+		int rowCount = table.getRowCount();
+		int columnCount = table.getColumnCount();
+		if( rowCount <= 0 || columnCount <= 0 )
+			return;
+
+		// repaint including rows before and after changed selection
+		int firstRow = Math.max( 0, Math.min( e.getFirstIndex() - 1, rowCount - 1 ) );
+		int lastRow = Math.max( 0, Math.min( e.getLastIndex() + 1, rowCount - 1 ) );
+		Rectangle firstRect = table.getCellRect( firstRow, 0, false );
+		Rectangle lastRect = table.getCellRect( lastRow, columnCount - 1, false );
+		table.repaint( firstRect.union( lastRect ) );
+	}
+
+	private void repaintRoundedColumnSelection( ListSelectionEvent e ) {
+		if( selectionArc <= 0 || !table.getColumnSelectionAllowed() )
+			return;
+
+		int rowCount = table.getRowCount();
+		int columnCount = table.getColumnCount();
+		if( rowCount <= 0 || columnCount <= 0 )
+			return;
+
+		// limit to selected rows for cell selection
+		int firstRow = 0;
+		int lastRow = rowCount - 1;
+		if( table.getRowSelectionAllowed() ) {
+			firstRow = table.getSelectionModel().getMinSelectionIndex();
+			lastRow = table.getSelectionModel().getMaxSelectionIndex();
+		}
+
+		// repaint including columns before and after changed selection
+		int firstColumn = Math.max( 0, Math.min( e.getFirstIndex() - 1, columnCount - 1 ) );
+		int lastColumn = Math.max( 0, Math.min( e.getLastIndex() + 1, columnCount - 1 ) );
+		Rectangle firstRect = table.getCellRect( firstRow, firstColumn, false );
+		Rectangle lastRect = table.getCellRect( lastRow, lastColumn, false );
+		table.repaint( firstRect.union( lastRect ) );
 	}
 
 	//---- class RoundedSelectionGraphics -------------------------------------
