@@ -133,14 +133,14 @@ public class FlatProgressBarUI
 				case PROGRESS_BAR_LARGE_HEIGHT:
 				case PROGRESS_BAR_SQUARE:
 					progressBar.revalidate();
-					progressBar.repaint();
+					HiDPIUtils.repaint( progressBar );
 					break;
 
 				case STYLE:
 				case STYLE_CLASS:
 					installStyle();
 					progressBar.revalidate();
-					progressBar.repaint();
+					HiDPIUtils.repaint( progressBar );
 					break;
 			}
 		};
@@ -294,6 +294,6 @@ public class FlatProgressBarUI
 		// Only solution is to repaint whole progress bar.
 		double systemScaleFactor = UIScale.getSystemScaleFactor( progressBar.getGraphicsConfiguration() );
 		if( (int) systemScaleFactor != systemScaleFactor )
-			progressBar.repaint();
+			HiDPIUtils.repaint( progressBar );
 	}
 }

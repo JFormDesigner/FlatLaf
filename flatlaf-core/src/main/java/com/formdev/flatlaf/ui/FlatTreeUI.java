@@ -47,6 +47,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -310,7 +311,7 @@ public class FlatTreeUI
 				switch( e.getPropertyName() ) {
 					case TREE_WIDE_SELECTION:
 					case TREE_PAINT_SELECTION:
-						tree.repaint();
+						HiDPIUtils.repaint( tree );
 						break;
 
 					case "dropLocation":
@@ -325,7 +326,7 @@ public class FlatTreeUI
 					case STYLE_CLASS:
 						installStyle();
 						tree.revalidate();
-						tree.repaint();
+						HiDPIUtils.repaint( tree );
 						break;
 
 					case "enabled":
@@ -353,7 +354,7 @@ public class FlatTreeUI
 
 		Rectangle r = tree.getPathBounds( loc.getPath() );
 		if( r != null )
-			tree.repaint( 0, r.y, tree.getWidth(), r.height );
+			HiDPIUtils.repaint( tree, 0, r.y, tree.getWidth(), r.height );
 	}
 
 	@Override
@@ -370,14 +371,14 @@ public class FlatTreeUI
 			{
 				if( changedPaths.length > 4 ) {
 					// same is done in BasicTreeUI.Handler.valueChanged()
-					tree.repaint();
+					HiDPIUtils.repaint( tree );
 				} else {
 					int arc = (int) Math.ceil( UIScale.scale( selectionArc / 2f ) );
 
 					for( TreePath path : changedPaths ) {
 						Rectangle r = getPathBounds( tree, path );
 						if( r != null )
-							tree.repaint( r.x, r.y - arc, r.width, r.height + (arc * 2) );
+							HiDPIUtils.repaint( tree, r.x, r.y - arc, r.width, r.height + (arc * 2) );
 					}
 				}
 			}

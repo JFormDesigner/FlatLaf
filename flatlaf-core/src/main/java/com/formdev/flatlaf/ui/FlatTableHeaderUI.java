@@ -45,6 +45,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -234,8 +235,8 @@ public class FlatTableHeaderUI
 
 	@Override
 	protected void rolloverColumnUpdated( int oldColumn, int newColumn ) {
-		header.repaint( header.getHeaderRect( oldColumn ) );
-		header.repaint( header.getHeaderRect( newColumn ) );
+		HiDPIUtils.repaint( header, header.getHeaderRect( oldColumn ) );
+		HiDPIUtils.repaint( header, header.getHeaderRect( newColumn ) );
 	}
 
 	@Override

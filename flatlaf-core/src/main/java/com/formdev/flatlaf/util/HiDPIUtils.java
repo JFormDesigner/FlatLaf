@@ -16,9 +16,11 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -321,5 +323,165 @@ public class HiDPIUtils
 				super.drawGlyphVector( g, x, y + yCorrection );
 			}
 		};
+	}
+
+	/**
+	 * Repaints the given component.
+	 * <p>
+	 * See {@link #repaint(Component, int, int, int, int)} for more details.
+	 *
+	 * @since 3.5
+	 */
+	public static void repaint( Component c ) {
+		repaint( c, 0, 0, c.getWidth(), c.getHeight() );
+	}
+
+	/**
+	 * Repaints the given component area.
+	 * <p>
+	 * See {@link #repaint(Component, int, int, int, int)} for more details.
+	 *
+	 * @since 3.5
+	 */
+	public static void repaint( Component c, Rectangle r ) {
+		repaint( c, r.x, r.y, r.width, r.height );
+	}
+
+	/**
+	 * Repaints the given component area.
+	 * <p>
+	 * Invokes {@link Component#repaint(int, int, int, int)} on the given component,
+	 * <p>
+	 * Use this method, instead of {@code Component.repaint(...)},
+	 * to fix a problem in Swing when using scale factors that end on .25 or .75
+	 * (e.g. 1.25, 1.75, 2.25, etc) and repainting single components, which may not
+	 * repaint right and/or bottom 1px edge of component.
+	 * <p>
+	 * The problem may occur under following conditions:
+	 * <li>using Java 9 or later
+	 * <li>system scale factor is 125%, 175%, 225%, ...
+	 *     (Windows only; Java on macOS and Linux does not support fractional scale factors)
+	 * <li>repaint whole component or right/bottom area of component
+	 * <li>component is opaque; or component is contained in a opaque container
+	 *     that has same right/bottom bounds as component
+	 * <li>component has bounds that Java/Swing scales different when repainting components
+	 * </ul>
+	 *
+	 * @since 3.5
+	 */
+	public static void repaint( Component c, int x, int y, int width, int height ) {
+		// repaint given component area
+		//   Always invoke repaint() on given component, even if also invoked (below)
+		//   on one of its ancestors, for the case that component overrides that method.
+		//   Also RepaintManager "merges" the two repaints into one.
+		c.repaint( x, y, width, height );
+
+		// if necessary, also repaint given area in first ancestor that is larger than component
+		// to avoid clipping issue (see needsSpecialRepaint())
+		if( needsSpecialRepaint( c, x, y, width, height ) ) {
+			int x2 = x + c.getX();
+			int y2 = y + c.getY();
+			for( Component p = c.getParent(); p != null; p = p.getParent() ) {
+				x2 += p.getX();
+				y2 += p.getY();
+				if( x2 + width < p.getWidth() && y2 + height < p.getHeight() ) {
+					p.repaint( x2, y2, width, height );
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * There is a problem in Swing, when using scale factors that end on .25 or .75
+	 * (e.g. 1.25, 1.75, 2.25, etc) and repainting single components, which may not
+	 * repaint right and/or bottom 1px edge of component.
+	 * <p>
+	 * The component is first painted to an in-memory image,
+	 * and then that image is copied to the screen.
+	 * See {@code javax.swing.RepaintManager.PaintManager#paintDoubleBufferedFPScales()}.
+	 * <p>
+	 * There are two clipping rectangles involved when copying the image to the screen:
+	 * {@code sun.java2d.SunGraphics2D#devClip} and
+	 * {@code sun.java2d.SunGraphics2D#usrClip}.
+	 * <p>
+	 * {@code devClip} is the device clipping in physical pixels.
+	 * It gets the bounds of the painting component, which is either the passed component,
+	 * or if it is non-opaque, then the first opaque ancestor of the passed component.
+	 * It is calculated in {@code sun.java2d.SunGraphics2D#constrain()} while
+	 * getting a graphics context via {@link JComponent#getGraphics()}.
+	 * <p>
+	 * {@code usrClip} is the user clipping, which is set via {@link Graphics} clipping methods.
+	 * This is done in {@code javax.swing.RepaintManager.PaintManager#paintDoubleBufferedFPScales()}.
+	 * <p>
+	 * The intersection of {@code devClip} and {@code usrClip}
+	 * (computed in {@code sun.java2d.SunGraphics2D#validateCompClip()})
+	 * is used to copy the image to the screen.
+	 * <p>
+	 * Unfortunately different scaling/rounding strategies are used to calculate
+	 * the two clipping rectangles, which is the reason of the issue.
+	 * <p>
+	 * {@code devClip} (see {@code sun.java2d.SunGraphics2D#constrain()}):
+	 * <pre>{@code
+	 * int devX = (int) (x * scale);
+	 * int devWidth = Math.round( width * scale )
+	 * }</pre>
+	 * {@code usrClip} (see {@code javax.swing.RepaintManager.PaintManager#paintDoubleBufferedFPScales()}):
+	 * <pre>{@code
+	 * int usrX = (int) Math.ceil( (x * scale) - 0.5 );
+	 * int usrWidth = ((int) Math.ceil( ((x + width) * scale) - 0.5 )) - usrX;
+	 * }</pre>
+	 * X/Y coordinates are always round down for {@code devClip}, but round up for {@code usrClip}.
+	 * Width/height calculation is also different.
+	 */
+	private static boolean needsSpecialRepaint( Component c, int x, int y, int width, int height ) {
+		// no special repaint necessary for Java 8 or for macOS and Linux
+		// (Java on those platforms does not support fractional scale factors)
+		if( !SystemInfo.isJava_9_orLater || !SystemInfo.isWindows )
+			return false;
+
+		// check whether repaint area is empty or no component given
+		// (same checks as in javax.swing.RepaintManager.addDirtyRegion0())
+		if( width <= 0 || height <= 0 || c == null )
+			return false;
+
+		// check whether component has zero size
+		// (same checks as in javax.swing.RepaintManager.addDirtyRegion0())
+		int compWidth = c.getWidth();
+		int compHeight = c.getHeight();
+		if( compWidth <= 0 || compHeight <= 0 )
+			return false;
+
+		// check whether repaint area does span to right or bottom component edges
+		// (in this case, {@code devClip} is always larger than {@code usrClip})
+		if( x + width < compWidth && y + height < compHeight )
+			return false;
+
+		// if component is not opaque, Swing uses the first opaque ancestor for painting
+		if( !c.isOpaque() ) {
+			int x2 = x;
+			int y2 = y;
+			for( Component p = c.getParent(); p != null; p = p.getParent() ) {
+				x2 += p.getX();
+				y2 += p.getY();
+				if( p.isOpaque() ) {
+					// check whether repaint area does span to right or bottom edges
+					// of the opaque ancestor component
+					// (in this case, {@code devClip} is always larger than {@code usrClip})
+					if( x2 + width < p.getWidth() && y2 + height < p.getHeight() )
+						return false;
+					break;
+				}
+			}
+		}
+
+		// check whether Special repaint is necessary for current scale factor
+		// (doing this check late because it temporary allocates some memory)
+		double scaleFactor = UIScale.getSystemScaleFactor( c.getGraphicsConfiguration() );
+		double fraction = scaleFactor - (int) scaleFactor;
+		if( fraction == 0 || fraction == 0.5 )
+			return false;
+
+		return true;
 	}
 }

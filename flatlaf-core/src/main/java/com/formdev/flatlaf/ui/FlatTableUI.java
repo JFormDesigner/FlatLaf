@@ -56,6 +56,7 @@ import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -257,7 +258,7 @@ public class FlatTableUI
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();
 					table.revalidate();
-					table.repaint();
+					HiDPIUtils.repaint( table );
 					break;
 			}
 		};
@@ -560,7 +561,7 @@ public class FlatTableUI
 		public void componentHidden( ComponentEvent e ) {
 			Container viewport = SwingUtilities.getUnwrappedParent( table );
 			if( viewport instanceof JViewport )
-				viewport.repaint();
+				HiDPIUtils.repaint( viewport );
 		}
 
 		@Override
@@ -579,7 +580,7 @@ public class FlatTableUI
 				int viewportHeight = viewport.getHeight();
 				int tableHeight = table.getHeight();
 				if( tableHeight < viewportHeight )
-					viewport.repaint( 0, tableHeight, viewport.getWidth(), viewportHeight - tableHeight );
+					HiDPIUtils.repaint( viewport, 0, tableHeight, viewport.getWidth(), viewportHeight - tableHeight );
 			}
 		}
 	}

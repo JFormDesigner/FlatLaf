@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -443,7 +444,7 @@ public class FlatToolBarUI
 
 		// repaint button group
 		if( gr != null )
-			toolBar.repaint( gr );
+			HiDPIUtils.repaint(toolBar, gr );
 	}
 
 	private ButtonGroup getButtonGroup( AbstractButton b ) {

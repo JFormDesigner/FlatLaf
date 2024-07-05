@@ -25,6 +25,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
@@ -189,6 +191,23 @@ public class FlatSliderUI
 	@Override
 	protected TrackListener createTrackListener( JSlider slider ) {
 		return new FlatTrackListener();
+	}
+
+	@Override
+	protected FocusListener createFocusListener( JSlider slider ) {
+		return new BasicSliderUI.FocusHandler() {
+			@Override
+			public void focusGained( FocusEvent e ) {
+				super.focusGained( e );
+				HiDPIUtils.repaint( slider );
+			}
+
+			@Override
+			public void focusLost( FocusEvent e ) {
+				super.focusLost( e );
+				HiDPIUtils.repaint( slider );
+			}
+		};
 	}
 
 	@Override
@@ -579,14 +598,14 @@ debug*/
 
 	@Override
 	public void setThumbLocation( int x, int y ) {
+		// set new thumb location and compute union of old and new thumb bounds
+		Rectangle r = new Rectangle( thumbRect );
+		thumbRect.setLocation( x, y );
+		SwingUtilities.computeUnion( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height, r );
+
 		if( !isRoundThumb() ) {
 			// the needle of the directional thumb is painted outside of thumbRect
 			// --> must increase repaint rectangle
-
-			// set new thumb location and compute union of old and new thumb bounds
-			Rectangle r = new Rectangle( thumbRect );
-			thumbRect.setLocation( x, y );
-			SwingUtilities.computeUnion( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height, r );
 
 			// increase union rectangle for repaint
 			int extra = (int) Math.ceil( UIScale.scale( focusWidth ) * 0.4142f );
@@ -597,10 +616,9 @@ debug*/
 				if( !slider.getComponentOrientation().isLeftToRight() )
 					r.x -= extra;
 			}
+		}
 
-			slider.repaint( r );
-		} else
-			super.setThumbLocation( x, y );
+		HiDPIUtils.repaint( slider, r );
 	}
 
 	//---- class FlatTrackListener --------------------------------------------
@@ -688,21 +706,21 @@ debug*/
 				!UIManager.getBoolean( "Slider.snapToTicksOnReleased" ) )
 			{
 				calculateThumbLocation();
-				slider.repaint();
+				HiDPIUtils.repaint( slider );
 			}
 		}
 
 		protected void setThumbHover( boolean hover ) {
 			if( hover != thumbHover ) {
 				thumbHover = hover;
-				slider.repaint( thumbRect );
+				HiDPIUtils.repaint( slider, thumbRect );
 			}
 		}
 
 		protected void setThumbPressed( boolean pressed ) {
 			if( pressed != thumbPressed ) {
 				thumbPressed = pressed;
-				slider.repaint( thumbRect );
+				HiDPIUtils.repaint( slider, thumbRect );
 			}
 		}
 

@@ -124,7 +124,7 @@ public class FlatLabelUI
 			} else
 				installStyle( label );
 			label.revalidate();
-			label.repaint();
+			HiDPIUtils.repaint( label );
 		}
 
 		super.propertyChange( e );

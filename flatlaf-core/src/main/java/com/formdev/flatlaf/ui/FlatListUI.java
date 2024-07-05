@@ -43,6 +43,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -182,7 +183,7 @@ public class FlatListUI
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();
 					list.revalidate();
-					list.repaint();
+					HiDPIUtils.repaint( list );
 					break;
 			}
 		};
@@ -205,7 +206,7 @@ public class FlatListUI
 				Rectangle r = getCellBounds( list, firstIndex, lastIndex );
 				if( r != null ) {
 					int arc = (int) Math.ceil( UIScale.scale( selectionArc / 2f ) );
-					list.repaint( r.x - arc, r.y - arc, r.width + (arc * 2), r.height + (arc * 2) );
+					HiDPIUtils.repaint( list, r.x - arc, r.y - arc, r.width + (arc * 2), r.height + (arc * 2) );
 				}
 			}
 		};

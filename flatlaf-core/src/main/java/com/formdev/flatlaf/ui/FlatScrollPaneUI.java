@@ -55,6 +55,7 @@ import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -297,11 +298,11 @@ public class FlatScrollPaneUI
 					JScrollBar hsb = scrollpane.getHorizontalScrollBar();
 					if( vsb != null ) {
 						vsb.revalidate();
-						vsb.repaint();
+						HiDPIUtils.repaint( vsb );
 					}
 					if( hsb != null ) {
 						hsb.revalidate();
-						hsb.repaint();
+						HiDPIUtils.repaint( hsb );
 					}
 					break;
 
@@ -321,14 +322,14 @@ public class FlatScrollPaneUI
 					break;
 
 				case FlatClientProperties.OUTLINE:
-					scrollpane.repaint();
+					HiDPIUtils.repaint( scrollpane );
 					break;
 
 				case FlatClientProperties.STYLE:
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();
 					scrollpane.revalidate();
-					scrollpane.repaint();
+					HiDPIUtils.repaint( scrollpane );
 					break;
 
 				case "border":
@@ -339,7 +340,7 @@ public class FlatScrollPaneUI
 						borderShared = null;
 						installStyle();
 						scrollpane.revalidate();
-						scrollpane.repaint();
+						HiDPIUtils.repaint( scrollpane );
 					}
 					break;
 			}
@@ -538,14 +539,14 @@ public class FlatScrollPaneUI
 		public void focusGained( FocusEvent e ) {
 			// necessary to update focus border
 			if( scrollpane.getBorder() instanceof FlatBorder )
-				scrollpane.repaint();
+				HiDPIUtils.repaint( scrollpane );
 		}
 
 		@Override
 		public void focusLost( FocusEvent e ) {
 			// necessary to update focus border
 			if( scrollpane.getBorder() instanceof FlatBorder )
-				scrollpane.repaint();
+				HiDPIUtils.repaint( scrollpane );
 		}
 	}
 

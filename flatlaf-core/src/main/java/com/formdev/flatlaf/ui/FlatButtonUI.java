@@ -29,6 +29,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
@@ -61,6 +62,7 @@ import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -312,11 +314,11 @@ public class FlatButtonUI
 
 			case BUTTON_TYPE:
 				b.revalidate();
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 
 			case OUTLINE:
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 
 			case STYLE:
@@ -328,7 +330,7 @@ public class FlatButtonUI
 				} else
 					installStyle( b );
 				b.revalidate();
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 		}
 	}
@@ -915,7 +917,7 @@ public class FlatButtonUI
 
 		@Override
 		public void stateChanged( ChangeEvent e ) {
-			super.stateChanged( e );
+			HiDPIUtils.repaint( b );
 
 			// if button is in toolbar, repaint button groups
 			AbstractButton b = (AbstractButton) e.getSource();
@@ -926,6 +928,18 @@ public class FlatButtonUI
 				if( ui instanceof FlatToolBarUI )
 					((FlatToolBarUI)ui).repaintButtonGroup( b );
 			}
+		}
+
+		@Override
+		public void focusGained( FocusEvent e ) {
+			super.focusGained( e );
+			HiDPIUtils.repaint( b );
+		}
+
+		@Override
+		public void focusLost( FocusEvent e ) {
+			super.focusLost( e );
+			HiDPIUtils.repaint( b );
 		}
 	}
 }

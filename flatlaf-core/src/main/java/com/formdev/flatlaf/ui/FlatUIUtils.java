@@ -1342,13 +1342,13 @@ debug*/
 		@Override
 		public void focusGained( FocusEvent e ) {
 			if( repaintCondition == null || repaintCondition.test( repaintComponent ) )
-				repaintComponent.repaint();
+				HiDPIUtils.repaint( repaintComponent );
 		}
 
 		@Override
 		public void focusLost( FocusEvent e ) {
 			if( repaintCondition == null || repaintCondition.test( repaintComponent ) )
-				repaintComponent.repaint();
+				HiDPIUtils.repaint( repaintComponent );
 		}
 	}
 
