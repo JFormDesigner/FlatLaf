@@ -358,13 +358,14 @@ public class HiDPIUtils
 	 * repaint right and/or bottom 1px edge of component.
 	 * <p>
 	 * The problem may occur under following conditions:
-	 * <li>using Java 9 or later
-	 * <li>system scale factor is 125%, 175%, 225%, ...
-	 *     (Windows only; Java on macOS and Linux does not support fractional scale factors)
-	 * <li>repaint whole component or right/bottom area of component
-	 * <li>component is opaque; or component is contained in a opaque container
-	 *     that has same right/bottom bounds as component
-	 * <li>component has bounds that Java/Swing scales different when repainting components
+	 * <ul>
+	 *   <li>using Java 9 or later
+	 *   <li>system scale factor is 125%, 175%, 225%, ...
+	 *       (Windows only; Java on macOS and Linux does not support fractional scale factors)
+	 *   <li>repaint whole component or right/bottom area of component
+	 *   <li>component is opaque; or component is contained in a opaque container
+	 *       that has same right/bottom bounds as component
+	 *   <li>component has bounds that Java/Swing scales different when repainting components
 	 * </ul>
 	 *
 	 * @since 3.5
@@ -431,7 +432,7 @@ public class HiDPIUtils
 	 * int usrX = (int) Math.ceil( (x * scale) - 0.5 );
 	 * int usrWidth = ((int) Math.ceil( ((x + width) * scale) - 0.5 )) - usrX;
 	 * }</pre>
-	 * X/Y coordinates are always round down for {@code devClip}, but round up for {@code usrClip}.
+	 * X/Y coordinates are always rounded down for {@code devClip}, but rounded up for {@code usrClip}.
 	 * Width/height calculation is also different.
 	 */
 	private static boolean needsSpecialRepaint( Component c, int x, int y, int width, int height ) {
