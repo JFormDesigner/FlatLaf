@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import javax.swing.JComponent;
+import javax.swing.RepaintManager;
 import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
@@ -377,6 +378,9 @@ public class HiDPIUtils
 		//   Also RepaintManager "merges" the two repaints into one.
 		c.repaint( x, y, width, height );
 
+		if( RepaintManager.currentManager( c ) instanceof HiDPIRepaintManager )
+			return;
+
 		// if necessary, also repaint given area in first ancestor that is larger than component
 		// to avoid clipping issue (see needsSpecialRepaint())
 		if( needsSpecialRepaint( c, x, y, width, height ) ) {
@@ -484,5 +488,80 @@ public class HiDPIUtils
 			return false;
 
 		return true;
+	}
+
+	/**
+	 * Installs a {@link HiDPIRepaintManager} on Windows when running in Java 9+,
+	 * but only if default repaint manager is currently installed.
+	 * <p>
+	 * Invoke once on application startup.
+	 * Compatible with all/other L&Fs.
+	 *
+	 * @since 3.5
+	 */
+	public static void installHiDPIRepaintManager() {
+		if( !SystemInfo.isJava_9_orLater || !SystemInfo.isWindows )
+			return;
+
+		RepaintManager manager = RepaintManager.currentManager( (Component) null );
+		if( manager.getClass() == RepaintManager.class )
+			RepaintManager.setCurrentManager( new HiDPIRepaintManager() );
+	}
+
+	/**
+	 * Similar to {@link #repaint(Component, int, int, int, int)},
+	 * but invokes callback instead of invoking {@link Component#repaint(int, int, int, int)}.
+	 * <p>
+	 * For use in custom repaint managers.
+	 *
+	 * @since 3.5
+	 */
+	public static void addDirtyRegion( JComponent c, int x, int y, int width, int height, DirtyRegionCallback callback ) {
+		if( needsSpecialRepaint( c, x, y, width, height ) ) {
+			int x2 = x + c.getX();
+			int y2 = y + c.getY();
+			for( Component p = c.getParent(); p != null; p = p.getParent() ) {
+				x2 += p.getX();
+				y2 += p.getY();
+				if( x2 + width < p.getWidth() && y2 + height < p.getHeight() && p instanceof JComponent ) {
+					callback.addDirtyRegion( (JComponent) p, x2, y2, width, height );
+					return;
+				}
+			}
+		}
+
+		callback.addDirtyRegion( c, x, y, width, height );
+	}
+
+	//---- interface DirtyRegionCallback --------------------------------------
+
+	/**
+	 * For {@link HiDPIUtils#addDirtyRegion(JComponent, int, int, int, int, DirtyRegionCallback)}.
+	 *
+	 * @since 3.5
+	 */
+	public interface DirtyRegionCallback {
+		void addDirtyRegion( JComponent c, int x, int y, int w, int h );
+	}
+
+	//---- class HiDPIRepaintManager ------------------------------------------
+
+	/**
+	 * A repaint manager that fixes a problem in Swing when repainting components
+	 * at some scale factors (e.g. 125%, 175%, etc) on Windows.
+	 * <p>
+	 * Use {@link HiDPIUtils#installHiDPIRepaintManager()} to install it.
+	 * <p>
+	 * See {@link HiDPIUtils#repaint(Component, int, int, int, int)} for details.
+	 *
+	 * @since 3.5
+	 */
+	public static class HiDPIRepaintManager
+		extends RepaintManager
+	{
+		@Override
+		public void addDirtyRegion( JComponent c, int x, int y, int w, int h ) {
+			HiDPIUtils.addDirtyRegion( c, x, y, w, h, super::addDirtyRegion );
+		}
 	}
 }

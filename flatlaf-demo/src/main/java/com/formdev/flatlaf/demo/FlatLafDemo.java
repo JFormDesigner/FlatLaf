@@ -96,6 +96,9 @@ public class FlatLafDemo
 			// use Roboto Mono font
 //			FlatLaf.setPreferredMonospacedFontFamily( FlatRobotoMonoFont.FAMILY );
 
+			// install own repaint manager to fix repaint issues at 125%, 175%, 225%, ... on Windows
+//			HiDPIUtils.installHiDPIRepaintManager();
+
 			// application specific UI defaults
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
 

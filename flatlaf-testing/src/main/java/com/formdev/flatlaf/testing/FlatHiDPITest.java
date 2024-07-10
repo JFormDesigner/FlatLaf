@@ -70,6 +70,8 @@ public class FlatHiDPITest
 				return;
 			}
 
+//			HiDPIUtils.installHiDPIRepaintManager();
+
 			FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
 			FlatLightLaf.setup();
 
@@ -124,6 +126,8 @@ public class FlatHiDPITest
 		y += 20;
 		addAtProblematicXY( 0, y, 16, 40, 20, "JScrollBar", () -> new JScrollBar( JScrollBar.VERTICAL ) );
 		y += 60;
+		addAtProblematicXY( 0, y, 82, 60, 88, "JScrollPane", () -> new JScrollPane( new JTree() ) );
+		y += 80;
 		addAtProblematicXY( 0, y, 80, 16, 88, "JProgressBar", () -> {
 			JProgressBar c = new JProgressBar();
 			c.setValue( 60 );
@@ -138,7 +142,7 @@ public class FlatHiDPITest
 		} );
 
 		frame.getContentPane().add( testPanel );
-		frame.setSize( 400, 300 );
+		frame.setSize( 400, 400 );
 		frame.setVisible( true );
 	}
 
