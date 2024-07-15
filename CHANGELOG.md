@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Table: Support rounded selection. (PR #856)
 - Button and ToggleButton: Added border colors for pressed and selected states.
   (issue #848)
 - Label: Support painting background with rounded corners. (issue #842)

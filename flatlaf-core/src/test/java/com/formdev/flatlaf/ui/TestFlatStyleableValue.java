@@ -305,6 +305,9 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "buttonPressedArrowColor", 0x123456 );
 
 		testColor( c, ui, "popupBackground", 0x123456 );
+		testInsets( c, ui, "popupInsets", 1,2,3,4 );
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 123 );
 
 		// border
 		flatRoundBorder( c, ui );
@@ -367,6 +370,8 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "selectionForeground", 0x123456 );
 		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
 		testColor( c, ui, "selectionInactiveForeground", 0x123456 );
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 123 );
 
 		// FlatListCellBorder
 		testInsets( c, ui, "cellMargins", 1,2,3,4 );
@@ -802,6 +807,8 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "selectionForeground", 0x123456 );
 		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
 		testColor( c, ui, "selectionInactiveForeground", 0x901324 );
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 123 );
 
 		// FlatTableCellBorder
 		testInsets( c, ui, "cellMargins", 1,2,3,4 );
@@ -931,6 +938,8 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
 		testColor( c, ui, "selectionInactiveForeground", 0x123456 );
 		testColor( c, ui, "selectionBorderColor", 0x123456 );
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 123 );
 		testBoolean( c, ui, "wideSelection", true );
 		testBoolean( c, ui, "showCellFocusIndicator", true );
 

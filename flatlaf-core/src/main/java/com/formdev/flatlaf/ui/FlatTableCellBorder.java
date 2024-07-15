@@ -66,7 +66,27 @@ public class FlatTableCellBorder
 	}
 
 	@Override
+	public int getArc() {
+		if( c != null ) {
+			Integer selectionArc = getStyleFromTableUI( c, ui -> ui.selectionArc );
+			if( selectionArc != null )
+				return selectionArc;
+		}
+		return super.getArc();
+	}
+
+	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		if( c != null ) {
+			Insets selectionInsets = getStyleFromTableUI( c, ui -> ui.selectionInsets );
+			if( selectionInsets != null ) {
+				x += selectionInsets.left;
+				y += selectionInsets.top;
+				width -= selectionInsets.left + selectionInsets.right;
+				height -= selectionInsets.top + selectionInsets.bottom;
+			}
+		}
+
 		this.c = c;
 		super.paintBorder( c, g, x, y, width, height );
 		this.c = null;
