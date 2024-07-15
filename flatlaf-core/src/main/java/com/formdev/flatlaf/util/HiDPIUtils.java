@@ -495,7 +495,7 @@ public class HiDPIUtils
 	 * but only if default repaint manager is currently installed.
 	 * <p>
 	 * Invoke once on application startup.
-	 * Compatible with all/other L&Fs.
+	 * Compatible with all/other LaFs.
 	 *
 	 * @since 3.5
 	 */
