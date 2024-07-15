@@ -113,7 +113,13 @@ public class FlatPopupFactory
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
-			if( popup.popupWindow != null && SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() )
+			if( popup.popupWindow != null && SystemInfo.isMacOS &&
+					// do not use rounded border on macOS 14.4+ because it may freeze the application
+					// and crash the macOS WindowServer process (reports vary from Finder restarts to OS restarts)
+					// https://github.com/apache/netbeans/issues/7560#issuecomment-2226439215
+					// https://github.com/apache/netbeans/issues/6647#issuecomment-2070124442
+					SystemInfo.osVersion < SystemInfo.toVersion( 14, 4, 0, 0 ) &&
+					FlatNativeMacLibrary.isLoaded() )
 				setupRoundedBorder( popup.popupWindow, owner, contents );
 			return popup;
 		}
