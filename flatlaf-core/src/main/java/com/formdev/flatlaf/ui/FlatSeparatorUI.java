@@ -32,6 +32,7 @@ import javax.swing.plaf.basic.BasicSeparatorUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -134,7 +135,7 @@ public class FlatSeparatorUI
 				} else
 					installStyle( s );
 				s.revalidate();
-				s.repaint();
+				HiDPIUtils.repaint( s );
 				break;
 		}
 	}

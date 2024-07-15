@@ -171,7 +171,7 @@ public class FlatEditorPaneUI
 			case FlatClientProperties.STYLE_CLASS:
 				installStyle.run();
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 		}
 	}

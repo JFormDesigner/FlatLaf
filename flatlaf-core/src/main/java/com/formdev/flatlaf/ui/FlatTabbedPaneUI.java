@@ -98,6 +98,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
@@ -895,7 +896,7 @@ public class FlatTabbedPaneUI
 			}
 		}
 
-		tabPane.repaint( r );
+		HiDPIUtils.repaint( tabPane, r );
 	}
 
 	private boolean inCalculateEqual;
@@ -2581,19 +2582,19 @@ debug*/
 		@Override
 		public void popupMenuWillBecomeVisible( PopupMenuEvent e ) {
 			popupVisible = true;
-			repaint();
+			HiDPIUtils.repaint( this );
 		}
 
 		@Override
 		public void popupMenuWillBecomeInvisible( PopupMenuEvent e ) {
 			popupVisible = false;
-			repaint();
+			HiDPIUtils.repaint( this );
 		}
 
 		@Override
 		public void popupMenuCanceled( PopupMenuEvent e ) {
 			popupVisible = false;
-			repaint();
+			HiDPIUtils.repaint( this );
 		}
 	}
 
@@ -3102,7 +3103,7 @@ debug*/
 
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_TAB_TYPE:
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					break;
 
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
@@ -3125,14 +3126,14 @@ debug*/
 				case TABBED_PANE_TAB_ICON_PLACEMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					break;
 
 				case TABBED_PANE_LEADING_COMPONENT:
 					uninstallLeadingComponent();
 					installLeadingComponent();
 					tabPane.revalidate();
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					ensureSelectedTabIsVisibleLater();
 					break;
 
@@ -3140,7 +3141,7 @@ debug*/
 					uninstallTrailingComponent();
 					installTrailingComponent();
 					tabPane.revalidate();
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					ensureSelectedTabIsVisibleLater();
 					break;
 
@@ -3148,7 +3149,7 @@ debug*/
 				case STYLE_CLASS:
 					installStyle();
 					tabPane.revalidate();
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					break;
 			}
 		}
@@ -3172,7 +3173,7 @@ debug*/
 				case TABBED_PANE_TAB_ALIGNMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
-					tabPane.repaint();
+					HiDPIUtils.repaint( tabPane );
 					break;
 			}
 		}

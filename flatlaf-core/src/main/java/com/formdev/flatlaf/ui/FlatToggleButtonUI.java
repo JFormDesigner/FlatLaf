@@ -26,6 +26,7 @@ import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -159,14 +160,14 @@ public class FlatToggleButtonUI
 					b.revalidate();
 				}
 
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 
 			case TAB_BUTTON_UNDERLINE_PLACEMENT:
 			case TAB_BUTTON_UNDERLINE_HEIGHT:
 			case TAB_BUTTON_UNDERLINE_COLOR:
 			case TAB_BUTTON_SELECTED_BACKGROUND:
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 		}
 	}

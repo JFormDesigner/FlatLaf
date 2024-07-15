@@ -34,6 +34,9 @@ FlatLaf Change Log
 - Theme Editor: Fixed occasional empty window on startup on macOS.
 - FlatLaf window decorations: Fixed black line sometimes painted on top of
   (native) window border on Windows 11. (issue #852)
+- HiDPI: Fixed incomplete component paintings at 125% or 175% scaling on Windows
+  where sometimes a 1px wide area at the right or bottom component edge is not
+  repainted. E.g. ScrollPane focus indicator border. (issues #860 and #582)
 
 #### Incompatibilities
 

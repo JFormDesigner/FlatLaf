@@ -43,6 +43,7 @@ import javax.swing.text.View;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -163,7 +164,7 @@ public class FlatPasswordFieldUI
 			}
 			private void repaint( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_CAPS_LOCK ) {
-					e.getComponent().repaint();
+					HiDPIUtils.repaint( e.getComponent() );
 					scrollCaretToVisible();
 				}
 			}
@@ -326,7 +327,7 @@ public class FlatPasswordFieldUI
 		if( visible != revealButton.isVisible() ) {
 			revealButton.setVisible( visible );
 			c.revalidate();
-			c.repaint();
+			HiDPIUtils.repaint( c );
 
 			if( !visible ) {
 				revealButton.setSelected( false );

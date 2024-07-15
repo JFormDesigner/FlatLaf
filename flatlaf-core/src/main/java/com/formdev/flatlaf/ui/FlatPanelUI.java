@@ -31,6 +31,7 @@ import javax.swing.plaf.basic.BasicPanelUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -111,7 +112,7 @@ public class FlatPanelUI
 				} else
 					installStyle( c );
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER:

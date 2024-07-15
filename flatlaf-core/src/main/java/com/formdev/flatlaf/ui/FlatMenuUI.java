@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicMenuUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -167,7 +168,7 @@ public class FlatMenuUI
 				JMenu menu = (JMenu) e.getSource();
 				if( menu.isTopLevelMenu() && menu.isRolloverEnabled() ) {
 					menu.getModel().setRollover( rollover );
-					menu.repaint();
+					HiDPIUtils.repaint( menu );
 				}
 			}
 		};

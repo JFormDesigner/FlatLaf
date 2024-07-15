@@ -47,6 +47,7 @@ import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -173,7 +174,7 @@ public class FlatRadioButtonUI
 				} else
 					installStyle( b );
 				b.revalidate();
-				b.repaint();
+				HiDPIUtils.repaint( b );
 				break;
 		}
 	}

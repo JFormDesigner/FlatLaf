@@ -78,6 +78,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -220,7 +221,7 @@ public class FlatComboBoxUI
 
 			private void repaintArrowButton() {
 				if( arrowButton != null && !comboBox.isEditable() )
-					arrowButton.repaint();
+					HiDPIUtils.repaint( arrowButton );
 			}
 		};
 		comboBox.addMouseListener( hoverListener );
@@ -351,15 +352,15 @@ public class FlatComboBoxUI
 			@Override
 			public void focusGained( FocusEvent e ) {
 				super.focusGained( e );
-				if( comboBox != null && comboBox.isEditable() )
-					comboBox.repaint();
+				if( comboBox != null )
+					HiDPIUtils.repaint( comboBox );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				if( comboBox != null && comboBox.isEditable() )
-					comboBox.repaint();
+				if( comboBox != null )
+					HiDPIUtils.repaint( comboBox );
 			}
 		};
 	}
@@ -386,12 +387,12 @@ public class FlatComboBoxUI
 				switch( propertyName ) {
 					case PLACEHOLDER_TEXT:
 						if( editor != null )
-							editor.repaint();
+							HiDPIUtils.repaint( editor );
 						break;
 
 					case COMPONENT_ROUND_RECT:
 					case OUTLINE:
-						comboBox.repaint();
+						HiDPIUtils.repaint( comboBox );
 						break;
 
 					case MINIMUM_WIDTH:
@@ -402,7 +403,7 @@ public class FlatComboBoxUI
 					case STYLE_CLASS:
 						installStyle();
 						comboBox.revalidate();
-						comboBox.repaint();
+						HiDPIUtils.repaint( comboBox );
 						break;
 				}
 			}

@@ -40,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -709,7 +710,7 @@ public class FlatStylingSupport
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle.run();
 					c.revalidate();
-					c.repaint();
+					HiDPIUtils.repaint( c );
 					break;
 			}
 		};

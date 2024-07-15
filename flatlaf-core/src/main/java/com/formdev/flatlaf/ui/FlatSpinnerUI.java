@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -586,7 +587,7 @@ public class FlatSpinnerUI
 		@Override
 		public void focusGained( FocusEvent e ) {
 			// necessary to update focus border
-			spinner.repaint();
+			HiDPIUtils.repaint( spinner );
 
 			// if spinner gained focus, transfer it to the editor text field
 			if( e.getComponent() == spinner ) {
@@ -599,7 +600,7 @@ public class FlatSpinnerUI
 		@Override
 		public void focusLost( FocusEvent e ) {
 			// necessary to update focus border
-			spinner.repaint();
+			HiDPIUtils.repaint( spinner );
 		}
 
 		//---- interface PropertyChangeListener ----
@@ -614,7 +615,7 @@ public class FlatSpinnerUI
 
 				case FlatClientProperties.COMPONENT_ROUND_RECT:
 				case FlatClientProperties.OUTLINE:
-					spinner.repaint();
+					HiDPIUtils.repaint( spinner );
 					break;
 
 				case FlatClientProperties.MINIMUM_WIDTH:
@@ -625,7 +626,7 @@ public class FlatSpinnerUI
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();
 					spinner.revalidate();
-					spinner.repaint();
+					HiDPIUtils.repaint( spinner );
 					break;
 			}
 		}

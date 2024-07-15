@@ -43,6 +43,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -212,14 +213,14 @@ public class FlatScrollBarUI
 			switch( e.getPropertyName() ) {
 				case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
 					scrollbar.revalidate();
-					scrollbar.repaint();
+					HiDPIUtils.repaint( scrollbar );
 					break;
 
 				case FlatClientProperties.STYLE:
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();
 					scrollbar.revalidate();
-					scrollbar.repaint();
+					HiDPIUtils.repaint( scrollbar );
 					break;
 
 				case "componentOrientation":
@@ -492,7 +493,7 @@ public class FlatScrollBarUI
 
 		private void repaint() {
 			if( scrollbar.isEnabled() )
-				scrollbar.repaint();
+				HiDPIUtils.repaint( scrollbar );
 		}
 	}
 

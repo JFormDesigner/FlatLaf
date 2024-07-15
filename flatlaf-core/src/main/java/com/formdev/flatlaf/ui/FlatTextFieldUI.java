@@ -239,7 +239,7 @@ public class FlatTextFieldUI
 			case COMPONENT_ROUND_RECT:
 			case OUTLINE:
 			case TEXT_FIELD_PADDING:
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case MINIMUM_WIDTH:
@@ -250,38 +250,38 @@ public class FlatTextFieldUI
 			case STYLE_CLASS:
 				installStyle();
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case TEXT_FIELD_LEADING_ICON:
 				leadingIcon = (e.getNewValue() instanceof Icon) ? (Icon) e.getNewValue() : null;
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case TEXT_FIELD_TRAILING_ICON:
 				trailingIcon = (e.getNewValue() instanceof Icon) ? (Icon) e.getNewValue() : null;
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case TEXT_FIELD_LEADING_COMPONENT:
 				uninstallLeadingComponent();
 				installLeadingComponent();
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case TEXT_FIELD_TRAILING_COMPONENT:
 				uninstallTrailingComponent();
 				installTrailingComponent();
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case TEXT_FIELD_SHOW_CLEAR_BUTTON:
 				uninstallClearButton();
 				installClearButton();
 				c.revalidate();
-				c.repaint();
+				HiDPIUtils.repaint( c );
 				break;
 
 			case "enabled":
@@ -815,7 +815,7 @@ debug*/
 		if( visible != clearButton.isVisible() ) {
 			clearButton.setVisible( visible );
 			c.revalidate();
-			c.repaint();
+			HiDPIUtils.repaint( c );
 		}
 	}
 
