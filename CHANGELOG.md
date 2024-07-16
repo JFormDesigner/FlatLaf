@@ -16,6 +16,13 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- macOS: Disabled rounded popup border (see PR #772) on macOS 14.4+ because it
+  may freeze the application and crash the macOS WindowServer process (reports
+  vary from Finder restarts to OS restarts). This is a temporary change until a
+  solution is found. See NetBeans issues
+  [apache/netbeans#7560](https://github.com/apache/netbeans/issues/7560#issuecomment-2226439215)
+  and
+  [apache/netbeans#6647](https://github.com/apache/netbeans/issues/6647#issuecomment-2070124442).
 - FlatLaf window decorations: Window top border on Windows 10 in "full window
   content" mode was not fully repainted when activating or deactivating window.
   (issue #809)
@@ -70,13 +77,6 @@ FlatLaf Change Log
   (some security software allows loading native library but blocks method
   invocation).
 - macOS: Fixed crash when running in WebSwing. (issue #826; regression in 3.4)
-- macOS: Disabled rounded popup border (see PR #772) on macOS 14.4+ because it
-  may freeze the application and crash the macOS WindowServer process (reports
-  vary from Finder restarts to OS restarts). This is a temporary change until a
-  solution is found. See NetBeans issues
-  [apache/netbeans#7560](https://github.com/apache/netbeans/issues/7560#issuecomment-2226439215)
-  and
-  [apache/netbeans#6647](https://github.com/apache/netbeans/issues/6647#issuecomment-2070124442).
 
 #### Incompatibilities
 
