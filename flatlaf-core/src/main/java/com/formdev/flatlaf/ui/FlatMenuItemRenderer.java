@@ -25,7 +25,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -35,6 +37,7 @@ import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -222,7 +225,7 @@ public class FlatMenuItemRenderer
 		}
 
 		// arrow size
-		if( !isTopLevelMenu && arrowIcon != null ) {
+		if( arrowIcon != null && (!isTopLevelMenu || isInVerticalMenuBar( menuItem )) ) {
 			// gap between text and arrow
 			if( accelText == null )
 				width += scale( textNoAcceleratorGap );
@@ -254,7 +257,8 @@ public class FlatMenuItemRenderer
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
 		// layout arrow
-		if( !isTopLevelMenu && arrowIcon != null ) {
+		boolean showArrowIcon = (arrowIcon != null && (!isTopLevelMenu || isInVerticalMenuBar( menuItem )));
+		if( showArrowIcon ) {
 			arrowRect.width = arrowIcon.getIconWidth();
 			arrowRect.height = arrowIcon.getIconHeight();
 		} else
@@ -288,7 +292,7 @@ public class FlatMenuItemRenderer
 		int accelArrowWidth = accelRect.width + arrowRect.width;
 		if( accelText != null )
 			accelArrowWidth += scale( !isTopLevelMenu ? textAcceleratorGap : menuItem.getIconTextGap() );
-		if( !isTopLevelMenu && arrowIcon != null ) {
+		if( showArrowIcon ) {
 			if( accelText == null )
 				accelArrowWidth += scale( textNoAcceleratorGap );
 			accelArrowWidth += scale( acceleratorArrowGap );
@@ -355,7 +359,7 @@ debug*/
 		paintIcon( g, iconRect, getIconForPainting(), underlineSelection ? underlineSelectionCheckBackground : checkBackground, selectionBackground );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
-		if( !isTopLevelMenu( menuItem ) )
+		if( arrowIcon != null && (!isTopLevelMenu( menuItem ) || isInVerticalMenuBar( menuItem )) )
 			paintArrowIcon( g, arrowRect, arrowIcon );
 	}
 
@@ -518,6 +522,15 @@ debug*/
 
 	protected static boolean isTopLevelMenu( JMenuItem menuItem ) {
 		return menuItem instanceof JMenu && ((JMenu)menuItem).isTopLevelMenu();
+	}
+
+	/** @since 3.5 */
+	public static boolean isInVerticalMenuBar( JMenuItem menuItem ) {
+		if( !(menuItem instanceof JMenu) || !(menuItem.getParent() instanceof JMenuBar) )
+			return false;
+
+		LayoutManager layout = menuItem.getParent().getLayout();
+		return layout instanceof GridLayout && ((GridLayout)layout).getRows() != 1;
 	}
 
 	protected boolean isUnderlineSelection() {

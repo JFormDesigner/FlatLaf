@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.404" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -662,6 +662,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Vertical JMenuBar:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 2"
+			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "armedCheckBox"
 				"text": "armed"
@@ -673,6 +679,39 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "armedChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3"
+			} )
+			add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "verticalMenuBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu14"
+					"text": "menu"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem53"
+						"text": "text"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu15"
+					"text": "another menu"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem54"
+						"text": "text"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu16"
+					"text": "menu 3"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test16.png" )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem55"
+						"text": "text"
+					} )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 3 1 3"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "underlineCheckBox"

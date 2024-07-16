@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.function.Supplier;
 import javax.swing.*;
@@ -49,6 +50,7 @@ public class FlatMenusTest
 		initComponents();
 
 		largerCheckBox.setSelected( LargerMenuItem.useLargerSize );
+		verticalMenuBar.setLayout( new GridLayout( 0, 1 ) );
 	}
 
 	private void armedChanged() {
@@ -246,7 +248,15 @@ public class FlatMenusTest
 		JLabel popupMenuLabel = new JLabel();
 		JButton showPopupMenuButton = new JButton();
 		showScrollingPopupMenuButton = new JButton();
+		JLabel label1 = new JLabel();
 		armedCheckBox = new JCheckBox();
+		verticalMenuBar = new JMenuBar();
+		JMenu menu14 = new JMenu();
+		JMenuItem menuItem53 = new JMenuItem();
+		JMenu menu15 = new JMenu();
+		JMenuItem menuItem54 = new JMenuItem();
+		JMenu menu16 = new JMenu();
+		JMenuItem menuItem55 = new JMenuItem();
 		underlineCheckBox = new JCheckBox();
 		popupMenubackgroundCheckBox = new JCheckBox();
 
@@ -884,12 +894,52 @@ public class FlatMenusTest
 		showScrollingPopupMenuButton.addActionListener(e -> showScrollingPopupMenu(e));
 		add(showScrollingPopupMenuButton, "cell 2 2");
 
+		//---- label1 ----
+		label1.setText("Vertical JMenuBar:");
+		add(label1, "cell 4 2");
+
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
 		armedCheckBox.setMnemonic('A');
 		armedCheckBox.putClientProperty("FlatLaf.internal.testing.ignore", true);
 		armedCheckBox.addActionListener(e -> armedChanged());
 		add(armedCheckBox, "cell 0 3");
+
+		//======== verticalMenuBar ========
+		{
+
+			//======== menu14 ========
+			{
+				menu14.setText("menu");
+
+				//---- menuItem53 ----
+				menuItem53.setText("text");
+				menu14.add(menuItem53);
+			}
+			verticalMenuBar.add(menu14);
+
+			//======== menu15 ========
+			{
+				menu15.setText("another menu");
+
+				//---- menuItem54 ----
+				menuItem54.setText("text");
+				menu15.add(menuItem54);
+			}
+			verticalMenuBar.add(menu15);
+
+			//======== menu16 ========
+			{
+				menu16.setText("menu 3");
+				menu16.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test16.png")));
+
+				//---- menuItem55 ----
+				menuItem55.setText("text");
+				menu16.add(menuItem55);
+			}
+			verticalMenuBar.add(menu16);
+		}
+		add(verticalMenuBar, "cell 4 3 1 3");
 
 		//---- underlineCheckBox ----
 		underlineCheckBox.setText("underline menu selection");
@@ -931,6 +981,7 @@ public class FlatMenusTest
 	private JCheckBox accelCheckBox;
 	private JButton showScrollingPopupMenuButton;
 	private JCheckBox armedCheckBox;
+	private JMenuBar verticalMenuBar;
 	private JCheckBox underlineCheckBox;
 	private JCheckBox popupMenubackgroundCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
