@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.5-SNAPSHOT
+## 3.5
 
 #### New features and improvements
 
@@ -41,8 +41,8 @@ FlatLaf Change Log
 #### Incompatibilities
 
 - ProgressBar: Log warning (including stack trace) when uninstalling
-  indeterminate progress bar UI or using JProgressBar.setIndeterminate(false)
-  not on AWT thread, because this may throw NPE in FlatProgressBarUI.paint().
+  indeterminate progress bar UI or using `JProgressBar.setIndeterminate(false)`
+  not on AWT thread, because this may throw NPE in `FlatProgressBarUI.paint()`.
   (issues #841 and #830)
 - Panel: Rounded background of panel with rounded corners is now painted even if
   panel is not opaque. (issue #840)
