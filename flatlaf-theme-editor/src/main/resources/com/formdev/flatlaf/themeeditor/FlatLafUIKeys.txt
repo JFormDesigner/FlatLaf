@@ -550,6 +550,7 @@ MenuItem.border
 MenuItem.borderPainted
 MenuItem.checkBackground
 MenuItem.checkMargins
+MenuItem.checkIconSeparated
 MenuItem.disabledForeground
 MenuItem.font
 MenuItem.foreground
