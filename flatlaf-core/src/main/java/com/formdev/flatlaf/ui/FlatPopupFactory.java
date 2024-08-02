@@ -139,7 +139,10 @@ public class FlatPopupFactory
 			forceHeavyWeight = true;
 
 		// create drop shadow popup
-		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
+		Popup popupForScreenOfOwner = getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight );
+		return owner.getGraphicsConfiguration().isTranslucencyCapable()
+			? new DropShadowPopup( popupForScreenOfOwner, owner, contents )
+			: new NonFlashingPopup( popupForScreenOfOwner, owner, contents );
 	}
 
 	/**

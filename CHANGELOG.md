@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## 3.5.1-SNAPSHOT
+
+#### Fixed bugs
+
+- Popup: Fixed `UnsupportedOperationException: PERPIXEL_TRANSLUCENT translucency
+  is not supported` exception on Haiku OS when showing popup (partly) outside of
+  window. (issue #869)
+
+
 ## 3.5
 
 #### New features and improvements
