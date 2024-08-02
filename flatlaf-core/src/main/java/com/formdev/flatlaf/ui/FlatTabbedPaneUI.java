@@ -1685,7 +1685,7 @@ debug*/
 			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
 
 		// add gap for selected tab to path
-		if( getTabType() == TAB_TYPE_CARD ) {
+		if( getTabType() == TAB_TYPE_CARD && selectedIndex >= 0 ) {
 			float csh = scale( (float) contentSeparatorHeight );
 
 			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
