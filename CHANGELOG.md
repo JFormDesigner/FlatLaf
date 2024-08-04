@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- HTML: Fixed occasional cutoff wrapped text when using multi-line text in HTML
+  tags `<h1>`...`<h6>`, `<code>`, `<kbd>`, `<big>`, `<small>` or `<samp>`.
+  (issue #873; regression in 3.5)
 - Popup: Fixed `UnsupportedOperationException: PERPIXEL_TRANSLUCENT translucency
   is not supported` exception on Haiku OS when showing popup (partly) outside of
   window. (issue #869)

@@ -19,13 +19,22 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JToolTip;
 import javax.swing.plaf.basic.BasicHTML;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.LabelView;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.View;
+import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
@@ -42,7 +51,7 @@ public class FlatHTML
 	 * which re-calculates font sizes based on current component font size.
 	 * This is necessary for "absolute-size" keywords (e.g. "x-large")
 	 * for "font-size" attributes in default style sheet (see javax/swing/text/html/default.css).
-	 * See also <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-size?retiredLocale=de#values">CSS font-size</a>.
+	 * See also <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-size#values">CSS font-size</a>.
 	 * <p>
 	 * This method should be invoked after {@link BasicHTML#updateRenderer(JComponent, String)}.
 	 */
@@ -61,16 +70,86 @@ public class FlatHTML
 		//  - if point size at index 7 is not 36, then probably HTML text contains BASE_SIZE rule
 		//  - if point size at index 4 is equal to given font size, then it is not necessary to add BASE_SIZE rule
 		StyleSheet styleSheet = ((HTMLDocument)doc).getStyleSheet();
+/*debug
+		for( int i = 1; i <= 7; i++ )
+			System.out.println( i+": "+ styleSheet.getPointSize( i ) );
+debug*/
 		int fontBaseSize = c.getFont().getSize();
 		if( styleSheet.getPointSize( 7 ) != 36f ||
 			styleSheet.getPointSize( 4 ) == fontBaseSize )
 		  return;
 
-		// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
-		styleSheet.addRule( "BASE_SIZE " + fontBaseSize );
-		clearViewCaches( view );
+		// check whether view uses "absolute-size" keywords (e.g. "x-large") for font-size
+		if( !usesAbsoluteSizeKeywordForFontSize( view ) )
+			return;
 
-//		dumpViews( view, 0 );
+		// get HTML text from component
+		String text;
+		if( c instanceof JLabel )
+			text = ((JLabel)c).getText();
+		else if( c instanceof AbstractButton )
+			text = ((AbstractButton)c).getText();
+		else if( c instanceof JToolTip )
+			text = ((JToolTip)c).getTipText();
+		else
+			return;
+		if( text == null )
+			return;
+
+		// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
+		String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
+		String openTag = "";
+		String closeTag = "";
+
+		String lowerText = text.toLowerCase( Locale.ENGLISH );
+		int headIndex;
+		int styleIndex;
+
+		int insertIndex;
+		if( (headIndex = lowerText.indexOf( "<head>" )) >= 0 ) {
+			// there is a <head> tag --> insert after <head> tag
+			insertIndex = headIndex + "<head>".length();
+		} else if( (styleIndex = lowerText.indexOf( "<style>" )) >= 0 ) {
+			// there is a <style> tag --> insert before <style> tag
+			insertIndex = styleIndex;
+		} else {
+			// no <head> or <style> tag --> insert <head> tag after <html> tag
+			insertIndex = "<html>".length();
+			openTag = "<head>";
+			closeTag = "</head>";
+		}
+
+		String newText = text.substring( 0, insertIndex )
+			+ openTag + style + closeTag
+			+ text.substring( insertIndex );
+
+		BasicHTML.updateRenderer( c, newText );
+	}
+
+	private static final Set<String> absoluteSizeKeywordsSet = new HashSet<>( Arrays.asList(
+		"xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large" ) );
+
+	/**
+	 * Checks whether view uses "absolute-size" keywords (e.g. "x-large") for font-size
+	 * (see javax/swing/text/html/default.css).
+	 */
+	private static boolean usesAbsoluteSizeKeywordForFontSize( View view ) {
+		AttributeSet attributes = view.getAttributes();
+		if( attributes != null ) {
+			Object fontSize = attributes.getAttribute( CSS.Attribute.FONT_SIZE );
+			if( fontSize != null ) {
+				if( absoluteSizeKeywordsSet.contains( fontSize.toString() ) )
+					return true;
+			}
+		}
+
+		int viewCount = view.getViewCount();
+		for( int i = 0; i < viewCount; i++ ) {
+			if( usesAbsoluteSizeKeywordForFontSize( view.getView( i ) ) )
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -128,8 +207,8 @@ public class FlatHTML
 	 * updates the HTML view.
 	 */
 	public static void propertyChange( PropertyChangeEvent e ) {
-		if( BasicHTML.propertyKey.equals( e.getPropertyName() ) )
-			FlatHTML.updateRendererCSSFontBaseSize( (JComponent) e.getSource() );
+		if( BasicHTML.propertyKey.equals( e.getPropertyName() ) && e.getNewValue() instanceof View )
+			updateRendererCSSFontBaseSize( (JComponent) e.getSource() );
 	}
 
 /*debug
@@ -142,15 +221,27 @@ public class FlatHTML
 	public static void dumpViews( View view, int indent ) {
 		for( int i = 0; i < indent; i++ )
 			System.out.print( "    " );
-		System.out.print( view.getClass().isAnonymousClass() ? view.getClass().getName() : view.getClass().getSimpleName() );
-		if( view instanceof LabelView ) {
-			LabelView lview = ((LabelView)view);
-			Font font = lview.getFont();
-			Color foreground = lview.getForeground();
-			System.out.printf( "  %2d-%-2d  %-14s %d  #%06x",
-				lview.getStartOffset(), lview.getEndOffset() - 1,
-				font.getName(), font.getSize(),
-				foreground.getRGB() & 0xffffff );
+
+		System.out.printf( "%s @%-8x   %3d,%2d",
+			view.getClass().isAnonymousClass() ? view.getClass().getName() : view.getClass().getSimpleName(),
+			System.identityHashCode( view ),
+			(int) view.getPreferredSpan( View.X_AXIS ),
+			(int) view.getPreferredSpan( View.Y_AXIS ) );
+
+		AttributeSet attrs = view.getAttributes();
+		if( attrs != null ) {
+			Object fontSize = attrs.getAttribute( CSS.Attribute.FONT_SIZE );
+			System.out.printf( "  %-8s", fontSize );
+		}
+
+		if( view instanceof javax.swing.text.GlyphView ) {
+			javax.swing.text.GlyphView gview = ((javax.swing.text.GlyphView)view);
+			java.awt.Font font = gview.getFont();
+			System.out.printf( "   %3d-%-3d  %s %2d (@%x)  #%06x  '%s'",
+				gview.getStartOffset(), gview.getEndOffset() - 1,
+				font.getName(), font.getSize(), System.identityHashCode( font ),
+				gview.getForeground().getRGB() & 0xffffff,
+				gview.getText( gview.getStartOffset(), gview.getEndOffset() ) );
 		}
 		System.out.println();
 
