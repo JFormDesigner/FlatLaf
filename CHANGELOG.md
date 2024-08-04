@@ -11,6 +11,8 @@ FlatLaf Change Log
 - Popup: Fixed `UnsupportedOperationException: PERPIXEL_TRANSLUCENT translucency
   is not supported` exception on Haiku OS when showing popup (partly) outside of
   window. (issue #869)
+- HiDPI: Fixed occasional wrong repaint areas when using
+  `HiDPIUtils.installHiDPIRepaintManager()`. (see PR #864)
 
 
 ## 3.5

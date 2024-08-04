@@ -521,12 +521,12 @@ public class HiDPIUtils
 			int x2 = x + c.getX();
 			int y2 = y + c.getY();
 			for( Component p = c.getParent(); p != null; p = p.getParent() ) {
-				x2 += p.getX();
-				y2 += p.getY();
 				if( x2 + width < p.getWidth() && y2 + height < p.getHeight() && p instanceof JComponent ) {
 					callback.addDirtyRegion( (JComponent) p, x2, y2, width, height );
 					return;
 				}
+				x2 += p.getX();
+				y2 += p.getY();
 			}
 		}
 
