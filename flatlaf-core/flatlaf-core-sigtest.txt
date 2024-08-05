@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.5
+#Version 3.5.1
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -296,6 +296,7 @@ fld public final static java.lang.String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flat
 fld public final static java.lang.String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations"
  anno 0 java.lang.Deprecated()
 fld public final static java.lang.String USE_NATIVE_LIBRARY = "flatlaf.useNativeLibrary"
+fld public final static java.lang.String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle"
 fld public final static java.lang.String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection"
 fld public final static java.lang.String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont"
 fld public final static java.lang.String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations"
