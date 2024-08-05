@@ -13,6 +13,9 @@ FlatLaf Change Log
   window. (issue #869)
 - HiDPI: Fixed occasional wrong repaint areas when using
   `HiDPIUtils.installHiDPIRepaintManager()`. (see PR #864)
+- Added system property `flatlaf.useSubMenuSafeTriangle` to allow disabling
+  submenu safe triangle (PR #490) for
+  [SWTSwing](https://github.com/Chrriis/SWTSwing). (issue #870)
 
 
 ## 3.5

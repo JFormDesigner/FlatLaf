@@ -205,6 +205,15 @@ public interface FlatSystemProperties
 	String NATIVE_LIBRARY_PATH = "flatlaf.nativeLibraryPath";
 
 	/**
+	 * Specifies whether safe triangle is used to improve usability of submenus.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 * @since 3.5.1
+	 */
+	String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle";
+
+	/**
 	 * Checks whether a system property is set and returns {@code true} if its value
 	 * is {@code "true"} (case-insensitive), otherwise it returns {@code false}.
 	 * If the system property is not set, {@code defaultValue} is returned.

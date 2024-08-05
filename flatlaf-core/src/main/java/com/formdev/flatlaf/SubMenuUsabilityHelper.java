@@ -45,6 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Improves usability of submenus by using a
@@ -64,6 +65,7 @@ class SubMenuUsabilityHelper
 	// https://github.com/apache/netbeans/issues/4231#issuecomment-1179616607
 	private static SubMenuUsabilityHelper instance;
 
+	private boolean eventQueuePushNotSupported;
 	private SubMenuEventQueue subMenuEventQueue;
 	private SafeTrianglePainter safeTrianglePainter;
 	private boolean changePending;
@@ -83,6 +85,9 @@ class SubMenuUsabilityHelper
 		if( instance != null )
 			return false;
 
+		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_SUB_MENU_SAFE_TRIANGLE, true ) )
+			return false;
+
 		instance = new SubMenuUsabilityHelper();
 		MenuSelectionManager.defaultManager().addChangeListener( instance );
 		return true;
@@ -99,7 +104,7 @@ class SubMenuUsabilityHelper
 
 	@Override
 	public void stateChanged( ChangeEvent e ) {
-		if( !FlatUIUtils.getUIBoolean( KEY_USE_SAFE_TRIANGLE, true ))
+		if( eventQueuePushNotSupported || !FlatUIUtils.getUIBoolean( KEY_USE_SAFE_TRIANGLE, true ))
 			return;
 
 		// handle menu selection change later, but only once in case of temporary changes
@@ -173,8 +178,29 @@ debug*/
 		targetBottomY = popupLocation.y + popupSize.height;
 
 		// install own event queue to suppress mouse events when mouse is moved within safe triangle
-		if( subMenuEventQueue == null )
-			subMenuEventQueue = new SubMenuEventQueue();
+		if( subMenuEventQueue == null ) {
+			SubMenuEventQueue queue = new SubMenuEventQueue();
+
+			try {
+				Toolkit toolkit = Toolkit.getDefaultToolkit();
+				toolkit.getSystemEventQueue().push( queue );
+
+				// check whether push() worked
+				// (e.g. SWTSwing uses own event queue that does not support push())
+				if( toolkit.getSystemEventQueue() != queue ) {
+					eventQueuePushNotSupported = true;
+					LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to push submenu event queue. Disabling submenu safe triangle.", null );
+					return;
+				}
+
+				subMenuEventQueue = queue;
+			} catch( RuntimeException ex ) {
+				// catch runtime exception from EventQueue.push()
+				eventQueuePushNotSupported = true;
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to push submenu event queue. Disabling submenu safe triangle.", ex );
+				return;
+			}
+		}
 
 		// create safe triangle painter
 		if( safeTrianglePainter == null && UIManager.getBoolean( KEY_SHOW_SAFE_TRIANGLE ) )
@@ -247,8 +273,6 @@ debug*/
 				}
 			} );
 			timeoutTimer.setRepeats( false );
-
-			Toolkit.getDefaultToolkit().getSystemEventQueue().push( this );
 		}
 
 		void uninstall() {
