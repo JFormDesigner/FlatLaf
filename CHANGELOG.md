@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## 3.6-SNAPSHOT
+
+#### Fixed bugs
+
+- FlatLaf window decorations on Windows: Fixed possible application freeze when
+  using custom component that overrides `Component.contains(int x, int y)` and
+  invokes `SwingUtilities.convertPoint()` (or similar) from the overridden
+  method. (issue #878)
+
+
 ## 3.5.1
 
 #### Fixed bugs

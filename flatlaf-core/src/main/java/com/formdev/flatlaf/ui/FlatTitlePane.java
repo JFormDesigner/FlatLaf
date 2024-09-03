@@ -1079,7 +1079,7 @@ public class FlatTitlePane
 	}
 
 	private boolean isTitleBarCaptionAt( Component c, int x, int y ) {
-		if( !c.isDisplayable() || !c.isVisible() || !c.contains( x, y ) || c == mouseLayer )
+		if( !c.isDisplayable() || !c.isVisible() || !contains( c, x, y ) || c == mouseLayer )
 			return true; // continue checking with next component
 
 		if( c.isEnabled() &&
@@ -1129,6 +1129,16 @@ public class FlatTitlePane
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Same as {@link Component#contains(int, int)}, but not using that method
+	 * because it may be overridden by custom components and invoke code that
+	 * tries to request AWT tree lock on 'AWT-Windows' thread.
+	 * This could freeze the application if AWT tree is already locked on 'AWT-EventQueue' thread.
+	 */
+	private boolean contains( Component c, int x, int y ) {
+		return x >= 0 && y >= 0 && x < c.getWidth() && y < c.getHeight();
 	}
 
 	private int lastCaptionHitTestX;
