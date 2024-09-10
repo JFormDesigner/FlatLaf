@@ -74,26 +74,33 @@ application.
 Proguard/Shadow JAR
 --------
 
-Flatlaf and Swing Desktop both use reflections in the code and other features like dynamic class loading, and
-minimization/shrinking tools like Proguard/Shadow JAR won't be able to see these references. Explicit rules are
-necessary to retain these classes.
+**FlatLaf** and **Swing Desktop** both use reflections, and dynamic class loading.
+
+Minimization/Shrinking tools (e.g. **Proguard/Shadow JAR**) are unable to detect these references.
+Explicit rules are necessary to retain these classes.
 
 If you're trying to run the application without excluding Flatlaf from minimization, you will get a runtime error:
-```
+
+```console
 java.lang.Error: no ComponentUI class for: javax.swing.<component>
 ```
 
 At the moment, we don't have support for minimization tools; however, the issue can be
-solved very easily by excluding FlatLaf from minimization; the steps will depend on the tool you're using.
+solved by excluding **FlatLaf** from being minimized without disabling code shrinking completely.
 
-The steps are **not guaranteed**, in most cases, it should work.
+**FlatLaf** adds only a minimal increase to the bundle size.
+
+The steps will depend on the tool you're using.
+
+> [!NOTE]
+> The steps are **not guaranteed**, but they should work in most cases.
 
 <details>
 	<summary>Proguard</summary>
 
-1. First of all, make sure you're including `java.desktop.jmod` and `java.base.jmod` by `libraryjars` using Proguard
+1. Include the modules `java.desktop` and `java.base` by `libraryjars` using Proguard
    rules, this is needed so Proguard can have access to the JDK modules that are being used in your application,
-   this step is not specific to Flatlaf, `java.desktop.jmod` is needed when using Java Swing/Desktop in general.
+   this step is not specific to **FlatLaf**, `java.desktop` is needed when using Java Swing/Desktop.
 
    An example of using Proguard in Gradle Kotlin DSL:
 
@@ -139,7 +146,7 @@ The steps are **not guaranteed**, in most cases, it should work.
     -dontwarn com.formdev.flatlaf.**
     ```
 
-Try to run the application now and test anything that uses Flatlaf.
+Try to run the application now and test all features that use **FlatLaf** in runtime.
 
 </details>
 
@@ -162,7 +169,7 @@ shadowJar {
 
 ```
 
-Try to run the application now and test anything that uses Flatlaf.
+Try to run the application now and test all features that use **FlatLaf** in runtime.
 
 </details>
 
