@@ -531,8 +531,11 @@ public class FlatToolBarUI
 
 		private Component getRecentComponent( Container aContainer, boolean first ) {
 			// if moving focus into the toolbar, focus recently focused toolbar button
-			if( focusedCompIndex >= 0 && focusedCompIndex < toolBar.getComponentCount() )
-				return toolBar.getComponent( focusedCompIndex );
+			if( focusedCompIndex >= 0 && focusedCompIndex < toolBar.getComponentCount() ) {
+				Component c = toolBar.getComponent( focusedCompIndex );
+				if( accept( c ) )
+					return c;
+			}
 
 			return first
 				? super.getFirstComponent( aContainer )

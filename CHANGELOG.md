@@ -9,6 +9,8 @@ FlatLaf Change Log
   using custom component that overrides `Component.contains(int x, int y)` and
   invokes `SwingUtilities.convertPoint()` (or similar) from the overridden
   method. (issue #878)
+- ToolBar: Fixed endless loop if button in Toolbar has focus and is made
+  invisible. (issue #884)
 
 
 ## 3.5.1
