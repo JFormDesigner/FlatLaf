@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "21" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -82,6 +82,13 @@ new FormModel {
 					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "showWithCustomIconButton"
+					"text": "Show with custom icon"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showWithCustomIcon", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "informationLabel"

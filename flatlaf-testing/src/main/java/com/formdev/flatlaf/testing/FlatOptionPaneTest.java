@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.demo.ScrollablePanel;
 import net.miginfocom.swing.*;
 
@@ -63,6 +64,15 @@ public class FlatOptionPaneTest
 		UIManager.put( "OptionPane.showIcon", showTitleBarIconCheckBox.isSelected() );
 	}
 
+	private void showWithCustomIcon() {
+		JOptionPane optionPane = new JOptionPane( "Hello world." );
+		JDialog dialog = optionPane.createDialog( "With Custom Icon" );
+		dialog.getRootPane().putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, true );
+		dialog.setIconImage( new ImageIcon( FlatOptionPaneTest.class.getResource( "/com/formdev/flatlaf/testing/test32.png" ) ).getImage() );
+		dialog.setVisible( true );
+		dialog.dispose();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		ScrollablePanel panel9 = new ScrollablePanel();
@@ -75,6 +85,7 @@ public class FlatOptionPaneTest
 		JPanel panel2 = new JPanel();
 		JOptionPane errorOptionPane = new JOptionPane();
 		errorShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
+		JButton showWithCustomIconButton = new JButton();
 		JLabel informationLabel = new JLabel();
 		JPanel panel3 = new JPanel();
 		JOptionPane informationOptionPane = new JOptionPane();
@@ -172,6 +183,11 @@ public class FlatOptionPaneTest
 			errorShowDialogLabel.setTitleLabel(errorLabel);
 			errorShowDialogLabel.setOptionPane(errorOptionPane);
 			panel9.add(errorShowDialogLabel, "cell 1 1");
+
+			//---- showWithCustomIconButton ----
+			showWithCustomIconButton.setText("Show with custom icon");
+			showWithCustomIconButton.addActionListener(e -> showWithCustomIcon());
+			panel9.add(showWithCustomIconButton, "cell 2 1");
 
 			//---- informationLabel ----
 			informationLabel.setText("Information");
