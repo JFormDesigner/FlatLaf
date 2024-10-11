@@ -210,7 +210,7 @@ public class FlatScrollPaneUI
 
 			// Use (0, 0) view position to obtain a constant unit increment of first item.
 			// Unit increment may be different for each item.
-			Rectangle visibleRect = new Rectangle( viewport.getViewSize() );
+			Rectangle visibleRect = new Rectangle( viewport.getExtentSize() );
 			unitIncrement = scrollable.getScrollableUnitIncrement( visibleRect, orientation, 1 );
 
 			if( unitIncrement > 0 ) {
