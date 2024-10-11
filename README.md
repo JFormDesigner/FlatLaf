@@ -33,13 +33,19 @@ FlatLaf can use 3rd party themes created for IntelliJ Platform (see
 Sponsors
 --------
 
+### Current Sponsors
+
+[![None Sponsors](images/none-sponsors.png)](https://www.formdev.com/flatlaf/sponsor/)
+
+[Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
+
+### Previous Sponsors
+
 <a href="https://www.ej-technologies.com/"><img src="https://www.formdev.com/flatlaf/sponsor/ej-technologies.png" width="200" alt="ej-technologies" title="ej-technologies - Java APM, Java Profiler, Java Installer Builder"></a>
 &nbsp; &nbsp; &nbsp; &nbsp;
 <a href="https://www.dbvis.com/"><img src="https://www.formdev.com/flatlaf/sponsor/dbvisualizer.svg" width="200" alt="DbVisualizer" title="DbVisualizer - SQL Client and Editor"></a>
 &nbsp; &nbsp; &nbsp; &nbsp;
 <a href="https://www.dscsag.com/"><img src="https://www.formdev.com/flatlaf/sponsor/DSC.png" height="48" alt="DSC Software AG" title="DSC Software AG - Your Companion for Integrative PLM"></a>
-
-[Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
 
 Demo
 ----
