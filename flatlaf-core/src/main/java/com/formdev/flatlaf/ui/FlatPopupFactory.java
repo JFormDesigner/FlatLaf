@@ -36,6 +36,8 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowFocusListener;
 import java.lang.invoke.MethodHandle;
@@ -43,6 +45,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -364,15 +367,11 @@ public class FlatPopupFactory
 	}
 
 	private static void setupRoundedBorder( Window popupWindow, Component owner, Component contents ) {
-		// make sure that the native window is created
-		if( !popupWindow.isDisplayable() )
-			popupWindow.addNotify();
-
 		int borderCornerRadius = getBorderCornerRadius( owner, contents );
 		float borderWidth = getRoundedBorderWidth( owner, contents );
 
 		// get Swing border color
-		Color borderColor = null; // use system default color
+		Color borderColor;
 		if( contents instanceof JComponent ) {
 			Border border = ((JComponent)contents).getBorder();
 			border = FlatUIUtils.unwrapNonUIResourceBorder( border );
@@ -384,11 +383,33 @@ public class FlatPopupFactory
 				borderColor = ((LineBorder)border).getLineColor();
 			else if( border instanceof EmptyBorder )
 				borderColor = FlatNativeWindowsLibrary.COLOR_NONE; // do not paint border
+			else
+				borderColor = null; // use system default color
 
 			// avoid that FlatLineBorder paints the Swing border
 			((JComponent)contents).putClientProperty( KEY_POPUP_USES_NATIVE_BORDER, true );
-		}
+		} else
+			borderColor = null; // use system default color
 
+		if( popupWindow.isDisplayable() ) {
+			// native window already created
+			setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+		} else {
+			// native window not yet created --> add listener to set native border after window creation
+			AtomicReference<HierarchyListener> l = new AtomicReference<>();
+			l.set( e -> {
+				if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
+					(e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0 )
+				{
+					setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+					popupWindow.removeHierarchyListener( l.get() );
+				}
+			} );
+			popupWindow.addHierarchyListener( l.get() );
+		}
+	}
+
+	private static void setupRoundedBorderImpl( Window popupWindow, int borderCornerRadius, float borderWidth, Color borderColor ) {
 		if( SystemInfo.isWindows ) {
 			// get native window handle
 			long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
