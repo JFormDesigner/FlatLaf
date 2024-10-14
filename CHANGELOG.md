@@ -14,6 +14,13 @@ FlatLaf Change Log
 - ToolBar: Fixed endless loop if button in Toolbar has focus and is made
   invisible. (issue #884)
 
+#### Other Changes
+
+- Added system property `flatlaf.useRoundedPopupBorder` to allow disabling
+  native rounded popup borders on Windows 11 and macOS. On macOS 14.4+, where
+  rounded popup borders are disabled since FlatLaf 3.5 because of occasional
+  problems, you can use this to enable rounded popup borders (at your risk).
+
 
 ## 3.5.1
 

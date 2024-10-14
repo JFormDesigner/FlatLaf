@@ -136,6 +136,17 @@ public interface FlatSystemProperties
 	String ANIMATION = "flatlaf.animation";
 
 	/**
+	 * Specifies whether native rounded popup borders should be used (if supported by operating system).
+	 * <p>
+	 * (requires Window 11 or macOS)
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}; except on macOS 14.4+ where it is {@code false}
+	 * @since 3.5.2
+	 */
+	String USE_ROUNDED_POPUP_BORDER = "flatlaf.useRoundedPopupBorder";
+
+	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
