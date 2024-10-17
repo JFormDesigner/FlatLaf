@@ -189,6 +189,7 @@ public class FlatWindowDecorationsTest
 
 		if( rightCompCheckBox.isSelected() ) {
 			rightStretchCompCheckBox.setSelected( false );
+			tallCompCheckBox.setSelected( false );
 
 			JButton myButton = new JButton( "?" );
 			myButton.putClientProperty( "JButton.buttonType", "toolBarButton" );
@@ -207,9 +208,24 @@ public class FlatWindowDecorationsTest
 
 		if( rightStretchCompCheckBox.isSelected() ) {
 			rightCompCheckBox.setSelected( false );
+			tallCompCheckBox.setSelected( false );
 
 			menuBar.add( Box.createGlue() );
 			menuBar.add( new JProgressBar() );
+		}
+
+		menuBar.revalidate();
+		menuBar.repaint();
+	}
+
+	private void tallCompChanged() {
+		removeNonMenusFromMenuBar();
+
+		if( tallCompCheckBox.isSelected() ) {
+			rightCompCheckBox.setSelected( false );
+			rightStretchCompCheckBox.setSelected( false );
+
+			menuBar.add( new JButton( "<html>large<br>button<br>large<br>button</html>" ) );
 		}
 
 		menuBar.revalidate();
@@ -585,6 +601,7 @@ debug*/
 		menuBarVisibleCheckBox = new JCheckBox();
 		rightCompCheckBox = new JCheckBox();
 		rightStretchCompCheckBox = new JCheckBox();
+		tallCompCheckBox = new JCheckBox();
 		JPanel panel3 = new JPanel();
 		addMenuButton = new JButton();
 		addGlueButton = new JButton();
@@ -777,6 +794,7 @@ debug*/
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- menuBarCheckBox ----
@@ -806,6 +824,11 @@ debug*/
 			rightStretchCompCheckBox.setText("right aligned stretching component");
 			rightStretchCompCheckBox.addActionListener(e -> rightStretchCompChanged());
 			panel6.add(rightStretchCompCheckBox, "cell 0 4");
+
+			//---- tallCompCheckBox ----
+			tallCompCheckBox.setText("tall component");
+			tallCompCheckBox.addActionListener(e -> tallCompChanged());
+			panel6.add(tallCompCheckBox, "cell 0 5");
 		}
 		add(panel6, "cell 2 0");
 
@@ -1254,6 +1277,7 @@ debug*/
 	private JCheckBox menuBarVisibleCheckBox;
 	private JCheckBox rightCompCheckBox;
 	private JCheckBox rightStretchCompCheckBox;
+	private JCheckBox tallCompCheckBox;
 	private JButton addMenuButton;
 	private JButton addGlueButton;
 	private JButton addCaptionButton;

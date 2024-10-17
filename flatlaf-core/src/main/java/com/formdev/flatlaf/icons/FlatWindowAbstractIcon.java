@@ -60,23 +60,24 @@ public abstract class FlatWindowAbstractIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		paintBackground( c, g );
-
 		g.setColor( getForeground( c ) );
 		HiDPIUtils.paintAtScale1x( g, 0, 0, width, height, this::paintIconAt1x );
 	}
 
 	protected abstract void paintIconAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor );
 
-	protected void paintBackground( Component c, Graphics2D g ) {
+	/** @since 3.5.2 */
+	@Override
+	protected void paintBackground( Component c, Graphics2D g, int x, int y ) {
 		Color background = FlatButtonUI.buttonStateColor( c, null, null, null, hoverBackground, pressedBackground );
 		if( background != null ) {
 			// disable antialiasing for background rectangle painting to avoid blurry edges when scaled (e.g. at 125% or 175%)
 			Object oldHint = g.getRenderingHint( RenderingHints.KEY_ANTIALIASING );
 			g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
 
+			// fill background of whole component
 			g.setColor( FlatUIUtils.deriveColor( background, c.getBackground() ) );
-			g.fillRect( 0, 0, width, height );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 
 			g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldHint );
 		}

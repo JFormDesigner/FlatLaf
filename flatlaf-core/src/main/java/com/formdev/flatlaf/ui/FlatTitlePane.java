@@ -395,6 +395,12 @@ public class FlatTitlePane
 				// allow the button to shrink if space is rare
 				return new Dimension( UIScale.scale( buttonMinimumWidth ), super.getMinimumSize().height );
 			}
+			@Override
+			public Dimension getMaximumSize() {
+				// allow the button to fill whole button area height
+				// see also BasicMenuUI.getMaximumSize()
+				return new Dimension( super.getMaximumSize().width, Short.MAX_VALUE );
+			}
 		};
 		button.setFocusable( false );
 		button.setContentAreaFilled( false );

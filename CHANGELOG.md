@@ -11,10 +11,13 @@ FlatLaf Change Log
   `sun.java2d.d3d` and `sun.java2d.noddraw` are not yet set), which disables
   usage of Windows Direct3D (DirectX) onscreen surfaces. Component rendering
   still uses Direct3D. (issue #887)
-- FlatLaf window decorations on Windows: Fixed possible application freeze when
-  using custom component that overrides `Component.contains(int x, int y)` and
-  invokes `SwingUtilities.convertPoint()` (or similar) from the overridden
-  method. (issue #878)
+- FlatLaf window decorations:
+  - Iconify/maximize/close buttons did not fill whole title bar height, if some
+    custom component in menu bar increases title bar height. (issue #897)
+  - Windows: Fixed possible application freeze when using custom component that
+    overrides `Component.contains(int x, int y)` and invokes
+    `SwingUtilities.convertPoint()` (or similar) from the overridden method.
+    (issue #878)
 - TextComponents: Fixed too fast scrolling in multi-line text components when
   using touchpads (e.g. on macOS). (issue #892)
 - ToolBar: Fixed endless loop if button in Toolbar has focus and is made

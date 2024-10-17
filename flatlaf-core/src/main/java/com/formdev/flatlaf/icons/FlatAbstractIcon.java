@@ -57,6 +57,8 @@ public abstract class FlatAbstractIcon
 //			g2.setColor( Color.blue );
 //			g2.drawRect( x, y, getIconWidth() - 1, getIconHeight() - 1 );
 
+			paintBackground( c, g2, x, y );
+
 			g2.translate( x, y );
 			UIScale.scaleGraphics( g2 );
 
@@ -69,7 +71,11 @@ public abstract class FlatAbstractIcon
 		}
 	}
 
-	protected abstract void paintIcon( Component c, Graphics2D g2 );
+	/** @since 3.5.2 */
+	protected void paintBackground( Component c, Graphics2D g, int x, int y ) {
+	}
+
+	protected abstract void paintIcon( Component c, Graphics2D g );
 
 	@Override
 	public int getIconWidth() {
