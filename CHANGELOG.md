@@ -5,6 +5,12 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Windows: Fixed repaint issues (ghosting) on some systems (probably depending
+  on graphics card/driver). This is done by setting Java system property
+  `sun.java2d.d3d.onscreen` to `false` (but only if `sun.java2d.d3d.onscreen`,
+  `sun.java2d.d3d` and `sun.java2d.noddraw` are not yet set), which disables
+  usage of Windows Direct3D (DirectX) onscreen surfaces. Component rendering
+  still uses Direct3D. (issue #887)
 - FlatLaf window decorations on Windows: Fixed possible application freeze when
   using custom component that overrides `Component.contains(int x, int y)` and
   invokes `SwingUtilities.convertPoint()` (or similar) from the overridden

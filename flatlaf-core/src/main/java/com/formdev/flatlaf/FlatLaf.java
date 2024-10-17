@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -118,6 +119,46 @@ public abstract class FlatLaf
 	private static String preferredLightFontFamily;
 	private static String preferredSemiboldFontFamily;
 	private static String preferredMonospacedFontFamily;
+
+	static {
+		// see disableWindowsD3Donscreen() for details
+		// https://github.com/JFormDesigner/FlatLaf/issues/887
+		if( SystemInfo.isWindows &&
+			System.getProperty( "sun.java2d.d3d.onscreen" ) == null &&
+			System.getProperty( "sun.java2d.d3d" ) == null &&
+			System.getProperty( "sun.java2d.noddraw" ) == null )
+		  System.setProperty( "sun.java2d.d3d.onscreen", "false" );
+	}
+
+	/**
+	 * Disable usage of Windows Direct3D (DirectX) onscreen surfaces because this may lead to
+	 * repaint issues (ghosting) on some systems (probably depending on graphics card/driver).
+	 * Problem occurs usually when a small heavy-weight popup window (menu, combobox, tooltip) is shown.
+	 * <p>
+	 * Sets system property {@code sun.java2d.d3d.onscreen} to {@code false},
+	 * but only if {@code sun.java2d.d3d.onscreen}, {@code sun.java2d.d3d}
+	 * and {@code sun.java2d.noddraw} are not yet set.
+	 * <p>
+	 * <strong>Note</strong>: Must be invoked very early before the graphics environment is created.
+	 * <p>
+	 * This method is automatically invoked when loading this class,
+	 * which is usually before the graphics environment is created.
+	 * E.g. when doing {@code FlatLightLaf.setup()} or
+	 * {@code UIManager.setLookAndFeel( "com.formdev.flatlaf.FlatLightLaf" )}.
+	 * <p>
+	 * However, it may be invoked too late if you use some methods from {@link UIManager}
+	 * of {@link GraphicsEnvironment} before setting look and feel.
+	 * E.g. {@link UIManager#put(Object, Object)}.
+	 * In that case invoke this method yourself very early.
+	 * <p>
+	 * <strong>Tip</strong>: How to find out when the graphics environment is created?
+	 * Set a breakpoint at constructor of class {@link GraphicsEnvironment} and look at the stack.
+	 *
+	 * @since 3.5.2
+	 */
+	public static void disableWindowsD3Donscreen() {
+		// dummy method used to trigger invocation of "static {...}" block
+	}
 
 	/**
 	 * Sets the application look and feel to the given LaF
