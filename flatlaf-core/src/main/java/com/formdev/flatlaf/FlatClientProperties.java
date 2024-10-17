@@ -627,6 +627,18 @@ public interface FlatClientProperties
 	String TITLE_BAR_FOREGROUND = "JRootPane.titleBarForeground";
 
 	/**
+	 * Specifies the preferred height of title bar (requires enabled window decorations).
+	 * <p>
+	 * (requires Windows 10/11)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 *
+	 * @since 3.5.2
+	 */
+	String TITLE_BAR_HEIGHT = "JRootPane.titleBarHeight";
+
+	/**
 	 * Specifies whether the glass pane should have full height and overlap the title bar,
 	 * if FlatLaf window decorations are enabled. Default is {@code false}.
 	 * <p>

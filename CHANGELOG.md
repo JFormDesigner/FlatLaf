@@ -25,6 +25,9 @@ FlatLaf Change Log
 
 #### Other Changes
 
+- FlatLaf window decorations: Added client property `JRootPane.titleBarHeight`
+  to allow specifying a (larger) preferred height for the title bar. (issue
+  #897)
 - Added system property `flatlaf.useRoundedPopupBorder` to allow disabling
   native rounded popup borders on Windows 11 and macOS. On macOS 14.4+, where
   rounded popup borders are disabled since FlatLaf 3.5 because of occasional

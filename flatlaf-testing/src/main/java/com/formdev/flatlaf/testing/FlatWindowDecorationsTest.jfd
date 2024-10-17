@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left][fill][fill][fill]"
-			"$rowConstraints": "[fill][fill][][]"
+			"$rowConstraints": "[fill][fill][][][40]"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
@@ -76,7 +76,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "ltr,hidemode 3,gap 0 0"
-				"$columnConstraints": "[grow,left]"
+				"$columnConstraints": "[grow,left][fill]"
 				"$rowConstraints": "[][][][][]rel[]rel[]"
 			} ) {
 				name: "panel4"
@@ -92,6 +92,16 @@ new FormModel {
 					"value": "cell 0 0"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "titleBarHeightCheckBox"
+					"text": "Height:"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "titleBarHeightChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showTitleCheckBox"
 					"text": "show title"
 					"selected": true
@@ -101,6 +111,20 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTitleChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JSpinner" ) {
+					name: "titleBarHeightField"
+					"enabled": false
+					"model": new javax.swing.SpinnerNumberModel {
+						stepSize: 2
+						value: 44
+					}
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "titleBarHeightChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showIconifyCheckBox"
@@ -148,12 +172,17 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "fullWindowContentButtonsBoundsLabel"
 					"text": "Buttons bounds:"
+					"enabled": false
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 6"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "fullWindowContentButtonsBoundsField"
 					"text": "null"
+					"enabled": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -610,7 +639,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 960, 495 )
+			"size": new java.awt.Dimension( 960, 570 )
 		} )
 		add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 			name: "menuBar"
@@ -776,23 +805,23 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 515 )
+			"location": new java.awt.Point( 0, 585 )
 			"size": new java.awt.Dimension( 255, 30 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "styleButtonGroup"
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 565 )
+			"location": new java.awt.Point( 0, 635 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "iconButtonGroup"
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 615 )
+			"location": new java.awt.Point( 0, 685 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "typeButtonGroup"
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 669 )
+			"location": new java.awt.Point( 0, 740 )
 		} )
 	}
 }

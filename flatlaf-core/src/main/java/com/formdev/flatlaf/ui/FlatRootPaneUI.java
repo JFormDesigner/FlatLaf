@@ -448,6 +448,11 @@ public class FlatRootPaneUI
 					titlePane.titleBarColorsChanged();
 				break;
 
+			case FlatClientProperties.TITLE_BAR_HEIGHT:
+				if( titlePane != null )
+					titlePane.revalidate();
+				break;
+
 			case FlatClientProperties.FULL_WINDOW_CONTENT:
 				if( titlePane != null ) {
 					rootPane.getLayeredPane().setLayer( titlePane, getLayerForTitlePane() );
