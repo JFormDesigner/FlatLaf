@@ -77,6 +77,109 @@ See also
 for instructions on how to redistribute FlatLaf native libraries with your
 application.
 
+Proguard/Shadow JAR
+--------
+
+**FlatLaf** and **Swing Desktop** both use reflections, and dynamic class loading.
+
+Minimization/Shrinking tools (e.g. **Proguard/Shadow JAR**) are unable to detect these references.
+Explicit rules are necessary to retain these classes.
+
+If you're trying to run the application without excluding Flatlaf from minimization, you will get a runtime error:
+
+```console
+java.lang.Error: no ComponentUI class for: javax.swing.<component>
+```
+
+At the moment, we don't have support for minimization tools; however, the issue can be
+solved by excluding **FlatLaf** from being minimized without disabling code shrinking completely.
+
+**FlatLaf** adds only a minimal increase to the bundle size.
+
+The steps will depend on the tool you're using.
+
+> [!NOTE]
+> The steps are **not guaranteed**, but they should work in most cases.
+
+<details>
+	<summary>Proguard</summary>
+
+1. Include the modules `java.desktop` and `java.base` by `libraryjars` using Proguard
+   rules, this is needed so Proguard can have access to the JDK modules that are being used in your application,
+   this step is not specific to **FlatLaf**, `java.desktop` is needed when using Java Swing/Desktop.
+
+   An example of using Proguard in Gradle Kotlin DSL:
+
+    ```kotlin
+    tasks.register<proguard.gradle.ProGuardTask>("minimizedJar") {
+    
+            // Your Proguard configurations
+    
+            // Automatically handle the Java version of this build.
+            val javaHome = System.getProperty("java.home")
+            if (System.getProperty("java.version").startsWith("1.")) {
+                // Before Java 9, runtime classes are packaged in a single JAR file.
+                libraryjars("$javaHome/lib/rt.jar")
+            } else {
+                // Starting from Java 9, runtime classes are packaged in modular JMOD files.
+               fun includeJdkModule(jModFileNameWithoutExtension: String) {
+                   val jModFilePath = Paths.get(javaHome, "jmods", "$jModFileNameWithoutExtension.jmod").toString()
+                   val jModFile = File(jModFilePath)
+                   if (!jModFile.exists()) {
+                       throw FileNotFoundException("The '$jModFile' at '$jModFilePath' doesn't exist.")
+                   }
+                   libraryjars(
+                       mapOf("jarfilter" to "!**.jar", "filter" to "!module-info.class"),
+                       jModFilePath,
+                   )
+               }
+   
+               val javaModules =
+                   listOf(
+                       "java.base",
+                       // Needed to support Java Swing/Desktop
+                       "java.desktop",
+                   )
+               javaModules.forEach { includeJdkModule(it) }
+            }
+        }
+    ```
+
+2. Include the following in your Proguard configurations/rules, which is usually in `proguard.pro` file:
+    ```
+    # Exclude the FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
+    -keep class com.formdev.flatlaf.** { *; }
+    -dontwarn com.formdev.flatlaf.**
+    ```
+
+Try to run the application now and test all features that use **FlatLaf** in runtime.
+
+</details>
+
+<details>
+    <summary>Shadow JAR Minimization</summary>
+
+[Gradle Shadow JAR Plugin](https://github.com/johnrengelman/shadow) is primarily
+for building fat JAR for your application, it has a `minimize()` function to minimize the JAR
+in the configurations of `shadowJar` task, use the following snippet in your `build.gradle` (or `build.gradle.kts`)
+
+```groovy
+
+shadowJar {
+    // Your shadow configurations
+    minimize {
+        // Exclude the FlatLaf dependency from minimization to fix `no ComponentUI class for: javax.swing.<component>`
+        exclude(dependency("com.formdev:flatlaf:.*"))
+    }
+}
+
+```
+
+Try to run the application now and test all features that use **FlatLaf** in runtime.
+
+</details>
+
+Use a similar solution for other tools.
 
 ### Snapshots
 
