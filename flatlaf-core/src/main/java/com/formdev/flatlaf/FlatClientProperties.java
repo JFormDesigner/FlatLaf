@@ -461,7 +461,7 @@ public interface FlatClientProperties
 	 * {@link FlatSystemProperties#USE_WINDOW_DECORATIONS}, but higher priority
 	 * than UI default {@code TitlePane.useWindowDecorations}.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -481,7 +481,7 @@ public interface FlatClientProperties
 	 * {@link FlatSystemProperties#MENUBAR_EMBEDDED}, but higher priority
 	 * than UI default {@code TitlePane.menuBarEmbedded}.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -506,6 +506,8 @@ public interface FlatClientProperties
 	 * <p>
 	 * The user can left-click-and-drag on the title bar area to move the window,
 	 * except when clicking on a component that processes mouse events (e.g. buttons or menus).
+	 * <p>
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -537,7 +539,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * This client property has higher priority than UI default {@code TitlePane.showIcon}.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -553,6 +555,8 @@ public interface FlatClientProperties
 	 * Setting this shows/hides the windows title
 	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
 	 * <p>
+	 * (requires Windows 10/11)
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 *
@@ -566,6 +570,8 @@ public interface FlatClientProperties
 	 * <p>
 	 * Setting this shows/hides the "iconify" button
 	 * for the {@code JFrame} that contains the root pane.
+	 * <p>
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -581,6 +587,8 @@ public interface FlatClientProperties
 	 * Setting this shows/hides the "maximize/restore" button
 	 * for the {@code JFrame} that contains the root pane.
 	 * <p>
+	 * (requires Windows 10/11)
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 *
@@ -595,6 +603,8 @@ public interface FlatClientProperties
 	 * Setting this shows/hides the "close" button
 	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
 	 * <p>
+	 * (requires Windows 10/11)
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 *
@@ -605,7 +615,7 @@ public interface FlatClientProperties
 	/**
 	 * Background color of window title bar (requires enabled window decorations).
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Color}
@@ -617,7 +627,7 @@ public interface FlatClientProperties
 	/**
 	 * Foreground color of window title bar (requires enabled window decorations).
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Color}
@@ -641,6 +651,8 @@ public interface FlatClientProperties
 	/**
 	 * Specifies whether the glass pane should have full height and overlap the title bar,
 	 * if FlatLaf window decorations are enabled. Default is {@code false}.
+	 * <p>
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}

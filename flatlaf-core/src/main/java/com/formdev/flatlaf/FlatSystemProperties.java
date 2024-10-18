@@ -82,7 +82,7 @@ public interface FlatSystemProperties
 	 * {@link FlatClientProperties#USE_WINDOW_DECORATIONS} and
 	 * UI default {@code TitlePane.useWindowDecorations}.
 	 * <p>
-	 * (requires Window 10/11)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
@@ -99,7 +99,7 @@ public interface FlatSystemProperties
 	 * Setting this to {@code false} disables using JetBrains Runtime custom window decorations.
 	 * Then FlatLaf native window decorations are used.
 	 * <p>
-	 * (requires Window 10/11)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code false} (since v2; was {@code true} in v1)
@@ -120,7 +120,7 @@ public interface FlatSystemProperties
 	 * {@link FlatClientProperties#MENU_BAR_EMBEDDED} and
 	 * UI default {@code TitlePane.menuBarEmbedded}.
 	 * <p>
-	 * (requires Window 10/11)
+	 * (requires Windows 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
@@ -142,6 +142,7 @@ public interface FlatSystemProperties
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}; except on macOS 14.4+ where it is {@code false}
+	 *
 	 * @since 3.5.2
 	 */
 	String USE_ROUNDED_POPUP_BORDER = "flatlaf.useRoundedPopupBorder";
@@ -220,6 +221,7 @@ public interface FlatSystemProperties
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}
+	 *
 	 * @since 3.5.1
 	 */
 	String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle";
