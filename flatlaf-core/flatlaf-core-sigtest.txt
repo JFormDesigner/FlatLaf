@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.5.1
+#Version 3.5.2
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -100,6 +100,7 @@ fld public final static java.lang.String TEXT_FIELD_TRAILING_COMPONENT = "JTextF
 fld public final static java.lang.String TEXT_FIELD_TRAILING_ICON = "JTextField.trailingIcon"
 fld public final static java.lang.String TITLE_BAR_BACKGROUND = "JRootPane.titleBarBackground"
 fld public final static java.lang.String TITLE_BAR_FOREGROUND = "JRootPane.titleBarForeground"
+fld public final static java.lang.String TITLE_BAR_HEIGHT = "JRootPane.titleBarHeight"
 fld public final static java.lang.String TITLE_BAR_SHOW_CLOSE = "JRootPane.titleBarShowClose"
 fld public final static java.lang.String TITLE_BAR_SHOW_ICON = "JRootPane.titleBarShowIcon"
 fld public final static java.lang.String TITLE_BAR_SHOW_ICONIFFY = "JRootPane.titleBarShowIconify"
@@ -223,6 +224,7 @@ meth public static java.util.Map<java.lang.String,java.lang.Class<?>> getStyleab
 meth public static java.util.Map<java.lang.String,java.lang.String> getGlobalExtraDefaults()
 meth public static java.util.function.Function<java.lang.String,java.awt.Color> getSystemColorGetter()
 meth public static javax.swing.UIDefaults$ActiveValue createActiveFontValue(float)
+meth public static void disableWindowsD3Donscreen()
 meth public static void hideMnemonics()
 meth public static void initIconColors(javax.swing.UIDefaults,boolean)
 meth public static void installLafInfo(java.lang.String,java.lang.Class<? extends javax.swing.LookAndFeel>)
@@ -296,6 +298,7 @@ fld public final static java.lang.String UPDATE_UI_ON_SYSTEM_FONT_CHANGE = "flat
 fld public final static java.lang.String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations"
  anno 0 java.lang.Deprecated()
 fld public final static java.lang.String USE_NATIVE_LIBRARY = "flatlaf.useNativeLibrary"
+fld public final static java.lang.String USE_ROUNDED_POPUP_BORDER = "flatlaf.useRoundedPopupBorder"
 fld public final static java.lang.String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle"
 fld public final static java.lang.String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection"
 fld public final static java.lang.String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont"
