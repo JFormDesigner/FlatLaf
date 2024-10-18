@@ -35,11 +35,14 @@ import java.awt.event.KeyEvent;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
 import javax.swing.Icon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
@@ -73,6 +76,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
  * @uiDefault MenuItem.underlineSelectionColor						Color
  * @uiDefault MenuItem.underlineSelectionHeight						int
+ * @uiDefault MenuItem.separateIconFromCheck						boolean
  *
  * @author Karl Tauber
  */
@@ -103,6 +107,7 @@ public class FlatMenuItemRenderer
 	@Styleable protected Color underlineSelectionCheckBackground = UIManager.getColor( "MenuItem.underlineSelectionCheckBackground" );
 	@Styleable protected Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
 	@Styleable protected int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
+	@Styleable protected boolean separateIconFromCheck = UIManager.getBoolean( "MenuItem.separateIconFromCheck" );
 
 	private boolean iconsShared = true;
 	private final Font menuFont = UIManager.getFont( "Menu.font" );
@@ -195,6 +200,7 @@ public class FlatMenuItemRenderer
 		int width = 0;
 		int height = 0;
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
+		boolean isIconSeparated = isIconSeparated( menuItem );
 
 		Rectangle viewRect = new Rectangle( 0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE );
 		Rectangle iconRect = new Rectangle();
@@ -237,6 +243,11 @@ public class FlatMenuItemRenderer
 			height = Math.max( arrowIcon.getIconHeight(), height );
 		}
 
+		if( isIconSeparated ) {
+			// gap between check and icon
+			width += iconRect.width + scale( menuItem.getIconTextGap() );
+		}
+
 		// add insets
 		Insets insets = menuItem.getInsets();
 		width += insets.left + insets.right;
@@ -251,10 +262,11 @@ public class FlatMenuItemRenderer
 		return new Dimension( width, height );
 	}
 
-	private void layout( Rectangle viewRect, Rectangle iconRect, Rectangle textRect,
-		Rectangle accelRect, Rectangle arrowRect, Rectangle labelRect )
+	private void layout( Rectangle viewRect, Rectangle checkRect, Rectangle iconRect,
+		Rectangle textRect, Rectangle accelRect, Rectangle arrowRect, Rectangle labelRect )
 	{
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
+		boolean isIconSeparated = isIconSeparated( menuItem );
 
 		// layout arrow
 		boolean showArrowIcon = (arrowIcon != null && (!isTopLevelMenu || isInVerticalMenuBar( menuItem )));
@@ -311,6 +323,16 @@ public class FlatMenuItemRenderer
 			menuItem.getVerticalAlignment(), menuItem.getHorizontalAlignment(),
 			menuItem.getVerticalTextPosition(), menuItem.getHorizontalTextPosition(),
 			labelRect, iconRect, textRect, scale( menuItem.getIconTextGap() ) );
+
+		checkRect.setBounds( iconRect );
+
+		if( isIconSeparated ) {
+			int width = checkRect.width + scale( menuItem.getIconTextGap() );
+			iconRect.x += width;
+			textRect.x += width;
+			labelRect.x += width;
+			textRect.width -= width;
+		}
 	}
 
 	private static int centerOffset( int wh1, int wh2 ) {
@@ -329,15 +351,17 @@ public class FlatMenuItemRenderer
 		viewRect.width -= (insets.left + insets.right);
 		viewRect.height -= (insets.top + insets.bottom);
 
+		Rectangle checkRect = new Rectangle();
 		Rectangle iconRect = new Rectangle();
 		Rectangle textRect = new Rectangle();
 		Rectangle accelRect = new Rectangle();
 		Rectangle arrowRect = new Rectangle();
 		Rectangle labelRect = new Rectangle();
 
-		layout( viewRect, iconRect, textRect, accelRect, arrowRect, labelRect );
+		layout( viewRect, checkRect, iconRect, textRect, accelRect, arrowRect, labelRect );
 
 /*debug
+		g.setColor( Color.pink ); g.drawRect( checkRect.x, checkRect.y, checkRect.width - 1, checkRect.height - 1 );
 		g.setColor( Color.green ); g.drawRect( viewRect.x, viewRect.y, viewRect.width - 1, viewRect.height - 1 );
 		g.setColor( Color.red ); g.drawRect( labelRect.x, labelRect.y, labelRect.width - 1, labelRect.height - 1 );
 		g.setColor( Color.blue ); g.drawRect( iconRect.x, iconRect.y, iconRect.width - 1, iconRect.height - 1 );
@@ -356,7 +380,19 @@ debug*/
 			else
 				paintSelection( g, selectionBackground, selectionInsets, selectionArc );
 		}
-		paintIcon( g, iconRect, getIconForPainting(), underlineSelection ? underlineSelectionCheckBackground : checkBackground, selectionBackground );
+
+		if( isIconSeparated( menuItem ) ) {
+			if( menuItem instanceof JCheckBoxMenuItem ) {
+				paintIcon( g, checkRect, UIManager.getIcon( "CheckBox.icon" ) );
+			} else if( menuItem instanceof JRadioButtonMenuItem ) {
+				paintIcon( g, checkRect, UIManager.getIcon( "RadioButton.icon" ) );
+			}
+
+			paintIcon( g, iconRect, getIconForPainting(false) );
+		} else {
+			paintIcon( g, iconRect, getIconForPainting(true), underlineSelection ? underlineSelectionCheckBackground : checkBackground, selectionBackground );
+		}
+
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( arrowIcon != null && (!isTopLevelMenu( menuItem ) || isInVerticalMenuBar( menuItem )) )
@@ -426,6 +462,10 @@ debug*/
 			g.fillRect( r.x, r.y, r.width, r.height );
 		}
 
+		paintIcon( g, menuItem, icon, iconRect );
+	}
+
+	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon ) {
 		paintIcon( g, menuItem, icon, iconRect );
 	}
 
@@ -537,6 +577,24 @@ debug*/
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 
+	protected boolean isIconSeparated( JMenuItem item ) {
+		if( !separateIconFromCheck)
+			return false;
+
+		Container parent = item.getParent();
+		if( !(parent instanceof MenuElement) )
+			return false;
+
+		for( MenuElement element : ((MenuElement) parent).getSubElements() ) {
+			Component c = element.getComponent();
+			if( c instanceof JCheckBoxMenuItem && ((JCheckBoxMenuItem) c).getIcon() != null )
+				return true;
+			if( c instanceof JRadioButtonMenuItem && ((JRadioButtonMenuItem) c).getIcon() != null )
+				return true;
+		}
+		return false;
+	}
+
 	private Font getTopLevelFont() {
 		Font font = menuItem.getFont();
 		// menu item parent may be null if JMenu.isTopLevelMenu() is overridden
@@ -546,10 +604,10 @@ debug*/
 			: menuItem.getParent().getFont();
 	}
 
-	private Icon getIconForPainting() {
+	private Icon getIconForPainting(boolean canUseCheckIcon) {
 		Icon icon = menuItem.getIcon();
 
-		if( icon == null && checkIcon != null && !isTopLevelMenu( menuItem ) )
+		if( icon == null && canUseCheckIcon && checkIcon != null && !isTopLevelMenu( menuItem ) )
 			return checkIcon;
 
 		if( icon == null )
