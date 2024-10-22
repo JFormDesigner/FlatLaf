@@ -577,7 +577,7 @@ public class FlatTreeUI
 		
 		if( alternateRowColor != null && row % 2 != 0 ) {
 			g.setColor( alternateRowColor );
-			FlatUIUtils.paintComponentBackground((Graphics2D) g, bounds.x, bounds.y, tree.getWidth(), bounds.height, 0, 0);
+			FlatUIUtils.paintComponentBackground((Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height, 0, 0);
 		}
 
 		// do not paint row if editing
