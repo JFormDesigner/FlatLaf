@@ -1182,6 +1182,7 @@ Tree.dropCellForeground
 Tree.dropLineColor
 Tree.editorBorder
 Tree.editorBorderSelectionColor
+Tree.alternateRowColor
 Tree.expandedIcon
 Tree.focusInputMap
 Tree.focusInputMap.RightToLeft

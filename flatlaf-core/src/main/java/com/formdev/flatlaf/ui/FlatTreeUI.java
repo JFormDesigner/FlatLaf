@@ -102,6 +102,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionForeground				Color
  * @uiDefault Tree.selectionInactiveBackground		Color
  * @uiDefault Tree.selectionInactiveForeground		Color
+ * @uiDefault Tree.alternateRowColor				Color
  * @uiDefault Tree.selectionInsets					Insets
  * @uiDefault Tree.selectionArc						int
  * @uiDefault Tree.wideSelection					boolean
@@ -141,6 +142,7 @@ public class FlatTreeUI
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
 	@Styleable protected Color selectionBorderColor;
+	@Styleable protected Color alternateRowColor;
 	/** @since 3 */ @Styleable protected Insets selectionInsets;
 	/** @since 3 */ @Styleable protected int selectionArc;
 	@Styleable protected boolean wideSelection;
@@ -192,6 +194,7 @@ public class FlatTreeUI
 		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
 		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
+		alternateRowColor = UIManager.getColor( "Tree.alternateRowColor" );
 		selectionInsets = UIManager.getInsets( "Tree.selectionInsets" );
 		selectionArc = UIManager.getInt( "Tree.selectionArc" );
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
@@ -227,6 +230,7 @@ public class FlatTreeUI
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 		selectionBorderColor = null;
+		alternateRowColor = null;
 
 		defaultLeafIcon = null;
 		defaultClosedIcon = null;
@@ -570,6 +574,11 @@ public class FlatTreeUI
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );
 		boolean needsSelectionPainting = (isSelected || isDropRow) && isPaintSelection();
+		
+		if( alternateRowColor != null && row % 2 != 0 ) {
+			g.setColor( alternateRowColor );
+			FlatUIUtils.paintComponentBackground((Graphics2D) g, bounds.x, bounds.y, tree.getWidth(), bounds.height, 0, 0);
+		}
 
 		// do not paint row if editing
 		if( isEditing ) {
