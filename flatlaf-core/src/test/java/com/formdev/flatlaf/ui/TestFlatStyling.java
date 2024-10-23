@@ -1187,6 +1187,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionInactiveBackground: #fff" );
 		ui.applyStyle( "selectionInactiveForeground: #fff" );
 		ui.applyStyle( "selectionBorderColor: #fff" );
+		ui.applyStyle( "alternateRowColor: #fff" );
 		ui.applyStyle( "selectionInsets: 1,2,3,4" );
 		ui.applyStyle( "selectionArc: 8" );
 		ui.applyStyle( "wideSelection: true" );
