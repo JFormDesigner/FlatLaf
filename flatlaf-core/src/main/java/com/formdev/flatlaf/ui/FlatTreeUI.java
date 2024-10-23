@@ -142,7 +142,7 @@ public class FlatTreeUI
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
 	@Styleable protected Color selectionBorderColor;
-	@Styleable protected Color alternateRowColor;
+	/** @since 3.6 */ @Styleable protected Color alternateRowColor;
 	/** @since 3 */ @Styleable protected Insets selectionInsets;
 	/** @since 3 */ @Styleable protected int selectionArc;
 	@Styleable protected boolean wideSelection;
