@@ -577,7 +577,11 @@ public class FlatTreeUI
 		
 		if( alternateRowColor != null && row % 2 != 0 ) {
 			g.setColor( alternateRowColor );
-			FlatUIUtils.paintComponentBackground((Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height, 0, 0);
+			
+			// paint respecting selection arc
+			final float arc = UIScale.scale( selectionArc / 2f );			
+			FlatUIUtils.paintSelection( (Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height,
+					UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
 		}
 
 		// do not paint row if editing
