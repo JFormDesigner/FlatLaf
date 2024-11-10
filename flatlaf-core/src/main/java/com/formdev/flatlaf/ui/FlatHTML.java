@@ -21,8 +21,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -93,7 +93,7 @@ debug*/
 			text = ((JToolTip)c).getTipText();
 		else
 			return;
-		if( text == null )
+		if( text == null || !BasicHTML.isHTMLString( text ) )
 			return;
 
 		// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
@@ -101,15 +101,14 @@ debug*/
 		String openTag = "";
 		String closeTag = "";
 
-		String lowerText = text.toLowerCase( Locale.ENGLISH );
 		int headIndex;
 		int styleIndex;
 
 		int insertIndex;
-		if( (headIndex = lowerText.indexOf( "<head>" )) >= 0 ) {
+		if( (headIndex = indexOfTag( text, "head", true )) >= 0 ) {
 			// there is a <head> tag --> insert after <head> tag
-			insertIndex = headIndex + "<head>".length();
-		} else if( (styleIndex = lowerText.indexOf( "<style>" )) >= 0 ) {
+			insertIndex = headIndex;
+		} else if( (styleIndex = indexOfTag( text, "style", false )) >= 0 ) {
 			// there is a <style> tag --> insert before <style> tag
 			insertIndex = styleIndex;
 		} else {
@@ -124,6 +123,41 @@ debug*/
 			+ text.substring( insertIndex );
 
 		BasicHTML.updateRenderer( c, newText );
+
+		// for unit tests
+		if( testUpdateRenderer != null )
+			testUpdateRenderer.accept( c, newText );
+	}
+
+	// for unit tests
+	static BiConsumer<JComponent, String> testUpdateRenderer;
+
+	/**
+	 * Returns start or end index of a HTML tag.
+	 * Checks only for leading '<' character and (case-ignore) tag name.
+	 */
+	private static int indexOfTag( String html, String tag, boolean endIndex ) {
+		int tagLength = tag.length();
+		int maxLength = html.length() - tagLength - 2;
+		char lastTagChar = tag.charAt( tagLength - 1 );
+
+		for( int i = "<html>".length(); i < maxLength; i++ ) {
+			// check for leading '<' and last tag name character
+			if( html.charAt( i ) == '<' && Character.toLowerCase( html.charAt( i + tagLength ) ) == lastTagChar ) {
+				// compare tag characters from last to first
+				for( int j = tagLength - 2; j >= 0; j-- ) {
+					if( Character.toLowerCase( html.charAt( i + 1 + j ) ) != tag.charAt( j ) )
+						break; // not equal
+
+					if( j == 0 ) {
+						// tag found
+						return endIndex ? html.indexOf( '>', i + tagLength ) + 1 : i;
+					}
+				}
+			}
+		}
+
+		return -1;
 	}
 
 	private static final Set<String> absoluteSizeKeywordsSet = new HashSet<>( Arrays.asList(

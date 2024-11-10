@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.5.3-SNAPSHOT
+
+#### Fixed bugs
+
+- HTML: Fixed wrong rendering if HTML text contains `<style>` tag with
+  attributes (e.g. `<style type='text/css'>`). (issue #905; regression in 3.5.1)
+
+
 ## 3.5.2
 
 #### Fixed bugs
