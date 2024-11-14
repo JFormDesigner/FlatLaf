@@ -8,6 +8,8 @@ FlatLaf Change Log
 - HTML: Fixed wrong rendering if HTML text contains `<style>` tag with
   attributes (e.g. `<style type='text/css'>`). (issue #905; regression in 3.5.1)
 - FlatLaf window decorations:
+  - Windows: Fixed possible deadlock with TabbedPane in window title area in
+    "full window content" mode. (issue #909)
   - Linux: Fixed continuous cursor toggling between resize and standard cursor
     when resizing window. (issue #907)
 

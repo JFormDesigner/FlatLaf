@@ -1058,10 +1058,11 @@ public class FlatTitlePane
 	 * <p>
 	 * Note:
 	 * <ul>
-	 *   <li>This method is invoked often when mouse is moved over title bar
+	 *   <li>This method is invoked often when mouse is moved over window title bar area
 	 *       and should therefore return quickly.
 	 *   <li>This method is invoked on 'AWT-Windows' thread (not 'AWT-EventQueue' thread)
 	 *       while processing Windows messages.
+	 *       It <b>must not</b> change any component property or layout because this could cause a dead lock.
 	 * </ul>
 	 */
 	private boolean captionHitTest( Point pt ) {
@@ -1578,6 +1579,15 @@ debug*/
 		 * Useful for components that do not use mouse input on whole component bounds.
 		 * E.g. a tabbed pane with a few tabs has some empty space beside the tabs
 		 * that can be used to move the window.
+		 * <p>
+		 * Note:
+		 * <ul>
+		 *   <li>This method is invoked often when mouse is moved over window title bar area
+		 *       and should therefore return quickly.
+		 *   <li>This method is invoked on 'AWT-Windows' thread (not 'AWT-EventQueue' thread)
+		 *       while processing Windows messages.
+		 *       It <b>must not</b> change any component property or layout because this could cause a dead lock.
+		 * </ul>
 		 *
 		 * @return {@code true} if the component is not interested in mouse input at the given location
 		 *         {@code false} if the component wants process mouse input at the given location

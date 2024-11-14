@@ -2306,8 +2306,23 @@ debug*/
 	/** @since 3.4 */
 	@Override
 	public Boolean isTitleBarCaptionAt( int x, int y ) {
-		if( tabForCoordinate( tabPane, x, y ) >= 0 )
-			return false;
+		// Note: not using tabForCoordinate() here because this may validate layout and cause dead lock
+
+		if( moreTabsButton != null ) {
+			// convert x,y from JTabbedPane coordinate space to ScrollableTabPanel coordinate space
+			Point viewPosition = tabViewport.getViewPosition();
+			x = x - tabViewport.getX() + viewPosition.x;
+			y = y - tabViewport.getY() + viewPosition.y;
+
+			// check whether point is within viewport
+			if( !tabViewport.getViewRect().contains( x, y ) )
+				return null; // check children
+		}
+
+		for( int i = 0; i < rects.length; i++ ) {
+			if( rects[i].contains( x, y ) )
+				return false;
+		}
 
 		return null; // check children
 	}
