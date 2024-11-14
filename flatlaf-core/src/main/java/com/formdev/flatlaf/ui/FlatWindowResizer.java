@@ -42,6 +42,7 @@ import javax.swing.DesktopManager;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -191,7 +192,7 @@ public abstract class FlatWindowResizer
 	protected abstract Dimension getWindowMinimumSize();
 	protected abstract Dimension getWindowMaximumSize();
 
-	protected void beginResizing( int direction ) {}
+	protected void beginResizing( int resizeDir ) {}
 	protected void endResizing() {}
 
 	//---- interface PropertyChangeListener ----
@@ -234,15 +235,44 @@ public abstract class FlatWindowResizer
 	{
 		protected Window window;
 
+		private final JComponent centerComp;
 		private final boolean limitResizeToScreenBounds;
 
 		public WindowResizer( JRootPane rootPane ) {
 			super( rootPane );
 
+			// Transparent "center" component that is made visible only while resizing window.
+			// It uses same cursor as the area where resize dragging started.
+			// This ensures that the cursor shape stays stable while dragging mouse
+			// into the window to make window smaller. Otherwise it would toggling between
+			// resize and standard cursor because the component layout is not updated
+			// fast enough and the mouse cursor is always updated from the component
+			// at the mouse location.
+			centerComp = new JPanel();
+			centerComp.setOpaque( false );
+			centerComp.setVisible( false );
+			Container cont = rootPane.getLayeredPane();
+			cont.add( centerComp, WINDOW_RESIZER_LAYER, 4 );
+
 			// On Linux, limit window resizing to screen bounds because otherwise
 			// there would be a strange effect when the mouse is moved over a sidebar
 			// while resizing and the opposite window side is also resized.
 			limitResizeToScreenBounds = SystemInfo.isLinux;
+		}
+
+		@Override
+		public void uninstall() {
+			Container cont = topDragComp.getParent();
+			cont.remove( centerComp );
+
+			super.uninstall();
+		}
+
+		@Override
+		public void doLayout() {
+			super.doLayout();
+
+			centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
 		}
 
 		@Override
@@ -346,6 +376,18 @@ public abstract class FlatWindowResizer
 		public void windowStateChanged( WindowEvent e ) {
 			updateVisibility();
 		}
+
+		@Override
+		protected void beginResizing( int resizeDir ) {
+			centerComp.setCursor( getPredefinedCursor( resizeDir ) );
+			centerComp.setVisible( true );
+		}
+
+		@Override
+		protected void endResizing() {
+			centerComp.setVisible( false );
+			centerComp.setCursor( null );
+		}
 	}
 
 	//---- class InternalFrameResizer -----------------------------------------
@@ -427,7 +469,18 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
-		protected void beginResizing( int direction ) {
+		protected void beginResizing( int resizeDir ) {
+			int direction = 0;
+			switch( resizeDir ) {
+				case N_RESIZE_CURSOR:	direction = NORTH; break;
+				case S_RESIZE_CURSOR:	direction = SOUTH; break;
+				case W_RESIZE_CURSOR:	direction = WEST; break;
+				case E_RESIZE_CURSOR:	direction = EAST; break;
+				case NW_RESIZE_CURSOR:	direction = NORTH_WEST; break;
+				case NE_RESIZE_CURSOR:	direction = NORTH_EAST; break;
+				case SW_RESIZE_CURSOR:	direction = SOUTH_WEST; break;
+				case SE_RESIZE_CURSOR:	direction = SOUTH_EAST; break;
+			}
 			desktopManager.get().beginResizingFrame( getFrame(), direction );
 		}
 
@@ -535,18 +588,7 @@ debug*/
 			dragRightOffset = windowBounds.x + windowBounds.width - xOnScreen;
 			dragBottomOffset = windowBounds.y + windowBounds.height - yOnScreen;
 
-			int direction = 0;
-			switch( resizeDir ) {
-				case N_RESIZE_CURSOR:	direction = NORTH; break;
-				case S_RESIZE_CURSOR:	direction = SOUTH; break;
-				case W_RESIZE_CURSOR:	direction = WEST; break;
-				case E_RESIZE_CURSOR:	direction = EAST; break;
-				case NW_RESIZE_CURSOR:	direction = NORTH_WEST; break;
-				case NE_RESIZE_CURSOR:	direction = NORTH_EAST; break;
-				case SW_RESIZE_CURSOR:	direction = SOUTH_WEST; break;
-				case SE_RESIZE_CURSOR:	direction = SOUTH_EAST; break;
-			}
-			beginResizing( direction );
+			beginResizing( resizeDir );
 		}
 
 		@Override
