@@ -46,8 +46,8 @@ glazedlists = "com.glazedlists:glazedlists:1.11.0"
 netbeans-api-awt = "org.netbeans.api:org-openide-awt:RELEASE112"
 
 # flatlaf-natives-jna
-jna = "net.java.dev.jna:jna:5.12.1"
-jna-platform = "net.java.dev.jna:jna-platform:5.12.1"
+jna = "net.java.dev.jna:jna:5.15.0"
+jna-platform = "net.java.dev.jna:jna-platform:5.15.0"
 
 # junit
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }

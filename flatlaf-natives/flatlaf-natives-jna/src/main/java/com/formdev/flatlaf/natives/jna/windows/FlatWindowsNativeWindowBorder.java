@@ -309,6 +309,8 @@ public class FlatWindowsNativeWindowBorder
 			WM_ENTERSIZEMOVE = 0x0231,
 			WM_EXITSIZEMOVE = 0x0232,
 
+			WM_DPICHANGED = 0x02E0,
+
 			WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
 
 		// WM_SIZE wParam
@@ -500,6 +502,22 @@ public class FlatWindowsNativeWindowBorder
 					if( isMovingOrSizing )
 						isMoving = true;
 					break;
+
+				case WM_DPICHANGED:
+					LRESULT lResult = User32Ex.INSTANCE.CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
+
+					// if window is maximized and DPI/scaling changed, then Windows
+					// does not send a subsequent WM_SIZE message and Java window bounds,
+					// which depend on scale factor, are not updated
+					boolean isMaximized = User32Ex.INSTANCE.IsZoomed( hwnd );
+					if( isMaximized ) {
+						MyRECT r = new MyRECT( new Pointer( lParam.longValue() ) );
+						int width = r.right - r.left;
+						int height = r.bottom - r.top;
+						User32Ex.INSTANCE.CallWindowProc( defaultWndProc, hwnd, WM_SIZE, new WPARAM( SIZE_MAXIMIZED ), MAKELPARAM( width, height ) );
+					}
+
+					return lResult;
 
 				case WM_ERASEBKGND:
 					// do not erase background while the user is moving the window,
@@ -819,6 +837,13 @@ public class FlatWindowsNativeWindowBorder
 		}
 
 		/**
+		 * Same implementation as MAKELPARAM(l, h) macro in winuser.h.
+		 */
+		private LPARAM MAKELPARAM( int low, int high ) {
+			return new LPARAM( MAKELONG( low, high ) );
+		}
+
+		/**
 		 * Same implementation as RGB(r,g,b) macro in wingdi.h.
 		 */
 		private DWORD RGB( int r, int g, int b ) {
@@ -932,6 +957,23 @@ public class FlatWindowsNativeWindowBorder
 //		public WINDOWPOS lppos;
 
 		public NCCALCSIZE_PARAMS( Pointer pointer ) {
+			super( pointer );
+			read();
+		}
+	}
+
+	//---- class MyRECT -------------------------------------------------------
+
+	@FieldOrder( { "left", "top", "right", "bottom" } )
+	public static class MyRECT
+		extends Structure
+	{
+		public int left;
+		public int top;
+		public int right;
+		public int bottom;
+
+		public MyRECT( Pointer pointer ) {
 			super( pointer );
 			read();
 		}

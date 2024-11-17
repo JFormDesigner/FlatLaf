@@ -19,3 +19,32 @@ The DLLs were built on a GitHub server with the help of GitHub Actions. See:
 [Native Libraries](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives.yml)
 workflow. Then the produced Artifacts ZIP was downloaded, signed DLLs with
 FormDev Software code signing certificate and committed the DLLs to Git.
+
+
+## Development
+
+To build the library on Windows using Gradle, (parts of)
+[Visual Studio Community
+2022](https://visualstudio.microsoft.com/downloads/)
+needs to be installed. After downloading and running `VisualStudioSetup.exe` the
+**Visual Studio Installer** is installed and started. Once running, it shows the
+**Workloads** tab that allows you to install additional packages. Either choose
+**Desktop development with C++**, or to save some disk space switch to the
+**Single Components** tab and choose following components (newest versions):
+
+- MSVC v143 - VS 2022 C++ x64/x86 Buildtools
+- MSVC v143 - VS 2022 C++ ARM64/ARM64EC Buildtools
+- Windows 11 SDK
+
+Note that the Visual Studio Installer shows many similar named components for
+MSVC. Make sure to choose exactly those components listed above.
+
+Using
+[Build Tools for Visual Studio 2022](https://visualstudio.microsoft.com/downloads/#remote-tools-for-visual-studio-2022)
+(installs only compiler and SDKs) instead of
+[Visual Studio Community
+2022](https://visualstudio.microsoft.com/downloads/)
+does not work with Gradle.
+
+[Visual Studio Code](https://code.visualstudio.com/) with **C/C++** extension
+can be used for C++ code editing.

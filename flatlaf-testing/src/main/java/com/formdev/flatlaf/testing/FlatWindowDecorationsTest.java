@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -74,6 +76,7 @@ public class FlatWindowDecorationsTest
 	}
 
 	private List<Image> images;
+	private Timer refreshStateTimer;
 
 	FlatWindowDecorationsTest() {
 		initComponents();
@@ -131,6 +134,49 @@ public class FlatWindowDecorationsTest
 				fullWindowContentButtonsBoundsLabel.setEnabled( bounds != null );
 				fullWindowContentButtonsBoundsField.setEnabled( bounds != null );
 			} );
+		}
+
+		if( window instanceof Frame ) {
+			AtomicInteger lastState = new AtomicInteger( -1 );
+			AtomicReference<Window> lastFullScreenWindow = new AtomicReference<>();
+			refreshStateTimer = new Timer( 500, e -> {
+				Frame frame = (Frame) window;
+				int state = frame.getExtendedState();
+				Window fullScreenWindow = window.getGraphicsConfiguration().getDevice().getFullScreenWindow();
+				if( state != lastState.get() || fullScreenWindow != lastFullScreenWindow.get() ) {
+					lastState.set( state );
+					lastFullScreenWindow.set( fullScreenWindow );
+
+					String s = "";
+					if( (state & Frame.ICONIFIED) != 0 )
+						s += "iconified ";
+					if( (state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH )
+						s += "maximized ";
+					else {
+						if( (state & Frame.MAXIMIZED_HORIZ) != 0 )
+							s += "maximized-horizontal ";
+						if( (state & Frame.MAXIMIZED_VERT) != 0 )
+							s += "maximized-vertical ";
+					}
+					if( fullScreenWindow == window )
+						s += "full-screen ";
+					if( s.isEmpty() )
+						s = "normal";
+
+					frameStateField.setText( s );
+				}
+			} );
+			refreshStateTimer.start();
+		}
+	}
+
+	@Override
+	public void removeNotify() {
+		super.removeNotify();
+
+		if( refreshStateTimer != null ) {
+			refreshStateTimer.stop();
+			refreshStateTimer = null;
 		}
 	}
 
@@ -653,6 +699,9 @@ debug*/
 		typeUtilityRadioButton = new JRadioButton();
 		typeSmallRadioButton = new JRadioButton();
 		showRectanglesCheckBox = new JCheckBox();
+		JPanel hSpacer1 = new JPanel(null);
+		JLabel frameStateLabel = new JLabel();
+		frameStateField = new JLabel();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -1092,6 +1141,16 @@ debug*/
 		showRectanglesCheckBox.setSelected(true);
 		showRectanglesCheckBox.addActionListener(e -> showRectangles());
 		add(showRectanglesCheckBox, "cell 0 3");
+		add(hSpacer1, "cell 2 3 2 1");
+
+		//---- frameStateLabel ----
+		frameStateLabel.setText("Frame state:");
+		add(frameStateLabel, "cell 2 3 2 1,alignx right,growx 0");
+
+		//---- frameStateField ----
+		frameStateField.setText("n/a");
+		frameStateField.setFont(frameStateField.getFont().deriveFont(frameStateField.getFont().getStyle() | Font.BOLD));
+		add(frameStateField, "cell 2 3 2 1,alignx right,growx 0");
 
 		//======== menuBar ========
 		{
@@ -1341,6 +1400,7 @@ debug*/
 	private JRadioButton typeUtilityRadioButton;
 	private JRadioButton typeSmallRadioButton;
 	private JCheckBox showRectanglesCheckBox;
+	private JLabel frameStateField;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

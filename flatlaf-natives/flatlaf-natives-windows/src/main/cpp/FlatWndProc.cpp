@@ -288,6 +288,23 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 				isMoving = true;
 			break;
 
+		case WM_DPICHANGED: {
+			LRESULT lResult = ::CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
+
+			// if window is maximized and DPI/scaling changed, then Windows
+			// does not send a subsequent WM_SIZE message and Java window bounds,
+			// which depend on scale factor, are not updated
+			bool isMaximized = ::IsZoomed( hwnd );
+			if( isMaximized ) {
+				RECT* r = reinterpret_cast<RECT*>( lParam );
+				int width = r->right - r->left;
+				int height = r->bottom - r->top;
+				::CallWindowProc( defaultWndProc, hwnd, WM_SIZE, SIZE_MAXIMIZED, MAKELPARAM( width, height ) );
+			}
+
+			return lResult;
+		}
+
 		case WM_ERASEBKGND:
 			// do not erase background while the user is moving the window,
 			// otherwise there may be rendering artifacts on HiDPI screens with Java 9+

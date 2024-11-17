@@ -10,6 +10,8 @@ FlatLaf Change Log
 - FlatLaf window decorations:
   - Windows: Fixed possible deadlock with TabbedPane in window title area in
     "full window content" mode. (issue #909)
+  - Windows: Fixed wrong layout in maximized frame after changing screen scale
+    factor. (issue #904)
   - Linux: Fixed continuous cursor toggling between resize and standard cursor
     when resizing window. (issue #907)
 
