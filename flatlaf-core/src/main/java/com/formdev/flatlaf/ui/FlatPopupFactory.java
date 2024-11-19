@@ -695,8 +695,6 @@ public class FlatPopupFactory
 			Container contentPane = ((JWindow)popupWindow).getContentPane();
 			contentPane.removeAll();
 			contentPane.add( contents, BorderLayout.CENTER );
-			popupWindow.invalidate();
-			popupWindow.validate();
 			popupWindow.pack();
 
 			// update client property on contents
@@ -957,12 +955,13 @@ public class FlatPopupFactory
 				int w = prefSize.width + insets.left + insets.right;
 				int h = prefSize.height + insets.top + insets.bottom;
 				dropShadowPanel2.setPreferredSize( new Dimension( w, h ) );
+				dropShadowPanel2.invalidate();
+				dropShadowWindow.pack();
 
-				// update drop shadow popup window location and size
+				// update drop shadow popup window location
 				int x = popupWindow.getX() - insets.left;
 				int y = popupWindow.getY() - insets.top;
-				dropShadowWindow.setBounds( x, y, w, h );
-				dropShadowWindow.pack();
+				dropShadowWindow.setLocation( x, y );
 			}
 		}
 	}

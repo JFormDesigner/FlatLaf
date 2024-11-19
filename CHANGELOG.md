@@ -14,6 +14,8 @@ FlatLaf Change Log
     factor. (issue #904)
   - Linux: Fixed continuous cursor toggling between resize and standard cursor
     when resizing window. (issue #907)
+- Popup: On Windows 10, fixed misplaced popup drop shadow. (issue #911;
+  regression in 3.5)
 
 
 ## 3.5.2
