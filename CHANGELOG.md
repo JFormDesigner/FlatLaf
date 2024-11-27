@@ -16,6 +16,7 @@ FlatLaf Change Log
     when resizing window. (issue #907)
 - Popup: On Windows 10, fixed misplaced popup drop shadow. (issue #911;
   regression in 3.5)
+- Theme Editor: Fixed using color picker on secondary screen.
 
 
 ## 3.5.2

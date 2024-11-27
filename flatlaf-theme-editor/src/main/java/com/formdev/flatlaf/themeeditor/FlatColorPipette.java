@@ -23,9 +23,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -97,16 +99,18 @@ class FlatColorPipette
 			// macOS: windows with opacity smaller than 0.05 does not receive
 			//        mouse clicked/pressed/released events (but mouse moved events)
 			setOpacity( SystemInfo.isMacOS ? 0.05f : 0.005f );
-			setBounds( owner.getGraphicsConfiguration().getBounds() );
+			GraphicsConfiguration gc = owner.getGraphicsConfiguration();
+			setBounds( (gc != null) ? gc.getBounds() : new Rectangle( Toolkit.getDefaultToolkit().getScreenSize() ) );
 
-			robot = new Robot( owner.getGraphicsConfiguration().getDevice() );
+			robot = (gc != null) ? new Robot( gc.getDevice() ) : new Robot();
 			magnifier = new Magnifier( this, robot );
 
 			MouseAdapter mouseListener = new MouseAdapter() {
 				@Override
 				public void mouseMoved( MouseEvent e ) {
-					lastX = e.getX();
-					lastY = e.getY();
+					// adding location of pick window is necessary for secondary screens
+					lastX = e.getX() + getX();
+					lastY = e.getY() + getY();
 
 					// get color at mouse location
 					// (temporary change opacity to zero to get correct color from robot)
@@ -133,7 +137,7 @@ class FlatColorPipette
 						// --> use last hover color on macOS
 						color = SystemInfo.isMacOS
 							? lastHoverColor
-							: robot.getPixelColor( e.getX(), e.getY() );
+							: robot.getPixelColor( e.getX() + getX(), e.getY() + getY() );
 					}
 					pick( color );
 				}
