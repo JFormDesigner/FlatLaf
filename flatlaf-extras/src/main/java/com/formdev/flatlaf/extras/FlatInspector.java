@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
@@ -450,15 +451,18 @@ public class FlatInspector
 		Dimension size = tip.getPreferredSize();
 
 		// position the tip in the visible area
-		Rectangle visibleRect = rootPane.getGraphicsConfiguration().getBounds();
-		if( tx + size.width > visibleRect.x + visibleRect.width )
-			tx -= size.width + UIScale.scale( 16 );
-		if( ty + size.height > visibleRect.y + visibleRect.height )
-			ty -= size.height + UIScale.scale( 32 );
-		if( tx < visibleRect.x )
-			tx = visibleRect.x;
-		if( ty < visibleRect.y )
-			ty = visibleRect.y;
+		GraphicsConfiguration gc = rootPane.getGraphicsConfiguration();
+		if( gc != null ) {
+			Rectangle visibleRect = gc.getBounds();
+			if( tx + size.width > visibleRect.x + visibleRect.width )
+				tx -= size.width + UIScale.scale( 16 );
+			if( ty + size.height > visibleRect.y + visibleRect.height )
+				ty -= size.height + UIScale.scale( 32 );
+			if( tx < visibleRect.x )
+				tx = visibleRect.x;
+			if( ty < visibleRect.y )
+				ty = visibleRect.y;
+		}
 
 		PopupFactory popupFactory = PopupFactory.getSharedInstance();
 		popup = popupFactory.getPopup( c, tip, tx, ty );

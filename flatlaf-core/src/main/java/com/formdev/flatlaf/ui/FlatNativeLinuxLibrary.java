@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -96,7 +97,11 @@ class FlatNativeLinuxLibrary
 	}
 
 	private static Point scale( Window window, Point pt ) {
-		AffineTransform transform = window.getGraphicsConfiguration().getDefaultTransform();
+		GraphicsConfiguration gc = window.getGraphicsConfiguration();
+		if( gc == null )
+			return pt;
+
+		AffineTransform transform = gc.getDefaultTransform();
 		int x = (int) Math.round( pt.x * transform.getScaleX() );
 		int y = (int) Math.round( pt.y * transform.getScaleY() );
 		return new Point( x, y );

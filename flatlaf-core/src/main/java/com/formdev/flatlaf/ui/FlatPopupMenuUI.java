@@ -239,11 +239,13 @@ public class FlatPopupMenuUI
 		if( gc == null && popupMenu.getInvoker() != null )
 			gc = popupMenu.getInvoker().getGraphicsConfiguration();
 
-		// compute screen height
+		if( gc == null )
+			return new Rectangle( Toolkit.getDefaultToolkit().getScreenSize() );
+
+		// compute screen bounds
 		// (always subtract screen insets because there is no API to detect whether
 		// the popup can overlap the taskbar; see JPopupMenu.canPopupOverlapTaskBar())
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Rectangle screenBounds = (gc != null) ? gc.getBounds() : new Rectangle( toolkit.getScreenSize() );
+		Rectangle screenBounds = gc.getBounds();
 		Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
 		return FlatUIUtils.subtractInsets( screenBounds, screenInsets );
 	}

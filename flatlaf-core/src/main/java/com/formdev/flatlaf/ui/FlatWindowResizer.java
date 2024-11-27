@@ -329,20 +329,17 @@ public abstract class FlatWindowResizer
 
 		@Override
 		protected boolean limitToParentBounds() {
-			return limitResizeToScreenBounds && window != null;
+			return limitResizeToScreenBounds && window != null && window.getGraphicsConfiguration() != null;
 		}
 
 		@Override
 		protected Rectangle getParentBounds() {
-			if( limitResizeToScreenBounds && window != null ) {
-				GraphicsConfiguration gc = window.getGraphicsConfiguration();
-				Rectangle bounds = gc.getBounds();
-				Insets insets = window.getToolkit().getScreenInsets( gc );
-				return new Rectangle( bounds.x + insets.left, bounds.y + insets.top,
-					bounds.width - insets.left - insets.right,
-					bounds.height - insets.top - insets.bottom );
-			}
-			return null;
+			GraphicsConfiguration gc = window.getGraphicsConfiguration();
+			Rectangle bounds = gc.getBounds();
+			Insets insets = window.getToolkit().getScreenInsets( gc );
+			return new Rectangle( bounds.x + insets.left, bounds.y + insets.top,
+				bounds.width - insets.left - insets.right,
+				bounds.height - insets.top - insets.bottom );
 		}
 
 		@Override

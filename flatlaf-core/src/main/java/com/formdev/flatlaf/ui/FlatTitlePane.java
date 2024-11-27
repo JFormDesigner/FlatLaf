@@ -824,7 +824,8 @@ public class FlatTitlePane
 		Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
 		if( !hasNativeCustomDecoration() &&
 			(oldMaximizedBounds == null ||
-			 Objects.equals( oldMaximizedBounds, rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) )
+			 Objects.equals( oldMaximizedBounds, rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) &&
+			window.getGraphicsConfiguration() != null )
 		{
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 
