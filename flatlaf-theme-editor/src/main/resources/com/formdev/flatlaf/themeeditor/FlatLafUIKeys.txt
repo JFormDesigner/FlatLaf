@@ -443,6 +443,7 @@ List.cellNoFocusBorder
 List.cellRenderer
 List.dropCellBackground
 List.dropCellForeground
+List.alternateRowColor
 List.dropLineColor
 List.focusCellHighlightBorder
 List.focusInputMap

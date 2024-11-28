@@ -57,6 +57,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault List.foreground						Color
  * @uiDefault List.selectionBackground				Color
  * @uiDefault List.selectionForeground				Color
+ * @uiDefault List.alternateRowColor				Color
  * @uiDefault List.dropLineColor					Color
  * @uiDefault List.border							Border
  * @uiDefault List.cellRenderer						ListCellRenderer
@@ -93,6 +94,7 @@ public class FlatListUI
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
+	/** @since 3.6 */ @Styleable protected Color alternateRowColor;
 	/** @since 3 */ @Styleable protected Insets selectionInsets;
 	/** @since 3 */ @Styleable protected int selectionArc;
 
@@ -129,6 +131,7 @@ public class FlatListUI
 		selectionForeground = UIManager.getColor( "List.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "List.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "List.selectionInactiveForeground" );
+		alternateRowColor = UIManager.getColor( "List.alternateRowColor" );
 		selectionInsets = UIManager.getInsets( "List.selectionInsets" );
 		selectionArc = UIManager.getInt( "List.selectionArc" );
 
@@ -143,6 +146,7 @@ public class FlatListUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+		alternateRowColor = null;
 
 		oldStyleValues = null;
 	}
@@ -304,6 +308,15 @@ public class FlatListUI
 		Component rendererComponent = cellRenderer.getListCellRendererComponent( list,
 			dataModel.getElementAt( row ), row, isSelected,
 			FlatUIUtils.isPermanentFocusOwner( list ) && (row == leadIndex) );
+		
+		if( alternateRowColor != null && row % 2 != 0 ) {
+			g.setColor( alternateRowColor );
+			
+			// paint respecting selection arc
+			final float arc = UIScale.scale( selectionArc / 2f );			
+			FlatUIUtils.paintSelection( (Graphics2D) g, 0, rowBounds.y, list.getWidth(), rowBounds.height,
+					UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
+		}
 
 		//
 		boolean isFileList = Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) );
