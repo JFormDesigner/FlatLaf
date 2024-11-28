@@ -30,12 +30,26 @@ HWND getWindowHandle( JNIEnv* env, jobject window );
 
 //---- Utility ----------------------------------------------------------------
 
+typedef LONG (WINAPI *RtlGetVersion_Type)( OSVERSIONINFO* );
+
 extern "C"
 JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_getOSBuildNumberImpl
 	( JNIEnv* env, jclass cls )
 {
 	OSVERSIONINFO info;
 	info.dwOSVersionInfoSize = sizeof( info );
+	info.dwBuildNumber = 0;
+
+	// use RtlGetVersion for the case that app manifest does not specify Windows 10+ compatibility
+	// https://www.codeproject.com/Articles/5336372/Windows-Version-Detection
+	HMODULE ntdllModule = ::GetModuleHandleA( "ntdll.dll" );
+	if( ntdllModule != NULL ) {
+		RtlGetVersion_Type pRtlGetVersion = (RtlGetVersion_Type) ::GetProcAddress( ntdllModule, "RtlGetVersion" );
+		if( pRtlGetVersion != NULL && pRtlGetVersion( &info ) == 0 )
+			return info.dwBuildNumber;
+	}
+
+	// fallback
 	if( !::GetVersionEx( &info ) )
 		return 0;
 	return info.dwBuildNumber;

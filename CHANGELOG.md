@@ -18,7 +18,8 @@ FlatLaf Change Log
   regression in 3.5)
 - Popup: Fixed NPE if `GraphicsConfiguration` is `null` on Windows. (issue #921)
 - Theme Editor: Fixed using color picker on secondary screen.
-
+- Fixed detection of Windows 11 if custom exe launcher does not specify Windows
+  10+ compatibility in application manifest. (issue #916)
 
 ## 3.5.2
 
