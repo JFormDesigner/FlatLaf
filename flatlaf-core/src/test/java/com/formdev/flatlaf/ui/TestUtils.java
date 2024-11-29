@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Font;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.UIManager;
@@ -43,7 +44,12 @@ public class TestUtils
 	}
 
 	public static void cleanup() {
-		UIManager.put( "defaultFont", null );
+		// remove all properties added by UIManager.put()
+		Iterator<Object> it = UIManager.getDefaults().keySet().iterator();
+		while( it.hasNext() ) {
+			it.next();
+			it.remove();
+		}
 	}
 
 	public static void scaleFont( float factor ) {
