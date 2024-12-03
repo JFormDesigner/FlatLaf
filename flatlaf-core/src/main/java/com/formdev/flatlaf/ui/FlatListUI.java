@@ -28,6 +28,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -308,16 +309,7 @@ public class FlatListUI
 		Component rendererComponent = cellRenderer.getListCellRendererComponent( list,
 			dataModel.getElementAt( row ), row, isSelected,
 			FlatUIUtils.isPermanentFocusOwner( list ) && (row == leadIndex) );
-		
-		if( alternateRowColor != null && row % 2 != 0 ) {
-			g.setColor( alternateRowColor );
-			
-			// paint respecting selection arc
-			final float arc = UIScale.scale( selectionArc / 2f );			
-			FlatUIUtils.paintSelection( (Graphics2D) g, 0, rowBounds.y, list.getWidth(), rowBounds.height,
-					UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
-		}
-
+	
 		//
 		boolean isFileList = Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) );
 		int cx, cw;
@@ -330,6 +322,18 @@ public class FlatListUI
 		} else {
 			cx = rowBounds.x;
 			cw = rowBounds.width;
+		}
+		
+		// filelist/combobox does not support alternate row color
+		if( !isFileList && !(dataModel instanceof DefaultComboBoxModel) ) {
+			if( alternateRowColor != null && row % 2 != 0 ) {
+				g.setColor( alternateRowColor );
+				
+				// paint respecting selection arc
+				final float arc = UIScale.scale( selectionArc / 2f );			
+				FlatUIUtils.paintSelection( (Graphics2D) g, 0, rowBounds.y, list.getWidth(), rowBounds.height,
+						UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
+			}
 		}
 
 		// rounded selection or selection insets
