@@ -138,7 +138,7 @@ public interface FlatSystemProperties
 	/**
 	 * Specifies whether native rounded popup borders should be used (if supported by operating system).
 	 * <p>
-	 * (requires Window 11 or macOS)
+	 * (requires Windows 11 or macOS)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}; except on macOS 14.4+ where it is {@code false}
