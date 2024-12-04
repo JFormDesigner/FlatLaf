@@ -23,13 +23,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 /**
  * A Flat LaF that is able to load UI defaults from properties passed to the constructor.
  * <p>
  * Specify the base theme in the properties with {@code @baseTheme=<baseTheme>}.
  * Allowed values for {@code <baseTheme>} are {@code light} (the default), {@code dark},
- * {@code intellij} or {@code darcula}.
+ * {@code intellij}, {@code darcula}, {@code maclight} or {@code macdark}.
  * <p>
  * The properties are applied after loading the base theme and may overwrite base properties.
  * All features of FlatLaf properties files are available.
@@ -71,7 +73,8 @@ public class FlatPropertiesLaf
 		this.properties = properties;
 
 		baseTheme = properties.getProperty( "@baseTheme", "light" );
-		dark = "dark".equalsIgnoreCase( baseTheme ) || "darcula".equalsIgnoreCase( baseTheme );
+		dark = "dark".equalsIgnoreCase( baseTheme ) || "darcula".equalsIgnoreCase( baseTheme ) ||
+			"macdark".equalsIgnoreCase( baseTheme );
 	}
 
 	@Override
@@ -115,6 +118,16 @@ public class FlatPropertiesLaf
 			case "darcula":
 				lafClasses.add( FlatDarkLaf.class );
 				lafClasses.add( FlatDarculaLaf.class );
+				break;
+
+			case "maclight":
+				lafClasses.add( FlatLightLaf.class );
+				lafClasses.add( FlatMacLightLaf.class );
+				break;
+
+			case "macdark":
+				lafClasses.add( FlatDarkLaf.class );
+				lafClasses.add( FlatMacDarkLaf.class );
 				break;
 		}
 		return lafClasses;

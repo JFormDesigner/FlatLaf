@@ -25,6 +25,10 @@ FlatLaf Change Log
 - Linux: Fixed slightly different font size (or letter width) used to paint HTML
   text when default font family is _Cantarell_ (e.g. on Fedora). (issue #912)
 
+#### Other Changes
+
+- Class `FlatPropertiesLaf` now supports FlatLaf macOS themes as base themes.
+
 
 ## 3.5.2
 

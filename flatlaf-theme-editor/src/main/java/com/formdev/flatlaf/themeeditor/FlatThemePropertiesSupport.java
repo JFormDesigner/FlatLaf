@@ -241,7 +241,7 @@ class FlatThemePropertiesSupport
 	}
 
 	static boolean isDark( String baseTheme ) {
-		return "dark".equals( baseTheme ) || "darcula".equals( baseTheme );
+		return "dark".equals( baseTheme ) || "darcula".equals( baseTheme ) || "macdark".equals( baseTheme );
 	}
 
 	private String getBaseTheme() {
