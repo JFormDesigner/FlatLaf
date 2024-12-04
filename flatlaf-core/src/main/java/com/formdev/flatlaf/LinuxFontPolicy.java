@@ -111,7 +111,7 @@ class LinuxFontPolicy
 		if( logicalFamily != null )
 			family = logicalFamily;
 
-		return createFontEx( family, style, size, dsize );
+		return createFontEx( family, style, size );
 	}
 
 	/**
@@ -121,9 +121,9 @@ class LinuxFontPolicy
 	 * E.g. family 'URW Bookman Light' is not found, but 'URW Bookman' is found.
 	 * If still not found, then font of family 'Dialog' is returned.
 	 */
-	private static Font createFontEx( String family, int style, int size, double dsize ) {
+	private static Font createFontEx( String family, int style, int size ) {
 		for(;;) {
-			Font font = createFont( family, style, size, dsize );
+			Font font = FlatLaf.createCompositeFont( family, style, size );
 
 			if( Font.DIALOG.equals( family ) )
 				return font;
@@ -135,7 +135,7 @@ class LinuxFontPolicy
 				// - character width is zero (e.g. font Cantarell; Fedora; Oracle Java 8)
 				FontMetrics fm = StyleContext.getDefaultStyleContext().getFontMetrics( font );
 				if( fm.getHeight() > size * 2 || fm.stringWidth( "a" ) == 0 )
-					return createFont( Font.DIALOG, style, size, dsize );
+					return FlatLaf.createCompositeFont( Font.DIALOG, style, size );
 
 				return font;
 			}
@@ -143,7 +143,7 @@ class LinuxFontPolicy
 			// find last word in family
 			int index = family.lastIndexOf( ' ' );
 			if( index < 0 )
-				return createFont( Font.DIALOG, style, size, dsize );
+				return FlatLaf.createCompositeFont( Font.DIALOG, style, size );
 
 			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
 			String lastWord = family.substring( index + 1 ).toLowerCase( Locale.ENGLISH );
@@ -153,15 +153,6 @@ class LinuxFontPolicy
 			// remove last word from family and try again
 			family = family.substring( 0, index );
 		}
-	}
-
-	private static Font createFont( String family, int style, int size, double dsize ) {
-		Font font = FlatLaf.createCompositeFont( family, style, size );
-
-		// set font size in floating points
-		font = font.deriveFont( style, (float) dsize );
-
-		return font;
 	}
 
 	private static double getGnomeFontScale() {
@@ -257,7 +248,7 @@ class LinuxFontPolicy
 		if( size < 1 )
 			size = 1;
 
-		return createFont( family, style, size, dsize );
+		return FlatLaf.createCompositeFont( family, style, size );
 	}
 
 	@SuppressWarnings( "MixedMutabilityReturnType" ) // Error Prone

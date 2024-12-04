@@ -20,6 +20,9 @@ FlatLaf Change Log
 - Theme Editor: Fixed using color picker on secondary screen.
 - Fixed detection of Windows 11 if custom exe launcher does not specify Windows
   10+ compatibility in application manifest. (issue #916)
+- Linux: Fixed slightly different font size (or letter width) used to paint HTML
+  text when default font family is _Cantarell_ (e.g. on Fedora). (issue #912)
+
 
 ## 3.5.2
 
