@@ -585,7 +585,7 @@ public class FlatComboBoxUI
 			FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 			// paint arrow button background
-			if( enabled && !isCellRenderer ) {
+			if( enabled && !isCellRenderer && arrowButton.isVisible() ) {
 				Color buttonColor = paintButton
 					? buttonEditableBackground
 					: (buttonFocusedBackground != null || focusedBackground != null) && isPermanentFocusOwner( comboBox )
@@ -612,7 +612,7 @@ public class FlatComboBoxUI
 			}
 
 			// paint vertical line between value and arrow button
-			if( paintButton ) {
+			if( paintButton && arrowButton.isVisible() ) {
 				Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
 				if( separatorColor != null && buttonSeparatorWidth > 0 ) {
 					g2.setColor( separatorColor );

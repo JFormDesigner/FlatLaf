@@ -59,6 +59,11 @@ public class FlatComponentsTest
 		};
 		for( JSlider slider : allSliders )
 			slider.addChangeListener( sliderChanged );
+
+		UIManager.addPropertyChangeListener( e -> {
+			if( "lookAndFeel".equals( e.getPropertyName() ) && hideArrowButtonCheckBox.isSelected() )
+				SwingUtilities.invokeLater( () -> hideArrowButton() );
+		} );
 	}
 
 	private void changeProgress() {
@@ -124,6 +129,18 @@ public class FlatComponentsTest
 		for( Component c : getComponents() ) {
 			if( c instanceof AbstractButton )
 				((AbstractButton)c).setFocusPainted( focusPainted );
+		}
+	}
+
+	private void hideArrowButton() {
+		boolean hideArrowButton = hideArrowButtonCheckBox.isSelected();
+
+		for( Component c : getComponents() ) {
+			if( c instanceof JComboBox ) {
+				Component b = ((JComboBox<?>)c).getComponent( 0 );
+				if( b instanceof AbstractButton )
+					b.setVisible( !hideArrowButton );
+			}
 		}
 	}
 
@@ -380,6 +397,7 @@ public class FlatComponentsTest
 		magentaOutlineRadioButton = new JRadioButton();
 		magentaCyanOutlineRadioButton = new JRadioButton();
 		focusPaintedCheckBox = new JCheckBox();
+		hideArrowButtonCheckBox = new JCheckBox();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -1234,9 +1252,10 @@ public class FlatComponentsTest
 				"[]" +
 				"[]",
 				// rows
-				"[]" +
-				"[]" +
-				"[]" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
 				"[]"));
 
 			//---- buttonTypeComboBox ----
@@ -1290,13 +1309,18 @@ public class FlatComponentsTest
 				magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
 				panel4.add(magentaCyanOutlineRadioButton);
 			}
-			panel5.add(panel4, "cell 0 2 1 2");
+			panel5.add(panel4, "cell 0 2 1 3");
 
 			//---- focusPaintedCheckBox ----
 			focusPaintedCheckBox.setText("focusPainted");
 			focusPaintedCheckBox.setSelected(true);
 			focusPaintedCheckBox.addActionListener(e -> focusPaintedChanged());
 			panel5.add(focusPaintedCheckBox, "cell 1 2");
+
+			//---- hideArrowButtonCheckBox ----
+			hideArrowButtonCheckBox.setText("hide arrow button");
+			hideArrowButtonCheckBox.addActionListener(e -> hideArrowButton());
+			panel5.add(hideArrowButtonCheckBox, "cell 1 3");
 		}
 		add(panel5, "cell 5 13 2 10,grow");
 
@@ -1703,6 +1727,7 @@ public class FlatComponentsTest
 	private JRadioButton magentaOutlineRadioButton;
 	private JRadioButton magentaCyanOutlineRadioButton;
 	private JCheckBox focusPaintedCheckBox;
+	private JCheckBox hideArrowButtonCheckBox;
 	private JSlider slider1;
 	private JSlider slider6;
 	private JCheckBox sliderPaintTrackCheckBox;
