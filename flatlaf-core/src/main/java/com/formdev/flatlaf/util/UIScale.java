@@ -33,6 +33,7 @@ import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.UIResource;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
@@ -188,7 +189,9 @@ public class UIScale
 		// because even if we are on a HiDPI display it is not sure
 		// that a larger font size is set by the current LaF
 		// (e.g. can avoid large icons with small text)
-		Font font = UIManager.getFont( "defaultFont" );
+		Font font = null;
+		if( UIManager.getLookAndFeel() instanceof FlatLaf )
+			font = UIManager.getFont( "defaultFont" );
 		if( font == null )
 			font = UIManager.getFont( "Label.font" );
 
@@ -244,6 +247,16 @@ public class UIScale
 	}
 
 	private static float computeScaleFactor( Font font ) {
+		String customFontSizeDivider = System.getProperty( "flatlaf.uiScale.fontSizeDivider" );
+		if( customFontSizeDivider != null ) {
+			try {
+				float fontSizeDivider = Math.max( Integer.parseInt( customFontSizeDivider ), 10 );
+				return font.getSize() / fontSizeDivider;
+			} catch( NumberFormatException ex ) {
+				// ignore
+			}
+		}
+
 		// default font size
 		float fontSizeDivider = 12f;
 
