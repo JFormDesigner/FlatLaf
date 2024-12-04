@@ -14,6 +14,8 @@ FlatLaf Change Log
     factor. (issue #904)
   - Linux: Fixed continuous cursor toggling between resize and standard cursor
     when resizing window. (issue #907)
+  - Fixed sometimes broken window moving with SplitPane in window title area in
+    "full window content" mode. (issue #926)
 - Popup: On Windows 10, fixed misplaced popup drop shadow. (issue #911;
   regression in 3.5)
 - Popup: Fixed NPE if `GraphicsConfiguration` is `null` on Windows. (issue #921)

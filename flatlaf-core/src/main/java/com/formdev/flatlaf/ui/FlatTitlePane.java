@@ -1109,8 +1109,18 @@ public class FlatTitlePane
 			// if component is not fully layouted, do not invoke function
 			// because it is too dangerous that the function tries to layout the component,
 			// which could cause a dead lock
-			if( !c.isValid() )
+			if( !c.isValid() ) {
+				// revalidate if necessary so that it is valid when invoked again later
+				EventQueue.invokeLater( () -> {
+					Window w = SwingUtilities.windowForComponent( c );
+					if( w != null )
+						w.revalidate();
+					else
+						c.revalidate();
+				} );
+
 				return false; // assume that this is not a caption because the component has mouse listeners
+			}
 
 			if( caption instanceof Function ) {
 				// check client property function value
