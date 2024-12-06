@@ -16,11 +16,8 @@
 
 package com.formdev.flatlaf.ui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Locale;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -28,6 +25,8 @@ import javax.swing.text.View;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Karl Tauber
@@ -71,6 +70,15 @@ public class TestFlatHTML
 
 		testHtmlBaseSize( "<html>${BASE_SIZE}<style type='text/css'>body { color: #f00; }</style>" + bodyInBody + "</html>", bodyPlain );
 		testHtmlBaseSize( "<html>${BASE_SIZE}<style type='text/css'>body { color: #f00; }</style><h1>header1</h1>" + body + "</html>", "header1\n" + bodyPlain );
+	}
+
+	@Test
+	void htmlOnComponentWithNullFont() {
+		assertDoesNotThrow( () -> {
+			JLabel label = new JLabel();
+			label.setFont( null );
+			label.setText( "<html>foo<br>bar</html>" );
+		} );
 	}
 
 	private void testHtmlBaseSize( String html, String expectedPlain ) {
