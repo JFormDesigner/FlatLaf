@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.6-SNAPSHOT
+
+#### New features and improvements
+
+- Extras: `FlatSVGIcon` color filters now can access painting component to
+  implement component state based color mappings. (PR #906)
+
+
 ## 3.5.3
 
 #### Fixed bugs

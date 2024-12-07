@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -588,7 +589,12 @@ public class FlatSVGIcon
 				: GrayFilter.createDisabledIconFilter( dark );
 		}
 
-		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), colorFilter, ColorFilter.getInstance(), grayFilter );
+		ColorFilter globalColorFilter = ColorFilter.getInstance();
+		globalColorFilter.c = c;
+		if( colorFilter != null )
+			colorFilter.c = c;
+
+		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), colorFilter, globalColorFilter, grayFilter );
 
 		try {
 			setRenderingHints( g2 );
@@ -596,6 +602,10 @@ public class FlatSVGIcon
 			paintSvg( g2, x, y );
 		} finally {
 			g2.dispose();
+
+			globalColorFilter.c = null;
+			if( colorFilter != null )
+				colorFilter.c = null;
 		}
 	}
 
@@ -760,6 +770,8 @@ public class FlatSVGIcon
 		private Map<Color, Color> colorMap;
 		private Map<Color, Color> darkColorMap;
 		private Function<Color, Color> mapper;
+		private BiFunction<Component, Color, Color> mapperEx;
+		private Component c;
 
 		/**
 		 * Returns the global ColorFilter that is applied to all icons.
@@ -801,6 +813,22 @@ public class FlatSVGIcon
 		}
 
 		/**
+		 * Creates a color modifying function that changes painted colors.
+		 * The {@link BiFunction} gets passed the component and
+		 * the original color and returns a modified one.
+		 * <p>
+		 * Examples:
+		 * A ColorFilter can be used to brighten colors of the icon (depending on component state if desired):
+		 * <pre>new ColorFilter( (c, color) -&gt; c.isEnabled() ? color.brighter() : color );</pre>
+		 *
+		 * @param mapperEx The color mapper function
+		 * @since 3.6
+		 */
+		public ColorFilter( BiFunction<Component, Color, Color> mapperEx ) {
+			setMapperEx( mapperEx );
+		}
+
+		/**
 		 * Returns a color modifying function or {@code null}
 		 *
 		 * @since 1.2
@@ -821,10 +849,37 @@ public class FlatSVGIcon
 		 * <pre>filter.setMapper( color -&gt; Color.RED );</pre>
 		 *
 		 * @param mapper The color mapper function
+		 * @see #setMapperEx(BiFunction)
 		 * @since 1.2
 		 */
 		public void setMapper( Function<Color, Color> mapper ) {
 			this.mapper = mapper;
+		}
+
+		/**
+		 * Returns a color modifying function or {@code null}
+		 *
+		 * @since 3.6
+		 */
+		public BiFunction<Component, Color, Color> getMapperEx() {
+			return mapperEx;
+		}
+
+		/**
+		 * Sets a color modifying function that changes painted colors.
+		 * The {@link BiFunction} gets passed the component and
+		 * the original color and returns a modified one.
+		 * <p>
+		 * Examples:
+		 * A ColorFilter can be used to brighten colors of the icon (depending on component state if desired):
+		 * <pre>filter.setMapperEx( (c, color) -&gt; c.isEnabled() ? color.brighter() : color );</pre>
+		 *
+		 * @param mapperEx The color mapper function
+		 * @see #setMapper(Function)
+		 * @since 3.6
+		 */
+		public void setMapperEx( BiFunction<Component, Color, Color> mapperEx ) {
+			this.mapperEx = mapperEx;
 		}
 
 		/**
@@ -936,12 +991,21 @@ public class FlatSVGIcon
 		}
 
 		public Color filter( Color color ) {
+			return filter( c, color );
+		}
+
+		/** @since 3.6 */
+		public Color filter( Component c, Color color ) {
 			// apply mappings
 			color = applyMappings( color );
 
 			// apply mapper function
 			if( mapper != null )
 				color = mapper.apply( color );
+
+			// apply mapperEx function
+			if( mapperEx != null )
+				color = mapperEx.apply( c, color );
 
 			return color;
 		}
@@ -972,6 +1036,16 @@ public class FlatSVGIcon
 			}
 
 			return color;
+		}
+
+		/**
+		 * Returns the component passed to {@link FlatSVGIcon#paintIcon(Component, Graphics, int, int)}.
+		 * This allows color mapping depend on component state (e.g. enabled, selected, hover, etc).
+		 *
+		 * @since 3.6
+		 */
+		public Component getPaintingComponent() {
+			return c;
 		}
 
 		/**
