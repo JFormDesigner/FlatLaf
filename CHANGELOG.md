@@ -8,6 +8,10 @@ FlatLaf Change Log
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (PR #906)
 
+#### Fixed bugs
+
+- HTML: Fixed NPE when using HTML text on a component with `null` font. (issue
+  #930; PR #931; regression in 3.5)
 
 ## 3.5.3
 
