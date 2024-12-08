@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Tree: Support for alternate row highlighting. (PR #903)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (PR #906)
 
