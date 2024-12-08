@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - HTML: Fixed NPE when using HTML text on a component with `null` font. (issue
   #930; PR #931; regression in 3.5)
+- Linux: Fixed NPE when using FlatLaf window decorations and switching theme.
+  (issue #933; regression in 3.5.3)
 
 
 ## 3.5.3
