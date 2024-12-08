@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
@@ -74,9 +75,9 @@ public class FlatHTML
 		for( int i = 1; i <= 7; i++ )
 			System.out.println( i+": "+ styleSheet.getPointSize( i ) );
 debug*/
-		int fontBaseSize = c.getFont().getSize();
+		Font font = c.getFont();
 		if( styleSheet.getPointSize( 7 ) != 36f ||
-			styleSheet.getPointSize( 4 ) == fontBaseSize )
+			font == null || styleSheet.getPointSize( 4 ) == font.getSize() )
 		  return;
 
 		// check whether view uses "absolute-size" keywords (e.g. "x-large") for font-size
@@ -97,7 +98,7 @@ debug*/
 			return;
 
 		// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
-		String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
+		String style = "<style>BASE_SIZE " + font.getSize() + "</style>";
 		String openTag = "";
 		String closeTag = "";
 

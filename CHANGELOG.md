@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 3.5.4-SNAPSHOT
+
+#### Fixed bugs
+
+- HTML: Fixed NPE when using HTML text on a component with `null` font. (issue
+  #930; PR #931; regression in 3.5)
+
+
 ## 3.5.3
 
 #### Fixed bugs
