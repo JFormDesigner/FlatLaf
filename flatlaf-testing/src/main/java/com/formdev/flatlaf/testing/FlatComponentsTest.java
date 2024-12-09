@@ -20,6 +20,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
@@ -142,6 +143,36 @@ public class FlatComponentsTest
 					b.setVisible( !hideArrowButton );
 			}
 		}
+	}
+
+	private void transparentBackground() {
+		EventQueue.invokeLater( () -> {
+			boolean transparent = transparentBackgroundCheckBox.isSelected();
+			Color transparentColor = new Color( 0, true );
+			ColorUIResource restoreColor = new ColorUIResource( Color.white );
+
+			FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
+				if( c instanceof JComboBox ) {
+					((JComboBox<?>)c).putClientProperty( FlatClientProperties.STYLE,
+						transparent ? "background: #0000; buttonBackground: #0000; buttonEditableBackground: #0000" : null );
+				} else if( c instanceof JSpinner ) {
+					((JSpinner)c).putClientProperty( FlatClientProperties.STYLE,
+						transparent ? "background: #0000; buttonBackground: #0000" : null );
+				} else if( c instanceof JComponent )
+					c.setBackground( transparent ? transparentColor : restoreColor );
+				else
+					return;
+
+				// if background color is transparent it is also required to make the component non-opaque
+				// DO NOT USE LookAndFeel.installProperty() in real-world applications
+				//            instead use c.setOpaque( false )
+				if( transparent )
+					LookAndFeel.installProperty( (JComponent) c, "opaque", false );
+			} );
+
+			if( !transparent )
+				SwingUtilities.updateComponentTreeUI( this );
+		} );
 	}
 
 	private void roundRectChanged() {
@@ -398,6 +429,7 @@ public class FlatComponentsTest
 		magentaCyanOutlineRadioButton = new JRadioButton();
 		focusPaintedCheckBox = new JCheckBox();
 		hideArrowButtonCheckBox = new JCheckBox();
+		transparentBackgroundCheckBox = new JCheckBox();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -1256,6 +1288,7 @@ public class FlatComponentsTest
 				"[]0" +
 				"[]0" +
 				"[]0" +
+				"[]0" +
 				"[]"));
 
 			//---- buttonTypeComboBox ----
@@ -1309,7 +1342,7 @@ public class FlatComponentsTest
 				magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
 				panel4.add(magentaCyanOutlineRadioButton);
 			}
-			panel5.add(panel4, "cell 0 2 1 3");
+			panel5.add(panel4, "cell 0 2 1 4");
 
 			//---- focusPaintedCheckBox ----
 			focusPaintedCheckBox.setText("focusPainted");
@@ -1321,6 +1354,11 @@ public class FlatComponentsTest
 			hideArrowButtonCheckBox.setText("hide arrow button");
 			hideArrowButtonCheckBox.addActionListener(e -> hideArrowButton());
 			panel5.add(hideArrowButtonCheckBox, "cell 1 3");
+
+			//---- transparentBackgroundCheckBox ----
+			transparentBackgroundCheckBox.setText("transparent background");
+			transparentBackgroundCheckBox.addActionListener(e -> transparentBackground());
+			panel5.add(transparentBackgroundCheckBox, "cell 1 4");
 		}
 		add(panel5, "cell 5 13 2 10,grow");
 
@@ -1728,6 +1766,7 @@ public class FlatComponentsTest
 	private JRadioButton magentaCyanOutlineRadioButton;
 	private JCheckBox focusPaintedCheckBox;
 	private JCheckBox hideArrowButtonCheckBox;
+	private JCheckBox transparentBackgroundCheckBox;
 	private JSlider slider1;
 	private JSlider slider6;
 	private JCheckBox sliderPaintTrackCheckBox;
