@@ -85,9 +85,12 @@ public class FlatUIDefaultsInspector
 	 * Installs a key listener into the application that allows enabling and disabling
 	 * the UI inspector with the given keystroke (e.g. "ctrl shift alt Y").
 	 *
-	 * @param activationKeys a keystroke (e.g. "ctrl shift alt Y")
+	 * @param activationKeys a keystroke (e.g. "ctrl shift alt Y"), or {@code null} to use "ctrl shift alt Y"
 	 */
 	public static void install( String activationKeys ) {
+		if( activationKeys == null )
+			activationKeys = "ctrl shift alt Y";
+
 		KeyStroke keyStroke = KeyStroke.getKeyStroke( activationKeys );
 		Toolkit.getDefaultToolkit().addAWTEventListener( e -> {
 			if( e.getID() == KeyEvent.KEY_RELEASED &&
