@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
@@ -497,54 +499,35 @@ public class FlatComponents2Test
 		if( !(sel instanceof String) )
 			return;
 
-		JTree[] trees = { tree1, tree2, xTree1 };
+		Supplier<TreeCellRenderer> creator;
 		switch( (String) sel ) {
-			case "default":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new DefaultTreeCellRenderer() );
-				break;
-
-			case "defaultSubclass":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new TestDefaultTreeCellRenderer() );
-				break;
-
-			case "defaultWithIcons":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new TestDefaultWithIconsTreeCellRenderer() );
-				break;
-
-			case "defaultWithIcon":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new TestDefaultWithIconTreeCellRenderer() );
-				break;
-
-			case "label":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new TestLabelTreeCellRenderer() );
-				break;
-
-			case "swingxDefault":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new DefaultTreeRenderer() );
-				break;
-
-			case "jideCheckBox":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new CheckBoxTreeCellRenderer( new DefaultTreeCellRenderer() ) );
-				break;
-
-			case "jideStyled":
-				for( JTree tree : trees )
-					tree.setCellRenderer( new StyledTreeCellRenderer() );
-				break;
+			default:
+			case "default":				creator = DefaultTreeCellRenderer::new; break;
+			case "defaultSubclass":		creator = TestDefaultTreeCellRenderer::new; break;
+			case "defaultWithIcons":	creator = TestDefaultWithIconsTreeCellRenderer::new; break;
+			case "defaultWithIcon":		creator = TestDefaultWithIconTreeCellRenderer::new; break;
+			case "label":				creator = TestLabelTreeCellRenderer::new; break;
+			case "wide":				creator = TestWideTreeCellRenderer::new; break;
+			case "swingxDefault":		creator = DefaultTreeRenderer::new; break;
+			case "jideCheckBox":		creator = () -> new CheckBoxTreeCellRenderer( new DefaultTreeCellRenderer() ); break;
+			case "jideStyled":			creator = StyledTreeCellRenderer::new; break;
 		}
+
+		JTree[] trees = { tree1, tree2, xTree1 };
+		for( JTree tree : trees )
+			tree.setCellRenderer( creator.get() );
 	}
 
 	private void treeWideSelectionChanged() {
 		boolean wideSelection = treeWideSelectionCheckBox.isSelected();
 		for( JTree tree : allTrees )
 			tree.putClientProperty( FlatClientProperties.TREE_WIDE_SELECTION, wideSelection );
+	}
+
+	private void treeWideCellRendererChanged() {
+		boolean wideCellRenderer = treeWideCellRendererCheckBox.isSelected();
+		for( JTree tree : allTrees )
+			tree.putClientProperty( FlatClientProperties.TREE_WIDE_CELL_RENDERER, wideCellRenderer );
 	}
 
 	private void treePaintSelectionChanged() {
@@ -691,6 +674,7 @@ public class FlatComponents2Test
 		JLabel treeRendererLabel = new JLabel();
 		treeRendererComboBox = new JComboBox<>();
 		treeWideSelectionCheckBox = new JCheckBox();
+		treeWideCellRendererCheckBox = new JCheckBox();
 		treePaintSelectionCheckBox = new JCheckBox();
 		treePaintLinesCheckBox = new JCheckBox();
 		treeRedLinesCheckBox = new JCheckBox();
@@ -1088,6 +1072,7 @@ public class FlatComponents2Test
 				"defaultWithIcons",
 				"defaultWithIcon",
 				"label",
+				"wide",
 				"swingxDefault",
 				"jideCheckBox",
 				"jideStyled"
@@ -1099,6 +1084,11 @@ public class FlatComponents2Test
 			treeWideSelectionCheckBox.setText("wide selection");
 			treeWideSelectionCheckBox.addActionListener(e -> treeWideSelectionChanged());
 			treeOptionsPanel.add(treeWideSelectionCheckBox, "cell 0 1");
+
+			//---- treeWideCellRendererCheckBox ----
+			treeWideCellRendererCheckBox.setText("wide cell renderer");
+			treeWideCellRendererCheckBox.addActionListener(e -> treeWideCellRendererChanged());
+			treeOptionsPanel.add(treeWideCellRendererCheckBox, "cell 0 1");
 
 			//---- treePaintSelectionCheckBox ----
 			treePaintSelectionCheckBox.setText("paint selection");
@@ -1266,6 +1256,7 @@ public class FlatComponents2Test
 	private JPanel treeOptionsPanel;
 	private JComboBox<String> treeRendererComboBox;
 	private JCheckBox treeWideSelectionCheckBox;
+	private JCheckBox treeWideCellRendererCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
 	private JCheckBox treePaintLinesCheckBox;
 	private JCheckBox treeRedLinesCheckBox;
@@ -1790,6 +1781,32 @@ public class FlatComponents2Test
 			boolean leaf, int row, boolean hasFocus )
 		{
 			setText( String.valueOf( value ) );
+			return this;
+		}
+	}
+
+	//---- class TestLabelTreeCellRenderer ------------------------------------
+
+	private static class TestWideTreeCellRenderer
+		extends JPanel
+		implements TreeCellRenderer
+	{
+		private final JLabel label = new JLabel();
+		private final JLabel icon = new JLabel( UIManager.getIcon( "FileView.floppyDriveIcon" ) );
+
+		TestWideTreeCellRenderer() {
+			super( new BorderLayout() );
+			setOpaque( false );
+			add( label, BorderLayout.CENTER );
+			add( icon, BorderLayout.LINE_END );
+			setBorder( new LineBorder( Color.red ) );
+		}
+
+		@Override
+		public Component getTreeCellRendererComponent( JTree tree, Object value, boolean selected, boolean expanded,
+			boolean leaf, int row, boolean hasFocus )
+		{
+			label.setText( String.valueOf( value ) );
 			return this;
 		}
 	}
