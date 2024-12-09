@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: gradle/wrapper-validation-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
         if: matrix.java == '8'
 
       - name: Setup Java ${{ matrix.java }}
@@ -94,17 +94,6 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-
-      - name: Upload theme editor
-        uses: sebastianpopp/ftp-action@releases/v2
-        with:
-          host: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          forceSsl: true
-          localDir: "flatlaf-theme-editor/build/libs"
-          remoteDir: "snapshots"
-          options: "--only-newer --no-recursion --verbose=1"
 
 
   release:
