@@ -272,7 +272,8 @@ public abstract class FlatWindowResizer
 		public void doLayout() {
 			super.doLayout();
 
-			centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
+			if( centerComp != null && centerComp.isVisible() )
+				centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
 		}
 
 		@Override
@@ -376,6 +377,7 @@ public abstract class FlatWindowResizer
 
 		@Override
 		protected void beginResizing( int resizeDir ) {
+			centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
 			centerComp.setCursor( getPredefinedCursor( resizeDir ) );
 			centerComp.setVisible( true );
 		}
