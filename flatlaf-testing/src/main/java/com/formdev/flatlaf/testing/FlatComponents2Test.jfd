@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.2.0.9999" Java: "21.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -484,6 +484,7 @@ new FormModel {
 						addElement( "defaultWithIcons" )
 						addElement( "defaultWithIcon" )
 						addElement( "label" )
+						addElement( "wide" )
 						addElement( "swingxDefault" )
 						addElement( "jideCheckBox" )
 						addElement( "jideStyled" )
@@ -502,6 +503,16 @@ new FormModel {
 						"JavaCodeGenerator.variableLocal": false
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeWideSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "treeWideCellRendererCheckBox"
+					"text": "wide cell renderer"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeWideCellRendererChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )

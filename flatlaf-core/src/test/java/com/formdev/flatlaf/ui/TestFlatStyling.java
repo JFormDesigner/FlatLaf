@@ -1191,6 +1191,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionInsets: 1,2,3,4" );
 		ui.applyStyle( "selectionArc: 8" );
 		ui.applyStyle( "wideSelection: true" );
+		ui.applyStyle( "wideCellRenderer: true" );
 		ui.applyStyle( "showCellFocusIndicator: true" );
 
 		ui.applyStyle( "paintSelection: false" );

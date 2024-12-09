@@ -1445,6 +1445,7 @@ Tree.showDefaultIcons          false
 Tree.textBackground            #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.textForeground            #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000
+Tree.wideCellRenderer          false
 Tree.wideSelection             true
 TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
 

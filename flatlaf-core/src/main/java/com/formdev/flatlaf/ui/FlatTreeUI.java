@@ -106,6 +106,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionInsets					Insets
  * @uiDefault Tree.selectionArc						int
  * @uiDefault Tree.wideSelection					boolean
+ * @uiDefault Tree.wideCellRenderer					boolean
  * @uiDefault Tree.showCellFocusIndicator			boolean
  * @uiDefault Tree.showDefaultIcons					boolean
  *
@@ -146,6 +147,7 @@ public class FlatTreeUI
 	/** @since 3 */ @Styleable protected Insets selectionInsets;
 	/** @since 3 */ @Styleable protected int selectionArc;
 	@Styleable protected boolean wideSelection;
+	/** @since 3.6 */ @Styleable protected boolean wideCellRenderer;
 	@Styleable protected boolean showCellFocusIndicator;
 	/** @since 3 */ protected boolean showDefaultIcons;
 
@@ -198,6 +200,7 @@ public class FlatTreeUI
 		selectionInsets = UIManager.getInsets( "Tree.selectionInsets" );
 		selectionArc = UIManager.getInt( "Tree.selectionArc" );
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
+		wideCellRenderer = UIManager.getBoolean( "Tree.wideCellRenderer" );
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 		showDefaultIcons = UIManager.getBoolean( "Tree.showDefaultIcons" );
 
@@ -314,6 +317,7 @@ public class FlatTreeUI
 			if( e.getSource() == tree ) {
 				switch( e.getPropertyName() ) {
 					case TREE_WIDE_SELECTION:
+					case TREE_WIDE_CELL_RENDERER:
 					case TREE_PAINT_SELECTION:
 						HiDPIUtils.repaint( tree );
 						break;
@@ -584,6 +588,18 @@ public class FlatTreeUI
 				UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
 		}
 
+		// update bounds for wide cell renderer
+		if( isWideSelection() && isWideCellRenderer() ) {
+			Rectangle wideBounds = new Rectangle( bounds );
+			if( tree.getComponentOrientation().isLeftToRight() )
+				wideBounds.width = tree.getWidth() - bounds.x - insets.right;
+			else {
+				wideBounds.x = insets.left;
+				wideBounds.width = bounds.x + bounds.width - insets.left;
+			}
+			bounds = wideBounds;
+		}
+
 		// do not paint row if editing
 		if( isEditing ) {
 			// paint wide selection
@@ -806,6 +822,11 @@ public class FlatTreeUI
 
 	protected boolean isWideSelection() {
 		return clientPropertyBoolean( tree, TREE_WIDE_SELECTION, wideSelection );
+	}
+
+	/** @since 3.6 */
+	protected boolean isWideCellRenderer() {
+		return clientPropertyBoolean( tree, TREE_WIDE_CELL_RENDERER, wideCellRenderer );
 	}
 
 	protected boolean isPaintSelection() {

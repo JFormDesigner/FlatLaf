@@ -969,6 +969,7 @@ public class TestFlatStyleableInfo
 			"selectionInsets", Insets.class,
 			"selectionArc", int.class,
 			"wideSelection", boolean.class,
+			"wideCellRenderer", boolean.class,
 			"showCellFocusIndicator", boolean.class,
 
 			"paintSelection", boolean.class,
