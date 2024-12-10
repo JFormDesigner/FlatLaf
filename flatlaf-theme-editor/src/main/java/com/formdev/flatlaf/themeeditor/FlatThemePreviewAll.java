@@ -423,7 +423,7 @@ class FlatThemePreviewAll
 
 		//---- label1 ----
 		label1.setText("Some Text");
-		label1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-label");
+		label1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-label");
 		add(label1, "cell 1 1 2 1");
 
 		//---- flatButton1 ----
@@ -438,12 +438,12 @@ class FlatThemePreviewAll
 
 		//---- button1 ----
 		button1.setText("OK");
-		button1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-button");
+		button1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-button");
 		add(button1, "cell 1 2");
 
 		//---- testDefaultButton1 ----
 		testDefaultButton1.setText("Default");
-		testDefaultButton1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-button");
+		testDefaultButton1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-button");
 		add(testDefaultButton1, "cell 2 2");
 
 		//---- toggleButtonLabel ----
@@ -452,13 +452,13 @@ class FlatThemePreviewAll
 
 		//---- toggleButton1 ----
 		toggleButton1.setText("Unselected");
-		toggleButton1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-togglebutton");
+		toggleButton1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-togglebutton");
 		add(toggleButton1, "cell 1 3");
 
 		//---- toggleButton3 ----
 		toggleButton3.setText("Selected");
 		toggleButton3.setSelected(true);
-		toggleButton3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-togglebutton");
+		toggleButton3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-togglebutton");
 		add(toggleButton3, "cell 2 3");
 
 		//---- checkBoxLabel ----
@@ -467,13 +467,13 @@ class FlatThemePreviewAll
 
 		//---- checkBox1 ----
 		checkBox1.setText("Unselected");
-		checkBox1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-checkbox");
+		checkBox1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-checkbox");
 		add(checkBox1, "cell 1 4,alignx left,growx 0");
 
 		//---- checkBox3 ----
 		checkBox3.setText("Selected");
 		checkBox3.setSelected(true);
-		checkBox3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-checkbox");
+		checkBox3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-checkbox");
 		add(checkBox3, "cell 2 4,alignx left,growx 0");
 
 		//---- radioButtonLabel ----
@@ -482,13 +482,13 @@ class FlatThemePreviewAll
 
 		//---- radioButton1 ----
 		radioButton1.setText("Unselected");
-		radioButton1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-radiobutton");
+		radioButton1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-radiobutton");
 		add(radioButton1, "cell 1 5,alignx left,growx 0");
 
 		//---- radioButton3 ----
 		radioButton3.setText("Selected");
 		radioButton3.setSelected(true);
-		radioButton3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-radiobutton");
+		radioButton3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-radiobutton");
 		add(radioButton3, "cell 2 5,alignx left,growx 0");
 
 		//---- comboBoxLabel ----
@@ -513,7 +513,7 @@ class FlatThemePreviewAll
 		}));
 		comboBox1.setMaximumRowCount(6);
 		comboBox1.setPlaceholderText("placeholder text");
-		comboBox1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-combobox");
+		comboBox1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-combobox");
 		add(comboBox1, "cell 1 6");
 
 		//---- comboBox3 ----
@@ -526,7 +526,7 @@ class FlatThemePreviewAll
 			"e"
 		}));
 		comboBox3.setMaximumRowCount(6);
-		comboBox3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-combobox");
+		comboBox3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-combobox");
 		add(comboBox3, "cell 2 6");
 
 		//---- spinnerLabel ----
@@ -534,7 +534,7 @@ class FlatThemePreviewAll
 		add(spinnerLabel, "cell 0 7");
 
 		//---- spinner1 ----
-		spinner1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-spinner");
+		spinner1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-spinner");
 		add(spinner1, "cell 1 7 2 1");
 
 		//---- textFieldLabel ----
@@ -544,24 +544,24 @@ class FlatThemePreviewAll
 		//---- textField1 ----
 		textField1.setText("Some Text");
 		textField1.setPlaceholderText("placeholder text");
-		textField1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textfield");
+		textField1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-textfield");
 		add(textField1, "cell 1 8");
 
 		//---- textField2 ----
 		textField2.setText("Txt");
-		textField2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textfield");
+		textField2.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-textfield");
 		add(textField2, "cell 2 8");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("Some Text");
 		formattedTextField1.setPlaceholderText("placeholder text");
-		formattedTextField1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-formattedtextfield");
+		formattedTextField1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-formattedtextfield");
 		add(formattedTextField1, "cell 1 9");
 
 		//---- passwordField1 ----
 		passwordField1.setText("Some Text");
 		passwordField1.setPlaceholderText("placeholder text");
-		passwordField1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-passwordfield");
+		passwordField1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-passwordfield");
 		passwordField1.setShowClearButton(true);
 		add(passwordField1, "cell 2 9");
 
@@ -577,7 +577,7 @@ class FlatThemePreviewAll
 			//---- textArea1 ----
 			textArea1.setText("Text");
 			textArea1.setRows(2);
-			textArea1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textarea");
+			textArea1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-textarea");
 			scrollPane1.setViewportView(textArea1);
 		}
 		add(scrollPane1, "cell 1 10 2 1,width 40");
@@ -589,7 +589,7 @@ class FlatThemePreviewAll
 
 			//---- editorPane1 ----
 			editorPane1.setText("Text");
-			editorPane1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-editorpane");
+			editorPane1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-editorpane");
 			scrollPane5.setViewportView(editorPane1);
 		}
 		add(scrollPane5, "cell 1 10 2 1,width 40");
@@ -601,7 +601,7 @@ class FlatThemePreviewAll
 
 			//---- textPane1 ----
 			textPane1.setText("Text");
-			textPane1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textpane");
+			textPane1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-textpane");
 			scrollPane9.setViewportView(textPane1);
 		}
 		add(scrollPane9, "cell 1 10 2 1,width 40");
@@ -615,62 +615,62 @@ class FlatThemePreviewAll
 		menuUnderlineSelectionButton.setButtonType(FlatButton.ButtonType.toolBarButton);
 		menuUnderlineSelectionButton.setToolTipText("menu underline selection");
 		menuUnderlineSelectionButton.setFocusable(false);
-		menuUnderlineSelectionButton.putClientProperty("FlatLaf.styleClass", "small");
+		menuUnderlineSelectionButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		menuUnderlineSelectionButton.addActionListener(e -> menuUnderlineSelectionChanged());
 		add(menuUnderlineSelectionButton, "cell 0 11");
 
 		//======== menuBar1 ========
 		{
-			menuBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menubar");
+			menuBar1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menubar");
 
 			//======== menu2 ========
 			{
 				menu2.setText("JMenu");
-				menu2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menu");
+				menu2.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menu");
 
 				//---- menuItem3 ----
 				menuItem3.setText("JMenuItem");
-				menuItem3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+				menuItem3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 				menu2.add(menuItem3);
 
 				//---- menuItem4 ----
 				menuItem4.setText("JMenuItem");
-				menuItem4.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+				menuItem4.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 				menu2.add(menuItem4);
 				menu2.addSeparator();
 
 				//---- checkBoxMenuItem2 ----
 				checkBoxMenuItem2.setText("JCheckBoxMenuItem");
 				checkBoxMenuItem2.setSelected(true);
-				checkBoxMenuItem2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-checkboxmenuitem");
+				checkBoxMenuItem2.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-checkboxmenuitem");
 				menu2.add(checkBoxMenuItem2);
 
 				//---- checkBoxMenuItem3 ----
 				checkBoxMenuItem3.setText("JCheckBoxMenuItem");
-				checkBoxMenuItem3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-checkboxmenuitem");
+				checkBoxMenuItem3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-checkboxmenuitem");
 				menu2.add(checkBoxMenuItem3);
 				menu2.addSeparator();
 
 				//---- radioButtonMenuItem4 ----
 				radioButtonMenuItem4.setText("JRadioButtonMenuItem");
 				radioButtonMenuItem4.setSelected(true);
-				radioButtonMenuItem4.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-radiobuttonmenuitem");
+				radioButtonMenuItem4.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-radiobuttonmenuitem");
 				menu2.add(radioButtonMenuItem4);
 
 				//---- radioButtonMenuItem5 ----
 				radioButtonMenuItem5.setText("JRadioButtonMenuItem");
-				radioButtonMenuItem5.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-radiobuttonmenuitem");
+				radioButtonMenuItem5.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-radiobuttonmenuitem");
 				menu2.add(radioButtonMenuItem5);
 				menu2.addSeparator();
 
 				//======== menu4 ========
 				{
 					menu4.setText("JMenu");
-					menu4.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menu");
+					menu4.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menu");
 
 					//---- menuItem6 ----
 					menuItem6.setText("JMenuItem");
-					menuItem6.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+					menuItem6.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 					menu4.add(menuItem6);
 				}
 				menu2.add(menu4);
@@ -678,11 +678,11 @@ class FlatThemePreviewAll
 				//======== menu5 ========
 				{
 					menu5.setText("JMenu");
-					menu5.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menu");
+					menu5.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menu");
 
 					//---- menuItem7 ----
 					menuItem7.setText("JMenuItem");
-					menuItem7.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+					menuItem7.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 					menu5.add(menuItem7);
 				}
 				menu2.add(menu5);
@@ -692,22 +692,22 @@ class FlatThemePreviewAll
 			//======== menu3 ========
 			{
 				menu3.setText("JMenu");
-				menu3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menu");
+				menu3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menu");
 
 				//---- menuItem5 ----
 				menuItem5.setText("JMenuItem");
 				menuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
-				menuItem5.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+				menuItem5.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 				menu3.add(menuItem5);
 
 				//---- menuItem8 ----
 				menuItem8.setText("JMenuItem");
-				menuItem8.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+				menuItem8.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 				menu3.add(menuItem8);
 
 				//---- menuItem9 ----
 				menuItem9.setText("JMenuItem");
-				menuItem9.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-menuitem");
+				menuItem9.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-menuitem");
 				menu3.add(menuItem9);
 			}
 			menuBar1.add(menu3);
@@ -720,14 +720,14 @@ class FlatThemePreviewAll
 
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
-		scrollBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-scrollbar");
+		scrollBar1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-scrollbar");
 		scrollBar1.setVisibleAmount(50);
 		add(scrollBar1, "cell 1 12 2 1");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar5.setShowButtons(true);
-		scrollBar5.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-scrollbar");
+		scrollBar5.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-scrollbar");
 		scrollBar5.setVisibleAmount(50);
 		add(scrollBar5, "cell 1 13 2 1");
 
@@ -736,7 +736,7 @@ class FlatThemePreviewAll
 		add(separatorLabel, "cell 0 14");
 
 		//---- separator1 ----
-		separator1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-separator");
+		separator1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-separator");
 		add(separator1, "cell 1 14 2 1");
 
 		//---- sliderLabel ----
@@ -744,7 +744,7 @@ class FlatThemePreviewAll
 		add(sliderLabel, "cell 0 15");
 
 		//---- slider1 ----
-		slider1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-slider");
+		slider1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-slider");
 		add(slider1, "cell 1 15 2 1,width 100");
 
 		//---- slider3 ----
@@ -752,7 +752,7 @@ class FlatThemePreviewAll
 		slider3.setPaintTicks(true);
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
-		slider3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-slider");
+		slider3.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-slider");
 		slider3.addChangeListener(e -> changeProgress());
 		add(slider3, "cell 1 16 2 1,width 100");
 
@@ -762,13 +762,13 @@ class FlatThemePreviewAll
 
 		//---- progressBar1 ----
 		progressBar1.setValue(50);
-		progressBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-progressbar");
+		progressBar1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-progressbar");
 		add(progressBar1, "cell 1 17 2 1");
 
 		//---- progressBar2 ----
 		progressBar2.setValue(50);
 		progressBar2.setStringPainted(true);
-		progressBar2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-progressbar");
+		progressBar2.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-progressbar");
 		add(progressBar2, "cell 1 18 2 1");
 
 		//---- toolTipLabel ----
@@ -777,7 +777,7 @@ class FlatThemePreviewAll
 
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
-		toolTip1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-tooltip");
+		toolTip1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-tooltip");
 		add(toolTip1, "cell 1 19 2 1,alignx left,growx 0");
 
 		//---- toolBarLabel ----
@@ -786,39 +786,39 @@ class FlatThemePreviewAll
 
 		//======== toolBar1 ========
 		{
-			toolBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar");
+			toolBar1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar");
 
 			//---- button4 ----
 			button4.setIcon(UIManager.getIcon("Tree.closedIcon"));
-			button4.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-button");
+			button4.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-button");
 			toolBar1.add(button4);
 
 			//---- button6 ----
 			button6.setIcon(UIManager.getIcon("Tree.openIcon"));
-			button6.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-button");
+			button6.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-button");
 			toolBar1.add(button6);
 			toolBar1.addSeparator();
 
 			//---- button7 ----
 			button7.setIcon(UIManager.getIcon("Tree.leafIcon"));
-			button7.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
+			button7.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button7);
 
 			//---- button8 ----
 			button8.setIcon(UIManager.getIcon("Tree.leafIcon"));
-			button8.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
+			button8.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button8);
 
 			//---- button9 ----
 			button9.setIcon(UIManager.getIcon("Tree.leafIcon"));
 			button9.setSelected(true);
-			button9.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
+			button9.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button9);
 
 			//---- button10 ----
 			button10.setIcon(UIManager.getIcon("Tree.leafIcon"));
 			button10.setSelected(true);
-			button10.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-toolbar-togglebutton");
+			button10.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-toolbar-togglebutton");
 			toolBar1.add(button10);
 		}
 		add(toolBar1, "cell 1 20 2 1");
@@ -829,7 +829,7 @@ class FlatThemePreviewAll
 
 		//======== tabbedPane1 ========
 		{
-			tabbedPane1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-tabbedpane");
+			tabbedPane1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-tabbedpane");
 		}
 		add(tabbedPane1, "cell 1 21 2 1");
 
@@ -840,7 +840,7 @@ class FlatThemePreviewAll
 		//======== splitPane1 ========
 		{
 			splitPane1.setResizeWeight(0.5);
-			splitPane1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-splitpane");
+			splitPane1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-splitpane");
 
 			//======== scrollPane2 ========
 			{
@@ -858,7 +858,7 @@ class FlatThemePreviewAll
 					@Override
 					public String getElementAt(int i) { return values[i]; }
 				});
-				list1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-list");
+				list1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-list");
 				scrollPane2.setViewportView(list1);
 			}
 			splitPane1.setLeftComponent(scrollPane2);
@@ -879,7 +879,7 @@ class FlatThemePreviewAll
 							add(node1);
 						}
 					}));
-				tree1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-tree");
+				tree1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-tree");
 				scrollPane3.setViewportView(tree1);
 			}
 			splitPane1.setRightComponent(scrollPane3);
@@ -903,7 +903,7 @@ class FlatThemePreviewAll
 					"Column 1", "Column 2"
 				}
 			));
-			table1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-table");
+			table1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-table");
 			scrollPane4.setViewportView(table1);
 		}
 		add(scrollPane4, "cell 1 23 2 1,width 100,height 70");
@@ -914,7 +914,7 @@ class FlatThemePreviewAll
 
 		//======== desktopPane1 ========
 		{
-			desktopPane1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-desktoppane");
+			desktopPane1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-desktoppane");
 
 			//======== internalFrame1 ========
 			{
@@ -924,7 +924,7 @@ class FlatThemePreviewAll
 				internalFrame1.setMaximizable(true);
 				internalFrame1.setIconifiable(true);
 				internalFrame1.setResizable(true);
-				internalFrame1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-internalframe");
+				internalFrame1.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-internalframe");
 				Container internalFrame1ContentPane = internalFrame1.getContentPane();
 				internalFrame1ContentPane.setLayout(new BorderLayout());
 			}
@@ -939,7 +939,7 @@ class FlatThemePreviewAll
 				internalFrame2.setMaximizable(true);
 				internalFrame2.setResizable(true);
 				internalFrame2.setTitle("Inactive");
-				internalFrame2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-internalframe");
+				internalFrame2.putClientProperty(FlatClientProperties.STYLE_CLASS, "flatlaf-preview-internalframe");
 				Container internalFrame2ContentPane = internalFrame2.getContentPane();
 				internalFrame2ContentPane.setLayout(new BorderLayout());
 			}

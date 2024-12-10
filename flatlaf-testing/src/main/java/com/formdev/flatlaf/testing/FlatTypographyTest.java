@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -205,57 +206,57 @@ public class FlatTypographyTest
 
 		//---- label54 ----
 		label54.setText("<html>FlatLaf<br><small>Windows</small></html>");
-		label54.putClientProperty("FlatLaf.styleClass", "h1");
+		label54.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label54, "cell 0 0");
 
 		//---- label68 ----
 		label68.setText("<html>JetBrains<br><small>Windows</small></html>");
-		label68.putClientProperty("FlatLaf.styleClass", "h1");
+		label68.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label68, "cell 1 0");
 
 		//---- label69 ----
 		label69.setText("<html>JetBrains<br><small>macOS</small></html>");
-		label69.putClientProperty("FlatLaf.styleClass", "h1");
+		label69.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label69, "cell 2 0");
 
 		//---- label10 ----
 		label10.setText("macOS");
-		label10.putClientProperty("FlatLaf.styleClass", "h1");
+		label10.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label10, "cell 3 0");
 
 		//---- label11 ----
 		label11.setText("Windows 10/11");
-		label11.putClientProperty("FlatLaf.styleClass", "h1");
+		label11.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label11, "cell 4 0");
 
 		//---- label72 ----
 		label72.setText("<html>GitHub<br>Primer</html>");
-		label72.putClientProperty("FlatLaf.styleClass", "h1");
+		label72.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label72, "cell 5 0");
 
 		//---- label28 ----
 		label28.setText("Material");
-		label28.putClientProperty("FlatLaf.styleClass", "h1");
+		label28.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label28, "cell 6 0");
 
 		//---- label29 ----
 		label29.setText("Material 3");
-		label29.putClientProperty("FlatLaf.styleClass", "h1");
+		label29.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label29, "cell 7 0");
 
 		//---- label1 ----
 		label1.setText("SAP Fiori");
-		label1.putClientProperty("FlatLaf.styleClass", "h1");
+		label1.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label1, "cell 8 0");
 
 		//---- label37 ----
 		label37.setText("Atlassian");
-		label37.putClientProperty("FlatLaf.styleClass", "h1");
+		label37.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label37, "cell 9 0");
 
 		//---- label46 ----
 		label46.setText("Iris");
-		label46.putClientProperty("FlatLaf.styleClass", "h1");
+		label46.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(label46, "cell 10 0");
 
 		//---- linkLabel9 ----
@@ -1147,7 +1148,7 @@ public class FlatTypographyTest
 
 			//---- descLabel ----
 			descLabel.setText("description");
-			descLabel.putClientProperty("FlatLaf.styleClass", "small");
+			descLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 			descLabel.setEnabled(false);
 			add(descLabel, "cell 0 1");
 			// JFormDesigner - End of component initialization  //GEN-END:initComponents

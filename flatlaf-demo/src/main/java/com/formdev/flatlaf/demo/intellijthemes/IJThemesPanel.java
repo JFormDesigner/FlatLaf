@@ -45,6 +45,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -554,7 +555,7 @@ public class IJThemesPanel
 			"light",
 			"dark"
 		}));
-		filterComboBox.putClientProperty("JComponent.minimumWidth", 0);
+		filterComboBox.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		filterComboBox.setFocusable(false);
 		filterComboBox.addActionListener(e -> filterChanged());
 		add(filterComboBox, "cell 0 0,alignx right,growx 0");

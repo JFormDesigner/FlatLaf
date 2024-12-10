@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -342,22 +343,22 @@ public class FlatCustomBordersTest
 
 		//---- button5 ----
 		button5.setText("text");
-		button5.putClientProperty("JButton.buttonType", "roundRect");
+		button5.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
 		add(button5, "cell 1 2");
 
 		//---- button6 ----
 		button6.setText("text");
-		button6.putClientProperty("JButton.buttonType", "roundRect");
+		button6.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
 		add(button6, "cell 2 2");
 
 		//---- button7 ----
 		button7.setText("text");
-		button7.putClientProperty("JButton.buttonType", "roundRect");
+		button7.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
 		add(button7, "cell 3 2");
 
 		//---- button8 ----
 		button8.setText("text");
-		button8.putClientProperty("JButton.buttonType", "roundRect");
+		button8.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
 		add(button8, "cell 4 2");
 
 		//---- label5 ----
@@ -372,31 +373,31 @@ public class FlatCustomBordersTest
 		add(comboBox27, "cell 7 3");
 
 		//---- comboBox5 ----
-		comboBox5.putClientProperty("JComponent.roundRect", true);
+		comboBox5.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox5, "cell 1 4");
 
 		//---- comboBox6 ----
-		comboBox6.putClientProperty("JComponent.roundRect", true);
+		comboBox6.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox6, "cell 2 4");
 
 		//---- comboBox7 ----
-		comboBox7.putClientProperty("JComponent.roundRect", true);
+		comboBox7.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox7, "cell 3 4");
 
 		//---- comboBox8 ----
-		comboBox8.putClientProperty("JComponent.roundRect", true);
+		comboBox8.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox8, "cell 4 4");
 
 		//---- comboBox24 ----
-		comboBox24.putClientProperty("JComponent.roundRect", true);
+		comboBox24.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox24, "cell 5 4");
 
 		//---- comboBox26 ----
-		comboBox26.putClientProperty("JComponent.roundRect", true);
+		comboBox26.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox26, "cell 6 4");
 
 		//---- comboBox28 ----
-		comboBox28.putClientProperty("JComponent.roundRect", true);
+		comboBox28.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(comboBox28, "cell 7 4");
 
 		//---- comboBox9 ----
@@ -428,37 +429,37 @@ public class FlatCustomBordersTest
 		add(comboBox21, "cell 7 5");
 
 		//---- comboBox13 ----
-		comboBox13.putClientProperty("JComponent.roundRect", true);
+		comboBox13.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox13.setEditable(true);
 		add(comboBox13, "cell 1 6");
 
 		//---- comboBox14 ----
-		comboBox14.putClientProperty("JComponent.roundRect", true);
+		comboBox14.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox14.setEditable(true);
 		add(comboBox14, "cell 2 6");
 
 		//---- comboBox15 ----
-		comboBox15.putClientProperty("JComponent.roundRect", true);
+		comboBox15.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox15.setEditable(true);
 		add(comboBox15, "cell 3 6");
 
 		//---- comboBox16 ----
-		comboBox16.putClientProperty("JComponent.roundRect", true);
+		comboBox16.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox16.setEditable(true);
 		add(comboBox16, "cell 4 6");
 
 		//---- comboBox18 ----
-		comboBox18.putClientProperty("JComponent.roundRect", true);
+		comboBox18.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox18.setEditable(true);
 		add(comboBox18, "cell 5 6");
 
 		//---- comboBox20 ----
-		comboBox20.putClientProperty("JComponent.roundRect", true);
+		comboBox20.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox20.setEditable(true);
 		add(comboBox20, "cell 6 6");
 
 		//---- comboBox22 ----
-		comboBox22.putClientProperty("JComponent.roundRect", true);
+		comboBox22.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		comboBox22.setEditable(true);
 		add(comboBox22, "cell 7 6");
 
@@ -471,19 +472,19 @@ public class FlatCustomBordersTest
 		add(spinner4, "cell 4 7");
 
 		//---- spinner5 ----
-		spinner5.putClientProperty("JComponent.roundRect", true);
+		spinner5.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(spinner5, "cell 1 8");
 
 		//---- spinner6 ----
-		spinner6.putClientProperty("JComponent.roundRect", true);
+		spinner6.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(spinner6, "cell 2 8");
 
 		//---- spinner7 ----
-		spinner7.putClientProperty("JComponent.roundRect", true);
+		spinner7.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(spinner7, "cell 3 8");
 
 		//---- spinner8 ----
-		spinner8.putClientProperty("JComponent.roundRect", true);
+		spinner8.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(spinner8, "cell 4 8");
 
 		//---- textFieldLabel ----
@@ -492,11 +493,11 @@ public class FlatCustomBordersTest
 
 		//---- textField1 ----
 		textField1.setText("text");
-		textField1.putClientProperty("JComponent.roundRect", false);
+		textField1.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, false);
 		add(textField1, "cell 1 9,growx");
 
 		//---- textField2 ----
-		textField2.putClientProperty("JComponent.roundRect", false);
+		textField2.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, false);
 		textField2.setText("text");
 		add(textField2, "cell 2 9");
 
@@ -505,27 +506,27 @@ public class FlatCustomBordersTest
 		add(textField3, "cell 3 9");
 
 		//---- textField4 ----
-		textField4.putClientProperty("JComponent.roundRect", false);
+		textField4.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, false);
 		textField4.setText("text");
 		add(textField4, "cell 4 9");
 
 		//---- textField5 ----
 		textField5.setText("text");
-		textField5.putClientProperty("JComponent.roundRect", true);
+		textField5.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(textField5, "cell 1 10,growx");
 
 		//---- textField6 ----
-		textField6.putClientProperty("JComponent.roundRect", true);
+		textField6.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		textField6.setText("text");
 		add(textField6, "cell 2 10");
 
 		//---- textField7 ----
 		textField7.setText("text");
-		textField7.putClientProperty("JComponent.roundRect", true);
+		textField7.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		add(textField7, "cell 3 10");
 
 		//---- textField8 ----
-		textField8.putClientProperty("JComponent.roundRect", true);
+		textField8.putClientProperty(FlatClientProperties.COMPONENT_ROUND_RECT, true);
 		textField8.setText("text");
 		add(textField8, "cell 4 10");
 

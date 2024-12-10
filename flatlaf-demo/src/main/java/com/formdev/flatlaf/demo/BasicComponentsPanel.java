@@ -277,22 +277,22 @@ class BasicComponentsPanel
 
 		//---- button5 ----
 		button5.setText("Square");
-		button5.putClientProperty("JButton.buttonType", "square");
+		button5.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_SQUARE);
 		add(button5, "cell 3 1");
 
 		//---- button6 ----
 		button6.setText("Round");
-		button6.putClientProperty("JButton.buttonType", "roundRect");
+		button6.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_ROUND_RECT);
 		add(button6, "cell 4 1");
 
 		//---- button3 ----
 		button3.setText("Help");
-		button3.putClientProperty("JButton.buttonType", "help");
+		button3.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(button3, "cell 4 1");
 
 		//---- button4 ----
 		button4.setText("Help");
-		button4.putClientProperty("JButton.buttonType", "help");
+		button4.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		button4.setEnabled(false);
 		add(button4, "cell 4 1");
 
@@ -432,7 +432,7 @@ class BasicComponentsPanel
 
 		//---- comboBox6 ----
 		comboBox6.setEditable(true);
-		comboBox6.putClientProperty("JTextField.placeholderText", "Placeholder");
+		comboBox6.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Placeholder");
 		add(comboBox6, "cell 5 5,growx");
 
 		//---- textFieldLabel ----
@@ -463,7 +463,7 @@ class BasicComponentsPanel
 		add(textField4, "cell 4 6,growx");
 
 		//---- textField6 ----
-		textField6.putClientProperty("JTextField.placeholderText", "Placeholder");
+		textField6.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Placeholder");
 		add(textField6, "cell 5 6,growx");
 
 		//---- formattedTextFieldLabel ----
@@ -494,7 +494,7 @@ class BasicComponentsPanel
 		add(formattedTextField4, "cell 4 7,growx");
 
 		//---- formattedTextField5 ----
-		formattedTextField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		formattedTextField5.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Placeholder");
 		add(formattedTextField5, "cell 5 7,growx");
 
 		//---- passwordFieldLabel ----
@@ -522,7 +522,7 @@ class BasicComponentsPanel
 		add(passwordField4, "cell 4 8,growx");
 
 		//---- passwordField5 ----
-		passwordField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		passwordField5.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Placeholder");
 		add(passwordField5, "cell 5 8,growx");
 
 		//---- textAreaLabel ----
@@ -703,11 +703,11 @@ class BasicComponentsPanel
 		add(errorHintsLabel, "cell 0 12");
 
 		//---- errorHintsTextField ----
-		errorHintsTextField.putClientProperty("JComponent.outline", "error");
+		errorHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
 		add(errorHintsTextField, "cell 1 12,growx");
 
 		//---- errorHintsComboBox ----
-		errorHintsComboBox.putClientProperty("JComponent.outline", "error");
+		errorHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
 		errorHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 			"Editable"
 		}));
@@ -715,7 +715,7 @@ class BasicComponentsPanel
 		add(errorHintsComboBox, "cell 2 12,growx");
 
 		//---- errorHintsSpinner ----
-		errorHintsSpinner.putClientProperty("JComponent.outline", "error");
+		errorHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
 		add(errorHintsSpinner, "cell 3 12,growx");
 
 		//---- warningHintsLabel ----
@@ -723,18 +723,18 @@ class BasicComponentsPanel
 		add(warningHintsLabel, "cell 0 13");
 
 		//---- warningHintsTextField ----
-		warningHintsTextField.putClientProperty("JComponent.outline", "warning");
+		warningHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
 		add(warningHintsTextField, "cell 1 13,growx");
 
 		//---- warningHintsComboBox ----
-		warningHintsComboBox.putClientProperty("JComponent.outline", "warning");
+		warningHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
 		warningHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 			"Not editable"
 		}));
 		add(warningHintsComboBox, "cell 2 13,growx");
 
 		//---- warningHintsSpinner ----
-		warningHintsSpinner.putClientProperty("JComponent.outline", "warning");
+		warningHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
 		add(warningHintsSpinner, "cell 3 13,growx");
 
 		//---- iconsLabel ----
@@ -765,53 +765,53 @@ class BasicComponentsPanel
 
 		//---- h00Label ----
 		h00Label.setText("H00");
-		h00Label.putClientProperty("FlatLaf.styleClass", "h00");
+		h00Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h00");
 		add(h00Label, "cell 1 16 5 1");
 
 		//---- h0Label ----
 		h0Label.setText("H0");
-		h0Label.putClientProperty("FlatLaf.styleClass", "h0");
+		h0Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h0");
 		add(h0Label, "cell 1 16 5 1");
 
 		//---- h1Label ----
 		h1Label.setText("H1");
-		h1Label.putClientProperty("FlatLaf.styleClass", "h1");
+		h1Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(h1Label, "cell 1 16 5 1");
 
 		//---- h2Label ----
 		h2Label.setText("H2");
-		h2Label.putClientProperty("FlatLaf.styleClass", "h2");
+		h2Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h2");
 		add(h2Label, "cell 1 16 5 1");
 
 		//---- h3Label ----
 		h3Label.setText("H3");
-		h3Label.putClientProperty("FlatLaf.styleClass", "h3");
+		h3Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(h3Label, "cell 1 16 5 1");
 
 		//---- h4Label ----
 		h4Label.setText("H4");
-		h4Label.putClientProperty("FlatLaf.styleClass", "h4");
+		h4Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 		add(h4Label, "cell 1 16 5 1");
 
 		//---- lightLabel ----
 		lightLabel.setText("light");
-		lightLabel.putClientProperty("FlatLaf.style", "font: 200% $light.font");
+		lightLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $light.font");
 		add(lightLabel, "cell 1 16 5 1,gapx 30");
 
 		//---- semiboldLabel ----
 		semiboldLabel.setText("semibold");
-		semiboldLabel.putClientProperty("FlatLaf.style", "font: 200% $semibold.font");
+		semiboldLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $semibold.font");
 		add(semiboldLabel, "cell 1 16 5 1");
 
 		//---- fontZoomLabel ----
 		fontZoomLabel.setText("(200%)");
-		fontZoomLabel.putClientProperty("FlatLaf.styleClass", "small");
+		fontZoomLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		fontZoomLabel.setEnabled(false);
 		add(fontZoomLabel, "cell 1 16 5 1");
 
 		//---- largeLabel ----
 		largeLabel.setText("large");
-		largeLabel.putClientProperty("FlatLaf.styleClass", "large");
+		largeLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
 		add(largeLabel, "cell 1 17 5 1");
 
 		//---- defaultLabel ----
@@ -820,22 +820,22 @@ class BasicComponentsPanel
 
 		//---- mediumLabel ----
 		mediumLabel.setText("medium");
-		mediumLabel.putClientProperty("FlatLaf.styleClass", "medium");
+		mediumLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
 		add(mediumLabel, "cell 1 17 5 1");
 
 		//---- smallLabel ----
 		smallLabel.setText("small");
-		smallLabel.putClientProperty("FlatLaf.styleClass", "small");
+		smallLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(smallLabel, "cell 1 17 5 1");
 
 		//---- miniLabel ----
 		miniLabel.setText("mini");
-		miniLabel.putClientProperty("FlatLaf.styleClass", "mini");
+		miniLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
 		add(miniLabel, "cell 1 17 5 1");
 
 		//---- monospacedLabel ----
 		monospacedLabel.setText("monospaced");
-		monospacedLabel.putClientProperty("FlatLaf.styleClass", "monospaced");
+		monospacedLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "monospaced");
 		add(monospacedLabel, "cell 1 17 5 1,gapx 30");
 
 		//======== popupMenu1 ========

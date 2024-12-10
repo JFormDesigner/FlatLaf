@@ -37,6 +37,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -806,7 +807,7 @@ public class FlatTestFrame
 				buttonBar.add(scaleFactorComboBox, "cell 1 0");
 
 				//---- fontSizeSpinner ----
-				fontSizeSpinner.putClientProperty("JComponent.minimumWidth", 50);
+				fontSizeSpinner.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 50);
 				fontSizeSpinner.setModel(new SpinnerNumberModel(0, 0, null, 1));
 				fontSizeSpinner.addChangeListener(e -> fontSizeChanged());
 				buttonBar.add(fontSizeSpinner, "cell 2 0");

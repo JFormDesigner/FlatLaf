@@ -316,13 +316,13 @@ public class FlatTextComponentsTest
 		//---- textField1 ----
 		textField1.setText("editable");
 		textField1.setComponentPopupMenu(popupMenu1);
-		textField1.putClientProperty("JTextField.placeholderText", "place");
+		textField1.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(textField1, "cell 1 0,growx");
 
 		//---- textField3 ----
 		textField3.setText("longer text for testing horizontal scrolling");
 		textField3.setComponentPopupMenu(popupMenu1);
-		textField3.putClientProperty("JTextField.placeholderText", "place");
+		textField3.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(textField3, "cell 2 0,growx");
 
 		//---- textField2 ----
@@ -330,7 +330,7 @@ public class FlatTextComponentsTest
 		textField2.setSelectionStart(1);
 		textField2.setSelectionEnd(4);
 		textField2.setComponentPopupMenu(popupMenu1);
-		textField2.putClientProperty("JTextField.placeholderText", "place");
+		textField2.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(textField2, "cell 3 0");
 
 		//---- formattedTextFieldLabel ----
@@ -342,13 +342,13 @@ public class FlatTextComponentsTest
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("editable");
 		formattedTextField1.setComponentPopupMenu(popupMenu1);
-		formattedTextField1.putClientProperty("JTextField.placeholderText", "place");
+		formattedTextField1.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(formattedTextField1, "cell 1 1,growx");
 
 		//---- formattedTextField3 ----
 		formattedTextField3.setText("longer text for testing horizontal scrolling");
 		formattedTextField3.setComponentPopupMenu(popupMenu1);
-		formattedTextField3.putClientProperty("JTextField.placeholderText", "place");
+		formattedTextField3.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(formattedTextField3, "cell 2 1,growx");
 
 		//======== panel1 ========
@@ -539,13 +539,13 @@ public class FlatTextComponentsTest
 		//---- passwordField1 ----
 		passwordField1.setText("editable");
 		passwordField1.setComponentPopupMenu(popupMenu1);
-		passwordField1.putClientProperty("JTextField.placeholderText", "place");
+		passwordField1.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(passwordField1, "cell 1 2,growx");
 
 		//---- passwordField3 ----
 		passwordField3.setText("longer text for testing horizontal scrolling");
 		passwordField3.setComponentPopupMenu(popupMenu1);
-		passwordField3.putClientProperty("JTextField.placeholderText", "place");
+		passwordField3.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(passwordField3, "cell 2 2,growx");
 
 		//---- textAreaLabel ----

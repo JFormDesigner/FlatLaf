@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.util.Objects;
 import java.util.function.Predicate;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -232,25 +233,25 @@ class FlatThemePreviewButtons
 				//---- noneButton ----
 				noneButton.setText("none");
 				noneButton.setSelected(true);
-				noneButton.putClientProperty("FlatLaf.styleClass", "small");
+				noneButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				noneButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar1.add(noneButton);
 
 				//---- squareButton ----
 				squareButton.setText("square");
-				squareButton.putClientProperty("FlatLaf.styleClass", "small");
+				squareButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				squareButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar1.add(squareButton);
 
 				//---- roundRectButton ----
 				roundRectButton.setText("roundRect");
-				roundRectButton.putClientProperty("FlatLaf.styleClass", "small");
+				roundRectButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				roundRectButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar1.add(roundRectButton);
 
 				//---- tabButton ----
 				tabButton.setText("tab");
-				tabButton.putClientProperty("FlatLaf.styleClass", "small");
+				tabButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				tabButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar1.add(tabButton);
 			}
@@ -263,13 +264,13 @@ class FlatThemePreviewButtons
 
 				//---- toolBarButtonButton ----
 				toolBarButtonButton.setText("toolBarButton");
-				toolBarButtonButton.putClientProperty("FlatLaf.styleClass", "small");
+				toolBarButtonButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				toolBarButtonButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar2.add(toolBarButtonButton);
 
 				//---- borderlessButton ----
 				borderlessButton.setText("borderless");
-				borderlessButton.putClientProperty("FlatLaf.styleClass", "small");
+				borderlessButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 				borderlessButton.addActionListener(e -> buttonTypeChanged());
 				buttonTypeToolBar2.add(borderlessButton);
 			}
@@ -279,7 +280,7 @@ class FlatThemePreviewButtons
 
 		//---- label11 ----
 		label11.setText("JButton");
-		label11.putClientProperty("FlatLaf.styleClass", "h3");
+		label11.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label11, "cell 0 1 3 1");
 
 		//---- label27 ----
@@ -292,22 +293,22 @@ class FlatThemePreviewButtons
 
 		//---- label5 ----
 		label5.setText("regular");
-		label5.putClientProperty("FlatLaf.styleClass", "small");
+		label5.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label5, "cell 1 3,alignx center,growx 0");
 
 		//---- label7 ----
 		label7.setText("default");
-		label7.putClientProperty("FlatLaf.styleClass", "small");
+		label7.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label7, "cell 2 3,alignx center,growx 0");
 
 		//---- label6 ----
 		label6.setText("regular");
-		label6.putClientProperty("FlatLaf.styleClass", "small");
+		label6.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label6, "cell 3 3,alignx center,growx 0");
 
 		//---- label8 ----
 		label8.setText("default");
-		label8.putClientProperty("FlatLaf.styleClass", "small");
+		label8.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label8, "cell 4 3,alignx center,growx 0");
 
 		//---- label1 ----
@@ -316,26 +317,26 @@ class FlatThemePreviewButtons
 
 		//---- testStateButton1 ----
 		testStateButton1.setText("OK");
-		testStateButton1.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton1, "cell 1 4");
 
 		//---- testStateButton7 ----
 		testStateButton7.setText("OK");
 		testStateButton7.setStateDefault(true);
-		testStateButton7.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton7.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton7, "cell 2 4");
 
 		//---- testStateButton4 ----
 		testStateButton4.setText("OK");
 		testStateButton4.setStateFocused(true);
-		testStateButton4.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton4.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton4, "cell 3 4");
 
 		//---- testStateButton10 ----
 		testStateButton10.setText("OK");
 		testStateButton10.setStateFocused(true);
 		testStateButton10.setStateDefault(true);
-		testStateButton10.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton10.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton10, "cell 4 4");
 
 		//---- label2 ----
@@ -345,21 +346,21 @@ class FlatThemePreviewButtons
 		//---- testStateButton2 ----
 		testStateButton2.setText("OK");
 		testStateButton2.setStateHover(true);
-		testStateButton2.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton2.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton2, "cell 1 5");
 
 		//---- testStateButton8 ----
 		testStateButton8.setText("OK");
 		testStateButton8.setStateHover(true);
 		testStateButton8.setStateDefault(true);
-		testStateButton8.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton8.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton8, "cell 2 5");
 
 		//---- testStateButton5 ----
 		testStateButton5.setText("OK");
 		testStateButton5.setStateHover(true);
 		testStateButton5.setStateFocused(true);
-		testStateButton5.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton5.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton5, "cell 3 5");
 
 		//---- testStateButton11 ----
@@ -367,7 +368,7 @@ class FlatThemePreviewButtons
 		testStateButton11.setStateHover(true);
 		testStateButton11.setStateFocused(true);
 		testStateButton11.setStateDefault(true);
-		testStateButton11.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton11.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton11, "cell 4 5");
 
 		//---- label3 ----
@@ -377,21 +378,21 @@ class FlatThemePreviewButtons
 		//---- testStateButton3 ----
 		testStateButton3.setText("OK");
 		testStateButton3.setStatePressed(true);
-		testStateButton3.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton3.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton3, "cell 1 6");
 
 		//---- testStateButton9 ----
 		testStateButton9.setText("OK");
 		testStateButton9.setStatePressed(true);
 		testStateButton9.setStateDefault(true);
-		testStateButton9.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton9.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton9, "cell 2 6");
 
 		//---- testStateButton6 ----
 		testStateButton6.setText("OK");
 		testStateButton6.setStatePressed(true);
 		testStateButton6.setStateFocused(true);
-		testStateButton6.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton6.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton6, "cell 3 6");
 
 		//---- testStateButton12 ----
@@ -399,7 +400,7 @@ class FlatThemePreviewButtons
 		testStateButton12.setStatePressed(true);
 		testStateButton12.setStateFocused(true);
 		testStateButton12.setStateDefault(true);
-		testStateButton12.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton12.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton12, "cell 4 6");
 
 		//---- label4 ----
@@ -409,14 +410,14 @@ class FlatThemePreviewButtons
 		//---- testStateButton13 ----
 		testStateButton13.setText("OK");
 		testStateButton13.setEnabled(false);
-		testStateButton13.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton13.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton13, "cell 1 7");
 
 		//---- testStateButton14 ----
 		testStateButton14.setText("OK");
 		testStateButton14.setEnabled(false);
 		testStateButton14.setStateDefault(true);
-		testStateButton14.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton14.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton14, "cell 2 7");
 
 		//---- label10 ----
@@ -425,17 +426,17 @@ class FlatThemePreviewButtons
 
 		//---- button1 ----
 		button1.setText("OK");
-		button1.putClientProperty("JComponent.minimumWidth", 0);
+		button1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(button1, "cell 1 8");
 
 		//---- testDefaultButton1 ----
 		testDefaultButton1.setText("OK");
-		testDefaultButton1.putClientProperty("JComponent.minimumWidth", 0);
+		testDefaultButton1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testDefaultButton1, "cell 2 8");
 
 		//---- label12 ----
 		label12.setText("JToggleButton");
-		label12.putClientProperty("FlatLaf.styleClass", "h3");
+		label12.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label12, "cell 0 9 3 1");
 
 		//---- label29 ----
@@ -448,22 +449,22 @@ class FlatThemePreviewButtons
 
 		//---- label13 ----
 		label13.setText("unsel.");
-		label13.putClientProperty("FlatLaf.styleClass", "small");
+		label13.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label13, "cell 1 11,alignx center,growx 0");
 
 		//---- label14 ----
 		label14.setText("selected");
-		label14.putClientProperty("FlatLaf.styleClass", "small");
+		label14.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label14, "cell 2 11,alignx center,growx 0");
 
 		//---- label15 ----
 		label15.setText("unsel.");
-		label15.putClientProperty("FlatLaf.styleClass", "small");
+		label15.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label15, "cell 3 11,alignx center,growx 0");
 
 		//---- label16 ----
 		label16.setText("selected");
-		label16.putClientProperty("FlatLaf.styleClass", "small");
+		label16.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		add(label16, "cell 4 11,alignx center,growx 0");
 
 		//---- label17 ----
@@ -576,7 +577,7 @@ class FlatThemePreviewButtons
 
 		//---- label32 ----
 		label32.setText("Help Button");
-		label32.putClientProperty("FlatLaf.styleClass", "h3");
+		label32.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label32, "cell 0 17 2 1");
 
 		//---- label9 ----
@@ -592,14 +593,14 @@ class FlatThemePreviewButtons
 		add(label22, "cell 0 19");
 
 		//---- testStateButton15 ----
-		testStateButton15.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton15.putClientProperty("JButton.buttonType", "help");
+		testStateButton15.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton15.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton15, "cell 1 19 2 1,alignx center,growx 0");
 
 		//---- testStateButton19 ----
 		testStateButton19.setStateFocused(true);
-		testStateButton19.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton19.putClientProperty("JButton.buttonType", "help");
+		testStateButton19.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton19.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton19, "cell 3 19 2 1,alignx center,growx 0");
 
 		//---- label23 ----
@@ -608,15 +609,15 @@ class FlatThemePreviewButtons
 
 		//---- testStateButton16 ----
 		testStateButton16.setStateHover(true);
-		testStateButton16.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton16.putClientProperty("JButton.buttonType", "help");
+		testStateButton16.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton16.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton16, "cell 1 20 2 1,alignx center,growx 0");
 
 		//---- testStateButton20 ----
 		testStateButton20.setStateHover(true);
 		testStateButton20.setStateFocused(true);
-		testStateButton20.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton20.putClientProperty("JButton.buttonType", "help");
+		testStateButton20.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton20.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton20, "cell 3 20 2 1,alignx center,growx 0");
 
 		//---- label24 ----
@@ -625,15 +626,15 @@ class FlatThemePreviewButtons
 
 		//---- testStateButton17 ----
 		testStateButton17.setStatePressed(true);
-		testStateButton17.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton17.putClientProperty("JButton.buttonType", "help");
+		testStateButton17.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton17.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton17, "cell 1 21 2 1,alignx center,growx 0");
 
 		//---- testStateButton21 ----
 		testStateButton21.setStatePressed(true);
 		testStateButton21.setStateFocused(true);
-		testStateButton21.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton21.putClientProperty("JButton.buttonType", "help");
+		testStateButton21.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton21.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton21, "cell 3 21 2 1,alignx center,growx 0");
 
 		//---- label25 ----
@@ -642,8 +643,8 @@ class FlatThemePreviewButtons
 
 		//---- testStateButton18 ----
 		testStateButton18.setEnabled(false);
-		testStateButton18.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton18.putClientProperty("JButton.buttonType", "help");
+		testStateButton18.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton18.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton18, "cell 1 22 2 1,alignx center,growx 0");
 
 		//---- label26 ----
@@ -651,8 +652,8 @@ class FlatThemePreviewButtons
 		add(label26, "cell 0 23");
 
 		//---- button2 ----
-		button2.putClientProperty("JComponent.minimumWidth", 0);
-		button2.putClientProperty("JButton.buttonType", "help");
+		button2.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		button2.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(button2, "cell 1 23 2 1,alignx center,growx 0");
 
 		//---- buttonGroup1 ----

@@ -23,6 +23,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIDefaults.ActiveValue;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.jideoss.ui.FlatJidePainter;
@@ -55,8 +56,8 @@ public class FlatJideOssDefaultsAddon
 	public void afterDefaultsLoading( LookAndFeel laf, UIDefaults defaults ) {
 		// TristateCheckBox
 		defaults.put( "TristateCheckBox.icon", null );
-		defaults.put( "TristateCheckBox.setMixed.clientProperty",   new Object[] { "JButton.selectedState", "indeterminate" } );
-		defaults.put( "TristateCheckBox.clearMixed.clientProperty", new Object[] { "JButton.selectedState", null } );
+		defaults.put( "TristateCheckBox.setMixed.clientProperty",   new Object[] { FlatClientProperties.SELECTED_STATE, FlatClientProperties.SELECTED_STATE_INDETERMINATE } );
+		defaults.put( "TristateCheckBox.clearMixed.clientProperty", new Object[] { FlatClientProperties.SELECTED_STATE, null } );
 	}
 
 	@Override

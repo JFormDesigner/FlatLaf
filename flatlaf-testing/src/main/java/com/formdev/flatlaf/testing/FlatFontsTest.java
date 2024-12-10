@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
@@ -132,7 +133,7 @@ public class FlatFontsTest
 
 		//---- previewFamilyNameLabel ----
 		previewFamilyNameLabel.setText("name");
-		previewFamilyNameLabel.putClientProperty("FlatLaf.styleClass", "h1");
+		previewFamilyNameLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
 		add(previewFamilyNameLabel, "cell 1 1");
 
 		//======== familiesScrollPane ========

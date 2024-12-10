@@ -241,7 +241,7 @@ public class FlatWindowDecorationsTest
 			tallCompCheckBox.setSelected( false );
 
 			JButton myButton = new JButton( "?" );
-			myButton.putClientProperty( "JButton.buttonType", "toolBarButton" );
+			myButton.putClientProperty( FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON );
 			myButton.setFocusable( false );
 
 			menuBar.add( Box.createGlue() );
@@ -499,7 +499,7 @@ debug*/
 		if( typeUtilityRadioButton.isSelected() )
 			window.setType( Window.Type.UTILITY );
 		else if( typeSmallRadioButton.isSelected() )
-			((RootPaneContainer)window).getRootPane().putClientProperty( "Window.style", "small" );
+			((RootPaneContainer)window).getRootPane().putClientProperty( FlatClientProperties.WINDOW_STYLE, FlatClientProperties.WINDOW_STYLE_SMALL );
 	}
 
 	private void decorationStyleChanged() {

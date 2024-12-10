@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -176,12 +177,12 @@ class MoreComponentsPanel
 		add(scrollBar3, "cell 2 0 1 6,growy");
 
 		//---- scrollBar7 ----
-		scrollBar7.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar7.putClientProperty(FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS, true);
 		add(scrollBar7, "cell 2 0 1 6,growy");
 
 		//---- scrollBar8 ----
 		scrollBar8.setEnabled(false);
-		scrollBar8.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar8.putClientProperty(FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS, true);
 		add(scrollBar8, "cell 2 0 1 6,growy");
 
 		//---- separator2 ----
@@ -301,13 +302,13 @@ class MoreComponentsPanel
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
-		scrollBar5.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar5.putClientProperty(FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS, true);
 		add(scrollBar5, "cell 1 3,growx");
 
 		//---- scrollBar6 ----
 		scrollBar6.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar6.setEnabled(false);
-		scrollBar6.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar6.putClientProperty(FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS, true);
 		add(scrollBar6, "cell 1 4,growx");
 
 		//---- separatorLabel ----
@@ -518,7 +519,7 @@ class MoreComponentsPanel
 
 		//======== panel5 ========
 		{
-			panel5.putClientProperty("FlatLaf.style", "arc: 16; background: darken($Panel.background,5%)");
+			panel5.putClientProperty(FlatClientProperties.STYLE, "arc: 16; background: darken($Panel.background,5%)");
 			panel5.setLayout(new BorderLayout());
 
 			//---- label9 ----
@@ -530,7 +531,7 @@ class MoreComponentsPanel
 
 		//======== panel4 ========
 		{
-			panel4.putClientProperty("FlatLaf.style", "border: 1,1,1,1,@disabledForeground,1,16; background: darken($Panel.background,5%)");
+			panel4.putClientProperty(FlatClientProperties.STYLE, "border: 1,1,1,1,@disabledForeground,1,16; background: darken($Panel.background,5%)");
 			panel4.setLayout(new BorderLayout());
 
 			//---- label8 ----
@@ -546,14 +547,14 @@ class MoreComponentsPanel
 
 		//---- label13 ----
 		label13.setText("rounded background");
-		label13.putClientProperty("FlatLaf.style", "arc: 999; border: 2,10,2,10");
+		label13.putClientProperty(FlatClientProperties.STYLE, "arc: 999; border: 2,10,2,10");
 		label13.setBackground(new Color(0xb8e4f3));
 		label13.setForeground(new Color(0x135b76));
 		add(label13, "cell 1 13 4 1");
 
 		//---- label10 ----
 		label10.setText("rounded border");
-		label10.putClientProperty("FlatLaf.style", "arc: 999; border: 2,10,2,10,#135b76");
+		label10.putClientProperty(FlatClientProperties.STYLE, "arc: 999; border: 2,10,2,10,#135b76");
 		label10.setBackground(new Color(0xb8e4f3));
 		label10.setForeground(new Color(0x135b76));
 		add(label10, "cell 1 13 4 1");

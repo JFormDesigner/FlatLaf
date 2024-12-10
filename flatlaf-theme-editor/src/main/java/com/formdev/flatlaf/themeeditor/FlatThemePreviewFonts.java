@@ -85,7 +85,7 @@ public class FlatThemePreviewFonts
 
 		//---- headingsLabel ----
 		headingsLabel.setText("Headings");
-		headingsLabel.putClientProperty("FlatLaf.styleClass", "h3");
+		headingsLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(headingsLabel, "cell 0 0");
 
 		//---- h00Preview ----
@@ -123,7 +123,7 @@ public class FlatThemePreviewFonts
 
 		//---- textLabel ----
 		textLabel.setText("Text");
-		textLabel.putClientProperty("FlatLaf.styleClass", "h3");
+		textLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(textLabel, "cell 0 7");
 
 		//---- largePreview ----
@@ -171,7 +171,7 @@ public class FlatThemePreviewFonts
 
 		//---- scaleValueLabel ----
 		scaleValueLabel.setText("1x");
-		scaleValueLabel.putClientProperty("FlatLaf.styleClass", "h2");
+		scaleValueLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h2");
 		add(scaleValueLabel, "cell 0 16");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
@@ -275,7 +275,7 @@ public class FlatThemePreviewFonts
 
 			//---- descLabel ----
 			descLabel.setText("description");
-			descLabel.putClientProperty("FlatLaf.styleClass", "medium");
+			descLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
 			add(descLabel, "cell 1 0");
 			// JFormDesigner - End of component initialization  //GEN-END:initComponents
 		}

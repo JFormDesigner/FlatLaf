@@ -198,17 +198,17 @@ public class FlatComponentStateTest
 
 		//---- label11 ----
 		label11.setText("JButton");
-		label11.putClientProperty("FlatLaf.styleClass", "h3");
+		label11.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label11, "cell 1 0 2 1");
 
 		//---- label12 ----
 		label12.setText("JToggleButton");
-		label12.putClientProperty("FlatLaf.styleClass", "h3");
+		label12.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label12, "cell 5 0 3 1");
 
 		//---- label32 ----
 		label32.setText("Help Button");
-		label32.putClientProperty("FlatLaf.styleClass", "h3");
+		label32.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label32, "cell 9 0 2 1");
 
 		//---- label5 ----
@@ -257,26 +257,26 @@ public class FlatComponentStateTest
 
 		//---- testStateButton1 ----
 		testStateButton1.setText("text");
-		testStateButton1.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton1, "cell 1 2");
 
 		//---- testStateButton7 ----
 		testStateButton7.setText("text");
 		testStateButton7.setStateDefault(true);
-		testStateButton7.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton7.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton7, "cell 2 2");
 
 		//---- testStateButton4 ----
 		testStateButton4.setText("text");
 		testStateButton4.setStateFocused(true);
-		testStateButton4.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton4.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton4, "cell 3 2");
 
 		//---- testStateButton10 ----
 		testStateButton10.setText("text");
 		testStateButton10.setStateFocused(true);
 		testStateButton10.setStateDefault(true);
-		testStateButton10.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton10.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton10, "cell 4 2");
 
 		//---- testStateToggleButton1 ----
@@ -300,14 +300,14 @@ public class FlatComponentStateTest
 		add(testStateToggleButton12, "cell 8 2");
 
 		//---- testStateButton15 ----
-		testStateButton15.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton15.putClientProperty("JButton.buttonType", "help");
+		testStateButton15.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton15.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton15, "cell 9 2");
 
 		//---- testStateButton19 ----
 		testStateButton19.setStateFocused(true);
-		testStateButton19.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton19.putClientProperty("JButton.buttonType", "help");
+		testStateButton19.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton19.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton19, "cell 10 2");
 
 		//---- label2 ----
@@ -317,21 +317,21 @@ public class FlatComponentStateTest
 		//---- testStateButton2 ----
 		testStateButton2.setText("text");
 		testStateButton2.setStateHover(true);
-		testStateButton2.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton2.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton2, "cell 1 3");
 
 		//---- testStateButton8 ----
 		testStateButton8.setText("text");
 		testStateButton8.setStateHover(true);
 		testStateButton8.setStateDefault(true);
-		testStateButton8.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton8.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton8, "cell 2 3");
 
 		//---- testStateButton5 ----
 		testStateButton5.setText("text");
 		testStateButton5.setStateHover(true);
 		testStateButton5.setStateFocused(true);
-		testStateButton5.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton5.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton5, "cell 3 3");
 
 		//---- testStateButton11 ----
@@ -339,7 +339,7 @@ public class FlatComponentStateTest
 		testStateButton11.setStateHover(true);
 		testStateButton11.setStateFocused(true);
 		testStateButton11.setStateDefault(true);
-		testStateButton11.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton11.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton11, "cell 4 3");
 
 		//---- testStateToggleButton2 ----
@@ -368,15 +368,15 @@ public class FlatComponentStateTest
 
 		//---- testStateButton16 ----
 		testStateButton16.setStateHover(true);
-		testStateButton16.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton16.putClientProperty("JButton.buttonType", "help");
+		testStateButton16.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton16.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton16, "cell 9 3");
 
 		//---- testStateButton20 ----
 		testStateButton20.setStateHover(true);
 		testStateButton20.setStateFocused(true);
-		testStateButton20.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton20.putClientProperty("JButton.buttonType", "help");
+		testStateButton20.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton20.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton20, "cell 10 3");
 
 		//---- label3 ----
@@ -386,21 +386,21 @@ public class FlatComponentStateTest
 		//---- testStateButton3 ----
 		testStateButton3.setText("text");
 		testStateButton3.setStatePressed(true);
-		testStateButton3.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton3.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton3, "cell 1 4");
 
 		//---- testStateButton9 ----
 		testStateButton9.setText("text");
 		testStateButton9.setStatePressed(true);
 		testStateButton9.setStateDefault(true);
-		testStateButton9.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton9.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton9, "cell 2 4");
 
 		//---- testStateButton6 ----
 		testStateButton6.setText("text");
 		testStateButton6.setStatePressed(true);
 		testStateButton6.setStateFocused(true);
-		testStateButton6.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton6.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton6, "cell 3 4");
 
 		//---- testStateButton12 ----
@@ -408,7 +408,7 @@ public class FlatComponentStateTest
 		testStateButton12.setStatePressed(true);
 		testStateButton12.setStateFocused(true);
 		testStateButton12.setStateDefault(true);
-		testStateButton12.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton12.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton12, "cell 4 4");
 
 		//---- testStateToggleButton3 ----
@@ -437,15 +437,15 @@ public class FlatComponentStateTest
 
 		//---- testStateButton17 ----
 		testStateButton17.setStatePressed(true);
-		testStateButton17.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton17.putClientProperty("JButton.buttonType", "help");
+		testStateButton17.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton17.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton17, "cell 9 4");
 
 		//---- testStateButton21 ----
 		testStateButton21.setStatePressed(true);
 		testStateButton21.setStateFocused(true);
-		testStateButton21.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton21.putClientProperty("JButton.buttonType", "help");
+		testStateButton21.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton21.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton21, "cell 10 4");
 
 		//---- label4 ----
@@ -455,14 +455,14 @@ public class FlatComponentStateTest
 		//---- testStateButton13 ----
 		testStateButton13.setText("text");
 		testStateButton13.setEnabled(false);
-		testStateButton13.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton13.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton13, "cell 1 5");
 
 		//---- testStateButton14 ----
 		testStateButton14.setText("text");
 		testStateButton14.setEnabled(false);
 		testStateButton14.setStateDefault(true);
-		testStateButton14.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton14.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testStateButton14, "cell 2 5");
 
 		//---- testStateToggleButton4 ----
@@ -478,8 +478,8 @@ public class FlatComponentStateTest
 
 		//---- testStateButton18 ----
 		testStateButton18.setEnabled(false);
-		testStateButton18.putClientProperty("JComponent.minimumWidth", 0);
-		testStateButton18.putClientProperty("JButton.buttonType", "help");
+		testStateButton18.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		testStateButton18.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(testStateButton18, "cell 9 5");
 
 		//---- label10 ----
@@ -488,12 +488,12 @@ public class FlatComponentStateTest
 
 		//---- button1 ----
 		button1.setText("text");
-		button1.putClientProperty("JComponent.minimumWidth", 0);
+		button1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(button1, "cell 1 6");
 
 		//---- testDefaultButton1 ----
 		testDefaultButton1.setText("text");
-		testDefaultButton1.putClientProperty("JComponent.minimumWidth", 0);
+		testDefaultButton1.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
 		add(testDefaultButton1, "cell 2 6");
 
 		//---- toggleButton1 ----
@@ -506,19 +506,19 @@ public class FlatComponentStateTest
 		add(toggleButton2, "cell 6 6");
 
 		//---- button2 ----
-		button2.putClientProperty("JComponent.minimumWidth", 0);
-		button2.putClientProperty("JButton.buttonType", "help");
+		button2.putClientProperty(FlatClientProperties.MINIMUM_WIDTH, 0);
+		button2.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
 		add(button2, "cell 9 6");
 		add(separator1, "cell 0 7 11 1");
 
 		//---- label22 ----
 		label22.setText("JCheckBox");
-		label22.putClientProperty("FlatLaf.styleClass", "h3");
+		label22.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label22, "cell 1 8 2 1");
 
 		//---- label27 ----
 		label27.setText("JRadioButton");
-		label27.putClientProperty("FlatLaf.styleClass", "h3");
+		label27.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
 		add(label27, "cell 5 8 2 1");
 
 		//---- label23 ----

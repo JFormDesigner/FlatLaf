@@ -28,6 +28,7 @@ import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.extras.components.*;
@@ -252,7 +253,7 @@ class FlatThemePreview
 
 		//---- previewLabel ----
 		previewLabel.setText(" Preview ");
-		previewLabel.putClientProperty("FlatLaf.styleClass", "h2");
+		previewLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
