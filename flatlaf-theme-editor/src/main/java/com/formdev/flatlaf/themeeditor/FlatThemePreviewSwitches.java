@@ -672,7 +672,7 @@ class FlatThemePreviewSwitches
 				}
 				@Override
 				public boolean isSelected() {
-					return isStateSelected();
+					return isStateSelected() || isStateIndeterminate();
 				}
 			} );
 

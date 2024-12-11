@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.icons;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
+import static com.formdev.flatlaf.ui.FlatUIUtils.stateColor;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -48,6 +49,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.borderWidth					int or float	optional; defaults to Component.borderWidth
  * @uiDefault CheckBox.icon.selectedBorderWidth			int or float	optional; defaults to CheckBox.icon.borderWidth
  * @uiDefault CheckBox.icon.disabledSelectedBorderWidth	int or float	optional; defaults to CheckBox.icon.selectedBorderWidth
+ * @uiDefault CheckBox.icon.indeterminateBorderWidth			int or float	optional; defaults to CheckBox.icon.selectedBorderWidth
+ * @uiDefault CheckBox.icon.disabledIndeterminateBorderWidth	int or float	optional; defaults to CheckBox.icon.disabledSelectedBorderWidth
  * @uiDefault CheckBox.arc								int
  *
  * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
@@ -56,30 +59,45 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.selectedBorderColor			Color
  * @uiDefault CheckBox.icon.selectedBackground			Color
  * @uiDefault CheckBox.icon.checkmarkColor				Color
+ * @uiDefault CheckBox.icon.indeterminateBorderColor	Color	optional; defaults to CheckBox.icon.selectedBorderColor
+ * @uiDefault CheckBox.icon.indeterminateBackground		Color	optional; defaults to CheckBox.icon.selectedBackground
+ * @uiDefault CheckBox.icon.indeterminateCheckmarkColor	Color	optional; defaults to CheckBox.icon.checkmarkColor
  *
- * @uiDefault CheckBox.icon.disabledBorderColor			Color
- * @uiDefault CheckBox.icon.disabledBackground			Color
- * @uiDefault CheckBox.icon.disabledSelectedBorderColor	Color	optional; CheckBox.icon.disabledBorderColor is used if not specified
- * @uiDefault CheckBox.icon.disabledSelectedBackground	Color	optional; CheckBox.icon.disabledBackground is used if not specified
- * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
+ * @uiDefault CheckBox.icon.disabledBorderColor					Color
+ * @uiDefault CheckBox.icon.disabledBackground					Color
+ * @uiDefault CheckBox.icon.disabledSelectedBorderColor			Color	optional; defaults to CheckBox.icon.disabledBorderColor
+ * @uiDefault CheckBox.icon.disabledSelectedBackground			Color	optional; defaults to CheckBox.icon.disabledBackground
+ * @uiDefault CheckBox.icon.disabledCheckmarkColor				Color
+ * @uiDefault CheckBox.icon.disabledIndeterminateBorderColor	Color	optional; defaults to CheckBox.icon.disabledSelectedBorderColor
+ * @uiDefault CheckBox.icon.disabledIndeterminateBackground		Color	optional; defaults to CheckBox.icon.disabledSelectedBackground
+ * @uiDefault CheckBox.icon.disabledIndeterminateCheckmarkColor	Color	optional; defaults to CheckBox.icon.disabledCheckmarkColor
  *
- * @uiDefault CheckBox.icon.focusedBorderColor			Color	optional
- * @uiDefault CheckBox.icon.focusedBackground			Color	optional
- * @uiDefault CheckBox.icon.focusedSelectedBorderColor	Color	optional; CheckBox.icon.focusedBorderColor is used if not specified
- * @uiDefault CheckBox.icon.focusedSelectedBackground	Color	optional; CheckBox.icon.focusedBackground is used if not specified
- * @uiDefault CheckBox.icon.focusedCheckmarkColor		Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ * @uiDefault CheckBox.icon.focusedBorderColor					Color	optional
+ * @uiDefault CheckBox.icon.focusedBackground					Color	optional
+ * @uiDefault CheckBox.icon.focusedSelectedBorderColor			Color	optional; defaults to CheckBox.icon.focusedBorderColor
+ * @uiDefault CheckBox.icon.focusedSelectedBackground			Color	optional; defaults to CheckBox.icon.focusedBackground
+ * @uiDefault CheckBox.icon.focusedCheckmarkColor				Color	optional; defaults to CheckBox.icon.checkmarkColor
+ * @uiDefault CheckBox.icon.focusedIndeterminateBorderColor		Color	optional; defaults to CheckBox.icon.focusedSelectedBorderColor
+ * @uiDefault CheckBox.icon.focusedIndeterminateBackground		Color	optional; defaults to CheckBox.icon.focusedSelectedBackground
+ * @uiDefault CheckBox.icon.focusedIndeterminateCheckmarkColor	Color	optional; defaults to CheckBox.icon.focusedCheckmarkColor
  *
- * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
- * @uiDefault CheckBox.icon.hoverBackground				Color	optional
- * @uiDefault CheckBox.icon.hoverSelectedBorderColor	Color	optional; CheckBox.icon.hoverBorderColor is used if not specified
- * @uiDefault CheckBox.icon.hoverSelectedBackground		Color	optional; CheckBox.icon.hoverBackground is used if not specified
- * @uiDefault CheckBox.icon.hoverCheckmarkColor			Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ * @uiDefault CheckBox.icon.hoverBorderColor					Color	optional
+ * @uiDefault CheckBox.icon.hoverBackground						Color	optional
+ * @uiDefault CheckBox.icon.hoverSelectedBorderColor			Color	optional; defaults to CheckBox.icon.hoverBorderColor
+ * @uiDefault CheckBox.icon.hoverSelectedBackground				Color	optional; defaults to CheckBox.icon.hoverBackground
+ * @uiDefault CheckBox.icon.hoverCheckmarkColor					Color	optional; defaults to CheckBox.icon.checkmarkColor
+ * @uiDefault CheckBox.icon.hoverIndeterminateBorderColor		Color	optional; defaults to CheckBox.icon.hoverSelectedBorderColor
+ * @uiDefault CheckBox.icon.hoverIndeterminateBackground		Color	optional; defaults to CheckBox.icon.hoverSelectedBackground
+ * @uiDefault CheckBox.icon.hoverIndeterminateCheckmarkColor	Color	optional; defaults to CheckBox.icon.hoverCheckmarkColor
  *
- * @uiDefault CheckBox.icon.pressedBorderColor			Color	optional
- * @uiDefault CheckBox.icon.pressedBackground			Color	optional
- * @uiDefault CheckBox.icon.pressedSelectedBorderColor	Color	optional; CheckBox.icon.pressedBorderColor is used if not specified
- * @uiDefault CheckBox.icon.pressedSelectedBackground	Color	optional; CheckBox.icon.pressedBackground is used if not specified
- * @uiDefault CheckBox.icon.pressedCheckmarkColor		Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ * @uiDefault CheckBox.icon.pressedBorderColor					Color	optional
+ * @uiDefault CheckBox.icon.pressedBackground					Color	optional
+ * @uiDefault CheckBox.icon.pressedSelectedBorderColor			Color	optional; defaults to CheckBox.icon.pressedBorderColor
+ * @uiDefault CheckBox.icon.pressedSelectedBackground			Color	optional; defaults to CheckBox.icon.pressedBackground
+ * @uiDefault CheckBox.icon.pressedCheckmarkColor				Color	optional; defaults to CheckBox.icon.checkmarkColor
+ * @uiDefault CheckBox.icon.pressedIndeterminateBorderColor		Color	optional; defaults to CheckBox.icon.pressedSelectedBorderColor
+ * @uiDefault CheckBox.icon.pressedIndeterminateBackground		Color	optional; defaults to CheckBox.icon.pressedSelectedBackground
+ * @uiDefault CheckBox.icon.pressedIndeterminateCheckmarkColor	Color	optional; defaults to CheckBox.icon.pressedCheckmarkColor
  *
  * @author Karl Tauber
  */
@@ -92,6 +110,8 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected float borderWidth = getUIFloat( "CheckBox.icon.borderWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ), style );
 	/** @since 2 */ @Styleable protected float selectedBorderWidth = getUIFloat( "CheckBox.icon.selectedBorderWidth", Float.MIN_VALUE, style );
 	/** @since 2 */ @Styleable protected float disabledSelectedBorderWidth = getUIFloat( "CheckBox.icon.disabledSelectedBorderWidth", Float.MIN_VALUE, style );
+	/** @since 3.6 */ @Styleable protected float indeterminateBorderWidth = getUIFloat( "CheckBox.icon.indeterminateBorderWidth", Float.MIN_VALUE, style );
+	/** @since 3.6 */ @Styleable protected float disabledIndeterminateBorderWidth = getUIFloat( "CheckBox.icon.disabledIndeterminateBorderWidth", Float.MIN_VALUE, style );
 	@Styleable protected int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	// enabled
@@ -100,6 +120,9 @@ public class FlatCheckBoxIcon
 	@Styleable protected Color selectedBorderColor = getUIColor( "CheckBox.icon.selectedBorderColor", style );
 	@Styleable protected Color selectedBackground = getUIColor( "CheckBox.icon.selectedBackground", style );
 	@Styleable protected Color checkmarkColor = getUIColor( "CheckBox.icon.checkmarkColor", style );
+	/** @since 3.6 */ @Styleable protected Color indeterminateBorderColor = getUIColor( "CheckBox.icon.indeterminateBorderColor", style );
+	/** @since 3.6 */ @Styleable protected Color indeterminateBackground = getUIColor( "CheckBox.icon.indeterminateBackground", style );
+	/** @since 3.6 */ @Styleable protected Color indeterminateCheckmarkColor = getUIColor( "CheckBox.icon.indeterminateCheckmarkColor", style );
 
 	// disabled
 	@Styleable protected Color disabledBorderColor = getUIColor( "CheckBox.icon.disabledBorderColor", style );
@@ -107,6 +130,9 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected Color disabledSelectedBorderColor = getUIColor( "CheckBox.icon.disabledSelectedBorderColor", style );
 	/** @since 2 */ @Styleable protected Color disabledSelectedBackground = getUIColor( "CheckBox.icon.disabledSelectedBackground", style );
 	@Styleable protected Color disabledCheckmarkColor = getUIColor( "CheckBox.icon.disabledCheckmarkColor", style );
+	/** @since 3.6 */ @Styleable protected Color disabledIndeterminateBorderColor = getUIColor( "CheckBox.icon.disabledIndeterminateBorderColor", style );
+	/** @since 3.6 */ @Styleable protected Color disabledIndeterminateBackground = getUIColor( "CheckBox.icon.disabledIndeterminateBackground", style );
+	/** @since 3.6 */ @Styleable protected Color disabledIndeterminateCheckmarkColor = getUIColor( "CheckBox.icon.disabledIndeterminateCheckmarkColor", style );
 
 	// focused
 	@Styleable protected Color focusedBorderColor = getUIColor( "CheckBox.icon.focusedBorderColor", style );
@@ -114,6 +140,9 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected Color focusedSelectedBorderColor = getUIColor( "CheckBox.icon.focusedSelectedBorderColor", style );
 	/** @since 2 */ @Styleable protected Color focusedSelectedBackground = getUIColor( "CheckBox.icon.focusedSelectedBackground", style );
 	/** @since 2 */ @Styleable protected Color focusedCheckmarkColor = getUIColor( "CheckBox.icon.focusedCheckmarkColor", style );
+	/** @since 3.6 */ @Styleable protected Color focusedIndeterminateBorderColor = getUIColor( "CheckBox.icon.focusedIndeterminateBorderColor", style );
+	/** @since 3.6 */ @Styleable protected Color focusedIndeterminateBackground = getUIColor( "CheckBox.icon.focusedIndeterminateBackground", style );
+	/** @since 3.6 */ @Styleable protected Color focusedIndeterminateCheckmarkColor = getUIColor( "CheckBox.icon.focusedIndeterminateCheckmarkColor", style );
 
 	// hover
 	@Styleable protected Color hoverBorderColor = getUIColor( "CheckBox.icon.hoverBorderColor", style );
@@ -121,6 +150,9 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected Color hoverSelectedBorderColor = getUIColor( "CheckBox.icon.hoverSelectedBorderColor", style );
 	/** @since 2 */ @Styleable protected Color hoverSelectedBackground = getUIColor( "CheckBox.icon.hoverSelectedBackground", style );
 	/** @since 2 */ @Styleable protected Color hoverCheckmarkColor = getUIColor( "CheckBox.icon.hoverCheckmarkColor", style );
+	/** @since 3.6 */ @Styleable protected Color hoverIndeterminateBorderColor = getUIColor( "CheckBox.icon.hoverIndeterminateBorderColor", style );
+	/** @since 3.6 */ @Styleable protected Color hoverIndeterminateBackground = getUIColor( "CheckBox.icon.hoverIndeterminateBackground", style );
+	/** @since 3.6 */ @Styleable protected Color hoverIndeterminateCheckmarkColor = getUIColor( "CheckBox.icon.hoverIndeterminateCheckmarkColor", style );
 
 	// pressed
 	/** @since 2 */ @Styleable protected Color pressedBorderColor = getUIColor( "CheckBox.icon.pressedBorderColor", style );
@@ -128,6 +160,9 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected Color pressedSelectedBorderColor = getUIColor( "CheckBox.icon.pressedSelectedBorderColor", style );
 	/** @since 2 */ @Styleable protected Color pressedSelectedBackground = getUIColor( "CheckBox.icon.pressedSelectedBackground", style );
 	/** @since 2 */ @Styleable protected Color pressedCheckmarkColor = getUIColor( "CheckBox.icon.pressedCheckmarkColor", style );
+	/** @since 3.6 */ @Styleable protected Color pressedIndeterminateBorderColor = getUIColor( "CheckBox.icon.pressedIndeterminateBorderColor", style );
+	/** @since 3.6 */ @Styleable protected Color pressedIndeterminateBackground = getUIColor( "CheckBox.icon.pressedIndeterminateBackground", style );
+	/** @since 3.6 */ @Styleable protected Color pressedIndeterminateCheckmarkColor = getUIColor( "CheckBox.icon.pressedIndeterminateCheckmarkColor", style );
 
 	protected String getPropertyPrefix() {
 		return "CheckBox.";
@@ -182,11 +217,17 @@ public class FlatCheckBoxIcon
 		boolean indeterminate = isIndeterminate( c );
 		boolean selected = indeterminate || isSelected( c );
 		boolean isFocused = FlatUIUtils.isPermanentFocusOwner( c );
-		float bw = selected
-			? (disabledSelectedBorderWidth != Float.MIN_VALUE && !c.isEnabled()
-				? disabledSelectedBorderWidth
-				: (selectedBorderWidth != Float.MIN_VALUE ? selectedBorderWidth : borderWidth))
-			: borderWidth;
+		float bw = Float.MIN_VALUE;
+		if( !c.isEnabled() ) {
+			bw = (indeterminate && disabledIndeterminateBorderWidth != Float.MIN_VALUE)
+				? disabledIndeterminateBorderWidth
+				: (selected ? disabledSelectedBorderWidth : selectedBorderWidth);
+		}
+		if( bw == Float.MIN_VALUE ) {
+			bw = (indeterminate && indeterminateBorderWidth != Float.MIN_VALUE)
+				? indeterminateBorderWidth
+				: ((selected && selectedBorderWidth != Float.MIN_VALUE) ? selectedBorderWidth : borderWidth);
+		}
 
 		// paint focused border
 		if( isFocused && focusWidth > 0 && FlatButtonUI.isFocusPainted( c ) ) {
@@ -195,15 +236,15 @@ public class FlatCheckBoxIcon
 		}
 
 		// paint border
-		g.setColor( getBorderColor( c, selected ) );
+		g.setColor( getBorderColor( c, selected, indeterminate ) );
 		paintBorder( c, g, bw );
 
 		// paint background
-		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected ),
-			selected ? selectedBackground : background );
+		Color baseBg = stateColor( indeterminate, indeterminateBackground, selected, selectedBackground, background );
+		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected, indeterminate ), baseBg );
 		if( bg.getAlpha() < 255 ) {
 			// fill background with default color before filling with non-opaque background
-			g.setColor( selected ? selectedBackground : background );
+			g.setColor( baseBg );
 			paintBackground( c, g, bw );
 		}
 		g.setColor( bg );
@@ -211,7 +252,7 @@ public class FlatCheckBoxIcon
 
 		// paint checkmark
 		if( selected ) {
-			g.setColor( getCheckmarkColor( c ) );
+			g.setColor( getCheckmarkColor( c, indeterminate ) );
 			if( indeterminate )
 				paintIndeterminate( c, g );
 			else
@@ -272,30 +313,33 @@ public class FlatCheckBoxIcon
 		return focusColor;
 	}
 
-	protected Color getBorderColor( Component c, boolean selected ) {
+	/** @since 3.6 */
+	protected Color getBorderColor( Component c, boolean selected, boolean indeterminate ) {
 		return FlatButtonUI.buttonStateColor( c,
-			selected ? selectedBorderColor : borderColor,
-			(selected && disabledSelectedBorderColor != null) ? disabledSelectedBorderColor : disabledBorderColor,
-			(selected && focusedSelectedBorderColor != null) ? focusedSelectedBorderColor : focusedBorderColor,
-			(selected && hoverSelectedBorderColor != null) ? hoverSelectedBorderColor : hoverBorderColor,
-			(selected && pressedSelectedBorderColor != null) ? pressedSelectedBorderColor : pressedBorderColor );
+			stateColor( indeterminate, indeterminateBorderColor,         selected, selectedBorderColor,         borderColor ),
+			stateColor( indeterminate, disabledIndeterminateBorderColor, selected, disabledSelectedBorderColor, disabledBorderColor ),
+			stateColor( indeterminate, focusedIndeterminateBorderColor,  selected, focusedSelectedBorderColor,  focusedBorderColor ),
+			stateColor( indeterminate, hoverIndeterminateBorderColor,    selected, hoverSelectedBorderColor,    hoverBorderColor ),
+			stateColor( indeterminate, pressedIndeterminateBorderColor,  selected, pressedSelectedBorderColor,  pressedBorderColor ) );
 	}
 
-	protected Color getBackground( Component c, boolean selected ) {
+	/** @since 3.6 */
+	protected Color getBackground( Component c, boolean selected, boolean indeterminate ) {
 		return FlatButtonUI.buttonStateColor( c,
-			selected ? selectedBackground : background,
-			(selected && disabledSelectedBackground != null) ? disabledSelectedBackground : disabledBackground,
-			(selected && focusedSelectedBackground != null) ? focusedSelectedBackground : focusedBackground,
-			(selected && hoverSelectedBackground != null) ? hoverSelectedBackground : hoverBackground,
-			(selected && pressedSelectedBackground != null) ? pressedSelectedBackground : pressedBackground );
+			stateColor( indeterminate, indeterminateBackground,          selected, selectedBackground,          background ),
+			stateColor( indeterminate, disabledIndeterminateBackground,  selected, disabledSelectedBackground,  disabledBackground ),
+			stateColor( indeterminate, focusedIndeterminateBackground,   selected, focusedSelectedBackground,   focusedBackground ),
+			stateColor( indeterminate, hoverIndeterminateBackground,     selected, hoverSelectedBackground,     hoverBackground ),
+			stateColor( indeterminate, pressedIndeterminateBackground,   selected, pressedSelectedBackground,   pressedBackground ) );
 	}
 
-	protected Color getCheckmarkColor( Component c ) {
+	/** @since 3.6 */
+	protected Color getCheckmarkColor( Component c, boolean indeterminate ) {
 		return FlatButtonUI.buttonStateColor( c,
-			checkmarkColor,
-			disabledCheckmarkColor,
-			focusedCheckmarkColor,
-			hoverCheckmarkColor,
-			pressedCheckmarkColor );
+			stateColor( indeterminate, indeterminateCheckmarkColor, checkmarkColor ),
+			stateColor( indeterminate, disabledIndeterminateCheckmarkColor, disabledCheckmarkColor ),
+			stateColor( indeterminate, focusedIndeterminateCheckmarkColor, focusedCheckmarkColor ),
+			stateColor( indeterminate, hoverIndeterminateCheckmarkColor, hoverCheckmarkColor ),
+			stateColor( indeterminate, pressedIndeterminateCheckmarkColor, pressedCheckmarkColor ) );
 	}
 }

@@ -517,6 +517,8 @@ public class TestFlatStyleableInfo
 			"icon.borderWidth", float.class,
 			"icon.selectedBorderWidth", float.class,
 			"icon.disabledSelectedBorderWidth", float.class,
+			"icon.indeterminateBorderWidth", float.class,
+			"icon.disabledIndeterminateBorderWidth", float.class,
 			"icon.arc", int.class,
 
 			// enabled
@@ -525,6 +527,9 @@ public class TestFlatStyleableInfo
 			"icon.selectedBorderColor", Color.class,
 			"icon.selectedBackground", Color.class,
 			"icon.checkmarkColor", Color.class,
+			"icon.indeterminateBorderColor", Color.class,
+			"icon.indeterminateBackground", Color.class,
+			"icon.indeterminateCheckmarkColor", Color.class,
 
 			// disabled
 			"icon.disabledBorderColor", Color.class,
@@ -532,6 +537,9 @@ public class TestFlatStyleableInfo
 			"icon.disabledSelectedBorderColor", Color.class,
 			"icon.disabledSelectedBackground", Color.class,
 			"icon.disabledCheckmarkColor", Color.class,
+			"icon.disabledIndeterminateBorderColor", Color.class,
+			"icon.disabledIndeterminateBackground", Color.class,
+			"icon.disabledIndeterminateCheckmarkColor", Color.class,
 
 			// focused
 			"icon.focusedBorderColor", Color.class,
@@ -539,6 +547,9 @@ public class TestFlatStyleableInfo
 			"icon.focusedSelectedBorderColor", Color.class,
 			"icon.focusedSelectedBackground", Color.class,
 			"icon.focusedCheckmarkColor", Color.class,
+			"icon.focusedIndeterminateBorderColor", Color.class,
+			"icon.focusedIndeterminateBackground", Color.class,
+			"icon.focusedIndeterminateCheckmarkColor", Color.class,
 
 			// hover
 			"icon.hoverBorderColor", Color.class,
@@ -546,13 +557,19 @@ public class TestFlatStyleableInfo
 			"icon.hoverSelectedBorderColor", Color.class,
 			"icon.hoverSelectedBackground", Color.class,
 			"icon.hoverCheckmarkColor", Color.class,
+			"icon.hoverIndeterminateBorderColor", Color.class,
+			"icon.hoverIndeterminateBackground", Color.class,
+			"icon.hoverIndeterminateCheckmarkColor", Color.class,
 
 			// pressed
 			"icon.pressedBorderColor", Color.class,
 			"icon.pressedBackground", Color.class,
 			"icon.pressedSelectedBorderColor", Color.class,
 			"icon.pressedSelectedBackground", Color.class,
-			"icon.pressedCheckmarkColor", Color.class
+			"icon.pressedCheckmarkColor", Color.class,
+			"icon.pressedIndeterminateBorderColor", Color.class,
+			"icon.pressedIndeterminateBackground", Color.class,
+			"icon.pressedIndeterminateCheckmarkColor", Color.class
 		);
 	}
 
@@ -1146,6 +1163,8 @@ public class TestFlatStyleableInfo
 			"borderWidth", float.class,
 			"selectedBorderWidth", float.class,
 			"disabledSelectedBorderWidth", float.class,
+			"indeterminateBorderWidth", float.class,
+			"disabledIndeterminateBorderWidth", float.class,
 			"arc", int.class,
 
 			// enabled
@@ -1154,6 +1173,9 @@ public class TestFlatStyleableInfo
 			"selectedBorderColor", Color.class,
 			"selectedBackground", Color.class,
 			"checkmarkColor", Color.class,
+			"indeterminateBorderColor", Color.class,
+			"indeterminateBackground", Color.class,
+			"indeterminateCheckmarkColor", Color.class,
 
 			// disabled
 			"disabledBorderColor", Color.class,
@@ -1161,6 +1183,9 @@ public class TestFlatStyleableInfo
 			"disabledSelectedBorderColor", Color.class,
 			"disabledSelectedBackground", Color.class,
 			"disabledCheckmarkColor", Color.class,
+			"disabledIndeterminateBorderColor", Color.class,
+			"disabledIndeterminateBackground", Color.class,
+			"disabledIndeterminateCheckmarkColor", Color.class,
 
 			// focused
 			"focusedBorderColor", Color.class,
@@ -1168,6 +1193,9 @@ public class TestFlatStyleableInfo
 			"focusedSelectedBorderColor", Color.class,
 			"focusedSelectedBackground", Color.class,
 			"focusedCheckmarkColor", Color.class,
+			"focusedIndeterminateBorderColor", Color.class,
+			"focusedIndeterminateBackground", Color.class,
+			"focusedIndeterminateCheckmarkColor", Color.class,
 
 			// hover
 			"hoverBorderColor", Color.class,
@@ -1175,13 +1203,19 @@ public class TestFlatStyleableInfo
 			"hoverSelectedBorderColor", Color.class,
 			"hoverSelectedBackground", Color.class,
 			"hoverCheckmarkColor", Color.class,
+			"hoverIndeterminateBorderColor", Color.class,
+			"hoverIndeterminateBackground", Color.class,
+			"hoverIndeterminateCheckmarkColor", Color.class,
 
 			// pressed
 			"pressedBorderColor", Color.class,
 			"pressedBackground", Color.class,
 			"pressedSelectedBorderColor", Color.class,
 			"pressedSelectedBackground", Color.class,
-			"pressedCheckmarkColor", Color.class
+			"pressedCheckmarkColor", Color.class,
+			"pressedIndeterminateBorderColor", Color.class,
+			"pressedIndeterminateBackground", Color.class,
+			"pressedIndeterminateCheckmarkColor", Color.class
 		);
 	}
 

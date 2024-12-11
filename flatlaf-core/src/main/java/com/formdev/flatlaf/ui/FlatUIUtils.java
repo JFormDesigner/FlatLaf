@@ -129,6 +129,20 @@ public class FlatUIUtils
 		return insets.top == 0 && insets.left == 0 && insets.bottom == 0 && insets.right == 0;
 	}
 
+	/** @since 3.6 */
+	public static Color stateColor( boolean state, Color stateColor, Color defaultColor ) {
+		return (state && stateColor != null) ? stateColor : defaultColor;
+	}
+
+	/** @since 3.6 */
+	public static Color stateColor( boolean state1, Color state1Color,
+		boolean state2, Color state2Color, Color defaultColor )
+	{
+		return (state1 && state1Color != null)
+			? state1Color
+			: ((state2 && state2Color != null) ? state2Color : defaultColor);
+	}
+
 	public static Color getUIColor( String key, int defaultColorRGB ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : new Color( defaultColorRGB );

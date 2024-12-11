@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- CheckBox: Support styling indeterminate state of
+  [tri-state check boxes](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html).
+  (issue #919)
 - Tree: Support for alternate row highlighting. (PR #903)
 - Tree: Support wide cell renderer. (issue #922)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
