@@ -29,17 +29,35 @@ public class FlatTree
 	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
-	 * Returns if the tree shows a wide selection
+	 * Returns whether tree shows a wide selection
 	 */
 	public boolean isWideSelection() {
 		return getClientPropertyBoolean( TREE_WIDE_SELECTION, "Tree.wideSelection" );
 	}
 
 	/**
-	 * Sets if the tree shows a wide selection
+	 * Specifies whether tree shows a wide selection
 	 */
 	public void setWideSelection( boolean wideSelection ) {
 		putClientProperty( TREE_WIDE_SELECTION, wideSelection );
+	}
+
+	/**
+	 * Returns whether tree uses a wide cell renderer.
+	 *
+	 * @since 3.6
+	 */
+	public boolean isWideCellRenderer() {
+		return getClientPropertyBoolean( TREE_WIDE_CELL_RENDERER, "Tree.wideCellRenderer" );
+	}
+
+	/**
+	 * Specifies whether tree uses a wide cell renderer.
+	 *
+	 * @since 3.6
+	 */
+	public void setWideCellRenderer( boolean wideCellRenderer ) {
+		putClientProperty( TREE_WIDE_CELL_RENDERER, wideCellRenderer );
 	}
 
 	/**

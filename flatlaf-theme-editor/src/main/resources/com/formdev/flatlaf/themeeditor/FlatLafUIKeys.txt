@@ -1217,6 +1217,7 @@ Tree.showDefaultIcons
 Tree.textBackground
 Tree.textForeground
 Tree.timeFactor
+Tree.wideCellRenderer
 Tree.wideSelection
 TreeUI
 TristateCheckBox.clearMixed.clientProperty

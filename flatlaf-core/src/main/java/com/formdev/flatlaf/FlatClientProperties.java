@@ -1410,12 +1410,22 @@ public interface FlatClientProperties
 	//---- JTree --------------------------------------------------------------
 
 	/**
-	 * Override if a tree shows a wide selection. Default is {@code true}.
+	 * Specifies whether tree shows a wide selection. Default is {@code true}.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TREE_WIDE_SELECTION = "JTree.wideSelection";
+
+	/**
+	 * Specifies whether tree uses a wide cell renderer. Default is {@code false}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 3.6
+	 */
+	String TREE_WIDE_CELL_RENDERER = "JTree.wideCellRenderer";
 
 	/**
 	 * Specifies whether tree item selection is painted. Default is {@code true}.

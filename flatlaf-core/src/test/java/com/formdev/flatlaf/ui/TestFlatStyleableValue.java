@@ -942,6 +942,7 @@ public class TestFlatStyleableValue
 		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
 		testInteger( c, ui, "selectionArc", 123 );
 		testBoolean( c, ui, "wideSelection", true );
+		testBoolean( c, ui, "wideCellRenderer", true );
 		testBoolean( c, ui, "showCellFocusIndicator", true );
 
 		testBoolean( c, ui, "paintSelection", false );
