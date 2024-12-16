@@ -325,7 +325,7 @@ public class FlatListUI
 		}
 		
 		// combobox does not support alternate row color
-		if ( !"ComboBox.list".equals( list.getName() ) ) {
+		if( !"ComboBox.list".equals( list.getName() ) ) {
 			if( alternateRowColor != null && row % 2 != 0 ) {
 				g.setColor( alternateRowColor );
 				
