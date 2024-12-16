@@ -324,8 +324,8 @@ public class FlatListUI
 			cw = rowBounds.width;
 		}
 		
-		// filelist/combobox does not support alternate row color
-		if( !isFileList && !(dataModel instanceof DefaultComboBoxModel) ) {
+		// combobox does not support alternate row color
+		if ( !"ComboBox.list".equals( list.getName() ) ) {
 			if( alternateRowColor != null && row % 2 != 0 ) {
 				g.setColor( alternateRowColor );
 				
