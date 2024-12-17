@@ -1148,6 +1148,8 @@ public class TestFlatStyleableValue
 		testValue( icon, "borderWidth", 1.5f );
 		testValue( icon, "selectedBorderWidth", 1.5f );
 		testValue( icon, "disabledSelectedBorderWidth", 1.5f );
+		testValue( icon, "indeterminateBorderWidth", 1.5f );
+		testValue( icon, "disabledIndeterminateBorderWidth", 1.5f );
 		testValue( icon, "arc", 5 );
 
 		// enabled
@@ -1156,6 +1158,9 @@ public class TestFlatStyleableValue
 		testValue( icon, "selectedBorderColor", Color.WHITE );
 		testValue( icon, "selectedBackground", Color.WHITE );
 		testValue( icon, "checkmarkColor", Color.WHITE );
+		testValue( icon, "indeterminateBorderColor", Color.WHITE );
+		testValue( icon, "indeterminateBackground", Color.WHITE );
+		testValue( icon, "indeterminateCheckmarkColor", Color.WHITE );
 
 		// disabled
 		testValue( icon, "disabledBorderColor", Color.WHITE );
@@ -1163,6 +1168,9 @@ public class TestFlatStyleableValue
 		testValue( icon, "disabledSelectedBorderColor", Color.WHITE );
 		testValue( icon, "disabledSelectedBackground", Color.WHITE );
 		testValue( icon, "disabledCheckmarkColor", Color.WHITE );
+		testValue( icon, "disabledIndeterminateBorderColor", Color.WHITE );
+		testValue( icon, "disabledIndeterminateBackground", Color.WHITE );
+		testValue( icon, "disabledIndeterminateCheckmarkColor", Color.WHITE );
 
 		// focused
 		testValue( icon, "focusedBorderColor", Color.WHITE );
@@ -1170,6 +1178,9 @@ public class TestFlatStyleableValue
 		testValue( icon, "focusedSelectedBorderColor", Color.WHITE );
 		testValue( icon, "focusedSelectedBackground", Color.WHITE );
 		testValue( icon, "focusedCheckmarkColor", Color.WHITE );
+		testValue( icon, "focusedIndeterminateBorderColor", Color.WHITE );
+		testValue( icon, "focusedIndeterminateBackground", Color.WHITE );
+		testValue( icon, "focusedIndeterminateCheckmarkColor", Color.WHITE );
 
 		// hover
 		testValue( icon, "hoverBorderColor", Color.WHITE );
@@ -1177,6 +1188,9 @@ public class TestFlatStyleableValue
 		testValue( icon, "hoverSelectedBorderColor", Color.WHITE );
 		testValue( icon, "hoverSelectedBackground", Color.WHITE );
 		testValue( icon, "hoverCheckmarkColor", Color.WHITE );
+		testValue( icon, "hoverIndeterminateBorderColor", Color.WHITE );
+		testValue( icon, "hoverIndeterminateBackground", Color.WHITE );
+		testValue( icon, "hoverIndeterminateCheckmarkColor", Color.WHITE );
 
 		// pressed
 		testValue( icon, "pressedBorderColor", Color.WHITE );
@@ -1184,6 +1198,9 @@ public class TestFlatStyleableValue
 		testValue( icon, "pressedSelectedBorderColor", Color.WHITE );
 		testValue( icon, "pressedSelectedBackground", Color.WHITE );
 		testValue( icon, "pressedCheckmarkColor", Color.WHITE );
+		testValue( icon, "pressedIndeterminateBorderColor", Color.WHITE );
+		testValue( icon, "pressedIndeterminateBackground", Color.WHITE );
+		testValue( icon, "pressedIndeterminateCheckmarkColor", Color.WHITE );
 	}
 
 	@Test
