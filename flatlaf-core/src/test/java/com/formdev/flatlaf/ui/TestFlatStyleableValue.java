@@ -370,6 +370,7 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "selectionForeground", 0x123456 );
 		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
 		testColor( c, ui, "selectionInactiveForeground", 0x123456 );
+		testColor( c, ui, "alternateRowColor", 0x123456 );
 		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
 		testInteger( c, ui, "selectionArc", 123 );
 

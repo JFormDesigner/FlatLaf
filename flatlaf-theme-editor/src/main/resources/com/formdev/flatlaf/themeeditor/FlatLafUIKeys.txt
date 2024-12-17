@@ -469,6 +469,7 @@ Label.disabledShadow
 Label.font
 Label.foreground
 LabelUI
+List.alternateRowColor
 List.background
 List.border
 List.cellFocusColor
