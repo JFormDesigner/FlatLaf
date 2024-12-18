@@ -33,7 +33,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][grow][][]"
+				"$rowConstraints": "[][grow][]0[]"
 				"$layoutConstraints": "ltr,insets 0,hidemode 3"
 			} ) {
 				name: "panel1"
@@ -95,7 +95,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][grow][][]"
+				"$rowConstraints": "[][grow][]0[]"
 			} ) {
 				name: "panel3"
 				"$client.FlatLaf.internal.testing.ignore": true
@@ -146,7 +146,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][grow][][]"
+				"$rowConstraints": "[][grow][]0[]"
 			} ) {
 				name: "panel2"
 				"$client.FlatLaf.internal.testing.ignore": true
@@ -385,7 +385,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 8,hidemode 3"
 				"$columnConstraints": "[fill][fill]"
-				"$rowConstraints": "[][][]"
+				"$rowConstraints": "[][][][]"
 			} ) {
 				name: "listOptionsPanel"
 				"border": new javax.swing.border.TitledBorder( "JList Control" )
@@ -454,6 +454,16 @@ new FormModel {
 					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "listVisibleRowCountChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "listAlternatingRowsCheckBox"
+					"text": "alternating rows"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "listAlternatingRowsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3 2 1,alignx left,growx 0"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 4 4 1"
@@ -524,6 +534,16 @@ new FormModel {
 						"JavaCodeGenerator.variableLocal": false
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treePaintSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "treeAlternatingRowsCheckBox"
+					"text": "alternating rows"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeAlternatingRowsChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )

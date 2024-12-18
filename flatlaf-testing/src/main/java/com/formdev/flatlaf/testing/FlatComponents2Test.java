@@ -494,6 +494,11 @@ public class FlatComponents2Test
 			list.setVisibleRowCount( visibleRowCount );
 	}
 
+	private void listAlternatingRowsChanged() {
+		UIManager.put( "List.alternateRowColor", listAlternatingRowsCheckBox.isSelected() ? Color.YELLOW : null );
+		FlatLaf.updateUILater();
+	}
+
 	private void treeRendererChanged() {
 		Object sel = treeRendererComboBox.getSelectedItem();
 		if( !(sel instanceof String) )
@@ -528,6 +533,11 @@ public class FlatComponents2Test
 		boolean wideCellRenderer = treeWideCellRendererCheckBox.isSelected();
 		for( JTree tree : allTrees )
 			tree.putClientProperty( FlatClientProperties.TREE_WIDE_CELL_RENDERER, wideCellRenderer );
+	}
+
+	private void treeAlternatingRowsChanged() {
+		UIManager.put( "Tree.alternateRowColor", treeAlternatingRowsCheckBox.isSelected() ? Color.cyan : null );
+		FlatLaf.updateUILater();
 	}
 
 	private void treePaintSelectionChanged() {
@@ -670,12 +680,14 @@ public class FlatComponents2Test
 		listLayoutOrientationField = new JComboBox<>();
 		JLabel listVisibleRowCountLabel = new JLabel();
 		listVisibleRowCountSpinner = new JSpinner();
+		listAlternatingRowsCheckBox = new JCheckBox();
 		treeOptionsPanel = new JPanel();
 		JLabel treeRendererLabel = new JLabel();
 		treeRendererComboBox = new JComboBox<>();
 		treeWideSelectionCheckBox = new JCheckBox();
 		treeWideCellRendererCheckBox = new JCheckBox();
 		treePaintSelectionCheckBox = new JCheckBox();
+		treeAlternatingRowsCheckBox = new JCheckBox();
 		treePaintLinesCheckBox = new JCheckBox();
 		treeRedLinesCheckBox = new JCheckBox();
 		treeEditableCheckBox = new JCheckBox();
@@ -737,7 +749,7 @@ public class FlatComponents2Test
 				// rows
 				"[]" +
 				"[grow]" +
-				"[]" +
+				"[]0" +
 				"[]"));
 
 			//---- listLabel ----
@@ -780,7 +792,7 @@ public class FlatComponents2Test
 				// rows
 				"[]" +
 				"[grow]" +
-				"[]" +
+				"[]0" +
 				"[]"));
 
 			//---- tableLabel ----
@@ -817,7 +829,7 @@ public class FlatComponents2Test
 				// rows
 				"[]" +
 				"[grow]" +
-				"[]" +
+				"[]0" +
 				"[]"));
 
 			//---- treeLabel ----
@@ -1006,6 +1018,7 @@ public class FlatComponents2Test
 				// rows
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- listRendererLabel ----
@@ -1043,6 +1056,11 @@ public class FlatComponents2Test
 			listVisibleRowCountSpinner.setModel(new SpinnerNumberModel(8, 0, null, 1));
 			listVisibleRowCountSpinner.addChangeListener(e -> listVisibleRowCountChanged());
 			listOptionsPanel.add(listVisibleRowCountSpinner, "cell 1 2");
+
+			//---- listAlternatingRowsCheckBox ----
+			listAlternatingRowsCheckBox.setText("alternating rows");
+			listAlternatingRowsCheckBox.addActionListener(e -> listAlternatingRowsChanged());
+			listOptionsPanel.add(listAlternatingRowsCheckBox, "cell 0 3 2 1,alignx left,growx 0");
 		}
 		add(listOptionsPanel, "cell 0 4 4 1");
 
@@ -1095,6 +1113,11 @@ public class FlatComponents2Test
 			treePaintSelectionCheckBox.setSelected(true);
 			treePaintSelectionCheckBox.addActionListener(e -> treePaintSelectionChanged());
 			treeOptionsPanel.add(treePaintSelectionCheckBox, "cell 0 2");
+
+			//---- treeAlternatingRowsCheckBox ----
+			treeAlternatingRowsCheckBox.setText("alternating rows");
+			treeAlternatingRowsCheckBox.addActionListener(e -> treeAlternatingRowsChanged());
+			treeOptionsPanel.add(treeAlternatingRowsCheckBox, "cell 0 2");
 
 			//---- treePaintLinesCheckBox ----
 			treePaintLinesCheckBox.setText("paint lines");
@@ -1253,11 +1276,13 @@ public class FlatComponents2Test
 	private JComboBox<String> listRendererComboBox;
 	private JComboBox<String> listLayoutOrientationField;
 	private JSpinner listVisibleRowCountSpinner;
+	private JCheckBox listAlternatingRowsCheckBox;
 	private JPanel treeOptionsPanel;
 	private JComboBox<String> treeRendererComboBox;
 	private JCheckBox treeWideSelectionCheckBox;
 	private JCheckBox treeWideCellRendererCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
+	private JCheckBox treeAlternatingRowsCheckBox;
 	private JCheckBox treePaintLinesCheckBox;
 	private JCheckBox treeRedLinesCheckBox;
 	private JCheckBox treeEditableCheckBox;
@@ -1363,7 +1388,7 @@ public class FlatComponents2Test
 		@Override
 		public String getElementAt( int index ) {
 			return (index < 20)
-				? "item " + (index + 1)
+				? "item " + (index + 1) + ((index + 1) % 5 == 0 ? " ####" : "")
 				: "item " + (index + 1) + "   " + randomRowString( index );
 		}
 	}

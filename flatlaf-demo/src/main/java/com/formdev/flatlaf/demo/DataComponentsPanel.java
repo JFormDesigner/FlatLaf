@@ -22,6 +22,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import javax.swing.*;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -63,6 +64,45 @@ class DataComponentsPanel
 		// rounded selection
 		list3.putClientProperty( FlatClientProperties.STYLE, "selectionInsets: 0,1,0,1; selectionArc: 6" );
 		tree3.putClientProperty( FlatClientProperties.STYLE, "selectionInsets: 0,1,0,1; selectionArc: 6" );
+	}
+
+	private void listAlternatingRowsChanged() {
+		ActiveValue alternateRowColor = null;
+		if( listAlternatingRowsCheckBox.isSelected() ) {
+			alternateRowColor = table -> {
+				Color background = list1.getBackground();
+				return FlatLaf.isLafDark()
+					? ColorFunctions.lighten( background, 0.05f )
+					: ColorFunctions.darken( background, 0.05f );
+			};
+		}
+		UIManager.put( "List.alternateRowColor", alternateRowColor );
+		list1.updateUI();
+		list2.updateUI();
+		list3.updateUI();
+	}
+
+	private void treeWideSelectionChanged() {
+		boolean wideSelection = treeWideSelectionCheckBox.isSelected();
+		tree1.putClientProperty( FlatClientProperties.TREE_WIDE_SELECTION, wideSelection );
+		tree2.putClientProperty( FlatClientProperties.TREE_WIDE_SELECTION, wideSelection );
+		tree3.putClientProperty( FlatClientProperties.TREE_WIDE_SELECTION, wideSelection );
+	}
+
+	private void treeAlternatingRowsChanged() {
+		ActiveValue alternateRowColor = null;
+		if( treeAlternatingRowsCheckBox.isSelected() ) {
+			alternateRowColor = table -> {
+				Color background = tree1.getBackground();
+				return FlatLaf.isLafDark()
+					? ColorFunctions.lighten( background, 0.05f )
+					: ColorFunctions.darken( background, 0.05f );
+			};
+		}
+		UIManager.put( "Tree.alternateRowColor", alternateRowColor );
+		tree1.updateUI();
+		tree2.updateUI();
+		tree3.updateUI();
 	}
 
 	private void dndChanged() {
@@ -142,18 +182,20 @@ class DataComponentsPanel
 	}
 
 	private void alternatingRowsChanged() {
-		Color alternateRowColor = null;
+		ActiveValue alternateRowColor = null;
 		if( alternatingRowsCheckBox.isSelected() ) {
-			Color background = table1.getBackground();
-			alternateRowColor = FlatLaf.isLafDark()
-				? ColorFunctions.lighten( background, 0.05f )
-				: ColorFunctions.darken( background, 0.05f );
+			alternateRowColor = table -> {
+				Color background = table1.getBackground();
+				return FlatLaf.isLafDark()
+					? ColorFunctions.lighten( background, 0.05f )
+					: ColorFunctions.darken( background, 0.05f );
+			};
 		}
 		UIManager.put( "Table.alternateRowColor", alternateRowColor );
 		table1.repaint();
 	}
 
-	@SuppressWarnings( { "unchecked", "rawtypes" } )
+	@SuppressWarnings( { "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel label1 = new JLabel();
@@ -166,6 +208,8 @@ class DataComponentsPanel
 		list3 = new JList<>();
 		JScrollPane scrollPane2 = new JScrollPane();
 		list2 = new JList<>();
+		JPanel listOptionsPanel = new JPanel();
+		listAlternatingRowsCheckBox = new JCheckBox();
 		JLabel treeLabel = new JLabel();
 		JScrollPane scrollPane3 = new JScrollPane();
 		tree1 = new JTree();
@@ -173,6 +217,9 @@ class DataComponentsPanel
 		tree3 = new JTree();
 		JScrollPane scrollPane4 = new JScrollPane();
 		tree2 = new JTree();
+		JPanel treeOptionsPanel = new JPanel();
+		treeWideSelectionCheckBox = new JCheckBox();
+		treeAlternatingRowsCheckBox = new JCheckBox();
 		JLabel tableLabel = new JLabel();
 		JScrollPane scrollPane5 = new JScrollPane();
 		table1 = new JTable();
@@ -273,6 +320,22 @@ class DataComponentsPanel
 		}
 		add(scrollPane2, "cell 3 1");
 
+		//======== listOptionsPanel ========
+		{
+			listOptionsPanel.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]"));
+
+			//---- listAlternatingRowsCheckBox ----
+			listAlternatingRowsCheckBox.setText("alternating rows");
+			listAlternatingRowsCheckBox.addActionListener(e -> listAlternatingRowsChanged());
+			listOptionsPanel.add(listAlternatingRowsCheckBox, "cell 0 0");
+		}
+		add(listOptionsPanel, "cell 4 1");
+
 		//---- treeLabel ----
 		treeLabel.setText("JTree:");
 		add(treeLabel, "cell 0 2,aligny top,growy 0");
@@ -334,6 +397,29 @@ class DataComponentsPanel
 		}
 		add(scrollPane4, "cell 3 2");
 
+		//======== treeOptionsPanel ========
+		{
+			treeOptionsPanel.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]0" +
+				"[]"));
+
+			//---- treeWideSelectionCheckBox ----
+			treeWideSelectionCheckBox.setText("wide selection");
+			treeWideSelectionCheckBox.setSelected(true);
+			treeWideSelectionCheckBox.addActionListener(e -> treeWideSelectionChanged());
+			treeOptionsPanel.add(treeWideSelectionCheckBox, "cell 0 0");
+
+			//---- treeAlternatingRowsCheckBox ----
+			treeAlternatingRowsCheckBox.setText("alternating rows");
+			treeAlternatingRowsCheckBox.addActionListener(e -> treeAlternatingRowsChanged());
+			treeOptionsPanel.add(treeAlternatingRowsCheckBox, "cell 0 1");
+		}
+		add(treeOptionsPanel, "cell 4 2");
+
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
 		add(tableLabel, "cell 0 3,aligny top,growy 0");
@@ -379,7 +465,7 @@ class DataComponentsPanel
 			{
 				TableColumnModel cm = table1.getColumnModel();
 				cm.getColumn(2).setCellEditor(new DefaultCellEditor(
-					new JComboBox(new DefaultComboBoxModel(new String[] {
+					new JComboBox<>(new DefaultComboBoxModel<>(new String[] {
 						"January",
 						"February",
 						"March",
@@ -394,7 +480,7 @@ class DataComponentsPanel
 						"December"
 					}))));
 				cm.getColumn(3).setCellEditor(new DefaultCellEditor(
-					new JComboBox(new DefaultComboBoxModel(new String[] {
+					new JComboBox<>(new DefaultComboBoxModel<>(new String[] {
 						"January",
 						"February",
 						"March",
@@ -513,9 +599,12 @@ class DataComponentsPanel
 	private JList<String> list1;
 	private JList<String> list3;
 	private JList<String> list2;
+	private JCheckBox listAlternatingRowsCheckBox;
 	private JTree tree1;
 	private JTree tree3;
 	private JTree tree2;
+	private JCheckBox treeWideSelectionCheckBox;
+	private JCheckBox treeAlternatingRowsCheckBox;
 	private JTable table1;
 	private JCheckBox roundedSelectionCheckBox;
 	private JCheckBox showHorizontalLinesCheckBox;
