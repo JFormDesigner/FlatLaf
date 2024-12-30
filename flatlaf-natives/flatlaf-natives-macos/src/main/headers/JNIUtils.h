@@ -44,3 +44,7 @@
 jclass findClass( JNIEnv *env, const char* className, bool globalRef );
 jfieldID getFieldID( JNIEnv *env, jclass cls, const char* fieldName, const char* fieldSignature, bool staticField );
 jmethodID getMethodID( JNIEnv *env, jclass cls, const char* methodName, const char* methodSignature, bool staticMethod );
+
+NSString* JavaToNSString( JNIEnv *env, jstring javaString );
+jstring NSToJavaString( JNIEnv *env, NSString *nsString );
+jstring NormalizedPathJavaFromNSString( JNIEnv* env, NSString *nsString );
