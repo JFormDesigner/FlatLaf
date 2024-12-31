@@ -80,8 +80,8 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi" )
-				is VisualCpp -> listOf( "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "/NODEFAULTLIB" )
+				is Gcc, is Clang -> listOf( "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi", "-lOle32", "-luuid" )
+				is VisualCpp -> listOf( "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "Ole32.lib", "uuid.lib", "/NODEFAULTLIB" )
 				else -> emptyList()
 			}
 		} )
