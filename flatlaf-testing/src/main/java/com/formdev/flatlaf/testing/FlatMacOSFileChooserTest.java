@@ -26,6 +26,7 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
@@ -52,6 +53,11 @@ public class FlatMacOSFileChooserTest
 		}
 
 		SwingUtilities.invokeLater( () -> {
+			if( !FlatNativeMacLibrary.isLoaded() ) {
+				JOptionPane.showMessageDialog( null, "FlatLaf native library not loaded" );
+				return;
+			}
+
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatMacOSFileChooserTest" );
 			addListeners( frame );
 			frame.showFrame( FlatMacOSFileChooserTest::new );
@@ -85,37 +91,25 @@ public class FlatMacOSFileChooserTest
 		String nameFieldLabel = n( nameFieldLabelField.getText() );
 		String nameFieldStringValue = n( nameFieldStringValueField.getText() );
 		String directoryURL = n( directoryURLField.getText() );
-		int options = 0;
+		AtomicInteger optionsSet = new AtomicInteger();
+		AtomicInteger optionsClear = new AtomicInteger();
 
 		// NSOpenPanel
 		if( canChooseFilesCheckBox.isSelected() )
-			options |= FC_canChooseFiles;
+			optionsSet.set( optionsSet.get() | FC_canChooseFiles );
 		if( canChooseDirectoriesCheckBox.isSelected() )
-			options |= FC_canChooseDirectories;
-		if( !resolvesAliasesCheckBox.isSelected() )
-			options |= FC_resolvesAliases_NO;
-		if( allowsMultipleSelectionCheckBox.isSelected() )
-			options |= FC_allowsMultipleSelection;
+			optionsSet.set( optionsSet.get() | FC_canChooseDirectories );
+		o( FC_resolvesAliases, resolvesAliasesCheckBox, optionsSet, optionsClear );
+		o( FC_allowsMultipleSelection, allowsMultipleSelectionCheckBox, optionsSet, optionsClear );
 
 		// NSSavePanel
-		if( showsTagFieldCheckBox.getState() == State.SELECTED )
-			options |= FC_showsTagField_YES;
-		else if( showsTagFieldCheckBox.getState() == State.UNSELECTED )
-			options |= FC_showsTagField_NO;
-		if( canCreateDirectoriesCheckBox.getState() == State.SELECTED )
-			options |= FC_canCreateDirectories_YES;
-		else if( canCreateDirectoriesCheckBox.getState() == State.UNSELECTED )
-			options |= FC_canCreateDirectories_NO;
-		if( canSelectHiddenExtensionCheckBox.isSelected() )
-			options |= FC_canSelectHiddenExtension;
-		if( showsHiddenFilesCheckBox.isSelected() )
-			options |= FC_showsHiddenFiles;
-		if( extensionHiddenCheckBox.isSelected() )
-			options |= FC_extensionHidden;
-		if( allowsOtherFileTypesCheckBox.isSelected() )
-			options |= FC_allowsOtherFileTypes;
-		if( treatsFilePackagesAsDirectoriesCheckBox.isSelected() )
-			options |= FC_treatsFilePackagesAsDirectories;
+		o( FC_showsTagField, showsTagFieldCheckBox, optionsSet, optionsClear );
+		o( FC_canCreateDirectories, canCreateDirectoriesCheckBox, optionsSet, optionsClear );
+		o( FC_canSelectHiddenExtension, canSelectHiddenExtensionCheckBox, optionsSet, optionsClear );
+		o( FC_showsHiddenFiles, showsHiddenFilesCheckBox, optionsSet, optionsClear );
+		o( FC_extensionHidden, extensionHiddenCheckBox, optionsSet, optionsClear );
+		o( FC_allowsOtherFileTypes, allowsOtherFileTypesCheckBox, optionsSet, optionsClear );
+		o( FC_treatsFilePackagesAsDirectories, treatsFilePackagesAsDirectoriesCheckBox, optionsSet, optionsClear );
 
 		String allowedFileTypesStr = n( allowedFileTypesField.getText() );
 		String[] allowedFileTypes = {};
@@ -124,17 +118,18 @@ public class FlatMacOSFileChooserTest
 
 		if( direct ) {
 			String[] files = FlatNativeMacLibrary.showFileChooser( open, title, prompt, message,
-				nameFieldLabel, nameFieldStringValue, directoryURL, options, allowedFileTypes );
+				nameFieldLabel, nameFieldStringValue, directoryURL,
+				optionsSet.get(), optionsClear.get(), allowedFileTypes );
 
 			filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
 		} else {
 			SecondaryLoop secondaryLoop = Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
 
-			int options2 = options;
 			String[] allowedFileTypes2 = allowedFileTypes;
 			new Thread( () -> {
 				String[] files = FlatNativeMacLibrary.showFileChooser( open, title, prompt, message,
-					nameFieldLabel, nameFieldStringValue, directoryURL, options2, allowedFileTypes2 );
+					nameFieldLabel, nameFieldStringValue, directoryURL,
+					optionsSet.get(), optionsClear.get(), allowedFileTypes2 );
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
@@ -150,6 +145,13 @@ public class FlatMacOSFileChooserTest
 
 	private static String n( String s ) {
 		return !s.isEmpty() ? s : null;
+	}
+
+	private static void o( int option, FlatTriStateCheckBox checkBox, AtomicInteger optionsSet, AtomicInteger optionsClear ) {
+		if( checkBox.getState() == State.SELECTED )
+			optionsSet.set( optionsSet.get() | option );
+		else if( checkBox.getState() == State.UNSELECTED )
+			optionsClear.set( optionsClear.get() | option );
 	}
 
 	private static void addListeners( Window w ) {
@@ -216,16 +218,16 @@ public class FlatMacOSFileChooserTest
 		options1Label = new JLabel();
 		canChooseFilesCheckBox = new JCheckBox();
 		canChooseDirectoriesCheckBox = new JCheckBox();
-		resolvesAliasesCheckBox = new JCheckBox();
-		allowsMultipleSelectionCheckBox = new JCheckBox();
+		resolvesAliasesCheckBox = new FlatTriStateCheckBox();
+		allowsMultipleSelectionCheckBox = new FlatTriStateCheckBox();
 		options2Label = new JLabel();
 		showsTagFieldCheckBox = new FlatTriStateCheckBox();
 		canCreateDirectoriesCheckBox = new FlatTriStateCheckBox();
-		canSelectHiddenExtensionCheckBox = new JCheckBox();
-		showsHiddenFilesCheckBox = new JCheckBox();
-		extensionHiddenCheckBox = new JCheckBox();
-		allowsOtherFileTypesCheckBox = new JCheckBox();
-		treatsFilePackagesAsDirectoriesCheckBox = new JCheckBox();
+		canSelectHiddenExtensionCheckBox = new FlatTriStateCheckBox();
+		showsHiddenFilesCheckBox = new FlatTriStateCheckBox();
+		extensionHiddenCheckBox = new FlatTriStateCheckBox();
+		allowsOtherFileTypesCheckBox = new FlatTriStateCheckBox();
+		treatsFilePackagesAsDirectoriesCheckBox = new FlatTriStateCheckBox();
 		promptLabel = new JLabel();
 		promptField = new JTextField();
 		messageLabel = new JLabel();
@@ -305,7 +307,7 @@ public class FlatMacOSFileChooserTest
 
 			//---- resolvesAliasesCheckBox ----
 			resolvesAliasesCheckBox.setText("resolvesAliases");
-			resolvesAliasesCheckBox.setSelected(true);
+			resolvesAliasesCheckBox.setState(FlatTriStateCheckBox.State.SELECTED);
 			panel1.add(resolvesAliasesCheckBox, "cell 0 3");
 
 			//---- allowsMultipleSelectionCheckBox ----
@@ -414,16 +416,16 @@ public class FlatMacOSFileChooserTest
 	private JLabel options1Label;
 	private JCheckBox canChooseFilesCheckBox;
 	private JCheckBox canChooseDirectoriesCheckBox;
-	private JCheckBox resolvesAliasesCheckBox;
-	private JCheckBox allowsMultipleSelectionCheckBox;
+	private FlatTriStateCheckBox resolvesAliasesCheckBox;
+	private FlatTriStateCheckBox allowsMultipleSelectionCheckBox;
 	private JLabel options2Label;
 	private FlatTriStateCheckBox showsTagFieldCheckBox;
 	private FlatTriStateCheckBox canCreateDirectoriesCheckBox;
-	private JCheckBox canSelectHiddenExtensionCheckBox;
-	private JCheckBox showsHiddenFilesCheckBox;
-	private JCheckBox extensionHiddenCheckBox;
-	private JCheckBox allowsOtherFileTypesCheckBox;
-	private JCheckBox treatsFilePackagesAsDirectoriesCheckBox;
+	private FlatTriStateCheckBox canSelectHiddenExtensionCheckBox;
+	private FlatTriStateCheckBox showsHiddenFilesCheckBox;
+	private FlatTriStateCheckBox extensionHiddenCheckBox;
+	private FlatTriStateCheckBox allowsOtherFileTypesCheckBox;
+	private FlatTriStateCheckBox treatsFilePackagesAsDirectoriesCheckBox;
 	private JLabel promptLabel;
 	private JTextField promptField;
 	private JLabel messageLabel;

@@ -45,14 +45,14 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "resolvesAliasesCheckBox"
 					"text": "resolvesAliases"
-					"selected": true
+					"state": enum com.formdev.flatlaf.extras.components.FlatTriStateCheckBox$State SELECTED
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "allowsMultipleSelectionCheckBox"
 					"text": "allowsMultipleSelection"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -76,31 +76,31 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 7"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "canSelectHiddenExtensionCheckBox"
 					"text": "canSelectHiddenExtension"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 8"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "showsHiddenFilesCheckBox"
 					"text": "showsHiddenFiles"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 9"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "extensionHiddenCheckBox"
 					"text": "extensionHidden"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 10"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "allowsOtherFileTypesCheckBox"
 					"text": "allowsOtherFileTypes"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 11"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "treatsFilePackagesAsDirectoriesCheckBox"
 					"text": "treatsFilePackagesAsDirectories"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

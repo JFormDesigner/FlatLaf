@@ -75,18 +75,16 @@ public class FlatNativeMacLibrary
 		// NSOpenPanel
 		FC_canChooseFiles					= 1 << 0,  // default
 		FC_canChooseDirectories				= 1 << 1,
-		FC_resolvesAliases_NO				= 1 << 2,  // default
+		FC_resolvesAliases					= 1 << 2,  // default
 		FC_allowsMultipleSelection			= 1 << 3,
 		// NSSavePanel
-		FC_showsTagField_YES				= 1 << 8,  // default for Save
-		FC_showsTagField_NO					= 1 << 9,  // default for Open
-		FC_canCreateDirectories_YES			= 1 << 10, // default for Save
-		FC_canCreateDirectories_NO			= 1 << 11, // default for Open
-		FC_canSelectHiddenExtension			= 1 << 12,
-		FC_showsHiddenFiles					= 1 << 14,
-		FC_extensionHidden					= 1 << 16,
-		FC_allowsOtherFileTypes				= 1 << 18,
-		FC_treatsFilePackagesAsDirectories	= 1 << 20;
+		FC_showsTagField					= 1 << 8,  // default for Save
+		FC_canCreateDirectories				= 1 << 9,  // default for Save
+		FC_canSelectHiddenExtension			= 1 << 10,
+		FC_showsHiddenFiles					= 1 << 11,
+		FC_extensionHidden					= 1 << 12,
+		FC_allowsOtherFileTypes				= 1 << 13,
+		FC_treatsFilePackagesAsDirectories	= 1 << 14;
 
 	/**
 	 * Shows the macOS system file dialogs
@@ -98,13 +96,14 @@ public class FlatNativeMacLibrary
 	 * to avoid blocking the AWT event dispatching thread.
 	 *
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
-	 * @param title text displayed at top of save dialog (not used in open dialog)
-	 * @param prompt text displayed in default button
-	 * @param message text displayed at top of open/save dialogs
-	 * @param nameFieldLabel text displayed in front of the filename text field in save dialog (not used in open dialog)
-	 * @param nameFieldStringValue user-editable filename currently shown in the name field in save dialog (not used in open dialog)
-	 * @param directoryURL current directory shown in the dialog
-	 * @param options see {@code FC_*} constants
+	 * @param title text displayed at top of save dialog (not used in open dialog); or {@code null}
+	 * @param prompt text displayed in default button; or {@code null}
+	 * @param message text displayed at top of open/save dialogs; or {@code null}
+	 * @param nameFieldLabel text displayed in front of the filename text field in save dialog (not used in open dialog); or {@code null}
+	 * @param nameFieldStringValue user-editable filename currently shown in the name field in save dialog (not used in open dialog); or {@code null}
+	 * @param directoryURL current directory shown in the dialog; or {@code null}
+	 * @param optionsSet options to set; see {@code FC_*} constants
+	 * @param optionsClear options to clear; see {@code FC_*} constants
 	 * @param allowedFileTypes allowed filename extensions (e.g. "txt")
 	 * @return file path(s) that the user selected, or {@code null} if canceled
 	 *
@@ -112,6 +111,6 @@ public class FlatNativeMacLibrary
 	 */
 	public native static String[] showFileChooser( boolean open,
 		String title, String prompt, String message, String nameFieldLabel,
-		String nameFieldStringValue, String directoryURL, int options,
-		String... allowedFileTypes );
+		String nameFieldStringValue, String directoryURL,
+		int optionsSet, int optionsClear, String... allowedFileTypes );
 }

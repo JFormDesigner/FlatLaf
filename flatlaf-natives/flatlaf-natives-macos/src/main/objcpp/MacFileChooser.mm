@@ -25,8 +25,9 @@
  * @author Karl Tauber
  */
 
-#define isOptionSet( option ) ((options & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
-#define isYesOrNoOptionSet( option ) isOptionSet( option ## _YES ) || isOptionSet( option ## _NO )
+#define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
+#define isOptionClear( option ) ((optionsClear & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
+#define isOptionSetOrClear( option ) isOptionSet( option ) || isOptionClear( option )
 
 // declare internal methods
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
@@ -38,7 +39,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 	( JNIEnv* env, jclass cls, jboolean open,
 		jstring title, jstring prompt, jstring message, jstring nameFieldLabel,
 		jstring nameFieldStringValue, jstring directoryURL,
-		jint options, jobjectArray allowedFileTypes )
+		jint optionsSet, jint optionsClear, jobjectArray allowedFileTypes )
 {
 	JNI_COCOA_ENTER()
 
@@ -56,8 +57,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		NSMutableArray* nsArray = [NSMutableArray arrayWithCapacity:len];
 		for( int i = 0; i < len; i++ ) {
 			jstring str = (jstring) env->GetObjectArrayElement( allowedFileTypes, i );
-			NSString* nsStr = JavaToNSString( env, str );
-			nsArray[i] = nsStr;
+			nsArray[i] = JavaToNSString( env, str );
+			env->DeleteLocalRef( str );
 		}
 		nsAllowedFileTypes = nsArray;
 	}
@@ -93,26 +94,27 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 				canChooseFiles = true;
 			openDialog.canChooseFiles = canChooseFiles;
 			openDialog.canChooseDirectories = canChooseDirectories;
-			if( isOptionSet( FC_resolvesAliases_NO ) )
-				openDialog.resolvesAliases = NO;
-			if( isOptionSet( FC_allowsMultipleSelection ) )
-				openDialog.allowsMultipleSelection = YES;
+
+			if( isOptionSetOrClear( FC_resolvesAliases ) )
+				openDialog.resolvesAliases = isOptionSet( FC_resolvesAliases );
+			if( isOptionSetOrClear( FC_allowsMultipleSelection ) )
+				openDialog.allowsMultipleSelection = isOptionSet( FC_allowsMultipleSelection );
 		}
 
-		if( isYesOrNoOptionSet( FC_showsTagField ) )
-			dialog.showsTagField = isOptionSet( FC_showsTagField_YES );
-		if( isYesOrNoOptionSet( FC_canCreateDirectories ) )
-			dialog.canCreateDirectories = isOptionSet( FC_canCreateDirectories_YES );
-		if( isOptionSet( FC_canSelectHiddenExtension ) )
-			dialog.canSelectHiddenExtension = YES;
-		if( isOptionSet( FC_showsHiddenFiles) )
-			dialog.showsHiddenFiles = YES;
-		if( isOptionSet( FC_extensionHidden ) )
-			dialog.extensionHidden = YES;
-		if( isOptionSet( FC_allowsOtherFileTypes ) )
-			dialog.allowsOtherFileTypes = YES;
-		if( isOptionSet( FC_treatsFilePackagesAsDirectories ) )
-			dialog.treatsFilePackagesAsDirectories = YES;
+		if( isOptionSetOrClear( FC_showsTagField ) )
+			dialog.showsTagField = isOptionSet( FC_showsTagField );
+		if( isOptionSetOrClear( FC_canCreateDirectories ) )
+			dialog.canCreateDirectories = isOptionSet( FC_canCreateDirectories );
+		if( isOptionSetOrClear( FC_canSelectHiddenExtension ) )
+			dialog.canSelectHiddenExtension = isOptionSet( FC_canSelectHiddenExtension );
+		if( isOptionSetOrClear( FC_showsHiddenFiles) )
+			dialog.showsHiddenFiles = isOptionSet( FC_showsHiddenFiles);
+		if( isOptionSetOrClear( FC_extensionHidden ) )
+			dialog.extensionHidden = isOptionSet( FC_extensionHidden );
+		if( isOptionSetOrClear( FC_allowsOtherFileTypes ) )
+			dialog.allowsOtherFileTypes = isOptionSet( FC_allowsOtherFileTypes );
+		if( isOptionSetOrClear( FC_treatsFilePackagesAsDirectories ) )
+			dialog.treatsFilePackagesAsDirectories = isOptionSet( FC_treatsFilePackagesAsDirectories );
 
 		// use deprecated allowedFileTypes instead of newer allowedContentTypes (since macOS 11+)
 		// to support older macOS versions 10.14+ and because of some problems with allowedContentTypes:
