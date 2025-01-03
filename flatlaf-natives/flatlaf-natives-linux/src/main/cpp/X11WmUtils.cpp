@@ -36,7 +36,7 @@ Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** displa
 /**
  * Send _NET_WM_MOVERESIZE to window to initiate moving or resizing.
  *
- * https://specifications.freedesktop.org/wm-spec/wm-spec-latest.html#idm45446104441728
+ * https://specifications.freedesktop.org/wm-spec/latest/ar01s04.html#id-1.5.4
  * https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/x11/gdksurface-x11.c#L3841-3881
  */
 extern "C"

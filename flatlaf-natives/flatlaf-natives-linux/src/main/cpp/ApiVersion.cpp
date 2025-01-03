@@ -24,7 +24,7 @@
 
 // increase this version if changing API or functionality of native library
 // also update version in Java class com.formdev.flatlaf.ui.FlatNativeLinuxLibrary
-#define API_VERSION_LINUX		3001
+#define API_VERSION_LINUX		3002
 
 
 //---- JNI methods ------------------------------------------------------------

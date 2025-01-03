@@ -24,16 +24,25 @@ To build the library on Linux, some packages needs to be installed.
 ### Ubuntu
 
 `build-essential` contains GCC and development tools. `libxt-dev` contains the
-X11 toolkit development headers.
+X11 toolkit development headers. `libgtk-3-dev` contains the GTK toolkit
+development headers.
 
 ~~~
 sudo apt update
-sudo apt install build-essential libxt-dev
+sudo apt install build-essential libxt-dev libgtk-3-dev
+~~~
+
+
+### Fedora
+
+~~~
+sudo dnf group install c-development
+sudo dnf install libXt-devel gtk3-devel
 ~~~
 
 
 ### CentOS
 
 ~~~
-sudo yum install libXt-devel
+sudo yum install libXt-devel gtk3-devel
 ~~~

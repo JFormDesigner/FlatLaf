@@ -34,9 +34,9 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @author Karl Tauber
  * @since 2.5
  */
-class FlatNativeLinuxLibrary
+public class FlatNativeLinuxLibrary
 {
-	private static int API_VERSION_LINUX = 3001;
+	private static int API_VERSION_LINUX = 3002;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -44,7 +44,7 @@ class FlatNativeLinuxLibrary
 	 * <b>Note</b>: It is required to invoke this method before invoking any other
 	 *              method of this class. Otherwise, the native library may not be loaded.
 	 */
-	static boolean isLoaded() {
+	public static boolean isLoaded() {
 		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded( API_VERSION_LINUX );
 	}
 
@@ -115,4 +115,48 @@ class FlatNativeLinuxLibrary
 		return (window instanceof JFrame && JFrame.isDefaultLookAndFeelDecorated() && ((JFrame)window).isUndecorated()) ||
 			(window instanceof JDialog && JDialog.isDefaultLookAndFeelDecorated() && ((JDialog)window).isUndecorated());
 	}
+
+
+	/**
+	 * https://docs.gtk.org/gtk3/iface.FileChooser.html#properties
+	 *
+	 * @since 3.6
+	 */
+	public static final int
+		FC_select_folder					= 1 << 0,
+		FC_select_multiple					= 1 << 1,
+		FC_show_hidden						= 1 << 2,
+		FC_local_only						= 1 << 3,  // default
+		FC_do_overwrite_confirmation		= 1 << 4,  // GTK 3 only; removed and always-on in GTK 4
+		FC_create_folders					= 1 << 5;  // default for Save
+
+	/**
+	 * Shows the Linux system file dialog
+	 * <a href="https://docs.gtk.org/gtk3/class.FileChooserDialog.html">GtkFileChooserDialog</a>.
+	 * <p>
+	 * <b>Note:</b> This method blocks the current thread until the user closes
+	 * the file dialog. It is highly recommended to invoke it from a new thread
+	 * to avoid blocking the AWT event dispatching thread.
+	 *
+	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
+	 * @param title text displayed in dialog title; or {@code null}
+	 * @param okButtonLabel text displayed in default button; or {@code null}
+	 * @param currentName user-editable filename currently shown in the filename field in save dialog; or {@code null}
+	 * @param currentFolder current directory shown in the dialog; or {@code null}
+	 * @param optionsSet options to set; see {@code FOS_*} constants
+	 * @param optionsClear options to clear; see {@code FOS_*} constants
+	 * @param fileTypeIndex the file type that appears as selected (zero-based)
+	 * @param fileTypes file types that the dialog can open or save.
+	 *        Two or more strings and {@code null} are required for each filter.
+	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
+	 *        Subsequent strings are the filter patterns (e.g. "*.txt" or "*").
+	 *        {@code null} is required to mark end of filter.
+	 * @return file path(s) that the user selected; an empty array if canceled;
+	 *         or {@code null} on failures (no dialog shown)
+	 *
+	 * @since 3.6
+	 */
+	public native static String[] showFileChooser( boolean open,
+		String title, String okButtonLabel, String currentName, String currentFolder,
+		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
 }

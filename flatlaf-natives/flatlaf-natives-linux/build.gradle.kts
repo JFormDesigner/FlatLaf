@@ -52,7 +52,17 @@ tasks {
 
 		includes.from(
 			"${javaHome}/include",
-			"${javaHome}/include/linux"
+			"${javaHome}/include/linux",
+
+			// for GTK
+			"/usr/include/gtk-3.0",
+			"/usr/include/glib-2.0",
+			"/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+			"/usr/include/gdk-pixbuf-2.0",
+			"/usr/include/atk-1.0",
+			"/usr/include/cairo",
+			"/usr/include/pango-1.0",
+			"/usr/include/harfbuzz",
 		)
 
 		compilerArgs.addAll( toolChain.map {
@@ -75,7 +85,7 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}" )
+				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}", "-lgtk-3" )
 				else -> emptyList()
 			}
 		} )
