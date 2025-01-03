@@ -36,7 +36,7 @@ import net.miginfocom.swing.*;
 /**
  * @author Karl Tauber
  */
-public class FlatWindowsFileChooserTest
+public class FlatSystemFileChooserWindowsTest
 	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
@@ -46,13 +46,13 @@ public class FlatWindowsFileChooserTest
 				return;
 			}
 
-			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowsFileChooserTest" );
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserWindowsTest" );
 			addListeners( frame );
-			frame.showFrame( FlatWindowsFileChooserTest::new );
+			frame.showFrame( FlatSystemFileChooserWindowsTest::new );
 		} );
 	}
 
-	FlatWindowsFileChooserTest() {
+	FlatSystemFileChooserWindowsTest() {
 		initComponents();
 
 		fileTypesField.setSelectedItem( null );

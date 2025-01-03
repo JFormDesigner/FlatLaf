@@ -37,7 +37,7 @@ import net.miginfocom.swing.*;
 /**
  * @author Karl Tauber
  */
-public class FlatMacOSFileChooserTest
+public class FlatSystemFileChooserMacTest
 	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
@@ -58,13 +58,13 @@ public class FlatMacOSFileChooserTest
 				return;
 			}
 
-			FlatTestFrame frame = FlatTestFrame.create( args, "FlatMacOSFileChooserTest" );
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserMacTest" );
 			addListeners( frame );
-			frame.showFrame( FlatMacOSFileChooserTest::new );
+			frame.showFrame( FlatSystemFileChooserMacTest::new );
 		} );
 	}
 
-	FlatMacOSFileChooserTest() {
+	FlatSystemFileChooserMacTest() {
 		initComponents();
 	}
 
