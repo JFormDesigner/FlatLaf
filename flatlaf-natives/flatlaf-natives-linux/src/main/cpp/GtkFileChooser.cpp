@@ -26,6 +26,9 @@
  * @since 3.6
  */
 
+// see X11WmUtils.cpp
+Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
+
 //---- class AutoReleaseStringUTF8 --------------------------------------------
 
 class AutoReleaseStringUTF8 {
@@ -86,10 +89,65 @@ void initFilters( GtkFileChooser* chooser, JNIEnv* env, jint fileTypeIndex, jobj
 	}
 }
 
+GdkWindow* getGdkWindow( JNIEnv* env, jobject window ) {
+	// get the AWT
+	JAWT awt;
+	awt.version = JAWT_VERSION_1_4;
+	if( !JAWT_GetAWT( env, &awt ) )
+		return NULL;
+
+	// get Xlib window and display from AWT window
+	Display* display;
+	Window w = getWindowHandle( env, &awt, window, &display );
+	if( w == 0 )
+		return NULL;
+
+	// based on GetAllocNativeWindowHandle() from https://github.com/btzy/nativefiledialog-extended
+	// https://github.com/btzy/nativefiledialog-extended/blob/29e3bcb578345b9fa345d1d7683f00c150565ca3/src/nfd_gtk.cpp#L384-L437
+	GdkDisplay* gdkDisplay = gdk_x11_lookup_xdisplay( display );
+	if( gdkDisplay == NULL ) {
+		// search for existing X11 display (there should only be one, even if multiple screens are connected)
+		GdkDisplayManager* displayManager = gdk_display_manager_get();
+		GSList* displays = gdk_display_manager_list_displays( displayManager );
+		for( GSList* l = displays; l; l = l->next ) {
+			if( GDK_IS_X11_DISPLAY( l->data ) ) {
+				gdkDisplay = GDK_DISPLAY( l->data );
+				break;
+			}
+		}
+		g_slist_free( displays );
+
+		// create our own X11 display
+		if( gdkDisplay == NULL ) {
+			gdk_set_allowed_backends( "x11" );
+			gdkDisplay = gdk_display_manager_open_display( displayManager, NULL );
+			gdk_set_allowed_backends( NULL );
+
+			if( gdkDisplay == NULL )
+				return NULL;
+		}
+	}
+
+	return gdk_x11_window_foreign_new_for_display( gdkDisplay, w );
+}
+
+static void handle_realize( GtkWidget* dialog, gpointer data ) {
+	GdkWindow* gdkOwner = static_cast<GdkWindow*>( data );
+
+	// make file dialog a transient of owner window,
+	// which centers file dialog on owner and keeps file dialog above owner
+	gdk_window_set_transient_for( gtk_widget_get_window( dialog ), gdkOwner );
+
+	// necessary because gdk_x11_window_foreign_new_for_display() increases the reference counter
+	g_object_unref( gdkOwner );
+}
+
 static void handle_response( GtkWidget* dialog, gint responseId, gpointer data ) {
+	// get filenames if user pressed OK
 	if( responseId == GTK_RESPONSE_ACCEPT )
 		*((GSList**)data) = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
 
+	// hide/destroy file dialog and quit loop
 	gtk_widget_hide( dialog );
 	gtk_widget_destroy( dialog );
 	gtk_main_quit();
@@ -99,7 +157,7 @@ static void handle_response( GtkWidget* dialog, gint responseId, gpointer data )
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
-	( JNIEnv* env, jclass cls, jboolean open,
+	( JNIEnv* env, jclass cls, jobject owner, jboolean open,
 		jstring title, jstring okButtonLabel, jstring currentName, jstring currentFolder,
 		jint optionsSet, jint optionsClear, jint fileTypeIndex, jobjectArray fileTypes )
 {
@@ -129,11 +187,13 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 		NULL ); // marks end of buttons
 	GtkFileChooser* chooser = GTK_FILE_CHOOSER( dialog );
 
+	// set current name and folder
 	if( !open && ccurrentName != NULL )
 		gtk_file_chooser_set_current_name( chooser, ccurrentName );
 	if( ccurrentFolder != NULL )
 		gtk_file_chooser_set_current_folder( chooser, ccurrentFolder );
 
+	// set options
 	if( isOptionSetOrClear( FC_select_multiple ) )
 		gtk_file_chooser_set_select_multiple( chooser, isOptionSet( FC_select_multiple ) );
 	if( isOptionSetOrClear( FC_show_hidden ) )
@@ -145,15 +205,39 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 	if( isOptionSetOrClear( FC_create_folders ) )
 		gtk_file_chooser_set_create_folders( chooser, isOptionSet( FC_create_folders ) );
 
+	// initialize filter
 	initFilters( chooser, env, fileTypeIndex, fileTypes );
 
-	gtk_window_set_modal( GTK_WINDOW( dialog ), true );
+	// setup modality
+	GdkWindow* gdkOwner = (owner != NULL) ? getGdkWindow( env, owner ) : NULL;
+	if( gdkOwner != NULL ) {
+		gtk_window_set_modal( GTK_WINDOW( dialog ), true );
+
+		// file dialog should use same screen as owner
+		gtk_window_set_screen( GTK_WINDOW( dialog ), gdk_window_get_screen( gdkOwner ) );
+
+		// set the transient when the file dialog is realized
+		g_signal_connect( dialog, "realize", G_CALLBACK( handle_realize ), gdkOwner );
+	}
 
 	// show dialog
 	// (similar to what's done in sun_awt_X11_GtkFileDialogPeer.c)
 	GSList* fileList = NULL;
-    g_signal_connect( dialog, "response", G_CALLBACK( handle_response ), &fileList );
+	g_signal_connect( dialog, "response", G_CALLBACK( handle_response ), &fileList );
 	gtk_widget_show( dialog );
+
+	// necessary to bring file dialog to the front (and make it active)
+	// see issues:
+	//     https://github.com/btzy/nativefiledialog-extended/issues/31
+	//     https://github.com/mlabbe/nativefiledialog/pull/92
+	//     https://github.com/guillaumechereau/noc/pull/11
+	if( GDK_IS_X11_DISPLAY( gtk_widget_get_display( GTK_WIDGET( dialog ) ) ) ) {
+		GdkWindow* gdkWindow = gtk_widget_get_window( GTK_WIDGET( dialog ) );
+		gdk_window_set_events( gdkWindow, static_cast<GdkEventMask>( gdk_window_get_events( gdkWindow ) | GDK_PROPERTY_CHANGE_MASK ) );
+		gtk_window_present_with_time( GTK_WINDOW( dialog ), gdk_x11_get_server_time( gdkWindow ) );
+	}
+
+	// start event loop (will be quit in respone handler)
 	gtk_main();
 
 	// canceled?

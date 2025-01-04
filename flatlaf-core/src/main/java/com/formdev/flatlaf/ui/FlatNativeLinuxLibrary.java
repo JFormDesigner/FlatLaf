@@ -138,9 +138,10 @@ public class FlatNativeLinuxLibrary
 	 * the file dialog. It is highly recommended to invoke it from a new thread
 	 * to avoid blocking the AWT event dispatching thread.
 	 *
+	 * @param owner the owner of the file dialog; or {@code null}
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
-	 * @param okButtonLabel text displayed in default button; or {@code null}
+	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '_' for mnemonics (e.g. "_Choose")
 	 * @param currentName user-editable filename currently shown in the filename field in save dialog; or {@code null}
 	 * @param currentFolder current directory shown in the dialog; or {@code null}
 	 * @param optionsSet options to set; see {@code FOS_*} constants
@@ -156,7 +157,7 @@ public class FlatNativeLinuxLibrary
 	 *
 	 * @since 3.6
 	 */
-	public native static String[] showFileChooser( boolean open,
+	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String currentName, String currentFolder,
 		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
 }
