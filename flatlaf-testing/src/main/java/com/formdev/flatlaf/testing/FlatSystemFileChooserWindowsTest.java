@@ -17,10 +17,12 @@
 package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.ui.FlatNativeWindowsLibrary.*;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
@@ -75,7 +77,26 @@ public class FlatSystemFileChooserWindowsTest
 	}
 
 	private void openOrSave( boolean open, boolean direct ) {
-		Window owner = SwingUtilities.windowForComponent( this );
+		Window frame = SwingUtilities.windowForComponent( this );
+		if( ownerFrameRadioButton.isSelected() )
+			openOrSave( open, direct, frame );
+		else if( ownerDialogRadioButton.isSelected() ) {
+			JDialog dialog = new JDialog( frame, "Dummy Modal Dialog", Dialog.DEFAULT_MODALITY_TYPE );
+			dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
+			dialog.addWindowListener( new WindowAdapter() {
+				@Override
+				public void windowOpened( WindowEvent e ) {
+					openOrSave( open, direct, dialog );
+				}
+			} );
+			dialog.setSize( 1200, 1000 );
+			dialog.setLocationRelativeTo( this );
+			dialog.setVisible( true );
+		} else
+			openOrSave( open, direct, null );
+	}
+
+	private void openOrSave( boolean open, boolean direct, Window owner ) {
 		String title = n( titleField.getText() );
 		String okButtonLabel = n( okButtonLabelField.getText() );
 		String fileNameLabel = n( fileNameLabelField.getText() );
@@ -215,6 +236,11 @@ public class FlatSystemFileChooserWindowsTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		ownerLabel = new JLabel();
+		ownerFrameRadioButton = new JRadioButton();
+		ownerDialogRadioButton = new JRadioButton();
+		ownerNullRadioButton = new JRadioButton();
+		ownerSpacer = new JPanel(null);
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		panel1 = new JPanel();
@@ -285,12 +311,31 @@ public class FlatSystemFileChooserWindowsTest
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
 			"[grow,fill]"));
+
+		//---- ownerLabel ----
+		ownerLabel.setText("owner");
+		add(ownerLabel, "cell 0 0");
+
+		//---- ownerFrameRadioButton ----
+		ownerFrameRadioButton.setText("JFrame");
+		ownerFrameRadioButton.setSelected(true);
+		add(ownerFrameRadioButton, "cell 1 0");
+
+		//---- ownerDialogRadioButton ----
+		ownerDialogRadioButton.setText("JDialog");
+		add(ownerDialogRadioButton, "cell 1 0");
+
+		//---- ownerNullRadioButton ----
+		ownerNullRadioButton.setText("null");
+		add(ownerNullRadioButton, "cell 1 0");
+		add(ownerSpacer, "cell 1 0,growx");
 
 		//---- titleLabel ----
 		titleLabel.setText("title");
-		add(titleLabel, "cell 0 0");
-		add(titleField, "cell 1 0");
+		add(titleLabel, "cell 0 1");
+		add(titleField, "cell 1 1");
 
 		//======== panel1 ========
 		{
@@ -402,46 +447,46 @@ public class FlatSystemFileChooserWindowsTest
 			hidePinnedPlacesCheckBox.setText("hidePinnedPlaces");
 			panel1.add(hidePinnedPlacesCheckBox, "cell 1 7");
 		}
-		add(panel1, "cell 2 0 1 10,aligny top,growy 0");
+		add(panel1, "cell 2 1 1 10,aligny top,growy 0");
 
 		//---- okButtonLabelLabel ----
 		okButtonLabelLabel.setText("okButtonLabel");
-		add(okButtonLabelLabel, "cell 0 1");
-		add(okButtonLabelField, "cell 1 1");
+		add(okButtonLabelLabel, "cell 0 2");
+		add(okButtonLabelField, "cell 1 2");
 
 		//---- fileNameLabelLabel ----
 		fileNameLabelLabel.setText("fileNameLabel");
-		add(fileNameLabelLabel, "cell 0 2");
-		add(fileNameLabelField, "cell 1 2");
+		add(fileNameLabelLabel, "cell 0 3");
+		add(fileNameLabelField, "cell 1 3");
 
 		//---- fileNameLabel ----
 		fileNameLabel.setText("fileName");
-		add(fileNameLabel, "cell 0 3");
-		add(fileNameField, "cell 1 3");
+		add(fileNameLabel, "cell 0 4");
+		add(fileNameField, "cell 1 4");
 
 		//---- folderLabel ----
 		folderLabel.setText("folder");
-		add(folderLabel, "cell 0 4");
-		add(folderField, "cell 1 4");
+		add(folderLabel, "cell 0 5");
+		add(folderField, "cell 1 5");
 
 		//---- saveAsItemLabel ----
 		saveAsItemLabel.setText("saveAsItem");
-		add(saveAsItemLabel, "cell 0 5");
-		add(saveAsItemField, "cell 1 5");
+		add(saveAsItemLabel, "cell 0 6");
+		add(saveAsItemField, "cell 1 6");
 
 		//---- defaultFolderLabel ----
 		defaultFolderLabel.setText("defaultFolder");
-		add(defaultFolderLabel, "cell 0 6");
-		add(defaultFolderField, "cell 1 6");
+		add(defaultFolderLabel, "cell 0 7");
+		add(defaultFolderField, "cell 1 7");
 
 		//---- defaultExtensionLabel ----
 		defaultExtensionLabel.setText("defaultExtension");
-		add(defaultExtensionLabel, "cell 0 7");
-		add(defaultExtensionField, "cell 1 7");
+		add(defaultExtensionLabel, "cell 0 8");
+		add(defaultExtensionField, "cell 1 8");
 
 		//---- fileTypesLabel ----
 		fileTypesLabel.setText("fileTypes");
-		add(fileTypesLabel, "cell 0 8");
+		add(fileTypesLabel, "cell 0 9");
 
 		//---- fileTypesField ----
 		fileTypesField.setEditable(true);
@@ -451,11 +496,11 @@ public class FlatSystemFileChooserWindowsTest
 			"Text Files,*.txt,PDF Files,*.pdf,All Files,*.*",
 			"Text and PDF Files,*.txt;*.pdf"
 		}));
-		add(fileTypesField, "cell 1 8");
+		add(fileTypesField, "cell 1 9");
 
 		//---- fileTypeIndexLabel ----
 		fileTypeIndexLabel.setText("fileTypeIndex");
-		add(fileTypeIndexLabel, "cell 0 9");
+		add(fileTypeIndexLabel, "cell 0 10");
 
 		//---- fileTypeIndexSlider ----
 		fileTypeIndexSlider.setMaximum(10);
@@ -463,27 +508,27 @@ public class FlatSystemFileChooserWindowsTest
 		fileTypeIndexSlider.setValue(0);
 		fileTypeIndexSlider.setPaintLabels(true);
 		fileTypeIndexSlider.setSnapToTicks(true);
-		add(fileTypeIndexSlider, "cell 1 9");
+		add(fileTypeIndexSlider, "cell 1 10");
 
 		//---- openButton ----
 		openButton.setText("Open...");
 		openButton.addActionListener(e -> open());
-		add(openButton, "cell 0 10 3 1");
+		add(openButton, "cell 0 11 3 1");
 
 		//---- saveButton ----
 		saveButton.setText("Save...");
 		saveButton.addActionListener(e -> save());
-		add(saveButton, "cell 0 10 3 1");
+		add(saveButton, "cell 0 11 3 1");
 
 		//---- openDirectButton ----
 		openDirectButton.setText("Open (no-thread)...");
 		openDirectButton.addActionListener(e -> openDirect());
-		add(openDirectButton, "cell 0 10 3 1");
+		add(openDirectButton, "cell 0 11 3 1");
 
 		//---- saveDirectButton ----
 		saveDirectButton.setText("Save (no-thread)...");
 		saveDirectButton.addActionListener(e -> saveDirect());
-		add(saveDirectButton, "cell 0 10 3 1");
+		add(saveDirectButton, "cell 0 11 3 1");
 
 		//======== filesScrollPane ========
 		{
@@ -492,11 +537,22 @@ public class FlatSystemFileChooserWindowsTest
 			filesField.setRows(8);
 			filesScrollPane.setViewportView(filesField);
 		}
-		add(filesScrollPane, "cell 0 11 3 1,growx");
+		add(filesScrollPane, "cell 0 12 3 1,growx");
+
+		//---- ownerButtonGroup ----
+		ButtonGroup ownerButtonGroup = new ButtonGroup();
+		ownerButtonGroup.add(ownerFrameRadioButton);
+		ownerButtonGroup.add(ownerDialogRadioButton);
+		ownerButtonGroup.add(ownerNullRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JLabel ownerLabel;
+	private JRadioButton ownerFrameRadioButton;
+	private JRadioButton ownerDialogRadioButton;
+	private JRadioButton ownerNullRadioButton;
+	private JPanel ownerSpacer;
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JPanel panel1;

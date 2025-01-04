@@ -201,10 +201,10 @@ public class FlatNativeWindowsLibrary
 	 * the file dialog. It is highly recommended to invoke it from a new thread
 	 * to avoid blocking the AWT event dispatching thread.
 	 *
-	 * @param owner the owner of the file dialog
+	 * @param owner the owner of the file dialog; or {@code null}
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
-	 * @param okButtonLabel text displayed in default button; or {@code null}
+	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '&' for mnemonics (e.g. "&Choose")
 	 * @param fileNameLabel text displayed in front of the filename text field; or {@code null}
 	 * @param fileName user-editable filename currently shown in the filename field; or {@code null}
 	 * @param folder current directory shown in the dialog; or {@code null}
@@ -219,7 +219,7 @@ public class FlatNativeWindowsLibrary
 	 * @param optionsClear options to clear; see {@code FOS_*} constants
 	 * @param fileTypeIndex the file type that appears as selected (zero-based)
 	 * @param fileTypes file types that the dialog can open or save.
-	 *        Pairs of strings are required.
+	 *        Pairs of strings are required for each filter.
 	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
 	 *        Second string is the filter pattern (e.g. "*.txt", "*.exe;*.dll" or "*.*").
 	 * @return file path(s) that the user selected; an empty array if canceled;
