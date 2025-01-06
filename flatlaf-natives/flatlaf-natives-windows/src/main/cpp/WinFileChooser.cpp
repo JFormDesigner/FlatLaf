@@ -144,6 +144,7 @@ public:
 
 //---- helper -----------------------------------------------------------------
 
+#define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_ ## option) != 0)
 #define CHECK_HRESULT( code ) { if( (code) != S_OK ) return NULL; }
 
 jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
@@ -170,12 +171,12 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 		return NULL;
 
 	// handle limitations (without this, some Win32 method fails and this method returns NULL)
-	if( (optionsSet & FOS_PICKFOLDERS) != 0 ) {
-		if( open )
-			fileTypes = NULL; // no filter allowed for picking folders
-		else
-			optionsSet &= ~FOS_PICKFOLDERS; // not allowed for save dialog
+	if( isOptionSet( FOS_PICKFOLDERS ) ) {
+		open = true; // always use IFileOpenDialog for picking folders
+		fileTypes = NULL; // no filter allowed for picking folders
 	}
+	if( !open && isOptionSet( FOS_ALLOWMULTISELECT ) )
+		optionsSet &= ~FOS_ALLOWMULTISELECT;
 
 	// convert Java strings to C strings
 	AutoReleaseString ctitle( env, title );
@@ -219,7 +220,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 	CHECK_HRESULT( dialog->SetOptions ( (existingOptions & ~optionsClear) | optionsSet ) );
 
 	// initialize filter
-	if( specs.count > 0 && (optionsSet & FOS_PICKFOLDERS) == 0 ) {
+	if( specs.count > 0 ) {
 		CHECK_HRESULT( dialog->SetFileTypes( specs.count, specs.specs ) );
 		if( fileTypeIndex > 0 )
 			CHECK_HRESULT( dialog->SetFileTypeIndex( min( fileTypeIndex + 1, specs.count ) ) );

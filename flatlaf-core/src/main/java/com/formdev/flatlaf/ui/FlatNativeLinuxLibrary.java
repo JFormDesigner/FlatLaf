@@ -134,6 +134,10 @@ public class FlatNativeLinuxLibrary
 	 * Shows the Linux system file dialog
 	 * <a href="https://docs.gtk.org/gtk3/class.FileChooserDialog.html">GtkFileChooserDialog</a>.
 	 * <p>
+	 * Uses {@code GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER} if {@link #FC_select_folder} is set in parameter {@code optionsSet}.
+	 * Otherwise uses {@code GTK_FILE_CHOOSER_ACTION_OPEN} if parameter {@code open} is {@code true},
+	 * or {@code GTK_FILE_CHOOSER_ACTION_SAVE} if {@code false}.
+	 * <p>
 	 * <b>Note:</b> This method blocks the current thread until the user closes
 	 * the file dialog. It is highly recommended to invoke it from a new thread
 	 * to avoid blocking the AWT event dispatching thread.
@@ -142,6 +146,7 @@ public class FlatNativeLinuxLibrary
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
 	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '_' for mnemonics (e.g. "_Choose")
+	 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
 	 * @param currentName user-editable filename currently shown in the filename field in save dialog; or {@code null}
 	 * @param currentFolder current directory shown in the dialog; or {@code null}
 	 * @param optionsSet options to set; see {@code FOS_*} constants

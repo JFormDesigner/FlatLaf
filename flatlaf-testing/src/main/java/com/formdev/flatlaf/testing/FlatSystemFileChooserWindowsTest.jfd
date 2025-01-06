@@ -116,6 +116,7 @@ new FormModel {
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "pickFoldersCheckBox"
 					"text": "pickFolders"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
@@ -128,6 +129,7 @@ new FormModel {
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "forceShowHiddenCheckBox"
 					"text": "forceShowHidden"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 3"
 				} )
@@ -188,6 +190,7 @@ new FormModel {
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "allowMultiSelectCheckBox"
 					"text": "allowMultiSelect"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 7"
 				} )

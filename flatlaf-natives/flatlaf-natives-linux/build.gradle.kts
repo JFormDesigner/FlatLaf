@@ -71,6 +71,17 @@ tasks {
 				else -> emptyList()
 			}
 		} )
+
+		doFirst {
+			// check required Java version
+			if( JavaVersion.current() < JavaVersion.VERSION_11 ) {
+				println()
+				println( "WARNING: Java 11 or later required to build Linux native library (running ${System.getProperty( "java.version" )})" )
+				println( "         Native library built with older Java versions throw following exception when running in Java 17+:" )
+				println( "         java.lang.UnsatisfiedLinkError: .../libjawt.so: version `SUNWprivate_1.1' not found" )
+				println()
+			}
+		}
 	}
 
 	withType<LinkSharedLibrary>().configureEach {

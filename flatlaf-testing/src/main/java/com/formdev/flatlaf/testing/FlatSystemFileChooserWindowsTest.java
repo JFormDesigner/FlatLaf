@@ -19,6 +19,7 @@ package com.formdev.flatlaf.testing;
 import static com.formdev.flatlaf.ui.FlatNativeWindowsLibrary.*;
 import java.awt.Dialog;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -393,6 +394,7 @@ public class FlatSystemFileChooserWindowsTest
 
 			//---- pickFoldersCheckBox ----
 			pickFoldersCheckBox.setText("pickFolders");
+			pickFoldersCheckBox.setFont(pickFoldersCheckBox.getFont().deriveFont(pickFoldersCheckBox.getFont().getStyle() | Font.BOLD));
 			panel1.add(pickFoldersCheckBox, "cell 0 3");
 
 			//---- shareAwareCheckBox ----
@@ -401,6 +403,7 @@ public class FlatSystemFileChooserWindowsTest
 
 			//---- forceShowHiddenCheckBox ----
 			forceShowHiddenCheckBox.setText("forceShowHidden");
+			forceShowHiddenCheckBox.setFont(forceShowHiddenCheckBox.getFont().deriveFont(forceShowHiddenCheckBox.getFont().getStyle() | Font.BOLD));
 			panel1.add(forceShowHiddenCheckBox, "cell 2 3");
 
 			//---- forceFileSystemCheckBox ----
@@ -441,6 +444,7 @@ public class FlatSystemFileChooserWindowsTest
 
 			//---- allowMultiSelectCheckBox ----
 			allowMultiSelectCheckBox.setText("allowMultiSelect");
+			allowMultiSelectCheckBox.setFont(allowMultiSelectCheckBox.getFont().deriveFont(allowMultiSelectCheckBox.getFont().getStyle() | Font.BOLD));
 			panel1.add(allowMultiSelectCheckBox, "cell 0 7");
 
 			//---- hidePinnedPlacesCheckBox ----

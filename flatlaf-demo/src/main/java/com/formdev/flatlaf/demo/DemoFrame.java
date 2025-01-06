@@ -49,6 +49,7 @@ import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -169,6 +170,16 @@ class DemoFrame
 
 	private void saveAsActionPerformed() {
 		JFileChooser chooser = new JFileChooser();
+		chooser.showSaveDialog( this );
+	}
+
+	private void openSystemActionPerformed() {
+		SystemFileChooser chooser = new SystemFileChooser();
+		chooser.showOpenDialog( this );
+	}
+
+	private void saveAsSystemActionPerformed() {
+		SystemFileChooser chooser = new SystemFileChooser();
 		chooser.showSaveDialog( this );
 	}
 
@@ -496,6 +507,8 @@ class DemoFrame
 		JMenuItem newMenuItem = new JMenuItem();
 		JMenuItem openMenuItem = new JMenuItem();
 		JMenuItem saveAsMenuItem = new JMenuItem();
+		JMenuItem openSystemMenuItem = new JMenuItem();
+		JMenuItem saveAsSystemMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
@@ -594,6 +607,17 @@ class DemoFrame
 				saveAsMenuItem.setMnemonic('S');
 				saveAsMenuItem.addActionListener(e -> saveAsActionPerformed());
 				fileMenu.add(saveAsMenuItem);
+				fileMenu.addSeparator();
+
+				//---- openSystemMenuItem ----
+				openSystemMenuItem.setText("Open (System)...");
+				openSystemMenuItem.addActionListener(e -> openSystemActionPerformed());
+				fileMenu.add(openSystemMenuItem);
+
+				//---- saveAsSystemMenuItem ----
+				saveAsSystemMenuItem.setText("Save As (System)...");
+				saveAsSystemMenuItem.addActionListener(e -> saveAsSystemActionPerformed());
+				fileMenu.add(saveAsSystemMenuItem);
 				fileMenu.addSeparator();
 
 				//---- closeMenuItem ----

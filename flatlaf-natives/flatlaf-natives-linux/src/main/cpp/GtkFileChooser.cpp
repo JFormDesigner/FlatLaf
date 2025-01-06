@@ -177,11 +177,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 	bool multiSelect = isOptionSet( FC_select_multiple );
 	GtkWidget* dialog = gtk_file_chooser_dialog_new(
 		(ctitle != NULL) ? ctitle
-			: (open ? (selectFolder ? (multiSelect ? _("Select Folders") : _("Select Folder"))
-				: (multiSelect ? _("Open Files") : _("Open File"))) : _("Save File")),
+			: (selectFolder ? (multiSelect ? _("Select Folders") : _("Select Folder"))
+				: (open ? ((multiSelect ? _("Open Files") : _("Open File"))) : _("Save File"))),
 		NULL, // can not use AWT X11 window as parent because GtkWindow is required
-		open ? (selectFolder ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN)
-			: GTK_FILE_CHOOSER_ACTION_SAVE,
+		selectFolder ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+			: (open ? GTK_FILE_CHOOSER_ACTION_OPEN : GTK_FILE_CHOOSER_ACTION_SAVE),
 		_("_Cancel"), GTK_RESPONSE_CANCEL,
 		(cokButtonLabel != NULL) ? cokButtonLabel : (open ? _("_Open") : _("_Save")), GTK_RESPONSE_ACCEPT,
 		NULL ); // marks end of buttons
