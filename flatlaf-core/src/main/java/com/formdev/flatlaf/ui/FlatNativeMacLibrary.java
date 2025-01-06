@@ -72,7 +72,7 @@ public class FlatNativeMacLibrary
 
 	/** @since 3.6 */
 	public static final int
-		// NSOpenPanel
+		// NSOpenPanel (extends NSSavePanel)
 		FC_canChooseFiles					= 1 << 0,  // default
 		FC_canChooseDirectories				= 1 << 1,
 		FC_resolvesAliases					= 1 << 2,  // default
@@ -105,7 +105,8 @@ public class FlatNativeMacLibrary
 	 * @param optionsSet options to set; see {@code FC_*} constants
 	 * @param optionsClear options to clear; see {@code FC_*} constants
 	 * @param allowedFileTypes allowed filename extensions (e.g. "txt")
-	 * @return file path(s) that the user selected, or {@code null} if canceled
+	 * @return file path(s) that the user selected; an empty array if canceled;
+	 *         or {@code null} on failures (no dialog shown)
 	 *
 	 * @since 3.6
 	 */

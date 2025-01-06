@@ -23,14 +23,22 @@
 
 /**
  * @author Karl Tauber
+ * @since 3.6
  */
+
+//---- helper -----------------------------------------------------------------
 
 #define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
 #define isOptionClear( option ) ((optionsClear & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
 #define isOptionSetOrClear( option ) isOptionSet( option ) || isOptionClear( option )
 
-// declare internal methods
+// declare methods
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
+
+jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
+	jclass stringClass = env->FindClass( "java/lang/String" );
+	return env->NewObjectArray( count, stringClass, NULL );
+}
 
 //---- JNI methods ------------------------------------------------------------
 
@@ -135,19 +143,18 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		urls = @[url];
 
 	if( urls == NULL )
-		return NULL;
+		return newJavaStringArray( env, 0 );
 
 	// convert URLs to Java string array
 	jsize count = urls.count;
-	jclass stringClass = env->FindClass( "java/lang/String" );
-	jobjectArray result = env->NewObjectArray( count, stringClass, NULL );
+	jobjectArray array = newJavaStringArray( env, count );
 	for( int i = 0; i < count; i++ ) {
 		jstring filename = NormalizedPathJavaFromNSString( env, [urls[i] path] );
-		env->SetObjectArrayElement( result, i, filename );
+		env->SetObjectArrayElement( array, i, filename );
 		env->DeleteLocalRef( filename );
 	}
 
-	return result;
+	return array;
 
 	JNI_COCOA_EXIT()
 }

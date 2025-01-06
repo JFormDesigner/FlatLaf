@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeLinuxLibrary;
+import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
 
 /**
@@ -61,7 +62,11 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *       If user selects "Yes", the file chooser closes. If user selects "No", the file chooser stays open.
  *       It is not possible to customize that question dialog.
  *   <li><b>Save File</b> dialog does not support multi-selection.
+ *   <li>For selection mode {@link #DIRECTORIES_ONLY}, dialog type {@link #SAVE_DIALOG} is ignored.
+ *       Operating system file dialogs support folder selection only in "Open" dialogs.
  *   <li>{@link JFileChooser#FILES_AND_DIRECTORIES} is not supported.
+ *   <li>{@link #getSelectedFiles()} returns selected file also in single selection mode.
+ *       {@link JFileChooser#getSelectedFiles()} only in multi selection mode.
  * </ul>
  *
  * @author Karl Tauber
@@ -289,6 +294,8 @@ public class SystemFileChooser
 
 		if( SystemInfo.isWindows_10_orLater && FlatNativeWindowsLibrary.isLoaded() )
 			return new WindowsFileChooserProvider();
+		else if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() )
+			return new MacFileChooserProvider();
 		else if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isLoaded() )
 			return new LinuxFileChooserProvider();
 		else // unknown platform or FlatLaf native library not loaded
@@ -413,7 +420,52 @@ public class SystemFileChooser
 		}
 	}
 
-	//---- class LinuxFileChooserProvider -----------------------------------..
+	//---- class MacFileChooserProvider ---------------------------------------
+
+	private static class MacFileChooserProvider
+		extends SystemFileChooserProvider
+	{
+		@Override
+		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
+			boolean open = (fc.getDialogType() == OPEN_DIALOG);
+			String nameFieldStringValue = null;
+			String directoryURL = null;
+
+			// paths
+			File currentDirectory = fc.getCurrentDirectory();
+			File selectedFile = fc.getSelectedFile();
+			if( selectedFile != null ) {
+				if( selectedFile.isDirectory() )
+					directoryURL = selectedFile.getAbsolutePath();
+				else {
+					nameFieldStringValue = selectedFile.getName();
+					directoryURL = selectedFile.getParent();
+				}
+			} else if( currentDirectory != null )
+				directoryURL = currentDirectory.getAbsolutePath();
+
+			// options
+			int optionsSet = 0;
+			int optionsClear = 0;
+			if( fc.isDirectorySelectionEnabled() ) {
+				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories;
+				optionsClear |= FlatNativeMacLibrary.FC_canChooseFiles;
+				open = true;
+			}
+			if( fc.isMultiSelectionEnabled() )
+				optionsSet |= FlatNativeMacLibrary.FC_allowsMultipleSelection;
+			if( !fc.isFileHidingEnabled() )
+				optionsSet |= FlatNativeMacLibrary.FC_showsHiddenFiles;
+
+			// show system file dialog
+			return FlatNativeMacLibrary.showFileChooser( open,
+				fc.getDialogTitle(), fc.getApproveButtonText(), null, null,
+				nameFieldStringValue, directoryURL,
+				optionsSet, optionsClear );
+		}
+	}
+
+	//---- class LinuxFileChooserProvider -------------------------------------
 
 	private static class LinuxFileChooserProvider
 		extends SystemFileChooserProvider
