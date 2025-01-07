@@ -21,6 +21,8 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_resolvesAliases 4L
 #undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsMultipleSelection
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsMultipleSelection 8L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_accessoryViewDisclosed
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_accessoryViewDisclosed 16L
 #undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsTagField
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsTagField 256L
 #undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canCreateDirectories
@@ -35,6 +37,8 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsOtherFileTypes 8192L
 #undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_treatsFilePackagesAsDirectories
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_treatsFilePackagesAsDirectories 16384L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showSingleFilterField
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showSingleFilterField 16777216L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
@@ -78,10 +82,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    showFileChooser
- * Signature: (ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II[Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;III[Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showFileChooser
-  (JNIEnv *, jclass, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobjectArray);
+  (JNIEnv *, jclass, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jint, jobjectArray);
 
 #ifdef __cplusplus
 }

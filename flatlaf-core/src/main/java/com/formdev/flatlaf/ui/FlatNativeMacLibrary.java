@@ -77,6 +77,7 @@ public class FlatNativeMacLibrary
 		FC_canChooseDirectories				= 1 << 1,
 		FC_resolvesAliases					= 1 << 2,  // default
 		FC_allowsMultipleSelection			= 1 << 3,
+		FC_accessoryViewDisclosed			= 1 << 4,
 		// NSSavePanel
 		FC_showsTagField					= 1 << 8,  // default for Save
 		FC_canCreateDirectories				= 1 << 9,  // default for Save
@@ -84,7 +85,9 @@ public class FlatNativeMacLibrary
 		FC_showsHiddenFiles					= 1 << 11,
 		FC_extensionHidden					= 1 << 12,
 		FC_allowsOtherFileTypes				= 1 << 13,
-		FC_treatsFilePackagesAsDirectories	= 1 << 14;
+		FC_treatsFilePackagesAsDirectories	= 1 << 14,
+		// custom
+		FC_showSingleFilterField			= 1 << 24;
 
 	/**
 	 * Shows the macOS system file dialogs
@@ -99,19 +102,25 @@ public class FlatNativeMacLibrary
 	 * @param title text displayed at top of save dialog (not used in open dialog); or {@code null}
 	 * @param prompt text displayed in default button; or {@code null}
 	 * @param message text displayed at top of open/save dialogs; or {@code null}
+	 * @param filterFieldLabel text displayed in front of the filter combobox; or {@code null}
 	 * @param nameFieldLabel text displayed in front of the filename text field in save dialog (not used in open dialog); or {@code null}
 	 * @param nameFieldStringValue user-editable filename currently shown in the name field in save dialog (not used in open dialog); or {@code null}
 	 * @param directoryURL current directory shown in the dialog; or {@code null}
 	 * @param optionsSet options to set; see {@code FC_*} constants
 	 * @param optionsClear options to clear; see {@code FC_*} constants
-	 * @param allowedFileTypes allowed filename extensions (e.g. "txt")
+	 * @param fileTypeIndex the file type that appears as selected (zero-based)
+	 * @param fileTypes file types that the dialog can open or save.
+	 *        Two or more strings and {@code null} are required for each filter.
+	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
+	 *        Subsequent strings are the filter patterns (e.g. "*.txt" or "*").
+	 *        {@code null} is required to mark end of filter.
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
 	 * @since 3.6
 	 */
 	public native static String[] showFileChooser( boolean open,
-		String title, String prompt, String message, String nameFieldLabel,
-		String nameFieldStringValue, String directoryURL,
-		int optionsSet, int optionsClear, String... allowedFileTypes );
+		String title, String prompt, String message, String filterFieldLabel,
+		String nameFieldLabel, String nameFieldStringValue, String directoryURL,
+		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
 }

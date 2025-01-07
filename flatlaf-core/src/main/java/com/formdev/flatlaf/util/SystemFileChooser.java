@@ -445,7 +445,7 @@ public class SystemFileChooser
 				directoryURL = currentDirectory.getAbsolutePath();
 
 			// options
-			int optionsSet = 0;
+			int optionsSet = FlatNativeMacLibrary.FC_accessoryViewDisclosed;
 			int optionsClear = 0;
 			if( fc.isDirectorySelectionEnabled() ) {
 				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories;
@@ -459,9 +459,9 @@ public class SystemFileChooser
 
 			// show system file dialog
 			return FlatNativeMacLibrary.showFileChooser( open,
-				fc.getDialogTitle(), fc.getApproveButtonText(), null, null,
+				fc.getDialogTitle(), fc.getApproveButtonText(), null, null, null,
 				nameFieldStringValue, directoryURL,
-				optionsSet, optionsClear );
+				optionsSet, optionsClear, 0 );
 		}
 	}
 

@@ -66,6 +66,8 @@ public class FlatSystemFileChooserMacTest
 
 	FlatSystemFileChooserMacTest() {
 		initComponents();
+
+		fileTypesField.setSelectedItem( null );
 	}
 
 	private void open() {
@@ -88,6 +90,7 @@ public class FlatSystemFileChooserMacTest
 		String title = n( titleField.getText() );
 		String prompt = n( promptField.getText() );
 		String message = n( messageField.getText() );
+		String filterFieldLabel = n( filterFieldLabelField.getText() );
 		String nameFieldLabel = n( nameFieldLabelField.getText() );
 		String nameFieldStringValue = n( nameFieldStringValueField.getText() );
 		String directoryURL = n( directoryURLField.getText() );
@@ -101,6 +104,8 @@ public class FlatSystemFileChooserMacTest
 			optionsSet.set( optionsSet.get() | FC_canChooseDirectories );
 		o( FC_resolvesAliases, resolvesAliasesCheckBox, optionsSet, optionsClear );
 		o( FC_allowsMultipleSelection, allowsMultipleSelectionCheckBox, optionsSet, optionsClear );
+		if( accessoryViewDisclosedCheckBox.isSelected() )
+			optionsSet.set( optionsSet.get() | FC_accessoryViewDisclosed );
 
 		// NSSavePanel
 		o( FC_showsTagField, showsTagFieldCheckBox, optionsSet, optionsClear );
@@ -111,25 +116,39 @@ public class FlatSystemFileChooserMacTest
 		o( FC_allowsOtherFileTypes, allowsOtherFileTypesCheckBox, optionsSet, optionsClear );
 		o( FC_treatsFilePackagesAsDirectories, treatsFilePackagesAsDirectoriesCheckBox, optionsSet, optionsClear );
 
-		String allowedFileTypesStr = n( allowedFileTypesField.getText() );
-		String[] allowedFileTypes = {};
-		if( allowedFileTypesStr != null )
-			allowedFileTypes = allowedFileTypesStr.trim().split( "[ ,]+" );
+		// custom
+		if( showSingleFilterFieldCheckBox.isSelected() )
+			optionsSet.set( optionsSet.get() | FC_showSingleFilterField );
+
+		String fileTypesStr = n( (String) fileTypesField.getSelectedItem() );
+		String[] fileTypes = {};
+		if( fileTypesStr != null ) {
+			if( !fileTypesStr.endsWith( ",null" ) )
+				fileTypesStr += ",null";
+			fileTypes = fileTypesStr.trim().split( "[,]+" );
+			for( int i = 0; i < fileTypes.length; i++ ) {
+				if( "null".equals( fileTypes[i] ) )
+					fileTypes[i] = null;
+			}
+		}
+		int fileTypeIndex = fileTypeIndexSlider.getValue();
 
 		if( direct ) {
-			String[] files = FlatNativeMacLibrary.showFileChooser( open, title, prompt, message,
+			String[] files = FlatNativeMacLibrary.showFileChooser( open,
+				title, prompt, message, filterFieldLabel,
 				nameFieldLabel, nameFieldStringValue, directoryURL,
-				optionsSet.get(), optionsClear.get(), allowedFileTypes );
+				optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes );
 
 			filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
 		} else {
 			SecondaryLoop secondaryLoop = Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
 
-			String[] allowedFileTypes2 = allowedFileTypes;
+			String[] fileTypes2 = fileTypes;
 			new Thread( () -> {
-				String[] files = FlatNativeMacLibrary.showFileChooser( open, title, prompt, message,
+				String[] files = FlatNativeMacLibrary.showFileChooser( open,
+					title, prompt, message, filterFieldLabel,
 					nameFieldLabel, nameFieldStringValue, directoryURL,
-					optionsSet.get(), optionsClear.get(), allowedFileTypes2 );
+					optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes2 );
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
@@ -144,7 +163,7 @@ public class FlatSystemFileChooserMacTest
 	}
 
 	private static String n( String s ) {
-		return !s.isEmpty() ? s : null;
+		return s != null && !s.isEmpty() ? s : null;
 	}
 
 	private static void o( int option, FlatTriStateCheckBox checkBox, AtomicInteger optionsSet, AtomicInteger optionsClear ) {
@@ -220,6 +239,7 @@ public class FlatSystemFileChooserMacTest
 		canChooseDirectoriesCheckBox = new JCheckBox();
 		resolvesAliasesCheckBox = new FlatTriStateCheckBox();
 		allowsMultipleSelectionCheckBox = new FlatTriStateCheckBox();
+		accessoryViewDisclosedCheckBox = new JCheckBox();
 		options2Label = new JLabel();
 		showsTagFieldCheckBox = new FlatTriStateCheckBox();
 		canCreateDirectoriesCheckBox = new FlatTriStateCheckBox();
@@ -228,18 +248,24 @@ public class FlatSystemFileChooserMacTest
 		extensionHiddenCheckBox = new FlatTriStateCheckBox();
 		allowsOtherFileTypesCheckBox = new FlatTriStateCheckBox();
 		treatsFilePackagesAsDirectoriesCheckBox = new FlatTriStateCheckBox();
+		options3Label = new JLabel();
+		showSingleFilterFieldCheckBox = new JCheckBox();
 		promptLabel = new JLabel();
 		promptField = new JTextField();
 		messageLabel = new JLabel();
 		messageField = new JTextField();
+		filterFieldLabelLabel = new JLabel();
+		filterFieldLabelField = new JTextField();
 		nameFieldLabelLabel = new JLabel();
 		nameFieldLabelField = new JTextField();
 		nameFieldStringValueLabel = new JLabel();
 		nameFieldStringValueField = new JTextField();
 		directoryURLLabel = new JLabel();
 		directoryURLField = new JTextField();
-		allowedFileTypesLabel = new JLabel();
-		allowedFileTypesField = new JTextField();
+		fileTypesLabel = new JLabel();
+		fileTypesField = new JComboBox<>();
+		fileTypeIndexLabel = new JLabel();
+		fileTypeIndexSlider = new JSlider();
 		openButton = new JButton();
 		saveButton = new JButton();
 		openDirectButton = new JButton();
@@ -255,6 +281,8 @@ public class FlatSystemFileChooserMacTest
 			"[grow,fill]" +
 			"[fill]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -282,6 +310,7 @@ public class FlatSystemFileChooserMacTest
 				"[]0" +
 				"[]0" +
 				"[]0" +
+				"[]0" +
 				"[]para" +
 				"[]" +
 				"[]0" +
@@ -290,6 +319,8 @@ public class FlatSystemFileChooserMacTest
 				"[]0" +
 				"[]0" +
 				"[]0" +
+				"[]para" +
+				"[]" +
 				"[]"));
 
 			//---- options1Label ----
@@ -314,39 +345,51 @@ public class FlatSystemFileChooserMacTest
 			allowsMultipleSelectionCheckBox.setText("allowsMultipleSelection");
 			panel1.add(allowsMultipleSelectionCheckBox, "cell 0 4");
 
+			//---- accessoryViewDisclosedCheckBox ----
+			accessoryViewDisclosedCheckBox.setText("accessoryViewDisclosed");
+			panel1.add(accessoryViewDisclosedCheckBox, "cell 0 5");
+
 			//---- options2Label ----
 			options2Label.setText("NSOpenPanel and NSSavePanel options:");
-			panel1.add(options2Label, "cell 0 5");
+			panel1.add(options2Label, "cell 0 6");
 
 			//---- showsTagFieldCheckBox ----
 			showsTagFieldCheckBox.setText("showsTagField");
-			panel1.add(showsTagFieldCheckBox, "cell 0 6");
+			panel1.add(showsTagFieldCheckBox, "cell 0 7");
 
 			//---- canCreateDirectoriesCheckBox ----
 			canCreateDirectoriesCheckBox.setText("canCreateDirectories");
-			panel1.add(canCreateDirectoriesCheckBox, "cell 0 7");
+			panel1.add(canCreateDirectoriesCheckBox, "cell 0 8");
 
 			//---- canSelectHiddenExtensionCheckBox ----
 			canSelectHiddenExtensionCheckBox.setText("canSelectHiddenExtension");
-			panel1.add(canSelectHiddenExtensionCheckBox, "cell 0 8");
+			panel1.add(canSelectHiddenExtensionCheckBox, "cell 0 9");
 
 			//---- showsHiddenFilesCheckBox ----
 			showsHiddenFilesCheckBox.setText("showsHiddenFiles");
-			panel1.add(showsHiddenFilesCheckBox, "cell 0 9");
+			panel1.add(showsHiddenFilesCheckBox, "cell 0 10");
 
 			//---- extensionHiddenCheckBox ----
 			extensionHiddenCheckBox.setText("extensionHidden");
-			panel1.add(extensionHiddenCheckBox, "cell 0 10");
+			panel1.add(extensionHiddenCheckBox, "cell 0 11");
 
 			//---- allowsOtherFileTypesCheckBox ----
 			allowsOtherFileTypesCheckBox.setText("allowsOtherFileTypes");
-			panel1.add(allowsOtherFileTypesCheckBox, "cell 0 11");
+			panel1.add(allowsOtherFileTypesCheckBox, "cell 0 12");
 
 			//---- treatsFilePackagesAsDirectoriesCheckBox ----
 			treatsFilePackagesAsDirectoriesCheckBox.setText("treatsFilePackagesAsDirectories");
-			panel1.add(treatsFilePackagesAsDirectoriesCheckBox, "cell 0 12");
+			panel1.add(treatsFilePackagesAsDirectoriesCheckBox, "cell 0 13");
+
+			//---- options3Label ----
+			options3Label.setText("Custom options:");
+			panel1.add(options3Label, "cell 0 14");
+
+			//---- showSingleFilterFieldCheckBox ----
+			showSingleFilterFieldCheckBox.setText("showSingleFilterField");
+			panel1.add(showSingleFilterFieldCheckBox, "cell 0 15");
 		}
-		add(panel1, "cell 2 0 1 8,aligny top,growy 0");
+		add(panel1, "cell 2 0 1 10,aligny top,growy 0");
 
 		//---- promptLabel ----
 		promptLabel.setText("prompt");
@@ -358,45 +401,72 @@ public class FlatSystemFileChooserMacTest
 		add(messageLabel, "cell 0 2");
 		add(messageField, "cell 1 2");
 
+		//---- filterFieldLabelLabel ----
+		filterFieldLabelLabel.setText("filterFieldLabel");
+		add(filterFieldLabelLabel, "cell 0 3");
+		add(filterFieldLabelField, "cell 1 3");
+
 		//---- nameFieldLabelLabel ----
 		nameFieldLabelLabel.setText("nameFieldLabel");
-		add(nameFieldLabelLabel, "cell 0 3");
-		add(nameFieldLabelField, "cell 1 3");
+		add(nameFieldLabelLabel, "cell 0 4");
+		add(nameFieldLabelField, "cell 1 4");
 
 		//---- nameFieldStringValueLabel ----
 		nameFieldStringValueLabel.setText("nameFieldStringValue");
-		add(nameFieldStringValueLabel, "cell 0 4");
-		add(nameFieldStringValueField, "cell 1 4");
+		add(nameFieldStringValueLabel, "cell 0 5");
+		add(nameFieldStringValueField, "cell 1 5");
 
 		//---- directoryURLLabel ----
 		directoryURLLabel.setText("directoryURL");
-		add(directoryURLLabel, "cell 0 5");
-		add(directoryURLField, "cell 1 5");
+		add(directoryURLLabel, "cell 0 6");
+		add(directoryURLField, "cell 1 6");
 
-		//---- allowedFileTypesLabel ----
-		allowedFileTypesLabel.setText("allowedFileTypes");
-		add(allowedFileTypesLabel, "cell 0 6");
-		add(allowedFileTypesField, "cell 1 6");
+		//---- fileTypesLabel ----
+		fileTypesLabel.setText("fileTypes");
+		add(fileTypesLabel, "cell 0 7");
+
+		//---- fileTypesField ----
+		fileTypesField.setEditable(true);
+		fileTypesField.setModel(new DefaultComboBoxModel<>(new String[] {
+			"Text Files,txt,null",
+			"All Files,*,null",
+			"Text Files,txt,null,PDF Files,pdf,null,All Files,*,null",
+			"Text and PDF Files,txt,pdf,null",
+			"Compressed,zip,gz,null,Disk Images,dmg,null"
+		}));
+		add(fileTypesField, "cell 1 7");
+
+		//---- fileTypeIndexLabel ----
+		fileTypeIndexLabel.setText("fileTypeIndex");
+		add(fileTypeIndexLabel, "cell 0 8");
+
+		//---- fileTypeIndexSlider ----
+		fileTypeIndexSlider.setMaximum(10);
+		fileTypeIndexSlider.setMajorTickSpacing(1);
+		fileTypeIndexSlider.setValue(0);
+		fileTypeIndexSlider.setPaintLabels(true);
+		fileTypeIndexSlider.setSnapToTicks(true);
+		add(fileTypeIndexSlider, "cell 1 8");
 
 		//---- openButton ----
 		openButton.setText("Open...");
 		openButton.addActionListener(e -> open());
-		add(openButton, "cell 0 8 3 1");
+		add(openButton, "cell 0 10 3 1");
 
 		//---- saveButton ----
 		saveButton.setText("Save...");
 		saveButton.addActionListener(e -> save());
-		add(saveButton, "cell 0 8 3 1");
+		add(saveButton, "cell 0 10 3 1");
 
 		//---- openDirectButton ----
 		openDirectButton.setText("Open (no-thread)...");
 		openDirectButton.addActionListener(e -> openDirect());
-		add(openDirectButton, "cell 0 8 3 1");
+		add(openDirectButton, "cell 0 10 3 1");
 
 		//---- saveDirectButton ----
 		saveDirectButton.setText("Save (no-thread)...");
 		saveDirectButton.addActionListener(e -> saveDirect());
-		add(saveDirectButton, "cell 0 8 3 1");
+		add(saveDirectButton, "cell 0 10 3 1");
 
 		//======== filesScrollPane ========
 		{
@@ -405,7 +475,7 @@ public class FlatSystemFileChooserMacTest
 			filesField.setRows(8);
 			filesScrollPane.setViewportView(filesField);
 		}
-		add(filesScrollPane, "cell 0 9 3 1,growx");
+		add(filesScrollPane, "cell 0 11 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -418,6 +488,7 @@ public class FlatSystemFileChooserMacTest
 	private JCheckBox canChooseDirectoriesCheckBox;
 	private FlatTriStateCheckBox resolvesAliasesCheckBox;
 	private FlatTriStateCheckBox allowsMultipleSelectionCheckBox;
+	private JCheckBox accessoryViewDisclosedCheckBox;
 	private JLabel options2Label;
 	private FlatTriStateCheckBox showsTagFieldCheckBox;
 	private FlatTriStateCheckBox canCreateDirectoriesCheckBox;
@@ -426,18 +497,24 @@ public class FlatSystemFileChooserMacTest
 	private FlatTriStateCheckBox extensionHiddenCheckBox;
 	private FlatTriStateCheckBox allowsOtherFileTypesCheckBox;
 	private FlatTriStateCheckBox treatsFilePackagesAsDirectoriesCheckBox;
+	private JLabel options3Label;
+	private JCheckBox showSingleFilterFieldCheckBox;
 	private JLabel promptLabel;
 	private JTextField promptField;
 	private JLabel messageLabel;
 	private JTextField messageField;
+	private JLabel filterFieldLabelLabel;
+	private JTextField filterFieldLabelField;
 	private JLabel nameFieldLabelLabel;
 	private JTextField nameFieldLabelField;
 	private JLabel nameFieldStringValueLabel;
 	private JTextField nameFieldStringValueField;
 	private JLabel directoryURLLabel;
 	private JTextField directoryURLField;
-	private JLabel allowedFileTypesLabel;
-	private JTextField allowedFileTypesField;
+	private JLabel fileTypesLabel;
+	private JComboBox<String> fileTypesField;
+	private JLabel fileTypeIndexLabel;
+	private JSlider fileTypeIndexSlider;
 	private JButton openButton;
 	private JButton saveButton;
 	private JButton openDirectButton;
