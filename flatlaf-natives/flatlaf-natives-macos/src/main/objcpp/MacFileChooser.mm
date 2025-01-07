@@ -58,7 +58,7 @@
 		}
 
 		// create label
-		NSTextField* label = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 60, 22 )];
+		NSTextField* label = [[NSTextField alloc] initWithFrame:NSZeroRect];
 		label.stringValue = (filterFieldLabel != NULL) ? filterFieldLabel : @"Format:";
 		label.editable = NO;
 		label.bordered = NO;
@@ -66,16 +66,36 @@
 		label.drawsBackground = NO;
 
 		// create combobox
-		NSPopUpButton* popupButton = [[NSPopUpButton alloc] initWithFrame:NSMakeRect( 50, 2, 140, 22 ) pullsDown:NO];
+		NSPopUpButton* popupButton = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 		[popupButton addItemsWithTitles:filterNames];
 		[popupButton selectItemAtIndex:MIN( MAX( filterIndex, 0 ), filterNames.count - 1 )];
 		[popupButton setTarget:self];
 		[popupButton setAction:@selector(selectFormat:)];
 
 		// create view
-		NSView* accessoryView = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 200, 32 )];
+		NSView* accessoryView = [[NSView alloc] initWithFrame:NSZeroRect];
 		[accessoryView addSubview:label];
 		[accessoryView addSubview:popupButton];
+
+		// autolayout
+		label.translatesAutoresizingMaskIntoConstraints = NO;
+		popupButton.translatesAutoresizingMaskIntoConstraints = NO;
+		int labelWidth = label.intrinsicContentSize.width;
+		int gap = 12;
+		int popupButtonWidth = popupButton.intrinsicContentSize.width;
+		int popupButtonMinimumWidth = 140;
+		int totalWidth = labelWidth + gap + MAX( popupButtonWidth, popupButtonMinimumWidth );
+		[accessoryView addConstraints:@[
+			// horizontal layout
+			[label.leadingAnchor constraintEqualToAnchor:accessoryView.centerXAnchor constant:-(totalWidth / 2)],
+			[popupButton.leadingAnchor constraintEqualToAnchor:label.trailingAnchor constant:gap],
+			[popupButton.widthAnchor constraintGreaterThanOrEqualToConstant:popupButtonMinimumWidth],
+
+			// vertical layout
+			[popupButton.topAnchor constraintEqualToAnchor:accessoryView.topAnchor constant:8],
+			[popupButton.bottomAnchor constraintEqualToAnchor:accessoryView.bottomAnchor constant:-8],
+			[label.firstBaselineAnchor constraintEqualToAnchor:popupButton.firstBaselineAnchor],
+		]];
 
 		[_dialog setAccessoryView:accessoryView];
 
