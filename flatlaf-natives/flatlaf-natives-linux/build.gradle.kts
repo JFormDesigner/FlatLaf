@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import java.io.FileOutputStream
+
 plugins {
 	`cpp-library`
 	`flatlaf-cpp-library`
@@ -67,7 +69,7 @@ tasks {
 
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf()
+				is Gcc, is Clang -> listOf( "-fvisibility=hidden" )
 				else -> emptyList()
 			}
 		} )
@@ -108,6 +110,29 @@ tasks {
 				into( nativesDir )
 				rename( "libflatlaf-natives-linux.so", libraryName )
 			}
+
+/*dump
+			val dylib = linkedFile.asFile.get()
+			val dylibDir = dylib.parent
+			exec { commandLine( "size", dylib ) }
+			exec {
+				commandLine( "objdump",
+					// commands
+					"--archive-headers",
+					"--section-headers",
+					"--private-headers",
+					"--reloc",
+					"--dynamic-reloc",
+					"--syms",
+					// options
+//					"--private-header",
+					// files
+					dylib )
+				standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+			}
+			exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+			exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+dump*/
 		}
 	}
 }

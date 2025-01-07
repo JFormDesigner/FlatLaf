@@ -26,8 +26,8 @@
  * @since 3.6
  */
 
-// see FlatWndProc.cpp
-HWND getWindowHandle( JNIEnv* env, jobject window );
+// declare external methods
+extern HWND getWindowHandle( JNIEnv* env, jobject window );
 
 //---- class AutoReleasePtr ---------------------------------------------------
 
@@ -147,12 +147,12 @@ public:
 #define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_ ## option) != 0)
 #define CHECK_HRESULT( code ) { if( (code) != S_OK ) return NULL; }
 
-jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
+static jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
 	jclass stringClass = env->FindClass( "java/lang/String" );
 	return env->NewObjectArray( count, stringClass, NULL );
 }
 
-jstring newJavaString( JNIEnv* env, LPWSTR str ) {
+static jstring newJavaString( JNIEnv* env, LPWSTR str ) {
 	return env->NewString( reinterpret_cast<jchar*>( str ), static_cast<jsize>( wcslen( str ) ) );
 }
 

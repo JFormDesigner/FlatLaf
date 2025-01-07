@@ -126,10 +126,10 @@
 #define isOptionClear( option ) ((optionsClear & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
 #define isOptionSetOrClear( option ) isOptionSet( option ) || isOptionClear( option )
 
-// declare methods
-NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
+// declare external methods
+extern NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
 
-jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
+static jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
 	jclass stringClass = env->FindClass( "java/lang/String" );
 	return env->NewObjectArray( count, stringClass, NULL );
 }

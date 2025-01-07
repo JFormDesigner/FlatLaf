@@ -26,8 +26,8 @@
  * @since 3.6
  */
 
-// see X11WmUtils.cpp
-Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
+// declare external methods
+extern Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
 
 //---- class AutoReleaseStringUTF8 --------------------------------------------
 
@@ -55,12 +55,12 @@ public:
 #define isOptionClear( option ) ((optionsClear & com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_ ## option) != 0)
 #define isOptionSetOrClear( option ) isOptionSet( option ) || isOptionClear( option )
 
-jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
+static jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
 	jclass stringClass = env->FindClass( "java/lang/String" );
 	return env->NewObjectArray( count, stringClass, NULL );
 }
 
-void initFilters( GtkFileChooser* chooser, JNIEnv* env, jint fileTypeIndex, jobjectArray fileTypes ) {
+static void initFilters( GtkFileChooser* chooser, JNIEnv* env, jint fileTypeIndex, jobjectArray fileTypes ) {
 	jint length = env->GetArrayLength( fileTypes );
 	if( length <= 0 )
 		return;
@@ -89,7 +89,7 @@ void initFilters( GtkFileChooser* chooser, JNIEnv* env, jint fileTypeIndex, jobj
 	}
 }
 
-GdkWindow* getGdkWindow( JNIEnv* env, jobject window ) {
+static GdkWindow* getGdkWindow( JNIEnv* env, jobject window ) {
 	// get the AWT
 	JAWT awt;
 	awt.version = JAWT_VERSION_1_4;

@@ -25,10 +25,13 @@
  */
 
 
-bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
-	long data0, long data1, long data2, long data3, long data4 );
-bool isWMHintSupported( Display* display, Window rootWindow, Atom atom );
+// declare exported methods
 Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
+
+// declare internal methods
+static bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
+	long data0, long data1, long data2, long data3, long data4 );
+static bool isWMHintSupported( Display* display, Window rootWindow, Atom atom );
 
 
 //---- JNI methods ------------------------------------------------------------
@@ -79,7 +82,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_xS
 		0 );
 }
 
-bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
+static bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
 	long data0, long data1, long data2, long data3, long data4 )
 {
 	// get the AWT
@@ -131,7 +134,7 @@ bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
 }
 
 
-bool isWMHintSupported( Display* display, Window rootWindow, Atom atom ) {
+static bool isWMHintSupported( Display* display, Window rootWindow, Atom atom ) {
 	Atom type;
 	int format;
 	unsigned long n_atoms;
