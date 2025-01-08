@@ -186,7 +186,22 @@ public class FlatSystemFileChooserTest
 		else
 			System.setProperty( FlatSystemProperties.USE_SYSTEM_FILE_CHOOSER, "false" );
 
-		//TODO filter
+		// filter
+		String fileTypesStr = n( (String) fileTypesField.getSelectedItem() );
+		String[] fileTypes = {};
+		if( fileTypesStr != null )
+			fileTypes = fileTypesStr.trim().split( "[,]+" );
+		int fileTypeIndex = fileTypeIndexSlider.getValue();
+		if( !useAcceptAllFileFilterCheckBox.isSelected() )
+			fc.setAcceptAllFileFilterUsed( false );
+		for( int i  = 0; i  < fileTypes.length; i += 2 ) {
+			fc.addChoosableFileFilter( "*".equals( fileTypes[i+1] )
+				? fc.getAcceptAllFileFilter()
+				: new SystemFileChooser.FileNameExtensionFilter( fileTypes[i], fileTypes[i+1].split( ";" ) ) );
+		}
+		SystemFileChooser.FileFilter[] filters = fc.getChoosableFileFilters();
+		if( filters.length > 0 )
+			fc.setFileFilter( filters[Math.min( Math.max( fileTypeIndex, 0 ), filters.length - 1 )] );
 	}
 
 	private void configureSwingFileChooser( JFileChooser fc ) {

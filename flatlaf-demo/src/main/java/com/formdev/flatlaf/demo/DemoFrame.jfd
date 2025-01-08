@@ -188,11 +188,13 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "openSystemMenuItem"
 						"text": "Open (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 79, 4291, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openSystemActionPerformed", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "saveAsSystemMenuItem"
 						"text": "Save As (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 4291, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveAsSystemActionPerformed", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {

@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JFileChooser;
@@ -37,6 +38,12 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
 /**
  * Gives access to operating system file dialogs.
  * <p>
+ * There are some limitations and incompatibilities to {@link JFileChooser} because
+ * operating system file dialogs do not offer all features that {@code JFileChooser} provides.
+ * On the other hand, operating system file dialogs offer features out of the box
+ * that {@code JFileChooser} do not offer (e.g. ask for overwrite on save).
+ * So this class offers only features that are available on all platforms.
+ * <p>
  * The API is (mostly) compatible with {@link JFileChooser}.
  * To use this class in existing code, do a string replace from {@code JFileChooser} to {@code SystemFileChooser}.
  * If there are no compile errors, then there is a good chance that it works without further changes.
@@ -48,8 +55,7 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  * {@code SystemFileChooser} requires FlatLaf native libraries (usually contained in flatlaf.jar).
  * If not available or disabled (via {@link FlatSystemProperties#USE_NATIVE_LIBRARY}
  * or {@link FlatSystemProperties#USE_SYSTEM_FILE_CHOOSER}), then {@code JFileChooser} is used.
- * <p>
- * <p>
+ *
  * <h2>Limitations/incompatibilities compared to JFileChooser</h2>
  *
  * <ul>
@@ -67,6 +73,14 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li>{@link JFileChooser#FILES_AND_DIRECTORIES} is not supported.
  *   <li>{@link #getSelectedFiles()} returns selected file also in single selection mode.
  *       {@link JFileChooser#getSelectedFiles()} only in multi selection mode.
+ *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported.
+ *   <li>If adding choosable file filters and {@link #isAcceptAllFileFilterUsed()} is {@code true},
+ *       then the <b>All Files</b> filter is placed at the end of the combobox list
+ *       (as usual in current operating systems) and the first choosable filter is selected by default.
+ *       {@code JFileChooser}, on the other hand, adds <b>All Files</b> filter
+ *       as first item and selects it by default.
+ *       Use {@code chooser.addChoosableFileFilter( chooser.getAcceptAllFileFilter() )}
+ *       to place <b>All Files</b> filter somewhere else.
  * </ul>
  *
  * @author Karl Tauber
@@ -92,17 +106,30 @@ public class SystemFileChooser
 	/** @see JFileChooser#DIRECTORIES_ONLY */
 	public static final int DIRECTORIES_ONLY = JFileChooser.DIRECTORIES_ONLY;
 
-    private int dialogType = OPEN_DIALOG;
-    private String dialogTitle;
-    private String approveButtonText;
-    private int approveButtonMnemonic = 0;
-    private int fileSelectionMode = FILES_ONLY;
-    private boolean multiSelection;
-    private boolean useFileHiding = true;
+	private int dialogType = OPEN_DIALOG;
+	private String dialogTitle;
+	private String approveButtonText;
+	private int approveButtonMnemonic = 0;
+	private int fileSelectionMode = FILES_ONLY;
+	private boolean multiSelection;
+	private boolean useFileHiding = true;
 
-    private File currentDirectory;
-    private File selectedFile;
-    private File[] selectedFiles;
+	private File currentDirectory;
+	private File selectedFile;
+	private File[] selectedFiles;
+
+	private final ArrayList<FileFilter> filters = new ArrayList<>();
+	private FileFilter fileFilter;
+	private AcceptAllFileFilter acceptAllFileFilter;
+	private boolean useAcceptAllFileFilter = true;
+
+	/**
+	 * If {@code fc.addChoosableFileFilter(fc.getAcceptAllFileFilter())} is invoked from user code,
+	 * then this flag is set to {@code false} and subsequent invocations of {@code fc.addChoosableFileFilter(...)}
+	 * no longer insert added filters before the "All Files" filter.
+	 * This allows custom ordering the "All Files" filter.
+	 */
+	private boolean keepAcceptAllAtEnd = true;
 
 	/** @see JFileChooser#JFileChooser() */
 	public SystemFileChooser() {
@@ -111,7 +138,7 @@ public class SystemFileChooser
 
 	/**  @see JFileChooser#JFileChooser(String) */
 	public SystemFileChooser( String currentDirectoryPath ) {
-		setCurrentDirectory( (currentDirectoryPath != null)
+		this( (currentDirectoryPath != null)
 			? FileSystemView.getFileSystemView().createFileObject( currentDirectoryPath )
 			: null );
 	}
@@ -119,6 +146,9 @@ public class SystemFileChooser
 	/**  @see JFileChooser#JFileChooser(File) */
 	public SystemFileChooser( File currentDirectory ) {
 		setCurrentDirectory( currentDirectory );
+
+		addChoosableFileFilter( getAcceptAllFileFilter() );
+		keepAcceptAllAtEnd = true;
 	}
 
 	/** @see JFileChooser#showOpenDialog(Component) */
@@ -282,6 +312,101 @@ public class SystemFileChooser
 		}
 	}
 
+	/** @see JFileChooser#getChoosableFileFilters() */
+	public FileFilter[] getChoosableFileFilters() {
+		return filters.toArray( new FileFilter[filters.size()] );
+	}
+
+	/** @see JFileChooser#addChoosableFileFilter(javax.swing.filechooser.FileFilter) */
+	public void addChoosableFileFilter( FileFilter filter ) {
+		if( filter == getAcceptAllFileFilter() )
+			keepAcceptAllAtEnd = false;
+
+		if( filter == null || filters.contains( filter ) )
+			return;
+
+		if( !(filter instanceof FileNameExtensionFilter) && !(filter instanceof AcceptAllFileFilter) )
+			throw new IllegalArgumentException( "Filter class not supported: " + filter.getClass().getName() );
+
+		// either insert filter before "All Files" filter, or append to the end
+		int size = filters.size();
+		if( keepAcceptAllAtEnd && size > 0 && (filters.get( size - 1 ) == getAcceptAllFileFilter()) )
+			filters.add( size - 1, filter );
+		else
+			filters.add( filter );
+
+		// initialize current filter
+		if( fileFilter == null || (filters.size() == 2 && filters.get( 1 ) == getAcceptAllFileFilter()) )
+			setFileFilter( filter );
+	}
+
+	/** @see JFileChooser#removeChoosableFileFilter(javax.swing.filechooser.FileFilter) */
+	public boolean removeChoosableFileFilter( FileFilter filter ) {
+		if( !filters.remove( filter ) )
+			return false;
+
+		// update current filter if necessary
+		if( filter == getFileFilter() ) {
+			if( isAcceptAllFileFilterUsed() && filter != getAcceptAllFileFilter() )
+				setFileFilter( getAcceptAllFileFilter() );
+			else
+				setFileFilter( !filters.isEmpty() ? filters.get( 0 ) : null );
+		}
+
+		return true;
+	}
+
+	/** @see JFileChooser#resetChoosableFileFilters() */
+	public void resetChoosableFileFilters() {
+		filters.clear();
+		setFileFilter( null );
+		if( isAcceptAllFileFilterUsed() ) {
+			addChoosableFileFilter( getAcceptAllFileFilter() );
+			keepAcceptAllAtEnd = true;
+		}
+	}
+
+	/** @see JFileChooser#getAcceptAllFileFilter() */
+	public FileFilter getAcceptAllFileFilter() {
+		if( acceptAllFileFilter == null )
+			acceptAllFileFilter = new AcceptAllFileFilter();
+		return acceptAllFileFilter;
+	}
+
+	/** @see JFileChooser#isAcceptAllFileFilterUsed() */
+	public boolean isAcceptAllFileFilterUsed() {
+		return useAcceptAllFileFilter;
+	}
+
+	/** @see JFileChooser#setAcceptAllFileFilterUsed(boolean) */
+	public void setAcceptAllFileFilterUsed( boolean acceptAll ) {
+		useAcceptAllFileFilter = acceptAll;
+
+		removeChoosableFileFilter( getAcceptAllFileFilter() );
+		if( acceptAll ) {
+			addChoosableFileFilter( getAcceptAllFileFilter() );
+			keepAcceptAllAtEnd = true;
+		}
+	}
+
+	/** @see JFileChooser#getFileFilter() */
+	public FileFilter getFileFilter() {
+		return fileFilter;
+	}
+
+	/** @see JFileChooser#setFileFilter(javax.swing.filechooser.FileFilter) */
+	public void setFileFilter( FileFilter filter ) {
+		this.fileFilter = filter;
+	}
+
+	private int indexOfCurrentFilter() {
+		return filters.indexOf( fileFilter );
+	}
+
+	private boolean hasOnlyAcceptAll() {
+		return filters.size() == 1 && filters.get( 0 ) == getAcceptAllFileFilter();
+	}
+
 	private int showDialogImpl( Component parent ) {
 		File[] files = getProvider().showDialog( parent, this );
 		setSelectedFiles( files );
@@ -401,13 +526,25 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
-			// FOS_PICKFOLDERS does not support file types
 			if( !fc.isDirectorySelectionEnabled() ) {
+				if( !fc.hasOnlyAcceptAll() ) {
+					fileTypeIndex = fc.indexOfCurrentFilter();
+					for( FileFilter filter : fc.getChoosableFileFilters() ) {
+						if( filter instanceof FileNameExtensionFilter ) {
+							fileTypes.add( filter.getDescription() );
+							fileTypes.add( "*." + String.join( ";*.", ((FileNameExtensionFilter)filter).getExtensions() ) );
+						} else if( filter instanceof AcceptAllFileFilter ) {
+							fileTypes.add( filter.getDescription() );
+							fileTypes.add( "*.*" );
+						}
+					}
+				}
+
 				// if there are no file types
 				// - for Save dialog add "All Files", otherwise Windows would show an empty "Save as type" combobox
 				// - for Open dialog, Windows hides the combobox
 				if( !open && fileTypes.isEmpty() ) {
-					fileTypes.add( UIManager.getString( "FileChooser.acceptAllFileFilterText" ) );
+					fileTypes.add( fc.getAcceptAllFileFilter().getDescription() );
 					fileTypes.add( "*.*" );
 				}
 			}
@@ -457,11 +594,30 @@ public class SystemFileChooser
 			if( !fc.isFileHidingEnabled() )
 				optionsSet |= FlatNativeMacLibrary.FC_showsHiddenFiles;
 
+			// filter
+			int fileTypeIndex = 0;
+			ArrayList<String> fileTypes = new ArrayList<>();
+			if( !fc.isDirectorySelectionEnabled() && !fc.hasOnlyAcceptAll() ) {
+				fileTypeIndex = fc.indexOfCurrentFilter();
+				for( FileFilter filter : fc.getChoosableFileFilters() ) {
+					if( filter instanceof FileNameExtensionFilter ) {
+						fileTypes.add( filter.getDescription() );
+						for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
+							fileTypes.add( ext );
+						fileTypes.add( null );
+					} else if( filter instanceof AcceptAllFileFilter ) {
+						fileTypes.add( filter.getDescription() );
+						fileTypes.add( "*" );
+						fileTypes.add( null );
+					}
+				}
+			}
+
 			// show system file dialog
 			return FlatNativeMacLibrary.showFileChooser( open,
 				fc.getDialogTitle(), fc.getApproveButtonText(), null, null, null,
 				nameFieldStringValue, directoryURL,
-				optionsSet, optionsClear, 0 );
+				optionsSet, optionsClear, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 	}
 
@@ -515,10 +671,46 @@ public class SystemFileChooser
 			else // necessary because GTK seems to be remember last state and re-use it for new file dialogs
 				optionsClear |= FlatNativeLinuxLibrary.FC_show_hidden;
 
+			// filter
+			int fileTypeIndex = 0;
+			ArrayList<String> fileTypes = new ArrayList<>();
+			if( !fc.isDirectorySelectionEnabled() && !fc.hasOnlyAcceptAll() ) {
+				fileTypeIndex = fc.indexOfCurrentFilter();
+				for( FileFilter filter : fc.getChoosableFileFilters() ) {
+					if( filter instanceof FileNameExtensionFilter ) {
+						fileTypes.add( filter.getDescription() );
+						for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
+							fileTypes.add( caseInsensitiveGlobPattern( ext ) );
+						fileTypes.add( null );
+					} else if( filter instanceof AcceptAllFileFilter ) {
+						fileTypes.add( filter.getDescription() );
+						fileTypes.add( "*" );
+						fileTypes.add( null );
+					}
+				}
+			}
+
 			// show system file dialog
 			return FlatNativeLinuxLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
-				optionsSet, optionsClear, 0 );
+				optionsSet, optionsClear, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+		}
+
+		private String caseInsensitiveGlobPattern( String ext ) {
+			StringBuilder buf = new StringBuilder();
+			buf.append( "*." );
+			int len = ext.length();
+			for( int i = 0; i < len; i++ ) {
+				char ch = ext.charAt( i );
+				if( Character.isLetter( ch ) ) {
+					buf.append( '[' )
+						.append( Character.toLowerCase( ch ) )
+						.append( Character.toUpperCase( ch ) )
+						.append( ']' );
+				} else
+					buf.append( ch );
+			}
+			return buf.toString();
 		}
 	}
 
@@ -561,6 +753,27 @@ public class SystemFileChooser
 				!chooser.isDirectorySelectionEnabled() )
 			  chooser.setMultiSelectionEnabled( false );
 
+			// filter
+			if( !fc.isDirectorySelectionEnabled() && !fc.hasOnlyAcceptAll() ) {
+				FileFilter currentFilter = fc.getFileFilter();
+				for( FileFilter filter : fc.getChoosableFileFilters() ) {
+					javax.swing.filechooser.FileFilter jfilter = convertFilter( filter, chooser );
+					if( jfilter == null )
+						continue;
+
+					chooser.addChoosableFileFilter( jfilter );
+					if( filter == currentFilter ) {
+						chooser.setFileFilter( jfilter );
+						currentFilter = null;
+					}
+				}
+				if( currentFilter != null ) {
+					javax.swing.filechooser.FileFilter jfilter = convertFilter( currentFilter, chooser );
+					if( jfilter != null )
+						chooser.setFileFilter( jfilter );
+				}
+			}
+
 			// paths
 			chooser.setCurrentDirectory( fc.getCurrentDirectory() );
 			chooser.setSelectedFile( fc.getSelectedFile() );
@@ -572,40 +785,111 @@ public class SystemFileChooser
 				? chooser.getSelectedFiles()
 				: new File[] { chooser.getSelectedFile() };
 		}
+
+		private javax.swing.filechooser.FileFilter convertFilter( FileFilter filter, JFileChooser chooser ) {
+			if( filter instanceof FileNameExtensionFilter ) {
+				return new javax.swing.filechooser.FileNameExtensionFilter(
+					((FileNameExtensionFilter)filter).getDescription(),
+					((FileNameExtensionFilter)filter).getExtensions() );
+			} else if( filter instanceof AcceptAllFileFilter )
+				return chooser.getAcceptAllFileFilter();
+			else
+				return null;
+		}
+
+		private static boolean checkMustExist( JFileChooser chooser, File[] files ) {
+			for( File file : files ) {
+				if( !file.exists() ) {
+					String title = chooser.getDialogTitle();
+					JOptionPane.showMessageDialog( chooser,
+						file.getName() + (chooser.isDirectorySelectionEnabled()
+							? "\nPath does not exist.\nCheck the path and try again."
+							: "\nFile not found.\nCheck the file name and try again."),
+						(title != null) ? title : "Open",
+						JOptionPane.WARNING_MESSAGE );
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private static boolean checkOverwrite( JFileChooser chooser, File[] files ) {
+			for( File file : files ) {
+				if( file.exists() ) {
+					String title = chooser.getDialogTitle();
+					Locale l = chooser.getLocale();
+					Object[] options = {
+						UIManager.getString( "OptionPane.yesButtonText", l ),
+						UIManager.getString( "OptionPane.noButtonText", l ),				};
+					int result = JOptionPane.showOptionDialog( chooser,
+						file.getName() + " already exists.\nDo you want to replace it?",
+						"Confirm " + (title != null ? title : "Save"),
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+						null, options, options[1] );
+					return (result == 0);
+				}
+			}
+			return true;
+		}
 	}
 
-	private static boolean checkMustExist( JFileChooser chooser, File[] files ) {
-		for( File file : files ) {
-			if( !file.exists() ) {
-				String title = chooser.getDialogTitle();
-				JOptionPane.showMessageDialog( chooser,
-					file.getName() + (chooser.isDirectorySelectionEnabled()
-						? "\nPath does not exist.\nCheck the path and try again."
-						: "\nFile not found.\nCheck the file name and try again."),
-					(title != null) ? title : "Open",
-					JOptionPane.WARNING_MESSAGE );
-				return false;
-			}
-		}
-		return true;
+	//---- class FileFilter ---------------------------------------------------
+
+	/** @see javax.swing.filechooser.FileFilter */
+	public static abstract class FileFilter {
+		/** @see javax.swing.filechooser.FileFilter#getDescription() */
+		public abstract String getDescription();
 	}
 
-	private static boolean checkOverwrite( JFileChooser chooser, File[] files ) {
-		for( File file : files ) {
-			if( file.exists() ) {
-				String title = chooser.getDialogTitle();
-				Locale l = chooser.getLocale();
-				Object[] options = {
-					UIManager.getString( "OptionPane.yesButtonText", l ),
-					UIManager.getString( "OptionPane.noButtonText", l ),				};
-				int result = JOptionPane.showOptionDialog( chooser,
-					file.getName() + " already exists.\nDo you want to replace it?",
-					"Confirm " + (title != null ? title : "Save"),
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-					null, options, options[1] );
-				return (result == 0);
+	//---- class FileNameExtensionFilter --------------------------------------
+
+	/** @see javax.swing.filechooser.FileNameExtensionFilter */
+	public static final class FileNameExtensionFilter
+		extends FileFilter
+	{
+		private final String description;
+		private final String[] extensions;
+
+		/** @see javax.swing.filechooser.FileNameExtensionFilter#FileNameExtensionFilter(String, String...) */
+		public FileNameExtensionFilter( String description, String... extensions ) {
+			if( extensions == null || extensions.length == 0 )
+				throw new IllegalArgumentException( "Missing extensions" );
+			for( String extension : extensions ) {
+				if( extension == null || extension.isEmpty() )
+					throw new IllegalArgumentException( "Extension is null or empty string" );
+				if( extension.indexOf( '.' ) >= 0 || extension.indexOf( '*' ) >= 0 )
+					throw new IllegalArgumentException( "Extension must not contain '.' or '*'" );
 			}
+
+			this.description = description;
+			this.extensions = extensions.clone();
 		}
-		return true;
+
+		/** @see javax.swing.filechooser.FileNameExtensionFilter#getDescription() */
+		@Override
+		public String getDescription() {
+			return description;
+		}
+
+		/** @see javax.swing.filechooser.FileNameExtensionFilter#getExtensions() */
+		public String[] getExtensions() {
+			return extensions.clone();
+		}
+
+		@Override
+		public String toString() {
+			return super.toString() + "[description=" + description + " extensions=" + Arrays.toString( extensions ) + "]";
+		}
+	}
+
+	//---- class AcceptAllFileFilter ------------------------------------------
+
+	private static final class AcceptAllFileFilter
+		extends FileFilter
+	{
+		@Override
+		public String getDescription() {
+			return UIManager.getString( "FileChooser.acceptAllFileFilterText" );
+		}
 	}
 }

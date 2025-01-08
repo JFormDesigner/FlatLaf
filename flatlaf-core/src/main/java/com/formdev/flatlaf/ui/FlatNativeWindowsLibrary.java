@@ -204,8 +204,8 @@ public class FlatNativeWindowsLibrary
 	 * @param owner the owner of the file dialog; or {@code null}
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
-	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '&' for mnemonics (e.g. "&Choose").
-	 *        Use '&&' for '&' character (e.g. "Choose && Quit").
+	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '&amp;' for mnemonics (e.g. "&amp;Choose").
+	 *        Use '&amp;&amp;' for '&amp;' character (e.g. "Choose &amp;&amp; Quit").
 	 * @param fileNameLabel text displayed in front of the filename text field; or {@code null}
 	 * @param fileName user-editable filename currently shown in the filename field; or {@code null}
 	 * @param folder current directory shown in the dialog; or {@code null}

@@ -175,11 +175,21 @@ class DemoFrame
 
 	private void openSystemActionPerformed() {
 		SystemFileChooser chooser = new SystemFileChooser();
+		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
+			"Text Files", "txt", "md" ) );
+		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
+			"PDF Files", "pdf" ) );
+		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
+			"Archives", "zip", "tar", "jar", "7z" ) );
 		chooser.showOpenDialog( this );
 	}
 
 	private void saveAsSystemActionPerformed() {
 		SystemFileChooser chooser = new SystemFileChooser();
+		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
+			"Text Files", "txt", "md" ) );
+		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
+			"Images", "png", "gif", "jpg" ) );
 		chooser.showSaveDialog( this );
 	}
 
@@ -611,11 +621,13 @@ class DemoFrame
 
 				//---- openSystemMenuItem ----
 				openSystemMenuItem.setText("Open (System)...");
+				openSystemMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
 				openSystemMenuItem.addActionListener(e -> openSystemActionPerformed());
 				fileMenu.add(openSystemMenuItem);
 
 				//---- saveAsSystemMenuItem ----
 				saveAsSystemMenuItem.setText("Save As (System)...");
+				saveAsSystemMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
 				saveAsSystemMenuItem.addActionListener(e -> saveAsSystemActionPerformed());
 				fileMenu.add(saveAsSystemMenuItem);
 				fileMenu.addSeparator();
