@@ -16,6 +16,9 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button: Fixed background and foreground colors for `borderless` and
+  `toolBarButton` style default buttons (`JButton.isDefaultButton()` is `true`).
+  (issue #947)
 - FileChooser: Improved performance when navigating to large directories with
   thousands of files. (issue #953)
 - PopupFactory: Fixed NPE on Windows 10 when `owner` is `null`. (issue #952)
