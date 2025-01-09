@@ -35,7 +35,9 @@ Sponsors
 
 ### Current Sponsors
 
-[![None Sponsors](images/none-sponsors.png)](https://www.formdev.com/flatlaf/sponsor/)
+<a href="https://exocharts.com/"><img src="https://www.formdev.com/flatlaf/sponsor/Exocharts.png" width="200" alt="Exocharts" title="Exocharts - Professional Grade OrderFlow"></a>
+
+<!-- [![None Sponsors](images/none-sponsors.png)](https://www.formdev.com/flatlaf/sponsor/) -->
 
 [Become a Sponsor](https://www.formdev.com/flatlaf/sponsor/)
 
