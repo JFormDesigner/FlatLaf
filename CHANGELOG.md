@@ -14,6 +14,11 @@ FlatLaf Change Log
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
 
+#### Fixed bugs
+
+- FileChooser: Improved performance when navigating to large directories with
+  thousands of files. (issue #953)
+
 
 ## 3.5.4
 
