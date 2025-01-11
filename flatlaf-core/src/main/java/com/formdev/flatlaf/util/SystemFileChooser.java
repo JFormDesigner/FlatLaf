@@ -450,7 +450,7 @@ public class SystemFileChooser
 			new Thread( () -> {
 				filenamesRef.set( showSystemDialog( owner, fc ) );
 				secondaryLoop.exit();
-			} ).start();
+			}, "FlatLaf SystemFileChooser" ).start();
 			secondaryLoop.enter();
 
 			String[] filenames = filenamesRef.get();
@@ -552,7 +552,7 @@ public class SystemFileChooser
 			// show system file dialog
 			return FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText, null, fileName,
-				folder, saveAsItem, null, null, optionsSet, optionsClear,
+				folder, saveAsItem, null, null, optionsSet, optionsClear, null,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 	}
@@ -693,7 +693,7 @@ public class SystemFileChooser
 			// show system file dialog
 			return FlatNativeLinuxLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
-				optionsSet, optionsClear, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				optionsSet, optionsClear, null, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 
 		private String caseInsensitiveGlobPattern( String ext ) {

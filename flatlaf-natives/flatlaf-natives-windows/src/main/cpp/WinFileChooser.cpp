@@ -29,6 +29,9 @@
 // declare external methods
 extern HWND getWindowHandle( JNIEnv* env, jobject window );
 
+// declare internal methods
+static jobjectArray getFiles( JNIEnv* env, jboolean open, IFileDialog* dialog );
+
 //---- class AutoReleasePtr ---------------------------------------------------
 
 template<class T> class AutoReleasePtr {
@@ -37,6 +40,10 @@ template<class T> class AutoReleasePtr {
 public:
 	AutoReleasePtr() {
 		ptr = NULL;
+	}
+	AutoReleasePtr( T* p ) {
+		ptr = p;
+		ptr->AddRef();
 	}
 	~AutoReleasePtr() {
 		if( ptr != NULL )
@@ -126,6 +133,86 @@ public:
 	}
 };
 
+//---- class DialogEventHandler -----------------------------------------------
+
+// see https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/Win7Samples/winui/shell/appplatform/commonfiledialog/CommonFileDialogApp.cpp
+
+class DialogEventHandler : public IFileDialogEvents {
+	JNIEnv* env;
+	jboolean open;
+	jobject callback;
+	LONG refCount = 1;
+
+public:
+	DialogEventHandler( JNIEnv* _env, jboolean _open, jobject _callback ) {
+		env = _env;
+		open = _open;
+		callback = _callback;
+	}
+
+	//---- IFileDialogEvents methods ----
+
+	IFACEMETHODIMP OnFileOk( IFileDialog* dialog ) {
+		if( callback == NULL )
+			return S_OK;
+
+		// get files
+		jobjectArray files;
+		if( open ) {
+			AutoReleasePtr<IFileOpenDialog> openDialog;
+			HRESULT hr = dialog->QueryInterface( &openDialog );
+			files = SUCCEEDED( hr ) ? getFiles( env, true, openDialog ) : getFiles( env, false, dialog );
+		} else
+			files = getFiles( env, false, dialog );
+
+		// get hwnd of file dialog
+		HWND hwndFileDialog = 0;
+		AutoReleasePtr<IOleWindow> window;
+		if( SUCCEEDED( dialog->QueryInterface( &window ) ) )
+			window->GetWindow( &hwndFileDialog );
+
+		// invoke callback: boolean approve( String[] files, long hwnd );
+		jclass cls = env->GetObjectClass( callback );
+		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;J)Z" );
+		if( approveID == NULL )
+			return S_OK;
+		return env->CallBooleanMethod( callback, approveID, files, hwndFileDialog ) ? S_OK : S_FALSE;
+	}
+
+	IFACEMETHODIMP OnFolderChange( IFileDialog* ) { return S_OK; }
+	IFACEMETHODIMP OnFolderChanging( IFileDialog*, IShellItem* ) { return S_OK; }
+	IFACEMETHODIMP OnHelp( IFileDialog* ) { return S_OK; }
+	IFACEMETHODIMP OnSelectionChange( IFileDialog* ) { return S_OK; }
+	IFACEMETHODIMP OnShareViolation( IFileDialog*, IShellItem*, FDE_SHAREVIOLATION_RESPONSE* ) { return S_OK; }
+	IFACEMETHODIMP OnTypeChange( IFileDialog*pfd ) { return S_OK; }
+	IFACEMETHODIMP OnOverwrite( IFileDialog*, IShellItem*, FDE_OVERWRITE_RESPONSE* ) { return S_OK; }
+
+	//---- IUnknown methods ----
+
+	IFACEMETHODIMP QueryInterface( REFIID riid, void** ppv ) {
+		if( riid != IID_IFileDialogEvents && riid != IID_IUnknown )
+			return E_NOINTERFACE;
+
+		*ppv = static_cast<IFileDialogEvents*>( this );
+		AddRef();
+		return S_OK;
+	}
+
+	IFACEMETHODIMP_(ULONG) AddRef() {
+		return InterlockedIncrement( &refCount );
+	}
+
+	IFACEMETHODIMP_(ULONG) Release() {
+		LONG newRefCount = InterlockedDecrement( &refCount );
+		if( newRefCount == 0 )
+			delete this;
+		return newRefCount;
+	}
+
+private:
+	~DialogEventHandler() {}
+};
+
 //---- class CoInitializer ----------------------------------------------------
 
 class CoInitializer {
@@ -163,7 +250,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 	( JNIEnv* env, jclass cls, jobject owner, jboolean open,
 		jstring title, jstring okButtonLabel, jstring fileNameLabel, jstring fileName,
 		jstring folder, jstring saveAsItem, jstring defaultFolder, jstring defaultExtension,
-		jint optionsSet, jint optionsClear, jint fileTypeIndex, jobjectArray fileTypes )
+		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
 {
 	// initialize COM library
 	CoInitializer coInitializer;
@@ -226,20 +313,31 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 			CHECK_HRESULT( dialog->SetFileTypeIndex( min( fileTypeIndex + 1, specs.count ) ) );
 	}
 
+	// add event handler
+	AutoReleasePtr<DialogEventHandler> handler( new DialogEventHandler( env, open, callback ) );
+	DWORD dwCookie = 0;
+	CHECK_HRESULT( dialog->Advise( handler, &dwCookie ) );
+
 	// show dialog
 	HWND hwndOwner = (owner != NULL) ? getWindowHandle( env, owner ) : NULL;
 	HRESULT hr = dialog->Show( hwndOwner );
+	dialog->Unadvise( dwCookie );
 	if( hr == HRESULT_FROM_WIN32(ERROR_CANCELLED) )
 		return newJavaStringArray( env, 0 );
 	CHECK_HRESULT( hr );
 
-	// convert shell items to Java string array
+	// get selected files as Java string array
+	return getFiles( env, open, dialog );
+}
+
+static jobjectArray getFiles( JNIEnv* env, jboolean open, IFileDialog* dialog ) {
 	if( open ) {
 		AutoReleasePtr<IShellItemArray> shellItems;
 		DWORD count;
 		CHECK_HRESULT( ((IFileOpenDialog*)(IFileDialog*)dialog)->GetResults( &shellItems ) );
 		CHECK_HRESULT( shellItems->GetCount( &count ) );
 
+		// convert shell items to Java string array
 		jobjectArray array = newJavaStringArray( env, count );
 		for( int i = 0; i < count; i++ ) {
 			AutoReleasePtr<IShellItem> shellItem;
@@ -260,6 +358,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 		CHECK_HRESULT( dialog->GetResult( &shellItem ) );
 		CHECK_HRESULT( shellItem->GetDisplayName( SIGDN_FILESYSPATH, &path ) );
 
+		// convert shell item to Java string array
 		jstring jpath = newJavaString( env, path );
 		CoTaskMemFree( path );
 
@@ -269,4 +368,16 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 
 		return array;
 	}
+}
+
+
+extern "C"
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageDialog
+	( JNIEnv* env, jclass cls, jlong hwndParent, jstring text, jstring caption, jint type )
+{
+	// convert Java strings to C strings
+	AutoReleaseString ctext( env, text );
+	AutoReleaseString ccaption( env, caption );
+
+	return ::MessageBox( reinterpret_cast<HWND>( hwndParent ), ctext, ccaption, type );
 }

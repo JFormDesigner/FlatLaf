@@ -29,6 +29,9 @@
 // declare external methods
 extern Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
 
+// declare internal methods
+static jobjectArray fileListToStringArray( JNIEnv* env, GSList* fileList );
+
 //---- class AutoReleaseStringUTF8 --------------------------------------------
 
 class AutoReleaseStringUTF8 {
@@ -142,10 +145,37 @@ static void handle_realize( GtkWidget* dialog, gpointer data ) {
 	g_object_unref( gdkOwner );
 }
 
+struct ResponseData {
+	JNIEnv* env;
+	jobject callback;
+	GSList* fileList;
+
+	ResponseData( JNIEnv* _env, jobject _callback ) {
+		env = _env;
+		callback = _callback;
+		fileList = NULL;
+	}
+};
+
 static void handle_response( GtkWidget* dialog, gint responseId, gpointer data ) {
 	// get filenames if user pressed OK
-	if( responseId == GTK_RESPONSE_ACCEPT )
-		*((GSList**)data) = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
+	if( responseId == GTK_RESPONSE_ACCEPT ) {
+		ResponseData *response = static_cast<ResponseData*>( data );
+		if( response->callback != NULL ) {
+			GSList* fileList = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
+			jobjectArray files = fileListToStringArray( response->env, fileList );
+
+			GtkWindow* window = GTK_WINDOW( dialog );
+
+			// invoke callback: boolean approve( String[] files, long hwnd );
+			jclass cls = response->env->GetObjectClass( response->callback );
+			jmethodID approveID = response->env->GetMethodID( cls, "approve", "([Ljava/lang/String;J)Z" );
+			if( approveID != NULL && !response->env->CallBooleanMethod( response->callback, approveID, files, window ) )
+				return; // keep dialog open
+		}
+
+		response->fileList = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
+	}
 
 	// hide/destroy file dialog and quit loop
 	gtk_widget_hide( dialog );
@@ -159,7 +189,7 @@ extern "C"
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
 	( JNIEnv* env, jclass cls, jobject owner, jboolean open,
 		jstring title, jstring okButtonLabel, jstring currentName, jstring currentFolder,
-		jint optionsSet, jint optionsClear, jint fileTypeIndex, jobjectArray fileTypes )
+		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
 {
 	// initialize GTK
 	if( !gtk_init_check( NULL, NULL ) )
@@ -222,8 +252,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 
 	// show dialog
 	// (similar to what's done in sun_awt_X11_GtkFileDialogPeer.c)
-	GSList* fileList = NULL;
-	g_signal_connect( dialog, "response", G_CALLBACK( handle_response ), &fileList );
+	ResponseData responseData( env, callback );
+	g_signal_connect( dialog, "response", G_CALLBACK( handle_response ), &responseData );
 	gtk_widget_show( dialog );
 
 	// necessary to bring file dialog to the front (and make it active)
@@ -241,10 +271,14 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 	gtk_main();
 
 	// canceled?
-	if( fileList == NULL )
+	if( responseData.fileList == NULL )
 		return newJavaStringArray( env, 0 );
 
 	// convert GSList to Java string array
+	return fileListToStringArray( env, responseData.fileList );
+}
+
+static jobjectArray fileListToStringArray( JNIEnv* env, GSList* fileList ) {
 	guint count = g_slist_length( fileList );
 	jobjectArray array = newJavaStringArray( env, count );
 	GSList* it = fileList;
@@ -258,4 +292,53 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 	}
 	g_slist_free( fileList );
 	return array;
+}
+
+
+extern "C"
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showMessageDialog
+	( JNIEnv* env, jclass cls, jlong hwndParent, jint messageType, jstring primaryText, jstring secondaryText,
+		jint defaultButton, jobjectArray buttons )
+{
+	GtkWindow* window = (GtkWindow*) hwndParent;
+
+	// convert message type
+	GtkMessageType gmessageType;
+	switch( messageType ) {
+		case /* JOptionPane.ERROR_MESSAGE */       0: gmessageType = GTK_MESSAGE_ERROR; break;
+		case /* JOptionPane.INFORMATION_MESSAGE */ 1: gmessageType = GTK_MESSAGE_INFO; break;
+		case /* JOptionPane.WARNING_MESSAGE */     2: gmessageType = GTK_MESSAGE_WARNING; break;
+		case /* JOptionPane.QUESTION_MESSAGE */    3: gmessageType = GTK_MESSAGE_QUESTION; break;
+		default:
+		case /* JOptionPane.PLAIN_MESSAGE */      -1: gmessageType = GTK_MESSAGE_OTHER; break;
+	}
+
+	// convert Java strings to C strings
+	AutoReleaseStringUTF8 cprimaryText( env, primaryText );
+	AutoReleaseStringUTF8 csecondaryText( env, secondaryText );
+
+	// create GTK file chooser dialog
+	// https://docs.gtk.org/gtk3/class.MessageDialog.html
+	jint buttonCount = env->GetArrayLength( buttons );
+	GtkWidget* dialog = gtk_message_dialog_new( window, GTK_DIALOG_MODAL, gmessageType,
+		(buttonCount > 0) ? GTK_BUTTONS_NONE : GTK_BUTTONS_OK,
+		"%s", (const gchar*) cprimaryText );
+	if( csecondaryText != NULL )
+		gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( dialog ), "%s", (const gchar*) csecondaryText );
+
+	// add buttons
+	for( int i = 0; i < buttonCount; i++ ) {
+		AutoReleaseStringUTF8 str( env, (jstring) env->GetObjectArrayElement( buttons, i ) );
+		gtk_dialog_add_button( GTK_DIALOG( dialog ), str, i );
+	}
+
+	// set default button
+	gtk_dialog_set_default_response( GTK_DIALOG( dialog ), MIN( MAX( defaultButton, 0 ), buttonCount - 1 ) );
+
+	// show message dialog
+	gint responseID = gtk_dialog_run( GTK_DIALOG( dialog ) );
+	gtk_widget_destroy( dialog );
+
+	// return -1 if closed with ESC key
+	return (responseID >= 0) ? responseID : -1;
 }

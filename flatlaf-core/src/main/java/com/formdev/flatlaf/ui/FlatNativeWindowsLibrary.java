@@ -218,6 +218,7 @@ public class FlatNativeWindowsLibrary
 	 * @param defaultExtension default extension to be added to file name in save dialog; or {@code null}
 	 * @param optionsSet options to set; see {@code FOS_*} constants
 	 * @param optionsClear options to clear; see {@code FOS_*} constants
+	 * @param callback approve callback; or {@code null}
 	 * @param fileTypeIndex the file type that appears as selected (zero-based)
 	 * @param fileTypes file types that the dialog can open or save.
 	 *        Pairs of strings are required for each filter.
@@ -231,5 +232,29 @@ public class FlatNativeWindowsLibrary
 	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String fileNameLabel, String fileName,
 		String folder, String saveAsItem, String defaultFolder, String defaultExtension,
-		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
+		int optionsSet, int optionsClear, FileChooserCallback callback,
+		int fileTypeIndex, String... fileTypes );
+
+	/** @since 3.6 */
+	public interface FileChooserCallback {
+		boolean approve( String[] files, long hwndFileDialog );
+	}
+
+	/**
+	 * Shows a Windows message box
+	 * <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox">MessageBox</a>.
+	 * <p>
+	 * For use in {@link FileChooserCallback} only.
+	 *
+	 * @param hwndParent the parent of the message box
+	 * @param text message to be displayed
+	 * @param caption dialog box title
+	 * @param type see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#parameters">MessageBox parameter uType</a>
+	 * @return see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#return-value">MessageBox Return value</a>
+	 * @return index of pressed button; or -1 for ESC key
+	 *
+	 * @since 3.6
+	 */
+	public native static int showMessageDialog( long hwndParent,
+		String text, String caption, int type );
 }

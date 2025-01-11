@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.3" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.2.0.9999" Java: "21.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -195,6 +195,12 @@ new FormModel {
 				name: "saveDirectButton"
 				"text": "Save (no-thread)..."
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveDirect", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "showMessageDialogOnOKCheckBox"
+				"text": "show message dialog on OK"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 7 3 1"
 			} )

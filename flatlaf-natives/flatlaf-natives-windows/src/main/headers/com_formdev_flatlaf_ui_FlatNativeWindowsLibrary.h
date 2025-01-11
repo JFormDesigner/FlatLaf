@@ -116,10 +116,18 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
  * Method:    showFileChooser
- * Signature: (Ljava/awt/Window;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;III[Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (Ljava/awt/Window;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeWindowsLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showFileChooser
-  (JNIEnv *, jclass, jobject, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jint, jobjectArray);
+  (JNIEnv *, jclass, jobject, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    showMessageDialog
+ * Signature: (JLjava/lang/String;Ljava/lang/String;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageDialog
+  (JNIEnv *, jclass, jlong, jstring, jstring, jint);
 
 #ifdef __cplusplus
 }

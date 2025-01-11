@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -131,7 +132,7 @@ public class FlatNativeLinuxLibrary
 		FC_create_folders					= 1 << 5;  // default for Save
 
 	/**
-	 * Shows the Linux system file dialog
+	 * Shows the Linux/GTK system file dialog
 	 * <a href="https://docs.gtk.org/gtk3/class.FileChooserDialog.html">GtkFileChooserDialog</a>.
 	 * <p>
 	 * Uses {@code GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER} if {@link #FC_select_folder} is set in parameter {@code optionsSet}.
@@ -151,6 +152,7 @@ public class FlatNativeLinuxLibrary
 	 * @param currentFolder current directory shown in the dialog; or {@code null}
 	 * @param optionsSet options to set; see {@code FOS_*} constants
 	 * @param optionsClear options to clear; see {@code FOS_*} constants
+	 * @param callback approve callback; or {@code null}
 	 * @param fileTypeIndex the file type that appears as selected (zero-based)
 	 * @param fileTypes file types that the dialog can open or save.
 	 *        Two or more strings and {@code null} are required for each filter.
@@ -164,5 +166,34 @@ public class FlatNativeLinuxLibrary
 	 */
 	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String currentName, String currentFolder,
-		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
+		int optionsSet, int optionsClear, FileChooserCallback callback,
+		int fileTypeIndex, String... fileTypes );
+
+	/** @since 3.6 */
+	public interface FileChooserCallback {
+		boolean approve( String[] files, long hwndFileDialog );
+	}
+
+	/**
+	 * Shows a GTK message box
+	 * <a href="https://docs.gtk.org/gtk3/class.MessageDialog.html">GtkMessageDialog</a>.
+	 * <p>
+	 * For use in {@link FileChooserCallback} only.
+	 *
+	 * @param hwndParent the parent of the message box
+	 * @param messageType type of message being displayed:
+	 *        {@link JOptionPane#ERROR_MESSAGE}, {@link JOptionPane#INFORMATION_MESSAGE},
+	 *        {@link JOptionPane#WARNING_MESSAGE}, {@link JOptionPane#QUESTION_MESSAGE} or
+	 *        {@link JOptionPane#PLAIN_MESSAGE}
+	 * @param primaryText primary text; if the dialog has a secondary text,
+	 *        this will appear as title in a larger bold font
+	 * @param secondaryText secondary text; shown below of primary text; or {@code null}
+	 * @param defaultButton index of the default button, which can be pressed using ENTER key
+	 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown
+	 * @return index of pressed button; or -1 for ESC key
+	 *
+	 * @since 3.6
+	 */
+	public native static int showMessageDialog( long hwndParent, int messageType,
+		String primaryText, String secondaryText, int defaultButton, String... buttons );
 }

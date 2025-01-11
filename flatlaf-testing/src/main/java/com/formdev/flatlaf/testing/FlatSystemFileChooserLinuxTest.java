@@ -124,10 +124,20 @@ public class FlatSystemFileChooserLinuxTest
 		}
 		int fileTypeIndex = fileTypeIndexSlider.getValue();
 
+		FlatNativeLinuxLibrary.FileChooserCallback callback = (files, hwndFileDialog) -> {
+			System.out.println( "  -- callback " + hwndFileDialog + "  " + Arrays.toString( files ) );
+			if( showMessageDialogOnOKCheckBox.isSelected() ) {
+				System.out.println( FlatNativeLinuxLibrary.showMessageDialog( hwndFileDialog,
+					JOptionPane.INFORMATION_MESSAGE,
+					"primary text", "secondary text", 1, "Yes", "No" ) );
+			}
+			return true;
+		};
+
 		if( direct ) {
 			String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, open,
 				title, okButtonLabel, currentName, currentFolder,
-				optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes );
+				optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes );
 
 			filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
 		} else {
@@ -137,7 +147,7 @@ public class FlatSystemFileChooserLinuxTest
 			new Thread( () -> {
 				String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, open,
 					title, okButtonLabel, currentName, currentFolder,
-					optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes2 );
+					optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes2 );
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
@@ -248,6 +258,7 @@ public class FlatSystemFileChooserLinuxTest
 		saveButton = new JButton();
 		openDirectButton = new JButton();
 		saveDirectButton = new JButton();
+		showMessageDialogOnOKCheckBox = new JCheckBox();
 		filesScrollPane = new JScrollPane();
 		filesField = new JTextArea();
 
@@ -397,6 +408,10 @@ public class FlatSystemFileChooserLinuxTest
 		saveDirectButton.addActionListener(e -> saveDirect());
 		add(saveDirectButton, "cell 0 7 3 1");
 
+		//---- showMessageDialogOnOKCheckBox ----
+		showMessageDialogOnOKCheckBox.setText("show message dialog on OK");
+		add(showMessageDialogOnOKCheckBox, "cell 0 7 3 1");
+
 		//======== filesScrollPane ========
 		{
 
@@ -443,6 +458,7 @@ public class FlatSystemFileChooserLinuxTest
 	private JButton saveButton;
 	private JButton openDirectButton;
 	private JButton saveDirectButton;
+	private JCheckBox showMessageDialogOnOKCheckBox;
 	private JScrollPane filesScrollPane;
 	private JTextArea filesField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

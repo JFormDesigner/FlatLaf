@@ -139,11 +139,21 @@ public class FlatSystemFileChooserWindowsTest
 			fileTypes = fileTypesStr.trim().split( "[,]+" );
 		int fileTypeIndex = fileTypeIndexSlider.getValue();
 
+		FlatNativeWindowsLibrary.FileChooserCallback callback = (files, hwndFileDialog) -> {
+			System.out.println( "  -- callback " + hwndFileDialog + "  " + Arrays.toString( files ) );
+			if( showMessageDialogOnOKCheckBox.isSelected() ) {
+				System.out.println( FlatNativeWindowsLibrary.showMessageDialog( hwndFileDialog,
+					"some text", "title",
+					/* MB_ICONINFORMATION */ 0x00000040 | /* MB_YESNO */ 0x00000004 ) );
+			}
+			return true;
+		};
+
 		if( direct ) {
 			String[] files = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				title, okButtonLabel, fileNameLabel, fileName,
 				folder, saveAsItem, defaultFolder, defaultExtension,
-				optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes );
+				optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes );
 
 			filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
 		} else {
@@ -154,7 +164,7 @@ public class FlatSystemFileChooserWindowsTest
 				String[] files = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 					title, okButtonLabel, fileNameLabel, fileName,
 					folder, saveAsItem, defaultFolder, defaultExtension,
-					optionsSet.get(), optionsClear.get(), fileTypeIndex, fileTypes2 );
+					optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes2 );
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
@@ -290,6 +300,7 @@ public class FlatSystemFileChooserWindowsTest
 		saveButton = new JButton();
 		openDirectButton = new JButton();
 		saveDirectButton = new JButton();
+		showMessageDialogOnOKCheckBox = new JCheckBox();
 		filesScrollPane = new JScrollPane();
 		filesField = new JTextArea();
 
@@ -534,6 +545,10 @@ public class FlatSystemFileChooserWindowsTest
 		saveDirectButton.addActionListener(e -> saveDirect());
 		add(saveDirectButton, "cell 0 11 3 1");
 
+		//---- showMessageDialogOnOKCheckBox ----
+		showMessageDialogOnOKCheckBox.setText("show message dialog on OK");
+		add(showMessageDialogOnOKCheckBox, "cell 0 11 3 1");
+
 		//======== filesScrollPane ========
 		{
 
@@ -605,6 +620,7 @@ public class FlatSystemFileChooserWindowsTest
 	private JButton saveButton;
 	private JButton openDirectButton;
 	private JButton saveDirectButton;
+	private JCheckBox showMessageDialogOnOKCheckBox;
 	private JScrollPane filesScrollPane;
 	private JTextArea filesField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
