@@ -257,6 +257,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 10 3 1"
 			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "showMessageDialogOnOKCheckBox"
+				"text": "show message dialog on OK"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 10 3 1"
+			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "filesScrollPane"
 				add( new FormComponent( "javax.swing.JTextArea" ) {

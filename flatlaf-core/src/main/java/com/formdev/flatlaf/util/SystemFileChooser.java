@@ -616,8 +616,8 @@ public class SystemFileChooser
 			// show system file dialog
 			return FlatNativeMacLibrary.showFileChooser( open,
 				fc.getDialogTitle(), fc.getApproveButtonText(), null, null, null,
-				nameFieldStringValue, directoryURL,
-				optionsSet, optionsClear, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				nameFieldStringValue, directoryURL, optionsSet, optionsClear, null,
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 	}
 

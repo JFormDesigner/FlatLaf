@@ -29,15 +29,43 @@
 #endif
 
 
+#define JNI_COCOA_TRY() \
+	@try {
+
+#define JNI_COCOA_CATCH() \
+	} @catch( NSException *ex ) { \
+		NSLog( @"Exception: %@\nReason: %@\nUser Info: %@\nStack: %@", \
+			[ex name], [ex reason], [ex userInfo], [ex callStackSymbols] ); \
+	}
+
 #define JNI_COCOA_ENTER() \
 	@autoreleasepool { \
-		@try {
+		JNI_COCOA_TRY()
 
 #define JNI_COCOA_EXIT() \
-		} @catch( NSException *ex ) { \
- 			NSLog( @"Exception: %@\nReason: %@\nUser Info: %@\nStack: %@", \
- 				[ex name], [ex reason], [ex userInfo], [ex callStackSymbols] ); \
- 		} \
+		JNI_COCOA_CATCH() \
+	}
+
+#define JNI_THREAD_ENTER( jvm, returnValue ) \
+	JNIEnv *env; \
+	bool detach = false; \
+	switch( jvm->GetEnv( (void**) &env, JNI_VERSION_1_6 ) ) { \
+		case JNI_OK: break; \
+		case JNI_EDETACHED: \
+			if( jvm->AttachCurrentThread( (void**) &env, NULL ) != JNI_OK ) \
+				return returnValue; \
+			detach = true; \
+			break; \
+		default: return returnValue; \
+	} \
+	@try {
+
+#define JNI_THREAD_EXIT( jvm ) \
+	} @finally { \
+		if( env->ExceptionCheck() ) \
+			env->ExceptionDescribe(); \
+		if( detach ) \
+			jvm->DetachCurrentThread(); \
 	}
 
 

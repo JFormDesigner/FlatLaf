@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Rectangle;
 import java.awt.Window;
+import javax.swing.JOptionPane;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -122,5 +123,32 @@ public class FlatNativeMacLibrary
 	public native static String[] showFileChooser( boolean open,
 		String title, String prompt, String message, String filterFieldLabel,
 		String nameFieldLabel, String nameFieldStringValue, String directoryURL,
-		int optionsSet, int optionsClear, int fileTypeIndex, String... fileTypes );
+		int optionsSet, int optionsClear, FileChooserCallback callback,
+		int fileTypeIndex, String... fileTypes );
+
+	/** @since 3.6 */
+	public interface FileChooserCallback {
+		boolean approve( String[] files, long hwndFileDialog );
+	}
+
+	/**
+	 * Shows a macOS alert
+	 * <a href="https://developer.apple.com/documentation/appkit/nsalert?language=objc">NSAlert</a>.
+	 * <p>
+	 * For use in {@link FileChooserCallback} only.
+	 *
+	 * @param hwndParent the parent of the message box
+	 * @param alertStyle type of alert being displayed:
+	 *        {@link JOptionPane#ERROR_MESSAGE}, {@link JOptionPane#INFORMATION_MESSAGE} or
+	 *        {@link JOptionPane#WARNING_MESSAGE}
+	 * @param messageText main message of the alert
+	 * @param informativeText additional information about the alert; shown below of main message; or {@code null}
+	 * @param defaultButton index of the default button, which can be pressed using ENTER key
+	 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown
+	 * @return index of pressed button
+	 *
+	 * @since 3.6
+	 */
+	public native static int showMessageDialog( long hwndParent, int alertStyle,
+		String messageText, String informativeText, int defaultButton, String... buttons );
 }
