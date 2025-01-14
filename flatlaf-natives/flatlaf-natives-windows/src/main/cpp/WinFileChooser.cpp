@@ -19,6 +19,7 @@
 
 #include <windows.h>
 #include <shobjidl.h>
+#include "JNIUtils.h"
 #include "com_formdev_flatlaf_ui_FlatNativeWindowsLibrary.h"
 
 /**
@@ -54,26 +55,6 @@ public:
 	operator T*() { return ptr; }
 };
 
-//---- class AutoReleaseString ------------------------------------------------
-
-class AutoReleaseString {
-	JNIEnv* env;
-	jstring javaString;
-	const jchar* chars;
-
-public:
-	AutoReleaseString( JNIEnv* _env, jstring _javaString ) {
-		env = _env;
-		javaString = _javaString;
-		chars = (javaString != NULL) ? env->GetStringChars( javaString, NULL ) : NULL;
-	}
-	~AutoReleaseString() {
-		if( chars != NULL )
-			env->ReleaseStringChars( javaString, chars );
-	}
-	operator LPCWSTR() { return (LPCWSTR) chars; }
-};
-
 //---- class AutoReleaseIShellItem --------------------------------------------
 
 class AutoReleaseIShellItem : public AutoReleasePtr<IShellItem> {
@@ -87,49 +68,30 @@ public:
 //---- class FilterSpec -------------------------------------------------------
 
 class FilterSpec {
-	JNIEnv* env = NULL;
-	jstring* jnames = NULL;
-	jstring* jspecs = NULL;
+	AutoReleaseStringArray fileTypes;
 
 public:
 	UINT count = 0;
 	COMDLG_FILTERSPEC* specs = NULL;
 
 public:
-	FilterSpec( JNIEnv* _env, jobjectArray fileTypes ) {
-		if( fileTypes == NULL )
+	FilterSpec( JNIEnv* _env, jobjectArray _fileTypes )
+		: fileTypes( _env, _fileTypes )
+	{
+		if( fileTypes.count == 0 )
 			return;
 
-		env = _env;
-		count = env->GetArrayLength( fileTypes ) / 2;
-		if( count <= 0 )
-			return;
-
-		specs = new COMDLG_FILTERSPEC[count];
-		jnames = new jstring[count];
-		jspecs = new jstring[count];
+		count = fileTypes.count / 2;
+		specs = new COMDLG_FILTERSPEC[fileTypes.count];
 
 		for( int i = 0; i < count; i++ ) {
-			jnames[i] = (jstring) env->GetObjectArrayElement( fileTypes, i * 2 );
-			jspecs[i] = (jstring) env->GetObjectArrayElement( fileTypes, (i * 2) + 1 );
-			specs[i].pszName = (LPCWSTR) env->GetStringChars( jnames[i] , NULL );
-			specs[i].pszSpec = (LPCWSTR) env->GetStringChars( jspecs[i], NULL );
+			specs[i].pszName = fileTypes[i * 2];
+			specs[i].pszSpec = fileTypes[(i * 2) + 1];
 		}
 	}
 	~FilterSpec() {
-		if( specs == NULL )
-			return;
-
-		for( int i = 0; i < count; i++ ) {
-			env->ReleaseStringChars( jnames[i], (jchar *) specs[i].pszName );
-			env->ReleaseStringChars( jspecs[i], (jchar *) specs[i].pszSpec );
-			env->DeleteLocalRef( jnames[i] );
-			env->DeleteLocalRef( jspecs[i] );
-		}
-
-		delete[] jnames;
-		delete[] jspecs;
-		delete[] specs;
+		if( specs != NULL )
+			delete[] specs;
 	}
 };
 
@@ -368,16 +330,4 @@ static jobjectArray getFiles( JNIEnv* env, jboolean open, IFileDialog* dialog ) 
 
 		return array;
 	}
-}
-
-
-extern "C"
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageDialog
-	( JNIEnv* env, jclass cls, jlong hwndParent, jstring text, jstring caption, jint type )
-{
-	// convert Java strings to C strings
-	AutoReleaseString ctext( env, text );
-	AutoReleaseString ccaption( env, caption );
-
-	return ::MessageBox( reinterpret_cast<HWND>( hwndParent ), ctext, ccaption, type );
 }
