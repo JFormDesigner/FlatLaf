@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Window;
+import javax.swing.JOptionPane;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -204,7 +205,8 @@ public class FlatNativeWindowsLibrary
 	 * @param owner the owner of the file dialog; or {@code null}
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
-	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '&amp;' for mnemonics (e.g. "&amp;Choose").
+	 * @param okButtonLabel text displayed in default button; or {@code null}.
+	 *        Use '&amp;' for mnemonics (e.g. "&amp;Choose").
 	 *        Use '&amp;&amp;' for '&amp;' character (e.g. "Choose &amp;&amp; Quit").
 	 * @param fileNameLabel text displayed in front of the filename text field; or {@code null}
 	 * @param fileName user-editable filename currently shown in the filename field; or {@code null}
@@ -241,6 +243,29 @@ public class FlatNativeWindowsLibrary
 	}
 
 	/**
+	 * Shows a modal Windows message dialog.
+	 * <p>
+	 * For use in {@link FileChooserCallback} only.
+	 *
+	 * @param hwndParent the parent of the message box
+	 * @param messageType type of message being displayed:
+	 *        {@link JOptionPane#ERROR_MESSAGE}, {@link JOptionPane#INFORMATION_MESSAGE},
+	 *        {@link JOptionPane#WARNING_MESSAGE}, {@link JOptionPane#QUESTION_MESSAGE} or
+	 *        {@link JOptionPane#PLAIN_MESSAGE}
+	 * @param title dialog box title; or {@code null} to use title from parent window
+	 * @param text message to be displayed
+	 * @param defaultButton index of the default button, which can be pressed using ENTER key
+	 * @param buttons texts of the buttons.
+	 *        Use '&amp;' for mnemonics (e.g. "&amp;Choose").
+	 *        Use '&amp;&amp;' for '&amp;' character (e.g. "Choose &amp;&amp; Quit").
+	 * @return index of pressed button; or -1 for ESC key
+	 *
+	 * @since 3.6
+	 */
+	public native static int showMessageDialog( long hwndParent, int messageType,
+		String title, String text, int defaultButton, String... buttons );
+
+	/**
 	 * Shows a Windows message box
 	 * <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox">MessageBox</a>.
 	 * <p>
@@ -251,10 +276,8 @@ public class FlatNativeWindowsLibrary
 	 * @param caption dialog box title
 	 * @param type see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#parameters">MessageBox parameter uType</a>
 	 * @return see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#return-value">MessageBox Return value</a>
-	 * @return index of pressed button; or -1 for ESC key
 	 *
 	 * @since 3.6
 	 */
-	public native static int showMessageDialog( long hwndParent,
-		String text, String caption, int type );
+	public native static int showMessageBox( long hwndParent, String text, String caption, int type );
 }

@@ -56,7 +56,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 2,hidemode 3"
 				"$columnConstraints": "[left]para[left]para[left]"
-				"$rowConstraints": "[]0[]0[]0[][]0[]0[]0[]0"
+				"$rowConstraints": "[]0[]0[]0[][]0[]0[]0[]0[grow]"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
@@ -200,8 +200,45 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 7"
 				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "hidemode 3"
+					"$columnConstraints": "[fill][grow,fill]"
+					"$rowConstraints": "[grow,fill][]"
+				} ) {
+					name: "messageDialogPanel"
+					"border": new javax.swing.border.TitledBorder( "MessageDialog" )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "messageLabel"
+						"text": "Message"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,aligny top,growy 0"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "messageScrollPane"
+						add( new FormComponent( "javax.swing.JTextArea" ) {
+							name: "messageField"
+							"columns": 40
+							"rows": 4
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "buttonsLabel"
+						"text": "Buttons:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "buttonsField"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 8 3 1,grow"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1 1 10,aligny top,growy 0"
+				"value": "cell 2 1 1 10,growy"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "okButtonLabelLabel"
@@ -344,8 +381,27 @@ new FormModel {
 				"value": "cell 0 11 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "showMessageDialogsOnOKCheckBox"
+				name: "showMessageDialogOnOKCheckBox"
 				"text": "show message dialog on OK"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11 3 1"
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+				name: "hSpacer1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11 3 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "messageDialogButton"
+				"text": "MessageDialog..."
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "messageDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11 3 1,alignx right,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "messageBoxButton"
+				"text": "MessageBox..."
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "messageBox", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 11 3 1"
 			} )
@@ -360,7 +416,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 845, 630 )
+			"size": new java.awt.Dimension( 890, 630 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "ownerButtonGroup"

@@ -30,7 +30,10 @@ import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
@@ -50,7 +53,7 @@ public class FlatSystemFileChooserWindowsTest
 			}
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserWindowsTest" );
-			addListeners( frame );
+//			addListeners( frame );
 			frame.showFrame( FlatSystemFileChooserWindowsTest::new );
 		} );
 	}
@@ -59,6 +62,10 @@ public class FlatSystemFileChooserWindowsTest
 		initComponents();
 
 		fileTypesField.setSelectedItem( null );
+
+		Preferences state = DemoPrefs.getState();
+		messageField.setText( state.get( "systemfilechooser.windows.message", "some message" ) );
+		buttonsField.setText( state.get( "systemfilechooser.windows.buttons", "OK" ) );
 	}
 
 	private void open() {
@@ -143,8 +150,8 @@ public class FlatSystemFileChooserWindowsTest
 			System.out.println( "  -- callback " + hwndFileDialog + "  " + Arrays.toString( files ) );
 			if( showMessageDialogOnOKCheckBox.isSelected() ) {
 				System.out.println( FlatNativeWindowsLibrary.showMessageDialog( hwndFileDialog,
-					"some text", "title",
-					/* MB_ICONINFORMATION */ 0x00000040 | /* MB_YESNO */ 0x00000004 ) );
+					JOptionPane.INFORMATION_MESSAGE,
+					null, "some text", 1, "Yes", "No" ) );
 			}
 			return true;
 		};
@@ -189,6 +196,28 @@ public class FlatSystemFileChooserWindowsTest
 			optionsClear.set( optionsClear.get() | option );
 	}
 
+	private void messageDialog() {
+		long hwnd = getHWND( SwingUtilities.windowForComponent( this ) );
+		String message = messageField.getText();
+		String[] buttons = buttonsField.getText().trim().split( "[,]+" );
+
+		Preferences state = DemoPrefs.getState();
+		state.put( "systemfilechooser.windows.message", message );
+		state.put( "systemfilechooser.windows.buttons", buttonsField.getText() );
+
+		System.out.println( FlatNativeWindowsLibrary.showMessageDialog( hwnd,
+			JOptionPane.WARNING_MESSAGE, null, message, 1, buttons ) );
+	}
+
+	private void messageBox() {
+		long hwnd = getHWND( SwingUtilities.windowForComponent( this ) );
+		String message = messageField.getText();
+
+		System.out.println( FlatNativeWindowsLibrary.showMessageBox( hwnd, message, null,
+			/* MB_ICONINFORMATION */ 0x00000040 | /* MB_YESNO */ 0x00000004 ) );
+	}
+
+	@SuppressWarnings( "unused" )
 	private static void addListeners( Window w ) {
 		w.addWindowListener( new WindowListener() {
 			@Override
@@ -278,6 +307,12 @@ public class FlatSystemFileChooserWindowsTest
 		supportStreamableItemsCheckBox = new FlatTriStateCheckBox();
 		allowMultiSelectCheckBox = new FlatTriStateCheckBox();
 		hidePinnedPlacesCheckBox = new FlatTriStateCheckBox();
+		messageDialogPanel = new JPanel();
+		messageLabel = new JLabel();
+		messageScrollPane = new JScrollPane();
+		messageField = new JTextArea();
+		buttonsLabel = new JLabel();
+		buttonsField = new JTextField();
 		okButtonLabelLabel = new JLabel();
 		okButtonLabelField = new JTextField();
 		fileNameLabelLabel = new JLabel();
@@ -301,6 +336,9 @@ public class FlatSystemFileChooserWindowsTest
 		openDirectButton = new JButton();
 		saveDirectButton = new JButton();
 		showMessageDialogOnOKCheckBox = new JCheckBox();
+		hSpacer1 = new JPanel(null);
+		messageDialogButton = new JButton();
+		messageBoxButton = new JButton();
 		filesScrollPane = new JScrollPane();
 		filesField = new JTextArea();
 
@@ -365,7 +403,8 @@ public class FlatSystemFileChooserWindowsTest
 				"[]0" +
 				"[]0" +
 				"[]0" +
-				"[]0"));
+				"[]0" +
+				"[grow]"));
 
 			//---- overwritePromptCheckBox ----
 			overwritePromptCheckBox.setText("overwritePrompt");
@@ -461,8 +500,41 @@ public class FlatSystemFileChooserWindowsTest
 			//---- hidePinnedPlacesCheckBox ----
 			hidePinnedPlacesCheckBox.setText("hidePinnedPlaces");
 			panel1.add(hidePinnedPlacesCheckBox, "cell 1 7");
+
+			//======== messageDialogPanel ========
+			{
+				messageDialogPanel.setBorder(new TitledBorder("MessageDialog"));
+				messageDialogPanel.setLayout(new MigLayout(
+					"hidemode 3",
+					// columns
+					"[fill]" +
+					"[grow,fill]",
+					// rows
+					"[grow,fill]" +
+					"[]"));
+
+				//---- messageLabel ----
+				messageLabel.setText("Message");
+				messageDialogPanel.add(messageLabel, "cell 0 0,aligny top,growy 0");
+
+				//======== messageScrollPane ========
+				{
+
+					//---- messageField ----
+					messageField.setColumns(40);
+					messageField.setRows(4);
+					messageScrollPane.setViewportView(messageField);
+				}
+				messageDialogPanel.add(messageScrollPane, "cell 1 0");
+
+				//---- buttonsLabel ----
+				buttonsLabel.setText("Buttons:");
+				messageDialogPanel.add(buttonsLabel, "cell 0 1");
+				messageDialogPanel.add(buttonsField, "cell 1 1");
+			}
+			panel1.add(messageDialogPanel, "cell 0 8 3 1,grow");
 		}
-		add(panel1, "cell 2 1 1 10,aligny top,growy 0");
+		add(panel1, "cell 2 1 1 10,growy");
 
 		//---- okButtonLabelLabel ----
 		okButtonLabelLabel.setText("okButtonLabel");
@@ -548,6 +620,17 @@ public class FlatSystemFileChooserWindowsTest
 		//---- showMessageDialogOnOKCheckBox ----
 		showMessageDialogOnOKCheckBox.setText("show message dialog on OK");
 		add(showMessageDialogOnOKCheckBox, "cell 0 11 3 1");
+		add(hSpacer1, "cell 0 11 3 1,growx");
+
+		//---- messageDialogButton ----
+		messageDialogButton.setText("MessageDialog...");
+		messageDialogButton.addActionListener(e -> messageDialog());
+		add(messageDialogButton, "cell 0 11 3 1,alignx right,growx 0");
+
+		//---- messageBoxButton ----
+		messageBoxButton.setText("MessageBox...");
+		messageBoxButton.addActionListener(e -> messageBox());
+		add(messageBoxButton, "cell 0 11 3 1");
 
 		//======== filesScrollPane ========
 		{
@@ -598,6 +681,12 @@ public class FlatSystemFileChooserWindowsTest
 	private FlatTriStateCheckBox supportStreamableItemsCheckBox;
 	private FlatTriStateCheckBox allowMultiSelectCheckBox;
 	private FlatTriStateCheckBox hidePinnedPlacesCheckBox;
+	private JPanel messageDialogPanel;
+	private JLabel messageLabel;
+	private JScrollPane messageScrollPane;
+	private JTextArea messageField;
+	private JLabel buttonsLabel;
+	private JTextField buttonsField;
 	private JLabel okButtonLabelLabel;
 	private JTextField okButtonLabelField;
 	private JLabel fileNameLabelLabel;
@@ -621,6 +710,9 @@ public class FlatSystemFileChooserWindowsTest
 	private JButton openDirectButton;
 	private JButton saveDirectButton;
 	private JCheckBox showMessageDialogOnOKCheckBox;
+	private JPanel hSpacer1;
+	private JButton messageDialogButton;
+	private JButton messageBoxButton;
 	private JScrollPane filesScrollPane;
 	private JTextArea filesField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

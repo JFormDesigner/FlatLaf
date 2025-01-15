@@ -146,7 +146,8 @@ public class FlatNativeLinuxLibrary
 	 * @param owner the owner of the file dialog; or {@code null}
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
-	 * @param okButtonLabel text displayed in default button; or {@code null}. Use '_' for mnemonics (e.g. "_Choose")
+	 * @param okButtonLabel text displayed in default button; or {@code null}.
+	 *        Use '_' for mnemonics (e.g. "_Choose")
 	 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
 	 * @param currentName user-editable filename currently shown in the filename field in save dialog; or {@code null}
 	 * @param currentFolder current directory shown in the dialog; or {@code null}
@@ -189,7 +190,9 @@ public class FlatNativeLinuxLibrary
 	 *        this will appear as title in a larger bold font
 	 * @param secondaryText secondary text; shown below of primary text; or {@code null}
 	 * @param defaultButton index of the default button, which can be pressed using ENTER key
-	 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown
+	 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown.
+	 *        Use '_' for mnemonics (e.g. "_Choose")
+	 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
 	 * @return index of pressed button; or -1 for ESC key
 	 *
 	 * @since 3.6

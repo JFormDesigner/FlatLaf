@@ -124,9 +124,17 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
  * Method:    showMessageDialog
- * Signature: (JLjava/lang/String;Ljava/lang/String;I)I
+ * Signature: (JILjava/lang/String;Ljava/lang/String;I[Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageDialog
+  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    showMessageBox
+ * Signature: (JLjava/lang/String;Ljava/lang/String;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageBox
   (JNIEnv *, jclass, jlong, jstring, jstring, jint);
 
 #ifdef __cplusplus
