@@ -28,11 +28,14 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines = listOf( machines.linux.x86_64 )
+	targetMachines = listOf(
+		machines.linux.x86_64,
+		machines.linux.architecture( "aarch64" ),
+	)
 }
 
 var javaHome = System.getProperty( "java.home" )
-if( javaHome.endsWith( "jre" ) )
+if( javaHome.endsWith( "jre" ) && !file( "${javaHome}/include" ).exists() )
 	javaHome += "/.."
 
 tasks {
@@ -40,8 +43,13 @@ tasks {
 		group = "build"
 		description = "Builds natives"
 
-		if( org.gradle.internal.os.OperatingSystem.current().isLinux )
-			dependsOn( "linkRelease" )
+		if( org.gradle.internal.os.OperatingSystem.current().isLinux ) {
+			val osArch = System.getProperty( "os.arch" )
+			if( osArch == "amd64" || osArch == "x86-64" )
+				dependsOn( "linkReleaseX86-64" )
+			if( osArch == "aarch64" )
+				dependsOn( "linkReleaseAarch64" )
+		}
 	}
 
 	withType<CppCompile>().configureEach {
@@ -67,7 +75,7 @@ tasks {
 		onlyIf { name.contains( "Release" ) }
 
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
-		val libraryName = "libflatlaf-linux-x86_64.so"
+		val libraryName = if( name.contains( "X86-64" ) ) "libflatlaf-linux-x86_64.so" else "libflatlaf-linux-arm64.so"
 		val jawt = "jawt"
 		var jawtPath = "${javaHome}/lib"
 		if( JavaVersion.current() == JavaVersion.VERSION_1_8 )
