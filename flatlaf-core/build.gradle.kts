@@ -156,5 +156,6 @@ flatlafPublish {
 		NativeArtifact( "${natives}/libflatlaf-macos-arm64.dylib",  "macos-arm64",    "dylib" ),
 		NativeArtifact( "${natives}/libflatlaf-macos-x86_64.dylib", "macos-x86_64",   "dylib" ),
 		NativeArtifact( "${natives}/libflatlaf-linux-x86_64.so",    "linux-x86_64",   "so" ),
+		NativeArtifact( "${natives}/libflatlaf-linux-arm64.so",     "linux-arm64",    "so" ),
 	)
 }

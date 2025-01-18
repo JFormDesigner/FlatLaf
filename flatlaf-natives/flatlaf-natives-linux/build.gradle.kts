@@ -30,11 +30,14 @@ flatlafJniHeaders {
 }
 
 library {
-	targetMachines = listOf( machines.linux.x86_64 )
+	targetMachines = listOf(
+		machines.linux.x86_64,
+		machines.linux.architecture( "aarch64" ),
+	)
 }
 
 var javaHome = System.getProperty( "java.home" )
-if( javaHome.endsWith( "jre" ) )
+if( javaHome.endsWith( "jre" ) && !file( "${javaHome}/include" ).exists() )
 	javaHome += "/.."
 
 tasks {
@@ -42,8 +45,16 @@ tasks {
 		group = "build"
 		description = "Builds natives"
 
-		if( org.gradle.internal.os.OperatingSystem.current().isLinux )
-			dependsOn( "linkRelease" )
+		if( org.gradle.internal.os.OperatingSystem.current().isLinux ) {
+			val osArch = System.getProperty( "os.arch" )
+			if( osArch == "amd64" ) {
+				dependsOn( "linkReleaseX86-64" )
+				if( file( "/usr/bin/aarch64-linux-gnu-gcc" ).exists() )
+					dependsOn( "linkCrossAarch64" )
+			}
+			if( osArch == "aarch64" )
+				dependsOn( "linkReleaseAarch64" )
+		}
 	}
 
 	withType<CppCompile>().configureEach {
@@ -90,7 +101,7 @@ tasks {
 		onlyIf { name.contains( "Release" ) }
 
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
-		val libraryName = "libflatlaf-linux-x86_64.so"
+		val libraryName = if( name.contains( "X86-64" ) ) "libflatlaf-linux-x86_64.so" else "libflatlaf-linux-arm64.so"
 		val jawt = "jawt"
 		var jawtPath = "${javaHome}/lib"
 		if( JavaVersion.current() == JavaVersion.VERSION_1_8 )
@@ -108,31 +119,103 @@ tasks {
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "libflatlaf-natives-linux.so", libraryName )
+				rename( linkedFile.get().asFile.name, libraryName )
 			}
 
-/*dump
-			val dylib = linkedFile.asFile.get()
-			val dylibDir = dylib.parent
-			exec { commandLine( "size", dylib ) }
-			exec {
-				commandLine( "objdump",
-					// commands
-					"--archive-headers",
-					"--section-headers",
-					"--private-headers",
-					"--reloc",
-					"--dynamic-reloc",
-					"--syms",
-					// options
-//					"--private-header",
-					// files
-					dylib )
-				standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+//			dump( linkedFile.asFile.get(), true )
+		}
+	}
+
+	if( org.gradle.internal.os.OperatingSystem.current().isLinux &&
+		System.getProperty( "os.arch" ) == "amd64" &&
+		file( "/usr/bin/aarch64-linux-gnu-gcc" ).exists() )
+	{
+		register<Exec>( "compileCrossAarch64Cpp" ) {
+			val include = layout.projectDirectory.dir( "src/main/headers" )
+			val src = layout.projectDirectory.dir( "src/main/cpp" )
+			workingDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
+
+			doFirst {
+				workingDir.mkdirs()
 			}
-			exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
-			exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
-dump*/
+
+			commandLine = listOf(
+				"aarch64-linux-gnu-gcc",
+				"-c",
+				"-fPIC",
+				"-fvisibility=hidden",
+				"-O3",
+				"-I", "${javaHome}/include",
+				"-I", "${javaHome}/include/linux",
+				"-I", "$include",
+
+				"$src/ApiVersion.cpp",
+				"$src/X11WmUtils.cpp",
+			)
+		}
+
+		register<Exec>( "linkCrossAarch64" ) {
+			dependsOn( "compileCrossAarch64Cpp" )
+
+			val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
+			val libraryName = "libflatlaf-linux-arm64.so"
+			val outDir = file( layout.buildDirectory.dir( "lib/main/release/aarch64-cross" ) )
+			val objDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
+
+			doFirst {
+				outDir.mkdirs()
+			}
+
+			commandLine = listOf(
+				"aarch64-linux-gnu-gcc",
+				"-shared",
+				"-Wl,-soname,$libraryName",
+				"-o", "$outDir/$libraryName",
+
+				"$objDir/ApiVersion.o",
+				"$objDir/X11WmUtils.o",
+
+				"-L${layout.projectDirectory}/lib/aarch64",
+				"-ljawt",
+			)
+
+			doLast {
+				// copy shared library to flatlaf-core resources
+				copy {
+					from( "$outDir/$libraryName" )
+					into( nativesDir )
+				}
+
+//				dump( file( "$outDir/$libraryName" ), false )
+			}
 		}
 	}
 }
+
+/*dump
+interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
+val injected = project.objects.newInstance<InjectedExecOps>()
+
+fun dump( dylib: File, disassemble: Boolean ) {
+
+	val dylibDir = dylib.parent
+	injected.execOps.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
+	injected.execOps.exec {
+		commandLine( "objdump",
+			// commands
+			"--archive-headers",
+			"--section-headers",
+			"--private-headers",
+			"--reloc",
+			"--dynamic-reloc",
+			"--syms",
+			// files
+			dylib )
+		standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+	}
+	if( disassemble )
+		injected.execOps.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+	injected.execOps.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+	injected.execOps.exec { commandLine( "hexdump", dylib ); standardOutput = FileOutputStream( "$dylibDir/hexdump.txt" ) }
+}
+dump*/

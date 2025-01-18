@@ -42,7 +42,7 @@ public class FlatWindowMaximizeIcon
 		int iwh = (int) (getSymbolHeight() * scaleFactor);
 		int ix = x + ((width - iwh) / 2);
 		int iy = y + ((height - iwh) / 2);
-		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
+		float thickness = Math.max( SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor, 1 );
 		int arc = Math.max( (int) (1.5 * scaleFactor), 2 );
 
 		g.fill( SystemInfo.isWindows_11_orLater

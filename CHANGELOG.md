@@ -13,6 +13,19 @@ FlatLaf Change Log
 - Tree: Support wide cell renderer. (issue #922)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
+- Linux: Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
+
+#### Fixed bugs
+
+- Button: Fixed background and foreground colors for `borderless` and
+  `toolBarButton` style default buttons (`JButton.isDefaultButton()` is `true`).
+  (issue #947)
+- FileChooser: Improved performance when navigating to large directories with
+  thousands of files. (issue #953)
+- PopupFactory: Fixed NPE on Windows 10 when `owner` is `null`. (issue #952)
+- FlatLaf window decorations: Minimize and maximize icons were not shown for
+  custom scale factors less than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue
+  #951)
 
 
 ## 3.5.4

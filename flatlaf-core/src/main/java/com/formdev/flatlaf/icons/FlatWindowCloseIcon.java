@@ -63,7 +63,7 @@ public class FlatWindowCloseIcon
 		int iy = y + ((height - iwh) / 2);
 		int ix2 = ix + iwh - 1;
 		int iy2 = iy + iwh - 1;
-		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
+		float thickness = Math.max( SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor, 1 );
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD, 4 );
 		path.moveTo( ix, iy );

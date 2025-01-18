@@ -91,7 +91,7 @@ tasks {
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "flatlaf-natives-windows.dll", libraryName )
+				rename( linkedFile.get().asFile.name, libraryName )
 			}
 
 /*dump

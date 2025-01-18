@@ -138,7 +138,7 @@ public class FlatPopupFactory
 
 		// create drop shadow popup
 		Popup popupForScreenOfOwner = getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight );
-		GraphicsConfiguration gc = owner.getGraphicsConfiguration();
+		GraphicsConfiguration gc = (owner != null) ? owner.getGraphicsConfiguration() : null;
 		return (gc != null && gc.isTranslucencyCapable())
 			? new DropShadowPopup( popupForScreenOfOwner, owner, contents )
 			: new NonFlashingPopup( popupForScreenOfOwner, owner, contents );
@@ -306,7 +306,7 @@ public class FlatPopupFactory
 				break;
 			}
 		}
-		if( gc == null )
+		if( gc == null && owner != null )
 			gc = owner.getGraphicsConfiguration();
 		if( gc == null )
 			return null;

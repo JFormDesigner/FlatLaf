@@ -376,31 +376,68 @@ public class FlatFileChooserUI
 			if( icon != null )
 				return icon;
 
-			// get system icon
-			if( f != null ) {
-				try {
-					icon = getFileChooser().getFileSystemView().getSystemIcon( f );
-				} catch( NullPointerException ex ) {
-					// Java 21 may throw a NPE for exe files that use default Windows exe icon
-				}
+			// new proxy icon
+			//
+			// Note: Since this is a super light weight icon object, we do not add it
+			//       to the icon cache here. This keeps cache small in case of large directories
+			//       with thousands of files when icons of all files are only needed to compute
+			//       the layout of list/table, but never painted because located outside of visible area.
+			//       When an icon needs to be painted, the proxy adds it to the icon cache
+			//       and loads the real icon.
+			return new FlatFileViewIcon( f );
+		}
 
-				if( icon != null ) {
-					if( icon instanceof ImageIcon )
-						icon = new ScaledImageIcon( (ImageIcon) icon );
-					cacheIcon( f, icon );
-					return icon;
-				}
+		//---- class FlatFileViewIcon -----------------------------------------
+
+		/**
+		 * A proxy icon that has a fixed (scaled) width/height (16x16) and
+		 * gets/loads the real (system) icon only for painting.
+		 * Avoids unnecessary getting/loading system icons.
+		 */
+		private class FlatFileViewIcon
+			implements Icon
+		{
+			private final File f;
+			private Icon realIcon;
+
+			FlatFileViewIcon( File f ) {
+				this.f = f;
 			}
 
-			// get default icon
-			icon = super.getIcon( f );
-
-			if( icon instanceof ImageIcon ) {
-				icon = new ScaledImageIcon( (ImageIcon) icon );
-				cacheIcon( f, icon );
+			@Override
+			public int getIconWidth() {
+				return UIScale.scale( 16 );
 			}
 
-			return icon;
+			@Override
+			public int getIconHeight() {
+				return UIScale.scale( 16 );
+			}
+
+			@Override
+			public void paintIcon( Component c, Graphics g, int x, int y ) {
+				// get icon on demand
+				if( realIcon == null ) {
+					// get system icon
+					try {
+						if( f != null )
+							realIcon = getFileChooser().getFileSystemView().getSystemIcon( f );
+					} catch( NullPointerException ex ) {
+						// Java 21 may throw a NPE for exe files that use default Windows exe icon
+					}
+
+					// get default icon
+					if( realIcon == null )
+						realIcon = FlatFileView.super.getIcon( f );
+
+					if( realIcon instanceof ImageIcon )
+						realIcon = new ScaledImageIcon( (ImageIcon) realIcon );
+
+					cacheIcon( f, this );
+				}
+
+				realIcon.paintIcon( c, g, x, y );
+			}
 		}
 	}
 

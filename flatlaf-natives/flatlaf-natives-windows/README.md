@@ -8,8 +8,8 @@ The native library can be built only on Windows and requires a C++ compiler.
 Tested with Microsoft Visual C++ (MSVC) 2019 and 2022 (comes with Visual Studio
 2019 and 2022).
 
-The native library is available for folloging CPU architectures: `x86_64` (or
-`amd64`), `x86` and `arm64`.
+The native library is available for following CPU architectures: `x86_64` (or
+`amd64`), `x86` and `arm64` (or `aarch64`).
 
 To be able to build FlatLaf on any platform, and without C++ compiler, the
 pre-built DLLs are checked into Git at
