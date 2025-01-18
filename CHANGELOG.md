@@ -13,6 +13,7 @@ FlatLaf Change Log
 - Tree: Support wide cell renderer. (issue #922)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
+- Linux: Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
 
 #### Fixed bugs
 

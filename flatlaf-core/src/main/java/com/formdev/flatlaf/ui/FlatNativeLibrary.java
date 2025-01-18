@@ -90,10 +90,10 @@ class FlatNativeLibrary
 			classifier = SystemInfo.isAARCH64 ? "macos-arm64" : "macos-x86_64";
 			ext = "dylib";
 
-		} else if( SystemInfo.isLinux && SystemInfo.isX86_64 ) {
-			// Linux: requires x86_64
+		} else if( SystemInfo.isLinux && (SystemInfo.isX86_64 || SystemInfo.isAARCH64)) {
+			// Linux: requires x86_64 or aarch64
 
-			classifier = "linux-x86_64";
+			classifier = SystemInfo.isAARCH64 ? "linux-arm64" : "linux-x86_64";
 			ext = "so";
 
 			// Load libjawt.so (part of JRE) explicitly because it is not found
