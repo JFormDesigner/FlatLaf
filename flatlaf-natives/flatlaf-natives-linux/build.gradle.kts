@@ -45,8 +45,11 @@ tasks {
 
 		if( org.gradle.internal.os.OperatingSystem.current().isLinux ) {
 			val osArch = System.getProperty( "os.arch" )
-			if( osArch == "amd64" || osArch == "x86-64" )
+			if( osArch == "amd64" ) {
 				dependsOn( "linkReleaseX86-64" )
+				if( file( "/usr/bin/aarch64-linux-gnu-gcc" ).exists() )
+					dependsOn( "linkCrossAarch64" )
+			}
 			if( osArch == "aarch64" )
 				dependsOn( "linkReleaseAarch64" )
 		}
@@ -94,6 +97,69 @@ tasks {
 				from( linkedFile )
 				into( nativesDir )
 				rename( "libflatlaf-natives-linux.so", libraryName )
+			}
+		}
+	}
+
+	if( org.gradle.internal.os.OperatingSystem.current().isLinux &&
+		System.getProperty( "os.arch" ) == "amd64" &&
+		file( "/usr/bin/aarch64-linux-gnu-gcc" ).exists() )
+	{
+		register<Exec>( "compileCrossAarch64Cpp" ) {
+			val include = layout.projectDirectory.dir( "src/main/headers" )
+			val src = layout.projectDirectory.dir( "src/main/cpp" )
+			workingDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
+
+			doFirst {
+				workingDir.mkdirs()
+			}
+
+			commandLine = listOf(
+				"aarch64-linux-gnu-gcc",
+				"-c",
+				"-fPIC",
+				"-fvisibility=hidden",
+				"-O3",
+				"-I", "${javaHome}/include",
+				"-I", "${javaHome}/include/linux",
+				"-I", "$include",
+
+				"$src/ApiVersion.cpp",
+				"$src/X11WmUtils.cpp",
+			)
+		}
+
+		register<Exec>( "linkCrossAarch64" ) {
+			dependsOn( "compileCrossAarch64Cpp" )
+
+			val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
+			val libraryName = "libflatlaf-linux-arm64.so"
+			val outDir = file( layout.buildDirectory.dir( "lib/main/release/aarch64-cross" ) )
+			val objDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
+
+			doFirst {
+				outDir.mkdirs()
+			}
+
+			commandLine = listOf(
+				"aarch64-linux-gnu-gcc",
+				"-shared",
+				"-Wl,-soname,$libraryName",
+				"-o", "$outDir/$libraryName",
+
+				"$objDir/ApiVersion.o",
+				"$objDir/X11WmUtils.o",
+
+				"-L${layout.projectDirectory}/lib/aarch64",
+				"-ljawt",
+			)
+
+			doLast {
+				// copy shared library to flatlaf-core resources
+				copy {
+					from( "$outDir/$libraryName" )
+					into( nativesDir )
+				}
 			}
 		}
 	}
