@@ -43,6 +43,9 @@ var javaHome = System.getProperty( "java.home" )
 if( javaHome.endsWith( "jre" ) )
 	javaHome += "/.."
 
+interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
+val injected = project.objects.newInstance<InjectedExecOps>()
+
 tasks {
 	register( "build-natives" ) {
 		group = "build"
@@ -95,21 +98,21 @@ tasks {
 
 		doLast {
 			// sign shared library
-//			exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
+//			injected.execOps.exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
 
 			// copy shared library to flatlaf-core resources
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "libflatlaf-natives-macos.dylib", libraryName )
+				rename( linkedFile.get().asFile.name, libraryName )
 			}
 
 /*dump
 			val dylib = linkedFile.asFile.get()
 			val dylibDir = dylib.parent
-			exec { commandLine( "size", dylib ) }
-			exec { commandLine( "size", "-m", dylib ) }
-			exec {
+			injected.execOps.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
+			injected.execOps.exec { commandLine( "size", "-m", dylib ); standardOutput = FileOutputStream( "$dylibDir/size-m.txt" ) }
+			injected.execOps.exec {
 				commandLine( "objdump",
 					// commands
 					"--archive-headers",
@@ -127,8 +130,8 @@ tasks {
 					dylib )
 				standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
 			}
-			exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
-			exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+			injected.execOps.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+			injected.execOps.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
 dump*/
 		}
 	}

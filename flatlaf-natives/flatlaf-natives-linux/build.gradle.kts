@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import java.io.FileOutputStream
+
 plugins {
 	`cpp-library`
 	`flatlaf-cpp-library`
@@ -96,8 +98,10 @@ tasks {
 			copy {
 				from( linkedFile )
 				into( nativesDir )
-				rename( "libflatlaf-natives-linux.so", libraryName )
+				rename( linkedFile.get().asFile.name, libraryName )
 			}
+
+//			dump( linkedFile.asFile.get(), true )
 		}
 	}
 
@@ -160,7 +164,37 @@ tasks {
 					from( "$outDir/$libraryName" )
 					into( nativesDir )
 				}
+
+//				dump( file( "$outDir/$libraryName" ), false )
 			}
 		}
 	}
 }
+
+/*dump
+interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
+val injected = project.objects.newInstance<InjectedExecOps>()
+
+fun dump( dylib: File, disassemble: Boolean ) {
+
+	val dylibDir = dylib.parent
+	injected.execOps.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
+	injected.execOps.exec {
+		commandLine( "objdump",
+			// commands
+			"--archive-headers",
+			"--section-headers",
+			"--private-headers",
+			"--reloc",
+			"--dynamic-reloc",
+			"--syms",
+			// files
+			dylib )
+		standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+	}
+	if( disassemble )
+		injected.execOps.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+	injected.execOps.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+	injected.execOps.exec { commandLine( "hexdump", dylib ); standardOutput = FileOutputStream( "$dylibDir/hexdump.txt" ) }
+}
+dump*/
