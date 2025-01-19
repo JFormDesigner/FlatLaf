@@ -40,6 +40,19 @@ jobs:
               if: matrix.os == 'ubuntu'
               run: sudo apt install libgtk-3-dev
 
+            - name: Download libgtk-3.so for arm64
+              if: matrix.os == 'ubuntu'
+              working-directory: flatlaf-natives/flatlaf-natives-linux/lib/aarch64
+              run: |
+                pwd
+                ls -l /usr/lib/x86_64-linux-gnu/libgtk*
+                wget --no-verbose https://ports.ubuntu.com/pool/main/g/gtk%2b3.0/libgtk-3-0_3.24.18-1ubuntu1_arm64.deb
+                ls -l
+                ar -x libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+                tar -xvf data.tar.xz --wildcards --to-stdout "./usr/lib/aarch64-linux-gnu/libgtk-3.so.0.*" > libgtk-3.so
+                rm libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+                ls -l
+
             - name: install g++-aarch64-linux-gnu
               if: matrix.os == 'ubuntu'
               run: sudo apt install g++-aarch64-linux-gnu

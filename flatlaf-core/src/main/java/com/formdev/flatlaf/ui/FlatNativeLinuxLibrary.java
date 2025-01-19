@@ -49,6 +49,9 @@ public class FlatNativeLinuxLibrary
 		return SystemInfo.isLinux && FlatNativeLibrary.isLoaded( API_VERSION_LINUX );
 	}
 
+
+	//---- X Window System ----------------------------------------------------
+
 	// direction for _NET_WM_MOVERESIZE message
 	// see https://specifications.freedesktop.org/wm-spec/wm-spec-latest.html
 	static final int MOVE = 8;
@@ -117,6 +120,28 @@ public class FlatNativeLinuxLibrary
 			(window instanceof JDialog && JDialog.isDefaultLookAndFeelDecorated() && ((JDialog)window).isUndecorated());
 	}
 
+
+	//---- GTK ----------------------------------------------------------------
+
+	private static Boolean isGtk3Available;
+
+	/**
+	 * Checks whether GTK 3 is available.
+	 * Use this before invoking any native method that uses GTK.
+	 * Otherwise the app may terminate immediately if GTK is not installed.
+	 * <p>
+	 * This works because Java uses {@code dlopen(RTLD_LAZY)} to load JNI libraries,
+	 * which only resolves symbols as the code that references them is executed.
+	 *
+	 * @since 3.6
+	 */
+	public static boolean isGtk3Available() {
+		if( isGtk3Available == null )
+			isGtk3Available = isLibAvailable( "libgtk-3.so.0" ) || isLibAvailable( "libgtk-3.so" );
+		return isGtk3Available;
+	}
+
+	private native static boolean isLibAvailable( String libname );
 
 	/**
 	 * https://docs.gtk.org/gtk3/iface.FileChooser.html#properties

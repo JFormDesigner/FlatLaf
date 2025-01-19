@@ -17,6 +17,7 @@
 // avoid inlining of printf()
 #define _NO_CRT_STDIO_INLINE
 
+#include <dlfcn.h>
 #include "JNIUtils.h"
 
 /**
@@ -34,4 +35,20 @@ AutoReleaseStringUTF8::AutoReleaseStringUTF8( JNIEnv* _env, jstring _javaString 
 AutoReleaseStringUTF8::~AutoReleaseStringUTF8() {
 	if( chars != NULL )
 		env->ReleaseStringUTFChars( javaString, chars );
+}
+
+//---- JNI methods ------------------------------------------------------------
+
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_isLibAvailable
+	( JNIEnv* env, jclass cls, jstring libname )
+{
+	AutoReleaseStringUTF8 clibname( env, libname );
+
+	void* lib = dlopen( clibname, RTLD_LAZY );
+	if( lib == NULL )
+		return false;
+
+	dlclose( lib );
+	return true;
 }

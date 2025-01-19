@@ -149,7 +149,20 @@ tasks {
 				"-I", "${javaHome}/include/linux",
 				"-I", "$include",
 
+				// for GTK
+				"-I", "/usr/include/gtk-3.0",
+				"-I", "/usr/include/glib-2.0",
+				"-I", "/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+				"-I", "/usr/include/gdk-pixbuf-2.0",
+				"-I", "/usr/include/atk-1.0",
+				"-I", "/usr/include/cairo",
+				"-I", "/usr/include/pango-1.0",
+				"-I", "/usr/include/harfbuzz",
+
 				"$src/ApiVersion.cpp",
+				"$src/GtkFileChooser.cpp",
+				"$src/GtkMessageDialog.cpp",
+				"$src/JNIUtils.cpp",
 				"$src/X11WmUtils.cpp",
 			)
 		}
@@ -173,10 +186,14 @@ tasks {
 				"-o", "$outDir/$libraryName",
 
 				"$objDir/ApiVersion.o",
+				"$objDir/GtkFileChooser.o",
+				"$objDir/GtkMessageDialog.o",
+				"$objDir/JNIUtils.o",
 				"$objDir/X11WmUtils.o",
 
 				"-L${layout.projectDirectory}/lib/aarch64",
 				"-ljawt",
+				"-lgtk-3",
 			)
 
 			doLast {

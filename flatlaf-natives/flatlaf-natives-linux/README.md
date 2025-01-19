@@ -43,6 +43,16 @@ Only on x86_64 Linux for cross-compiling for arm64 architecture:
 sudo apt install g++-aarch64-linux-gnu
 ~~~
 
+Download `libgtk-3.so` for arm64 architecture:
+
+~~~
+cd flatlaf-natives/flatlaf-natives-linux/lib/aarch64
+wget --no-verbose https://ports.ubuntu.com/pool/main/g/gtk%2b3.0/libgtk-3-0_3.24.18-1ubuntu1_arm64.deb
+ar -x libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+tar -xvf data.tar.xz --wildcards --to-stdout "./usr/lib/aarch64-linux-gnu/libgtk-3.so.0.*" > libgtk-3.so
+rm libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+~~~
+
 
 ### Fedora
 

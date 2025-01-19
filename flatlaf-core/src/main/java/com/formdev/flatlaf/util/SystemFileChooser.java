@@ -49,8 +49,8 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  * If there are no compile errors, then there is a good chance that it works without further changes.
  * If there are compile errors, then you're using a feature that {@code SystemFileChooser} does not support.
  * <p>
- * Supported platforms are <b>Windows 10+</b>, <b>macOS 10.14+</b> and <b>Linux GTK 3</b>.
- * {@code JFileChooser} is used on unsupported platforms.
+ * Supported platforms are <b>Windows 10+</b>, <b>macOS 10.14+</b> and <b>Linux with GTK 3</b>.
+ * {@code JFileChooser} is used on unsupported platforms or if GTK 3 is not installed.
  * <p>
  * {@code SystemFileChooser} requires FlatLaf native libraries (usually contained in flatlaf.jar).
  * If not available or disabled (via {@link FlatSystemProperties#USE_NATIVE_LIBRARY}
@@ -421,7 +421,7 @@ public class SystemFileChooser
 			return new WindowsFileChooserProvider();
 		else if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() )
 			return new MacFileChooserProvider();
-		else if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isLoaded() )
+		else if( SystemInfo.isLinux && FlatNativeLinuxLibrary.isLoaded() && FlatNativeLinuxLibrary.isGtk3Available() )
 			return new LinuxFileChooserProvider();
 		else // unknown platform or FlatLaf native library not loaded
 			return new SwingFileChooserProvider();

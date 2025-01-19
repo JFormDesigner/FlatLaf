@@ -49,7 +49,7 @@ public class FlatSystemFileChooserLinuxTest
 			}
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserLinuxTest" );
-			addListeners( frame );
+//			addListeners( frame );
 			frame.showFrame( FlatSystemFileChooserLinuxTest::new );
 		} );
 	}
@@ -133,6 +133,8 @@ public class FlatSystemFileChooserLinuxTest
 			}
 			return true;
 		};
+
+		System.out.println( FlatNativeLinuxLibrary.isGtk3Available() );
 
 		if( direct ) {
 			String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, open,
