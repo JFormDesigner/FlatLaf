@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- macOS: Re-enabled rounded popup border (see PR #772) on macOS 14.4+ (was
+  disabled in 3.5.x).
 - CheckBox: Support styling indeterminate state of
   [tri-state check boxes](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html).
   (PR #936; issue #919)
