@@ -23,7 +23,9 @@ import java.awt.Window;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -63,10 +65,10 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li><b>Open File</b> and <b>Select Folder</b> dialogs always warn about not existing files/folders.
  *       The operating system shows a warning dialog to inform the user.
  *       It is not possible to customize that warning dialog.
- *       The file chooser stays open.
+ *       The file dialog stays open.
  *   <li><b>Save File</b> dialog always asks whether an existing file should be overwritten.
  *       The operating system shows a question dialog to ask the user whether he wants to overwrite the file or not.
- *       If user selects "Yes", the file chooser closes. If user selects "No", the file chooser stays open.
+ *       If user selects "Yes", the file dialog closes. If user selects "No", the file dialog stays open.
  *       It is not possible to customize that question dialog.
  *   <li><b>Save File</b> dialog does not support multi-selection.
  *   <li>For selection mode {@link #DIRECTORIES_ONLY}, dialog type {@link #SAVE_DIALOG} is ignored.
@@ -83,6 +85,9 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *       Use {@code chooser.addChoosableFileFilter( chooser.getAcceptAllFileFilter() )}
  *       to place <b>All Files</b> filter somewhere else.
  *   <li>Accessory components are not supported.
+ *   <li><b>macOS</b>: By default, the user can not navigate into file packages (e.g. applications).
+ *       If needed, this can be enabled by setting platform property
+ *       {@link #MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES} to {@code true}.
  * </ul>
  *
  * @author Karl Tauber
@@ -135,6 +140,112 @@ public class SystemFileChooser
 
 	private ApproveCallback approveCallback;
 	private int approveResult = APPROVE_OPTION;
+
+
+	/**
+	 * <b>Windows</b>: Text displayed in front of the filename text field.
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String WINDOWS_FILE_NAME_LABEL = "windows.fileNameLabel";
+
+	/**
+	 * <b>Windows</b>: Folder used as a default if there is not a recently used folder value available.
+	 * Windows somewhere stores default folder on a per-app basis.
+	 * So this is probably used only once when the app opens a file dialog for first time.
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String WINDOWS_DEFAULT_FOLDER = "windows.defaultFolder";
+
+	/**
+	 * <b>Windows</b>: Default extension to be added to file name in save dialog.
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String WINDOWS_DEFAULT_EXTENSION = "windows.defaultExtension";
+
+	/**
+	 * <b>macOS</b>: Text displayed at top of open/save dialogs.
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_MESSAGE = "mac.message";
+
+	/**
+	 * <b>macOS</b>: Text displayed in front of the filter combobox.
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_FILTER_FIELD_LABEL = "mac.filterFieldLabel";
+
+	/**
+	 * <b>macOS</b>: Text displayed in front of the filename text field in save dialog (not used in open dialog).
+	 * Value type must be {@link String}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_NAME_FIELD_LABEL = "mac.nameFieldLabel";
+
+	/**
+	 * <b>macOS</b>: If {@code true}, displays file packages (e.g. applications) as directories
+	 * and allows the user to navigate into the file package.
+	 * Value type must be {@link Boolean}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES = "mac.treatsFilePackagesAsDirectories";
+
+	/**
+	 * <b>Windows</b>: Low-level options to set. See {@code FOS_*} constants in {@link FlatNativeWindowsLibrary}.
+	 * Options {@code FOS_PICKFOLDERS}, {@code FOS_ALLOWMULTISELECT} and {@code FOS_FORCESHOWHIDDEN} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String WINDOWS_OPTIONS_SET = "windows.optionsSet";
+
+	/**
+	 * <b>Windows</b>: Low-level options to clear. See {@code FOS_*} constants in {@link FlatNativeWindowsLibrary}.
+	 * Options {@code FOS_PICKFOLDERS}, {@code FOS_ALLOWMULTISELECT} and {@code FOS_FORCESHOWHIDDEN} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String WINDOWS_OPTIONS_CLEAR = "windows.optionsClear";
+
+	/**
+	 * <b>macOS</b>: Low-level options to set. See {@code FC_*} constants in {@link FlatNativeMacLibrary}.
+	 * Options {@code FC_canChooseFiles}, {@code FC_canChooseDirectories},
+	 * {@code FC_allowsMultipleSelection} and {@code FC_showsHiddenFiles} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_OPTIONS_SET = "mac.optionsSet";
+
+	/**
+	 * <b>macOS</b>: Low-level options to clear. See {@code FC_*} constants in {@link FlatNativeMacLibrary}.
+	 * Options {@code FC_canChooseFiles}, {@code FC_canChooseDirectories},
+	 * {@code FC_allowsMultipleSelection} and {@code FC_showsHiddenFiles} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String MAC_OPTIONS_CLEAR = "mac.optionsClear";
+
+	/**
+	 * <b>Linux</b>: Low-level options to set. See {@code FC_*} constants in {@link FlatNativeLinuxLibrary}.
+	 * Options {@code FC_select_folder}, {@code FC_select_multiple} and {@code FC_show_hidden} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String LINUX_OPTIONS_SET = "linux.optionsSet";
+
+	/**
+	 * <b>Linux</b>: Low-level options to clear. See {@code FC_*} constants in {@link FlatNativeLinuxLibrary}.
+	 * Options {@code FC_select_folder}, {@code FC_select_multiple} and {@code FC_show_hidden} can not be modified.
+	 * Value type must be {@link Integer}.
+	 * @see #putPlatformProperty(String, Object)
+	 */
+	public static final String LINUX_OPTIONS_CLEAR = "linux.optionsClear";
+
+	private Map<String, Object> platformProperties;
+
 
 	/** @see JFileChooser#JFileChooser() */
 	public SystemFileChooser() {
@@ -472,6 +583,38 @@ public class SystemFileChooser
 		this.approveCallback = approveCallback;
 	}
 
+	@SuppressWarnings( "unchecked" )
+	public <T> T getPlatformProperty( String key ) {
+		return (platformProperties != null) ? (T) platformProperties.get( key ) : null;
+	}
+
+	/**
+	 * Set a platform specific file dialog property.
+	 * <p>
+	 * For supported properties see {@code WINDOWS_}, {@code MAC_} and {@code LINUX_} constants in this class.
+	 *
+	 * <pre>{@code
+	 * chooser.putPlatformProperty( SystemFileChooser.WINDOWS_FILE_NAME_LABEL, "My filename label:" );
+	 * chooser.putPlatformProperty( SystemFileChooser.MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES, true );
+	 * chooser.putPlatformProperty( SystemFileChooser.LINUX_OPTIONS_CLEAR,
+	 *     FlatNativeLinuxLibrary.FC_create_folders | FlatNativeLinuxLibrary.FC_do_overwrite_confirmation );
+	 * }</pre>
+	 */
+	public void putPlatformProperty( String key, Object value ) {
+		if( platformProperties == null )
+			platformProperties = new HashMap<>();
+
+		if( value != null )
+			platformProperties.put( key, value );
+		else
+			platformProperties.remove( key );
+	}
+
+	private int getPlatformOptions( String key, int optionsBlocked ) {
+		Object value = getPlatformProperty( key );
+		return (value instanceof Integer) ? (Integer) value & ~optionsBlocked : 0;
+	}
+
 	private int showDialogImpl( Component parent ) {
 		approveResult = APPROVE_OPTION;
 		File[] files = getProvider().showDialog( parent, this );
@@ -597,8 +740,13 @@ public class SystemFileChooser
 				folder = currentDirectory.getAbsolutePath();
 
 			// options
-			int optionsSet = FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT;
-			int optionsClear = 0;
+			int optionsBlocked = FlatNativeWindowsLibrary.FOS_PICKFOLDERS
+				| FlatNativeWindowsLibrary.FOS_ALLOWMULTISELECT
+				| FlatNativeWindowsLibrary.FOS_FORCESHOWHIDDEN;
+			int optionsSet = fc.getPlatformOptions( WINDOWS_OPTIONS_SET, optionsBlocked );
+			int optionsClear = fc.getPlatformOptions( WINDOWS_OPTIONS_CLEAR, optionsBlocked );
+			if( (optionsClear & FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT) == 0 )
+				optionsSet |= FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT;
 			if( fc.isDirectorySelectionEnabled() )
 				optionsSet |= FlatNativeWindowsLibrary.FOS_PICKFOLDERS;
 			if( fc.isMultiSelectionEnabled() )
@@ -640,8 +788,12 @@ public class SystemFileChooser
 
 			// show system file dialog
 			return FlatNativeWindowsLibrary.showFileChooser( owner, open,
-				fc.getDialogTitle(), approveButtonText, null, fileName,
-				folder, saveAsItem, null, null, optionsSet, optionsClear, callback,
+				fc.getDialogTitle(), approveButtonText,
+				fc.getPlatformProperty( WINDOWS_FILE_NAME_LABEL ),
+				fileName, folder, saveAsItem,
+				fc.getPlatformProperty( WINDOWS_DEFAULT_FOLDER ),
+				fc.getPlatformProperty( WINDOWS_DEFAULT_EXTENSION ),
+				optionsSet, optionsClear, callback,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 
@@ -703,8 +855,14 @@ public class SystemFileChooser
 				directoryURL = currentDirectory.getAbsolutePath();
 
 			// options
-			int optionsSet = FlatNativeMacLibrary.FC_accessoryViewDisclosed;
-			int optionsClear = 0;
+			int optionsBlocked = FlatNativeMacLibrary.FC_canChooseFiles
+				| FlatNativeMacLibrary.FC_canChooseDirectories
+				| FlatNativeMacLibrary.FC_allowsMultipleSelection
+				| FlatNativeMacLibrary.FC_showsHiddenFiles;
+			int optionsSet = fc.getPlatformOptions( MAC_OPTIONS_SET, optionsBlocked );
+			int optionsClear = fc.getPlatformOptions( MAC_OPTIONS_CLEAR, optionsBlocked );
+			if( (optionsClear & FlatNativeMacLibrary.FC_accessoryViewDisclosed) == 0 )
+				optionsSet |= FlatNativeMacLibrary.FC_accessoryViewDisclosed;
 			if( fc.isDirectorySelectionEnabled() ) {
 				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories;
 				optionsClear |= FlatNativeMacLibrary.FC_canChooseFiles;
@@ -714,6 +872,8 @@ public class SystemFileChooser
 				optionsSet |= FlatNativeMacLibrary.FC_allowsMultipleSelection;
 			if( !fc.isFileHidingEnabled() )
 				optionsSet |= FlatNativeMacLibrary.FC_showsHiddenFiles;
+			if( Boolean.TRUE.equals( fc.getPlatformProperty( MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES ) ) )
+				optionsSet |= FlatNativeMacLibrary.FC_treatsFilePackagesAsDirectories;
 
 			// filter
 			int fileTypeIndex = 0;
@@ -742,7 +902,10 @@ public class SystemFileChooser
 
 			// show system file dialog
 			return FlatNativeMacLibrary.showFileChooser( open,
-				fc.getDialogTitle(), fc.getApproveButtonText(), null, null, null,
+				fc.getDialogTitle(), fc.getApproveButtonText(),
+				fc.getPlatformProperty( MAC_MESSAGE ),
+				fc.getPlatformProperty( MAC_FILTER_FIELD_LABEL ),
+				fc.getPlatformProperty( MAC_NAME_FIELD_LABEL ),
 				nameFieldStringValue, directoryURL, optionsSet, optionsClear, callback,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
@@ -811,8 +974,13 @@ public class SystemFileChooser
 				currentFolder = currentDirectory.getAbsolutePath();
 
 			// options
-			int optionsSet = FlatNativeLinuxLibrary.FC_do_overwrite_confirmation;
-			int optionsClear = 0;
+			int optionsBlocked = FlatNativeLinuxLibrary.FC_select_folder
+				| FlatNativeLinuxLibrary.FC_select_multiple
+				| FlatNativeLinuxLibrary.FC_show_hidden;
+			int optionsSet = fc.getPlatformOptions( LINUX_OPTIONS_SET, optionsBlocked );
+			int optionsClear = fc.getPlatformOptions( LINUX_OPTIONS_CLEAR, optionsBlocked );
+			if( (optionsClear & FlatNativeLinuxLibrary.FC_do_overwrite_confirmation) == 0 )
+				optionsSet |= FlatNativeLinuxLibrary.FC_do_overwrite_confirmation;
 			if( fc.isDirectorySelectionEnabled() )
 				optionsSet |= FlatNativeLinuxLibrary.FC_select_folder;
 			if( fc.isMultiSelectionEnabled() )
@@ -1142,7 +1310,7 @@ public class SystemFileChooser
 
 	public static abstract class ApproveContext {
 		/**
-		 * Shows a modal (operating system) message dialog as child of the system file chooser.
+		 * Shows a modal (operating system) message dialog as child of the system file dialog.
 		 * <p>
 		 * Use this instead of {@link JOptionPane} in approve callbacks.
 		 *

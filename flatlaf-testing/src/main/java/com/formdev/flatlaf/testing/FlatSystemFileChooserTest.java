@@ -202,6 +202,17 @@ public class FlatSystemFileChooserTest
 		SystemFileChooser.FileFilter[] filters = fc.getChoosableFileFilters();
 		if( filters.length > 0 )
 			fc.setFileFilter( filters[Math.min( Math.max( fileTypeIndex, 0 ), filters.length - 1 )] );
+
+//		fc.putPlatformProperty( SystemFileChooser.WINDOWS_FILE_NAME_LABEL, "My filename label:" );
+//		fc.putPlatformProperty( SystemFileChooser.WINDOWS_OPTIONS_SET, FlatNativeWindowsLibrary.FOS_HIDEMRUPLACES );
+
+//		fc.putPlatformProperty( SystemFileChooser.MAC_MESSAGE, "some message" );
+//		fc.putPlatformProperty( SystemFileChooser.MAC_NAME_FIELD_LABEL, "My name label:" );
+//		fc.putPlatformProperty( SystemFileChooser.MAC_FILTER_FIELD_LABEL, "My filter label" );
+//		fc.putPlatformProperty( SystemFileChooser.MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES, true );
+//		fc.putPlatformProperty( SystemFileChooser.MAC_OPTIONS_CLEAR, FlatNativeMacLibrary.FC_showsTagField );
+
+//		fc.putPlatformProperty( SystemFileChooser.LINUX_OPTIONS_CLEAR, FlatNativeLinuxLibrary.FC_create_folders | FlatNativeLinuxLibrary.FC_do_overwrite_confirmation );
 	}
 
 	private void configureSwingFileChooser( JFileChooser fc ) {
