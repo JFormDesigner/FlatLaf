@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -81,6 +82,7 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *       as first item and selects it by default.
  *       Use {@code chooser.addChoosableFileFilter( chooser.getAcceptAllFileFilter() )}
  *       to place <b>All Files</b> filter somewhere else.
+ *   <li>Accessory components are not supported.
  * </ul>
  *
  * @author Karl Tauber
@@ -130,6 +132,9 @@ public class SystemFileChooser
 	 * This allows custom ordering the "All Files" filter.
 	 */
 	private boolean keepAcceptAllAtEnd = true;
+
+	private ApproveCallback approveCallback;
+	private int approveResult = APPROVE_OPTION;
 
 	/** @see JFileChooser#JFileChooser() */
 	public SystemFileChooser() {
@@ -407,10 +412,71 @@ public class SystemFileChooser
 		return filters.size() == 1 && filters.get( 0 ) == getAcceptAllFileFilter();
 	}
 
+	public ApproveCallback getApproveCallback() {
+		return approveCallback;
+	}
+
+	/**
+	 * Sets a callback that is invoked when user presses "OK" button (or double-clicks a file).
+	 * The file dialog is still open.
+	 * If the callback returns {@link #CANCEL_OPTION}, then the file dialog stays open.
+	 * If it returns {@link #APPROVE_OPTION} (or any other value other than {@link #CANCEL_OPTION}),
+	 * the file dialog is closed and the {@code show...Dialog()} methods return that value.
+	 * <p>
+	 * The callback has two parameters:
+	 * <ul>
+	 *   <li>{@code File[] selectedFiles} - one or more selected files
+	 *   <li>{@code ApproveContext context} - context object that provides additional methods
+	 * </ul>
+	 *
+	 * <pre>{@code
+	 * chooser.setApproveCallback( (selectedFiles, context) -> {
+	 *     // do something
+	 *     return SystemFileChooser.APPROVE_OPTION; // or SystemFileChooser.CANCEL_OPTION
+	 * } );
+	 * }</pre>
+	 *
+	 * or
+	 *
+	 * <pre>{@code
+	 * chooser.setApproveCallback( this::approveCallback );
+	 *
+	 * ...
+	 *
+	 * private boolean approveCallback( File[] selectedFiles, ApproveContext context ) {
+	 *     // do something
+	 *     return SystemFileChooser.APPROVE_OPTION; // or SystemFileChooser.CANCEL_OPTION
+	 * }
+	 * }</pre>
+	 *
+	 * <b>WARNING:</b> Do not show a Swing dialog for the callback. This will not work!
+	 * <p>
+	 * Instead use {@link ApproveContext#showMessageDialog(int, String, String, int, String...)},
+	 * which shows a modal system message dialog as child of the file dialog.
+	 *
+	 * <pre>{@code
+	 * chooser.setApproveCallback( (selectedFiles, context) -> {
+	 *     if( !selectedFiles[0].getName().startsWith( "blabla" ) ) {
+	 *         context.showMessageDialog( JOptionPane.WARNING_MESSAGE,
+	 *             "File name must start with 'blabla' :)", null, 0 );
+	 *         return SystemFileChooser.CANCEL_OPTION;
+	 *     }
+	 *     return SystemFileChooser.APPROVE_OPTION;
+	 * } );
+	 * }</pre>
+	 *
+	 * @see ApproveContext
+	 * @see JFileChooser#approveSelection()
+	 */
+	public void setApproveCallback( ApproveCallback approveCallback ) {
+		this.approveCallback = approveCallback;
+	}
+
 	private int showDialogImpl( Component parent ) {
+		approveResult = APPROVE_OPTION;
 		File[] files = getProvider().showDialog( parent, this );
 		setSelectedFiles( files );
-		return (files != null) ? APPROVE_OPTION : CANCEL_OPTION;
+		return (files != null) ? approveResult : CANCEL_OPTION;
 	}
 
 	private FileChooserProvider getProvider() {
@@ -464,14 +530,31 @@ public class SystemFileChooser
 				return null;
 
 			// convert file names to file objects
+			return filenames2files( filenames );
+		}
+
+		abstract String[] showSystemDialog( Window owner, SystemFileChooser fc );
+
+		boolean invokeApproveCallback( SystemFileChooser fc, String[] files, ApproveContext context ) {
+			if( files == null || files.length == 0 )
+				return false; // should never happen
+
+			ApproveCallback approveCallback = fc.getApproveCallback();
+			int result = approveCallback.approve( filenames2files( files ), context );
+			if( result == CANCEL_OPTION )
+				return false;
+
+			fc.approveResult = result;
+			return true;
+		}
+
+		private static File[] filenames2files( String[] filenames ) {
 			FileSystemView fsv = FileSystemView.getFileSystemView();
 			File[] files = new File[filenames.length];
 			for( int i = 0; i < filenames.length; i++ )
 				files[i] = fsv.createFileObject( filenames[i] );
 			return files;
 		}
-
-		abstract String[] showSystemDialog( Window owner, SystemFileChooser fc );
 	}
 
 	//---- class WindowsFileChooserProvider -----------------------------------
@@ -549,11 +632,49 @@ public class SystemFileChooser
 				}
 			}
 
+			// callback
+			FlatNativeWindowsLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
+				? (files, hwndFileDialog) -> {
+					return invokeApproveCallback( fc, files, new WindowsApproveContext( hwndFileDialog ) );
+				} : null;
+
 			// show system file dialog
 			return FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText, null, fileName,
-				folder, saveAsItem, null, null, optionsSet, optionsClear, null,
+				folder, saveAsItem, null, null, optionsSet, optionsClear, callback,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+		}
+
+		//---- class WindowsApproveContext ----
+
+		private static class WindowsApproveContext
+			extends ApproveContext
+		{
+			private final long hwndFileDialog;
+
+			WindowsApproveContext( long hwndFileDialog ) {
+				this.hwndFileDialog = hwndFileDialog;
+			}
+
+			@Override
+			public int showMessageDialog( int messageType, String primaryText,
+				String secondaryText, int defaultButton, String... buttons )
+			{
+				// concat primary and secondary texts
+				if( secondaryText != null )
+					primaryText = primaryText + "\n\n" + secondaryText;
+
+				// button menmonics ("&" -> "&&", "__" -> "_", "_" -> "&")
+				for( int i = 0; i < buttons.length; i++ )
+					buttons[i] = buttons[i].replace( "&", "&&" ).replace( "__", "\u0001" ).replace( '_', '&' ).replace( '\u0001', '_' );
+
+				// use "OK" button if no buttons given
+				if( buttons.length == 0 )
+					buttons = new String[] { UIManager.getString( "OptionPane.okButtonText", Locale.getDefault() ) };
+
+				return FlatNativeWindowsLibrary.showMessageDialog( hwndFileDialog,
+					messageType, null, primaryText, defaultButton, buttons );
+			}
 		}
 	}
 
@@ -613,11 +734,41 @@ public class SystemFileChooser
 				}
 			}
 
+			// callback
+			FlatNativeMacLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
+				? (files, hwndFileDialog) -> {
+					return invokeApproveCallback( fc, files, new MacApproveContext( hwndFileDialog ) );
+				} : null;
+
 			// show system file dialog
 			return FlatNativeMacLibrary.showFileChooser( open,
 				fc.getDialogTitle(), fc.getApproveButtonText(), null, null, null,
-				nameFieldStringValue, directoryURL, optionsSet, optionsClear, null,
+				nameFieldStringValue, directoryURL, optionsSet, optionsClear, callback,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+		}
+
+		//---- class MacApproveContext ----
+
+		private static class MacApproveContext
+			extends ApproveContext
+		{
+			private final long hwndFileDialog;
+
+			MacApproveContext( long hwndFileDialog ) {
+				this.hwndFileDialog = hwndFileDialog;
+			}
+
+			@Override
+			public int showMessageDialog( int messageType, String primaryText,
+				String secondaryText, int defaultButton, String... buttons )
+			{
+				// remove button menmonics ("__" -> "_", "_" -> "")
+				for( int i = 0; i < buttons.length; i++ )
+					buttons[i] = buttons[i].replace( "__", "\u0001" ).replace( "_", "" ).replace( "\u0001", "_" );
+
+				return FlatNativeMacLibrary.showMessageDialog( hwndFileDialog,
+					messageType, primaryText, secondaryText, defaultButton, buttons );
+			}
 		}
 	}
 
@@ -690,10 +841,17 @@ public class SystemFileChooser
 				}
 			}
 
+			// callback
+			FlatNativeLinuxLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
+				? (files, hwndFileDialog) -> {
+					return invokeApproveCallback( fc, files, new LinuxApproveContext( hwndFileDialog ) );
+				} : null;
+
 			// show system file dialog
 			return FlatNativeLinuxLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
-				optionsSet, optionsClear, null, fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				optionsSet, optionsClear, callback,
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
 		}
 
 		private String caseInsensitiveGlobPattern( String ext ) {
@@ -712,6 +870,26 @@ public class SystemFileChooser
 			}
 			return buf.toString();
 		}
+
+		//---- class LinuxApproveContext ----
+
+		private static class LinuxApproveContext
+			extends ApproveContext
+		{
+			private final long hwndFileDialog;
+
+			LinuxApproveContext( long hwndFileDialog ) {
+				this.hwndFileDialog = hwndFileDialog;
+			}
+
+			@Override
+			public int showMessageDialog( int messageType, String primaryText,
+				String secondaryText, int defaultButton, String... buttons )
+			{
+				return FlatNativeLinuxLibrary.showMessageDialog( hwndFileDialog,
+					messageType, primaryText, secondaryText, defaultButton, buttons );
+			}
+		}
 	}
 
 	//---- class SwingFileChooserProvider -------------------------------------
@@ -727,6 +905,8 @@ public class SystemFileChooser
 					File[] files = isMultiSelectionEnabled()
 						? getSelectedFiles()
 						: new File[] { getSelectedFile() };
+					if( files == null || files.length == 0 )
+						return; // should never happen
 
 					if( getDialogType() == OPEN_DIALOG || isDirectorySelectionEnabled() ) {
 						if( !checkMustExist( this, files ) )
@@ -735,6 +915,17 @@ public class SystemFileChooser
 						if( !checkOverwrite( this, files ) )
 							return;
 					}
+
+					// callback
+					ApproveCallback approveCallback = fc.getApproveCallback();
+					if( approveCallback != null ) {
+						int result = approveCallback.approve( files, new SwingApproveContext( this ) );
+						if( result == CANCEL_OPTION )
+							return;
+
+						fc.approveResult = result;
+					}
+
 					super.approveSelection();
 				}
 			};
@@ -831,6 +1022,47 @@ public class SystemFileChooser
 			}
 			return true;
 		}
+
+		//---- class SwingApproveContext ----
+
+		private static class SwingApproveContext
+			extends ApproveContext
+		{
+			private final JFileChooser chooser;
+
+			SwingApproveContext( JFileChooser chooser ) {
+				this.chooser = chooser;
+			}
+
+			@Override
+			public int showMessageDialog( int messageType, String primaryText,
+				String secondaryText, int defaultButton, String... buttons )
+			{
+				// title
+				String title = chooser.getDialogTitle();
+				if( title == null ) {
+					Window window = SwingUtilities.windowForComponent( chooser );
+					if( window instanceof JDialog )
+						title = ((JDialog)window).getTitle();
+				}
+
+				// concat primary and secondary texts
+				if( secondaryText != null )
+					primaryText = primaryText + "\n\n" + secondaryText;
+
+				// remove button menmonics ("__" -> "_", "_" -> "")
+				for( int i = 0; i < buttons.length; i++ )
+					buttons[i] = buttons[i].replace( "__", "\u0001" ).replace( "_", "" ).replace( "\u0001", "_" );
+
+				// use "OK" button if no buttons given
+				if( buttons.length == 0 )
+					buttons = new String[] { UIManager.getString( "OptionPane.okButtonText", Locale.getDefault() ) };
+
+				return JOptionPane.showOptionDialog( chooser,
+					primaryText, title, JOptionPane.YES_NO_OPTION, messageType,
+					null, buttons, buttons[Math.min( Math.max( defaultButton, 0 ), buttons.length - 1 )] );
+			}
+		}
 	}
 
 	//---- class FileFilter ---------------------------------------------------
@@ -891,5 +1123,42 @@ public class SystemFileChooser
 		public String getDescription() {
 			return UIManager.getString( "FileChooser.acceptAllFileFilterText" );
 		}
+	}
+
+	//---- class ApproveCallback ----------------------------------------------
+
+	public interface ApproveCallback {
+		/**
+		 * @param selectedFiles one or more selected files
+		 * @param context context object that provides additional methods
+		 * @return If the callback returns {@link #CANCEL_OPTION}, then the file dialog stays open.
+		 *         If it returns {@link #APPROVE_OPTION} (or any other value other than {@link #CANCEL_OPTION}),
+		 *         the file dialog is closed and the {@code show...Dialog()} methods return that value.
+		 */
+		int approve( File[] selectedFiles, ApproveContext context );
+	}
+
+	//---- class ApproveContext -----------------------------------------------
+
+	public static abstract class ApproveContext {
+		/**
+		 * Shows a modal (operating system) message dialog as child of the system file chooser.
+		 * <p>
+		 * Use this instead of {@link JOptionPane} in approve callbacks.
+		 *
+		 * @param messageType type of message being displayed:
+		 *        {@link JOptionPane#ERROR_MESSAGE}, {@link JOptionPane#INFORMATION_MESSAGE},
+		 *        {@link JOptionPane#WARNING_MESSAGE}, {@link JOptionPane#QUESTION_MESSAGE} or
+		 *        {@link JOptionPane#PLAIN_MESSAGE}
+		 * @param primaryText primary text
+		 * @param secondaryText secondary text; shown below of primary text; or {@code null}
+		 * @param defaultButton index of the default button, which can be pressed using ENTER key
+		 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown.
+		 *        Use '_' for mnemonics (e.g. "_Choose")
+		 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
+		 * @return index of pressed button; or -1 for ESC key
+		 */
+		public abstract int showMessageDialog( int messageType, String primaryText,
+			String secondaryText, int defaultButton, String... buttons );
 	}
 }
