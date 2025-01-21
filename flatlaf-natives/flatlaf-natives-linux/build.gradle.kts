@@ -70,7 +70,8 @@ tasks {
 			// for GTK
 			"/usr/include/gtk-3.0",
 			"/usr/include/glib-2.0",
-			"/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+			if( name.contains( "X86-64" ) ) "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+									   else "/usr/lib/aarch64-linux-gnu/glib-2.0/include",
 			"/usr/include/gdk-pixbuf-2.0",
 			"/usr/include/atk-1.0",
 			"/usr/include/cairo",
@@ -191,6 +192,7 @@ tasks {
 				"$objDir/JNIUtils.o",
 				"$objDir/X11WmUtils.o",
 
+				"-lstdc++",
 				"-L${layout.projectDirectory}/lib/aarch64",
 				"-ljawt",
 				"-lgtk-3",
