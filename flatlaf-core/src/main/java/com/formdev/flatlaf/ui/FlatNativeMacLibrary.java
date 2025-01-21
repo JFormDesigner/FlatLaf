@@ -99,6 +99,8 @@ public class FlatNativeMacLibrary
 	 * the file dialog. It is highly recommended to invoke it from a new thread
 	 * to avoid blocking the AWT event dispatching thread.
 	 *
+	 * @param owner the owner of the file dialog; or {@code null}
+	 * @param dark appearance of the file dialog: {@code 1} = dark, {@code 0} = light, {@code -1} = default
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed at top of save dialog (not used in open dialog); or {@code null}
 	 * @param prompt text displayed in default button; or {@code null}
@@ -120,7 +122,7 @@ public class FlatNativeMacLibrary
 	 *
 	 * @since 3.6
 	 */
-	public native static String[] showFileChooser( boolean open,
+	public native static String[] showFileChooser( Window owner, int dark, boolean open,
 		String title, String prompt, String message, String filterFieldLabel,
 		String nameFieldLabel, String nameFieldStringValue, String directoryURL,
 		int optionsSet, int optionsClear, FileChooserCallback callback,

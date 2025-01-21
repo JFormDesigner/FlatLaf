@@ -51,6 +51,11 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showMess
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		NSAlert* alert = [[NSAlert alloc] init];
 
+		// use appearance from parent window
+		NSWindow* parent = (NSWindow*) hwndParent;
+		if( parent != NULL )
+			alert.window.appearance = parent.appearance;
+
 		// use empty string because if alert.messageText is not set it displays "Alert"
 		alert.messageText = (nsMessageText != NULL) ? nsMessageText : @"";
 		if( nsInformativeText != NULL )

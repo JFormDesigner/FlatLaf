@@ -28,6 +28,7 @@ import java.awt.event.WindowStateListener;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
@@ -87,6 +88,7 @@ public class FlatSystemFileChooserMacTest
 	}
 
 	private void openOrSave( boolean open, boolean direct ) {
+		Window owner = SwingUtilities.windowForComponent( this );
 		String title = n( titleField.getText() );
 		String prompt = n( promptField.getText() );
 		String message = n( messageField.getText() );
@@ -146,8 +148,9 @@ public class FlatSystemFileChooserMacTest
 			return true;
 		};
 
+		int dark = FlatLaf.isLafDark() ? 1 : 0;
 		if( direct ) {
-			String[] files = FlatNativeMacLibrary.showFileChooser( open,
+			String[] files = FlatNativeMacLibrary.showFileChooser( owner, dark, open,
 				title, prompt, message, filterFieldLabel,
 				nameFieldLabel, nameFieldStringValue, directoryURL,
 				optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes );
@@ -158,7 +161,7 @@ public class FlatSystemFileChooserMacTest
 
 			String[] fileTypes2 = fileTypes;
 			new Thread( () -> {
-				String[] files = FlatNativeMacLibrary.showFileChooser( open,
+				String[] files = FlatNativeMacLibrary.showFileChooser( owner, dark, open,
 					title, prompt, message, filterFieldLabel,
 					nameFieldLabel, nameFieldStringValue, directoryURL,
 					optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes2 );

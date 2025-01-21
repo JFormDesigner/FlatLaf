@@ -232,7 +232,7 @@ static NSMutableArray* initFilters( JNIEnv* env, jobjectArray fileTypes ) {
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showFileChooser
-	( JNIEnv* env, jclass cls, jboolean open,
+	( JNIEnv* env, jclass cls, jobject owner, jint dark, jboolean open,
 		jstring title, jstring prompt, jstring message, jstring filterFieldLabel,
 		jstring nameFieldLabel, jstring nameFieldStringValue, jstring directoryURL,
 		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
@@ -261,6 +261,12 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		JNI_COCOA_TRY()
 
 		NSSavePanel* dialog = open ? [NSOpenPanel openPanel] : [NSSavePanel savePanel];
+
+		// set appearance
+		if( dark == 1 )
+			dialog.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+		else if( dark == 0 )
+			dialog.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
 
 		if( nsTitle != NULL )
 			dialog.title = nsTitle;

@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeLinuxLibrary;
 import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
@@ -837,6 +838,7 @@ public class SystemFileChooser
 	{
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
+			int dark = FlatLaf.isLafDark() ? 1 : 0;
 			boolean open = (fc.getDialogType() == OPEN_DIALOG);
 			String nameFieldStringValue = null;
 			String directoryURL = null;
@@ -901,7 +903,7 @@ public class SystemFileChooser
 				} : null;
 
 			// show system file dialog
-			return FlatNativeMacLibrary.showFileChooser( open,
+			return FlatNativeMacLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), fc.getApproveButtonText(),
 				fc.getPlatformProperty( MAC_MESSAGE ),
 				fc.getPlatformProperty( MAC_FILTER_FIELD_LABEL ),
