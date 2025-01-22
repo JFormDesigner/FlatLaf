@@ -17,20 +17,16 @@
 package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.ui.FlatNativeMacLibrary.*;
-import java.awt.EventQueue;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
+import com.formdev.flatlaf.testing.FlatSystemFileChooserTest.DummyModalDialog;
 import com.formdev.flatlaf.ui.FlatNativeMacLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
@@ -44,6 +40,10 @@ public class FlatSystemFileChooserMacTest
 	public static void main( String[] args ) {
 		// macOS  (see https://www.formdev.com/flatlaf/macos/)
 		if( SystemInfo.isMacOS ) {
+			// enable screen menu bar
+			// (moves menu bar from JFrame window to top of screen)
+			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+
 			// appearance of window title bars
 			// possible values:
 			//   - "system": use current macOS appearance (light or dark)
@@ -60,8 +60,9 @@ public class FlatSystemFileChooserMacTest
 			}
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserMacTest" );
-//			addListeners( frame );
+			FlatSystemFileChooserTest.addListeners( frame );
 			frame.showFrame( FlatSystemFileChooserMacTest::new );
+			frame.setJMenuBar( menuBar1 );
 		} );
 	}
 
@@ -88,7 +89,16 @@ public class FlatSystemFileChooserMacTest
 	}
 
 	private void openOrSave( boolean open, boolean direct ) {
-		Window owner = SwingUtilities.windowForComponent( this );
+		Window frame = SwingUtilities.windowForComponent( this );
+		if( ownerFrameRadioButton.isSelected() )
+			openOrSave( open, direct, frame );
+		else if( ownerDialogRadioButton.isSelected() )
+			new DummyModalDialog( frame, owner -> openOrSave( open, direct, owner ) ).setVisible( true );
+		else
+			openOrSave( open, direct, null );
+	}
+
+	private void openOrSave( boolean open, boolean direct, Window owner ) {
 		String title = n( titleField.getText() );
 		String prompt = n( promptField.getText() );
 		String message = n( messageField.getText() );
@@ -168,7 +178,7 @@ public class FlatSystemFileChooserMacTest
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
-				EventQueue.invokeLater( () -> {
+				SwingUtilities.invokeLater( () -> {
 					filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
 				} );
 			} ).start();
@@ -189,75 +199,27 @@ public class FlatSystemFileChooserMacTest
 			optionsClear.set( optionsClear.get() | option );
 	}
 
-	@SuppressWarnings( "unused" )
-	private static void addListeners( Window w ) {
-		w.addWindowListener( new WindowListener() {
-			@Override
-			public void windowOpened( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowIconified( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowDeiconified( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowDeactivated( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowClosing( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowClosed( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowActivated( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
-		w.addWindowStateListener( new WindowStateListener() {
-			@Override
-			public void windowStateChanged( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
-		w.addWindowFocusListener( new WindowFocusListener() {
-			@Override
-			public void windowLostFocus( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowGainedFocus( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
+	private void menuItemAction() {
+		System.out.println( "menu item action" );
 	}
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		titleLabel = new JLabel();
+		JLabel ownerLabel = new JLabel();
+		ownerFrameRadioButton = new JRadioButton();
+		ownerDialogRadioButton = new JRadioButton();
+		ownerNullRadioButton = new JRadioButton();
+		JPanel ownerSpacer = new JPanel(null);
+		JLabel titleLabel = new JLabel();
 		titleField = new JTextField();
-		panel1 = new JPanel();
-		options1Label = new JLabel();
+		JPanel panel1 = new JPanel();
+		JLabel options1Label = new JLabel();
 		canChooseFilesCheckBox = new JCheckBox();
 		canChooseDirectoriesCheckBox = new JCheckBox();
 		resolvesAliasesCheckBox = new FlatTriStateCheckBox();
 		allowsMultipleSelectionCheckBox = new FlatTriStateCheckBox();
 		accessoryViewDisclosedCheckBox = new JCheckBox();
-		options2Label = new JLabel();
+		JLabel options2Label = new JLabel();
 		showsTagFieldCheckBox = new FlatTriStateCheckBox();
 		canCreateDirectoriesCheckBox = new FlatTriStateCheckBox();
 		canSelectHiddenExtensionCheckBox = new FlatTriStateCheckBox();
@@ -265,31 +227,38 @@ public class FlatSystemFileChooserMacTest
 		extensionHiddenCheckBox = new FlatTriStateCheckBox();
 		allowsOtherFileTypesCheckBox = new FlatTriStateCheckBox();
 		treatsFilePackagesAsDirectoriesCheckBox = new FlatTriStateCheckBox();
-		options3Label = new JLabel();
+		JLabel options3Label = new JLabel();
 		showSingleFilterFieldCheckBox = new JCheckBox();
-		promptLabel = new JLabel();
+		JLabel promptLabel = new JLabel();
 		promptField = new JTextField();
-		messageLabel = new JLabel();
+		JLabel messageLabel = new JLabel();
 		messageField = new JTextField();
-		filterFieldLabelLabel = new JLabel();
+		JLabel filterFieldLabelLabel = new JLabel();
 		filterFieldLabelField = new JTextField();
-		nameFieldLabelLabel = new JLabel();
+		JLabel nameFieldLabelLabel = new JLabel();
 		nameFieldLabelField = new JTextField();
-		nameFieldStringValueLabel = new JLabel();
+		JLabel nameFieldStringValueLabel = new JLabel();
 		nameFieldStringValueField = new JTextField();
-		directoryURLLabel = new JLabel();
+		JLabel directoryURLLabel = new JLabel();
 		directoryURLField = new JTextField();
-		fileTypesLabel = new JLabel();
+		JLabel fileTypesLabel = new JLabel();
 		fileTypesField = new JComboBox<>();
-		fileTypeIndexLabel = new JLabel();
+		JLabel fileTypeIndexLabel = new JLabel();
 		fileTypeIndexSlider = new JSlider();
-		openButton = new JButton();
-		saveButton = new JButton();
-		openDirectButton = new JButton();
-		saveDirectButton = new JButton();
+		JButton openButton = new JButton();
+		JButton saveButton = new JButton();
+		JButton openDirectButton = new JButton();
+		JButton saveDirectButton = new JButton();
 		showMessageDialogOnOKCheckBox = new JCheckBox();
-		filesScrollPane = new JScrollPane();
+		JScrollPane filesScrollPane = new JScrollPane();
 		filesField = new JTextArea();
+		menuBar1 = new JMenuBar();
+		JMenu menu1 = new JMenu();
+		JMenuItem menuItem1 = new JMenuItem();
+		JMenuItem menuItem2 = new JMenuItem();
+		JMenu menu2 = new JMenu();
+		JMenuItem menuItem3 = new JMenuItem();
+		JMenuItem menuItem4 = new JMenuItem();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -310,12 +279,31 @@ public class FlatSystemFileChooserMacTest
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
 			"[grow,fill]"));
+
+		//---- ownerLabel ----
+		ownerLabel.setText("owner");
+		add(ownerLabel, "cell 0 0");
+
+		//---- ownerFrameRadioButton ----
+		ownerFrameRadioButton.setText("JFrame");
+		ownerFrameRadioButton.setSelected(true);
+		add(ownerFrameRadioButton, "cell 1 0");
+
+		//---- ownerDialogRadioButton ----
+		ownerDialogRadioButton.setText("JDialog");
+		add(ownerDialogRadioButton, "cell 1 0");
+
+		//---- ownerNullRadioButton ----
+		ownerNullRadioButton.setText("null");
+		add(ownerNullRadioButton, "cell 1 0");
+		add(ownerSpacer, "cell 1 0,growx");
 
 		//---- titleLabel ----
 		titleLabel.setText("title");
-		add(titleLabel, "cell 0 0");
-		add(titleField, "cell 1 0");
+		add(titleLabel, "cell 0 1");
+		add(titleField, "cell 1 1");
 
 		//======== panel1 ========
 		{
@@ -407,41 +395,41 @@ public class FlatSystemFileChooserMacTest
 			showSingleFilterFieldCheckBox.setText("showSingleFilterField");
 			panel1.add(showSingleFilterFieldCheckBox, "cell 0 15");
 		}
-		add(panel1, "cell 2 0 1 10,aligny top,growy 0");
+		add(panel1, "cell 2 1 1 10,aligny top,growy 0");
 
 		//---- promptLabel ----
 		promptLabel.setText("prompt");
-		add(promptLabel, "cell 0 1");
-		add(promptField, "cell 1 1");
+		add(promptLabel, "cell 0 2");
+		add(promptField, "cell 1 2");
 
 		//---- messageLabel ----
 		messageLabel.setText("message");
-		add(messageLabel, "cell 0 2");
-		add(messageField, "cell 1 2");
+		add(messageLabel, "cell 0 3");
+		add(messageField, "cell 1 3");
 
 		//---- filterFieldLabelLabel ----
 		filterFieldLabelLabel.setText("filterFieldLabel");
-		add(filterFieldLabelLabel, "cell 0 3");
-		add(filterFieldLabelField, "cell 1 3");
+		add(filterFieldLabelLabel, "cell 0 4");
+		add(filterFieldLabelField, "cell 1 4");
 
 		//---- nameFieldLabelLabel ----
 		nameFieldLabelLabel.setText("nameFieldLabel");
-		add(nameFieldLabelLabel, "cell 0 4");
-		add(nameFieldLabelField, "cell 1 4");
+		add(nameFieldLabelLabel, "cell 0 5");
+		add(nameFieldLabelField, "cell 1 5");
 
 		//---- nameFieldStringValueLabel ----
 		nameFieldStringValueLabel.setText("nameFieldStringValue");
-		add(nameFieldStringValueLabel, "cell 0 5");
-		add(nameFieldStringValueField, "cell 1 5");
+		add(nameFieldStringValueLabel, "cell 0 6");
+		add(nameFieldStringValueField, "cell 1 6");
 
 		//---- directoryURLLabel ----
 		directoryURLLabel.setText("directoryURL");
-		add(directoryURLLabel, "cell 0 6");
-		add(directoryURLField, "cell 1 6");
+		add(directoryURLLabel, "cell 0 7");
+		add(directoryURLField, "cell 1 7");
 
 		//---- fileTypesLabel ----
 		fileTypesLabel.setText("fileTypes");
-		add(fileTypesLabel, "cell 0 7");
+		add(fileTypesLabel, "cell 0 8");
 
 		//---- fileTypesField ----
 		fileTypesField.setEditable(true);
@@ -452,11 +440,11 @@ public class FlatSystemFileChooserMacTest
 			"Text and PDF Files,txt,pdf,null",
 			"Compressed,zip,gz,null,Disk Images,dmg,null"
 		}));
-		add(fileTypesField, "cell 1 7");
+		add(fileTypesField, "cell 1 8");
 
 		//---- fileTypeIndexLabel ----
 		fileTypeIndexLabel.setText("fileTypeIndex");
-		add(fileTypeIndexLabel, "cell 0 8");
+		add(fileTypeIndexLabel, "cell 0 9");
 
 		//---- fileTypeIndexSlider ----
 		fileTypeIndexSlider.setMaximum(10);
@@ -464,31 +452,31 @@ public class FlatSystemFileChooserMacTest
 		fileTypeIndexSlider.setValue(0);
 		fileTypeIndexSlider.setPaintLabels(true);
 		fileTypeIndexSlider.setSnapToTicks(true);
-		add(fileTypeIndexSlider, "cell 1 8");
+		add(fileTypeIndexSlider, "cell 1 9");
 
 		//---- openButton ----
 		openButton.setText("Open...");
 		openButton.addActionListener(e -> open());
-		add(openButton, "cell 0 10 3 1");
+		add(openButton, "cell 0 11 3 1");
 
 		//---- saveButton ----
 		saveButton.setText("Save...");
 		saveButton.addActionListener(e -> save());
-		add(saveButton, "cell 0 10 3 1");
+		add(saveButton, "cell 0 11 3 1");
 
 		//---- openDirectButton ----
 		openDirectButton.setText("Open (no-thread)...");
 		openDirectButton.addActionListener(e -> openDirect());
-		add(openDirectButton, "cell 0 10 3 1");
+		add(openDirectButton, "cell 0 11 3 1");
 
 		//---- saveDirectButton ----
 		saveDirectButton.setText("Save (no-thread)...");
 		saveDirectButton.addActionListener(e -> saveDirect());
-		add(saveDirectButton, "cell 0 10 3 1");
+		add(saveDirectButton, "cell 0 11 3 1");
 
 		//---- showMessageDialogOnOKCheckBox ----
 		showMessageDialogOnOKCheckBox.setText("show message dialog on OK");
-		add(showMessageDialogOnOKCheckBox, "cell 0 10 3 1");
+		add(showMessageDialogOnOKCheckBox, "cell 0 11 3 1");
 
 		//======== filesScrollPane ========
 		{
@@ -497,21 +485,62 @@ public class FlatSystemFileChooserMacTest
 			filesField.setRows(8);
 			filesScrollPane.setViewportView(filesField);
 		}
-		add(filesScrollPane, "cell 0 11 3 1,growx");
+		add(filesScrollPane, "cell 0 12 3 1,growx");
+
+		//======== menuBar1 ========
+		{
+
+			//======== menu1 ========
+			{
+				menu1.setText("text");
+
+				//---- menuItem1 ----
+				menuItem1.setText("text");
+				menuItem1.addActionListener(e -> menuItemAction());
+				menu1.add(menuItem1);
+
+				//---- menuItem2 ----
+				menuItem2.setText("text");
+				menuItem2.addActionListener(e -> menuItemAction());
+				menu1.add(menuItem2);
+			}
+			menuBar1.add(menu1);
+
+			//======== menu2 ========
+			{
+				menu2.setText("text");
+
+				//---- menuItem3 ----
+				menuItem3.setText("text");
+				menuItem3.addActionListener(e -> menuItemAction());
+				menu2.add(menuItem3);
+
+				//---- menuItem4 ----
+				menuItem4.setText("text");
+				menuItem4.addActionListener(e -> menuItemAction());
+				menu2.add(menuItem4);
+			}
+			menuBar1.add(menu2);
+		}
+
+		//---- ownerButtonGroup ----
+		ButtonGroup ownerButtonGroup = new ButtonGroup();
+		ownerButtonGroup.add(ownerFrameRadioButton);
+		ownerButtonGroup.add(ownerDialogRadioButton);
+		ownerButtonGroup.add(ownerNullRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JLabel titleLabel;
+	private JRadioButton ownerFrameRadioButton;
+	private JRadioButton ownerDialogRadioButton;
+	private JRadioButton ownerNullRadioButton;
 	private JTextField titleField;
-	private JPanel panel1;
-	private JLabel options1Label;
 	private JCheckBox canChooseFilesCheckBox;
 	private JCheckBox canChooseDirectoriesCheckBox;
 	private FlatTriStateCheckBox resolvesAliasesCheckBox;
 	private FlatTriStateCheckBox allowsMultipleSelectionCheckBox;
 	private JCheckBox accessoryViewDisclosedCheckBox;
-	private JLabel options2Label;
 	private FlatTriStateCheckBox showsTagFieldCheckBox;
 	private FlatTriStateCheckBox canCreateDirectoriesCheckBox;
 	private FlatTriStateCheckBox canSelectHiddenExtensionCheckBox;
@@ -519,30 +548,17 @@ public class FlatSystemFileChooserMacTest
 	private FlatTriStateCheckBox extensionHiddenCheckBox;
 	private FlatTriStateCheckBox allowsOtherFileTypesCheckBox;
 	private FlatTriStateCheckBox treatsFilePackagesAsDirectoriesCheckBox;
-	private JLabel options3Label;
 	private JCheckBox showSingleFilterFieldCheckBox;
-	private JLabel promptLabel;
 	private JTextField promptField;
-	private JLabel messageLabel;
 	private JTextField messageField;
-	private JLabel filterFieldLabelLabel;
 	private JTextField filterFieldLabelField;
-	private JLabel nameFieldLabelLabel;
 	private JTextField nameFieldLabelField;
-	private JLabel nameFieldStringValueLabel;
 	private JTextField nameFieldStringValueField;
-	private JLabel directoryURLLabel;
 	private JTextField directoryURLField;
-	private JLabel fileTypesLabel;
 	private JComboBox<String> fileTypesField;
-	private JLabel fileTypeIndexLabel;
 	private JSlider fileTypeIndexSlider;
-	private JButton openButton;
-	private JButton saveButton;
-	private JButton openDirectButton;
-	private JButton saveDirectButton;
 	private JCheckBox showMessageDialogOnOKCheckBox;
-	private JScrollPane filesScrollPane;
 	private JTextArea filesField;
+	private static JMenuBar menuBar1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

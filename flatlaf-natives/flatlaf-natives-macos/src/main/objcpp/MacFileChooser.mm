@@ -33,7 +33,7 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 //---- class FileChooserDelegate ----------------------------------------------
 
-@interface FileChooserDelegate : NSObject <NSOpenSavePanelDelegate> {
+@interface FileChooserDelegate : NSObject <NSOpenSavePanelDelegate, NSWindowDelegate> {
 		NSArray* _filters;
 
 		JavaVM* _jvm;
@@ -43,15 +43,15 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 	@property (nonatomic, assign) NSSavePanel* dialog;
 
-	- (void)initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
+	- (void) initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
 		:(NSString*)filterFieldLabel :(bool)showSingleFilterField;
-	- (void)selectFormat: (id)sender;
-	- (void)selectFormatAtIndex: (int)index;
+	- (void) selectFormat: (id)sender;
+	- (void) selectFormatAtIndex: (int)index;
 @end
 
 @implementation FileChooserDelegate
 
-	- (void)initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
+	- (void) initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
 		:(NSString*)filterFieldLabel :(bool)showSingleFilterField
 	{
 		_filters = filters;
@@ -112,12 +112,12 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		[self selectFormatAtIndex:filterIndex];
 	}
 
-	- (void)selectFormat:(id)sender {
+	- (void) selectFormat: (id)sender {
 		NSPopUpButton* popupButton = (NSPopUpButton*) sender;
 		[self selectFormatAtIndex:popupButton.indexOfSelectedItem];
 	}
 
-	- (void)selectFormatAtIndex: (int)index {
+	- (void) selectFormatAtIndex: (int)index {
 		index = MIN( MAX( index, 0 ), _filters.count - 1 );
 		NSArray* fileTypes = [_filters objectAtIndex:index];
 
@@ -129,13 +129,16 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 	//---- NSOpenSavePanelDelegate ----
 
-	- (void)initCallback: (JavaVM*)jvm :(jobject)callback {
+	- (void) initCallback: (JavaVM*)jvm :(jobject)callback {
 		_jvm = jvm;
 		_callback = callback;
 	}
 
-	- (BOOL) panel:(id) sender validateURL:(NSURL*) url error:(NSError**) outError {
+	- (BOOL) panel: (id) sender validateURL:(NSURL*) url error:(NSError**) outError {
 		JNI_COCOA_TRY()
+
+		if( _callback == NULL )
+			return true;
 
 		NSArray* urls = getDialogURLs( sender );
 
@@ -172,6 +175,33 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		JNI_COCOA_CATCH()
 
 		return true;
+	}
+
+	//---- NSWindowDelegate ----
+
+	- (void) windowDidBecomeMain:(NSNotification *) notification {
+		JNI_COCOA_TRY()
+
+		// Disable main menu bar because the file dialog is modal and it should be not possible
+		// to select any menu item. Otherwiese an action could show a Swing dialog, which would
+		// be shown under the file dialog.
+		//
+		// NOTE: It is not necessary to re-enable the main menu bar because Swing does this itself.
+		//       When the file dialog is closed and a Swing window becomes active,
+		//       macOS sends windowDidBecomeMain (and windowDidBecomeKey) message to AWTWindow,
+		//       which invokes [self activateWindowMenuBar],
+		//       which invokes [CMenuBar activate:menuBar modallyDisabled:isDisabled],
+		//       which updates main menu bar.
+		NSMenu* mainMenu = [NSApp mainMenu];
+		int count = [mainMenu numberOfItems];
+		for( int i = 0; i < count; i++ ) {
+			NSMenuItem* menuItem = [mainMenu itemAtIndex:i];
+			NSMenu *subenu = [menuItem submenu];
+			if( [subenu isJavaMenu] )
+				[menuItem setEnabled:NO];
+		}
+
+		JNI_COCOA_CATCH()
 	}
 
 @end
@@ -260,6 +290,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
 
+		// create open/save panel
 		NSSavePanel* dialog = open ? [NSOpenPanel openPanel] : [NSSavePanel savePanel];
 
 		// set appearance
@@ -326,10 +357,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		}
 
 		// initialize callback
-		if( callback != NULL ) {
+		if( callback != NULL )
 			[delegate initCallback :jvm :callback];
-			dialog.delegate = delegate;
-		}
+
+		// set file dialog delegate
+		dialog.delegate = delegate;
 
 		// show dialog
 		NSModalResponse response = [dialog runModal];

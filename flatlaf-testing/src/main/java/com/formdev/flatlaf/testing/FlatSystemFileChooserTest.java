@@ -16,9 +16,12 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -49,6 +52,10 @@ public class FlatSystemFileChooserTest
 	public static void main( String[] args ) {
 		// macOS  (see https://www.formdev.com/flatlaf/macos/)
 		if( SystemInfo.isMacOS ) {
+			// enable screen menu bar
+			// (moves menu bar from JFrame window to top of screen)
+			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+
 			// appearance of window title bars
 			// possible values:
 			//   - "system": use current macOS appearance (light or dark)
@@ -63,6 +70,7 @@ public class FlatSystemFileChooserTest
 			frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE ); // necessary because of JavaFX
 			addListeners( frame );
 			frame.showFrame( FlatSystemFileChooserTest::new );
+			frame.setJMenuBar( menuBar1 );
 		} );
 	}
 
@@ -322,19 +330,9 @@ public class FlatSystemFileChooserTest
 		Window frame = SwingUtilities.windowForComponent( this );
 		if( ownerFrameRadioButton.isSelected() )
 			showConsumer.accept( frame );
-		else if( ownerDialogRadioButton.isSelected() ) {
-			JDialog dialog = new JDialog( frame, "Dummy Modal Dialog", Dialog.DEFAULT_MODALITY_TYPE );
-			dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-			dialog.addWindowListener( new WindowAdapter() {
-				@Override
-				public void windowOpened( WindowEvent e ) {
-					showConsumer.accept( dialog );
-				}
-			} );
-			dialog.setSize( 1200, 1000 );
-			dialog.setLocationRelativeTo( this );
-			dialog.setVisible( true );
-		} else
+		else if( ownerDialogRadioButton.isSelected() )
+			new DummyModalDialog( frame, showConsumer ).setVisible( true );
+		else
 			showConsumer.accept( null );
 	}
 
@@ -423,79 +421,105 @@ public class FlatSystemFileChooserTest
 			DemoPrefs.getState().put( key, value );
 	}
 
-	private static void addListeners( Window w ) {
+	private void menuItemAction() {
+		System.out.println( "menu item action" );
+	}
+
+	static void addListeners( Window w ) {
 		w.addWindowListener( new WindowListener() {
 			@Override
 			public void windowOpened( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowIconified( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowDeiconified( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowDeactivated( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowClosing( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowClosed( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowActivated( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 		} );
 		w.addWindowStateListener( new WindowStateListener() {
 			@Override
 			public void windowStateChanged( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 		} );
 		w.addWindowFocusListener( new WindowFocusListener() {
 			@Override
 			public void windowLostFocus( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 
 			@Override
 			public void windowGainedFocus( WindowEvent e ) {
-				System.out.println( e );
+				printWindowEvent( e );
 			}
 		} );
 	}
 
+	static void printWindowEvent( WindowEvent e ) {
+		String typeStr;
+		switch( e.getID() ) {
+			case WindowEvent.WINDOW_OPENED:			typeStr = "WINDOW_OPENED       "; break;
+			case WindowEvent.WINDOW_CLOSING:		typeStr = "WINDOW_CLOSING      "; break;
+			case WindowEvent.WINDOW_CLOSED:			typeStr = "WINDOW_CLOSED       "; break;
+			case WindowEvent.WINDOW_ICONIFIED:		typeStr = "WINDOW_ICONIFIED    "; break;
+			case WindowEvent.WINDOW_DEICONIFIED:	typeStr = "WINDOW_DEICONIFIED  "; break;
+			case WindowEvent.WINDOW_ACTIVATED:		typeStr = "WINDOW_ACTIVATED    "; break;
+			case WindowEvent.WINDOW_DEACTIVATED:	typeStr = "WINDOW_DEACTIVATED  "; break;
+			case WindowEvent.WINDOW_GAINED_FOCUS:	typeStr = "WINDOW_GAINED_FOCUS "; break;
+			case WindowEvent.WINDOW_LOST_FOCUS:		typeStr = "WINDOW_LOST_FOCUS   "; break;
+			case WindowEvent.WINDOW_STATE_CHANGED:	typeStr = "WINDOW_STATE_CHANGED"; break;
+			default:								typeStr = "unknown type        "; break;
+		}
+		Object source = e.getSource();
+		Window opposite = e.getOppositeWindow();
+		String sourceStr = (source instanceof Component) ? ((Component)source).getName() : String.valueOf( source );
+		String oppositeStr = (opposite != null) ? opposite.getName() : null;
+		System.out.println( typeStr + "  source " + sourceStr + "   opposite " + oppositeStr );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		ownerLabel = new JLabel();
+		JLabel ownerLabel = new JLabel();
 		ownerFrameRadioButton = new JRadioButton();
 		ownerDialogRadioButton = new JRadioButton();
 		ownerNullRadioButton = new JRadioButton();
-		ownerSpacer = new JPanel(null);
-		dialogTitleLabel = new JLabel();
+		JPanel ownerSpacer = new JPanel(null);
+		JLabel dialogTitleLabel = new JLabel();
 		dialogTitleField = new JTextField();
-		panel1 = new JPanel();
+		JPanel panel1 = new JPanel();
 		directorySelectionCheckBox = new JCheckBox();
 		multiSelectionEnabledCheckBox = new JCheckBox();
 		useFileHidingCheckBox = new JCheckBox();
 		useSystemFileChooserCheckBox = new JCheckBox();
-		approveButtonTextLabel = new JLabel();
+		JLabel approveButtonTextLabel = new JLabel();
 		approveButtonTextField = new JTextField();
-		approveButtonMnemonicLabel = new JLabel();
+		JLabel approveButtonMnemonicLabel = new JLabel();
 		approveButtonMnemonicField = new JTextField();
 		currentDirCheckBox = new JCheckBox();
 		currentDirField = new JTextField();
@@ -506,21 +530,28 @@ public class FlatSystemFileChooserTest
 		selectedFilesCheckBox = new JCheckBox();
 		selectedFilesField = new JTextField();
 		selectedFilesChooseButton = new JButton();
-		fileTypesLabel = new JLabel();
+		JLabel fileTypesLabel = new JLabel();
 		fileTypesField = new JComboBox<>();
-		fileTypeIndexLabel = new JLabel();
+		JLabel fileTypeIndexLabel = new JLabel();
 		fileTypeIndexSlider = new JSlider();
 		useAcceptAllFileFilterCheckBox = new JCheckBox();
-		openButton = new JButton();
-		saveButton = new JButton();
-		swingOpenButton = new JButton();
-		swingSaveButton = new JButton();
-		awtOpenButton = new JButton();
-		awtSaveButton = new JButton();
+		JButton openButton = new JButton();
+		JButton saveButton = new JButton();
+		JButton swingOpenButton = new JButton();
+		JButton swingSaveButton = new JButton();
+		JButton awtOpenButton = new JButton();
+		JButton awtSaveButton = new JButton();
 		javafxOpenButton = new JButton();
 		javafxSaveButton = new JButton();
-		outputScrollPane = new JScrollPane();
+		JScrollPane outputScrollPane = new JScrollPane();
 		outputField = new JTextArea();
+		menuBar1 = new JMenuBar();
+		JMenu menu1 = new JMenu();
+		JMenuItem menuItem1 = new JMenuItem();
+		JMenuItem menuItem2 = new JMenuItem();
+		JMenu menu2 = new JMenu();
+		JMenuItem menuItem3 = new JMenuItem();
+		JMenuItem menuItem4 = new JMenuItem();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -722,6 +753,42 @@ public class FlatSystemFileChooserTest
 		}
 		add(outputScrollPane, "cell 0 9 3 1,growx");
 
+		//======== menuBar1 ========
+		{
+
+			//======== menu1 ========
+			{
+				menu1.setText("text");
+
+				//---- menuItem1 ----
+				menuItem1.setText("text");
+				menuItem1.addActionListener(e -> menuItemAction());
+				menu1.add(menuItem1);
+
+				//---- menuItem2 ----
+				menuItem2.setText("text");
+				menuItem2.addActionListener(e -> menuItemAction());
+				menu1.add(menuItem2);
+			}
+			menuBar1.add(menu1);
+
+			//======== menu2 ========
+			{
+				menu2.setText("text");
+
+				//---- menuItem3 ----
+				menuItem3.setText("text");
+				menuItem3.addActionListener(e -> menuItemAction());
+				menu2.add(menuItem3);
+
+				//---- menuItem4 ----
+				menuItem4.setText("text");
+				menuItem4.addActionListener(e -> menuItemAction());
+				menu2.add(menuItem4);
+			}
+			menuBar1.add(menu2);
+		}
+
 		//---- ownerButtonGroup ----
 		ButtonGroup ownerButtonGroup = new ButtonGroup();
 		ownerButtonGroup.add(ownerFrameRadioButton);
@@ -731,21 +798,15 @@ public class FlatSystemFileChooserTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JLabel ownerLabel;
 	private JRadioButton ownerFrameRadioButton;
 	private JRadioButton ownerDialogRadioButton;
 	private JRadioButton ownerNullRadioButton;
-	private JPanel ownerSpacer;
-	private JLabel dialogTitleLabel;
 	private JTextField dialogTitleField;
-	private JPanel panel1;
 	private JCheckBox directorySelectionCheckBox;
 	private JCheckBox multiSelectionEnabledCheckBox;
 	private JCheckBox useFileHidingCheckBox;
 	private JCheckBox useSystemFileChooserCheckBox;
-	private JLabel approveButtonTextLabel;
 	private JTextField approveButtonTextField;
-	private JLabel approveButtonMnemonicLabel;
 	private JTextField approveButtonMnemonicField;
 	private JCheckBox currentDirCheckBox;
 	private JTextField currentDirField;
@@ -756,20 +817,151 @@ public class FlatSystemFileChooserTest
 	private JCheckBox selectedFilesCheckBox;
 	private JTextField selectedFilesField;
 	private JButton selectedFilesChooseButton;
-	private JLabel fileTypesLabel;
 	private JComboBox<String> fileTypesField;
-	private JLabel fileTypeIndexLabel;
 	private JSlider fileTypeIndexSlider;
 	private JCheckBox useAcceptAllFileFilterCheckBox;
-	private JButton openButton;
-	private JButton saveButton;
-	private JButton swingOpenButton;
-	private JButton swingSaveButton;
-	private JButton awtOpenButton;
-	private JButton awtSaveButton;
 	private JButton javafxOpenButton;
 	private JButton javafxSaveButton;
-	private JScrollPane outputScrollPane;
 	private JTextArea outputField;
+	private static JMenuBar menuBar1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class DummyModalDialog ---------------------------------------------
+
+	static class DummyModalDialog
+		extends JDialog
+	{
+		private final Consumer<Window> showConsumer;
+
+		DummyModalDialog( Window owner, Consumer<Window> showConsumer ) {
+			super( owner );
+			this.showConsumer = showConsumer;
+			initComponents();
+			addListeners( this );
+			((JComponent)getContentPane()).registerKeyboardAction(
+				e -> dispose(),
+				KeyStroke.getKeyStroke( "ESCAPE" ),
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+			if( owner != null ) {
+				Point pt = owner.getLocationOnScreen();
+				setLocation( pt.x + (getWidth() / 2), pt.y + 40 );
+			} else
+				setLocationRelativeTo( null );
+		}
+
+		private void modalityTypeChanged() {
+			if( applicationRadioButton.isSelected() )
+				setModalityType( ModalityType.APPLICATION_MODAL );
+			else if( documentRadioButton.isSelected() )
+				setModalityType( ModalityType.DOCUMENT_MODAL );
+			else if( toolkitRadioButton.isSelected() )
+				setModalityType( ModalityType.TOOLKIT_MODAL );
+			else
+				setModalityType( ModalityType.MODELESS );
+
+			setVisible( false );
+			setVisible( true );
+		}
+
+		private void showModalDialog() {
+			new DummyModalDialog( this, showConsumer ).setVisible( true );
+		}
+
+		private void showFileDialog() {
+			showConsumer.accept( this );
+		}
+
+		private void windowOpened() {
+			showConsumer.accept( this );
+		}
+
+		private void initComponents() {
+			// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+			JLabel label1 = new JLabel();
+			applicationRadioButton = new JRadioButton();
+			documentRadioButton = new JRadioButton();
+			toolkitRadioButton = new JRadioButton();
+			modelessRadioButton = new JRadioButton();
+			JButton showModalDialogButton = new JButton();
+			JButton showFileDialogButton = new JButton();
+
+			//======== this ========
+			setTitle("Dummy Modal Dialog");
+			setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowOpened(WindowEvent e) {
+					DummyModalDialog.this.windowOpened();
+				}
+			});
+			Container contentPane = getContentPane();
+			contentPane.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]" +
+				"[]para" +
+				"[]" +
+				"[198]"));
+
+			//---- label1 ----
+			label1.setText("Modality type:");
+			contentPane.add(label1, "cell 0 0");
+
+			//---- applicationRadioButton ----
+			applicationRadioButton.setText("Application");
+			applicationRadioButton.setSelected(true);
+			applicationRadioButton.addActionListener(e -> modalityTypeChanged());
+			contentPane.add(applicationRadioButton, "cell 1 0");
+
+			//---- documentRadioButton ----
+			documentRadioButton.setText("Document");
+			documentRadioButton.addActionListener(e -> modalityTypeChanged());
+			contentPane.add(documentRadioButton, "cell 1 1");
+
+			//---- toolkitRadioButton ----
+			toolkitRadioButton.setText("Toolkit");
+			toolkitRadioButton.addActionListener(e -> modalityTypeChanged());
+			contentPane.add(toolkitRadioButton, "cell 1 2");
+
+			//---- modelessRadioButton ----
+			modelessRadioButton.setText("modeless");
+			modelessRadioButton.addActionListener(e -> modalityTypeChanged());
+			contentPane.add(modelessRadioButton, "cell 1 3");
+
+			//---- showModalDialogButton ----
+			showModalDialogButton.setText("Show Modal Dialog...");
+			showModalDialogButton.addActionListener(e -> showModalDialog());
+			contentPane.add(showModalDialogButton, "cell 0 4 2 1");
+
+			//---- showFileDialogButton ----
+			showFileDialogButton.setText("Show File Dialog...");
+			showFileDialogButton.addActionListener(e -> showFileDialog());
+			contentPane.add(showFileDialogButton, "cell 0 5 2 1");
+			pack();
+			setLocationRelativeTo(getOwner());
+
+			//---- modalityTypeButtonGroup ----
+			ButtonGroup modalityTypeButtonGroup = new ButtonGroup();
+			modalityTypeButtonGroup.add(applicationRadioButton);
+			modalityTypeButtonGroup.add(documentRadioButton);
+			modalityTypeButtonGroup.add(toolkitRadioButton);
+			modalityTypeButtonGroup.add(modelessRadioButton);
+			// JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+		}
+
+		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
+		private JRadioButton applicationRadioButton;
+		private JRadioButton documentRadioButton;
+		private JRadioButton toolkitRadioButton;
+		private JRadioButton modelessRadioButton;
+		// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+	}
 }

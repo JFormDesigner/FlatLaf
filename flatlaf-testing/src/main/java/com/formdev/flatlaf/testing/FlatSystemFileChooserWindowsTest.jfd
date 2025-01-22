@@ -3,6 +3,9 @@ JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left][grow,fill][fill]"
@@ -20,6 +23,9 @@ new FormModel {
 				"text": "JFrame"
 				"selected": true
 				"$buttonGroup": new FormReference( "ownerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
 			} )
@@ -27,6 +33,9 @@ new FormModel {
 				name: "ownerDialogRadioButton"
 				"text": "JDialog"
 				"$buttonGroup": new FormReference( "ownerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
 			} )
@@ -34,6 +43,9 @@ new FormModel {
 				name: "ownerNullRadioButton"
 				"text": "null"
 				"$buttonGroup": new FormReference( "ownerButtonGroup" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
 			} )
@@ -50,6 +62,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "titleField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
@@ -62,54 +77,81 @@ new FormModel {
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "overwritePromptCheckBox"
 					"text": "overwritePrompt"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "pathMustExistCheckBox"
 					"text": "pathMustExist"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "noDereferenceLinksCheckBox"
 					"text": "noDereferenceLinks"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "strictFileTypesCheckBox"
 					"text": "strictFileTypes"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "fileMustExistCheckBox"
 					"text": "fileMustExist"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "okButtonNeedsInteractionCheckBox"
 					"text": "okButtonNeedsInteraction"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "noChangeDirCheckBox"
 					"text": "noChangeDir"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "createPromptCheckBox"
 					"text": "createPrompt"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "dontAddToRecentCheckBox"
 					"text": "dontAddToRecent"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 2"
 				} )
@@ -117,12 +159,18 @@ new FormModel {
 					name: "pickFoldersCheckBox"
 					"text": "pickFolders"
 					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "shareAwareCheckBox"
 					"text": "shareAware"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 3"
 				} )
@@ -130,60 +178,90 @@ new FormModel {
 					name: "forceShowHiddenCheckBox"
 					"text": "forceShowHidden"
 					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 3"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "forceFileSystemCheckBox"
 					"text": "forceFileSystem"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 4"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "noReadOnlyReturnCheckBox"
 					"text": "noReadOnlyReturn"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 4"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "defaultNoMiniModeCheckBox"
 					"text": "defaultNoMiniMode"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 4"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "allNonStorageItemsCheckBox"
 					"text": "allNonStorageItems"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 5"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "noTestFileCreateCheckBox"
 					"text": "noTestFileCreate"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 5"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "forcePreviewPaneonCheckBox"
 					"text": "forcePreviewPaneon"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 5"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "noValidateCheckBox"
 					"text": "noValidate"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 6"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "hideMruPlacesCheckBox"
 					"text": "hideMruPlaces"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 6"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "supportStreamableItemsCheckBox"
 					"text": "supportStreamableItems"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 6"
 				} )
@@ -191,12 +269,18 @@ new FormModel {
 					name: "allowMultiSelectCheckBox"
 					"text": "allowMultiSelect"
 					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 7"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 					name: "hidePinnedPlacesCheckBox"
 					"text": "hidePinnedPlaces"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 7"
 				} )
@@ -219,6 +303,9 @@ new FormModel {
 							name: "messageField"
 							"columns": 40
 							"rows": 4
+							auxiliary() {
+								"JavaCodeGenerator.variableLocal": false
+							}
 						} )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 0"
@@ -231,6 +318,9 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "buttonsField"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 1"
 					} )
@@ -248,6 +338,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "okButtonLabelField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -259,6 +352,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "fileNameLabelField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3"
 			} )
@@ -270,6 +366,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "fileNameField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 4"
 			} )
@@ -281,6 +380,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "folderField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5"
 			} )
@@ -292,6 +394,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "saveAsItemField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 6"
 			} )
@@ -303,6 +408,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "defaultFolderField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7"
 			} )
@@ -314,6 +422,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "defaultExtensionField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 8"
 			} )
@@ -333,6 +444,9 @@ new FormModel {
 					addElement( "Text Files,*.txt,PDF Files,*.pdf,All Files,*.*" )
 					addElement( "Text and PDF Files,*.txt;*.pdf" )
 				}
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 9"
 			} )
@@ -349,6 +463,9 @@ new FormModel {
 				"value": 0
 				"paintLabels": true
 				"snapToTicks": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10"
 			} )
@@ -383,6 +500,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "showMessageDialogOnOKCheckBox"
 				"text": "show message dialog on OK"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 11 3 1"
 			} )
@@ -410,6 +530,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "filesField"
 					"rows": 8
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 12 3 1,growx"

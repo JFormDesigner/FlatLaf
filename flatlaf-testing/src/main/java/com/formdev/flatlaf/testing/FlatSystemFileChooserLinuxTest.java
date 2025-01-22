@@ -17,21 +17,16 @@
 package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.ui.FlatNativeLinuxLibrary.*;
-import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
+import com.formdev.flatlaf.testing.FlatSystemFileChooserTest.DummyModalDialog;
 import com.formdev.flatlaf.ui.FlatNativeLinuxLibrary;
 import net.miginfocom.swing.*;
 
@@ -49,7 +44,7 @@ public class FlatSystemFileChooserLinuxTest
 			}
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSystemFileChooserLinuxTest" );
-//			addListeners( frame );
+			FlatSystemFileChooserTest.addListeners( frame );
 			frame.showFrame( FlatSystemFileChooserLinuxTest::new );
 		} );
 	}
@@ -80,19 +75,9 @@ public class FlatSystemFileChooserLinuxTest
 		Window frame = SwingUtilities.windowForComponent( this );
 		if( ownerFrameRadioButton.isSelected() )
 			openOrSave( open, direct, frame );
-		else if( ownerDialogRadioButton.isSelected() ) {
-			JDialog dialog = new JDialog( frame, "Dummy Modal Dialog", Dialog.DEFAULT_MODALITY_TYPE );
-			dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-			dialog.addWindowListener( new WindowAdapter() {
-				@Override
-				public void windowOpened( WindowEvent e ) {
-					openOrSave( open, direct, dialog );
-				}
-			} );
-			dialog.setSize( 1200, 1000 );
-			dialog.setLocationRelativeTo( this );
-			dialog.setVisible( true );
-		} else
+		else if( ownerDialogRadioButton.isSelected() )
+			new DummyModalDialog( frame, owner -> openOrSave( open, direct, owner ) ).setVisible( true );
+		else
 			openOrSave( open, direct, null );
 	}
 
@@ -174,94 +159,38 @@ public class FlatSystemFileChooserLinuxTest
 			optionsClear.set( optionsClear.get() | option );
 	}
 
-	private static void addListeners( Window w ) {
-		w.addWindowListener( new WindowListener() {
-			@Override
-			public void windowOpened( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowIconified( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowDeiconified( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowDeactivated( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowClosing( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowClosed( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowActivated( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
-		w.addWindowStateListener( new WindowStateListener() {
-			@Override
-			public void windowStateChanged( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
-		w.addWindowFocusListener( new WindowFocusListener() {
-			@Override
-			public void windowLostFocus( WindowEvent e ) {
-				System.out.println( e );
-			}
-
-			@Override
-			public void windowGainedFocus( WindowEvent e ) {
-				System.out.println( e );
-			}
-		} );
-	}
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		ownerLabel = new JLabel();
+		JLabel ownerLabel = new JLabel();
 		ownerFrameRadioButton = new JRadioButton();
 		ownerDialogRadioButton = new JRadioButton();
 		ownerNullRadioButton = new JRadioButton();
-		ownerSpacer = new JPanel(null);
-		titleLabel = new JLabel();
+		JPanel ownerSpacer = new JPanel(null);
+		JLabel titleLabel = new JLabel();
 		titleField = new JTextField();
-		panel1 = new JPanel();
+		JPanel panel1 = new JPanel();
 		select_folderCheckBox = new FlatTriStateCheckBox();
 		select_multipleCheckBox = new FlatTriStateCheckBox();
 		do_overwrite_confirmationCheckBox = new FlatTriStateCheckBox();
 		create_foldersCheckBox = new FlatTriStateCheckBox();
 		show_hiddenCheckBox = new FlatTriStateCheckBox();
 		local_onlyCheckBox = new FlatTriStateCheckBox();
-		okButtonLabelLabel = new JLabel();
+		JLabel okButtonLabelLabel = new JLabel();
 		okButtonLabelField = new JTextField();
-		currentNameLabel = new JLabel();
+		JLabel currentNameLabel = new JLabel();
 		currentNameField = new JTextField();
-		currentFolderLabel = new JLabel();
+		JLabel currentFolderLabel = new JLabel();
 		currentFolderField = new JTextField();
-		fileTypesLabel = new JLabel();
+		JLabel fileTypesLabel = new JLabel();
 		fileTypesField = new JComboBox<>();
-		fileTypeIndexLabel = new JLabel();
+		JLabel fileTypeIndexLabel = new JLabel();
 		fileTypeIndexSlider = new JSlider();
-		openButton = new JButton();
-		saveButton = new JButton();
-		openDirectButton = new JButton();
-		saveDirectButton = new JButton();
+		JButton openButton = new JButton();
+		JButton saveButton = new JButton();
+		JButton openDirectButton = new JButton();
+		JButton saveDirectButton = new JButton();
 		showMessageDialogOnOKCheckBox = new JCheckBox();
-		filesScrollPane = new JScrollPane();
+		JScrollPane filesScrollPane = new JScrollPane();
 		filesField = new JTextArea();
 
 		//======== this ========
@@ -432,36 +361,22 @@ public class FlatSystemFileChooserLinuxTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JLabel ownerLabel;
 	private JRadioButton ownerFrameRadioButton;
 	private JRadioButton ownerDialogRadioButton;
 	private JRadioButton ownerNullRadioButton;
-	private JPanel ownerSpacer;
-	private JLabel titleLabel;
 	private JTextField titleField;
-	private JPanel panel1;
 	private FlatTriStateCheckBox select_folderCheckBox;
 	private FlatTriStateCheckBox select_multipleCheckBox;
 	private FlatTriStateCheckBox do_overwrite_confirmationCheckBox;
 	private FlatTriStateCheckBox create_foldersCheckBox;
 	private FlatTriStateCheckBox show_hiddenCheckBox;
 	private FlatTriStateCheckBox local_onlyCheckBox;
-	private JLabel okButtonLabelLabel;
 	private JTextField okButtonLabelField;
-	private JLabel currentNameLabel;
 	private JTextField currentNameField;
-	private JLabel currentFolderLabel;
 	private JTextField currentFolderField;
-	private JLabel fileTypesLabel;
 	private JComboBox<String> fileTypesField;
-	private JLabel fileTypeIndexLabel;
 	private JSlider fileTypeIndexSlider;
-	private JButton openButton;
-	private JButton saveButton;
-	private JButton openDirectButton;
-	private JButton saveDirectButton;
 	private JCheckBox showMessageDialogOnOKCheckBox;
-	private JScrollPane filesScrollPane;
 	private JTextArea filesField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
