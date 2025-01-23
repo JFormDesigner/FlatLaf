@@ -365,14 +365,8 @@ public class FlatPopupFactory
 	}
 
 	private static boolean isMacOSBorderSupported() {
-		// do not use rounded border on macOS 14.4+ because it may freeze the application
-		// and crash the macOS WindowServer process (reports vary from Finder restarts to OS restarts)
-		// https://github.com/apache/netbeans/issues/7560#issuecomment-2226439215
-		// https://github.com/apache/netbeans/issues/6647#issuecomment-2070124442
-		boolean isMacOS_14_4_orLater = (SystemInfo.osVersion >= SystemInfo.toVersion( 14, 4, 0, 0 ));
-
 		return SystemInfo.isMacOS &&
-			FlatSystemProperties.getBoolean( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER, !isMacOS_14_4_orLater ) &&
+			FlatSystemProperties.getBoolean( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER, true ) &&
 			FlatNativeMacLibrary.isLoaded();
 	}
 

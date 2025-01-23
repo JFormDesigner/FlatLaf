@@ -102,10 +102,13 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 		return FALSE;
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		JNI_COCOA_TRY()
+
 		nsWindow.hasShadow = YES;
 		nsWindow.contentView.wantsLayer = YES;
 		nsWindow.contentView.layer.cornerRadius = radius;
 		nsWindow.contentView.layer.masksToBounds = YES;
+		nsWindow.contentView.layer.opaque = NO;
 
 		nsWindow.contentView.layer.borderWidth = borderWidth;
 		if( borderWidth > 0 ) {
@@ -122,6 +125,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 		[nsWindow.contentView.layer removeAllAnimations];
 		[nsWindow invalidateShadow];
+
+		JNI_COCOA_CATCH()
 	}];
 
 	return TRUE;
@@ -159,6 +164,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	WindowData* windowData = getWindowData( nsWindow, true );
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
+		JNI_COCOA_TRY()
+
 //		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
 		// add/remove toolbar
@@ -237,6 +244,8 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 				windowData.didExitFullScreenObserver = nil;
 			}
 		}
+
+		JNI_COCOA_CATCH()
 	}];
 
 	return TRUE;

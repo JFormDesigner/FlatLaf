@@ -143,7 +143,7 @@ public interface FlatSystemProperties
 	 * (requires Windows 11 or macOS)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> {@code true}; except on macOS 14.4+ where it is {@code false}
+	 * <strong>Default</strong> {@code true}; except in FlatLaf 3.5.x on macOS 14.4+ where it was {@code false}
 	 *
 	 * @since 3.5.2
 	 */
