@@ -194,7 +194,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 		selectFolder ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 			: (open ? GTK_FILE_CHOOSER_ACTION_OPEN : GTK_FILE_CHOOSER_ACTION_SAVE),
 		_("_Cancel"), GTK_RESPONSE_CANCEL,
-		(cokButtonLabel != NULL) ? cokButtonLabel : (open ? _("_Open") : _("_Save")), GTK_RESPONSE_ACCEPT,
+		(cokButtonLabel != NULL) ? cokButtonLabel
+			: (selectFolder ? _("_Select") : (open ? _("_Open") : _("_Save"))), GTK_RESPONSE_ACCEPT,
 		NULL ); // marks end of buttons
 	GtkFileChooser* chooser = GTK_FILE_CHOOSER( dialog );
 

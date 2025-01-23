@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.util;
 
 import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -617,8 +618,14 @@ public class SystemFileChooser
 	}
 
 	private int showDialogImpl( Component parent ) {
+		Window owner = (parent instanceof Window)
+			? (Window) parent
+			: (parent != null) ? SwingUtilities.windowForComponent( parent ) : null;
+		if( owner == null )
+			owner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+
 		approveResult = APPROVE_OPTION;
-		File[] files = getProvider().showDialog( parent, this );
+		File[] files = getProvider().showDialog( owner, this );
 		setSelectedFiles( files );
 		return (files != null) ? approveResult : CANCEL_OPTION;
 	}
@@ -640,7 +647,7 @@ public class SystemFileChooser
 	//---- interface FileChooserProvider --------------------------------------
 
 	private interface FileChooserProvider {
-		File[] showDialog( Component parent, SystemFileChooser fc );
+		File[] showDialog( Window owner, SystemFileChooser fc );
 	}
 
 	//---- class SystemFileChooserProvider ------------------------------------
@@ -649,10 +656,7 @@ public class SystemFileChooser
 		implements FileChooserProvider
 	{
 		@Override
-		public File[] showDialog( Component parent, SystemFileChooser fc ) {
-			Window owner = (parent instanceof Window)
-				? (Window) parent
-				: (parent != null) ? SwingUtilities.windowForComponent( parent ) : null;
+		public File[] showDialog( Window owner, SystemFileChooser fc ) {
 			AtomicReference<String[]> filenamesRef = new AtomicReference<>();
 
 			// create secondary event look and invoke system file dialog on a new thread
@@ -667,7 +671,7 @@ public class SystemFileChooser
 
 			// fallback to Swing file chooser if system file dialog failed or is not available
 			if( filenames == null )
-				return new SwingFileChooserProvider().showDialog( parent, fc );
+				return new SwingFileChooserProvider().showDialog( owner, fc );
 
 			// canceled?
 			if( filenames.length == 0 )
@@ -1068,7 +1072,7 @@ public class SystemFileChooser
 		implements FileChooserProvider
 	{
 		@Override
-		public File[] showDialog( Component parent, SystemFileChooser fc ) {
+		public File[] showDialog( Window owner, SystemFileChooser fc ) {
 			JFileChooser chooser = new JFileChooser() {
 				@Override
 				public void approveSelection() {
@@ -1139,7 +1143,7 @@ public class SystemFileChooser
 			chooser.setCurrentDirectory( fc.getCurrentDirectory() );
 			chooser.setSelectedFile( fc.getSelectedFile() );
 
-			if( chooser.showDialog( parent, null ) != JFileChooser.APPROVE_OPTION )
+			if( chooser.showDialog( owner, null ) != JFileChooser.APPROVE_OPTION )
 				return null;
 
 			return chooser.isMultiSelectionEnabled()
