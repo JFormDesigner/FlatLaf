@@ -20,7 +20,42 @@ on:
 
 jobs:
   build:
+    name: build (11)
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: gradle/actions/wrapper-validation@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: temurin  # pre-installed on ubuntu-latest
+          cache: gradle
+
+      - name: Check with Error Prone
+        run: ./gradlew errorprone clean
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlatLaf-build-artifacts
+          path: |
+            flatlaf-*/build/libs
+            flatlaf-*/flatlaf-*/build/libs
+            !**/*-javadoc.jar
+            !**/*-sources.jar
+
+
+  build-on:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.repository == 'JFormDesigner/FlatLaf'
 
     strategy:
       matrix:
@@ -30,7 +65,6 @@ jobs:
         # - latest Java version(s)
         java:
           - 8
-          - 11  # LTS
           - 17  # LTS
           - 21  # LTS
           - 23  # latest
@@ -42,9 +76,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: gradle/actions/wrapper-validation@v4
-        if: matrix.java == '8'
-
       - name: Setup Java ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
@@ -52,28 +83,13 @@ jobs:
           distribution: temurin  # Java 8, 11, 17 and 21 are pre-installed on ubuntu-latest
           cache: gradle
 
-      - name: Check with Error Prone
-        if: matrix.java == '11'
-        run: ./gradlew errorprone clean -Dtoolchain=${{ matrix.toolchain }}
-
       - name: Build with Gradle
         run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: matrix.java == '11'
-        with:
-          name: FlatLaf-build-artifacts
-          path: |
-            flatlaf-*/build/libs
-            flatlaf-*/flatlaf-*/build/libs
-            !**/*-javadoc.jar
-            !**/*-sources.jar
 
 
   snapshot:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-on
     if: |
       github.event_name == 'push' &&
       (github.ref == 'refs/heads/main' || startsWith( github.ref, 'refs/heads/develop-' )) &&
@@ -98,7 +114,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-on
     if: |
       github.event_name == 'push' &&
       startsWith( github.ref, 'refs/tags/' ) &&

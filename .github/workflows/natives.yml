@@ -21,11 +21,12 @@ jobs:
         strategy:
             matrix:
                 os:
-                    - windows
-                    - macos
-                    - ubuntu
+                    - windows-latest
+                    - macos-latest
+                    - ubuntu-latest
+                    - ubuntu-24.04-arm
 
-        runs-on: ${{ matrix.os }}-latest
+        runs-on: ${{ matrix.os }}
 
         steps:
             - uses: actions/checkout@v4
@@ -33,11 +34,11 @@ jobs:
             - uses: gradle/actions/wrapper-validation@v4
 
             - name: install libxt-dev
-              if: matrix.os == 'ubuntu'
+              if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-24.04-arm'
               run: sudo apt install libxt-dev
 
             - name: install g++-aarch64-linux-gnu
-              if: matrix.os == 'ubuntu'
+              if: matrix.os == 'ubuntu-latest'
               run: sudo apt install g++-aarch64-linux-gnu
 
             - name: Setup Java 11
