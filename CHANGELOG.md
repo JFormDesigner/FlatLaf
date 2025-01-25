@@ -30,6 +30,9 @@ FlatLaf Change Log
 - FlatLaf window decorations: Minimize and maximize icons were not shown for
   custom scale factors less than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue
   #951)
+- Linux: Popups (menus and combobox lists) were not hidden when window is moved,
+  resized, maximized, restored, iconified or switched to another window. (issue
+  #962)
 
 
 ## 3.5.4

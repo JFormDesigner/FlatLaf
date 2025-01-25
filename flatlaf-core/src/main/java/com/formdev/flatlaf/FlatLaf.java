@@ -111,6 +111,7 @@ public abstract class FlatLaf
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
 	private boolean subMenuUsabilityHelperInstalled;
+	private LinuxPopupMenuCanceler linuxPopupMenuCanceler;
 
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
@@ -305,6 +306,10 @@ public abstract class FlatLaf
 		// install submenu usability helper
 		subMenuUsabilityHelperInstalled = SubMenuUsabilityHelper.install();
 
+		// install Linux popup menu canceler
+		if( SystemInfo.isLinux )
+			linuxPopupMenuCanceler = new LinuxPopupMenuCanceler();
+
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
@@ -395,6 +400,12 @@ public abstract class FlatLaf
 		if( subMenuUsabilityHelperInstalled ) {
 			SubMenuUsabilityHelper.uninstall();
 			subMenuUsabilityHelperInstalled = false;
+		}
+
+		// uninstall Linux popup menu canceler
+		if( linuxPopupMenuCanceler != null ) {
+			linuxPopupMenuCanceler.uninstall();
+			linuxPopupMenuCanceler = null;
 		}
 
 		// restore default link color
