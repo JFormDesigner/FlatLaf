@@ -709,6 +709,7 @@ public class FlatPopupFactory
 
 	private class DropShadowPopup
 		extends NonFlashingPopup
+		implements ComponentListener
 	{
 		// light weight
 		private JComponent lightComp;
@@ -768,7 +769,7 @@ public class FlatPopupFactory
 				}
 
 				// Windows 11: reset corner preference on reused heavy weight popups
-				if( isWindows11BorderSupported() ) {
+				if( SystemInfo.isWindows_11_orLater && FlatNativeWindowsLibrary.isLoaded() ) {
 					resetWindows11Border( popupWindow );
 					if( dropShadowWindow != null )
 						resetWindows11Border( dropShadowWindow );
@@ -838,10 +839,18 @@ public class FlatPopupFactory
 				if( insets.left != 0 || insets.top != 0 )
 					lightComp.setLocation( lightComp.getX() - insets.left, lightComp.getY() - insets.top );
 			}
+
+			if( popupWindow != null ) {
+				removeAllPopupWindowComponentListeners();
+				popupWindow.addComponentListener( this );
+			}
 		}
 
 		@Override
 		void hideImpl() {
+			if( popupWindow != null )
+				removeAllPopupWindowComponentListeners();
+
 			if( dropShadowDelegate != null ) {
 				dropShadowDelegate.hide();
 				dropShadowDelegate = null;
@@ -941,23 +950,55 @@ public class FlatPopupFactory
 
 		@Override
 		void reset( Component contents, int ownerX, int ownerY ) {
+			if( popupWindow != null )
+				removeAllPopupWindowComponentListeners();
+
 			super.reset( contents, ownerX, ownerY );
 
-			if( dropShadowWindow != null ) {
-				// set preferred size of drop shadow panel
-				Dimension prefSize = popupWindow.getPreferredSize();
-				Insets insets = dropShadowPanel2.getInsets();
-				int w = prefSize.width + insets.left + insets.right;
-				int h = prefSize.height + insets.top + insets.bottom;
-				dropShadowPanel2.setPreferredSize( new Dimension( w, h ) );
-				dropShadowPanel2.invalidate();
-				dropShadowWindow.pack();
+			updateDropShadowWindowBounds();
+		}
 
-				// update drop shadow popup window location
-				int x = popupWindow.getX() - insets.left;
-				int y = popupWindow.getY() - insets.top;
-				dropShadowWindow.setLocation( x, y );
+		private void updateDropShadowWindowBounds() {
+			if( dropShadowWindow == null )
+				return;
+
+			// calculate size of drop shadow window
+			Dimension size = popupWindow.getSize();
+			Insets insets = dropShadowPanel2.getInsets();
+			int w = size.width + insets.left + insets.right;
+			int h = size.height + insets.top + insets.bottom;
+
+			// update drop shadow popup window bounds
+			int x = popupWindow.getX() - insets.left;
+			int y = popupWindow.getY() - insets.top;
+			dropShadowWindow.setBounds( x, y, w, h );
+			dropShadowWindow.validate();
+		}
+
+		private void removeAllPopupWindowComponentListeners() {
+			// make sure that there is no old component listener
+			// necessary because this class is cloned if reusing popup windows
+			for( ComponentListener l : popupWindow.getComponentListeners() ) {
+				if( l instanceof DropShadowPopup )
+					popupWindow.removeComponentListener( l );
 			}
 		}
+
+		//---- interface ComponentListener ----
+
+		@Override
+		public void componentResized( ComponentEvent e ) {
+			if( e.getSource() == popupWindow )
+				updateDropShadowWindowBounds();
+		}
+
+		@Override
+		public void componentMoved( ComponentEvent e ) {
+			if( e.getSource() == popupWindow )
+				updateDropShadowWindowBounds();
+		}
+
+		@Override public void componentShown( ComponentEvent e ) {}
+		@Override public void componentHidden( ComponentEvent e ) {}
 	}
 }

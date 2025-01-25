@@ -25,6 +25,8 @@ FlatLaf Change Log
 - FileChooser: Improved performance when navigating to large directories with
   thousands of files. (issue #953)
 - PopupFactory: Fixed NPE on Windows 10 when `owner` is `null`. (issue #952)
+- Popup: On Windows 10, drop shadow of heavy-weight popup was not updated if
+  popup moved/resized. (issue #942)
 - FlatLaf window decorations: Minimize and maximize icons were not shown for
   custom scale factors less than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue
   #951)

@@ -21,6 +21,10 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -43,6 +47,8 @@ public class FlatPopupTest
 
 	FlatPopupTest() {
 		initComponents();
+		addPopupMenuListener( popupMenu1, "popupMenu1" );
+		addPopupMenuListener( popupMenu2, "popupMenu2" );
 	}
 
 	private void showPopupMenu() {
@@ -114,6 +120,46 @@ public class FlatPopupTest
 		}
 	}
 
+	private void showDirectPopup() {
+		DirectPopupContent content = new DirectPopupContent();
+		content.putClientProperty( FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, true );
+		Point pt = showDirectPopupButton.getLocationOnScreen();
+
+		System.setProperty( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER, "false" );
+		UIManager.put( "Popup.dropShadowColor", Color.red );
+		UIManager.put( "Popup.dropShadowInsets", new Insets( 5, 5, 5, 5 ) );
+		UIManager.put( "Popup.dropShadowOpacity", 1f );
+
+		Popup popup = PopupFactory.getSharedInstance().getPopup( showDirectPopupButton,
+			content, pt.x, pt.y + showDirectPopupButton.getHeight() + 10 );
+		content.popup = popup;
+		popup.show();
+
+		System.clearProperty( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER );
+		UIManager.put( "Popup.dropShadowColor", null );
+		UIManager.put( "Popup.dropShadowInsets", null );
+		UIManager.put( "Popup.dropShadowOpacity", null );
+	}
+
+	private void addPopupMenuListener( JPopupMenu popupMenu, String name ) {
+		popupMenu.addPopupMenuListener( new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible( PopupMenuEvent e ) {
+				System.out.println( "popupMenuWillBecomeVisible    " + name );
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible( PopupMenuEvent e ) {
+				System.out.println( "popupMenuWillBecomeInvisible  " + name );
+			}
+
+			@Override
+			public void popupMenuCanceled( PopupMenuEvent e ) {
+				System.out.println( "popupMenuCanceled             " + name );
+			}
+		} );
+	}
+
 	@Override
 	public void updateUI() {
 		super.updateUI();
@@ -128,15 +174,12 @@ public class FlatPopupTest
 		}
 	}
 
-	private void countChanged() {
-		// TODO add your code here
-	}
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label1 = new JLabel();
 		label2 = new JLabel();
 		showPopupMenuButton = new JButton();
+		showDirectPopupButton = new JButton();
 		showLargePopupMenuButton = new JButton();
 		showPopupButton = new JButton();
 		hidePopupButton = new JButton();
@@ -209,6 +252,11 @@ public class FlatPopupTest
 		showPopupMenuButton.addActionListener(e -> showPopupMenu());
 		add(showPopupMenuButton, "cell 0 2");
 
+		//---- showDirectPopupButton ----
+		showDirectPopupButton.setText("show direct move/resize popup");
+		showDirectPopupButton.addActionListener(e -> showDirectPopup());
+		add(showDirectPopupButton, "cell 2 2 2 1");
+
 		//---- showLargePopupMenuButton ----
 		showLargePopupMenuButton.setText("show heavy-weight JPopupMenu");
 		showLargePopupMenuButton.addActionListener(e -> showLargePopupMenu());
@@ -240,7 +288,6 @@ public class FlatPopupTest
 
 		//---- countField ----
 		countField.setModel(new SpinnerNumberModel(1, 1, null, 1));
-		countField.addChangeListener(e -> countChanged());
 		add(countField, "cell 5 4");
 
 		//---- label4 ----
@@ -366,6 +413,7 @@ public class FlatPopupTest
 	private JLabel label1;
 	private JLabel label2;
 	private JButton showPopupMenuButton;
+	private JButton showDirectPopupButton;
 	private JButton showLargePopupMenuButton;
 	private JButton showPopupButton;
 	private JButton hidePopupButton;
@@ -442,6 +490,71 @@ public class FlatPopupTest
 
 		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
 		private JLabel label6;
+		// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+	}
+
+	//---- class MyPopupContent -----------------------------------------------
+
+	private static class DirectPopupContent
+		extends JPanel
+	{
+		Popup popup;
+
+		DirectPopupContent() {
+			initComponents();
+		}
+
+		private void resizePopup() {
+			Window popupWindow = SwingUtilities.windowForComponent( this );
+			popupWindow.setSize( popupWindow.getWidth() + 20, popupWindow.getHeight() + 50 );
+		}
+
+		private void movePopup() {
+			Window popupWindow = SwingUtilities.windowForComponent( this );
+			popupWindow.setLocation( popupWindow.getX() + 20, popupWindow.getY() + 50 );
+		}
+
+		private void hidePopup() {
+			popup.hide();
+		}
+
+		private void initComponents() {
+			// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+			resizeButton = new JButton();
+			moveButton = new JButton();
+			hideButton = new JButton();
+
+			//======== this ========
+			setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]"));
+
+			//---- resizeButton ----
+			resizeButton.setText("Resize");
+			resizeButton.addActionListener(e -> resizePopup());
+			add(resizeButton, "cell 0 0");
+
+			//---- moveButton ----
+			moveButton.setText("Move");
+			moveButton.addActionListener(e -> movePopup());
+			add(moveButton, "cell 1 0");
+
+			//---- hideButton ----
+			hideButton.setText("Hide");
+			hideButton.addActionListener(e -> hidePopup());
+			add(hideButton, "cell 2 0");
+			// JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+		}
+
+		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
+		private JButton resizeButton;
+		private JButton moveButton;
+		private JButton hideButton;
 		// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 	}
 }
