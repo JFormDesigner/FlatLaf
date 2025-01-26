@@ -119,9 +119,10 @@ public abstract class FlatWindowResizer
 
 		int x = 0;
 		int y = 0;
-		int width = resizeComp.getWidth();
-		int height = resizeComp.getHeight();
-		if( width == 0 || height == 0 )
+		Container cont = topDragComp.getParent();
+		int width = cont.getWidth();
+		int height = cont.getHeight();
+		if( width <= 0 || height <= 0 )
 			return;
 
 		Insets resizeInsets = getResizeInsets();
