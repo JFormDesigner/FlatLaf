@@ -684,7 +684,7 @@ public class FlatRootPaneUI
 	 * Window border used for non-native window decorations.
 	 */
 	public static class FlatWindowBorder
-		extends BorderUIResource.EmptyBorderUIResource
+		extends FlatEmptyBorder
 	{
 		protected final Color activeBorderColor = UIManager.getColor( "RootPane.activeBorderColor" );
 		protected final Color inactiveBorderColor = UIManager.getColor( "RootPane.inactiveBorderColor" );
@@ -717,7 +717,10 @@ public class FlatRootPaneUI
 		}
 
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-			g.drawRect( x, y, width - 1, height - 1 );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			float lineWidth = (float) (UIScale.scale( 1f ) * scaleFactor);
+			g.fill( FlatUIUtils.createRectangle( x, y, width, height, lineWidth ) );
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		protected boolean isWindowMaximized( Component c ) {
