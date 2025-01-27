@@ -1,12 +1,11 @@
 - Java   1.8.0_202
-+ Java   1.8.0_292
++ Java   1.8.0_322
 
 - OS     Windows 10
 + OS     Mac OS X
 
 #---- ComboBox ----
 
-+ ComboBox.roundedBorderWidth    1
 + ComboBox.showPopupOnNavigation true
 
 
@@ -47,16 +46,6 @@
 + OptionPane.isYesLast           true
 
 
-#---- Popup ----
-
-+ Popup.roundedBorderWidth       1
-
-
-#---- PopupMenu ----
-
-+ PopupMenu.roundedBorderWidth   1
-
-
 #---- ProgressBar ----
 
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
@@ -88,11 +77,6 @@
 
 - TitlePane.small.font           [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
 + TitlePane.small.font           [active] Helvetica Neue plain 12    javax.swing.plaf.FontUIResource [UI]
-
-
-#---- ToolTip ----
-
-+ ToolTip.roundedBorderWidth     1
 - defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 + defaultFont                    Helvetica Neue plain 13    javax.swing.plaf.FontUIResource [UI]
 

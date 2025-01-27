@@ -384,6 +384,7 @@ public interface FlatClientProperties
 	 *     If this value is {@code 1 - 4}, then {@code DWMWCP_ROUNDSMALL} is used.
 	 *     If it is {@code >= 5}, then {@code DWMWCP_ROUND} is used.
 	 * <li><strong>macOS</strong> (10.14 and later): Any corner radius is supported.
+	 * <li><strong>Linux</strong> (since FlatLaf 3.6): Any corner radius is supported.
 	 * </ul>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
@@ -402,6 +403,7 @@ public interface FlatClientProperties
 	 * Supported platforms:
 	 * <ul>
 	 * <li><strong>macOS</strong> (10.14 and later)
+	 * <li><strong>Linux</strong> (since FlatLaf 3.6)
 	 * </ul>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.Float}<br>

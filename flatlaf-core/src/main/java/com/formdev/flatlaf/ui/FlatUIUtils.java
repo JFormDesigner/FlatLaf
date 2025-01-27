@@ -411,7 +411,8 @@ public class FlatUIUtils
 		GraphicsConfiguration gc = c.getGraphicsConfiguration();
 		GraphicsDevice gd = (gc != null) ? gc.getDevice() : null;
 		Window fullScreenWindow = (gd != null) ? gd.getFullScreenWindow() : null;
-		return (fullScreenWindow != null && fullScreenWindow == SwingUtilities.windowForComponent( c ));
+		return (fullScreenWindow != null &&
+			(fullScreenWindow == c || fullScreenWindow == SwingUtilities.windowForComponent( c )));
 	}
 
 	public static Boolean isRoundRect( Component c ) {
