@@ -27,9 +27,11 @@ FlatLaf Change Log
 - PopupFactory: Fixed NPE on Windows 10 when `owner` is `null`. (issue #952)
 - Popup: On Windows 10, drop shadow of heavy-weight popup was not updated if
   popup moved/resized. (issue #942)
-- FlatLaf window decorations: Minimize and maximize icons were not shown for
-  custom scale factors less than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue
-  #951)
+- FlatLaf window decorations:
+  - Minimize and maximize icons were not shown for custom scale factors less
+    than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue #951)
+  - Linux: Fixed occasional maximizing of window when single-clicking the
+    window's title bar. (issue #637)
 - Linux: Popups (menus and combobox lists) were not hidden when window is moved,
   resized, maximized, restored, iconified or switched to another window. (issue
   #962)
