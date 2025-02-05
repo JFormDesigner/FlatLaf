@@ -280,8 +280,6 @@ public class FlatButtonUI
 
 		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
-
-		MigLayoutVisualPadding.install( b );
 	}
 
 	@Override
@@ -291,8 +289,21 @@ public class FlatButtonUI
 		oldStyleValues = null;
 		borderShared = null;
 
-		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
+	}
+
+	@Override
+	protected void installListeners( AbstractButton b ) {
+		super.installListeners( b );
+
+		MigLayoutVisualPadding.install( b );
+	}
+
+	@Override
+	protected void uninstallListeners( AbstractButton b ) {
+		super.uninstallListeners( b );
+
+		MigLayoutVisualPadding.uninstall( b );
 	}
 
 	@Override

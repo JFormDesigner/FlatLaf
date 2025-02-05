@@ -32,6 +32,9 @@ FlatLaf Change Log
     than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue #951)
   - Linux: Fixed occasional maximizing of window when single-clicking the
     window's title bar. (issue #637)
+- Styling: MigLayout visual padding was not updated after applying style to
+  Button, ComboBox, Spinner, TextField (and subclasses) and ToggleButton. (issue
+  #965)
 - Linux: Popups (menus and combobox lists) were not hidden when window is moved,
   resized, maximized, restored, iconified or switched to another window. (issue
   #962)

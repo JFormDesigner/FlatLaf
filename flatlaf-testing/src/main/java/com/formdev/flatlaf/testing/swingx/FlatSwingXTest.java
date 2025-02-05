@@ -354,14 +354,14 @@ public class FlatSwingXTest
 			//---- table ----
 			table.setModel(new DefaultTableModel(
 				new Object[][] {
-					{new Date(1574636400000L) /* 25.11.2019, 00:00:00 */},
-					{new Date(1517439600000L) /* 01.02.2018, 00:00:00 */},
+					{new Date(1574636400000L) /* 2019-11-25 */},
+					{new Date(1517439600000L) /* 2018-02-01 */},
 				},
 				new String[] {
 					"Date"
 				}
 			) {
-				Class<?>[] columnTypes = new Class<?>[] {
+				Class<?>[] columnTypes = {
 					Date.class
 				};
 				@Override
