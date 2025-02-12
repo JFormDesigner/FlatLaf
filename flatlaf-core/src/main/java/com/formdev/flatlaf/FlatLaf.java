@@ -553,6 +553,9 @@ public abstract class FlatLaf
 			return UIScale.getUserScaleFactor();
 		} );
 
+		// add lazy UI delegate class loading (if necessary)
+		addLazyUIdelegateClassLoading( defaults );
+
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
@@ -748,6 +751,53 @@ public abstract class FlatLaf
 			if( c.light == !dark || c.dark == dark )
 				defaults.put( c.key, new ColorUIResource( c.rgb ) );
 		}
+	}
+
+	/**
+	 * Handle UI delegate classes if running in special application where multiple class loaders are involved.
+	 * E.g. in Eclipse plugin or in LibreOffice extension.
+	 * <p>
+	 * Problem: Swing runs in Java's system classloader and FlatLaf is loaded in plugin classloader.
+	 * When Swing tries to load UI delegate class in {@link UIDefaults#getUIClass(String, ClassLoader)},
+	 * invoked from {@link UIDefaults#getUI(JComponent)}, it uses the component's classloader,
+	 * which is Java's system classloader for core Swing components,
+	 * and can not find FlatLaf UI delegates.
+	 * <p>
+	 * Solution: Add lazy values for UI delegate class names.
+	 * Those lazy values use FlatLaf classloader to load UI delegate class.
+	 * This is similar to what {@link UIDefaults#getUIClass(String, ClassLoader)} does.
+	 * <p>
+	 * Not using {@code defaults.put( "ClassLoader", FlatLaf.class.getClassLoader() )},
+	 * which would work for FlatLaf UI delegates, but it would break custom
+	 * UI delegates used in other classloaders.
+	 */
+	private static void addLazyUIdelegateClassLoading( UIDefaults defaults ) {
+		if( FlatLaf.class.getClassLoader() == ClassLoader.getSystemClassLoader() )
+			return; // not necessary
+
+		Map<String, LazyValue> map = new HashMap<>();
+		for( Map.Entry<Object, Object> e : defaults.entrySet() ) {
+			Object key = e.getKey();
+			Object value = e.getValue();
+			if( key instanceof String && ((String)key).endsWith( "UI" ) &&
+				value instanceof String && !defaults.containsKey( value ) )
+			{
+				String className = (String) value;
+				map.put( className, (LazyValue) t -> {
+					try {
+						Class<?> uiClass = FlatLaf.class.getClassLoader().loadClass( className );
+						if( ComponentUI.class.isAssignableFrom( uiClass ) )
+							return uiClass;
+					} catch( ClassNotFoundException ex ) {
+						// ignore
+					}
+
+					// let UIDefaults.getUIClass() try to load UI delegate class
+					return null;
+				} );
+			}
+		}
+		defaults.putAll( map );
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {

@@ -38,6 +38,9 @@ FlatLaf Change Log
 - Linux: Popups (menus and combobox lists) were not hidden when window is moved,
   resized, maximized, restored, iconified or switched to another window. (issue
   #962)
+- Fixed loading FlatLaf UI delegate classes when using FlatLaf in special
+  application where multiple class loaders are involved. E.g. in Eclipse plugin
+  or in LibreOffice extension. (issues #955 and #851)
 
 
 ## 3.5.4
