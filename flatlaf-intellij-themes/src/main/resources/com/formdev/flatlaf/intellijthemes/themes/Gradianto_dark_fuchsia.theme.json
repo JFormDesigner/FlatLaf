@@ -31,6 +31,7 @@
       "separatorColor": "#4b2665"
     },
     "Tree": {
+      "selectionInactiveBackground": "#57376d",
       "hoverBackground": "#71468f",
       "hoverInactiveBackground": "#71468f"
 

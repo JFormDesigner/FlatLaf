@@ -16,6 +16,7 @@ FlatLaf Change Log
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
 - Linux: Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
+- IntelliJ Themes: Updated to latest versions.
 
 #### Fixed bugs
 

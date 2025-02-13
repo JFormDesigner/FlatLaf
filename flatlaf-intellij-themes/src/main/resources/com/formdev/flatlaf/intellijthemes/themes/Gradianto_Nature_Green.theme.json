@@ -1,29 +1,8 @@
 {
-  "author": "thvardhan",
-  "dark": true,
-  "editorScheme": "/Gradianto_Nature_Green.xml",
-  "icons": {
-    "ColorPalette": {
-      "Checkbox.Border.Default": "#3f765a",
-      "Checkbox.Border.Default.Dark": "#3f765a",
-      "Checkbox.Background.Default.Dark": "#3f765a",
-      "Checkbox.Foreground.Selected.Dark": "#00d679",
-      "Checkbox.Background.Disabled": "#274439",
-      "Checkbox.Background.Disabled.Dark": "#1e3b2f",
-      "Objects.Grey": "#e3e3e3c0",
-      "Objects.Blue": "#4fc3f7c0",
-      "Objects.RedStatus": "#ff5722c0",
-      "Objects.Red": "#e07483c0",
-      "Objects.Pink": "#de6dc2c0",
-      "Objects.Yellow": "#ffca57c0",
-      "Objects.Green": "#76da84c0",
-      "Objects.Purple": "#d199ffc0",
-      "Objects.BlackText": "#2e2e2ec0",
-      "Objects.YellowDark": "#ffca1ec0",
-      "Objects.GreenAndroid": "#18e66bc0"
-    }
-  },
   "name": "Gradianto Nature Green",
+  "dark": true,
+  "author": "thvardhan",
+  "editorScheme": "/Gradianto_Nature_Green.xml",
   "ui": {
     "*": {
       "background": "#20403f",
@@ -282,5 +261,26 @@
       }
     },
     "EditorPane.inactiveBackground": "#254a39ff"
+  },
+  "icons": {
+    "ColorPalette": {
+      "Checkbox.Border.Default": "#3f765a",
+      "Checkbox.Border.Default.Dark": "#3f765a",
+      "Checkbox.Background.Default.Dark": "#3f765a",
+      "Checkbox.Foreground.Selected.Dark": "#00d679",
+      "Checkbox.Background.Disabled": "#274439",
+      "Checkbox.Background.Disabled.Dark": "#1e3b2f",
+      "Objects.Grey": "#e3e3e3c0",
+      "Objects.Blue": "#4fc3f7c0",
+      "Objects.RedStatus": "#ff5722c0",
+      "Objects.Red": "#e07483c0",
+      "Objects.Pink": "#de6dc2c0",
+      "Objects.Yellow": "#ffca57c0",
+      "Objects.Green": "#76da84c0",
+      "Objects.Purple": "#d199ffc0",
+      "Objects.BlackText": "#2e2e2ec0",
+      "Objects.YellowDark": "#ffca1ec0",
+      "Objects.GreenAndroid": "#18e66bc0"
+    }
   }
 }

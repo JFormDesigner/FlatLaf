@@ -220,7 +220,6 @@
       "Header.inactiveBackground": "#7f7e7f",
       "Advertiser": {
         "foreground": "#727072",
-        "background": "#403e42",
         "borderColor": "#7f7e7f",
         "borderInsets": "4,8,3,0"
       }
