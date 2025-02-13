@@ -133,3 +133,9 @@
 
 - ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+
+
+#---- contrast ratio: Button ----
+
+- contrast ratio: Button.default.foreground                           #000000  #ffffff    21.0
++ contrast ratio: Button.default.foreground                           #ffffff  #478ac9     3.7  !!!!

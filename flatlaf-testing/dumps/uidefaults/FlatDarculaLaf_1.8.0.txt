@@ -113,3 +113,9 @@
 
 - ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+
+
+#---- contrast ratio: ProgressBar ----
+
+- contrast ratio: ProgressBar.selectionForeground                     #bbbbbb  #4c87c8     2.0  !!!!!
++ contrast ratio: ProgressBar.selectionForeground                     #3c3f41  #a2a2a2     4.2  !!!

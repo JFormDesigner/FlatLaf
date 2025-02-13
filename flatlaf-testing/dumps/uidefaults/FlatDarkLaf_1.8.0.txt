@@ -1630,3 +1630,123 @@ textText                       #bbbbbb  HSL   0   0  73    javax.swing.plaf.Colo
 window                         #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
 windowBorder                   #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 windowText                     #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- activeTitleForeground --
+InternalFrame.activeTitleForeground                 #bbbbbb  #242526     8.0
+
+#-- disabledForeground --
+ComboBox.disabledForeground                         #8c8c8c  #3c3f41     3.2  !!!!
+Label.disabledForeground                            #8c8c8c  #3c3f41     3.2  !!!!
+Spinner.disabledForeground                          #8c8c8c  #3c3f41     3.2  !!!!
+
+#-- disabledText --
+Button.disabledText                                 #8c8c8c  #3c3f41     3.2  !!!!
+CheckBox.disabledText                               #8c8c8c  #3c3f41     3.2  !!!!
+RadioButton.disabledText                            #8c8c8c  #3c3f41     3.2  !!!!
+ToggleButton.disabledText                           #8c8c8c  #3c3f41     3.2  !!!!
+
+#-- dropCellForeground --
+List.dropCellForeground                             #bbbbbb  #3c588b     3.7  !!!!
+Table.dropCellForeground                            #bbbbbb  #3c588b     3.7  !!!!
+Tree.dropCellForeground                             #bbbbbb  #3c588b     3.7  !!!!
+
+#-- focusCellForeground --
+Table.focusCellForeground                           #bbbbbb  #46494b     4.7  !!!
+
+#-- foreground --
+Button.foreground                                   #bbbbbb  #4e5052     4.2  !!!
+Button.default.foreground                           #bbbbbb  #375a81     3.7  !!!!
+CheckBox.foreground                                 #bbbbbb  #3c3f41     5.5  !!
+CheckBoxMenuItem.foreground                         #bbbbbb  #303234     6.7  !
+ColorChooser.foreground                             #bbbbbb  #3c3f41     5.5  !!
+ComboBox.foreground                                 #bbbbbb  #46494b     4.7  !!!
+DesktopIcon.foreground                              #bbbbbb  #555c68     3.5  !!!!
+EditorPane.foreground                               #bbbbbb  #46494b     4.7  !!!
+FormattedTextField.foreground                       #bbbbbb  #46494b     4.7  !!!
+JideButton.foreground                               #bbbbbb  #4e5052     4.2  !!!
+JideLabel.foreground                                #bbbbbb  #3c3f41     5.5  !!
+JideSplitButton.foreground                          #bbbbbb  #4e5052     4.2  !!!
+JideTabbedPane.foreground                           #bbbbbb  #3c3f41     5.5  !!
+Label.foreground                                    #bbbbbb  #3c3f41     5.5  !!
+List.foreground                                     #bbbbbb  #46494b     4.7  !!!
+Menu.foreground                                     #bbbbbb  #303234     6.7  !
+MenuBar.foreground                                  #bbbbbb  #303234     6.7  !
+MenuItem.foreground                                 #bbbbbb  #303234     6.7  !
+OptionPane.foreground                               #bbbbbb  #3c3f41     5.5  !!
+Panel.foreground                                    #bbbbbb  #3c3f41     5.5  !!
+PasswordField.foreground                            #bbbbbb  #46494b     4.7  !!!
+PopupMenu.foreground                                #bbbbbb  #303234     6.7  !
+RadioButton.foreground                              #bbbbbb  #3c3f41     5.5  !!
+RadioButtonMenuItem.foreground                      #bbbbbb  #303234     6.7  !
+RootPane.foreground                                 #bbbbbb  #3c3f41     5.5  !!
+Spinner.foreground                                  #bbbbbb  #46494b     4.7  !!!
+TabbedPane.foreground                               #bbbbbb  #3c3f41     5.5  !!
+Table.foreground                                    #bbbbbb  #46494b     4.7  !!!
+TableHeader.foreground                              #bbbbbb  #46494b     4.7  !!!
+TextArea.foreground                                 #bbbbbb  #46494b     4.7  !!!
+TextField.foreground                                #bbbbbb  #46494b     4.7  !!!
+TextPane.foreground                                 #bbbbbb  #46494b     4.7  !!!
+TitlePane.foreground                                #bbbbbb  #303234     6.7  !
+ToggleButton.foreground                             #bbbbbb  #4e5052     4.2  !!!
+ToolTip.foreground                                  #bbbbbb  #1e2021     8.5
+Tree.foreground                                     #bbbbbb  #46494b     4.7  !!!
+
+#-- inactiveForeground --
+EditorPane.inactiveForeground                       #8c8c8c  #3c3f41     3.2  !!!!
+FormattedTextField.inactiveForeground               #8c8c8c  #3c3f41     3.2  !!!!
+PasswordField.inactiveForeground                    #8c8c8c  #3c3f41     3.2  !!!!
+TextArea.inactiveForeground                         #8c8c8c  #3c3f41     3.2  !!!!
+TextField.inactiveForeground                        #8c8c8c  #3c3f41     3.2  !!!!
+TextPane.inactiveForeground                         #8c8c8c  #3c3f41     3.2  !!!!
+TitlePane.inactiveForeground                        #8c8c8c  #303234     3.8  !!!!
+
+#-- inactiveTitleForeground --
+InternalFrame.inactiveTitleForeground               #8c8c8c  #303233     3.8  !!!!
+
+#-- monthStringForeground --
+JXMonthView.monthStringForeground                   #bbbbbb  #4c5052     4.2  !!!
+
+#-- selectedForeground --
+Button.selectedForeground                           #bbbbbb  #676a6c     2.8  !!!!!
+ToggleButton.selectedForeground                     #bbbbbb  #676a6c     2.8  !!!!!
+
+#-- selectionBackground --
+ProgressBar.selectionBackground                     #bbbbbb  #505456     4.0  !!!
+
+#-- selectionForeground --
+CheckBoxMenuItem.selectionForeground                #bbbbbb  #4b6eaf     2.6  !!!!!
+ComboBox.selectionForeground                        #bbbbbb  #4b6eaf     2.6  !!!!!
+EditorPane.selectionForeground                      #bbbbbb  #4b6eaf     2.6  !!!!!
+FormattedTextField.selectionForeground              #bbbbbb  #4b6eaf     2.6  !!!!!
+List.selectionForeground                            #bbbbbb  #4b6eaf     2.6  !!!!!
+Menu.selectionForeground                            #bbbbbb  #4b6eaf     2.6  !!!!!
+MenuItem.selectionForeground                        #bbbbbb  #4b6eaf     2.6  !!!!!
+PasswordField.selectionForeground                   #bbbbbb  #4b6eaf     2.6  !!!!!
+ProgressBar.selectionForeground                     #bbbbbb  #4c87c8     2.0  !!!!!
+RadioButtonMenuItem.selectionForeground             #bbbbbb  #4b6eaf     2.6  !!!!!
+Table.selectionForeground                           #bbbbbb  #4b6eaf     2.6  !!!!!
+TextArea.selectionForeground                        #bbbbbb  #4b6eaf     2.6  !!!!!
+TextField.selectionForeground                       #bbbbbb  #4b6eaf     2.6  !!!!!
+TextPane.selectionForeground                        #bbbbbb  #4b6eaf     2.6  !!!!!
+Tree.selectionForeground                            #bbbbbb  #4b6eaf     2.6  !!!!!
+
+#-- selectionInactiveForeground --
+List.selectionInactiveForeground                    #bbbbbb  #0f2a3d     7.7
+Table.selectionInactiveForeground                   #bbbbbb  #0f2a3d     7.7
+Tree.selectionInactiveForeground                    #bbbbbb  #0f2a3d     7.7
+
+#-- specialTitleForeground --
+TaskPane.specialTitleForeground                     #222222  #afafaf     7.3
+
+#-- textForeground --
+Tree.textForeground                                 #bbbbbb  #46494b     4.7  !!!
+
+#-- titleForeground --
+JXTitledPanel.titleForeground                       #bbbbbb  #4c5052     4.2  !!!
