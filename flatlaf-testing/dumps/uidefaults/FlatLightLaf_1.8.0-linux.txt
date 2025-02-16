@@ -1,8 +1,31 @@
 - OS     Windows 10
 + OS     Linux
 
+#---- FileChooser ----
+
+- FileChooser.useSystemExtensionHiding true
++ FileChooser.useSystemExtensionHiding false
+
+
+#---- JXHeader ----
+
+- JXHeader.titleFont             [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ JXHeader.titleFont             [active] Liberation Sans bold 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- JXTitledPanel ----
+
+- JXTitledPanel.titleFont        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ JXTitledPanel.titleFont        [active] Liberation Sans bold 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- ProgressBar ----
+
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
-+ ProgressBar.font               [active] Cantarell plain 13    javax.swing.plaf.FontUIResource [UI]
++ ProgressBar.font               [active] Liberation Sans plain 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- ScrollBar ----
 
 - ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
 + ScrollBar.minimumThumbSize     18,18    javax.swing.plaf.DimensionUIResource [UI]
@@ -13,6 +36,104 @@
 - ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 + ScrollBar.thumbInsets          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 
-- defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
-+ defaultFont                    Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
 
+#---- TaskPane ----
+
+- TaskPane.font                  [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ TaskPane.font                  [active] Liberation Sans bold 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- TitlePane ----
+
+- TitlePane.small.font           [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
++ TitlePane.small.font           [active] Liberation Sans plain 14    javax.swing.plaf.FontUIResource [UI]
+- defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ defaultFont                    Liberation Sans plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+
+#---- h0 ----
+
+- h0.font                        [active] Segoe UI plain 30    javax.swing.plaf.FontUIResource [UI]
++ h0.font                        [active] Liberation Sans plain 33    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h00 ----
+
+- h00.font                       [active] Segoe UI plain 36    javax.swing.plaf.FontUIResource [UI]
++ h00.font                       [active] Liberation Sans plain 39    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h1 ----
+
+- h1.font                        [active] Segoe UI Semibold plain 24    javax.swing.plaf.FontUIResource [UI]
++ h1.font                        [active] Ubuntu Medium plain 27    javax.swing.plaf.FontUIResource [UI]
+
+- h1.regular.font                [active] Segoe UI plain 24    javax.swing.plaf.FontUIResource [UI]
++ h1.regular.font                [active] Liberation Sans plain 27    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h2 ----
+
+- h2.font                        [active] Segoe UI Semibold plain 18    javax.swing.plaf.FontUIResource [UI]
++ h2.font                        [active] Ubuntu Medium plain 21    javax.swing.plaf.FontUIResource [UI]
+
+- h2.regular.font                [active] Segoe UI plain 18    javax.swing.plaf.FontUIResource [UI]
++ h2.regular.font                [active] Liberation Sans plain 21    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h3 ----
+
+- h3.font                        [active] Segoe UI Semibold plain 15    javax.swing.plaf.FontUIResource [UI]
++ h3.font                        [active] Ubuntu Medium plain 18    javax.swing.plaf.FontUIResource [UI]
+
+- h3.regular.font                [active] Segoe UI plain 15    javax.swing.plaf.FontUIResource [UI]
++ h3.regular.font                [active] Liberation Sans plain 18    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h4 ----
+
+- h4.font                        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ h4.font                        [active] Liberation Sans bold 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- large ----
+
+- large.font                     [active] Segoe UI plain 14    javax.swing.plaf.FontUIResource [UI]
++ large.font                     [active] Liberation Sans plain 17    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- light ----
+
+- light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
++ light.font                     [active] Ubuntu Light plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- medium ----
+
+- medium.font                    [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
++ medium.font                    [active] Liberation Sans plain 14    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- mini ----
+
+- mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.FontUIResource [UI]
++ mini.font                      [active] Liberation Sans plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- monospaced ----
+
+- monospaced.font                [active] Monospaced plain 12    javax.swing.plaf.FontUIResource [UI]
++ monospaced.font                [active] Liberation Mono plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- semibold ----
+
+- semibold.font                  [active] Segoe UI Semibold plain 12    javax.swing.plaf.FontUIResource [UI]
++ semibold.font                  [active] Ubuntu Medium plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- small ----
+
+- small.font                     [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
++ small.font                     [active] Liberation Sans plain 13    javax.swing.plaf.FontUIResource [UI]
