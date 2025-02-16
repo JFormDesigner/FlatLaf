@@ -1109,13 +1109,14 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: mix(color1,color2[,weight]) or
-	 *         tint(color[,weight]) or
-	 *         shade(color[,weight])
+	 * Syntax: mix(color1,color2[,weight][,options]) or
+	 *         tint(color[,weight][,options]) or
+	 *         shade(color[,weight][,options])
 	 *   - color1: a color (e.g. #f00) or a color function
 	 *   - color2: a color (e.g. #f00) or a color function
 	 *   - weight: the weight (in range 0-100%) to mix the two colors
 	 *             larger weight uses more of first color, smaller weight more of second color
+	 *   - options: [derived]
 	 */
 	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver )
 		throws IllegalArgumentException
@@ -1124,18 +1125,31 @@ class UIDefaultsLoader
 		if( color1Str == null )
 			color1Str = params.get( i++ );
 		String color2Str = params.get( i++ );
-		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
+		int weight = 50;
+		boolean derived = false;
+
+		if( params.size() > i ) {
+			String weightStr = params.get( i );
+			if( !weightStr.isEmpty() && Character.isDigit( weightStr.charAt( 0 ) ) ) {
+				weight = parsePercentage( weightStr );
+				i++;
+			}
+		}
+		if( params.size() > i ) {
+			String options = params.get( i );
+			derived = options.contains( "derived" );
+		}
 
 		// parse second color
-		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver );
-		if( color2 == null )
+		ColorUIResource color1 = (ColorUIResource) parseColorOrFunction( resolver.apply( color1Str ), resolver );
+		if( color1 == null )
 			return null;
 
 		// create function
-		ColorFunction function = new ColorFunctions.Mix( color2, weight );
+		ColorFunction function = new ColorFunctions.Mix2( color1, weight );
 
 		// parse first color, apply function and create mixed color
-		return parseFunctionBaseColor( color1Str, function, false, resolver );
+		return parseFunctionBaseColor( color2Str, function, derived, resolver );
 	}
 
 	/**

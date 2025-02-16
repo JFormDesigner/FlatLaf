@@ -224,6 +224,9 @@ public class ColorFunctions
 		if( functions.length == 1 && functions[0] instanceof Mix ) {
 			Mix mixFunction = (Mix) functions[0];
 			return mix( color, mixFunction.color2, mixFunction.weight / 100 );
+		} else if( functions.length == 1 && functions[0] instanceof Mix2 ) {
+			Mix2 mixFunction = (Mix2) functions[0];
+			return mix( mixFunction.color1, color, mixFunction.weight / 100 );
 		}
 
 		// convert RGB to HSL
@@ -386,7 +389,11 @@ public class ColorFunctions
 	//---- class Mix ----------------------------------------------------------
 
 	/**
-	 * Mix two colors.
+	 * Mix two colors using {@link ColorFunctions#mix(Color, Color, float)}.
+	 * First color is passed to {@link #apply(float[])}.
+	 * Second color is {@link #color2}.
+	 * <p>
+	 * Use {@link Mix2} to tint or shade color.
 	 *
 	 * @since 1.6
 	 */
@@ -418,6 +425,46 @@ public class ColorFunctions
 		@Override
 		public String toString() {
 			return String.format( "mix(#%08x,%.0f%%)", color2.getRGB(), weight );
+		}
+	}
+
+	//---- class Mix2 ---------------------------------------------------------
+
+	/**
+	 * Mix two colors using {@link ColorFunctions#mix(Color, Color, float)}.
+	 * First color is {@link #color1}.
+	 * Second color is passed to {@link #apply(float[])}.
+	 *
+	 * @since 3.6
+	 */
+	public static class Mix2
+		implements ColorFunction
+	{
+		public final Color color1;
+		public final float weight;
+
+		public Mix2( Color color1, float weight ) {
+			this.color1 = color1;
+			this.weight = weight;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			// convert from HSL to RGB because color mixing is done on RGB values
+			Color color2 = HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
+
+			// mix
+			Color color = mix( color1, color2, weight / 100 );
+
+			// convert RGB to HSL
+			float[] hsl = HSLColor.fromRGB( color );
+			System.arraycopy( hsl, 0, hsla, 0, hsl.length );
+			hsla[3] = (color.getAlpha() / 255f) * 100;
+		}
+
+		@Override
+		public String toString() {
+			return String.format( "mix2(#%08x,%.0f%%)", color1.getRGB(), weight );
 		}
 	}
 }
