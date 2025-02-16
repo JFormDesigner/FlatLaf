@@ -54,7 +54,7 @@ public class FlatClassLoaderTest
 			}, FlatClassLoaderTest.class.getClassLoader() );
 
 			Class<?> lafClass = cl.loadClass( "com.formdev.flatlaf.FlatDarkLaf" );
-			LookAndFeel laf = (LookAndFeel) lafClass.newInstance();
+			LookAndFeel laf = (LookAndFeel) lafClass.getDeclaredConstructor().newInstance();
 			UIManager.setLookAndFeel( laf );
 
 			JFrame frame = new JFrame( "FlatClassloaderTest" );
