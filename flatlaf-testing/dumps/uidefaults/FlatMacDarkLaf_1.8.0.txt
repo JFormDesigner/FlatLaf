@@ -73,7 +73,7 @@ Button.default.borderColor     #268eff  HSL 211 100  57    javax.swing.plaf.Colo
 Button.default.borderWidth     0
 Button.default.focusColor      #29acff80  50%  HSLA 203 100  58 50    javax.swing.plaf.ColorUIResource [UI]
 Button.default.focusedBorderColor #2e92ff  HSL 211 100  59    javax.swing.plaf.ColorUIResource [UI]
-Button.default.foreground      #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+Button.default.foreground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Button.default.hoverBackground #0f82ff  HSL 211 100  53    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.default.hoverBorderColor #2e92ff  HSL 211 100  59    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #1f8aff  HSL 211 100  56    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
@@ -794,7 +794,7 @@ ProgressBar.foreground         #007aff  HSL 211 100  50    javax.swing.plaf.Colo
 ProgressBar.horizontalSize     146,4    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBar.repaintInterval    15
 ProgressBar.selectionBackground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
-ProgressBar.selectionForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionForeground #eeeeee  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.verticalSize       4,146    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBarUI                  com.formdev.flatlaf.ui.FlatProgressBarUI
 
@@ -1326,7 +1326,7 @@ ToggleButton.margin            2,14,2,14    javax.swing.plaf.InsetsUIResource [U
 ToggleButton.pressedBackground #656565  HSL   0   0  40    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 ToggleButton.rollover          true
 ToggleButton.selectedBackground #898989  HSL   0   0  54    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20% autoInverse)
-ToggleButton.selectedForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.selectedForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.shadow            #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.disabledUnderlineColor #595959  HSL   0   0  35    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.focusBackground #172c4a  HSL 215  53  19    javax.swing.plaf.ColorUIResource [UI]
@@ -1672,7 +1672,7 @@ Table.focusCellForeground                           #dddddd  #282828    10.9
 
 #-- foreground --
 Button.foreground                                   #dddddd  #565656     5.4  !!
-Button.default.foreground                           #dddddd  #007aff     3.0  !!!!
+Button.default.foreground                           #ffffff  #007aff     4.0  !!!
 CheckBox.foreground                                 #dddddd  #1e1e1e    12.3
 CheckBoxMenuItem.foreground                         #dddddd  #323232     9.4
 ColorChooser.foreground                             #dddddd  #1e1e1e    12.3
@@ -1725,7 +1725,7 @@ JXMonthView.monthStringForeground                   #dddddd  #4c5052     6.0  !
 
 #-- selectedForeground --
 Button.selectedForeground                           #dddddd  #707070     3.6  !!!!
-ToggleButton.selectedForeground                     #dddddd  #898989     2.6  !!!!!
+ToggleButton.selectedForeground                     #ffffff  #898989     3.5  !!!!
 
 #-- selectionBackground --
 ProgressBar.selectionBackground                     #dddddd  #323232     9.4
@@ -1740,7 +1740,7 @@ Menu.selectionForeground                            #ffffff  #1458b8     6.7  !
 MenuBar.selectionForeground                         #dddddd  #585858     5.2  !!
 MenuItem.selectionForeground                        #ffffff  #1458b8     6.7  !
 PasswordField.selectionForeground                   #ffffff  #3d6490     6.1  !
-ProgressBar.selectionForeground                     #dddddd  #007aff     3.0  !!!!
+ProgressBar.selectionForeground                     #eeeeee  #007aff     3.5  !!!!
 RadioButtonMenuItem.selectionForeground             #ffffff  #1458b8     6.7  !
 Table.selectionForeground                           #ffffff  #0054cc     6.7  !
 TextArea.selectionForeground                        #ffffff  #3d6490     6.1  !
