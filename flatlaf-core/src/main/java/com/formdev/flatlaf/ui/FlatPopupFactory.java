@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.MouseInfo;
@@ -117,8 +118,8 @@ public class FlatPopupFactory
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
-			if( popup.popupWindow != null && isMacOSBorderSupported() )
-				setupRoundedBorder( popup.popupWindow, owner, contents );
+			if( popup.popupWindow != null && (isMacOSBorderSupported() || isLinuxBorderSupported( popup.popupWindow )) )
+				setupRoundedBorder( popup, popup.popupWindow, owner, contents );
 			return popup;
 		}
 
@@ -128,7 +129,7 @@ public class FlatPopupFactory
 		{
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
 			if( popup.popupWindow != null )
-				setupRoundedBorder( popup.popupWindow, owner, contents );
+				setupRoundedBorder( popup, popup.popupWindow, owner, contents );
 			return popup;
 		}
 
@@ -370,7 +371,15 @@ public class FlatPopupFactory
 			FlatNativeMacLibrary.isLoaded();
 	}
 
-	private static void setupRoundedBorder( Window popupWindow, Component owner, Component contents ) {
+	private static boolean isLinuxBorderSupported( Window window ) {
+		return SystemInfo.isLinux &&
+			FlatSystemProperties.getBoolean( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER, true ) &&
+			window.getGraphicsConfiguration().getDevice().isWindowTranslucencySupported( WindowTranslucency.PERPIXEL_TRANSPARENT );
+	}
+
+	private static void setupRoundedBorder( NonFlashingPopup popup,
+		Window popupWindow, Component owner, Component contents )
+	{
 		int borderCornerRadius = getBorderCornerRadius( owner, contents );
 		float borderWidth = getRoundedBorderWidth( owner, contents );
 
@@ -397,7 +406,7 @@ public class FlatPopupFactory
 
 		if( popupWindow.isDisplayable() ) {
 			// native window already created
-			setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+			setupRoundedBorderImpl( popup, popupWindow, borderCornerRadius, borderWidth, borderColor );
 		} else {
 			// native window not yet created --> add listener to set native border after window creation
 			AtomicReference<HierarchyListener> l = new AtomicReference<>();
@@ -405,7 +414,7 @@ public class FlatPopupFactory
 				if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
 					(e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0 )
 				{
-					setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+					setupRoundedBorderImpl( popup, popupWindow, borderCornerRadius, borderWidth, borderColor );
 					popupWindow.removeHierarchyListener( l.get() );
 				}
 			} );
@@ -413,7 +422,9 @@ public class FlatPopupFactory
 		}
 	}
 
-	private static void setupRoundedBorderImpl( Window popupWindow, int borderCornerRadius, float borderWidth, Color borderColor ) {
+	private static void setupRoundedBorderImpl( NonFlashingPopup popup,
+		Window popupWindow, int borderCornerRadius, float borderWidth, Color borderColor )
+	{
 		if( SystemInfo.isWindows ) {
 			// get native window handle
 			long hwnd = FlatNativeWindowsLibrary.getHWND( popupWindow );
@@ -433,6 +444,12 @@ public class FlatPopupFactory
 			// set corner radius, border width and color
 			FlatNativeMacLibrary.setWindowRoundedBorder( popupWindow, borderCornerRadius,
 				borderWidth, (borderColor != null) ? borderColor.getRGB() : 0 );
+		} else if( SystemInfo.isLinux ) {
+			if( popupWindow instanceof RootPaneContainer ) {
+				popup.windowRoundedBorder = new FlatWindowRoundedBorder(
+					((RootPaneContainer)popupWindow).getRootPane(),
+					borderCornerRadius, borderWidth, borderColor );
+			}
 		}
 	}
 
@@ -465,7 +482,7 @@ public class FlatPopupFactory
 			"Popup.roundedBorderWidth";
 
 		Object value = getOption( owner, contents, FlatClientProperties.POPUP_ROUNDED_BORDER_WIDTH, uiKey );
-		return (value instanceof Number) ? ((Number)value).floatValue() : 0;
+		return (value instanceof Number) ? ((Number)value).floatValue() : 1;
 	}
 
 	//---- fixes --------------------------------------------------------------
@@ -578,6 +595,7 @@ public class FlatPopupFactory
 		// heavy weight
 		Window popupWindow;
 		private Color oldPopupWindowBackground;
+		private FlatWindowRoundedBorder windowRoundedBorder;
 
 		private boolean disposed;
 
@@ -603,6 +621,7 @@ public class FlatPopupFactory
 			contents = reusePopup.contents;
 			popupWindow = reusePopup.popupWindow;
 			oldPopupWindowBackground = reusePopup.oldPopupWindowBackground;
+			windowRoundedBorder = reusePopup.windowRoundedBorder;
 		}
 
 		NonFlashingPopup cloneForReuse() {
@@ -672,6 +691,11 @@ public class FlatPopupFactory
 				delegate = null;
 				owner = null;
 				contents = null;
+			}
+
+			if( windowRoundedBorder != null ) {
+				windowRoundedBorder.uninstall();
+				windowRoundedBorder = null;
 			}
 
 			if( popupWindow != null ) {

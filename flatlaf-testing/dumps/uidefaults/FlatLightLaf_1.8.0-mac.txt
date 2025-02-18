@@ -1,12 +1,14 @@
 - Java   1.8.0_202
-+ Java   1.8.0_292
++ Java   1.8.0_322
 
 - OS     Windows 10
 + OS     Mac OS X
 
 #---- ComboBox ----
 
+- ComboBox.roundedBorderWidth    1
 + ComboBox.roundedBorderWidth    0
+
 + ComboBox.showPopupOnNavigation true
 
 
@@ -49,11 +51,13 @@
 
 #---- Popup ----
 
+- Popup.roundedBorderWidth       1
 + Popup.roundedBorderWidth       0
 
 
 #---- PopupMenu ----
 
+- PopupMenu.roundedBorderWidth   1
 + PopupMenu.roundedBorderWidth   0
 
 
@@ -92,6 +96,7 @@
 
 #---- ToolTip ----
 
+- ToolTip.roundedBorderWidth     1
 + ToolTip.roundedBorderWidth     0
 - defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 + defaultFont                    Helvetica Neue plain 13    javax.swing.plaf.FontUIResource [UI]

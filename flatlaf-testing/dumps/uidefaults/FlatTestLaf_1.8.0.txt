@@ -254,6 +254,7 @@ ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.popupBackground       #ffffcc  HSL  60 100  90    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.popupInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.roundedBorderWidth    1
 ComboBox.selectionArc          0
 ComboBox.selectionBackground   #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
@@ -782,6 +783,7 @@ Popup.dropShadowColor          #00ff00  HSL 120 100  50    javax.swing.plaf.Colo
 Popup.dropShadowInsets         -6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 Popup.dropShadowOpacity        0.5
 Popup.dropShadowPainted        true
+Popup.roundedBorderWidth       1
 
 
 #---- PopupMenu ----
@@ -795,6 +797,7 @@ PopupMenu.consumeEventOnClose  false
 PopupMenu.font                 [active] $defaultFont [UI]
 PopupMenu.foreground           #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.hoverScrollArrowBackground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.roundedBorderWidth   1
 PopupMenu.scrollArrowColor     #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
 
 
@@ -1438,6 +1441,7 @@ ToolTip.border                 [lazy] line: #000000  HSL   0   0   0    java.awt
 ToolTip.borderCornerRadius     4
 ToolTip.font                   [active] $defaultFont [UI]
 ToolTip.foreground             #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.roundedBorderWidth     1
 
 
 #---- ToolTipManager ----
