@@ -42,14 +42,15 @@ public class FlatWindowRestoreIcon
 
 	@Override
 	protected void paintIconAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-		int iwh = (int) (getSymbolHeight() * scaleFactor);
+		int iwh = (int) (symbolHeight * scaleFactor);
 		int ix = x + ((width - iwh) / 2);
 		int iy = y + ((height - iwh) / 2);
-		float thickness = Math.max( SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor, 1 );
+		boolean isWindows10 = SystemInfo.isWindows_10_orLater && !SystemInfo.isWindows_11_orLater;
+		float thickness = Math.max( isWindows10 ? (int) scaleFactor : (float) scaleFactor, 1 );
 		int arc = Math.max( (int) (1.5 * scaleFactor), 2 );
 		int arcOuter = (int) (arc + (1.5 * scaleFactor));
 
-		int rwh = (int) ((getSymbolHeight() - 2) * scaleFactor);
+		int rwh = (int) ((symbolHeight - 2) * scaleFactor);
 		int ro2 = iwh - rwh;
 
 		// upper-right rectangle

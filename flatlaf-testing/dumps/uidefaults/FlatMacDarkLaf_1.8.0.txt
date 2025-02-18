@@ -1252,12 +1252,17 @@ TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 #---- TitlePane ----
 
 TitlePane.background           #323232  HSL   0   0  20    javax.swing.plaf.ColorUIResource [UI]
-TitlePane.buttonHoverBackground #585858  HSL   0   0  35    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15% autoInverse)
+TitlePane.buttonArc            0
+TitlePane.buttonHoverBackground #4c4c4c  HSL   0   0  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+TitlePane.buttonInsets         0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonMinimumWidth   30
-TitlePane.buttonPressedBackground #4c4c4c  HSL   0   0  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+TitlePane.buttonPressedBackground #414141  HSL   0   0  25    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.buttonSymbolHeight   10
+TitlePane.buttonsFillVertically true
+TitlePane.buttonsGap           0
+TitlePane.buttonsMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.centerTitle          false
 TitlePane.centerTitleIfMenuBarEmbedded true
 TitlePane.closeHoverBackground #c42b1c  HSL   5  75  44    javax.swing.plaf.ColorUIResource [UI]

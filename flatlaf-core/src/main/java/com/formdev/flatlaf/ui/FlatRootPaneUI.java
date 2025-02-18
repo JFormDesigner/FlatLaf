@@ -31,6 +31,7 @@ import java.awt.Window;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 import java.util.function.Function;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -485,8 +486,12 @@ public class FlatRootPaneUI
 				break;
 
 			case "ancestor":
-				if( e.getNewValue() instanceof Window )
+				if( e.getNewValue() instanceof Window ) {
+					if( titlePane != null && !Objects.equals( titlePane.windowStyle, FlatTitlePane.getWindowStyle( rootPane ) ) )
+						setTitlePane( createTitlePane() );
+
 					macClearBackgroundForTranslucentWindow( rootPane );
+				}
 
 				macUninstallWindowBackgroundListener( rootPane );
 				macInstallWindowBackgroundListener( rootPane );
