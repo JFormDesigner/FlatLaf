@@ -102,9 +102,9 @@ public class UIDefaultsDump
 
 			dump( FlatMacLightLaf.class.getName(), dir, false );
 			dump( FlatMacDarkLaf.class.getName(), dir, false );
-		}
 
-		dump( FlatTestLaf.class.getName(), dir, false );
+			dump( FlatTestLaf.class.getName(), dir, false );
+		}
 
 //		dump( MyBasicLookAndFeel.class.getName(), dir, false );
 //		dump( MetalLookAndFeel.class.getName(), dir, false );
@@ -184,8 +184,11 @@ public class UIDefaultsDump
 		dump( dir, "", lookAndFeel, defaults, key -> !key.contains( "InputMap" ) );
 
 		if( lookAndFeel.getClass() == FlatLightLaf.class || !(lookAndFeel instanceof FlatLaf) ) {
-			dump( dir, "_InputMap", lookAndFeel, defaults, key -> key.contains( "InputMap" ) );
-			dumpActionMaps( dir, "_ActionMap", lookAndFeel, defaults );
+			if( SystemInfo.isWindows || SystemInfo.isMacOS )
+				dump( dir, "_InputMap", lookAndFeel, defaults, key -> key.contains( "InputMap" ) );
+
+			if( SystemInfo.isWindows )
+				dumpActionMaps( dir, "_ActionMap", lookAndFeel, defaults );
 		}
 	}
 

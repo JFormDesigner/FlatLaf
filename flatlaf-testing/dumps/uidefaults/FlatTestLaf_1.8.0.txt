@@ -1293,17 +1293,34 @@ TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 TitlePane.background           #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.borderColor          #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonArc            0
+TitlePane.buttonBackground     #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonForeground     #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonHoverBackground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonHoverForeground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonInactiveBackground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonInactiveForeground #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonInsets         0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonMinimumWidth   30
+TitlePane.buttonPressedBackground #999999  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonPressedForeground #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.buttonSymbolHeight   10
+TitlePane.buttonsFillVertically true
+TitlePane.buttonsGap           0
+TitlePane.buttonsMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.centerTitle          false
 TitlePane.centerTitleIfMenuBarEmbedded true
-TitlePane.closeHoverBackground #c42b1c  HSL   5  75  44    javax.swing.plaf.ColorUIResource [UI]
-TitlePane.closeHoverForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeBackground      #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeForeground      #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeHoverBackground #bb0000  HSL   0 100  37    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeHoverForeground #ff00ff  HSL 300 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
-TitlePane.closePressedBackground #c42b1ce6  90%  HSLA   5  75  44 90    javax.swing.plaf.ColorUIResource [UI]
-TitlePane.closePressedForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeInactiveBackground #dd0000  HSL   0 100  43    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeInactiveForeground #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closePressedBackground #990000  HSL   0 100  30    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closePressedForeground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.font                 [active] $defaultFont [UI]
 TitlePane.foreground           #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.icon                 [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
