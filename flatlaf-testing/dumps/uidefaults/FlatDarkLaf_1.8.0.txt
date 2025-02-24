@@ -598,7 +598,7 @@ Menu.submenuPopupOffsetY       [active] -4
 
 MenuBar.background             #303234  HSL 210   4  20    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.border                 [lazy] 0,0,1,0  false    com.formdev.flatlaf.ui.FlatMenuBarBorder [UI]
-MenuBar.borderColor            #505254  HSL 210   2  32    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.borderColor            #595c5e  HSL 204   3  36    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.font                   [active] $defaultFont [UI]
 MenuBar.foreground             #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.highlight              #232324  HSL 240   1  14    javax.swing.plaf.ColorUIResource [UI]
@@ -938,7 +938,7 @@ SearchField.searchIconPressedColor [lazy] #7f8b9180  50%  HSLA 200   8  53 50   
 #---- Separator ----
 
 Separator.background           #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
-Separator.foreground           #505254  HSL 210   2  32    javax.swing.plaf.ColorUIResource [UI]
+Separator.foreground           #595c5e  HSL 204   3  36    javax.swing.plaf.ColorUIResource [UI]
 Separator.height               3
 Separator.highlight            #232324  HSL 240   1  14    javax.swing.plaf.ColorUIResource [UI]
 Separator.shadow               #616365  HSL 210   2  39    javax.swing.plaf.ColorUIResource [UI]
@@ -1289,7 +1289,7 @@ TitlePane.useWindowDecorations true
 
 #---- TitledBorder ----
 
-TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#505254  HSL 210   2  32    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#595c5e  HSL 204   3  36    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 TitledBorder.font              [active] $defaultFont [UI]
 TitledBorder.titleColor        #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 
@@ -1352,7 +1352,7 @@ ToolBar.hoverButtonGroupArc    8
 ToolBar.hoverButtonGroupBackground #434749  HSL 200   4  27    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 ToolBar.isRollover             true
 ToolBar.light                  #2f3031  HSL 210   2  19    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.separatorColor         #505254  HSL 210   2  32    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.separatorColor         #595c5e  HSL 204   3  36    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorWidth         7
 ToolBar.shadow                 #616365  HSL 210   2  39    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.spacingBorder          [lazy] 1,2,1,2  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
@@ -1750,3 +1750,17 @@ Tree.textForeground                                 #dddddd  #46494b     6.7  !
 
 #-- titleForeground --
 JXTitledPanel.titleForeground                       #dddddd  #4c5052     6.0  !
+
+#-- non-text --
+CheckBoxMenuItem.icon.checkmarkColor                #b7b7b7  #3c3f41     5.3  !!
+CheckBoxMenuItem.icon.disabledCheckmarkColor        #777777  #3c3f41     2.4  !!!!!
+Menu.icon.arrowColor                                #b7b7b7  #3c3f41     5.3  !!
+Menu.icon.disabledArrowColor                        #777777  #3c3f41     2.4  !!!!!
+ProgressBar.background                              #505456  #3c3f41     1.4  !!!!!!
+ProgressBar.foreground                              #4c87c8  #3c3f41     2.8  !!!!!
+Separator.foreground                                #595c5e  #3c3f41     1.6  !!!!!!
+Slider.disabledTrackColor                           #54595c  #3c3f41     1.5  !!!!!!
+Slider.trackColor                                   #616669  #3c3f41     1.8  !!!!!!
+Slider.trackValueColor                              #4c87c8  #3c3f41     2.8  !!!!!
+TabbedPane.contentAreaColor                         #616365  #3c3f41     1.8  !!!!!!
+ToolBar.separatorColor                              #595c5e  #3c3f41     1.6  !!!!!!

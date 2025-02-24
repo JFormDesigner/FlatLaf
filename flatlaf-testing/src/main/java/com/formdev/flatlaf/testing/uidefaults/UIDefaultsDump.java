@@ -901,6 +901,22 @@ public class UIDefaultsDump
 		fg2bgMap.remove( "TitlePane.closeHoverForeground" );
 		fg2bgMap.remove( "TitlePane.closePressedForeground" );
 
+		// non-text
+		HashMap<String, String> nonTextMap = new HashMap<>();
+		nonTextMap.put( "Menu.icon.arrowColor", "Panel.background" );
+		nonTextMap.put( "Menu.icon.disabledArrowColor", "Panel.background" );
+		nonTextMap.put( "CheckBoxMenuItem.icon.checkmarkColor", "Panel.background" );
+		nonTextMap.put( "CheckBoxMenuItem.icon.disabledCheckmarkColor", "Panel.background" );
+		nonTextMap.put( "ProgressBar.foreground", "Panel.background" );
+		nonTextMap.put( "ProgressBar.background", "Panel.background" );
+		nonTextMap.put( "Separator.foreground", "Separator.background" );
+		nonTextMap.put( "Slider.trackColor", "Panel.background" );
+		nonTextMap.put( "Slider.trackValueColor", "Panel.background" );
+		nonTextMap.put( "Slider.disabledTrackColor", "Panel.background" );
+		nonTextMap.put( "TabbedPane.contentAreaColor", "Panel.background" );
+		nonTextMap.put( "ToolBar.separatorColor", "ToolBar.background" );
+
+
 //		out.println();
 //		fg2bgMap.entrySet().stream()
 //			.sorted( (e1, e2) -> e1.getKey().compareTo( e2.getKey() ) )
@@ -925,37 +941,58 @@ public class UIDefaultsDump
 				return key1.substring( 0, dot1 ).compareTo( key2.substring( 0, dot2 ) );
 			} )
 			.forEach( e -> {
-				String fgKey = e.getKey();
-				String bgKey = e.getValue();
-				Color background = defaults.getColor( bgKey );
-				Color foreground = defaults.getColor( fgKey );
-				if( background != null && foreground != null ) {
-					float luma1 = ColorFunctions.luma( background );
-					float luma2 = ColorFunctions.luma( foreground );
-					float contrastRatio = (luma1 > luma2)
-						? (luma1 + 0.05f) / (luma2 + 0.05f)
-						: (luma2 + 0.05f) / (luma1 + 0.05f);
-					String rateing =
-						contrastRatio < 1.95f ? "  !!!!!!" :
-						contrastRatio < 2.95f ? "  !!!!!" :
-						contrastRatio < 3.95f ? "  !!!!" :
-						contrastRatio < 4.95f ? "  !!!" :
-						contrastRatio < 5.95f ? "  !!" :
-						contrastRatio < 6.95f ? "  !" :
-						"";
-
-					String subkey = fgKey.substring( fgKey.lastIndexOf( '.' ) + 1 );
-					if( !subkey.equals( lastSubkey.get() ) ) {
-						lastSubkey.set( subkey );
-						out.println();
-						out.println( "#-- " + subkey + " --" );
-					}
-
-					out.printf( "%-50s  #%06x  #%06x    %4.1f%s%n", fgKey,
-						foreground.getRGB() & 0xffffff, background.getRGB() & 0xffffff,
-						contrastRatio, rateing );
-				}
+				dumpContrastRatio( out, e.getKey(), e.getValue(), lastSubkey );
 			} );
+
+		out.println();
+		out.println( "#-- non-text --" );
+		nonTextMap.entrySet().stream()
+			.sorted( (e1, e2) -> {
+				return e1.getKey().compareTo( e2.getKey() );
+			} )
+			.forEach( e -> {
+				dumpContrastRatio( out, e.getKey(), e.getValue(), null );
+			} );
+	}
+
+	private void dumpContrastRatio( PrintWriter out, String fgKey, String bgKey, AtomicReference<String> lastSubkey ) {
+		Color background = defaults.getColor( bgKey );
+		Color foreground = defaults.getColor( fgKey );
+		if( background == null || foreground == null )
+			return;
+
+		String subkey = fgKey.substring( fgKey.lastIndexOf( '.' ) + 1 );
+		if( lastSubkey != null && !subkey.equals( lastSubkey.get() ) ) {
+			lastSubkey.set( subkey );
+			out.println();
+			out.println( "#-- " + subkey + " --" );
+		}
+
+		Color translucentForeground = null;
+		if( foreground.getAlpha() != 255 ) {
+			translucentForeground = foreground;
+			float weight = foreground.getAlpha() / 255f;
+			foreground = ColorFunctions.mix( new Color( foreground.getRGB() ), background, weight );
+		}
+
+		float luma1 = ColorFunctions.luma( background );
+		float luma2 = ColorFunctions.luma( foreground );
+		float contrastRatio = (luma1 > luma2)
+			? (luma1 + 0.05f) / (luma2 + 0.05f)
+			: (luma2 + 0.05f) / (luma1 + 0.05f);
+		String rateing =
+			contrastRatio < 1.95f ? "  !!!!!!" :
+			contrastRatio < 2.95f ? "  !!!!!" :
+			contrastRatio < 3.95f ? "  !!!!" :
+			contrastRatio < 4.95f ? "  !!!" :
+			contrastRatio < 5.95f ? "  !!" :
+			contrastRatio < 6.95f ? "  !" :
+			"";
+
+		out.printf( "%-50s  #%06x  #%06x    %4.1f%s%s%n", fgKey,
+			foreground.getRGB() & 0xffffff, background.getRGB() & 0xffffff,
+			contrastRatio, rateing,
+			translucentForeground != null ? "    " + dumpColorHex( translucentForeground ) : "" );
 	}
 
 	//---- class MyBasicLookAndFeel -------------------------------------------

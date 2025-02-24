@@ -1844,3 +1844,16 @@ Tree.textForeground                                 #ff0000  #fff0ff     3.6  !!
 
 #-- titleForeground --
 JXTitledPanel.titleForeground                       #ff00ff  #ffff00     2.9  !!!!!
+
+#-- non-text --
+CheckBoxMenuItem.icon.checkmarkColor                #4d89c9  #ccffcc     3.3  !!!!
+CheckBoxMenuItem.icon.disabledCheckmarkColor        #ababab  #ccffcc     2.0  !!!!!
+Menu.icon.arrowColor                                #4d89c9  #ccffcc     3.3  !!!!
+Menu.icon.disabledArrowColor                        #ababab  #ccffcc     2.0  !!!!!
+ProgressBar.background                              #88ff88  #ccffcc     1.1  !!!!!!
+ProgressBar.foreground                              #bae3ba  #ccffcc     1.3  !!!!!!    #73737333  20%
+Separator.foreground                                #00bb00  #ccffcc     2.3  !!!!!
+Slider.disabledTrackColor                           #ffff88  #ccffcc     1.1  !!!!!!
+Slider.trackColor                                   #88ff88  #ccffcc     1.1  !!!!!!
+TabbedPane.contentAreaColor                         #ff0000  #ccffcc     3.6  !!!!
+ToolBar.separatorColor                              #00bb00  #ccffcc     2.3  !!!!!
