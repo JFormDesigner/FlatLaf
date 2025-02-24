@@ -48,7 +48,7 @@ public class FlatAllIJThemes
 		new FlatIJLookAndFeelInfo( "Gruvbox Dark Medium", "com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Gruvbox Dark Soft", "com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkSoftIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Hiberbee Dark", "com.formdev.flatlaf.intellijthemes.FlatHiberbeeDarkIJTheme", true ),
-		new FlatIJLookAndFeelInfo( "High contrast", "com.formdev.flatlaf.intellijthemes.FlatHighContrastIJTheme", true ),
+		new FlatIJLookAndFeelInfo( "High Contrast", "com.formdev.flatlaf.intellijthemes.FlatHighContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Light Flat", "com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme", false ),
 		new FlatIJLookAndFeelInfo( "Material Design Dark", "com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Monocai", "com.formdev.flatlaf.intellijthemes.FlatMonocaiIJTheme", true ),

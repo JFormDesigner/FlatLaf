@@ -167,12 +167,12 @@
 		"sourceCodePath": "blob/latest/src/intellij/src/main/resources/themes/HiberbeeDark.theme.json"
 	},
 	"HighContrast.theme.json": {
-		"name": "High contrast",
+		"name": "High Contrast",
 		"dark": true,
-		"license": "MIT",
+		"license": "Apache License 2.0",
 		"licenseFile": "HighContrast.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/OlyaB/HighContrastTheme",
-		"sourceCodePath": "blob/master/src/HighContrast.theme.json"
+		"sourceCodeUrl": "https://github.com/JetBrains/intellij-community",
+		"sourceCodePath": "blob/master/platform/platform-resources/src/themes/HighContrast.theme.json"
 	},
 	"LightFlatTheme.theme.json": {
 		"name": "Light Flat",
