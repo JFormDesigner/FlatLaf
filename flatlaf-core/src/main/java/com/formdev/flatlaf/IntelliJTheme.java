@@ -332,16 +332,16 @@ public class IntelliJTheme
 		// search for theme specific UI defaults keys
 		ArrayList<String> themeSpecificKeys = new ArrayList<>();
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && ((String)key).startsWith( "[" ) && !((String)key).startsWith( "[style]" ) )
+			if( key instanceof String && ((String)key).startsWith( "{" ) )
 				themeSpecificKeys.add( (String) key );
 		}
 
 		// remove theme specific UI defaults and remember only those for current theme
 		Map<Object, Object> themeSpecificDefaults = new HashMap<>();
-		String currentThemePrefix = '[' + name.replace( ' ', '_' ) + ']';
-		String currentThemeAndAuthorPrefix = '[' + name.replace( ' ', '_' ) + "---" + author.replace( ' ', '_' ) + ']';
-		String currentAuthorPrefix = "[author-" + author.replace( ' ', '_' ) + ']';
-		String allThemesPrefix = "[*]";
+		String currentThemePrefix = '{' + name.replace( ' ', '_' ) + '}';
+		String currentThemeAndAuthorPrefix = '{' + name.replace( ' ', '_' ) + "---" + author.replace( ' ', '_' ) + '}';
+		String currentAuthorPrefix = "{author-" + author.replace( ' ', '_' ) + '}';
+		String allThemesPrefix = "{*}";
 		String[] prefixes = { currentThemePrefix, currentThemeAndAuthorPrefix, currentAuthorPrefix, allThemesPrefix };
 		for( String key : themeSpecificKeys ) {
 			Object value = defaults.remove( key );

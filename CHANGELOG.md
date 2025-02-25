@@ -51,6 +51,11 @@ FlatLaf Change Log
   application where multiple class loaders are involved. E.g. in Eclipse plugin
   or in LibreOffice extension. (issues #955 and #851)
 
+#### Incompatibilities
+
+- Theme prefix in `IntelliJTheme$ThemeLaf.properties` changed from
+  `[theme-name]` to `{theme-name}`.
+
 
 ## 3.5.4
 
