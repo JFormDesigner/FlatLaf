@@ -122,6 +122,7 @@ CheckBox.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 CheckBox.disabledText          #7b7b7b  HSL   0   0  48    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.font                  [active] $defaultFont [UI]
 CheckBox.foreground            #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.icon.background       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.borderColor      #0000003c  24%  HSLA   0   0   0 24    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.checkmarkColor   #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
@@ -136,7 +137,6 @@ CheckBox.icon.pressedBorderColor #0056cf98  60%  HSLA 215 100  41 60    javax.sw
 CheckBox.icon.selectedBackground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBorderColor #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.style            filled
-CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           6
 CheckBox.icon[filled].background #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon[filled].borderColor #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
@@ -812,9 +812,9 @@ RadioButton.disabledText       #7b7b7b  HSL   0   0  48    javax.swing.plaf.Colo
 RadioButton.font               [active] $defaultFont [UI]
 RadioButton.foreground         #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.highlight          #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.icon.centerDiameter 8
 RadioButton.icon.style         filled
-RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.iconTextGap        6
 RadioButton.icon[filled].centerDiameter 6
 RadioButton.light              #1f1f1f26  15%  HSLA   0   0  12 15    javax.swing.plaf.ColorUIResource [UI]
@@ -1475,14 +1475,14 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 #---- [style] ----
 
-[style].h00                    font: $h00.font
 [style].h0                     font: $h0.font
-[style].h1.regular             font: $h1.regular.font
+[style].h00                    font: $h00.font
 [style].h1                     font: $h1.font
-[style].h2.regular             font: $h2.regular.font
+[style].h1.regular             font: $h1.regular.font
 [style].h2                     font: $h2.font
-[style].h3.regular             font: $h3.regular.font
+[style].h2.regular             font: $h2.regular.font
 [style].h3                     font: $h3.font
+[style].h3.regular             font: $h3.regular.font
 [style].h4                     font: $h4.font
 [style].large                  font: $large.font
 [style].light                  font: $light.font

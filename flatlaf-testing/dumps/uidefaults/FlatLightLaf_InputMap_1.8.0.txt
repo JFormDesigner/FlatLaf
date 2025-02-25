@@ -200,23 +200,6 @@ FormattedTextField.focusInputMap [lazy] 44    javax.swing.plaf.InputMapUIResourc
 
 #---- List ----
 
-List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl KP_LEFT          selectNextColumnChangeLead
-    ctrl KP_RIGHT         selectPreviousColumnChangeLead
-    ctrl LEFT             selectNextColumnChangeLead
-    ctrl RIGHT            selectPreviousColumnChangeLead
-    KP_LEFT               selectNextColumn
-    KP_RIGHT              selectPreviousColumn
-    LEFT                  selectNextColumn
-    RIGHT                 selectPreviousColumn
-    shift ctrl KP_LEFT    selectNextColumnExtendSelection
-    shift ctrl KP_RIGHT   selectPreviousColumnExtendSelection
-    shift ctrl LEFT       selectNextColumnExtendSelection
-    shift ctrl RIGHT      selectPreviousColumnExtendSelection
-    shift KP_LEFT         selectNextColumnExtendSelection
-    shift KP_RIGHT        selectPreviousColumnExtendSelection
-    shift LEFT            selectNextColumnExtendSelection
-    shift RIGHT           selectPreviousColumnExtendSelection
 List.focusInputMap             [lazy] 64    javax.swing.plaf.InputMapUIResource [UI]
     ctrl A                selectAll
     ctrl BACK_SLASH       clearSelection
@@ -282,6 +265,23 @@ List.focusInputMap             [lazy] 64    javax.swing.plaf.InputMapUIResource 
     shift RIGHT           selectNextColumnExtendSelection
     shift SPACE           extendTo
     shift UP              selectPreviousRowExtendSelection
+List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl KP_LEFT          selectNextColumnChangeLead
+    ctrl KP_RIGHT         selectPreviousColumnChangeLead
+    ctrl LEFT             selectNextColumnChangeLead
+    ctrl RIGHT            selectPreviousColumnChangeLead
+    KP_LEFT               selectNextColumn
+    KP_RIGHT              selectPreviousColumn
+    LEFT                  selectNextColumn
+    RIGHT                 selectPreviousColumn
+    shift ctrl KP_LEFT    selectNextColumnExtendSelection
+    shift ctrl KP_RIGHT   selectPreviousColumnExtendSelection
+    shift ctrl LEFT       selectNextColumnExtendSelection
+    shift ctrl RIGHT      selectPreviousColumnExtendSelection
+    shift KP_LEFT         selectNextColumnExtendSelection
+    shift KP_RIGHT        selectPreviousColumnExtendSelection
+    shift LEFT            selectNextColumnExtendSelection
+    shift RIGHT           selectPreviousColumnExtendSelection
 
 
 #---- PasswordField ----
@@ -328,6 +328,31 @@ PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource 
 
 #---- PopupMenu ----
 
+PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] cancel
+    [2] DOWN
+    [3] selectNext
+    [4] KP_DOWN
+    [5] selectNext
+    [6] UP
+    [7] selectPrevious
+    [8] KP_UP
+    [9] selectPrevious
+    [10] LEFT
+    [11] selectParent
+    [12] KP_LEFT
+    [13] selectParent
+    [14] RIGHT
+    [15] selectChild
+    [16] KP_RIGHT
+    [17] selectChild
+    [18] ENTER
+    [19] return
+    [20] ctrl ENTER
+    [21] return
+    [22] SPACE
+    [23] return
 PopupMenu.selectedWindowInputMapBindings.RightToLeft length=32    [Ljava.lang.Object;
     [0] ESCAPE
     [1] cancel
@@ -361,31 +386,6 @@ PopupMenu.selectedWindowInputMapBindings.RightToLeft length=32    [Ljava.lang.Ob
     [29] selectParent
     [30] KP_RIGHT
     [31] selectParent
-PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
-    [0] ESCAPE
-    [1] cancel
-    [2] DOWN
-    [3] selectNext
-    [4] KP_DOWN
-    [5] selectNext
-    [6] UP
-    [7] selectPrevious
-    [8] KP_UP
-    [9] selectPrevious
-    [10] LEFT
-    [11] selectParent
-    [12] KP_LEFT
-    [13] selectParent
-    [14] RIGHT
-    [15] selectChild
-    [16] KP_RIGHT
-    [17] selectChild
-    [18] ENTER
-    [19] return
-    [20] ctrl ENTER
-    [21] return
-    [22] SPACE
-    [23] return
 
 
 #---- RadioButton ----
@@ -404,11 +404,6 @@ RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [
 
 #---- ScrollBar ----
 
-ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    KP_LEFT               positiveUnitIncrement
-    KP_RIGHT              negativeUnitIncrement
-    LEFT                  positiveUnitIncrement
-    RIGHT                 negativeUnitIncrement
 ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
     DOWN                  positiveUnitIncrement
     END                   maxScroll
@@ -422,13 +417,15 @@ ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource 
     PAGE_UP               negativeBlockIncrement
     RIGHT                 positiveUnitIncrement
     UP                    negativeUnitIncrement
+ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    KP_LEFT               positiveUnitIncrement
+    KP_RIGHT              negativeUnitIncrement
+    LEFT                  positiveUnitIncrement
+    RIGHT                 negativeUnitIncrement
 
 
 #---- ScrollPane ----
 
-ScrollPane.ancestorInputMap.RightToLeft [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl PAGE_DOWN        scrollLeft
-    ctrl PAGE_UP          scrollRight
 ScrollPane.ancestorInputMap    [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
     ctrl END              scrollEnd
     ctrl HOME             scrollHome
@@ -444,15 +441,13 @@ ScrollPane.ancestorInputMap    [lazy] 14    javax.swing.plaf.InputMapUIResource 
     PAGE_UP               scrollUp
     RIGHT                 unitScrollRight
     UP                    unitScrollUp
+ScrollPane.ancestorInputMap.RightToLeft [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl PAGE_DOWN        scrollLeft
+    ctrl PAGE_UP          scrollRight
 
 
 #---- Slider ----
 
-Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    KP_LEFT               positiveUnitIncrement
-    KP_RIGHT              negativeUnitIncrement
-    LEFT                  positiveUnitIncrement
-    RIGHT                 negativeUnitIncrement
 Slider.focusInputMap           [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
     DOWN                  negativeUnitIncrement
     END                   maxScroll
@@ -466,6 +461,11 @@ Slider.focusInputMap           [lazy] 12    javax.swing.plaf.InputMapUIResource 
     PAGE_UP               positiveBlockIncrement
     RIGHT                 positiveUnitIncrement
     UP                    positiveUnitIncrement
+Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    KP_LEFT               positiveUnitIncrement
+    KP_RIGHT              negativeUnitIncrement
+    LEFT                  positiveUnitIncrement
+    RIGHT                 negativeUnitIncrement
 
 
 #---- Spinner ----
@@ -520,27 +520,6 @@ TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource 
 
 #---- Table ----
 
-Table.ancestorInputMap.RightToLeft [lazy] 20    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl KP_LEFT          selectNextColumnChangeLead
-    ctrl KP_RIGHT         selectPreviousColumnChangeLead
-    ctrl LEFT             selectNextColumnChangeLead
-    ctrl PAGE_DOWN        scrollLeftChangeSelection
-    ctrl PAGE_UP          scrollRightChangeSelection
-    ctrl RIGHT            selectPreviousColumnChangeLead
-    KP_LEFT               selectNextColumn
-    KP_RIGHT              selectPreviousColumn
-    LEFT                  selectNextColumn
-    RIGHT                 selectPreviousColumn
-    shift ctrl KP_LEFT    selectNextColumnExtendSelection
-    shift ctrl KP_RIGHT   selectPreviousColumnExtendSelection
-    shift ctrl LEFT       selectNextColumnExtendSelection
-    shift ctrl PAGE_DOWN  scrollLeftExtendSelection
-    shift ctrl PAGE_UP    scrollRightExtendSelection
-    shift ctrl RIGHT      selectPreviousColumnExtendSelection
-    shift KP_LEFT         selectNextColumnExtendSelection
-    shift KP_RIGHT        selectPreviousColumnExtendSelection
-    shift LEFT            selectNextColumnExtendSelection
-    shift RIGHT           selectPreviousColumnExtendSelection
 Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource [UI]
     ctrl A                selectAll
     ctrl BACK_SLASH       clearSelection
@@ -613,6 +592,27 @@ Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource 
     shift SPACE           extendTo
     shift TAB             selectPreviousColumnCell
     shift UP              selectPreviousRowExtendSelection
+Table.ancestorInputMap.RightToLeft [lazy] 20    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl KP_LEFT          selectNextColumnChangeLead
+    ctrl KP_RIGHT         selectPreviousColumnChangeLead
+    ctrl LEFT             selectNextColumnChangeLead
+    ctrl PAGE_DOWN        scrollLeftChangeSelection
+    ctrl PAGE_UP          scrollRightChangeSelection
+    ctrl RIGHT            selectPreviousColumnChangeLead
+    KP_LEFT               selectNextColumn
+    KP_RIGHT              selectPreviousColumn
+    LEFT                  selectNextColumn
+    RIGHT                 selectPreviousColumn
+    shift ctrl KP_LEFT    selectNextColumnExtendSelection
+    shift ctrl KP_RIGHT   selectPreviousColumnExtendSelection
+    shift ctrl LEFT       selectNextColumnExtendSelection
+    shift ctrl PAGE_DOWN  scrollLeftExtendSelection
+    shift ctrl PAGE_UP    scrollRightExtendSelection
+    shift ctrl RIGHT      selectPreviousColumnExtendSelection
+    shift KP_LEFT         selectNextColumnExtendSelection
+    shift KP_RIGHT        selectPreviousColumnExtendSelection
+    shift LEFT            selectNextColumnExtendSelection
+    shift RIGHT           selectPreviousColumnExtendSelection
 
 
 #---- TableHeader ----
@@ -834,11 +834,6 @@ ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [
 
 Tree.ancestorInputMap          [lazy] 1    javax.swing.plaf.InputMapUIResource [UI]
     ESCAPE                cancel
-Tree.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    KP_LEFT               selectChild
-    KP_RIGHT              selectParent
-    LEFT                  selectChild
-    RIGHT                 selectParent
 Tree.focusInputMap             [lazy] 59    javax.swing.plaf.InputMapUIResource [UI]
     ctrl A                selectAll
     ctrl BACK_SLASH       clearSelection
@@ -899,3 +894,8 @@ Tree.focusInputMap             [lazy] 59    javax.swing.plaf.InputMapUIResource 
     shift PAGE_UP         scrollUpExtendSelection
     shift SPACE           extendTo
     shift UP              selectPreviousExtendSelection
+Tree.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    KP_LEFT               selectChild
+    KP_RIGHT              selectParent
+    LEFT                  selectChild
+    RIGHT                 selectParent

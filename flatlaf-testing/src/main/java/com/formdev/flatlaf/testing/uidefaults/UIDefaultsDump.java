@@ -167,6 +167,8 @@ public class UIDefaultsDump
 	}
 
 	private static void dump( String lookAndFeelClassName, File dir, boolean jide ) {
+		System.out.println( "---- "+lookAndFeelClassName+" -------------------------------" );
+
 		try {
 			UIManager.setLookAndFeel( lookAndFeelClassName );
 			if( jide )
@@ -415,8 +417,8 @@ public class UIDefaultsDump
 		dumpHeader( out );
 
 		defaults.entrySet().stream()
-			.sorted( (key1, key2) -> {
-				return String.valueOf( key1 ).compareTo( String.valueOf( key2 ) );
+			.sorted( (e1, e2) -> {
+				return String.valueOf( e1.getKey() ).compareTo( String.valueOf( e2.getKey() ) );
 			} )
 			.forEach( entry -> {
 				Object key = entry.getKey();
