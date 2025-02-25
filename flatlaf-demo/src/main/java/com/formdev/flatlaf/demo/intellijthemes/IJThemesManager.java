@@ -58,6 +58,7 @@ class IJThemesManager
 			String name = value.get( "name" );
 			boolean discontinued = Boolean.parseBoolean( value.get( "discontinued" ) );
 			boolean dark = Boolean.parseBoolean( value.get( "dark" ) );
+			String lafClassName = value.get( "lafClassName" );
 			String license = value.get( "license" );
 			String licenseFile = value.get( "licenseFile" );
 			String pluginUrl = value.get( "pluginUrl" );
@@ -65,7 +66,7 @@ class IJThemesManager
 			String sourceCodePath = value.get( "sourceCodePath" );
 
 			bundledThemes.add( new IJThemeInfo( name, resourceName, discontinued, dark,
-				license, licenseFile, pluginUrl, sourceCodeUrl, sourceCodePath, null, null ) );
+				license, licenseFile, pluginUrl, sourceCodeUrl, sourceCodePath, null, lafClassName ) );
 		}
 	}
 

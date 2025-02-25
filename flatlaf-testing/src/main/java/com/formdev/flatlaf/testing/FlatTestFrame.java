@@ -576,7 +576,7 @@ public class FlatTestFrame
 		UIManager.put( "defaultFont", null );
 
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
+		IntelliJTheme theme = (lookAndFeel.getClass() == IntelliJTheme.ThemeLaf.class)
 			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
 			: null;
 		String nameForProperties = null;
