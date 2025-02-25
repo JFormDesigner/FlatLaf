@@ -7,6 +7,14 @@ FlatLaf Change Log
 
 - macOS: Re-enabled rounded popup border (see PR #772) on macOS 14.4+ (was
   disabled in 3.5.x).
+- Increased contrast of text for better readability: (PR #972; issue #762)
+  - In **FlatLaf Dark**, **FlatLaf Darcula** and many dark IntelliJ themes, made
+    all text colors brighter.
+  - In **FlatLaf Light**, **FlatLaf IntelliJ** and many light IntelliJ themes,
+    made disabled text colors slightly darker.
+  - In **FlatLaf macOS Light**, made disabled text colors darker.
+  - In **FlatLaf macOS Dark**, made text colors of "default" button and selected
+    ToggleButton lighter.
 - CheckBox: Support styling indeterminate state of
   [tri-state check boxes](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html).
   (PR #936; issue #919)
