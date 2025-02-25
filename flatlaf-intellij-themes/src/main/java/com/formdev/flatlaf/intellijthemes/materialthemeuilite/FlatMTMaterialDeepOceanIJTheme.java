@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatGitHubIJTheme
+public class FlatMTMaterialDeepOceanIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "GitHub (Material)";
+	public static final String NAME = "Material Deep Ocean (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatGitHubIJTheme() );
+			return setup( new FlatMTMaterialDeepOceanIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatGitHubIJTheme.class );
+		installLafInfo( NAME, FlatMTMaterialDeepOceanIJTheme.class );
 	}
 
-	public FlatGitHubIJTheme() {
-		super( Utils.loadTheme( "GitHub.theme.json" ) );
+	public FlatMTMaterialDeepOceanIJTheme() {
+		super( Utils.loadTheme( "Material Deep Ocean.theme.json" ) );
 	}
 
 	@Override

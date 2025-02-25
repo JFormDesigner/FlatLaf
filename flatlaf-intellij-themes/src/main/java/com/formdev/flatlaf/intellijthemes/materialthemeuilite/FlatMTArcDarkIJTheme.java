@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatMaterialDeepOceanIJTheme
+public class FlatMTArcDarkIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Material Deep Ocean (Material)";
+	public static final String NAME = "Arc Dark (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatMaterialDeepOceanIJTheme() );
+			return setup( new FlatMTArcDarkIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatMaterialDeepOceanIJTheme.class );
+		installLafInfo( NAME, FlatMTArcDarkIJTheme.class );
 	}
 
-	public FlatMaterialDeepOceanIJTheme() {
-		super( Utils.loadTheme( "Material Deep Ocean.theme.json" ) );
+	public FlatMTArcDarkIJTheme() {
+		super( Utils.loadTheme( "Arc Dark.theme.json" ) );
 	}
 
 	@Override

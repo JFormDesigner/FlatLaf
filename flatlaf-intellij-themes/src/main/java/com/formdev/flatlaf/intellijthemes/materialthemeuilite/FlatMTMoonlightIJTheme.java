@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatMaterialPalenightIJTheme
+public class FlatMTMoonlightIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Material Palenight (Material)";
+	public static final String NAME = "Moonlight (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatMaterialPalenightIJTheme() );
+			return setup( new FlatMTMoonlightIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatMaterialPalenightIJTheme.class );
+		installLafInfo( NAME, FlatMTMoonlightIJTheme.class );
 	}
 
-	public FlatMaterialPalenightIJTheme() {
-		super( Utils.loadTheme( "Material Palenight.theme.json" ) );
+	public FlatMTMoonlightIJTheme() {
+		super( Utils.loadTheme( "Moonlight.theme.json" ) );
 	}
 
 	@Override

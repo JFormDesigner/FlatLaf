@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatDraculaIJTheme
+public class FlatMTNightOwlIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Dracula (Material)";
+	public static final String NAME = "Night Owl (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatDraculaIJTheme() );
+			return setup( new FlatMTNightOwlIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatDraculaIJTheme.class );
+		installLafInfo( NAME, FlatMTNightOwlIJTheme.class );
 	}
 
-	public FlatDraculaIJTheme() {
-		super( Utils.loadTheme( "Dracula.theme.json" ) );
+	public FlatMTNightOwlIJTheme() {
+		super( Utils.loadTheme( "Night Owl.theme.json" ) );
 	}
 
 	@Override

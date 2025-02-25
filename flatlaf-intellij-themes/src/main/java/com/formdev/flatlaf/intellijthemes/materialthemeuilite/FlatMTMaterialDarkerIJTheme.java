@@ -26,24 +26,24 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatMaterialDarkerIJTheme
+public class FlatMTMaterialDarkerIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
 	public static final String NAME = "Material Darker (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatMaterialDarkerIJTheme() );
+			return setup( new FlatMTMaterialDarkerIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatMaterialDarkerIJTheme.class );
+		installLafInfo( NAME, FlatMTMaterialDarkerIJTheme.class );
 	}
 
-	public FlatMaterialDarkerIJTheme() {
+	public FlatMTMaterialDarkerIJTheme() {
 		super( Utils.loadTheme( "Material Darker.theme.json" ) );
 	}
 

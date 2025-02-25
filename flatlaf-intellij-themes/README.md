@@ -78,20 +78,20 @@ Material Theme UI Lite:
 
 Name | Class
 -----|------
-[Arc Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme`
-[Atom One Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkIJTheme`
-[Atom One Light (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme`
-[Dracula (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaIJTheme`
-[GitHub (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme`
-[GitHub Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme`
-[Light Owl (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme`
-[Material Darker (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme`
-[Material Deep Ocean (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanIJTheme`
-[Material Lighter (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme`
-[Material Oceanic (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicIJTheme`
-[Material Palenight (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightIJTheme`
-[Monokai Pro (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme`
-[Moonlight (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme`
-[Night Owl (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme`
-[Solarized Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme`
-[Solarized Light (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightIJTheme`
+[Arc Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTArcDarkIJTheme`
+[Atom One Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTAtomOneDarkIJTheme`
+[Atom One Light (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTAtomOneLightIJTheme`
+[Dracula (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTDraculaIJTheme`
+[GitHub (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubIJTheme`
+[GitHub Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubDarkIJTheme`
+[Light Owl (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTLightOwlIJTheme`
+[Material Darker (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDarkerIJTheme`
+[Material Deep Ocean (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDeepOceanIJTheme`
+[Material Lighter (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialLighterIJTheme`
+[Material Oceanic (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialOceanicIJTheme`
+[Material Palenight (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialPalenightIJTheme`
+[Monokai Pro (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMonokaiProIJTheme`
+[Moonlight (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMoonlightIJTheme`
+[Night Owl (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTNightOwlIJTheme`
+[Solarized Dark (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedDarkIJTheme`
+[Solarized Light (Material)](https://github.com/AtomMaterialUI/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedLightIJTheme`

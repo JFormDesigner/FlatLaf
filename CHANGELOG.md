@@ -53,8 +53,12 @@ FlatLaf Change Log
 
 #### Incompatibilities
 
-- Theme prefix in `IntelliJTheme$ThemeLaf.properties` changed from
-  `[theme-name]` to `{theme-name}`.
+- IntelliJ Themes:
+  - Theme prefix in `IntelliJTheme$ThemeLaf.properties` changed from
+    `[theme-name]` to `{theme-name}`.
+  - Renamed classes in package
+    `com.formdev.flatlaf.intellijthemes.materialthemeuilite` from `Flat<theme>`
+    to `FlatMT<theme>`.
 
 
 ## 3.5.4

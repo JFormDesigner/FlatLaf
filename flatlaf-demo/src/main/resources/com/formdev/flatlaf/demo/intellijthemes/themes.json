@@ -305,7 +305,7 @@
 	"material-theme-ui-lite/Arc Dark.theme.json": {
 		"name": "Material Theme UI Lite / Arc Dark",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTArcDarkIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -315,7 +315,7 @@
 	"material-theme-ui-lite/Atom One Dark.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Dark",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTAtomOneDarkIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -324,7 +324,7 @@
 	},
 	"material-theme-ui-lite/Atom One Light.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Light",
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTAtomOneLightIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -334,7 +334,7 @@
 	"material-theme-ui-lite/Dracula.theme.json": {
 		"name": "Material Theme UI Lite / Dracula",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTDraculaIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -343,7 +343,7 @@
 	},
 	"material-theme-ui-lite/GitHub.theme.json": {
 		"name": "Material Theme UI Lite / GitHub",
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -353,7 +353,7 @@
 	"material-theme-ui-lite/GitHub Dark.theme.json": {
 		"name": "Material Theme UI Lite / GitHub Dark",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubDarkIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -362,7 +362,7 @@
 	},
 	"material-theme-ui-lite/Light Owl.theme.json": {
 		"name": "Material Theme UI Lite / Light Owl",
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTLightOwlIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -372,7 +372,7 @@
 	"material-theme-ui-lite/Material Darker.theme.json": {
 		"name": "Material Theme UI Lite / Material Darker",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDarkerIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -382,7 +382,7 @@
 	"material-theme-ui-lite/Material Deep Ocean.theme.json": {
 		"name": "Material Theme UI Lite / Material Deep Ocean",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDeepOceanIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -391,7 +391,7 @@
 	},
 	"material-theme-ui-lite/Material Lighter.theme.json": {
 		"name": "Material Theme UI Lite / Material Lighter",
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialLighterIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -401,7 +401,7 @@
 	"material-theme-ui-lite/Material Oceanic.theme.json": {
 		"name": "Material Theme UI Lite / Material Oceanic",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialOceanicIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -411,7 +411,7 @@
 	"material-theme-ui-lite/Material Palenight.theme.json": {
 		"name": "Material Theme UI Lite / Material Palenight",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialPalenightIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -421,7 +421,7 @@
 	"material-theme-ui-lite/Monokai Pro.theme.json": {
 		"name": "Material Theme UI Lite / Monokai Pro",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMonokaiProIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -431,7 +431,7 @@
 	"material-theme-ui-lite/Moonlight.theme.json": {
 		"name": "Material Theme UI Lite / Moonlight",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMoonlightIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -441,7 +441,7 @@
 	"material-theme-ui-lite/Night Owl.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTNightOwlIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -451,7 +451,7 @@
 	"material-theme-ui-lite/Solarized Dark.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Dark",
 		"dark": true,
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedDarkIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
@@ -460,7 +460,7 @@
 	},
 	"material-theme-ui-lite/Solarized Light.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Light",
-		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightIJTheme",
+		"lafClassName": "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedLightIJTheme",
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"pluginUrl": "https://plugins.jetbrains.com/plugin/8006-material-theme-ui",
