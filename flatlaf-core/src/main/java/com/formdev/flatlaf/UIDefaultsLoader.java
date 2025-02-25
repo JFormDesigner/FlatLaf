@@ -830,6 +830,7 @@ class UIDefaultsLoader
 		try {
 			switch( function ) {
 				case "if":			return parseColorIf( value, params, resolver );
+				case "lazy":		return parseColorLazy( value, params, resolver );
 				case "systemColor":	return parseColorSystemColor( value, params, resolver );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver );
@@ -875,6 +876,32 @@ class UIDefaultsLoader
 		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
 		String ifValue = params.get( ifCondition ? 1 : 2 );
 		return parseColorOrFunction( resolver.apply( ifValue ), resolver );
+	}
+
+	/**
+	 * Syntax: lazy(uiKey)
+	 * <p>
+	 * This "lazy" function is only used if the "lazy" is passed as parameter to another
+	 * color function. Otherwise, the general "lazy" function is used.
+	 * <p>
+	 * Note: The color is resolved immediately, not lazy, because it is passed as parameter to another color function.
+	 * So e.g. {@code darken(lazy(List.background), 10%)} is the same as {@code darken($List.background, 10%)}.
+	 * <p>
+	 * Only useful if a property is defined as lazy and that property is used
+	 * in another property's color function. E.g.
+	 *
+	 * <pre>{@code
+	 * someProperty = lazy(List.background)
+	 * anotherProperty = darken($someProperty, 10%)
+	 * }</pre>
+	 */
+	private static Object parseColorLazy( String value, List<String> params, Function<String, String> resolver )
+		throws IllegalArgumentException
+	{
+		if( params.size() != 1 )
+			throw newMissingParametersException( value );
+
+		return parseColorOrFunction( resolver.apply( PROPERTY_PREFIX + params.get( 0 ) ), resolver );
 	}
 
 	/**
@@ -974,7 +1001,7 @@ class UIDefaultsLoader
 	 *         fadein(color,amount[,options]) or fadeout(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
+	 *   - options: [relative] [autoInverse] [noAutoInverse] [derived] [lazy]
 	 */
 	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
 		List<String> params, Function<String, String> resolver )
@@ -984,15 +1011,15 @@ class UIDefaultsLoader
 		int amount = parsePercentage( params.get( 1 ) );
 		boolean relative = false;
 		boolean autoInverse = false;
-		boolean lazy = false;
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
-			lazy = options.contains( "lazy" );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 
 			// use autoInverse by default for derived colors, except if noAutoInverse is set
 			if( derived && !options.contains( "noAutoInverse" ) )
@@ -1003,14 +1030,8 @@ class UIDefaultsLoader
 		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
 			hslIndex, increase, amount, relative, autoInverse );
 
-		if( lazy ) {
-			return (LazyValue) t -> {
-				Object color = lazyUIManagerGet( colorStr );
-				return (color instanceof Color)
-					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
-					: null;
-			};
-		}
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1039,14 +1060,8 @@ class UIDefaultsLoader
 		// create function
 		ColorFunction function = new ColorFunctions.Fade( amount );
 
-		if( lazy ) {
-			return (LazyValue) t -> {
-				Object color = lazyUIManagerGet( colorStr );
-				return (color instanceof Color)
-					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
-					: null;
-			};
-		}
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1056,7 +1071,7 @@ class UIDefaultsLoader
 	 * Syntax: spin(color,angle[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - angle: number of degrees to rotate
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorSpin( List<String> params, Function<String, String> resolver )
 		throws IllegalArgumentException
@@ -1064,14 +1079,19 @@ class UIDefaultsLoader
 		String colorStr = params.get( 0 );
 		int amount = parseInteger( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease( 0, true, amount, false, false );
+
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1084,7 +1104,7 @@ class UIDefaultsLoader
 	 *         changeAlpha(color,value[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - value: for hue: number of degrees; otherwise: percentage 0-100%
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorChange( int hslIndex,
 		List<String> params, Function<String, String> resolver )
@@ -1095,14 +1115,19 @@ class UIDefaultsLoader
 			? parseInteger( params.get( 1 ) )
 			: parsePercentage( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.HSLChange( hslIndex, value );
+
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1116,7 +1141,7 @@ class UIDefaultsLoader
 	 *   - color2: a color (e.g. #f00) or a color function
 	 *   - weight: the weight (in range 0-100%) to mix the two colors
 	 *             larger weight uses more of first color, smaller weight more of second color
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver )
 		throws IllegalArgumentException
@@ -1127,6 +1152,7 @@ class UIDefaultsLoader
 		String color2Str = params.get( i++ );
 		int weight = 50;
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > i ) {
 			String weightStr = params.get( i );
@@ -1138,6 +1164,7 @@ class UIDefaultsLoader
 		if( params.size() > i ) {
 			String options = params.get( i );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// parse second color
@@ -1147,6 +1174,9 @@ class UIDefaultsLoader
 
 		// create function
 		ColorFunction function = new ColorFunctions.Mix2( color1, weight );
+
+		if( lazy )
+			return newLazyColorFunction( color2Str, function );
 
 		// parse first color, apply function and create mixed color
 		return parseFunctionBaseColor( color2Str, function, derived, resolver );
@@ -1241,6 +1271,15 @@ class UIDefaultsLoader
 		}
 
 		return new ColorUIResource( newColor );
+	}
+
+	private static LazyValue newLazyColorFunction( String uiKey, ColorFunction function ) {
+		return (LazyValue) t -> {
+			Object color = lazyUIManagerGet( uiKey );
+			return (color instanceof Color)
+				? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
+				: null;
+		};
 	}
 
 	/**
