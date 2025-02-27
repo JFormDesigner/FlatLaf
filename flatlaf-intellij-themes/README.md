@@ -58,8 +58,6 @@ Name | Class
 [Gradianto Nature Green](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoNatureGreenIJTheme`
 [Gray](https://github.com/OlyaB/GreyTheme) | `com.formdev.flatlaf.intellijthemes.FlatGrayIJTheme`
 [Gruvbox Dark Hard](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme`
-[Gruvbox Dark Medium](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme`
-[Gruvbox Dark Soft](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkSoftIJTheme`
 [Hiberbee Dark](https://github.com/Hiberbee/themes) | `com.formdev.flatlaf.intellijthemes.FlatHiberbeeDarkIJTheme`
 [High Contrast](https://github.com/JetBrains/intellij-community) | `com.formdev.flatlaf.intellijthemes.FlatHighContrastIJTheme`
 [Light Flat](https://github.com/nerzhulart/LightFlatTheme) | `com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme`

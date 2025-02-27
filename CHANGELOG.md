@@ -59,6 +59,7 @@ FlatLaf Change Log
   - Renamed classes in package
     `com.formdev.flatlaf.intellijthemes.materialthemeuilite` from `Flat<theme>`
     to `FlatMT<theme>`.
+  - Removed `Gruvbox Dark Medium` and `Gruvbox Dark Soft` themes.
 
 
 ## 3.5.4
