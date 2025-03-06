@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.swing.Icon;
 import javax.swing.UIDefaults;
@@ -85,15 +86,14 @@ class UIDefaultsLoader
 	private static final String WILDCARD_PREFIX = "*.";
 
 	static final String KEY_VARIABLES = "FlatLaf.internal.variables";
+	static final String KEY_PROPERTIES = "FlatLaf.internal.properties";
 
 	private static int parseColorDepth;
 
 	private static Map<String, ColorUIResource> systemColorCache;
 	private static final SoftCache<String, Object> fontCache = new SoftCache<>();
 
-	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, boolean dark, UIDefaults defaults )
-	{
+	static ArrayList<Class<?>> getLafClassesForDefaultsLoading( Class<?> lookAndFeelClass ) {
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
 		for( Class<?> lafClass = lookAndFeelClass;
@@ -102,12 +102,11 @@ class UIDefaultsLoader
 		{
 			lafClasses.add( 0, lafClass );
 		}
-
-		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, dark, defaults );
+		return lafClasses;
 	}
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, boolean dark, UIDefaults defaults )
+		Consumer<Properties> intellijThemesHook, Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
 		try {
 			// temporary cache system colors while loading defaults,
@@ -141,6 +140,10 @@ class UIDefaultsLoader
 				if( !addonClassLoaders.contains( addonClassLoader ) )
 					addonClassLoaders.add( addonClassLoader );
 			}
+
+			// apply IntelliJ themes properties
+			if( intellijThemesHook != null )
+				intellijThemesHook.accept( properties );
 
 			// load custom properties files (usually provided by applications)
 			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
@@ -286,6 +289,15 @@ class UIDefaultsLoader
 
 			// remember variables in defaults to allow using them in styles
 			defaults.put( KEY_VARIABLES, variables );
+
+			// remember properties (for testing)
+			if( FlatSystemProperties.getBoolean( KEY_PROPERTIES, false ) ) {
+				Properties properties2 = new Properties();
+				properties2.putAll( properties );
+				for( Map.Entry<String, String> e : wildcards.entrySet() )
+					properties2.put( WILDCARD_PREFIX + e.getKey(), e.getValue() );
+				defaults.put( KEY_PROPERTIES, properties2 );
+			}
 
 			// clear/disable system color cache
 			systemColorCache = null;

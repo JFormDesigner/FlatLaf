@@ -52,6 +52,8 @@ public class DemoPrefs
 	}
 
 	public static void setupLaf( String[] args ) {
+//		com.formdev.flatlaf.demo.intellijthemes.IJThemesDump.install();
+
 		// set look and feel
 		try {
 			if( args.length > 0 )

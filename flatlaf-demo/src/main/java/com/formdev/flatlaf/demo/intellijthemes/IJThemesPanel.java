@@ -276,20 +276,21 @@ public class IJThemesPanel
 			return;
 
 		EventQueue.invokeLater( () -> {
-			setTheme( themeInfo );
+			setTheme( themeInfo, false );
 		} );
 	}
 
-	private void setTheme( IJThemeInfo themeInfo ) {
+	private void setTheme( IJThemeInfo themeInfo, boolean reload ) {
 		if( themeInfo == null )
 			return;
 
 		// change look and feel
 		if( themeInfo.lafClassName != null ) {
-			if( themeInfo.lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
+			if( !reload && themeInfo.lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 				return;
 
-			FlatAnimatedLafChange.showSnapshot();
+			if( !reload )
+				FlatAnimatedLafChange.showSnapshot();
 
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
@@ -298,7 +299,8 @@ public class IJThemesPanel
 				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
 			}
 		} else if( themeInfo.themeFile != null ) {
-			FlatAnimatedLafChange.showSnapshot();
+			if( !reload )
+				FlatAnimatedLafChange.showSnapshot();
 
 			try {
 				if( themeInfo.themeFile.getName().endsWith( ".properties" ) )
@@ -320,7 +322,9 @@ public class IJThemesPanel
 
 		// update all components
 		FlatLaf.updateUI();
-		FlatAnimatedLafChange.hideSnapshotWithAnimation();
+
+		if( !reload )
+			FlatAnimatedLafChange.hideSnapshotWithAnimation();
 	}
 
 	private void browsePlugin() {
@@ -386,8 +390,8 @@ public class IJThemesPanel
 			// use invokeLater() because KEY_LAF_THEME_FILE is updated after this event
 			EventQueue.invokeLater( () -> {
 				selectedCurrentLookAndFeel();
+				lastLafChangeTime = System.currentTimeMillis();
 			} );
-			lastLafChangeTime = System.currentTimeMillis();
 		}
 	}
 
@@ -435,7 +439,7 @@ public class IJThemesPanel
 				}
 
 				if( reload )
-					setTheme( themesList.getSelectedValue() );
+					setTheme( themesList.getSelectedValue(), true );
 			}
 		}
 	}

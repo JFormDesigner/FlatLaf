@@ -76,7 +76,7 @@
 + ProgressBar.foreground         #c4c4c4  HSL   0   0  77    javax.swing.plaf.ColorUIResource [UI]
 
 - ProgressBar.selectionForeground #eeeeee  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
-+ ProgressBar.selectionForeground #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
++ ProgressBar.selectionForeground #1e2021  HSL 200   5  12    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- RadioButton ----
@@ -121,4 +121,4 @@
 + contrast ratio: ProgressBar.foreground                              #c4c4c4  #3c3f41     6.1  !
 
 - contrast ratio: ProgressBar.selectionForeground                     #eeeeee  #4c87c8     3.2  !!!!
-+ contrast ratio: ProgressBar.selectionForeground                     #3c3f41  #c4c4c4     6.1  !
++ contrast ratio: ProgressBar.selectionForeground                     #1e2021  #c4c4c4     9.4
