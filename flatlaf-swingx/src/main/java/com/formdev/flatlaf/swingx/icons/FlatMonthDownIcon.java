@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.swingx.ui;
+package com.formdev.flatlaf.swingx.icons;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
