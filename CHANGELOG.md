@@ -30,6 +30,7 @@ FlatLaf Change Log
 - IntelliJ Themes:
   - Updated to latest versions and fixed various issues.
   - Support customizing through properties files. (issue #824)
+- SwingX: Support `JXTipOfTheDay` component. (issue #980)
 
 #### Fixed bugs
 

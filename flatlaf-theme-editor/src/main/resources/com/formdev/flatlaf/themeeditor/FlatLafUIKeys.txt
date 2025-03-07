@@ -1055,6 +1055,13 @@ TextPane.margin
 TextPane.selectionBackground
 TextPane.selectionForeground
 TextPaneUI
+TipOfTheDay.background
+TipOfTheDay.border
+TipOfTheDay.font
+TipOfTheDay.icon
+TipOfTheDay.icon.bulbColor
+TipOfTheDay.icon.socketColor
+TipOfTheDay.tipAreaInsets
 TitlePane.background
 TitlePane.borderColor
 TitlePane.buttonHoverBackground
@@ -1323,6 +1330,7 @@ scrollbar
 semibold.font
 small.font
 swingx/TaskPaneUI
+swingx/TipOfTheDayUI
 text
 textHighlight
 textHighlightText

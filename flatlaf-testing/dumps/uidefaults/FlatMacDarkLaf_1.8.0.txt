@@ -1249,6 +1249,17 @@ TextPane.selectionForeground   #ffffff  HSL   0   0 100    javax.swing.plaf.Colo
 TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 
+#---- TipOfTheDay ----
+
+TipOfTheDay.background         #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.border             [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+TipOfTheDay.font               [active] $defaultFont [UI]
+TipOfTheDay.icon               [lazy] 24,24    com.formdev.flatlaf.swingx.icons.FlatTipOfTheDayIcon [UI]
+TipOfTheDay.icon.bulbColor     #f2c55c  HSL  42  85  65    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.icon.socketColor   #ced0d6  HSL 225   9  82    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.tipAreaInsets      4,16,4,16    javax.swing.plaf.InsetsUIResource [UI]
+
+
 #---- TitlePane ----
 
 TitlePane.background           #323232  HSL   0   0  20    javax.swing.plaf.ColorUIResource [UI]
@@ -1628,6 +1639,11 @@ small.font                     [active] Segoe UI plain 10    javax.swing.plaf.Fo
 #---- swingx/TaskPane ----
 
 swingx/TaskPaneUI              com.formdev.flatlaf.swingx.ui.FlatTaskPaneUI
+
+
+#---- swingx/TipOfTheDay ----
+
+swingx/TipOfTheDayUI           com.formdev.flatlaf.swingx.ui.FlatTipOfTheDayUI
 
 
 #----  ----

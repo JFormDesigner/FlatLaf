@@ -16,6 +16,7 @@ this addon:
 - `JXMonthView`
 - `JXTaskPaneContainer`
 - `JXTaskPane`
+- `JXTipOfTheDay`
 - `JXTitledPanel`
 
 ![Flat Light SwingX Demo](../images/FlatLightSwingXTest.png)
