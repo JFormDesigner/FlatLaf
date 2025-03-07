@@ -226,6 +226,7 @@ Applications using FlatLaf
   language created to learn programming
 - [lsfusion platform](https://github.com/lsfusion/platform) - information
   systems development platform
+- ![New](images/new.svg) [Consulo](https://github.com/consulo/consulo) - open source cross-platform multi-language IDE (Java, .NET, JS, etc)
 
 ### Electrical
 
