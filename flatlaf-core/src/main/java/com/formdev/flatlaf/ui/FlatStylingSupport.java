@@ -42,7 +42,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.StringUtils;
-import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Support for styling components in CSS syntax.
@@ -325,22 +324,24 @@ public class FlatStylingSupport
 			return null;
 
 		Map<String, Object> oldValues = new HashMap<>();
+		outer:
 		for( Map.Entry<String, Object> e : style.entrySet() ) {
 			String key = e.getKey();
 			Object newValue = e.getValue();
 
 			// handle key prefix
-			if( key.startsWith( "[" ) ) {
-				if( (SystemInfo.isWindows && key.startsWith( "[win]" )) ||
-					(SystemInfo.isMacOS && key.startsWith( "[mac]" )) ||
-					(SystemInfo.isLinux && key.startsWith( "[linux]" )) ||
-					(key.startsWith( "[light]" ) && !FlatLaf.isLafDark()) ||
-					(key.startsWith( "[dark]" ) && FlatLaf.isLafDark()) )
-				{
-					// prefix is known and enabled --> remove prefix
-					key = key.substring( key.indexOf( ']' ) + 1 );
-				} else
-					continue;
+			while( key.startsWith( "[" ) ) {
+				int closeIndex = key.indexOf( ']' );
+				if( closeIndex < 0 )
+					continue outer;
+
+				String prefix = key.substring( 0, closeIndex + 1 );
+				String lightOrDarkPrefix = FlatLaf.getUIKeyLightOrDarkPrefix( FlatLaf.isLafDark() );
+				if( !lightOrDarkPrefix.equals( prefix ) && !FlatLaf.getUIKeyPlatformPrefixes().contains( prefix ) )
+					continue outer;
+
+				// prefix is known and enabled --> remove prefix
+				key = key.substring( closeIndex + 1 );
 			}
 
 			Object oldValue = applyProperty.apply( key, newValue );

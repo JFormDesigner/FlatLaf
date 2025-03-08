@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -44,6 +45,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
@@ -100,6 +102,8 @@ public abstract class FlatLaf
 	private static Map<String, String> globalExtraDefaults;
 	private Map<String, String> extraDefaults;
 	private static Function<String, Color> systemColorGetter;
+	private static Set<String> uiKeyPlatformPrefixes;
+	private static Set<String> uiKeySpecialPrefixes;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -1120,6 +1124,92 @@ public abstract class FlatLaf
 	 */
 	public static void setSystemColorGetter( Function<String, Color> systemColorGetter ) {
 		FlatLaf.systemColorGetter = systemColorGetter;
+	}
+
+	/**
+	 * Returns UI key prefix, used in FlatLaf properties files, for light or dark themes.
+	 * Return value is either {@code [light]} or {@code [dark]}.
+	 *
+	 * @since 3.6
+	 */
+	public static String getUIKeyLightOrDarkPrefix( boolean dark ) {
+		return dark ? "[dark]" : "[light]";
+	}
+
+	/**
+	 * Returns set of UI key prefixes, used in FlatLaf properties files, for current platform.
+	 * If UI keys in properties files start with a prefix (e.g. {@code [someprefix]Button.background}),
+	 * then they are only used if that prefix is contained in this set
+	 * (or is one of {@code [light]} or {@code [dark]} depending on current theme).
+	 * <p>
+	 * By default, the set contains one or more of following prefixes:
+	 * <ul>
+	 *   <li>{@code [win]} on Windows
+	 *   <li>{@code [mac]} on macOS
+	 *   <li>{@code [linux]} on Linux
+	 *   <li>{@code [unknown]} on other platforms
+	 *   <li>{@code [gnome]} on Linux with GNOME desktop environment
+	 *   <li>{@code [kde]} on Linux with KDE desktop environment
+	 *   <li>on Linux, the value of the environment variable {@code XDG_CURRENT_DESKTOP},
+	 *       split at colons and converted to lower case (e.g. if value of  {@code XDG_CURRENT_DESKTOP}
+	 *       is {@code ubuntu:GNOME}, then {@code [ubuntu]} and {@code [gnome]})
+	 * </ul>
+	 * <p>
+	 * You can add own prefixes to the set.
+	 * The prefixes must start with '[' and end with ']' characters, otherwise they will be ignored.
+	 *
+	 * @since 3.6
+	 */
+	public static Set<String> getUIKeyPlatformPrefixes() {
+		if( uiKeyPlatformPrefixes == null ) {
+			uiKeyPlatformPrefixes = new HashSet<>();
+			uiKeyPlatformPrefixes.add(
+				SystemInfo.isWindows ? "[win]" :
+				SystemInfo.isMacOS ? "[mac]" :
+				SystemInfo.isLinux ? "[linux]" : "[unknown]" );
+
+			// Linux
+			if( SystemInfo.isLinux ) {
+				if( SystemInfo.isGNOME )
+					uiKeyPlatformPrefixes.add( "[gnome]" );
+				else if( SystemInfo.isKDE )
+					uiKeyPlatformPrefixes.add( "[kde]" );
+
+				// add values from XDG_CURRENT_DESKTOP for other desktops
+				String desktop = System.getenv( "XDG_CURRENT_DESKTOP" );
+				if( desktop != null ) {
+					// XDG_CURRENT_DESKTOP is a colon-separated list of strings
+					// https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html#key-onlyshowin
+					// e.g. "ubuntu:GNOME" on Ubuntu 24.10 or "GNOME-Classic:GNOME" on CentOS 7
+					for( String desk : StringUtils.split( desktop.toLowerCase( Locale.ENGLISH ), ':', true, true ) )
+						uiKeyPlatformPrefixes.add( '[' + desk + ']' );
+				}
+			}
+		}
+		return uiKeyPlatformPrefixes;
+	}
+
+	/**
+	 * Returns set of special UI key prefixes, used in FlatLaf properties files.
+	 * Unlike other prefixes, properties with special prefixes are preserved.
+	 * You can access them using `UIManager`. E.g. `UIManager.get( "[someSpecialPrefix]someKey" )`.
+	 * <p>
+	 * By default, the set contains following special prefixes:
+	 * <ul>
+	 *   <li>{@code [style]}
+	 * </ul>
+	 * <p>
+	 * You can add own prefixes to the set.
+	 * The prefixes must start with '[' and end with ']' characters, otherwise they will be ignored.
+	 *
+	 * @since 3.6
+	 */
+	public static Set<String> getUIKeySpecialPrefixes() {
+		if( uiKeySpecialPrefixes == null ) {
+			uiKeySpecialPrefixes = new HashSet<>();
+			uiKeySpecialPrefixes.add( "[style]" );
+		}
+		return uiKeySpecialPrefixes;
 	}
 
 	private static void reSetLookAndFeel() {

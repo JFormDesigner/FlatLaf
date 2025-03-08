@@ -33,7 +33,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.BadLocationException;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
-import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Supports parsing content of text area in FlatLaf properties syntax.
@@ -54,16 +53,12 @@ class FlatThemePropertiesSupport
 	private final Map<String, Object> parsedValueCache2 = new HashMap<>();
 	private Set<String> allKeysCache;
 	private String baseTheme;
+	private boolean lastDark;
 
 	private static long globalCacheInvalidationCounter;
 	private long cacheInvalidationCounter;
 
 	private static Set<String> wildcardKeys;
-
-	private static final String platformPrefix =
-		SystemInfo.isWindows ? "[win]" :
-		SystemInfo.isMacOS ? "[mac]" :
-		SystemInfo.isLinux ? "[linux]" : "[unknown]";
 
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -115,6 +110,7 @@ class FlatThemePropertiesSupport
 
 	private KeyValue getKeyValueAtLine( int line ) {
 		try {
+			// get text at line
 			int startOffset = textArea.getLineStartOffset( line );
 			int endOffset = textArea.getLineEndOffset( line );
 			String text = textArea.getText( startOffset, endOffset - startOffset );
@@ -134,11 +130,13 @@ class FlatThemePropertiesSupport
 					text = text.substring( sepIndex + 1 );
 			}
 
+			// parse line
 			Properties properties = new Properties();
 			properties.load( new StringReader( text ) );
 			if( properties.isEmpty() )
 				return null;
 
+			// get key and value for line
 			String key = (String) properties.keys().nextElement();
 			String value = properties.getProperty( key );
 			return new KeyValue( key, value );
@@ -171,17 +169,7 @@ class FlatThemePropertiesSupport
 	}
 
 	private String getPropertyOrWildcard( String key ) {
-		// get platform specific properties
-		String value = getProperty( platformPrefix + key );
-		if( value != null )
-			return value;
-
-		// get light/dark specific properties
-		value = getProperty( (isDark( getBaseTheme() ) ? "[dark]" : "[light]") + key );
-		if( value != null )
-			return value;
-
-		value = getProperty( key );
+		String value = getProperty( key );
 		if( value != null )
 			return value;
 
@@ -213,9 +201,18 @@ class FlatThemePropertiesSupport
 		if( propertiesCache != null )
 			return propertiesCache;
 
-		propertiesCache = new Properties();
+		String text = textArea.getText();
 		try {
-			propertiesCache.load( new StringReader( textArea.getText() ) );
+			propertiesCache = UIDefaultsLoaderAccessor.newUIProperties( lastDark );
+			propertiesCache.load( new StringReader( text ) );
+
+			// re-load if dark has changed (getBaseTheme() invokes getProperties()!!!)
+			boolean dark = isDark( getBaseTheme() );
+			if( lastDark != dark ) {
+				lastDark = dark;
+				propertiesCache = UIDefaultsLoaderAccessor.newUIProperties( lastDark );
+				propertiesCache.load( new StringReader( text ) );
+			}
 		} catch( IOException ex ) {
 			ex.printStackTrace(); //TODO
 		}

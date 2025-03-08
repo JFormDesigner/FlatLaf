@@ -31,6 +31,12 @@ FlatLaf Change Log
   - Updated to latest versions and fixed various issues.
   - Support customizing through properties files. (issue #824)
 - SwingX: Support `JXTipOfTheDay` component. (issue #980)
+- Support key prefixes for Linux desktop environments (e.g. `[gnome]`, `[kde]`
+  or `[xfce]`) in properties files. (issue #974)
+- Support custom key prefixes (e.g. `[win10]` or `[test]`) in properties files.
+  (issue #649)
+- Support multi-prefixed keys (e.g. `[dark][gnome]TitlePane.buttonBackground`).
+  The value is only used if all prefixes match current platform/theme.
 
 #### Fixed bugs
 
@@ -66,6 +72,23 @@ FlatLaf Change Log
     `com.formdev.flatlaf.intellijthemes.materialthemeuilite` from `Flat<theme>`
     to `FlatMT<theme>`.
   - Removed `Gruvbox Dark Medium` and `Gruvbox Dark Soft` themes.
+- Prefixed keys in properties files (e.g. `[dark]Button.background` or
+  `[win]Button.arc`) are now handled earlier than before. In previous versions,
+  prefixed keys always had higher priority than unprefixed keys and did always
+  overwrite unprefixed keys. Now prefixed keys are handled in same order as
+  unprefixed keys, which means that if a key is prefixed and unprefixed (e.g.
+  `[win]Button.arc` and `Button.arc`), the one which is last specified in
+  properties file is used.\
+  Following worked in previous versions, but now `Button.arc` is always `6`:
+  ~~~properties
+  [win]Button.arc = 12
+  Button.arc = 6
+  ~~~
+  This works in new (and old) versions:
+  ~~~properties
+  Button.arc = 6
+  [win]Button.arc = 12
+  ~~~
 
 
 ## 3.5.4

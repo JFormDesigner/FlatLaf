@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.swing.Icon;
@@ -62,7 +63,6 @@ import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.StringUtils;
-import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -105,6 +105,39 @@ class UIDefaultsLoader
 		return lafClasses;
 	}
 
+	static Properties newUIProperties( boolean dark ) {
+		// UI key prefixes
+		String lightOrDarkPrefix = FlatLaf.getUIKeyLightOrDarkPrefix( dark );
+		Set<String> platformPrefixes = FlatLaf.getUIKeyPlatformPrefixes();
+		Set<String> specialPrefixes = FlatLaf.getUIKeySpecialPrefixes();
+
+		return new Properties() {
+			@Override
+			public synchronized Object put( Object k, Object value ) {
+				// process key prefixes (while loading properties files)
+				String key = (String) k;
+				while( key.startsWith( "[" ) ) {
+					int closeIndex = key.indexOf( ']' );
+					if( closeIndex < 0 )
+						return null; // ignore property with invalid prefix
+
+					String prefix = key.substring( 0, closeIndex + 1 );
+
+					if( specialPrefixes.contains( prefix ) )
+						break; // keep special prefix
+
+					if( !lightOrDarkPrefix.equals( prefix ) && !platformPrefixes.contains( prefix ) )
+						return null; // ignore property
+
+					// prefix is known and enabled --> remove prefix
+					key = key.substring( closeIndex + 1 );
+				}
+
+				return super.put( key, value );
+			}
+		};
+	}
+
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
 		Consumer<Properties> intellijThemesHook, Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
@@ -113,8 +146,10 @@ class UIDefaultsLoader
 			// which avoids that system color getter is invoked multiple times
 			systemColorCache = (FlatLaf.getSystemColorGetter() != null) ? new HashMap<>() : null;
 
+			// all properties files will be loaded into this map
+			Properties properties = newUIProperties( dark );
+
 			// load core properties files
-			Properties properties = new Properties();
 			for( Class<?> lafClass : lafClasses ) {
 				String propertiesName = '/' + lafClass.getName().replace( '.', '/' ) + ".properties";
 				try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
@@ -200,41 +235,6 @@ class UIDefaultsLoader
 			// add additional defaults
 			if( additionalDefaults != null )
 				properties.putAll( additionalDefaults );
-
-			// collect all platform specific keys (but do not modify properties)
-			ArrayList<String> platformSpecificKeys = new ArrayList<>();
-			for( Object okey : properties.keySet() ) {
-				String key = (String) okey;
-				if( key.startsWith( "[" ) &&
-					(key.startsWith( "[win]" ) ||
-					 key.startsWith( "[mac]" ) ||
-					 key.startsWith( "[linux]" ) ||
-					 key.startsWith( "[light]" ) ||
-					 key.startsWith( "[dark]" )) )
-				  platformSpecificKeys.add( key );
-			}
-
-			// remove platform specific properties and re-add only properties
-			// for current platform, but with platform prefix removed
-			if( !platformSpecificKeys.isEmpty() ) {
-				// handle light/dark specific properties
-				String lightOrDarkPrefix = dark ? "[dark]" : "[light]";
-				for( String key : platformSpecificKeys ) {
-					if( key.startsWith( lightOrDarkPrefix ) )
-						properties.put( key.substring( lightOrDarkPrefix.length() ), properties.remove( key ) );
-				}
-
-				// handle platform specific properties
-				String platformPrefix =
-					SystemInfo.isWindows ? "[win]" :
-					SystemInfo.isMacOS ? "[mac]" :
-					SystemInfo.isLinux ? "[linux]" : "[unknown]";
-				for( String key : platformSpecificKeys ) {
-					Object value = properties.remove( key );
-					if( key.startsWith( platformPrefix ) )
-						properties.put( key.substring( platformPrefix.length() ), value );
-				}
-			}
 
 			// get (and remove) wildcard replacements, which override all other defaults that end with same suffix
 			HashMap<String, String> wildcards = new HashMap<>();
