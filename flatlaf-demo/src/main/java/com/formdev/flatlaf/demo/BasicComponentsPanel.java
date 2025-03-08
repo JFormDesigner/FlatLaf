@@ -179,6 +179,10 @@ class BasicComponentsPanel
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
+		JLabel successHintsLabel = new JLabel();
+		JTextField successHintsTextField = new JTextField();
+		JComboBox<String> successHintsComboBox = new JComboBox<>();
+		JSpinner successHintsSpinner = new JSpinner();
 		JLabel errorHintsLabel = new JLabel();
 		JTextField errorHintsTextField = new JTextField();
 		JComboBox<String> errorHintsComboBox = new JComboBox<>();
@@ -698,13 +702,33 @@ class BasicComponentsPanel
 		textPane5.setText("No scroll pane");
 		add(textPane5, "cell 5 11,growx");
 
+  		//---- successHintsLabel ----
+		successHintsLabel.setText("Success hints:");
+		add(successHintsLabel, "cell 0 12");
+
+		//---- successHintsTextField ----
+		successHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_SUCCESS);
+		add(successHintsTextField, "cell 1 12,growx");
+
+		//---- successHintsComboBox ----
+		successHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_SUCCESS);
+        successHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+			"Editable"
+		}));
+        successHintsComboBox.setEditable(true);
+		add(successHintsComboBox, "cell 2 12,growx");
+
+		//---- successHintsSpinner ----
+		successHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_SUCCESS);
+		add(successHintsSpinner, "cell 3 12,growx");
+
 		//---- errorHintsLabel ----
 		errorHintsLabel.setText("Error hints:");
-		add(errorHintsLabel, "cell 0 12");
+		add(errorHintsLabel, "cell 0 13");
 
 		//---- errorHintsTextField ----
 		errorHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
-		add(errorHintsTextField, "cell 1 12,growx");
+		add(errorHintsTextField, "cell 1 13,growx");
 
 		//---- errorHintsComboBox ----
 		errorHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
@@ -712,131 +736,131 @@ class BasicComponentsPanel
 			"Editable"
 		}));
 		errorHintsComboBox.setEditable(true);
-		add(errorHintsComboBox, "cell 2 12,growx");
+		add(errorHintsComboBox, "cell 2 13,growx");
 
 		//---- errorHintsSpinner ----
 		errorHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
-		add(errorHintsSpinner, "cell 3 12,growx");
+		add(errorHintsSpinner, "cell 3 13,growx");
 
 		//---- warningHintsLabel ----
 		warningHintsLabel.setText("Warning hints:");
-		add(warningHintsLabel, "cell 0 13");
+		add(warningHintsLabel, "cell 0 14");
 
 		//---- warningHintsTextField ----
 		warningHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
-		add(warningHintsTextField, "cell 1 13,growx");
+		add(warningHintsTextField, "cell 1 14,growx");
 
 		//---- warningHintsComboBox ----
 		warningHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
 		warningHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 			"Not editable"
 		}));
-		add(warningHintsComboBox, "cell 2 13,growx");
+		add(warningHintsComboBox, "cell 2 14,growx");
 
 		//---- warningHintsSpinner ----
 		warningHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
-		add(warningHintsSpinner, "cell 3 13,growx");
+		add(warningHintsSpinner, "cell 3 14,growx");
 
 		//---- iconsLabel ----
 		iconsLabel.setText("Leading/trailing icons:");
-		add(iconsLabel, "cell 0 14");
-		add(leadingIconTextField, "cell 1 14,growx");
+		add(iconsLabel, "cell 0 15");
+		add(leadingIconTextField, "cell 1 15,growx");
 
 		//---- trailingIconTextField ----
 		trailingIconTextField.setText("text");
-		add(trailingIconTextField, "cell 2 14,growx");
+		add(trailingIconTextField, "cell 2 15,growx");
 
 		//---- iconsTextField ----
 		iconsTextField.setText("text");
-		add(iconsTextField, "cell 3 14,growx");
+		add(iconsTextField, "cell 3 15,growx");
 
 		//---- compsLabel ----
 		compsLabel.setText("Leading/trailing comp.:");
 		add(compsLabel, "cell 0 15");
-		add(compsTextField, "cell 1 15 2 1,growx");
+		add(compsTextField, "cell 1 16 2 1,growx");
 
 		//---- clearTextField ----
 		clearTextField.setText("clear me");
-		add(clearTextField, "cell 3 15,growx");
+		add(clearTextField, "cell 3 16,growx");
 
 		//---- fontsLabel ----
 		fontsLabel.setText("Typography / Fonts:");
-		add(fontsLabel, "cell 0 16");
+		add(fontsLabel, "cell 0 17");
 
 		//---- h00Label ----
 		h00Label.setText("H00");
 		h00Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h00");
-		add(h00Label, "cell 1 16 5 1");
+		add(h00Label, "cell 1 17 5 1");
 
 		//---- h0Label ----
 		h0Label.setText("H0");
 		h0Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h0");
-		add(h0Label, "cell 1 16 5 1");
+		add(h0Label, "cell 1 17 5 1");
 
 		//---- h1Label ----
 		h1Label.setText("H1");
 		h1Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
-		add(h1Label, "cell 1 16 5 1");
+		add(h1Label, "cell 1 17 5 1");
 
 		//---- h2Label ----
 		h2Label.setText("H2");
 		h2Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h2");
-		add(h2Label, "cell 1 16 5 1");
+		add(h2Label, "cell 1 17 5 1");
 
 		//---- h3Label ----
 		h3Label.setText("H3");
 		h3Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
-		add(h3Label, "cell 1 16 5 1");
+		add(h3Label, "cell 1 17 5 1");
 
 		//---- h4Label ----
 		h4Label.setText("H4");
 		h4Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
-		add(h4Label, "cell 1 16 5 1");
+		add(h4Label, "cell 1 17 5 1");
 
 		//---- lightLabel ----
 		lightLabel.setText("light");
 		lightLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $light.font");
-		add(lightLabel, "cell 1 16 5 1,gapx 30");
+		add(lightLabel, "cell 1 17 5 1,gapx 30");
 
 		//---- semiboldLabel ----
 		semiboldLabel.setText("semibold");
 		semiboldLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $semibold.font");
-		add(semiboldLabel, "cell 1 16 5 1");
+		add(semiboldLabel, "cell 1 17 5 1");
 
 		//---- fontZoomLabel ----
 		fontZoomLabel.setText("(200%)");
 		fontZoomLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		fontZoomLabel.setEnabled(false);
-		add(fontZoomLabel, "cell 1 16 5 1");
+		add(fontZoomLabel, "cell 1 17 5 1");
 
 		//---- largeLabel ----
 		largeLabel.setText("large");
 		largeLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
-		add(largeLabel, "cell 1 17 5 1");
+		add(largeLabel, "cell 1 18 5 1");
 
 		//---- defaultLabel ----
 		defaultLabel.setText("default");
-		add(defaultLabel, "cell 1 17 5 1");
+		add(defaultLabel, "cell 1 18 5 1");
 
 		//---- mediumLabel ----
 		mediumLabel.setText("medium");
 		mediumLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
-		add(mediumLabel, "cell 1 17 5 1");
+		add(mediumLabel, "cell 1 18 5 1");
 
 		//---- smallLabel ----
 		smallLabel.setText("small");
 		smallLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-		add(smallLabel, "cell 1 17 5 1");
+		add(smallLabel, "cell 1 18 5 1");
 
 		//---- miniLabel ----
 		miniLabel.setText("mini");
 		miniLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
-		add(miniLabel, "cell 1 17 5 1");
+		add(miniLabel, "cell 1 18 5 1");
 
 		//---- monospacedLabel ----
 		monospacedLabel.setText("monospaced");
 		monospacedLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "monospaced");
-		add(monospacedLabel, "cell 1 17 5 1,gapx 30");
+		add(monospacedLabel, "cell 1 18 5 1,gapx 30");
 
 		//======== popupMenu1 ========
 		{

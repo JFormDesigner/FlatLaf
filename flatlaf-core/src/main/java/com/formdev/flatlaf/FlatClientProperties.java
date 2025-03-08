@@ -227,6 +227,13 @@ public interface FlatClientProperties
 	String OUTLINE = "JComponent.outline";
 
 	/**
+	 * Paint the component border in another color (usually greenish) to indicate an success.
+	 *
+	 * @see #OUTLINE
+	 */
+	String OUTLINE_SUCCESS = "success";
+
+	/**
 	 * Paint the component border in another color (usually reddish) to indicate an error.
 	 *
 	 * @see #OUTLINE
