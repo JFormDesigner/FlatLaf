@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -27,7 +28,9 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import javax.swing.JComponent;
 import javax.swing.RepaintManager;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.ui.StackUtils;
 
 /**
  * @author Karl Tauber
@@ -322,6 +325,19 @@ public class HiDPIUtils
 			@Override
 			public void drawGlyphVector( GlyphVector g, float x, float y ) {
 				super.drawGlyphVector( g, x, y + yCorrection );
+			}
+
+			@Override
+			public void fillRect( int x, int y, int width, int height ) {
+				// fix hard coded black color in HRuleView.paint() of '<hr noshade>'
+				if( super.getColor() == Color.black &&
+					StackUtils.wasInvokedFrom( "javax.swing.text.html.HRuleView", "paint", 4 ) )
+				{
+					super.setColor( FlatLaf.isLafDark() ? Color.lightGray : Color.darkGray );
+					super.fillRect( x, y, width, height );
+					super.setColor( Color.black );
+				} else
+					super.fillRect( x, y, width, height );
 			}
 		};
 	}

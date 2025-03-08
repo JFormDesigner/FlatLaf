@@ -62,6 +62,7 @@ FlatLaf Change Log
 - Fixed loading FlatLaf UI delegate classes when using FlatLaf in special
   application where multiple class loaders are involved. E.g. in Eclipse plugin
   or in LibreOffice extension. (issues #955 and #851)
+- HTML: Fixed rendering of `<hr noshade>` in dark themes. (issue #932)
 
 #### Incompatibilities
 

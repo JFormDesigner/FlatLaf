@@ -21,7 +21,7 @@ import java.util.function.BiPredicate;
 /**
  * @author Karl Tauber
  */
-class StackUtils
+public class StackUtils
 {
 	private static final StackUtils INSTANCE = new StackUtilsImpl();
 
