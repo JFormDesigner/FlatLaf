@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatArcDarkIJTheme
+public class FlatMTGitHubDarkIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Arc Dark (Material)";
+	public static final String NAME = "GitHub Dark (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatArcDarkIJTheme() );
+			return setup( new FlatMTGitHubDarkIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatArcDarkIJTheme.class );
+		installLafInfo( NAME, FlatMTGitHubDarkIJTheme.class );
 	}
 
-	public FlatArcDarkIJTheme() {
-		super( Utils.loadTheme( "Arc Dark.theme.json" ) );
+	public FlatMTGitHubDarkIJTheme() {
+		super( Utils.loadTheme( "GitHub Dark.theme.json" ) );
 	}
 
 	@Override

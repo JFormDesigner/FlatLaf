@@ -73,10 +73,12 @@ public class IJThemesClassGenerator
 			name = name.substring( nameSep + 1 ).trim();
 
 		String themeName = name;
-		if( "material-theme-ui-lite".equals( resourcePath ) )
-			themeName += " (Material)";
-
 		StringBuilder buf = new StringBuilder();
+		if( "material-theme-ui-lite".equals( resourcePath ) ) {
+			themeName += " (Material)";
+			buf.append( "MT" );
+		}
+
 		for( String n : name.split( "[ \\-]" ) ) {
 			if( n.length() == 0 || n.equals( "-" ) )
 				continue;

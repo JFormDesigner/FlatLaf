@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatAtomOneLightIJTheme
+public class FlatMTMonokaiProIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Atom One Light (Material)";
+	public static final String NAME = "Monokai Pro (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatAtomOneLightIJTheme() );
+			return setup( new FlatMTMonokaiProIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatAtomOneLightIJTheme.class );
+		installLafInfo( NAME, FlatMTMonokaiProIJTheme.class );
 	}
 
-	public FlatAtomOneLightIJTheme() {
-		super( Utils.loadTheme( "Atom One Light.theme.json" ) );
+	public FlatMTMonokaiProIJTheme() {
+		super( Utils.loadTheme( "Monokai Pro.theme.json" ) );
 	}
 
 	@Override

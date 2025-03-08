@@ -7,6 +7,14 @@ FlatLaf Change Log
 
 - macOS: Re-enabled rounded popup border (see PR #772) on macOS 14.4+ (was
   disabled in 3.5.x).
+- Increased contrast of text for better readability: (PR #972; issue #762)
+  - In **FlatLaf Dark**, **FlatLaf Darcula** and many dark IntelliJ themes, made
+    all text colors brighter.
+  - In **FlatLaf Light**, **FlatLaf IntelliJ** and many light IntelliJ themes,
+    made disabled text colors slightly darker.
+  - In **FlatLaf macOS Light**, made disabled text colors darker.
+  - In **FlatLaf macOS Dark**, made text colors of "default" button and selected
+    ToggleButton lighter.
 - CheckBox: Support styling indeterminate state of
   [tri-state check boxes](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html).
   (PR #936; issue #919)
@@ -16,7 +24,13 @@ FlatLaf Change Log
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
 - Linux: Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
-- IntelliJ Themes: Updated to latest versions.
+- Linux: Use X11 window manager events to resize window, if FlatLaf window
+  decorations are enabled. This gives FlatLaf windows a more "native" feeling.
+  (issue #866)
+- IntelliJ Themes:
+  - Updated to latest versions and fixed various issues.
+  - Support customizing through properties files. (issue #824)
+- SwingX: Support `JXTipOfTheDay` component. (issue #980)
 
 #### Fixed bugs
 
@@ -42,6 +56,16 @@ FlatLaf Change Log
 - Fixed loading FlatLaf UI delegate classes when using FlatLaf in special
   application where multiple class loaders are involved. E.g. in Eclipse plugin
   or in LibreOffice extension. (issues #955 and #851)
+
+#### Incompatibilities
+
+- IntelliJ Themes:
+  - Theme prefix in `IntelliJTheme$ThemeLaf.properties` changed from
+    `[theme-name]` to `{theme-name}`.
+  - Renamed classes in package
+    `com.formdev.flatlaf.intellijthemes.materialthemeuilite` from `Flat<theme>`
+    to `FlatMT<theme>`.
+  - Removed `Gruvbox Dark Medium` and `Gruvbox Dark Soft` themes.
 
 
 ## 3.5.4

@@ -521,10 +521,10 @@ public abstract class FlatLaf
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
-		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), isDark(), defaults );
-		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
+		if( lafClassesForDefaultsLoading == null )
+			lafClassesForDefaultsLoading = UIDefaultsLoader.getLafClassesForDefaultsLoading( getClass() );
+		UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons,
+			this::applyAdditionalProperties, getAdditionalDefaults(), isDark(), defaults );
 
 		// setup default font after loading defaults from properties
 		// to allow defining "defaultFont" in properties
@@ -540,9 +540,6 @@ public abstract class FlatLaf
 
 		// initialize text antialiasing
 		putAATextInfo( defaults );
-
-		// apply additional defaults (e.g. from IntelliJ themes)
-		applyAdditionalDefaults( defaults );
 
 		// allow addons modifying UI defaults
 		for( FlatDefaultsAddon addon : addons )
@@ -564,7 +561,8 @@ public abstract class FlatLaf
 		return defaults;
 	}
 
-	void applyAdditionalDefaults( UIDefaults defaults ) {
+	// apply additional properties (e.g. from IntelliJ themes)
+	void applyAdditionalProperties( Properties properties ) {
 	}
 
 	protected List<Class<?>> getLafClassesForDefaultsLoading() {

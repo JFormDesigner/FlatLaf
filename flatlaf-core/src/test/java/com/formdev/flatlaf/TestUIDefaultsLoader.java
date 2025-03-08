@@ -272,9 +272,54 @@ public class TestUIDefaultsLoader
 	}
 
 	@Test
-	void parseDerivedColorFunctions() {
-		// lighten, darken
+	void parseLazyColorFunctions() {
+		// lighten
+		assertEquals( new Color( 0xff6666 ), parseColorLazy( "lighten(dummyColor, 20%, lazy)", new Color( 0xff0000 ) ) );
 
+		// darken
+		assertEquals( new Color( 0x990000 ), parseColorLazy( "darken(dummyColor, 20%, lazy)", new Color( 0xff0000 ) ) );
+
+		// saturate
+		assertEquals( new Color( 0xf32e2e ), parseColorLazy( "saturate(dummyColor, 20%, lazy)", new Color( 0xdd4444 ) ) );
+
+		// desaturate
+		assertEquals( new Color( 0x745858 ), parseColorLazy( "desaturate(dummyColor, 20%, lazy)", new Color( 0x884444 ) ) );
+
+		// fadein
+		assertEquals( new Color( 0xddff0000, true ), parseColorLazy( "fadein(dummyColor, 20%, lazy)", new Color( 0xaaff0000, true ) ) );
+
+		// fadeout
+		assertEquals( new Color( 0x11ff0000, true ), parseColorLazy( "fadeout(dummyColor, 20%, lazy)", new Color( 0x44ff0000, true ) ) );
+
+		// fade
+		assertEquals( new Color( 0x33ff0000, true ), parseColorLazy( "fade(dummyColor, 20%, lazy)", new Color( 0xff0000 ) ) );
+		assertEquals( new Color( 0xccff0000, true ), parseColorLazy( "fade(dummyColor, 80%, lazy)", new Color( 0x10ff0000, true ) ) );
+
+		// spin
+		assertEquals( new Color( 0xffaa00 ), parseColorLazy( "spin(dummyColor, 40, lazy)", new Color( 0xff0000 ) ) );
+		assertEquals( new Color( 0xff00aa ), parseColorLazy( "spin(dummyColor, -40, lazy)", new Color( 0xff0000 ) ) );
+
+		// changeHue / changeSaturation / changeLightness / changeAlpha
+		assertEquals( new Color( 0xffaa00 ), parseColorLazy( "changeHue(dummyColor, 40, lazy)", new Color( 0xff0000 ) ) );
+		assertEquals( new Color( 0xb34d4d ), parseColorLazy( "changeSaturation(dummyColor, 40%, lazy)", new Color( 0xff0000 ) ) );
+		assertEquals( new Color( 0xcc0000 ), parseColorLazy( "changeLightness(dummyColor, 40%, lazy)", new Color( 0xff0000 ) ) );
+		assertEquals( new Color( 0x66ff0000, true ), parseColorLazy( "changeAlpha(dummyColor, 40%, lazy)", new Color( 0xff0000 ) ) );
+
+		// mix
+		assertEquals( new Color( 0x808000 ), parseColorLazy( "mix(#f00, dummyColor, lazy)", new Color( 0x00ff00 ) ) );
+		assertEquals( new Color( 0xbf4000 ), parseColorLazy( "mix(#f00, dummyColor, 75%, lazy)", new Color( 0x00ff00 ) ) );
+
+		// tint
+		assertEquals( new Color( 0xff80ff ), parseColorLazy( "tint(dummyColor, lazy)", new Color( 0xff00ff ) ) );
+		assertEquals( new Color( 0xffbfff ), parseColorLazy( "tint(dummyColor, 75%, lazy)", new Color( 0xff00ff ) ) );
+
+		// shade
+		assertEquals( new Color( 0x800080 ), parseColorLazy( "shade(dummyColor, lazy)", new Color( 0xff00ff ) ) );
+		assertEquals( new Color( 0x400040 ), parseColorLazy( "shade(dummyColor, 75%, lazy)", new Color( 0xff00ff ) ) );
+	}
+
+	@Test
+	void parseDerivedColorFunctions() {
 		// mix
 		assertDerivedColorEquals( new Color( 0x808000 ), "mix(#f00, #0f0, derived)", new Mix2( Color.red, 50 ) );
 		assertDerivedColorEquals( new Color( 0xbf4000 ), "mix(#f00, #0f0, 75%, derived)", new Mix2( Color.red, 75 ) );
@@ -398,6 +443,13 @@ public class TestUIDefaultsLoader
 
 	private Object parseColor( String value ) {
 		return UIDefaultsLoader.parseValue( "dummyColor", value, null );
+	}
+
+	private Object parseColorLazy( String value, Color actual ) {
+		UIManager.put( "dummyColor", actual );
+		Object v = UIDefaultsLoader.parseValue( "dummyColor", value, null );
+		assertInstanceOf( LazyValue.class, v );
+		return ((LazyValue)v).createValue( null );
 	}
 
 	//---- class TestInstance -------------------------------------------------

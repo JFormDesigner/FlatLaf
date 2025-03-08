@@ -58,6 +58,7 @@ class FlatNativeLibrary
 
 		String classifier;
 		String ext;
+		boolean unknownArch = false;
 		if( SystemInfo.isWindows_10_orLater && (SystemInfo.isX86 || SystemInfo.isX86_64 || SystemInfo.isAARCH64) ) {
 			// Windows: requires Windows 10/11 (x86, x86_64 or aarch64)
 
@@ -90,11 +91,14 @@ class FlatNativeLibrary
 			classifier = SystemInfo.isAARCH64 ? "macos-arm64" : "macos-x86_64";
 			ext = "dylib";
 
-		} else if( SystemInfo.isLinux && (SystemInfo.isX86_64 || SystemInfo.isAARCH64)) {
-			// Linux: requires x86_64 or aarch64
+		} else if( SystemInfo.isLinux ) {
+			// Linux: x86_64 or aarch64 (but also supports unknown architectures)
 
-			classifier = SystemInfo.isAARCH64 ? "linux-arm64" : "linux-x86_64";
+			classifier = SystemInfo.isAARCH64 ? "linux-arm64"
+				: (SystemInfo.isX86_64 ? "linux-x86_64"
+					: "linux-" + sanitize( System.getProperty( "os.arch" ) ));
 			ext = "so";
+			unknownArch = !SystemInfo.isX86_64 && !SystemInfo.isAARCH64;
 
 			// Load libjawt.so (part of JRE) explicitly because it is not found
 			// in all Java versions/distributions.
@@ -106,7 +110,7 @@ class FlatNativeLibrary
 			return; // no native library available for current OS or CPU architecture
 
 		// load native library
-		NativeLibrary nativeLibrary = createNativeLibrary( classifier, ext );
+		NativeLibrary nativeLibrary = createNativeLibrary( classifier, ext, unknownArch );
 		if( !nativeLibrary.isLoaded() )
 			return;
 
@@ -128,7 +132,7 @@ class FlatNativeLibrary
 		FlatNativeLibrary.nativeLibrary = nativeLibrary;
 	}
 
-	private static NativeLibrary createNativeLibrary( String classifier, String ext ) {
+	private static NativeLibrary createNativeLibrary( String classifier, String ext, boolean unknownArch ) {
 		String libraryName = "flatlaf-" + classifier;
 
 		// load from "java.library.path" or from path specified in system property "flatlaf.nativeLibraryPath"
@@ -139,9 +143,11 @@ class FlatNativeLibrary
 				if( library.isLoaded() )
 					return library;
 
-				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '" + System.mapLibraryName( libraryName )
-					+ "' not found in java.library.path '" + System.getProperty( "java.library.path" )
-					+ "'. Using extracted native library instead.", null );
+				if( !unknownArch ) {
+					LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '" + System.mapLibraryName( libraryName )
+						+ "' not found in java.library.path '" + System.getProperty( "java.library.path" )
+						+ "'. Using extracted native library instead.", null );
+				}
 			} else {
 				// try standard library naming scheme
 				// (same as in flatlaf.jar in package 'com/formdev/flatlaf/natives')
@@ -160,11 +166,13 @@ class FlatNativeLibrary
 						return new NativeLibrary( libraryFile2, true );
 				}
 
-				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '"
-					+ libraryFile.getName()
-					+ (libraryName2 != null ? ("' or '" + libraryName2) : "")
-					+ "' not found in '" + libraryFile.getParentFile().getAbsolutePath()
-					+ "'. Using extracted native library instead.", null );
+				if( !unknownArch ) {
+					LoggingFacade.INSTANCE.logSevere( "FlatLaf: Native library '"
+						+ libraryFile.getName()
+						+ (libraryName2 != null ? ("' or '" + libraryName2) : "")
+						+ "' not found in '" + libraryFile.getParentFile().getAbsolutePath()
+						+ "'. Using extracted native library instead.", null );
+				}
 			}
 		}
 
@@ -175,7 +183,7 @@ class FlatNativeLibrary
 			return new NativeLibrary( libraryFile, true );
 
 		// load from FlatLaf jar (extract native library to temp folder)
-		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, true );
+		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, !unknownArch );
 	}
 
 	/**
@@ -271,6 +279,13 @@ class FlatNativeLibrary
 		return jarBasename
 			+ (jarBasename.contains( "flatlaf" ) ? "" : "-flatlaf")
 			+ '-' + classifier + '.' + ext;
+	}
+
+	/**
+	 * Allow only 'a'-'z', 'A'-'Z', '0'-'9', '_' and '-' in filenames.
+	 */
+	private static String sanitize( String s ) {
+		return s.replaceAll( "[^a-zA-Z0-9_-]", "_" );
 	}
 
 	private static void loadJAWT() {

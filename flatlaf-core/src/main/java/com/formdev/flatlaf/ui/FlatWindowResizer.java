@@ -188,7 +188,7 @@ public abstract class FlatWindowResizer
 	protected abstract Dimension getWindowMinimumSize();
 	protected abstract Dimension getWindowMaximumSize();
 
-	protected void beginResizing( int resizeDir ) {}
+	protected void beginResizing( int resizeDir, MouseEvent e ) {}
 	protected void endResizing() {}
 
 	//---- interface PropertyChangeListener ----
@@ -370,7 +370,25 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
-		protected void beginResizing( int resizeDir ) {
+		protected void beginResizing( int resizeDir, MouseEvent e ) {
+			// on Linux, resize window using window manager
+			if( SystemInfo.isLinux && window != null && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
+				int direction = -1;
+				switch( resizeDir ) {
+					case N_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOP; break;
+					case S_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOM; break;
+					case W_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_LEFT; break;
+					case E_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_RIGHT; break;
+					case NW_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOPLEFT; break;
+					case NE_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOPRIGHT; break;
+					case SW_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOMLEFT; break;
+					case SE_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOMRIGHT; break;
+				}
+
+				if( direction >= 0 && FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, direction ) )
+					return;
+			}
+
 			centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
 			centerComp.setCursor( getPredefinedCursor( resizeDir ) );
 			centerComp.setVisible( true );
@@ -462,7 +480,7 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
-		protected void beginResizing( int resizeDir ) {
+		protected void beginResizing( int resizeDir, MouseEvent e ) {
 			int direction = 0;
 			switch( resizeDir ) {
 				case N_RESIZE_CURSOR:	direction = NORTH; break;
@@ -581,7 +599,7 @@ debug*/
 			dragRightOffset = windowBounds.x + windowBounds.width - xOnScreen;
 			dragBottomOffset = windowBounds.y + windowBounds.height - yOnScreen;
 
-			beginResizing( resizeDir );
+			beginResizing( resizeDir, e );
 		}
 
 		@Override

@@ -335,7 +335,7 @@ Menu.acceleratorFont           [lazy] Dialog plain 12    javax.swing.plaf.FontUI
 Menu.acceleratorForeground     [active] #000000    javax.swing.plaf.ColorUIResource [UI]
 Menu.acceleratorSelectionForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
 Menu.afterCheckIconGap         [active] 9
-Menu.arrowIcon                 [lazy] 9,9    com.sun.java.swing.plaf.windows.WindowsIconFactory$MenuArrowIcon [UI]
+Menu.arrowIcon                 [lazy] 11,10    com.sun.java.swing.plaf.windows.WindowsIconFactory$MenuArrowIcon [UI]
 Menu.background                [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
 Menu.border                    [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 Menu.borderPainted             false
@@ -936,3 +936,89 @@ textText                       #000000    javax.swing.plaf.ColorUIResource [UI]
 window                         #ffffff    javax.swing.plaf.ColorUIResource [UI]
 windowBorder                   #646464    javax.swing.plaf.ColorUIResource [UI]
 windowText                     #000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- activeTitleForeground --
+InternalFrame.activeTitleForeground                 #000000  #99b4d1     9.8
+
+#-- disabledForeground --
+ComboBox.disabledForeground                         #6d6d6d  #f0f0f0     4.5  !!!
+Label.disabledForeground                            #6d6d6d  #f0f0f0     4.5  !!!
+
+#-- focusCellForeground --
+Table.focusCellForeground                           #000000  #ffffff    21.0
+
+#-- foreground --
+Button.foreground                                   #000000  #f0f0f0    18.4
+CheckBox.foreground                                 #000000  #f0f0f0    18.4
+CheckBoxMenuItem.foreground                         #000000  #f0f0f0    18.4
+ColorChooser.foreground                             #000000  #f0f0f0    18.4
+ComboBox.foreground                                 #000000  #ffffff    21.0
+EditorPane.foreground                               #000000  #ffffff    21.0
+FormattedTextField.foreground                       #000000  #ffffff    21.0
+Label.foreground                                    #000000  #f0f0f0    18.4
+List.foreground                                     #000000  #ffffff    21.0
+Menu.foreground                                     #000000  #f0f0f0    18.4
+MenuBar.foreground                                  #000000  #f0f0f0    18.4
+MenuItem.foreground                                 #000000  #f0f0f0    18.4
+OptionPane.foreground                               #000000  #f0f0f0    18.4
+Panel.foreground                                    #000000  #f0f0f0    18.4
+PasswordField.foreground                            #000000  #ffffff    21.0
+PopupMenu.foreground                                #000000  #f0f0f0    18.4
+RadioButton.foreground                              #000000  #f0f0f0    18.4
+RadioButtonMenuItem.foreground                      #000000  #f0f0f0    18.4
+Spinner.foreground                                  #f0f0f0  #f0f0f0     1.0  !!!!!!
+TabbedPane.foreground                               #000000  #f0f0f0    18.4
+Table.foreground                                    #000000  #ffffff    21.0
+TableHeader.foreground                              #000000  #f0f0f0    18.4
+TextArea.foreground                                 #000000  #ffffff    21.0
+TextField.foreground                                #000000  #ffffff    21.0
+TextPane.foreground                                 #000000  #ffffff    21.0
+ToggleButton.foreground                             #000000  #f0f0f0    18.4
+ToolTip.foreground                                  #000000  #ffffe1    20.6
+Tree.foreground                                     #000000  #ffffff    21.0
+
+#-- inactiveForeground --
+EditorPane.inactiveForeground                       #6d6d6d  #f0f0f0     4.5  !!!
+FormattedTextField.inactiveForeground               #6d6d6d  #f0f0f0     4.5  !!!
+PasswordField.inactiveForeground                    #6d6d6d  #f0f0f0     4.5  !!!
+TextArea.inactiveForeground                         #6d6d6d  #f0f0f0     4.5  !!!
+TextField.inactiveForeground                        #6d6d6d  #f0f0f0     4.5  !!!
+TextPane.inactiveForeground                         #6d6d6d  #f0f0f0     4.5  !!!
+
+#-- inactiveTitleForeground --
+InternalFrame.inactiveTitleForeground               #000000  #bfcddb    13.0
+
+#-- selectionBackground --
+ProgressBar.selectionBackground                     #0078d7  #f0f0f0     3.9  !!!!
+
+#-- selectionForeground --
+CheckBoxMenuItem.selectionForeground                #ffffff  #0078d7     4.5  !!!
+ComboBox.selectionForeground                        #ffffff  #0078d7     4.5  !!!
+EditorPane.selectionForeground                      #ffffff  #0078d7     4.5  !!!
+FormattedTextField.selectionForeground              #ffffff  #0078d7     4.5  !!!
+List.selectionForeground                            #ffffff  #0078d7     4.5  !!!
+Menu.selectionForeground                            #ffffff  #0078d7     4.5  !!!
+MenuItem.selectionForeground                        #ffffff  #0078d7     4.5  !!!
+PasswordField.selectionForeground                   #ffffff  #0078d7     4.5  !!!
+ProgressBar.selectionForeground                     #f0f0f0  #0078d7     3.9  !!!!
+RadioButtonMenuItem.selectionForeground             #ffffff  #0078d7     4.5  !!!
+Table.selectionForeground                           #ffffff  #0078d7     4.5  !!!
+TextArea.selectionForeground                        #ffffff  #0078d7     4.5  !!!
+TextField.selectionForeground                       #ffffff  #0078d7     4.5  !!!
+TextPane.selectionForeground                        #ffffff  #0078d7     4.5  !!!
+Tree.selectionForeground                            #ffffff  #0078d7     4.5  !!!
+
+#-- textForeground --
+Tree.textForeground                                 #000000  #ffffff    21.0
+
+#-- non-text --
+ProgressBar.background                              #f0f0f0  #f0f0f0     1.0  !!!!!!
+ProgressBar.foreground                              #0078d7  #f0f0f0     3.9  !!!!
+Separator.foreground                                #a0a0a0  #ffffff     2.6  !!!!!

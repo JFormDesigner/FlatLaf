@@ -24,6 +24,9 @@ import javax.swing.table.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.table.DatePickerCellEditor;
+import org.jdesktop.swingx.tips.DefaultTip;
+import org.jdesktop.swingx.tips.DefaultTipOfTheDayModel;
+import org.jdesktop.swingx.tips.TipOfTheDayModel.Tip;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.formdev.flatlaf.testing.FlatTestPanel;
 
@@ -69,12 +72,21 @@ public class FlatSwingXTest
 		JProgressBar statusProgressBar = new JProgressBar();
 		statusProgressBar.setValue( 50 );
 		statusBar1.add( statusProgressBar, new JXStatusBar.Constraint( JXStatusBar.Constraint.ResizeBehavior.FILL ) );
+
+		xTipOfTheDay1.setModel( new DefaultTipOfTheDayModel( new Tip[] {
+			new DefaultTip( "testTip", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." )
+		} ) );
 	}
 
 	private void busyChanged() {
 		boolean busy = busyCheckBox.isSelected();
 		xBusyLabel1.setBusy( busy );
 		xBusyLabel2.setBusy( busy );
+	}
+
+	private void showTipOfTheDayDialog() {
+		JXTipOfTheDay tipOfTheDay = new JXTipOfTheDay( xTipOfTheDay1.getModel() );
+		tipOfTheDay.showDialog( this );
 	}
 
 	private void initComponents() {
@@ -138,6 +150,9 @@ public class FlatSwingXTest
 		JXSearchField xSearchField4 = new JXSearchField();
 		JLabel label12 = new JLabel();
 		statusBar1 = new JXStatusBar();
+		JLabel label13 = new JLabel();
+		xTipOfTheDay1 = new JXTipOfTheDay();
+		JButton showTipOfTheDayDialogButton = new JButton();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
 
@@ -163,6 +178,7 @@ public class FlatSwingXTest
 			"[]" +
 			"[]" +
 			"[]" +
+			"[top]" +
 			"[37]"));
 
 		//---- label1 ----
@@ -471,6 +487,16 @@ public class FlatSwingXTest
 		add(label12, "cell 0 11");
 		add(statusBar1, "cell 1 11 3 1,grow");
 
+		//---- label13 ----
+		label13.setText("JXTipOfTheDay:");
+		add(label13, "cell 0 12");
+		add(xTipOfTheDay1, "cell 1 12 3 1");
+
+		//---- showTipOfTheDayDialogButton ----
+		showTipOfTheDayDialogButton.setText("Show Dialog...");
+		showTipOfTheDayDialogButton.addActionListener(e -> showTipOfTheDayDialog());
+		add(showTipOfTheDayDialogButton, "cell 1 12 3 1");
+
 		//---- button1 ----
 		button1.setText("<");
 
@@ -492,5 +518,6 @@ public class FlatSwingXTest
 	private JCheckBox busyCheckBox;
 	private JTable table;
 	private JXStatusBar statusBar1;
+	private JXTipOfTheDay xTipOfTheDay1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
