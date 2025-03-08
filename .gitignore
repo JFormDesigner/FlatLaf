@@ -5,6 +5,7 @@ build/
 .project
 .settings/
 .idea/
+.consulo/
 out/
 *.iml
 *.ipr

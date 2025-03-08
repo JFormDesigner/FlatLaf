@@ -220,6 +220,7 @@ public interface FlatClientProperties
 	 * <strong>Allowed Values</strong>
 	 *     {@link #OUTLINE_ERROR},
 	 *     {@link #OUTLINE_WARNING},
+	 *     {@link #OUTLINE_SUCCESS},
 	 *     any color (type {@link java.awt.Color}) or
 	 *     an array of two colors (type {@link java.awt.Color}[2]) where the first color
 	 *     is for focused state and the second for unfocused state
@@ -239,6 +240,14 @@ public interface FlatClientProperties
 	 * @see #OUTLINE
 	 */
 	String OUTLINE_WARNING = "warning";
+
+	/**
+	 * Paint the component border in another color (usually greenish) to indicate a success.
+	 *
+	 * @see #OUTLINE
+	 * @since 3.6
+	 */
+	String OUTLINE_SUCCESS = "success";
 
 	/**
 	 * Specifies a callback that is invoked to check whether a component is permanent focus owner.

@@ -59,6 +59,8 @@ import com.formdev.flatlaf.util.DerivedColor;
  * @uiDefault Component.error.focusedBorderColor		Color
  * @uiDefault Component.warning.borderColor				Color
  * @uiDefault Component.warning.focusedBorderColor		Color
+ * @uiDefault Component.success.borderColor				Color
+ * @uiDefault Component.success.focusedBorderColor		Color
  * @uiDefault Component.custom.borderColor				Color
  *
  * @author Karl Tauber
@@ -81,6 +83,8 @@ public class FlatBorder
 	@Styleable(dot=true) protected Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
 	@Styleable(dot=true) protected Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
 	@Styleable(dot=true) protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
+	/** @since 3.6 */ @Styleable(dot=true) protected Color successBorderColor = UIManager.getColor( "Component.success.borderColor" );
+	/** @since 3.6 */ @Styleable(dot=true) protected Color successFocusedBorderColor = UIManager.getColor( "Component.success.focusedBorderColor" );
 	@Styleable(dot=true) protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
 
 	// only used via styling (not in UI defaults, but has likewise client properties)
@@ -168,6 +172,9 @@ public class FlatBorder
 
 				case FlatClientProperties.OUTLINE_WARNING:
 					return isFocused( c ) ? warningFocusedBorderColor : warningBorderColor;
+
+				case FlatClientProperties.OUTLINE_SUCCESS:
+					return isFocused( c ) ? successFocusedBorderColor : successBorderColor;
 			}
 		} else if( outline instanceof Color ) {
 			Color color = (Color) outline;
