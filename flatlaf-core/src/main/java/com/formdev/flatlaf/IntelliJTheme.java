@@ -725,6 +725,8 @@ public class IntelliJTheme
 		uiKeyMapping.put( "Component.errorFocusColor",           "Component.error.focusedBorderColor" );
 		uiKeyMapping.put( "Component.inactiveWarningFocusColor", "Component.warning.borderColor" );
 		uiKeyMapping.put( "Component.warningFocusColor",         "Component.warning.focusedBorderColor" );
+		uiKeyMapping.put( "Component.inactiveSuccessFocusColor", "Component.success.borderColor" );
+		uiKeyMapping.put( "Component.successFocusColor",         "Component.success.focusedBorderColor" );
 
 		// Label
 		uiKeyMapping.put( "Label.disabledForegroundColor", "" ); // ignore (used in Material Theme UI Lite)

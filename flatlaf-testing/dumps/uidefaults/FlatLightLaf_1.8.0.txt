@@ -254,6 +254,8 @@ Component.innerFocusWidth      0.5
 Component.innerOutlineWidth    1
 Component.linkColor            #236db2  HSL 209  67  42    javax.swing.plaf.ColorUIResource [UI]
 Component.minimumWidth         64
+Component.success.borderColor  #8be5c4  HSL 158  63  72    javax.swing.plaf.ColorUIResource [UI]
+Component.success.focusedBorderColor #14dc92  HSL 158  83  47    javax.swing.plaf.ColorUIResource [UI]
 Component.warning.borderColor  #fed284  HSL  38  98  76    javax.swing.plaf.ColorUIResource [UI]
 Component.warning.focusedBorderColor #e2a53a  HSL  38  74  56    javax.swing.plaf.ColorUIResource [UI]
 

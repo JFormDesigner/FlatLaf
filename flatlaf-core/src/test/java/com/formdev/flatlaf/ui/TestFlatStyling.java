@@ -1278,6 +1278,8 @@ public class TestFlatStyling
 		applyStyle.accept( "error.focusedBorderColor: #fff" );
 		applyStyle.accept( "warning.borderColor: #fff" );
 		applyStyle.accept( "warning.focusedBorderColor: #fff" );
+		applyStyle.accept( "success.borderColor: #fff" );
+		applyStyle.accept( "success.focusedBorderColor: #fff" );
 		applyStyle.accept( "custom.borderColor: desaturate(#f00,50%,relative derived noAutoInverse)" );
 
 		applyStyle.accept( "outline: error" );
@@ -1363,6 +1365,8 @@ public class TestFlatStyling
 		border.applyStyleProperty( "error.focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "warning.borderColor", Color.WHITE );
 		border.applyStyleProperty( "warning.focusedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "success.borderColor", Color.WHITE );
+		border.applyStyleProperty( "success.focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "custom.borderColor", Color.WHITE );
 	}
 

@@ -1080,6 +1080,8 @@ public class TestFlatStyleableInfo
 			"error.focusedBorderColor", Color.class,
 			"warning.borderColor", Color.class,
 			"warning.focusedBorderColor", Color.class,
+			"success.borderColor", Color.class,
+			"success.focusedBorderColor", Color.class,
 			"custom.borderColor", Color.class,
 
 			"outline", String.class,

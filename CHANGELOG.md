@@ -37,6 +37,8 @@ FlatLaf Change Log
   (issue #649)
 - Support multi-prefixed keys (e.g. `[dark][gnome]TitlePane.buttonBackground`).
   The value is only used if all prefixes match current platform/theme.
+- Support new component border color to indicate success state (set client
+  property `JComponent.outline` to `success`). (PR #982, issue #945)
 
 #### Fixed bugs
 

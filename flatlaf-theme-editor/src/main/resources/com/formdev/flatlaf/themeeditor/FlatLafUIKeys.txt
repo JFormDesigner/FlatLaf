@@ -272,6 +272,8 @@ Component.innerFocusWidth
 Component.innerOutlineWidth
 Component.linkColor
 Component.minimumWidth
+Component.success.borderColor
+Component.success.focusedBorderColor
 Component.warning.borderColor
 Component.warning.focusedBorderColor
 DatePickerUI
