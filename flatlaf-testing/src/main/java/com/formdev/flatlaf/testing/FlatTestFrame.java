@@ -176,6 +176,9 @@ public class FlatTestFrame
 		// register Alt+Shift+F1, F2, ... keys to change system scale factor
 		DemoPrefs.registerSystemScaleFactors( this );
 
+		// register Alt+Shift+S to enable/disable interprocess Laf sync
+		DemoPrefs.initLafSync( this );
+
 		// register Ctrl+0, Ctrl++ and Ctrl+- to change font size
 		registerKey( SystemInfo.isMacOS ? "meta 0" : "ctrl 0", () -> restoreFont() );
 		registerKey( SystemInfo.isMacOS ? "meta PLUS" : "ctrl PLUS", () -> incrFont() );
