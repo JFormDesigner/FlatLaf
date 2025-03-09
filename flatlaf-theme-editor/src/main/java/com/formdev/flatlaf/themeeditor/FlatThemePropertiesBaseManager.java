@@ -76,14 +76,21 @@ class FlatThemePropertiesBaseManager
 
 		definedCoreKeys = new HashSet<>();
 		for( Properties properties : coreThemes.values() ) {
+			outer:
 			for( Object k : properties.keySet() ) {
 				String key = (String) k;
 				if( key.startsWith( "*." ) || key.startsWith( "@" ) )
 					continue;
-				if( key.startsWith( "[" ) ) {
+
+				while( key.startsWith( "[" ) ) {
 					int closeIndex = key.indexOf( ']' );
 					if( closeIndex < 0 )
-						continue;
+						continue outer;
+
+					String prefix = key.substring( 0, closeIndex + 1 );
+					if( FlatLaf.getUIKeySpecialPrefixes().contains( prefix ) )
+						break; // keep special prefix
+
 					key = key.substring( closeIndex + 1 );
 				}
 				definedCoreKeys.add( key );

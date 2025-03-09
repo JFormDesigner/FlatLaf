@@ -37,7 +37,7 @@ public class FlatWindowIconifyIcon
 
 	@Override
 	protected void paintIconAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-		int iw = (int) (getSymbolHeight() * scaleFactor);
+		int iw = (int) (symbolHeight * scaleFactor);
 		int ih = Math.max( (int) scaleFactor, 1 );
 		int ix = x + ((width - iw) / 2);
 		int iy = y + ((height - ih) / 2);

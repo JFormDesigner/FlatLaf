@@ -225,6 +225,8 @@ public class FlatComboBoxUI
 			}
 		};
 		comboBox.addMouseListener( hoverListener );
+
+		MigLayoutVisualPadding.install( comboBox );
 	}
 
 	@Override
@@ -233,6 +235,8 @@ public class FlatComboBoxUI
 
 		comboBox.removeMouseListener( hoverListener );
 		hoverListener = null;
+
+		MigLayoutVisualPadding.uninstall( comboBox );
 	}
 
 	@Override
@@ -274,8 +278,6 @@ public class FlatComboBoxUI
 			comboBox.setMaximumRowCount( maximumRowCount );
 
 		paddingBorder = new CellPaddingBorder( padding );
-
-		MigLayoutVisualPadding.install( comboBox );
 	}
 
 	@Override
@@ -304,8 +306,6 @@ public class FlatComboBoxUI
 
 		oldStyleValues = null;
 		borderShared = null;
-
-		MigLayoutVisualPadding.uninstall( comboBox );
 	}
 
 	@Override

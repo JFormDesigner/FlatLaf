@@ -31,6 +31,7 @@ import java.awt.Window;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 import java.util.function.Function;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -485,8 +486,12 @@ public class FlatRootPaneUI
 				break;
 
 			case "ancestor":
-				if( e.getNewValue() instanceof Window )
+				if( e.getNewValue() instanceof Window ) {
+					if( titlePane != null && !Objects.equals( titlePane.windowStyle, FlatTitlePane.getWindowStyle( rootPane ) ) )
+						setTitlePane( createTitlePane() );
+
 					macClearBackgroundForTranslucentWindow( rootPane );
+				}
 
 				macUninstallWindowBackgroundListener( rootPane );
 				macInstallWindowBackgroundListener( rootPane );
@@ -684,7 +689,7 @@ public class FlatRootPaneUI
 	 * Window border used for non-native window decorations.
 	 */
 	public static class FlatWindowBorder
-		extends BorderUIResource.EmptyBorderUIResource
+		extends FlatEmptyBorder
 	{
 		protected final Color activeBorderColor = UIManager.getColor( "RootPane.activeBorderColor" );
 		protected final Color inactiveBorderColor = UIManager.getColor( "RootPane.inactiveBorderColor" );
@@ -717,7 +722,10 @@ public class FlatRootPaneUI
 		}
 
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-			g.drawRect( x, y, width - 1, height - 1 );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			float lineWidth = (float) (UIScale.scale( 1f ) * scaleFactor);
+			g.fill( FlatUIUtils.createRectangle( x, y, width, height, lineWidth ) );
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		protected boolean isWindowMaximized( Component c ) {

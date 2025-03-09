@@ -52,18 +52,18 @@ AuditoryCues.noAuditoryCues    length=1    [Ljava.lang.Object;
 
 #---- Button ----
 
-Button.background              #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Button.background              #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Button.border                  [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,3,3,3  false    javax.swing.plaf.basic.BasicBorders$ButtonBorder [UI]
     0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 Button.darkShadow              #000000    javax.swing.plaf.ColorUIResource [UI]
 Button.defaultButtonFollowsFocus false
-Button.font                    [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Button.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
+Button.font                    [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Button.foreground              #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 Button.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
-Button.light                   #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Button.light                   #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-Button.shadow                  #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Button.shadow                  #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Button.textIconGap             4
 Button.textShiftOffset         0
 ButtonUI                       javax.swing.plaf.synth.SynthLookAndFeel
@@ -71,12 +71,12 @@ ButtonUI                       javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- CheckBox ----
 
-CheckBox.background            #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.background            #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.border                [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$RadioButtonBorder [UI]
     0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
-CheckBox.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-CheckBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+CheckBox.foreground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon                  [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
 CheckBox.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.textIconGap           4
@@ -86,17 +86,17 @@ CheckBox.textShiftOffset       0
 #---- CheckBoxMenuItem ----
 
 CheckBoxMenuItem.acceleratorFont [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
-CheckBoxMenuItem.acceleratorForeground #2e3436    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.acceleratorForeground #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.acceleratorSelectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.alignAcceleratorText false
-CheckBoxMenuItem.background    #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.background    #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.border        [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 CheckBoxMenuItem.borderPainted false
 CheckBoxMenuItem.checkIcon     [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
-CheckBoxMenuItem.font          [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-CheckBoxMenuItem.foreground    #2e3436    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.font          [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.foreground    #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.margin        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-CheckBoxMenuItem.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItemUI             javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -108,13 +108,13 @@ CheckBoxUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ColorChooser ----
 
-ColorChooser.background        #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-ColorChooser.font              [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ColorChooser.foreground        #000000    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.background        #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.font              [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.foreground        #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.panels            [active] length=1    [Ljavax.swing.colorchooser.AbstractColorChooserPanel;
     [0] [unknown type] com.sun.java.swing.plaf.gtk.GTKColorChooserPanel
 ColorChooser.showPreviewPanelText false
-ColorChooser.swatchesDefaultRecentColor #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.swatchesDefaultRecentColor #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.swatchesRecentSwatchSize 10,10    java.awt.Dimension
 ColorChooser.swatchesSwatchSize 10,10    java.awt.Dimension
 ColorChooserUI                 javax.swing.plaf.synth.SynthLookAndFeel
@@ -122,18 +122,18 @@ ColorChooserUI                 javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ComboBox ----
 
-ComboBox.background            #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonBackground      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.background            #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonBackground      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #000000    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonShadow          #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.disabledBackground    #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonShadow          #a6acb3    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.disabledBackground    #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ComboBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ComboBox.foreground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.isEnterSelectablePopup true
 ComboBox.noActionOnKeyNavigation false
-ComboBox.selectionBackground   #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.selectionBackground   #e95420    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.timeFactor            1000
 ComboBoxUI                     javax.swing.plaf.synth.SynthLookAndFeel
@@ -141,7 +141,7 @@ ComboBoxUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- Desktop ----
 
-Desktop.background             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Desktop.background             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 
 
@@ -149,7 +149,7 @@ Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 
 DesktopIcon.border             [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  true    javax.swing.border.BevelBorder
-    line: #e8e8e7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
+    line: #f5f6f7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
 DesktopIconUI                  javax.swing.plaf.synth.SynthLookAndFeel
 
 
@@ -165,11 +165,11 @@ EditorPane.border              [lazy] 0,0,0,0  false    javax.swing.plaf.basic.B
 EditorPane.caretAspectRatio    0.025
 EditorPane.caretBlinkRate      1200
 EditorPane.caretForeground     #000000    javax.swing.plaf.ColorUIResource [UI]
-EditorPane.font                [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-EditorPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.font                [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+EditorPane.foreground          #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.inactiveForeground  #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
-EditorPane.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 EditorPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -198,17 +198,17 @@ FileView.hardDriveIcon         [lazy] null
 
 #---- FormattedTextField ----
 
-FormattedTextField.background  #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.background  #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.border      [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 FormattedTextField.caretAspectRatio 0.025
 FormattedTextField.caretBlinkRate 1200
 FormattedTextField.caretForeground #000000    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.font        [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-FormattedTextField.foreground  #000000    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.inactiveBackground #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.font        [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+FormattedTextField.foreground  #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.inactiveBackground #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveForeground #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.margin      0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-FormattedTextField.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextFieldUI           javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -217,12 +217,12 @@ FormattedTextFieldUI           javax.swing.plaf.synth.SynthLookAndFeel
 
 InternalFrame.border           [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  true    javax.swing.border.BevelBorder
-    line: #e8e8e7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
-InternalFrame.borderColor      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+    line: #f5f6f7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
+InternalFrame.borderColor      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.borderDarkShadow #000000    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.borderHighlight  #ffffff    javax.swing.plaf.ColorUIResource [UI]
-InternalFrame.borderLight      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-InternalFrame.borderShadow     #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderLight      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderShadow     #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.closeIcon        [lazy] 14,16    javax.swing.plaf.basic.BasicIconFactory$EmptyFrameIcon
 InternalFrame.icon             [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 InternalFrame.iconifyIcon      [lazy] 14,16    javax.swing.plaf.basic.BasicIconFactory$EmptyFrameIcon
@@ -253,11 +253,11 @@ InternalFrameUI                javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- Label ----
 
-Label.background               #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Label.background               #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Label.disabledForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-Label.disabledShadow           #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
-Label.font                     [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Label.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Label.disabledShadow           #a6acb3    javax.swing.plaf.ColorUIResource [UI]
+Label.font                     [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Label.foreground               #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 LabelUI                        javax.swing.plaf.synth.SynthLookAndFeel
 
 
@@ -265,14 +265,14 @@ LabelUI                        javax.swing.plaf.synth.SynthLookAndFeel
 
 List.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
-List.dropLineColor             #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+List.dropLineColor             #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 List.focusCellHighlightBorder  [lazy] 0,0,0,0  true    com.sun.java.swing.plaf.gtk.GTKPainter$ListTableFocusBorder [UI]
 List.focusSelectedCellHighlightBorder [lazy] 0,0,0,0  true    com.sun.java.swing.plaf.gtk.GTKPainter$ListTableFocusBorder [UI]
-List.font                      [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-List.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
+List.font                      [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+List.foreground                #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             [lazy] 0,0,0,0  true    com.sun.java.swing.plaf.gtk.GTKPainter$ListTableFocusBorder [UI]
 List.rendererUseUIBorder       false
-List.selectionBackground       #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+List.selectionBackground       #e95420    javax.swing.plaf.ColorUIResource [UI]
 List.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.timeFactor                1000
 ListUI                         javax.swing.plaf.synth.SynthLookAndFeel
@@ -281,22 +281,22 @@ ListUI                         javax.swing.plaf.synth.SynthLookAndFeel
 #---- Menu ----
 
 Menu.acceleratorFont           [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
-Menu.acceleratorForeground     #2e3436    javax.swing.plaf.ColorUIResource [UI]
+Menu.acceleratorForeground     #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 Menu.acceleratorSelectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Menu.alignAcceleratorText      false
 Menu.arrowIcon                 [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$MenuArrowIcon [UI]
-Menu.background                #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Menu.background                #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Menu.border                    [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 Menu.borderPainted             false
 Menu.cancelMode                hideMenuTree
 Menu.crossMenuMnemonic         true
-Menu.font                      [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Menu.foreground                #2e3436    javax.swing.plaf.ColorUIResource [UI]
+Menu.font                      [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Menu.foreground                #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 Menu.margin                    0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Menu.menuPopupOffsetX          0
 Menu.menuPopupOffsetY          0
 Menu.preserveTopLevelSelection false
-Menu.selectionBackground       #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+Menu.selectionBackground       #e95420    javax.swing.plaf.ColorUIResource [UI]
 Menu.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Menu.shortcutKeys              length=1    [I
     [0] 8
@@ -307,12 +307,12 @@ Menu.useMenuBarForTopLevelMenus true
 
 #---- MenuBar ----
 
-MenuBar.background             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.background             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.border                 [lazy] 0,0,2,0  false    javax.swing.plaf.basic.BasicBorders$MenuBarBorder [UI]
-MenuBar.font                   [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-MenuBar.foreground             #2e3436    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.font                   [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+MenuBar.foreground             #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
-MenuBar.shadow                 #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.shadow                 #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
     [0] F10
     [1] takeFocus
@@ -323,16 +323,16 @@ MenuBarUI                      javax.swing.plaf.synth.SynthLookAndFeel
 
 MenuItem.acceleratorDelimiter  +
 MenuItem.acceleratorFont       [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
-MenuItem.acceleratorForeground #2e3436    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.acceleratorForeground #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.acceleratorSelectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.alignAcceleratorText  false
-MenuItem.background            #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.background            #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 MenuItem.borderPainted         false
-MenuItem.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-MenuItem.foreground            #2e3436    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+MenuItem.foreground            #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-MenuItem.selectionBackground   #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.selectionBackground   #e95420    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 MenuItemUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -344,19 +344,19 @@ MenuUI                         javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- OptionPane ----
 
-OptionPane.background          #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.background          #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 OptionPane.border              [lazy] 10,10,12,10  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
 OptionPane.buttonAreaBorder    [lazy] 6,0,0,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
 OptionPane.buttonClickThreshhold 500
 OptionPane.buttonOrientation   4
 OptionPane.buttonPadding       10
 OptionPane.errorIcon           [lazy] null
-OptionPane.font                [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-OptionPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.font                [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+OptionPane.foreground          #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 OptionPane.informationIcon     [lazy] null
 OptionPane.isYesLast           true
 OptionPane.messageAreaBorder   [lazy] 0,0,0,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
-OptionPane.messageForeground   #000000    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.messageForeground   #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 OptionPane.minimumSize         262,90    javax.swing.plaf.DimensionUIResource [UI]
 OptionPane.questionIcon        [lazy] null
 OptionPane.sameSizeButtons     true
@@ -370,39 +370,39 @@ OptionPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- Panel ----
 
-Panel.background               #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-Panel.font                     [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Panel.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Panel.background               #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+Panel.font                     [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Panel.foreground               #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 PanelUI                        javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- PasswordField ----
 
-PasswordField.background       #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.background       #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.border           [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 PasswordField.caretAspectRatio 0.025
 PasswordField.caretBlinkRate   1200
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.echoChar         '*'
-PasswordField.font             [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-PasswordField.foreground       #000000    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.inactiveBackground #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.font             [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+PasswordField.foreground       #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.inactiveBackground #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveForeground #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.margin           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-PasswordField.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 PasswordFieldUI                javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- PopupMenu ----
 
-PopupMenu.background           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.background           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.border               [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  true    javax.swing.border.BevelBorder
-    line: #e8e8e7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
+    line: #f5f6f7    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
 PopupMenu.consumeEventOnClose  true
-PopupMenu.font                 [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-PopupMenu.foreground           #2e3436    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.font                 [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+PopupMenu.foreground           #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- PopupMenuSeparator ----
@@ -417,35 +417,35 @@ PopupMenuUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ProgressBar ----
 
-ProgressBar.background         #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.background         #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.border             [lazy] line: #00ff00    java.awt.Color 2 false    2,2,2,2  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
 ProgressBar.cellLength         1
 ProgressBar.cellSpacing        0
 ProgressBar.cycleTime          3000
-ProgressBar.font               [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ProgressBar.foreground         #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.font               [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ProgressBar.foreground         #e95420    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.horizontalSize     148,18    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBar.repaintInterval    50
-ProgressBar.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
-ProgressBar.selectionForeground #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionForeground #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.verticalSize       20,78    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBarUI                  javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- RadioButton ----
 
-RadioButton.background         #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.background         #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.border             [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$RadioButtonBorder [UI]
     0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 RadioButton.darkShadow         #000000    javax.swing.plaf.ColorUIResource [UI]
-RadioButton.font               [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-RadioButton.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.font               [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+RadioButton.foreground         #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.highlight          #ffffff    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.icon               [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
-RadioButton.light              #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.light              #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.margin             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-RadioButton.shadow             #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.shadow             #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.textIconGap        4
 RadioButton.textShiftOffset    0
 
@@ -453,17 +453,17 @@ RadioButton.textShiftOffset    0
 #---- RadioButtonMenuItem ----
 
 RadioButtonMenuItem.acceleratorFont [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
-RadioButtonMenuItem.acceleratorForeground #2e3436    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.acceleratorForeground #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.acceleratorSelectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.alignAcceleratorText false
-RadioButtonMenuItem.background #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.background #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.border     [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 RadioButtonMenuItem.borderPainted false
 RadioButtonMenuItem.checkIcon  [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
-RadioButtonMenuItem.font       [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-RadioButtonMenuItem.foreground #2e3436    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.font       [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.foreground #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.margin     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-RadioButtonMenuItem.selectionBackground #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.selectionBackground #e95420    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItemUI          javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -492,16 +492,16 @@ RootPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
 ScrollBar.allowsAbsolutePositioning true
 ScrollBar.alwaysShowThumb      true
 ScrollBar.background           #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.foreground           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.foreground           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.maximumThumbSize     4096,4096    java.awt.Dimension
 ScrollBar.minimumThumbSize     8,8    java.awt.Dimension
 ScrollBar.squareButtons        false
-ScrollBar.thumb                #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumb                #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbDarkShadow      #000000    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHeight          14
 ScrollBar.thumbHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.thumbShadow          #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.track                #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbShadow          #a6acb3    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.track                #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.trackHighlight       #000000    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.width                16
 ScrollBarUI                    javax.swing.plaf.synth.SynthLookAndFeel
@@ -509,40 +509,40 @@ ScrollBarUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ScrollPane ----
 
-ScrollPane.background          #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.background          #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ScrollPane.border              [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 ScrollPane.fillLowerCorner     true
 ScrollPane.fillUpperCorner     true
-ScrollPane.font                [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ScrollPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.font                [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ScrollPane.foreground          #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ScrollPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- Separator ----
 
 Separator.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
-Separator.foreground           #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Separator.foreground           #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Separator.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Separator.insets               0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-Separator.shadow               #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Separator.shadow               #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Separator.thickness            2
 SeparatorUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- Slider ----
 
-Slider.background              #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Slider.background              #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #000000    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 Slider.font                    [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
-Slider.foreground              #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Slider.foreground              #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag false
 Slider.paintValue              true
-Slider.shadow                  #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Slider.shadow                  #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbHeight             14
 Slider.thumbWidth              30
 Slider.tickColor               #000000    java.awt.Color
@@ -553,26 +553,26 @@ SliderUI                       javax.swing.plaf.synth.SynthLookAndFeel
 #---- Spinner ----
 
 Spinner.arrowButtonSize        16,5    java.awt.Dimension
-Spinner.background             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Spinner.background             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 Spinner.border                 [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 Spinner.disableOnBoundaryValues true
 Spinner.editorAlignment        10
 Spinner.editorBorderPainted    false
-Spinner.font                   [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Spinner.foreground             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+Spinner.font                   [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Spinner.foreground             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 SpinnerUI                      javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- SplitPane ----
 
-SplitPane.background           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.background           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 SplitPane.border               [lazy] 1,1,1,1  true    javax.swing.plaf.basic.BasicBorders$SplitPaneBorder [UI]
 SplitPane.darkShadow           #000000    javax.swing.plaf.ColorUIResource [UI]
 SplitPane.dividerSize          7
 SplitPane.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
 SplitPane.oneTouchButtonSize   5
 SplitPane.oneTouchOffset       2
-SplitPane.shadow               #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.shadow               #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 SplitPane.size                 7
 SplitPane.supportsOneTouchButtons false
 
@@ -595,21 +595,21 @@ Synth.doNotSetTextAA           true
 
 #---- TabbedPane ----
 
-TabbedPane.background          #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.background          #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.contentBorderInsets 2,2,3,3    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.contentOpaque       true
 TabbedPane.darkShadow          #000000    javax.swing.plaf.ColorUIResource [UI]
-TabbedPane.focus               #000000    javax.swing.plaf.ColorUIResource [UI]
-TabbedPane.font                [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TabbedPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focus               #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.font                [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.foreground          #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.highlight           #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.isTabRollover       false
 TabbedPane.labelShift          3
-TabbedPane.light               #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.light               #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.selectedLabelShift  3
 TabbedPane.selectedTabPadInsets 2,2,0,1    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.selectionFollowsFocus true
-TabbedPane.shadow              #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.shadow              #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.tabAreaInsets       3,2,0,2    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabInsets           0,4,1,4    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabRunOverlay       2
@@ -624,29 +624,29 @@ TabbedPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
 Table.ascendingSortIcon        [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
 Table.background               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Table.descendingSortIcon       [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$DelegatingIcon [UI]
-Table.dropLineColor            #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineColor            #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Table.dropLineShortColor       #000000    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellBackground      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellForeground      #2e3436    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellBackground      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellForeground      #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellHighlightBorder [lazy] 0,0,0,0  true    com.sun.java.swing.plaf.gtk.GTKPainter$ListTableFocusBorder [UI]
 Table.focusSelectedCellHighlightBorder [lazy] 0,0,0,0  true    com.sun.java.swing.plaf.gtk.GTKPainter$ListTableFocusBorder [UI]
-Table.font                     [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Table.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Table.font                     [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Table.foreground               #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #808080    javax.swing.plaf.ColorUIResource [UI]
 Table.scrollPaneBorder         [lazy] 0,0,0,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
-Table.selectionBackground      #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+Table.selectionBackground      #e95420    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionForeground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
-Table.sortIconColor            #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Table.sortIconColor            #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- TableHeader ----
 
 TableHeader.alignSorterArrow   true
-TableHeader.background         #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.background         #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.cellBorder         [lazy] 2,2,2,2  true    javax.swing.plaf.BorderUIResource$BevelBorderUIResource [UI]
 TableHeader.focusCellBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TableHeader.font               [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TableHeader.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.font               [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TableHeader.foreground         #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 TableHeaderUI                  javax.swing.plaf.synth.SynthLookAndFeel
 
 
@@ -657,38 +657,38 @@ TableUI                        javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- TextArea ----
 
-TextArea.background            #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TextArea.background            #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TextArea.border                [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 TextArea.caretAspectRatio      0.025
 TextArea.caretBlinkRate        1200
 TextArea.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
-TextArea.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TextArea.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+TextArea.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TextArea.foreground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 TextArea.inactiveForeground    #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
 TextArea.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-TextArea.selectionBackground   #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+TextArea.selectionBackground   #e95420    javax.swing.plaf.ColorUIResource [UI]
 TextArea.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TextAreaUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- TextField ----
 
-TextField.background           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TextField.background           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TextField.border               [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 TextField.caretAspectRatio     0.025
 TextField.caretBlinkRate       1200
 TextField.caretForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #000000    javax.swing.plaf.ColorUIResource [UI]
-TextField.font                 [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TextField.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+TextField.font                 [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TextField.foreground           #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 TextField.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TextField.inactiveBackground   #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TextField.inactiveBackground   #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TextField.inactiveForeground   #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
-TextField.light                #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+TextField.light                #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 TextField.margin               0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-TextField.selectionBackground  #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+TextField.selectionBackground  #e95420    javax.swing.plaf.ColorUIResource [UI]
 TextField.selectionForeground  #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TextField.shadow               #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+TextField.shadow               #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 TextFieldUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
 
@@ -699,11 +699,11 @@ TextPane.border                [lazy] 0,0,0,0  false    javax.swing.plaf.basic.B
 TextPane.caretAspectRatio      0.025
 TextPane.caretBlinkRate        1200
 TextPane.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
-TextPane.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TextPane.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+TextPane.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TextPane.foreground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 TextPane.inactiveForeground    #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
 TextPane.margin                3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
-TextPane.selectionBackground   #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+TextPane.selectionBackground   #e95420    javax.swing.plaf.ColorUIResource [UI]
 TextPane.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TextPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -711,23 +711,23 @@ TextPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
 #---- TitledBorder ----
 
 TitledBorder.border            [lazy] 1,1,1,1  true    com.sun.java.swing.plaf.gtk.GTKPainter$TitledBorder [UI]
-TitledBorder.font              Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-TitledBorder.titleColor        #000000    javax.swing.plaf.ColorUIResource [UI]
+TitledBorder.font              Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+TitledBorder.titleColor        #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ToggleButton ----
 
-ToggleButton.background        #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.background        #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.border            [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
     2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$ToggleButtonBorder [UI]
     0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 ToggleButton.darkShadow        #000000    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.font              [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ToggleButton.foreground        #000000    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.font              [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ToggleButton.foreground        #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.highlight         #ffffff    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.light             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.light             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.margin            0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-ToggleButton.shadow            #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.shadow            #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.textIconGap       4
 ToggleButton.textShiftOffset   0
 ToggleButtonUI                 javax.swing.plaf.synth.SynthLookAndFeel
@@ -735,20 +735,20 @@ ToggleButtonUI                 javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ToolBar ----
 
-ToolBar.background             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.background             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.border                 [lazy] 2,2,2,2  true    javax.swing.plaf.BorderUIResource$EtchedBorderUIResource [UI]
 ToolBar.darkShadow             #000000    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.dockingBackground      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.dockingBackground      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #ff0000    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.floatingBackground     #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.floatingBackground     #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingForeground     #404040    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.font                   [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ToolBar.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.font                   [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ToolBar.foreground             #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.handleIcon             [active] 10,10    com.sun.java.swing.plaf.gtk.GTKIconFactory$ToolBarHandleIcon [UI]
 ToolBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.light                  #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.light                  #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorSize          10,10    javax.swing.plaf.DimensionUIResource [UI]
-ToolBar.shadow                 #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.shadow                 #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ToolBarSeparator ----
@@ -763,10 +763,10 @@ ToolBarUI                      javax.swing.plaf.synth.SynthLookAndFeel
 
 #---- ToolTip ----
 
-ToolTip.background             #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.background             #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.border                 [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
-ToolTip.font                   [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-ToolTip.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.font                   [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+ToolTip.foreground             #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ToolTipManager ----
@@ -788,12 +788,12 @@ Tree.drawHorizontalLines       false
 Tree.drawVerticalLines         false
 Tree.drawsFocusBorder          true
 Tree.drawsFocusBorderAroundIcon false
-Tree.dropLineColor             #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
+Tree.dropLineColor             #a6acb3    javax.swing.plaf.ColorUIResource [UI]
 Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
 Tree.expandedIcon              [lazy] 13,13    com.sun.java.swing.plaf.gtk.GTKIconFactory$SynthExpanderIcon [UI]
 Tree.expanderSize              10
-Tree.font                      [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Tree.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.font                      [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Tree.foreground                #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 Tree.hash                      #808080    javax.swing.plaf.ColorUIResource [UI]
 Tree.leftChildIndent           2
 Tree.lineTypeDashed            false
@@ -804,20 +804,20 @@ Tree.rightChildIndent          12
 Tree.rowHeight                 -1
 Tree.scrollsHorizontallyAndVertically false
 Tree.scrollsOnExpand           false
-Tree.selectionBackground       #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionBackground       #e95420    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionBorderColor      #000000    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.textBackground            #ffffff    javax.swing.plaf.ColorUIResource [UI]
-Tree.textForeground            #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.textForeground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000
 TreeUI                         javax.swing.plaf.synth.SynthLookAndFeel
 
 
 #---- Viewport ----
 
-Viewport.background            #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-Viewport.font                  [lazy] Cantarell plain 15    javax.swing.plaf.FontUIResource [UI]
-Viewport.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+Viewport.background            #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+Viewport.font                  [lazy] Ubuntu plain 15    javax.swing.plaf.FontUIResource [UI]
+Viewport.foreground            #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 ViewportUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
 
@@ -825,14 +825,14 @@ ViewportUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
 black                          #000000    javax.swing.plaf.ColorUIResource [UI]
 caretColor                     #000000    javax.swing.plaf.ColorUIResource [UI]
-control                        #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+control                        #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 controlDkShadow                #000000    javax.swing.plaf.ColorUIResource [UI]
-controlHighlight               #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+controlHighlight               #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 controlLtHighlight             #ffffff    javax.swing.plaf.ColorUIResource [UI]
-controlShadow                  #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
-controlText                    #000000    javax.swing.plaf.ColorUIResource [UI]
-dark                           #a4a4a1    javax.swing.plaf.ColorUIResource [UI]
-desktop                        #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+controlShadow                  #a6acb3    javax.swing.plaf.ColorUIResource [UI]
+controlText                    #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
+dark                           #a6acb3    javax.swing.plaf.ColorUIResource [UI]
+desktop                        #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- html ----
@@ -843,18 +843,90 @@ html.pendingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI
 
 #----  ----
 
-info                           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-infoText                       #000000    javax.swing.plaf.ColorUIResource [UI]
+info                           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+infoText                       #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 light                          #ffffff    javax.swing.plaf.ColorUIResource [UI]
-menu                           #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-menuText                       #2e3436    javax.swing.plaf.ColorUIResource [UI]
-mid                            #d2d2d0    javax.swing.plaf.ColorUIResource [UI]
-scrollbar                      #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
+menu                           #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+menuText                       #3d3d3d    javax.swing.plaf.ColorUIResource [UI]
+mid                            #d3d6d9    javax.swing.plaf.ColorUIResource [UI]
+scrollbar                      #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
 text                           #ffffff    javax.swing.plaf.ColorUIResource [UI]
-textHighlight                  #4a90d9    javax.swing.plaf.ColorUIResource [UI]
+textHighlight                  #e95420    javax.swing.plaf.ColorUIResource [UI]
 textHighlightText              #ffffff    javax.swing.plaf.ColorUIResource [UI]
 textInactiveText               #8b8e8f    javax.swing.plaf.ColorUIResource [UI]
-textText                       #000000    javax.swing.plaf.ColorUIResource [UI]
+textText                       #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
 white                          #ffffff    javax.swing.plaf.ColorUIResource [UI]
-window                         #e8e8e7    javax.swing.plaf.ColorUIResource [UI]
-windowText                     #000000    javax.swing.plaf.ColorUIResource [UI]
+window                         #f5f6f7    javax.swing.plaf.ColorUIResource [UI]
+windowText                     #5d5d5d    javax.swing.plaf.ColorUIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- disabledForeground --
+ComboBox.disabledForeground                         #8b8e8f  #f5f6f7     3.0  !!!!
+Label.disabledForeground                            #ffffff  #f5f6f7     1.1  !!!!!!
+
+#-- focusCellForeground --
+Table.focusCellForeground                           #3d3d3d  #f5f6f7    10.0
+
+#-- foreground --
+Button.foreground                                   #5d5d5d  #f5f6f7     6.1  !
+CheckBox.foreground                                 #5d5d5d  #f5f6f7     6.1  !
+CheckBoxMenuItem.foreground                         #3d3d3d  #f5f6f7    10.0
+ColorChooser.foreground                             #5d5d5d  #f5f6f7     6.1  !
+ComboBox.foreground                                 #5d5d5d  #f5f6f7     6.1  !
+EditorPane.foreground                               #5d5d5d  #ffffff     6.6  !
+FormattedTextField.foreground                       #5d5d5d  #f5f6f7     6.1  !
+Label.foreground                                    #5d5d5d  #f5f6f7     6.1  !
+List.foreground                                     #5d5d5d  #ffffff     6.6  !
+Menu.foreground                                     #3d3d3d  #f5f6f7    10.0
+MenuBar.foreground                                  #3d3d3d  #f5f6f7    10.0
+MenuItem.foreground                                 #3d3d3d  #f5f6f7    10.0
+OptionPane.foreground                               #5d5d5d  #f5f6f7     6.1  !
+Panel.foreground                                    #5d5d5d  #f5f6f7     6.1  !
+PasswordField.foreground                            #5d5d5d  #f5f6f7     6.1  !
+PopupMenu.foreground                                #3d3d3d  #f5f6f7    10.0
+RadioButton.foreground                              #5d5d5d  #f5f6f7     6.1  !
+RadioButtonMenuItem.foreground                      #3d3d3d  #f5f6f7    10.0
+Spinner.foreground                                  #f5f6f7  #f5f6f7     1.0  !!!!!!
+TabbedPane.foreground                               #5d5d5d  #f5f6f7     6.1  !
+Table.foreground                                    #5d5d5d  #ffffff     6.6  !
+TableHeader.foreground                              #5d5d5d  #f5f6f7     6.1  !
+TextArea.foreground                                 #5d5d5d  #f5f6f7     6.1  !
+TextField.foreground                                #5d5d5d  #f5f6f7     6.1  !
+TextPane.foreground                                 #5d5d5d  #ffffff     6.6  !
+ToggleButton.foreground                             #5d5d5d  #f5f6f7     6.1  !
+ToolTip.foreground                                  #5d5d5d  #f5f6f7     6.1  !
+Tree.foreground                                     #5d5d5d  #ffffff     6.6  !
+
+#-- selectionBackground --
+ProgressBar.selectionBackground                     #e95420  #f5f6f7     3.4  !!!!
+
+#-- selectionForeground --
+CheckBoxMenuItem.selectionForeground                #ffffff  #e95420     3.6  !!!!
+ComboBox.selectionForeground                        #ffffff  #e95420     3.6  !!!!
+EditorPane.selectionForeground                      #ffffff  #e95420     3.6  !!!!
+FormattedTextField.selectionForeground              #ffffff  #e95420     3.6  !!!!
+List.selectionForeground                            #ffffff  #e95420     3.6  !!!!
+Menu.selectionForeground                            #ffffff  #e95420     3.6  !!!!
+MenuItem.selectionForeground                        #ffffff  #e95420     3.6  !!!!
+PasswordField.selectionForeground                   #ffffff  #e95420     3.6  !!!!
+ProgressBar.selectionForeground                     #f5f6f7  #e95420     3.4  !!!!
+RadioButtonMenuItem.selectionForeground             #ffffff  #e95420     3.6  !!!!
+Table.selectionForeground                           #ffffff  #e95420     3.6  !!!!
+TextArea.selectionForeground                        #ffffff  #e95420     3.6  !!!!
+TextField.selectionForeground                       #ffffff  #e95420     3.6  !!!!
+TextPane.selectionForeground                        #ffffff  #e95420     3.6  !!!!
+Tree.selectionForeground                            #ffffff  #e95420     3.6  !!!!
+
+#-- textForeground --
+Tree.textForeground                                 #5d5d5d  #ffffff     6.6  !
+
+#-- non-text --
+ProgressBar.background                              #f5f6f7  #f5f6f7     1.0  !!!!!!
+ProgressBar.foreground                              #e95420  #f5f6f7     3.4  !!!!
+Separator.foreground                                #a6acb3  #ffffff     2.3  !!!!!

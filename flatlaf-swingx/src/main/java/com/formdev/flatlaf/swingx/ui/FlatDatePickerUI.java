@@ -125,8 +125,6 @@ public class FlatDatePickerUI
 
 		LookAndFeel.installBorder( datePicker, "JXDatePicker.border" );
 		LookAndFeel.installProperty( datePicker, "opaque", Boolean.TRUE );
-
-		MigLayoutVisualPadding.install( datePicker );
 	}
 
 	@Override
@@ -146,6 +144,18 @@ public class FlatDatePickerUI
 
 		if( datePicker.getBorder() instanceof UIResource )
 			datePicker.setBorder( null );
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		MigLayoutVisualPadding.install( datePicker );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
 
 		MigLayoutVisualPadding.uninstall( datePicker );
 	}

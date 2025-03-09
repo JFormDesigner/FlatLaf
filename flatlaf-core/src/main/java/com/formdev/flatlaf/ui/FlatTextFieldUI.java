@@ -174,8 +174,6 @@ public class FlatTextFieldUI
 		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
-
-		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -193,8 +191,6 @@ public class FlatTextFieldUI
 
 		oldStyleValues = null;
 		borderShared = null;
-
-		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
 
 	@Override
@@ -204,6 +200,8 @@ public class FlatTextFieldUI
 		// necessary to update focus border and background
 		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
 		getComponent().addFocusListener( focusListener );
+
+		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -217,6 +215,8 @@ public class FlatTextFieldUI
 			getComponent().getDocument().removeDocumentListener( documentListener );
 			documentListener = null;
 		}
+
+		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
 
 	@Override

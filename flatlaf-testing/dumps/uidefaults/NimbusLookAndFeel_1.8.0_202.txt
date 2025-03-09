@@ -43,7 +43,7 @@ ArrowButton.background         [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ArrowButton.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ArrowButton.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ArrowButton.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ArrowButton.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ArrowButton.font               [active] $defaultFont [UI]
 ArrowButton.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ArrowButton.size               16
 ArrowButtonUI                  javax.swing.plaf.synth.SynthLookAndFeel
@@ -66,7 +66,7 @@ Button.contentMargins          6,14,6,14    javax.swing.plaf.InsetsUIResource [U
 Button.defaultButtonFollowsFocus false
 Button.disabled                [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Button.disabledText            [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Button.font                    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Button.font                    [active] $defaultFont [UI]
 Button.foreground              [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ButtonUI                       javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -144,7 +144,7 @@ CheckBox.background            [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 CheckBox.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 CheckBox.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-CheckBox.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBox.font                  [active] $defaultFont [UI]
 CheckBox.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 CheckBox.icon                  18,18    javax.swing.plaf.nimbus.NimbusIcon
 
@@ -156,7 +156,7 @@ CheckBoxMenuItem.checkIcon     9,10    javax.swing.plaf.nimbus.NimbusIcon
 CheckBoxMenuItem.contentMargins 1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.disabled      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 CheckBoxMenuItem.disabledText  [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-CheckBoxMenuItem.font          [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.font          [active] $defaultFont [UI]
 CheckBoxMenuItem.foreground    [active] #232324    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.textIconGap   5
 
@@ -291,7 +291,7 @@ ColorChooser.background        [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ColorChooser.contentMargins    5,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ColorChooser.disabled          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ColorChooser.disabledText      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ColorChooser.font              [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.font              [active] $defaultFont [UI]
 ColorChooser.foreground        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ColorChooser.swatchesDefaultRecentColor #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.swatchesRecentSwatchSize 10,10    java.awt.Dimension
@@ -318,7 +318,7 @@ ComboBox.buttonWhenNotEditable true
 ComboBox.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ComboBox.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ComboBox.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ComboBox.font                  [active] $defaultFont [UI]
 ComboBox.forceOpaque           true
 ComboBox.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ComboBox.padding               3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
@@ -443,7 +443,7 @@ DesktopIcon.background         [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 DesktopIcon.contentMargins     4,6,5,4    javax.swing.plaf.InsetsUIResource [UI]
 DesktopIcon.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 DesktopIcon.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-DesktopIcon.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+DesktopIcon.font               [active] $defaultFont [UI]
 DesktopIcon.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 DesktopIconUI                  javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -459,7 +459,7 @@ DesktopPane.background         [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 DesktopPane.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 DesktopPane.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 DesktopPane.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-DesktopPane.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+DesktopPane.font               [active] $defaultFont [UI]
 DesktopPane.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 DesktopPane.opaque             true
 DesktopPaneUI                  javax.swing.plaf.synth.SynthLookAndFeel
@@ -476,7 +476,7 @@ EditorPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 EditorPane.contentMargins      4,6,4,6    javax.swing.plaf.InsetsUIResource [UI]
 EditorPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 EditorPane.disabledText        [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-EditorPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+EditorPane.font                [active] $defaultFont [UI]
 EditorPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 EditorPane.opaque              true
 EditorPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
@@ -509,7 +509,7 @@ FileChooser.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 FileChooser.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 FileChooser.fileIcon           16,16    javax.swing.plaf.nimbus.NimbusIcon
 FileChooser.floppyDriveIcon    16,16    javax.swing.plaf.nimbus.NimbusIcon
-FileChooser.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+FileChooser.font               [active] $defaultFont [UI]
 FileChooser.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 FileChooser.hardDriveIcon      16,16    javax.swing.plaf.nimbus.NimbusIcon
 FileChooser.homeFolderIcon     16,16    javax.swing.plaf.nimbus.NimbusIcon
@@ -551,7 +551,7 @@ FormattedTextField.background  [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 FormattedTextField.contentMargins 6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 FormattedTextField.disabled    [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 FormattedTextField.disabledText [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-FormattedTextField.font        [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+FormattedTextField.font        [active] $defaultFont [UI]
 FormattedTextField.foreground  [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 FormattedTextFieldUI           javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -588,7 +588,7 @@ InternalFrame.background       [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 InternalFrame.contentMargins   1,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 InternalFrame.disabled         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 InternalFrame.disabledText     [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-InternalFrame.font             [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrame.font             [active] $defaultFont [UI]
 InternalFrame.foreground       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 InternalFrame.titleFont        [active] sansserif bold 12    java.awt.Font
 InternalFrame.windowBindings   length=6    [Ljava.lang.Object;
@@ -673,7 +673,7 @@ InternalFrameTitlePane.background [active] #d6d9df    javax.swing.plaf.nimbus.De
 InternalFrameTitlePane.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 InternalFrameTitlePane.disabled [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 InternalFrameTitlePane.disabledText [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-InternalFrameTitlePane.font    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrameTitlePane.font    [active] $defaultFont [UI]
 InternalFrameTitlePane.foreground [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 InternalFrameTitlePane.maxFrameIconSize 18,18    javax.swing.plaf.DimensionUIResource [UI]
 InternalFrameTitlePaneUI       javax.swing.plaf.synth.SynthLookAndFeel
@@ -700,7 +700,7 @@ Label.background               [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Label.contentMargins           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Label.disabled                 [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Label.disabledText             [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Label.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Label.font                     [active] $defaultFont [UI]
 Label.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 LabelUI                        javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -719,7 +719,7 @@ List.disabled                  [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 List.disabledText              [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 List.dropLineColor             #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 List.focusCellHighlightBorder  2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
-List.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+List.font                      [active] $defaultFont [UI]
 List.foreground                [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 List.opaque                    true
 List.rendererUseListColors     false
@@ -764,7 +764,7 @@ Menu.background                [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Menu.contentMargins            1,12,2,5    javax.swing.plaf.InsetsUIResource [UI]
 Menu.disabled                  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Menu.disabledText              [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Menu.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.font                      [active] $defaultFont [UI]
 Menu.foreground                [active] #232324    javax.swing.plaf.ColorUIResource [UI]
 Menu.textIconGap               5
 
@@ -785,7 +785,7 @@ MenuBar.background             [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 MenuBar.contentMargins         2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 MenuBar.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 MenuBar.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-MenuBar.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuBar.font                   [active] $defaultFont [UI]
 MenuBar.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
     [0] F10
@@ -835,7 +835,7 @@ MenuItem.background            [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 MenuItem.contentMargins        1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 MenuItem.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-MenuItem.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.font                  [active] $defaultFont [UI]
 MenuItem.foreground            [active] #232324    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textIconGap           5
 
@@ -908,7 +908,7 @@ OptionPane.contentMargins      15,15,15,15    javax.swing.plaf.InsetsUIResource 
 OptionPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 OptionPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 OptionPane.errorIcon           48,48    javax.swing.plaf.nimbus.NimbusIcon
-OptionPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.font                [active] $defaultFont [UI]
 OptionPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 OptionPane.informationIcon     48,48    javax.swing.plaf.nimbus.NimbusIcon
 OptionPane.isYesLast           false
@@ -950,7 +950,7 @@ Panel.background               [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Panel.contentMargins           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Panel.disabled                 [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Panel.disabledText             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Panel.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Panel.font                     [active] $defaultFont [UI]
 Panel.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Panel.opaque                   true
 PanelUI                        javax.swing.plaf.synth.SynthLookAndFeel
@@ -962,7 +962,7 @@ PasswordField.background       [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 PasswordField.contentMargins   6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 PasswordField.disabled         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PasswordField.disabledText     [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-PasswordField.font             [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PasswordField.font             [active] $defaultFont [UI]
 PasswordField.foreground       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PasswordFieldUI                javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -998,7 +998,7 @@ PopupMenu.consumeEventOnClose  true
 PopupMenu.contentMargins       6,1,6,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PopupMenu.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-PopupMenu.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenu.font                 [active] $defaultFont [UI]
 PopupMenu.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PopupMenu.opaque               true
 
@@ -1009,7 +1009,7 @@ PopupMenuSeparator.background  [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 PopupMenuSeparator.contentMargins 1,0,2,0    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenuSeparator.disabled    [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PopupMenuSeparator.disabledText [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-PopupMenuSeparator.font        [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenuSeparator.font        [active] $defaultFont [UI]
 PopupMenuSeparator.foreground  [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 PopupMenuSeparatorUI           javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -1044,7 +1044,7 @@ ProgressBar.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ProgressBar.cycleTime          250
 ProgressBar.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ProgressBar.disabledText       [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ProgressBar.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ProgressBar.font               [active] $defaultFont [UI]
 ProgressBar.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ProgressBar.glowWidth          2
 ProgressBar.horizontalSize     150,19    javax.swing.plaf.DimensionUIResource [UI]
@@ -1098,7 +1098,7 @@ RadioButton.background         [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 RadioButton.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 RadioButton.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 RadioButton.disabledText       [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-RadioButton.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButton.font               [active] $defaultFont [UI]
 RadioButton.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 RadioButton.icon               18,18    javax.swing.plaf.nimbus.NimbusIcon
 
@@ -1110,7 +1110,7 @@ RadioButtonMenuItem.checkIcon  9,10    javax.swing.plaf.nimbus.NimbusIcon
 RadioButtonMenuItem.contentMargins 1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
 RadioButtonMenuItem.disabled   [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 RadioButtonMenuItem.disabledText [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-RadioButtonMenuItem.font       [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.font       [active] $defaultFont [UI]
 RadioButtonMenuItem.foreground [active] #232324    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.textIconGap 5
 
@@ -1254,7 +1254,7 @@ RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [7] release
 RootPane.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 RootPane.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-RootPane.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RootPane.font                  [active] $defaultFont [UI]
 RootPane.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 RootPane.opaque                true
 RootPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
@@ -1267,7 +1267,7 @@ ScrollBar.contentMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.decrementButtonGap   -8
 ScrollBar.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBar.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ScrollBar.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBar.font                 [active] $defaultFont [UI]
 ScrollBar.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBar.incrementButtonGap   -8
 ScrollBar.maximumThumbSize     1000,1000    javax.swing.plaf.DimensionUIResource [UI]
@@ -1326,7 +1326,7 @@ ScrollBar:ScrollBarTrack[Enabled].backgroundPainter [lazy] [unknown type] javax.
 ScrollBarThumb.background      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBarThumb.disabled        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBarThumb.disabledText    [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ScrollBarThumb.font            [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBarThumb.font            [active] $defaultFont [UI]
 ScrollBarThumb.foreground      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 
 
@@ -1335,7 +1335,7 @@ ScrollBarThumb.foreground      [active] #000000    javax.swing.plaf.nimbus.Deriv
 ScrollBarTrack.background      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBarTrack.disabled        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollBarTrack.disabledText    [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ScrollBarTrack.font            [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBarTrack.font            [active] $defaultFont [UI]
 ScrollBarTrack.foreground      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 
 
@@ -1350,7 +1350,7 @@ ScrollPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ScrollPane.contentMargins      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 ScrollPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ScrollPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollPane.font                [active] $defaultFont [UI]
 ScrollPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ScrollPane.useChildTextComponentFocus true
 ScrollPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
@@ -1372,7 +1372,7 @@ Separator.background           [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Separator.contentMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Separator.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Separator.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Separator.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Separator.font                 [active] $defaultFont [UI]
 Separator.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SeparatorUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -1390,7 +1390,7 @@ Slider.background              [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Slider.contentMargins          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.disabled                [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Slider.disabledText            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Slider.font                    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Slider.paintValue              false
 Slider.thumbHeight             17
@@ -1498,7 +1498,7 @@ Slider:SliderTrack[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.
 SliderThumb.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SliderThumb.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SliderThumb.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-SliderThumb.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SliderThumb.font               [active] $defaultFont [UI]
 SliderThumb.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 
 
@@ -1507,7 +1507,7 @@ SliderThumb.foreground         [active] #000000    javax.swing.plaf.nimbus.Deriv
 SliderTrack.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SliderTrack.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SliderTrack.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-SliderTrack.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SliderTrack.font               [active] $defaultFont [UI]
 SliderTrack.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 
 
@@ -1522,7 +1522,7 @@ Spinner.background             [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Spinner.contentMargins         0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Spinner.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Spinner.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Spinner.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Spinner.font                   [active] $defaultFont [UI]
 Spinner.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 
 
@@ -1592,7 +1592,7 @@ SplitPane.continuousLayout     true
 SplitPane.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SplitPane.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SplitPane.dividerSize          10
-SplitPane.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SplitPane.font                 [active] $defaultFont [UI]
 SplitPane.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 SplitPane.oneTouchButtonOffset 30
 SplitPane.oneTouchExpandable   false
@@ -1635,7 +1635,7 @@ TabbedPane.darkShadow          #000000    javax.swing.plaf.nimbus.DerivedColor$U
 TabbedPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TabbedPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TabbedPane.extendTabsToBase    true
-TabbedPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.font                [active] $defaultFont [UI]
 TabbedPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TabbedPane.highlight           #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TabbedPane.isTabRollover       true
@@ -1758,7 +1758,7 @@ Table.disabledText             [active] #000000    javax.swing.plaf.nimbus.Deriv
 Table.dropLineColor            #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Table.dropLineShortColor       #bf6204    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Table.focusCellHighlightBorder 2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
-Table.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Table.font                     [active] $defaultFont [UI]
 Table.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.opaque                   true
@@ -1782,7 +1782,7 @@ TableHeader.background         [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 TableHeader.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TableHeader.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TableHeader.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-TableHeader.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TableHeader.font               [active] $defaultFont [UI]
 TableHeader.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TableHeader.opaque             true
 TableHeader.rightAlignSortArrow true
@@ -1839,7 +1839,7 @@ TextArea.background            [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 TextArea.contentMargins        6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 TextArea.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextArea.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-TextArea.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextArea.font                  [active] $defaultFont [UI]
 TextArea.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextAreaUI                     javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -1885,7 +1885,7 @@ TextField.background           #ffffff    javax.swing.plaf.nimbus.DerivedColor$U
 TextField.contentMargins       6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 TextField.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextField.disabledText         [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-TextField.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextField.font                 [active] $defaultFont [UI]
 TextField.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextFieldUI                    javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -1920,7 +1920,7 @@ TextPane.background            [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 TextPane.contentMargins        4,6,4,6    javax.swing.plaf.InsetsUIResource [UI]
 TextPane.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextPane.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-TextPane.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextPane.font                  [active] $defaultFont [UI]
 TextPane.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 TextPane.opaque                true
 TextPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
@@ -1958,7 +1958,7 @@ ToggleButton.background        [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ToggleButton.contentMargins    6,14,6,14    javax.swing.plaf.InsetsUIResource [UI]
 ToggleButton.disabled          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToggleButton.disabledText      [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ToggleButton.font              [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToggleButton.font              [active] $defaultFont [UI]
 ToggleButton.foreground        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToggleButtonUI                 javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -2046,7 +2046,7 @@ ToolBar.background             [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ToolBar.contentMargins         2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToolBar.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ToolBar.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolBar.font                   [active] $defaultFont [UI]
 ToolBar.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToolBar.handleIcon             11,38    javax.swing.plaf.nimbus.NimbusIcon
 ToolBar.opaque                 true
@@ -2196,7 +2196,7 @@ ToolTip.background             [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 ToolTip.contentMargins         4,4,4,4    javax.swing.plaf.InsetsUIResource [UI]
 ToolTip.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToolTip.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-ToolTip.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolTip.font                   [active] $defaultFont [UI]
 ToolTip.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 ToolTipUI                      javax.swing.plaf.synth.SynthLookAndFeel
 
@@ -2218,7 +2218,7 @@ Tree.drawHorizontalLines       false
 Tree.drawVerticalLines         false
 Tree.dropLineColor             #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Tree.expandedIcon              18,7    javax.swing.plaf.nimbus.NimbusIcon
-Tree.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Tree.leafIcon                  16,16    javax.swing.plaf.nimbus.NimbusIcon
 Tree.leftChildIndent           12
@@ -2297,7 +2297,7 @@ Viewport.background            [active] #d6d9df    javax.swing.plaf.nimbus.Deriv
 Viewport.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Viewport.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Viewport.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
-Viewport.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Viewport.font                  [active] $defaultFont [UI]
 Viewport.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 Viewport.opaque                true
 ViewportUI                     javax.swing.plaf.synth.SynthLookAndFeel
@@ -2351,3 +2351,70 @@ textForeground                 #000000    javax.swing.plaf.nimbus.DerivedColor$U
 textHighlight                  #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 textHighlightText              #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
 textInactiveText               #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- disabledText --
+CheckBox.disabledText                               #8e8f91  #d6d9df     2.3  !!!!!
+RadioButton.disabledText                            #8e8f91  #d6d9df     2.3  !!!!!
+
+#-- foreground --
+ArrowButton.foreground                              #000000  #d6d9df    14.8
+Button.foreground                                   #000000  #d6d9df    14.8
+CheckBox.foreground                                 #000000  #d6d9df    14.8
+CheckBoxMenuItem.foreground                         #232324  #d6d9df    11.1
+ColorChooser.foreground                             #000000  #d6d9df    14.8
+ComboBox.foreground                                 #000000  #d6d9df    14.8
+DesktopIcon.foreground                              #000000  #d6d9df    14.8
+DesktopPane.foreground                              #000000  #d6d9df    14.8
+EditorPane.foreground                               #000000  #d6d9df    14.8
+FileChooser.foreground                              #000000  #d6d9df    14.8
+FormattedTextField.foreground                       #000000  #d6d9df    14.8
+InternalFrame.foreground                            #000000  #d6d9df    14.8
+InternalFrameTitlePane.foreground                   #000000  #d6d9df    14.8
+Label.foreground                                    #000000  #d6d9df    14.8
+List.foreground                                     #000000  #ffffff    21.0
+Menu.foreground                                     #232324  #d6d9df    11.1
+MenuBar.foreground                                  #000000  #d6d9df    14.8
+MenuItem.foreground                                 #232324  #d6d9df    11.1
+OptionPane.foreground                               #000000  #d6d9df    14.8
+Panel.foreground                                    #000000  #d6d9df    14.8
+PasswordField.foreground                            #000000  #d6d9df    14.8
+PopupMenu.foreground                                #000000  #d6d9df    14.8
+PopupMenuSeparator.foreground                       #000000  #d6d9df    14.8
+RadioButton.foreground                              #000000  #d6d9df    14.8
+RadioButtonMenuItem.foreground                      #232324  #d6d9df    11.1
+RootPane.foreground                                 #000000  #d6d9df    14.8
+ScrollBarThumb.foreground                           #000000  #d6d9df    14.8
+ScrollBarTrack.foreground                           #000000  #d6d9df    14.8
+SliderThumb.foreground                              #000000  #d6d9df    14.8
+SliderTrack.foreground                              #000000  #d6d9df    14.8
+Spinner.foreground                                  #000000  #d6d9df    14.8
+TabbedPane.foreground                               #000000  #d6d9df    14.8
+Table.foreground                                    #000000  #ffffff    21.0
+TableHeader.foreground                              #000000  #d6d9df    14.8
+TextArea.foreground                                 #000000  #d6d9df    14.8
+TextField.foreground                                #000000  #ffffff    21.0
+TextPane.foreground                                 #000000  #d6d9df    14.8
+ToggleButton.foreground                             #000000  #d6d9df    14.8
+ToolTip.foreground                                  #000000  #d6d9df    14.8
+Tree.foreground                                     #000000  #ffffff    21.0
+
+#-- selectionForeground --
+Tree.selectionForeground                            #ffffff  #39698a     5.9  !!
+
+#-- textForeground --
+List[Selected].textForeground                       #ffffff  #39698a     5.9  !!
+Table[Enabled+Selected].textForeground              #ffffff  #39698a     5.9  !!
+Tree.textForeground                                 #000000  #ffffff    21.0
+textForeground                                      #000000  #39698a     3.6  !!!!
+
+#-- non-text --
+ProgressBar.background                              #d6d9df  #d6d9df     1.0  !!!!!!
+ProgressBar.foreground                              #000000  #d6d9df    14.8
+Separator.foreground                                #000000  #d6d9df    14.8

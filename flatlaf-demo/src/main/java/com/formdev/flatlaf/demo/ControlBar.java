@@ -156,6 +156,9 @@ class ControlBar
 		// register Alt+Shift+F1, F2, ... keys to change system scale factor
 		DemoPrefs.registerSystemScaleFactors( frame );
 
+		// register Alt+Shift+S to enable/disable interprocess Laf sync
+		DemoPrefs.initLafSync( frame );
+
 		// register ESC key to close frame
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
 			e -> {

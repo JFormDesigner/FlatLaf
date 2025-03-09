@@ -73,7 +73,7 @@ Button.default.borderColor     #268eff  HSL 211 100  57    javax.swing.plaf.Colo
 Button.default.borderWidth     0
 Button.default.focusColor      #29acff80  50%  HSLA 203 100  58 50    javax.swing.plaf.ColorUIResource [UI]
 Button.default.focusedBorderColor #2e92ff  HSL 211 100  59    javax.swing.plaf.ColorUIResource [UI]
-Button.default.foreground      #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+Button.default.foreground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Button.default.hoverBackground #0f82ff  HSL 211 100  53    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.default.hoverBorderColor #2e92ff  HSL 211 100  59    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #1f8aff  HSL 211 100  56    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
@@ -122,6 +122,7 @@ CheckBox.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 CheckBox.disabledText          #9a9a9a  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.font                  [active] $defaultFont [UI]
 CheckBox.foreground            #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.icon.background       #292929  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.borderColor      #ffffff25  15%  HSLA   0   0 100 15    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.checkmarkColor   #c7c7c7  HSL   0   0  78    javax.swing.plaf.ColorUIResource [UI]
@@ -136,7 +137,6 @@ CheckBox.icon.pressedBorderColor #34b0ff80  50%  HSLA 203 100  60 50    javax.sw
 CheckBox.icon.selectedBackground #292929  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBorderColor #ffffff51  32%  HSLA   0   0 100 32    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.style            filled
-CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           6
 CheckBox.icon[filled].background #4e4e4e  HSL   0   0  31    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon[filled].borderWidth 0
@@ -256,6 +256,8 @@ Component.innerFocusWidth      0
 Component.innerOutlineWidth    0
 Component.linkColor            #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 Component.minimumWidth         64
+Component.success.borderColor  #647255  HSL  89  15  39    javax.swing.plaf.ColorUIResource [UI]
+Component.success.focusedBorderColor #648b3c  HSL  90  40  39    javax.swing.plaf.ColorUIResource [UI]
 Component.warning.borderColor  #725627  HSL  38  49  30    javax.swing.plaf.ColorUIResource [UI]
 Component.warning.focusedBorderColor #ac7920  HSL  38  69  40    javax.swing.plaf.ColorUIResource [UI]
 
@@ -453,10 +455,10 @@ JXMonthView.disabledArrowColor #9a9a9a  HSL   0   0  60    javax.swing.plaf.Colo
 JXMonthView.flaggedDayForeground #e05555  HSL   0  69  61    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.font               [active] $defaultFont [UI]
 JXMonthView.leadingDayForeground #9a9a9a  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
-JXMonthView.monthDownFileName  [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthDownIcon [UI]
+JXMonthView.monthDownFileName  [lazy] 20,20    com.formdev.flatlaf.swingx.icons.FlatMonthDownIcon [UI]
 JXMonthView.monthStringBackground #4c5052  HSL 200   4  31    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.monthStringForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
-JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthUpIcon [UI]
+JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.icons.FlatMonthUpIcon [UI]
 JXMonthView.selectedBackground #0054cc  HSL 215 100  40    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.todayColor         #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 JXMonthView.trailingDayForeground #9a9a9a  HSL   0   0  60    javax.swing.plaf.ColorUIResource [UI]
@@ -794,7 +796,7 @@ ProgressBar.foreground         #007aff  HSL 211 100  50    javax.swing.plaf.Colo
 ProgressBar.horizontalSize     146,4    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBar.repaintInterval    15
 ProgressBar.selectionBackground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
-ProgressBar.selectionForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionForeground #eeeeee  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.verticalSize       4,146    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBarUI                  com.formdev.flatlaf.ui.FlatProgressBarUI
 
@@ -808,9 +810,9 @@ RadioButton.disabledText       #9a9a9a  HSL   0   0  60    javax.swing.plaf.Colo
 RadioButton.font               [active] $defaultFont [UI]
 RadioButton.foreground         #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.highlight          #bfbfbf19  10%  HSLA   0   0  75 10    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.icon.centerDiameter 8
 RadioButton.icon.style         filled
-RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.iconTextGap        6
 RadioButton.icon[filled].centerDiameter 6
 RadioButton.light              #cccccc19  10%  HSLA   0   0  80 10    javax.swing.plaf.ColorUIResource [UI]
@@ -861,8 +863,8 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 RootPane.activeBorderColor     #303030  HSL   0   0  19    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(7% autoInverse)
 RootPane.background            #1e1e1e  HSL   0   0  12    javax.swing.plaf.ColorUIResource [UI]
 RootPane.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRootPaneUI$FlatWindowBorder [UI]
-RootPane.borderDragThickness   5
-RootPane.cornerDragWidth       16
+RootPane.borderDragThickness   6
+RootPane.cornerDragWidth       32
 RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [0] ENTER
     [1] press
@@ -1249,15 +1251,31 @@ TextPane.selectionForeground   #ffffff  HSL   0   0 100    javax.swing.plaf.Colo
 TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 
+#---- TipOfTheDay ----
+
+TipOfTheDay.background         #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.border             [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+TipOfTheDay.font               [active] $defaultFont [UI]
+TipOfTheDay.icon               [lazy] 24,24    com.formdev.flatlaf.swingx.icons.FlatTipOfTheDayIcon [UI]
+TipOfTheDay.icon.bulbColor     #f2c55c  HSL  42  85  65    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.icon.socketColor   #ced0d6  HSL 225   9  82    javax.swing.plaf.ColorUIResource [UI]
+TipOfTheDay.tipAreaInsets      4,16,4,16    javax.swing.plaf.InsetsUIResource [UI]
+
+
 #---- TitlePane ----
 
 TitlePane.background           #323232  HSL   0   0  20    javax.swing.plaf.ColorUIResource [UI]
-TitlePane.buttonHoverBackground #585858  HSL   0   0  35    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15% autoInverse)
+TitlePane.buttonArc            0
+TitlePane.buttonHoverBackground #4c4c4c  HSL   0   0  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+TitlePane.buttonInsets         0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonMinimumWidth   30
-TitlePane.buttonPressedBackground #4c4c4c  HSL   0   0  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+TitlePane.buttonPressedBackground #414141  HSL   0   0  25    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.buttonSymbolHeight   10
+TitlePane.buttonsFillVertically true
+TitlePane.buttonsGap           0
+TitlePane.buttonsMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.centerTitle          false
 TitlePane.centerTitleIfMenuBarEmbedded true
 TitlePane.closeHoverBackground #c42b1c  HSL   5  75  44    javax.swing.plaf.ColorUIResource [UI]
@@ -1326,7 +1344,7 @@ ToggleButton.margin            2,14,2,14    javax.swing.plaf.InsetsUIResource [U
 ToggleButton.pressedBackground #656565  HSL   0   0  40    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 ToggleButton.rollover          true
 ToggleButton.selectedBackground #898989  HSL   0   0  54    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20% autoInverse)
-ToggleButton.selectedForeground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.selectedForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.shadow            #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.disabledUnderlineColor #595959  HSL   0   0  35    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.focusBackground #172c4a  HSL 215  53  19    javax.swing.plaf.ColorUIResource [UI]
@@ -1471,14 +1489,14 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 #---- [style] ----
 
-[style].h00                    font: $h00.font
 [style].h0                     font: $h0.font
-[style].h1.regular             font: $h1.regular.font
+[style].h00                    font: $h00.font
 [style].h1                     font: $h1.font
-[style].h2.regular             font: $h2.regular.font
+[style].h1.regular             font: $h1.regular.font
 [style].h2                     font: $h2.font
-[style].h3.regular             font: $h3.regular.font
+[style].h2.regular             font: $h2.regular.font
 [style].h3                     font: $h3.font
+[style].h3.regular             font: $h3.regular.font
 [style].h4                     font: $h4.font
 [style].large                  font: $large.font
 [style].light                  font: $light.font
@@ -1630,6 +1648,11 @@ small.font                     [active] Segoe UI plain 10    javax.swing.plaf.Fo
 swingx/TaskPaneUI              com.formdev.flatlaf.swingx.ui.FlatTaskPaneUI
 
 
+#---- swingx/TipOfTheDay ----
+
+swingx/TipOfTheDayUI           com.formdev.flatlaf.swingx.ui.FlatTipOfTheDayUI
+
+
 #----  ----
 
 text                           #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
@@ -1640,3 +1663,138 @@ textText                       #dddddd  HSL   0   0  87    javax.swing.plaf.Colo
 window                         #1e1e1e  HSL   0   0  12    javax.swing.plaf.ColorUIResource [UI]
 windowBorder                   #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 windowText                     #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- activeTitleForeground --
+InternalFrame.activeTitleForeground                 #dddddd  #040404    15.1
+
+#-- disabledForeground --
+ComboBox.disabledForeground                         #9a9a9a  #232323     5.6  !!
+Label.disabledForeground                            #9a9a9a  #1e1e1e     5.9  !!
+Spinner.disabledForeground                          #9a9a9a  #232323     5.6  !!
+
+#-- disabledText --
+Button.disabledText                                 #9a9a9a  #3d3d3d     3.9  !!!!
+CheckBox.disabledText                               #9a9a9a  #1e1e1e     5.9  !!
+RadioButton.disabledText                            #9a9a9a  #1e1e1e     5.9  !!
+ToggleButton.disabledText                           #9a9a9a  #3d3d3d     3.9  !!!!
+
+#-- dropCellForeground --
+List.dropCellForeground                             #ffffff  #003f99     9.7
+Table.dropCellForeground                            #ffffff  #003f99     9.7
+Tree.dropCellForeground                             #ffffff  #003f99     9.7
+
+#-- focusCellForeground --
+Table.focusCellForeground                           #dddddd  #282828    10.9
+
+#-- foreground --
+Button.foreground                                   #dddddd  #565656     5.4  !!
+Button.default.foreground                           #ffffff  #007aff     4.0  !!!
+CheckBox.foreground                                 #dddddd  #1e1e1e    12.3
+CheckBoxMenuItem.foreground                         #dddddd  #323232     9.4
+ColorChooser.foreground                             #dddddd  #1e1e1e    12.3
+ComboBox.foreground                                 #dddddd  #565656     5.4  !!
+DesktopIcon.foreground                              #dddddd  #555c68     5.0  !!
+EditorPane.foreground                               #dddddd  #282828    10.9
+FormattedTextField.foreground                       #dddddd  #282828    10.9
+JideButton.foreground                               #dddddd  #565656     5.4  !!
+JideLabel.foreground                                #dddddd  #1e1e1e    12.3
+JideSplitButton.foreground                          #dddddd  #565656     5.4  !!
+JideTabbedPane.foreground                           #dddddd  #1e1e1e    12.3
+Label.foreground                                    #dddddd  #1e1e1e    12.3
+List.foreground                                     #dddddd  #282828    10.9
+Menu.foreground                                     #dddddd  #323232     9.4
+MenuBar.foreground                                  #dddddd  #323232     9.4
+MenuItem.foreground                                 #dddddd  #323232     9.4
+OptionPane.foreground                               #dddddd  #1e1e1e    12.3
+Panel.foreground                                    #dddddd  #1e1e1e    12.3
+PasswordField.foreground                            #dddddd  #282828    10.9
+PopupMenu.foreground                                #dddddd  #323232     9.4
+RadioButton.foreground                              #dddddd  #1e1e1e    12.3
+RadioButtonMenuItem.foreground                      #dddddd  #323232     9.4
+RootPane.foreground                                 #dddddd  #1e1e1e    12.3
+Spinner.foreground                                  #dddddd  #282828    10.9
+TabbedPane.foreground                               #dddddd  #1e1e1e    12.3
+Table.foreground                                    #dddddd  #282828    10.9
+TableHeader.foreground                              #dddddd  #282828    10.9
+TextArea.foreground                                 #dddddd  #282828    10.9
+TextField.foreground                                #dddddd  #282828    10.9
+TextPane.foreground                                 #dddddd  #282828    10.9
+TitlePane.foreground                                #dddddd  #323232     9.4
+ToggleButton.foreground                             #dddddd  #565656     5.4  !!
+ToolTip.foreground                                  #dddddd  #0f0f0f    14.1
+Tree.foreground                                     #dddddd  #282828    10.9
+
+#-- inactiveForeground --
+EditorPane.inactiveForeground                       #9a9a9a  #232323     5.6  !!
+FormattedTextField.inactiveForeground               #9a9a9a  #232323     5.6  !!
+PasswordField.inactiveForeground                    #9a9a9a  #232323     5.6  !!
+TextArea.inactiveForeground                         #9a9a9a  #232323     5.6  !!
+TextField.inactiveForeground                        #9a9a9a  #232323     5.6  !!
+TextPane.inactiveForeground                         #9a9a9a  #232323     5.6  !!
+TitlePane.inactiveForeground                        #9a9a9a  #323232     4.6  !!!
+
+#-- inactiveTitleForeground --
+InternalFrame.inactiveTitleForeground               #9a9a9a  #111111     6.7  !
+
+#-- monthStringForeground --
+JXMonthView.monthStringForeground                   #dddddd  #4c5052     6.0  !
+
+#-- selectedForeground --
+Button.selectedForeground                           #dddddd  #707070     3.6  !!!!
+ToggleButton.selectedForeground                     #ffffff  #898989     3.5  !!!!
+
+#-- selectionBackground --
+ProgressBar.selectionBackground                     #dddddd  #323232     9.4
+
+#-- selectionForeground --
+CheckBoxMenuItem.selectionForeground                #ffffff  #1458b8     6.7  !
+ComboBox.selectionForeground                        #ffffff  #1458b8     6.7  !
+EditorPane.selectionForeground                      #ffffff  #3d6490     6.1  !
+FormattedTextField.selectionForeground              #ffffff  #3d6490     6.1  !
+List.selectionForeground                            #ffffff  #0054cc     6.7  !
+Menu.selectionForeground                            #ffffff  #1458b8     6.7  !
+MenuBar.selectionForeground                         #dddddd  #585858     5.2  !!
+MenuItem.selectionForeground                        #ffffff  #1458b8     6.7  !
+PasswordField.selectionForeground                   #ffffff  #3d6490     6.1  !
+ProgressBar.selectionForeground                     #eeeeee  #007aff     3.5  !!!!
+RadioButtonMenuItem.selectionForeground             #ffffff  #1458b8     6.7  !
+Table.selectionForeground                           #ffffff  #0054cc     6.7  !
+TextArea.selectionForeground                        #ffffff  #3d6490     6.1  !
+TextField.selectionForeground                       #ffffff  #3d6490     6.1  !
+TextPane.selectionForeground                        #ffffff  #3d6490     6.1  !
+Tree.selectionForeground                            #ffffff  #0054cc     6.7  !
+
+#-- selectionInactiveForeground --
+List.selectionInactiveForeground                    #dddddd  #464646     6.9  !
+Table.selectionInactiveForeground                   #dddddd  #464646     6.9  !
+Tree.selectionInactiveForeground                    #dddddd  #464646     6.9  !
+
+#-- specialTitleForeground --
+TaskPane.specialTitleForeground                     #222222  #afafaf     7.3
+
+#-- textForeground --
+Tree.textForeground                                 #dddddd  #282828    10.9
+
+#-- titleForeground --
+JXTitledPanel.titleForeground                       #dddddd  #4c5052     6.0  !
+
+#-- non-text --
+CheckBoxMenuItem.icon.checkmarkColor                #b7b7b7  #1e1e1e     8.3
+CheckBoxMenuItem.icon.disabledCheckmarkColor        #777777  #1e1e1e     3.7  !!!!
+Menu.icon.arrowColor                                #b7b7b7  #1e1e1e     8.3
+Menu.icon.disabledArrowColor                        #777777  #1e1e1e     3.7  !!!!
+ProgressBar.background                              #323232  #1e1e1e     1.3  !!!!!!
+ProgressBar.foreground                              #007aff  #1e1e1e     4.2  !!!
+Separator.foreground                                #343434  #1e1e1e     1.3  !!!!!!    #ffffff19  10%
+Slider.disabledTrackColor                           #282828  #1e1e1e     1.1  !!!!!!
+Slider.trackColor                                   #323232  #1e1e1e     1.3  !!!!!!
+Slider.trackValueColor                              #007aff  #1e1e1e     4.2  !!!
+TabbedPane.contentAreaColor                         #343434  #1e1e1e     1.3  !!!!!!    #ffffff19  10%
+ToolBar.separatorColor                              #343434  #1e1e1e     1.3  !!!!!!    #ffffff19  10%

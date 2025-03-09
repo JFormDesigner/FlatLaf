@@ -74,7 +74,7 @@ public class FlatDropShadowBorder
 
 		this.shadowColor = shadowColor;
 		this.shadowInsets = shadowInsets;
-		this.shadowOpacity = shadowOpacity;
+		this.shadowOpacity = Math.min( Math.max( shadowOpacity, 0f ), 1f );
 
 		shadowSize = maxInset( shadowInsets );
 	}

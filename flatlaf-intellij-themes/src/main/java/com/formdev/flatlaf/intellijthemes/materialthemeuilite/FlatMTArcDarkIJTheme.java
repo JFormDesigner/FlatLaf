@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.intellijthemes;
+package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 //
 // DO NOT MODIFY
@@ -26,25 +26,25 @@ import com.formdev.flatlaf.IntelliJTheme;
 /**
  * @author Karl Tauber
  */
-public class FlatGruvboxDarkSoftIJTheme
+public class FlatMTArcDarkIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static final String NAME = "Gruvbox Dark Soft";
+	public static final String NAME = "Arc Dark (Material)";
 
 	public static boolean setup() {
 		try {
-			return setup( new FlatGruvboxDarkSoftIJTheme() );
+			return setup( new FlatMTArcDarkIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
 	}
 
 	public static void installLafInfo() {
-		installLafInfo( NAME, FlatGruvboxDarkSoftIJTheme.class );
+		installLafInfo( NAME, FlatMTArcDarkIJTheme.class );
 	}
 
-	public FlatGruvboxDarkSoftIJTheme() {
-		super( Utils.loadTheme( "gruvbox_dark_soft.theme.json" ) );
+	public FlatMTArcDarkIJTheme() {
+		super( Utils.loadTheme( "Arc Dark.theme.json" ) );
 	}
 
 	@Override

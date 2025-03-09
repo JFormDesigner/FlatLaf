@@ -1024,6 +1024,8 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "error.focusedBorderColor", 0x123456 );
 		testColor( c, ui, "warning.borderColor", 0x123456 );
 		testColor( c, ui, "warning.focusedBorderColor", 0x123456 );
+		testColor( c, ui, "success.borderColor", 0x123456 );
+		testColor( c, ui, "success.focusedBorderColor", 0x123456 );
 		testColor( c, ui, "custom.borderColor", 0x123456 );
 
 		testString( c, ui, "outline", "error" );
@@ -1121,6 +1123,8 @@ public class TestFlatStyleableValue
 		testValue( border, "error.focusedBorderColor", Color.WHITE );
 		testValue( border, "warning.borderColor", Color.WHITE );
 		testValue( border, "warning.focusedBorderColor", Color.WHITE );
+		testValue( border, "success.borderColor", Color.WHITE );
+		testValue( border, "success.focusedBorderColor", Color.WHITE );
 		testValue( border, "custom.borderColor", Color.WHITE );
 	}
 

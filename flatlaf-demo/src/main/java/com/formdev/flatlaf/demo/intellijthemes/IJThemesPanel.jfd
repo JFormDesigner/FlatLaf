@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -22,10 +22,10 @@ new FormModel {
 				name: "toolBar"
 				"floatable": false
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "saveButton"
-					"toolTipText": "Save .theme.json of selected IntelliJ theme to file."
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/download.svg" )
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveTheme", false ) )
+					name: "pluginButton"
+					"toolTipText": "Opens the IntelliJ plugin page of selected IntelliJ theme in the browser."
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/plugin.svg" )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browsePlugin", false ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "sourceCodeButton"

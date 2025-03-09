@@ -252,7 +252,7 @@ class DataComponentsPanel
 			"[]" +
 			"[150,grow,sizegroup 1,fill]" +
 			"[150,grow,sizegroup 1,fill]" +
-			"[150,grow,sizegroup 1,fill]"));
+			"[150,grow,fill]"));
 
 		//---- label1 ----
 		label1.setText("Square Selection");

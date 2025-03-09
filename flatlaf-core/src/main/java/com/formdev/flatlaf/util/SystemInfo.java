@@ -31,6 +31,7 @@ public class SystemInfo
 	public static final boolean isWindows;
 	public static final boolean isMacOS;
 	public static final boolean isLinux;
+	/** @since 3.6 */ public static final boolean isUnknownOS;
 
 	// OS versions
 	public static final long osVersion;
@@ -59,6 +60,7 @@ public class SystemInfo
 	public static final boolean isJetBrainsJVM_11_orLater;
 
 	// UI toolkits
+	/** @since 3.6 */ public static final boolean isGNOME;
 	public static final boolean isKDE;
 
 	// other
@@ -75,6 +77,7 @@ public class SystemInfo
 		isWindows = osName.startsWith( "windows" );
 		isMacOS = osName.startsWith( "mac" );
 		isLinux = osName.startsWith( "linux" );
+		isUnknownOS = !isWindows && !isMacOS && !isLinux;
 
 		// OS versions
 		osVersion = scanVersion( System.getProperty( "os.version" ) );
@@ -104,7 +107,13 @@ public class SystemInfo
 		isJetBrainsJVM_11_orLater = isJetBrainsJVM && isJava_11_orLater;
 
 		// UI toolkits
-		isKDE = (isLinux && System.getenv( "KDE_FULL_SESSION" ) != null);
+		String desktop = isLinux ? System.getenv( "XDG_CURRENT_DESKTOP" ) : null;
+		isGNOME = (isLinux &&
+			(System.getenv( "GNOME_DESKTOP_SESSION_ID" ) != null ||
+			 (desktop != null && desktop.contains( "GNOME" ))));
+		isKDE = (isLinux &&
+			(System.getenv( "KDE_FULL_SESSION" ) != null ||
+			 (desktop != null && desktop.contains( "KDE" ))));
 
 		// other
 		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );

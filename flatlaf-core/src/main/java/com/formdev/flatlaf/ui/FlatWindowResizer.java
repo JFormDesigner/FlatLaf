@@ -41,7 +41,6 @@ import java.util.function.Supplier;
 import javax.swing.DesktopManager;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
@@ -60,8 +59,6 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatWindowResizer
 	implements PropertyChangeListener, ComponentListener
 {
-	protected final static Integer WINDOW_RESIZER_LAYER = JLayeredPane.DRAG_LAYER + 1;
-
 	protected final JComponent resizeComp;
 
 	protected final int borderDragThickness = FlatUIUtils.getUIInt( "RootPane.borderDragThickness", 5 );
@@ -82,12 +79,12 @@ public abstract class FlatWindowResizer
 		leftDragComp = createDragBorderComponent( NW_RESIZE_CURSOR, W_RESIZE_CURSOR, SW_RESIZE_CURSOR );
 		rightDragComp = createDragBorderComponent( NE_RESIZE_CURSOR, E_RESIZE_CURSOR, SE_RESIZE_CURSOR );
 
-		Container cont = (resizeComp instanceof JRootPane) ? ((JRootPane)resizeComp).getLayeredPane() : resizeComp;
-		Object cons = (cont instanceof JLayeredPane) ? WINDOW_RESIZER_LAYER : null;
-		cont.add( topDragComp, cons, 0 );
-		cont.add( bottomDragComp, cons, 1 );
-		cont.add( leftDragComp, cons, 2 );
-		cont.add( rightDragComp, cons, 3 );
+		// for rootpanes, add after glasspane
+		int insertIndex = (resizeComp instanceof JRootPane) ? 1 : 0;
+		resizeComp.add( topDragComp,    insertIndex++ );
+		resizeComp.add( bottomDragComp, insertIndex++ );
+		resizeComp.add( leftDragComp,   insertIndex++ );
+		resizeComp.add( rightDragComp,  insertIndex++ );
 
 		resizeComp.addComponentListener( this );
 		resizeComp.addPropertyChangeListener( "ancestor", this );
@@ -106,11 +103,10 @@ public abstract class FlatWindowResizer
 		resizeComp.removeComponentListener( this );
 		resizeComp.removePropertyChangeListener( "ancestor", this );
 
-		Container cont = topDragComp.getParent();
-		cont.remove( topDragComp );
-		cont.remove( bottomDragComp );
-		cont.remove( leftDragComp );
-		cont.remove( rightDragComp );
+		resizeComp.remove( topDragComp );
+		resizeComp.remove( bottomDragComp );
+		resizeComp.remove( leftDragComp );
+		resizeComp.remove( rightDragComp );
 	}
 
 	public void doLayout() {
@@ -121,7 +117,7 @@ public abstract class FlatWindowResizer
 		int y = 0;
 		int width = resizeComp.getWidth();
 		int height = resizeComp.getHeight();
-		if( width == 0 || height == 0 )
+		if( width <= 0 || height <= 0 )
 			return;
 
 		Insets resizeInsets = getResizeInsets();
@@ -192,7 +188,7 @@ public abstract class FlatWindowResizer
 	protected abstract Dimension getWindowMinimumSize();
 	protected abstract Dimension getWindowMaximumSize();
 
-	protected void beginResizing( int resizeDir ) {}
+	protected void beginResizing( int resizeDir, MouseEvent e ) {}
 	protected void endResizing() {}
 
 	//---- interface PropertyChangeListener ----
@@ -251,8 +247,7 @@ public abstract class FlatWindowResizer
 			centerComp = new JPanel();
 			centerComp.setOpaque( false );
 			centerComp.setVisible( false );
-			Container cont = rootPane.getLayeredPane();
-			cont.add( centerComp, WINDOW_RESIZER_LAYER, 4 );
+			rootPane.add( centerComp, 5 );
 
 			// On Linux, limit window resizing to screen bounds because otherwise
 			// there would be a strange effect when the mouse is moved over a sidebar
@@ -262,8 +257,7 @@ public abstract class FlatWindowResizer
 
 		@Override
 		public void uninstall() {
-			Container cont = topDragComp.getParent();
-			cont.remove( centerComp );
+			resizeComp.remove( centerComp );
 
 			super.uninstall();
 		}
@@ -376,7 +370,25 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
-		protected void beginResizing( int resizeDir ) {
+		protected void beginResizing( int resizeDir, MouseEvent e ) {
+			// on Linux, resize window using window manager
+			if( SystemInfo.isLinux && window != null && FlatNativeLinuxLibrary.isWMUtilsSupported( window ) ) {
+				int direction = -1;
+				switch( resizeDir ) {
+					case N_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOP; break;
+					case S_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOM; break;
+					case W_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_LEFT; break;
+					case E_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_RIGHT; break;
+					case NW_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOPLEFT; break;
+					case NE_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_TOPRIGHT; break;
+					case SW_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOMLEFT; break;
+					case SE_RESIZE_CURSOR:	direction = FlatNativeLinuxLibrary.SIZE_BOTTOMRIGHT; break;
+				}
+
+				if( direction >= 0 && FlatNativeLinuxLibrary.moveOrResizeWindow( window, e, direction ) )
+					return;
+			}
+
 			centerComp.setBounds( 0, 0, resizeComp.getWidth(), resizeComp.getHeight() );
 			centerComp.setCursor( getPredefinedCursor( resizeDir ) );
 			centerComp.setVisible( true );
@@ -468,7 +480,7 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
-		protected void beginResizing( int resizeDir ) {
+		protected void beginResizing( int resizeDir, MouseEvent e ) {
 			int direction = 0;
 			switch( resizeDir ) {
 				case N_RESIZE_CURSOR:	direction = NORTH; break;
@@ -587,7 +599,7 @@ debug*/
 			dragRightOffset = windowBounds.x + windowBounds.width - xOnScreen;
 			dragBottomOffset = windowBounds.y + windowBounds.height - yOnScreen;
 
-			beginResizing( resizeDir );
+			beginResizing( resizeDir, e );
 		}
 
 		@Override

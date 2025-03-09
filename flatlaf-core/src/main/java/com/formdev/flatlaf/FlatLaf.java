@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -44,6 +45,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
@@ -100,6 +102,8 @@ public abstract class FlatLaf
 	private static Map<String, String> globalExtraDefaults;
 	private Map<String, String> extraDefaults;
 	private static Function<String, Color> systemColorGetter;
+	private static Set<String> uiKeyPlatformPrefixes;
+	private static Set<String> uiKeySpecialPrefixes;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -111,6 +115,7 @@ public abstract class FlatLaf
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
 	private boolean subMenuUsabilityHelperInstalled;
+	private LinuxPopupMenuCanceler linuxPopupMenuCanceler;
 
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
@@ -305,6 +310,10 @@ public abstract class FlatLaf
 		// install submenu usability helper
 		subMenuUsabilityHelperInstalled = SubMenuUsabilityHelper.install();
 
+		// install Linux popup menu canceler
+		if( SystemInfo.isLinux )
+			linuxPopupMenuCanceler = new LinuxPopupMenuCanceler();
+
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
@@ -395,6 +404,12 @@ public abstract class FlatLaf
 		if( subMenuUsabilityHelperInstalled ) {
 			SubMenuUsabilityHelper.uninstall();
 			subMenuUsabilityHelperInstalled = false;
+		}
+
+		// uninstall Linux popup menu canceler
+		if( linuxPopupMenuCanceler != null ) {
+			linuxPopupMenuCanceler.uninstall();
+			linuxPopupMenuCanceler = null;
 		}
 
 		// restore default link color
@@ -510,10 +525,10 @@ public abstract class FlatLaf
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
-		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), isDark(), defaults );
-		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
+		if( lafClassesForDefaultsLoading == null )
+			lafClassesForDefaultsLoading = UIDefaultsLoader.getLafClassesForDefaultsLoading( getClass() );
+		UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons,
+			this::applyAdditionalProperties, getAdditionalDefaults(), isDark(), defaults );
 
 		// setup default font after loading defaults from properties
 		// to allow defining "defaultFont" in properties
@@ -530,9 +545,6 @@ public abstract class FlatLaf
 		// initialize text antialiasing
 		putAATextInfo( defaults );
 
-		// apply additional defaults (e.g. from IntelliJ themes)
-		applyAdditionalDefaults( defaults );
-
 		// allow addons modifying UI defaults
 		for( FlatDefaultsAddon addon : addons )
 			addon.afterDefaultsLoading( this, defaults );
@@ -542,6 +554,9 @@ public abstract class FlatLaf
 			return UIScale.getUserScaleFactor();
 		} );
 
+		// add lazy UI delegate class loading (if necessary)
+		addLazyUIdelegateClassLoading( defaults );
+
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
@@ -550,7 +565,8 @@ public abstract class FlatLaf
 		return defaults;
 	}
 
-	void applyAdditionalDefaults( UIDefaults defaults ) {
+	// apply additional properties (e.g. from IntelliJ themes)
+	void applyAdditionalProperties( Properties properties ) {
 	}
 
 	protected List<Class<?>> getLafClassesForDefaultsLoading() {
@@ -737,6 +753,53 @@ public abstract class FlatLaf
 			if( c.light == !dark || c.dark == dark )
 				defaults.put( c.key, new ColorUIResource( c.rgb ) );
 		}
+	}
+
+	/**
+	 * Handle UI delegate classes if running in special application where multiple class loaders are involved.
+	 * E.g. in Eclipse plugin or in LibreOffice extension.
+	 * <p>
+	 * Problem: Swing runs in Java's system classloader and FlatLaf is loaded in plugin classloader.
+	 * When Swing tries to load UI delegate class in {@link UIDefaults#getUIClass(String, ClassLoader)},
+	 * invoked from {@link UIDefaults#getUI(JComponent)}, it uses the component's classloader,
+	 * which is Java's system classloader for core Swing components,
+	 * and can not find FlatLaf UI delegates.
+	 * <p>
+	 * Solution: Add lazy values for UI delegate class names.
+	 * Those lazy values use FlatLaf classloader to load UI delegate class.
+	 * This is similar to what {@link UIDefaults#getUIClass(String, ClassLoader)} does.
+	 * <p>
+	 * Not using {@code defaults.put( "ClassLoader", FlatLaf.class.getClassLoader() )},
+	 * which would work for FlatLaf UI delegates, but it would break custom
+	 * UI delegates used in other classloaders.
+	 */
+	private static void addLazyUIdelegateClassLoading( UIDefaults defaults ) {
+		if( FlatLaf.class.getClassLoader() == ClassLoader.getSystemClassLoader() )
+			return; // not necessary
+
+		Map<String, LazyValue> map = new HashMap<>();
+		for( Map.Entry<Object, Object> e : defaults.entrySet() ) {
+			Object key = e.getKey();
+			Object value = e.getValue();
+			if( key instanceof String && ((String)key).endsWith( "UI" ) &&
+				value instanceof String && !defaults.containsKey( value ) )
+			{
+				String className = (String) value;
+				map.put( className, (LazyValue) t -> {
+					try {
+						Class<?> uiClass = FlatLaf.class.getClassLoader().loadClass( className );
+						if( ComponentUI.class.isAssignableFrom( uiClass ) )
+							return uiClass;
+					} catch( ClassNotFoundException ex ) {
+						// ignore
+					}
+
+					// let UIDefaults.getUIClass() try to load UI delegate class
+					return null;
+				} );
+			}
+		}
+		defaults.putAll( map );
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
@@ -1061,6 +1124,92 @@ public abstract class FlatLaf
 	 */
 	public static void setSystemColorGetter( Function<String, Color> systemColorGetter ) {
 		FlatLaf.systemColorGetter = systemColorGetter;
+	}
+
+	/**
+	 * Returns UI key prefix, used in FlatLaf properties files, for light or dark themes.
+	 * Return value is either {@code [light]} or {@code [dark]}.
+	 *
+	 * @since 3.6
+	 */
+	public static String getUIKeyLightOrDarkPrefix( boolean dark ) {
+		return dark ? "[dark]" : "[light]";
+	}
+
+	/**
+	 * Returns set of UI key prefixes, used in FlatLaf properties files, for current platform.
+	 * If UI keys in properties files start with a prefix (e.g. {@code [someprefix]Button.background}),
+	 * then they are only used if that prefix is contained in this set
+	 * (or is one of {@code [light]} or {@code [dark]} depending on current theme).
+	 * <p>
+	 * By default, the set contains one or more of following prefixes:
+	 * <ul>
+	 *   <li>{@code [win]} on Windows
+	 *   <li>{@code [mac]} on macOS
+	 *   <li>{@code [linux]} on Linux
+	 *   <li>{@code [unknown]} on other platforms
+	 *   <li>{@code [gnome]} on Linux with GNOME desktop environment
+	 *   <li>{@code [kde]} on Linux with KDE desktop environment
+	 *   <li>on Linux, the value of the environment variable {@code XDG_CURRENT_DESKTOP},
+	 *       split at colons and converted to lower case (e.g. if value of  {@code XDG_CURRENT_DESKTOP}
+	 *       is {@code ubuntu:GNOME}, then {@code [ubuntu]} and {@code [gnome]})
+	 * </ul>
+	 * <p>
+	 * You can add own prefixes to the set.
+	 * The prefixes must start with '[' and end with ']' characters, otherwise they will be ignored.
+	 *
+	 * @since 3.6
+	 */
+	public static Set<String> getUIKeyPlatformPrefixes() {
+		if( uiKeyPlatformPrefixes == null ) {
+			uiKeyPlatformPrefixes = new HashSet<>();
+			uiKeyPlatformPrefixes.add(
+				SystemInfo.isWindows ? "[win]" :
+				SystemInfo.isMacOS ? "[mac]" :
+				SystemInfo.isLinux ? "[linux]" : "[unknown]" );
+
+			// Linux
+			if( SystemInfo.isLinux ) {
+				if( SystemInfo.isGNOME )
+					uiKeyPlatformPrefixes.add( "[gnome]" );
+				else if( SystemInfo.isKDE )
+					uiKeyPlatformPrefixes.add( "[kde]" );
+
+				// add values from XDG_CURRENT_DESKTOP for other desktops
+				String desktop = System.getenv( "XDG_CURRENT_DESKTOP" );
+				if( desktop != null ) {
+					// XDG_CURRENT_DESKTOP is a colon-separated list of strings
+					// https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html#key-onlyshowin
+					// e.g. "ubuntu:GNOME" on Ubuntu 24.10 or "GNOME-Classic:GNOME" on CentOS 7
+					for( String desk : StringUtils.split( desktop.toLowerCase( Locale.ENGLISH ), ':', true, true ) )
+						uiKeyPlatformPrefixes.add( '[' + desk + ']' );
+				}
+			}
+		}
+		return uiKeyPlatformPrefixes;
+	}
+
+	/**
+	 * Returns set of special UI key prefixes, used in FlatLaf properties files.
+	 * Unlike other prefixes, properties with special prefixes are preserved.
+	 * You can access them using `UIManager`. E.g. `UIManager.get( "[someSpecialPrefix]someKey" )`.
+	 * <p>
+	 * By default, the set contains following special prefixes:
+	 * <ul>
+	 *   <li>{@code [style]}
+	 * </ul>
+	 * <p>
+	 * You can add own prefixes to the set.
+	 * The prefixes must start with '[' and end with ']' characters, otherwise they will be ignored.
+	 *
+	 * @since 3.6
+	 */
+	public static Set<String> getUIKeySpecialPrefixes() {
+		if( uiKeySpecialPrefixes == null ) {
+			uiKeySpecialPrefixes = new HashSet<>();
+			uiKeySpecialPrefixes.add( "[style]" );
+		}
+		return uiKeySpecialPrefixes;
 	}
 
 	private static void reSetLookAndFeel() {

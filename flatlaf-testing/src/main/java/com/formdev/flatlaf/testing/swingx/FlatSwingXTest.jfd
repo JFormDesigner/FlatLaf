@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left][][][][fill]"
-			"$rowConstraints": "[]0[][]0[top][][][][][][][][][37]"
+			"$rowConstraints": "[]0[][]0[top][][][][][][][][][top][37]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -402,9 +402,30 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11 3 1,grow"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label13"
+				"text": "JXTipOfTheDay:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 12"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXTipOfTheDay" ) {
+				name: "xTipOfTheDay1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showTipOfTheDayDialogButton"
+				"text": "Show Dialog..."
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTipOfTheDayDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12 3 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 795, 600 )
+			"size": new java.awt.Dimension( 900, 820 )
 		} )
 		add( new FormComponent( "javax.swing.JButton" ) {
 			name: "button1"

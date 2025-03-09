@@ -804,3 +804,81 @@ textText                       #000000    javax.swing.plaf.ColorUIResource [UI]
 window                         #ffffff    javax.swing.plaf.ColorUIResource [UI]
 windowBorder                   #000000    javax.swing.plaf.ColorUIResource [UI]
 windowText                     #000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#-------- Contrast Ratios --------
+
+# WCAG 2 Contrast Requirements: minimum 4.5; enhanced 7.0
+# https://webaim.org/articles/contrast/#sc143
+
+
+#-- activeTitleForeground --
+InternalFrame.activeTitleForeground                 #ffffff  #000080    16.0
+
+#-- disabledForeground --
+ComboBox.disabledForeground                         #808080  #c0c0c0     2.2  !!!!!
+Label.disabledForeground                            #ffffff  #c0c0c0     1.8  !!!!!!
+
+#-- focusCellForeground --
+Table.focusCellForeground                           #000000  #ffffff    21.0
+
+#-- foreground --
+Button.foreground                                   #000000  #c0c0c0    11.5
+CheckBox.foreground                                 #000000  #c0c0c0    11.5
+CheckBoxMenuItem.foreground                         #000000  #c0c0c0    11.5
+ColorChooser.foreground                             #000000  #c0c0c0    11.5
+ComboBox.foreground                                 #000000  #ffffff    21.0
+EditorPane.foreground                               #000000  #ffffff    21.0
+FormattedTextField.foreground                       #000000  #ffffff    21.0
+Label.foreground                                    #000000  #c0c0c0    11.5
+List.foreground                                     #000000  #ffffff    21.0
+Menu.foreground                                     #000000  #c0c0c0    11.5
+MenuBar.foreground                                  #000000  #c0c0c0    11.5
+MenuItem.foreground                                 #000000  #c0c0c0    11.5
+OptionPane.foreground                               #000000  #c0c0c0    11.5
+Panel.foreground                                    #000000  #c0c0c0    11.5
+PasswordField.foreground                            #000000  #ffffff    21.0
+PopupMenu.foreground                                #000000  #c0c0c0    11.5
+RadioButton.foreground                              #000000  #c0c0c0    11.5
+RadioButtonMenuItem.foreground                      #000000  #c0c0c0    11.5
+Spinner.foreground                                  #c0c0c0  #c0c0c0     1.0  !!!!!!
+TabbedPane.foreground                               #000000  #c0c0c0    11.5
+Table.foreground                                    #000000  #ffffff    21.0
+TableHeader.foreground                              #000000  #c0c0c0    11.5
+TextArea.foreground                                 #000000  #ffffff    21.0
+TextField.foreground                                #000000  #ffffff    21.0
+TextPane.foreground                                 #000000  #ffffff    21.0
+ToggleButton.foreground                             #000000  #c0c0c0    11.5
+ToolTip.foreground                                  #000000  #ffffe1    20.6
+Tree.foreground                                     #000000  #ffffff    21.0
+
+#-- inactiveTitleForeground --
+InternalFrame.inactiveTitleForeground               #c0c0c0  #808080     2.2  !!!!!
+
+#-- selectionBackground --
+ProgressBar.selectionBackground                     #000080  #c0c0c0     8.8
+
+#-- selectionForeground --
+CheckBoxMenuItem.selectionForeground                #ffffff  #000080    16.0
+ComboBox.selectionForeground                        #ffffff  #000080    16.0
+EditorPane.selectionForeground                      #ffffff  #000080    16.0
+FormattedTextField.selectionForeground              #ffffff  #000080    16.0
+List.selectionForeground                            #ffffff  #000080    16.0
+Menu.selectionForeground                            #ffffff  #000080    16.0
+MenuItem.selectionForeground                        #ffffff  #000080    16.0
+PasswordField.selectionForeground                   #ffffff  #000080    16.0
+ProgressBar.selectionForeground                     #c0c0c0  #000080     8.8
+RadioButtonMenuItem.selectionForeground             #ffffff  #000080    16.0
+Table.selectionForeground                           #ffffff  #000080    16.0
+TextArea.selectionForeground                        #ffffff  #000080    16.0
+TextField.selectionForeground                       #ffffff  #000080    16.0
+TextPane.selectionForeground                        #ffffff  #000080    16.0
+Tree.selectionForeground                            #ffffff  #000080    16.0
+
+#-- textForeground --
+Tree.textForeground                                 #000000  #c0c0c0    11.5
+
+#-- non-text --
+ProgressBar.background                              #c0c0c0  #c0c0c0     1.0  !!!!!!
+ProgressBar.foreground                              #000080  #c0c0c0     8.8
+Separator.foreground                                #808080  #ffffff     3.9  !!!!

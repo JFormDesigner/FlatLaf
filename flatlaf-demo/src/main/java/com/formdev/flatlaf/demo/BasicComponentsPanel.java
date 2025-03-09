@@ -179,14 +179,10 @@ class BasicComponentsPanel
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
-		JLabel errorHintsLabel = new JLabel();
+		JLabel hintsLabel = new JLabel();
 		JTextField errorHintsTextField = new JTextField();
-		JComboBox<String> errorHintsComboBox = new JComboBox<>();
-		JSpinner errorHintsSpinner = new JSpinner();
-		JLabel warningHintsLabel = new JLabel();
 		JTextField warningHintsTextField = new JTextField();
-		JComboBox<String> warningHintsComboBox = new JComboBox<>();
-		JSpinner warningHintsSpinner = new JSpinner();
+		JTextField successHintsTextField = new JTextField();
 		JLabel iconsLabel = new JLabel();
 		leadingIconTextField = new JTextField();
 		trailingIconTextField = new JTextField();
@@ -238,7 +234,6 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]para" +
-			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -698,145 +693,122 @@ class BasicComponentsPanel
 		textPane5.setText("No scroll pane");
 		add(textPane5, "cell 5 11,growx");
 
-		//---- errorHintsLabel ----
-		errorHintsLabel.setText("Error hints:");
-		add(errorHintsLabel, "cell 0 12");
+		//---- hintsLabel ----
+		hintsLabel.setText("Error/warning/success:");
+		add(hintsLabel, "cell 0 12");
 
 		//---- errorHintsTextField ----
 		errorHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
 		add(errorHintsTextField, "cell 1 12,growx");
 
-		//---- errorHintsComboBox ----
-		errorHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
-		errorHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-			"Editable"
-		}));
-		errorHintsComboBox.setEditable(true);
-		add(errorHintsComboBox, "cell 2 12,growx");
-
-		//---- errorHintsSpinner ----
-		errorHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
-		add(errorHintsSpinner, "cell 3 12,growx");
-
-		//---- warningHintsLabel ----
-		warningHintsLabel.setText("Warning hints:");
-		add(warningHintsLabel, "cell 0 13");
-
 		//---- warningHintsTextField ----
 		warningHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
-		add(warningHintsTextField, "cell 1 13,growx");
+		add(warningHintsTextField, "cell 2 12,growx");
 
-		//---- warningHintsComboBox ----
-		warningHintsComboBox.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
-		warningHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-			"Not editable"
-		}));
-		add(warningHintsComboBox, "cell 2 13,growx");
-
-		//---- warningHintsSpinner ----
-		warningHintsSpinner.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_WARNING);
-		add(warningHintsSpinner, "cell 3 13,growx");
+		//---- successHintsTextField ----
+		successHintsTextField.putClientProperty(FlatClientProperties.OUTLINE, "success");
+		add(successHintsTextField, "cell 3 12,growx");
 
 		//---- iconsLabel ----
 		iconsLabel.setText("Leading/trailing icons:");
-		add(iconsLabel, "cell 0 14");
-		add(leadingIconTextField, "cell 1 14,growx");
+		add(iconsLabel, "cell 0 13");
+		add(leadingIconTextField, "cell 1 13,growx");
 
 		//---- trailingIconTextField ----
 		trailingIconTextField.setText("text");
-		add(trailingIconTextField, "cell 2 14,growx");
+		add(trailingIconTextField, "cell 2 13,growx");
 
 		//---- iconsTextField ----
 		iconsTextField.setText("text");
-		add(iconsTextField, "cell 3 14,growx");
+		add(iconsTextField, "cell 3 13,growx");
 
 		//---- compsLabel ----
 		compsLabel.setText("Leading/trailing comp.:");
-		add(compsLabel, "cell 0 15");
-		add(compsTextField, "cell 1 15 2 1,growx");
+		add(compsLabel, "cell 0 14");
+		add(compsTextField, "cell 1 14 2 1,growx");
 
 		//---- clearTextField ----
 		clearTextField.setText("clear me");
-		add(clearTextField, "cell 3 15,growx");
+		add(clearTextField, "cell 3 14,growx");
 
 		//---- fontsLabel ----
 		fontsLabel.setText("Typography / Fonts:");
-		add(fontsLabel, "cell 0 16");
+		add(fontsLabel, "cell 0 15");
 
 		//---- h00Label ----
 		h00Label.setText("H00");
 		h00Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h00");
-		add(h00Label, "cell 1 16 5 1");
+		add(h00Label, "cell 1 15 5 1");
 
 		//---- h0Label ----
 		h0Label.setText("H0");
 		h0Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h0");
-		add(h0Label, "cell 1 16 5 1");
+		add(h0Label, "cell 1 15 5 1");
 
 		//---- h1Label ----
 		h1Label.setText("H1");
 		h1Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h1");
-		add(h1Label, "cell 1 16 5 1");
+		add(h1Label, "cell 1 15 5 1");
 
 		//---- h2Label ----
 		h2Label.setText("H2");
 		h2Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h2");
-		add(h2Label, "cell 1 16 5 1");
+		add(h2Label, "cell 1 15 5 1");
 
 		//---- h3Label ----
 		h3Label.setText("H3");
 		h3Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
-		add(h3Label, "cell 1 16 5 1");
+		add(h3Label, "cell 1 15 5 1");
 
 		//---- h4Label ----
 		h4Label.setText("H4");
 		h4Label.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
-		add(h4Label, "cell 1 16 5 1");
+		add(h4Label, "cell 1 15 5 1");
 
 		//---- lightLabel ----
 		lightLabel.setText("light");
 		lightLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $light.font");
-		add(lightLabel, "cell 1 16 5 1,gapx 30");
+		add(lightLabel, "cell 1 15 5 1,gapx 30");
 
 		//---- semiboldLabel ----
 		semiboldLabel.setText("semibold");
 		semiboldLabel.putClientProperty(FlatClientProperties.STYLE, "font: 200% $semibold.font");
-		add(semiboldLabel, "cell 1 16 5 1");
+		add(semiboldLabel, "cell 1 15 5 1");
 
 		//---- fontZoomLabel ----
 		fontZoomLabel.setText("(200%)");
 		fontZoomLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 		fontZoomLabel.setEnabled(false);
-		add(fontZoomLabel, "cell 1 16 5 1");
+		add(fontZoomLabel, "cell 1 15 5 1");
 
 		//---- largeLabel ----
 		largeLabel.setText("large");
 		largeLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
-		add(largeLabel, "cell 1 17 5 1");
+		add(largeLabel, "cell 1 16 5 1");
 
 		//---- defaultLabel ----
 		defaultLabel.setText("default");
-		add(defaultLabel, "cell 1 17 5 1");
+		add(defaultLabel, "cell 1 16 5 1");
 
 		//---- mediumLabel ----
 		mediumLabel.setText("medium");
 		mediumLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
-		add(mediumLabel, "cell 1 17 5 1");
+		add(mediumLabel, "cell 1 16 5 1");
 
 		//---- smallLabel ----
 		smallLabel.setText("small");
 		smallLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-		add(smallLabel, "cell 1 17 5 1");
+		add(smallLabel, "cell 1 16 5 1");
 
 		//---- miniLabel ----
 		miniLabel.setText("mini");
 		miniLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
-		add(miniLabel, "cell 1 17 5 1");
+		add(miniLabel, "cell 1 16 5 1");
 
 		//---- monospacedLabel ----
 		monospacedLabel.setText("monospaced");
 		monospacedLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "monospaced");
-		add(monospacedLabel, "cell 1 17 5 1,gapx 30");
+		add(monospacedLabel, "cell 1 16 5 1,gapx 30");
 
 		//======== popupMenu1 ========
 		{
@@ -875,8 +847,7 @@ class BasicComponentsPanel
 				editorPaneLabel, scrollPane5, scrollPane6, scrollPane7, scrollPane8, editorPane5,
 				textPaneLabel, scrollPane9, scrollPane10, scrollPane11, scrollPane12, textPane5,
 
-				errorHintsLabel, errorHintsTextField, errorHintsComboBox, errorHintsSpinner,
-				warningHintsLabel, warningHintsTextField, warningHintsComboBox, warningHintsSpinner,
+				hintsLabel, errorHintsTextField, warningHintsTextField, successHintsTextField,
 
 				fontZoomLabel,
 			};
@@ -899,8 +870,7 @@ class BasicComponentsPanel
 			rows[11].setGapBefore( zeroGap );
 			rows[11].setGapAfter( zeroGap );
 			rows[12].setGapBefore( zeroGap );
-			rows[13].setGapBefore( zeroGap );
-			rows[16].setGapBefore( zeroGap );
+			rows[15].setGapBefore( zeroGap );
 			layout.setRowConstraints( ac );
 
 			// move two text field into same row as spinners

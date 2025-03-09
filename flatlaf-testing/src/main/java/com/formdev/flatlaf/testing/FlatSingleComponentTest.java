@@ -142,6 +142,9 @@ public class FlatSingleComponentTest
 		// register Alt+Shift+F1, F2, ... keys to change system scale factor
 		DemoPrefs.registerSystemScaleFactors( this );
 
+		// register Alt+Shift+S to enable/disable interprocess Laf sync
+		DemoPrefs.initLafSync( this );
+
 		// register Alt+R key to toggle component orientation
 		registerKey( "alt R", () -> {
 			applyComponentOrientation( getComponentOrientation().isLeftToRight()

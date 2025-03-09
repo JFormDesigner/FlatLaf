@@ -16,8 +16,15 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.prefs.Preferences;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -28,7 +35,6 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
-import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -38,14 +44,10 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class DemoPrefs
 {
-	public static final String KEY_LAF = "laf";
-	public static final String KEY_LAF_THEME = "lafTheme";
+	public static final String KEY_LAF_CLASS_NAME = "lafClassName";
+	public static final String KEY_LAF_THEME_FILE = "lafThemeFile";
 	public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
-
-	public static final String RESOURCE_PREFIX = "res:";
-	public static final String FILE_PREFIX = "file:";
-
-	public static final String THEME_UI_KEY = "__FlatLaf.demo.theme";
+	public static final String KEY_LAF_SYNC = "lafSync";
 
 	private static Preferences state;
 
@@ -58,37 +60,14 @@ public class DemoPrefs
 	}
 
 	public static void setupLaf( String[] args ) {
+//		com.formdev.flatlaf.demo.intellijthemes.IJThemesDump.install();
+
 		// set look and feel
 		try {
 			if( args.length > 0 )
 				UIManager.setLookAndFeel( args[0] );
-			else {
-				String lafClassName = state.get( KEY_LAF, FlatLightLaf.class.getName() );
-				if( IntelliJTheme.ThemeLaf.class.getName().equals( lafClassName ) ) {
-					String theme = state.get( KEY_LAF_THEME, "" );
-					if( theme.startsWith( RESOURCE_PREFIX ) )
-						IntelliJTheme.setup( IJThemesPanel.class.getResourceAsStream( IJThemesPanel.THEMES_PACKAGE + theme.substring( RESOURCE_PREFIX.length() ) ) );
-					else if( theme.startsWith( FILE_PREFIX ) )
-					    FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( theme.substring( FILE_PREFIX.length() ) ) ) );
-					else
-						FlatLightLaf.setup();
-
-					if( !theme.isEmpty() )
-						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
-				} else if( FlatPropertiesLaf.class.getName().equals( lafClassName ) ) {
-					String theme = state.get( KEY_LAF_THEME, "" );
-					if( theme.startsWith( FILE_PREFIX ) ) {
-						File themeFile = new File( theme.substring( FILE_PREFIX.length() ) );
-						String themeName = StringUtils.removeTrailing( themeFile.getName(), ".properties" );
-						FlatLaf.setup( new FlatPropertiesLaf( themeName, themeFile ) );
-					} else
-						FlatLightLaf.setup();
-
-					if( !theme.isEmpty() )
-						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
-				} else
-					UIManager.setLookAndFeel( lafClassName );
-			}
+			else
+				restoreLaf();
 		} catch( Throwable ex ) {
 			LoggingFacade.INSTANCE.logSevere( null, ex );
 
@@ -98,16 +77,44 @@ public class DemoPrefs
 
 		// remember active look and feel
 		UIManager.addPropertyChangeListener( e -> {
-			if( "lookAndFeel".equals( e.getPropertyName() ) )
-				state.put( KEY_LAF, UIManager.getLookAndFeel().getClass().getName() );
+			if( "lookAndFeel".equals( e.getPropertyName() ) ) {
+				state.put( KEY_LAF_CLASS_NAME, UIManager.getLookAndFeel().getClass().getName() );
+				notifyLafChange();
+			}
 		} );
+	}
+
+	private static void restoreLaf()
+		throws Exception
+	{
+		String lafClassName = state.get( KEY_LAF_CLASS_NAME, FlatLightLaf.class.getName() );
+		if( FlatPropertiesLaf.class.getName().equals( lafClassName ) ||
+			IntelliJTheme.ThemeLaf.class.getName().equals( lafClassName ) )
+		{
+			String themeFileName = state.get( KEY_LAF_THEME_FILE, "" );
+			if( !themeFileName.isEmpty() ) {
+				File themeFile = new File( themeFileName );
+
+				if( themeFileName.endsWith( ".properties" ) ) {
+					String themeName = StringUtils.removeTrailing( themeFile.getName(), ".properties" );
+					FlatLaf.setup( new FlatPropertiesLaf( themeName, themeFile ) );
+				} else
+					FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( themeFile ) ) );
+			} else
+				FlatLightLaf.setup();
+		} else
+			UIManager.setLookAndFeel( lafClassName );
 	}
 
 	public static void initSystemScale() {
 		if( System.getProperty( "sun.java2d.uiScale" ) == null ) {
-			String scaleFactor = getState().get( KEY_SYSTEM_SCALE_FACTOR, null );
-			if( scaleFactor != null )
+			String scaleFactor = state.get( KEY_SYSTEM_SCALE_FACTOR, null );
+			if( scaleFactor != null ) {
 				System.setProperty( "sun.java2d.uiScale", scaleFactor );
+
+				System.out.println( "FlatLaf: setting 'sun.java2d.uiScale' to " + scaleFactor );
+				System.out.println( "         use 'Alt+Shift+F1...12' to change it to 1x...4x" );
+			}
 		}
 	}
 
@@ -158,10 +165,113 @@ public class DemoPrefs
 			return;
 
 		if( scaleFactor != null )
-			DemoPrefs.getState().put( KEY_SYSTEM_SCALE_FACTOR, scaleFactor );
+			state.put( KEY_SYSTEM_SCALE_FACTOR, scaleFactor );
 		else
-			DemoPrefs.getState().remove( KEY_SYSTEM_SCALE_FACTOR );
+			state.remove( KEY_SYSTEM_SCALE_FACTOR );
 
 		System.exit( 0 );
+	}
+
+	//---- inter-process Laf change notification/synchronisation --------------
+
+	// used for FlatLaf development when running multiple testing apps
+
+	private static final String MULTICAST_ADDRESS = "224.63.31.41";
+	private static final int MULTICAST_PORT = 36584;
+	private static final long PROCESS_ID = System.nanoTime();
+
+	private static Thread thread;
+	private static boolean notifyEnabled = true;
+
+	public static void initLafSync( JFrame frame ) {
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> enableDisableLafSync(),
+			KeyStroke.getKeyStroke( "alt shift S" ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		if( state.getBoolean( KEY_LAF_SYNC, false ) ) {
+			System.out.println( "FlatLaf: theme sync enabled; use Alt+Shift+S to disable it" );
+			listenToLafChange();
+		}
+	}
+
+	private static void enableDisableLafSync() {
+		boolean enabled = !state.getBoolean( KEY_LAF_SYNC, false );
+		state.putBoolean( KEY_LAF_SYNC, enabled );
+
+		if( enabled )
+			listenToLafChange();
+		else if( thread != null) {
+			thread.interrupt();
+			thread = null;
+		}
+	}
+
+	private static void listenToLafChange() {
+		if( thread != null )
+			return;
+
+		thread = new Thread( "FlatLaf Laf change listener" ) {
+			MulticastSocket socket;
+
+			@Override
+			public void run() {
+				try( MulticastSocket socket = new MulticastSocket( MULTICAST_PORT ) ) {
+					this.socket = socket;
+					socket.joinGroup( InetAddress.getByName( MULTICAST_ADDRESS ) );
+
+					byte[] buffer = new byte[Long.BYTES];
+					for(;;) {
+						DatagramPacket packet = new DatagramPacket( buffer, buffer.length );
+						socket.receive( packet );
+
+						long id = ByteBuffer.wrap( buffer ).getLong();
+						if( id == PROCESS_ID )
+							continue; // was sent from this process
+
+						EventQueue.invokeLater( () -> {
+							notifyEnabled = false;
+							try {
+								restoreLaf();
+								FlatLaf.updateUI();
+							} catch( Throwable ex ) {
+								LoggingFacade.INSTANCE.logSevere( null, ex );
+							} finally {
+								notifyEnabled = true;
+							}
+						} );
+					}
+				} catch( IOException ex ) {
+					if( ex instanceof SocketException && "Socket closed".equals( ex.getMessage() ) )
+						return; // interrupted
+
+					LoggingFacade.INSTANCE.logSevere( null, ex );
+				}
+			}
+
+			@Override
+			public void interrupt() {
+				super.interrupt();
+				socket.close();
+			}
+		};
+		thread.setDaemon( true );
+		thread.start();
+	}
+
+	private static void notifyLafChange() {
+		if( thread == null || !notifyEnabled )
+			return;
+
+		EventQueue.invokeLater( () -> {
+			try( MulticastSocket socket = new MulticastSocket() ) {
+				InetAddress address = InetAddress.getByName( MULTICAST_ADDRESS );
+				byte[] buffer = ByteBuffer.wrap( new byte[Long.BYTES] ).putLong( PROCESS_ID ).array();
+				DatagramPacket packet = new DatagramPacket( buffer, buffer.length, address, MULTICAST_PORT );
+				socket.send( packet );
+			} catch( IOException ex ) {
+				LoggingFacade.INSTANCE.logSevere( null, ex );
+			}
+		} );
 	}
 }

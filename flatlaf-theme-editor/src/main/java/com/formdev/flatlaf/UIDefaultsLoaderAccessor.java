@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.util.Collections;
+import java.util.Properties;
 import java.util.function.Function;
 import com.formdev.flatlaf.UIDefaultsLoader.ValueType;
 
@@ -71,5 +72,9 @@ public class UIDefaultsLoaderAccessor
 		throws IllegalArgumentException
 	{
 		return UIDefaultsLoader.parseColorRGBA( value );
+	}
+
+	public static Properties newUIProperties( boolean dark ) {
+		return UIDefaultsLoader.newUIProperties( dark );
 	}
 }

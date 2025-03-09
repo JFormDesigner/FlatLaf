@@ -41,6 +41,7 @@ import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import com.formdev.flatlaf.FlatLaf;
 
 /**
  * @author Karl Tauber
@@ -358,12 +359,18 @@ class FlatCompletionProvider
 			lastKeys = keys;
 
 			completions.clear();
+			outer:
 			for( String key : keys ) {
-				if( key.startsWith( "[" ) ) {
+				while( key.startsWith( "[" ) ) {
 					// remove prefix
 					int closeIndex = key.indexOf( ']' );
 					if( closeIndex < 0 )
-						continue;
+						continue outer;
+
+					String prefix = key.substring( 0, closeIndex + 1 );
+					if( FlatLaf.getUIKeySpecialPrefixes().contains( prefix ) )
+						continue outer; // can not reference properties with special prefix
+
 					key = key.substring( closeIndex + 1 );
 				}
 

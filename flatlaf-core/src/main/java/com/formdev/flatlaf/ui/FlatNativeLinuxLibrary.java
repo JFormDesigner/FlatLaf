@@ -53,8 +53,17 @@ public class FlatNativeLinuxLibrary
 	//---- X Window System ----------------------------------------------------
 
 	// direction for _NET_WM_MOVERESIZE message
-	// see https://specifications.freedesktop.org/wm-spec/wm-spec-latest.html
-	static final int MOVE = 8;
+	// see https://specifications.freedesktop.org/wm-spec/latest/ar01s04.html
+	static final int
+		SIZE_TOPLEFT     = 0,
+		SIZE_TOP         = 1,
+		SIZE_TOPRIGHT    = 2,
+		SIZE_RIGHT       = 3,
+		SIZE_BOTTOMRIGHT = 4,
+		SIZE_BOTTOM      = 5,
+		SIZE_BOTTOMLEFT  = 6,
+		SIZE_LEFT        = 7,
+		MOVE             = 8;
 
 	private static Boolean isXWindowSystem;
 

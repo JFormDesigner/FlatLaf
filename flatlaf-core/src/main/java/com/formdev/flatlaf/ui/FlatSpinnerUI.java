@@ -140,8 +140,6 @@ public class FlatSpinnerUI
 		buttonHoverArrowColor = UIManager.getColor( "Spinner.buttonHoverArrowColor" );
 		buttonPressedArrowColor = UIManager.getColor( "Spinner.buttonPressedArrowColor" );
 		padding = UIManager.getInsets( "Spinner.padding" );
-
-		MigLayoutVisualPadding.install( spinner );
 	}
 
 	@Override
@@ -162,8 +160,6 @@ public class FlatSpinnerUI
 
 		oldStyleValues = null;
 		borderShared = null;
-
-		MigLayoutVisualPadding.uninstall( spinner );
 	}
 
 	@Override
@@ -173,6 +169,8 @@ public class FlatSpinnerUI
 		addEditorFocusListener( spinner.getEditor() );
 		spinner.addFocusListener( getHandler() );
 		spinner.addPropertyChangeListener( getHandler() );
+
+		MigLayoutVisualPadding.install( spinner );
 	}
 
 	@Override
@@ -184,6 +182,8 @@ public class FlatSpinnerUI
 		spinner.removePropertyChangeListener( getHandler() );
 
 		handler = null;
+
+		MigLayoutVisualPadding.uninstall( spinner );
 	}
 
 	private Handler getHandler() {

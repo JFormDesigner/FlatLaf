@@ -288,15 +288,6 @@ PasswordField.focusInputMap    [lazy] 31    javax.swing.plaf.InputMapUIResource 
 
 #---- PopupMenu ----
 
-PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
-    [0] LEFT
-    [1] selectChild
-    [2] KP_LEFT
-    [3] selectChild
-    [4] RIGHT
-    [5] selectParent
-    [6] KP_RIGHT
-    [7] selectParent
 PopupMenu.selectedWindowInputMapBindings length=22    [Ljava.lang.Object;
     [0] ESCAPE
     [1] cancel
@@ -320,6 +311,15 @@ PopupMenu.selectedWindowInputMapBindings length=22    [Ljava.lang.Object;
     [19] return
     [20] SPACE
     [21] return
+PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
+    [0] LEFT
+    [1] selectChild
+    [2] KP_LEFT
+    [3] selectChild
+    [4] RIGHT
+    [5] selectParent
+    [6] KP_RIGHT
+    [7] selectParent
 
 
 #---- RadioButton ----

@@ -41,6 +41,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.swing.Icon;
 import javax.swing.UIDefaults;
@@ -61,7 +63,6 @@ import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.StringUtils;
-import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -85,15 +86,14 @@ class UIDefaultsLoader
 	private static final String WILDCARD_PREFIX = "*.";
 
 	static final String KEY_VARIABLES = "FlatLaf.internal.variables";
+	static final String KEY_PROPERTIES = "FlatLaf.internal.properties";
 
 	private static int parseColorDepth;
 
 	private static Map<String, ColorUIResource> systemColorCache;
 	private static final SoftCache<String, Object> fontCache = new SoftCache<>();
 
-	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, boolean dark, UIDefaults defaults )
-	{
+	static ArrayList<Class<?>> getLafClassesForDefaultsLoading( Class<?> lookAndFeelClass ) {
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
 		for( Class<?> lafClass = lookAndFeelClass;
@@ -102,20 +102,54 @@ class UIDefaultsLoader
 		{
 			lafClasses.add( 0, lafClass );
 		}
+		return lafClasses;
+	}
 
-		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, dark, defaults );
+	static Properties newUIProperties( boolean dark ) {
+		// UI key prefixes
+		String lightOrDarkPrefix = FlatLaf.getUIKeyLightOrDarkPrefix( dark );
+		Set<String> platformPrefixes = FlatLaf.getUIKeyPlatformPrefixes();
+		Set<String> specialPrefixes = FlatLaf.getUIKeySpecialPrefixes();
+
+		return new Properties() {
+			@Override
+			public synchronized Object put( Object k, Object value ) {
+				// process key prefixes (while loading properties files)
+				String key = (String) k;
+				while( key.startsWith( "[" ) ) {
+					int closeIndex = key.indexOf( ']' );
+					if( closeIndex < 0 )
+						return null; // ignore property with invalid prefix
+
+					String prefix = key.substring( 0, closeIndex + 1 );
+
+					if( specialPrefixes.contains( prefix ) )
+						break; // keep special prefix
+
+					if( !lightOrDarkPrefix.equals( prefix ) && !platformPrefixes.contains( prefix ) )
+						return null; // ignore property
+
+					// prefix is known and enabled --> remove prefix
+					key = key.substring( closeIndex + 1 );
+				}
+
+				return super.put( key, value );
+			}
+		};
 	}
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, boolean dark, UIDefaults defaults )
+		Consumer<Properties> intellijThemesHook, Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
 		try {
 			// temporary cache system colors while loading defaults,
 			// which avoids that system color getter is invoked multiple times
 			systemColorCache = (FlatLaf.getSystemColorGetter() != null) ? new HashMap<>() : null;
 
+			// all properties files will be loaded into this map
+			Properties properties = newUIProperties( dark );
+
 			// load core properties files
-			Properties properties = new Properties();
 			for( Class<?> lafClass : lafClasses ) {
 				String propertiesName = '/' + lafClass.getName().replace( '.', '/' ) + ".properties";
 				try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
@@ -141,6 +175,10 @@ class UIDefaultsLoader
 				if( !addonClassLoaders.contains( addonClassLoader ) )
 					addonClassLoaders.add( addonClassLoader );
 			}
+
+			// apply IntelliJ themes properties
+			if( intellijThemesHook != null )
+				intellijThemesHook.accept( properties );
 
 			// load custom properties files (usually provided by applications)
 			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
@@ -198,41 +236,6 @@ class UIDefaultsLoader
 			if( additionalDefaults != null )
 				properties.putAll( additionalDefaults );
 
-			// collect all platform specific keys (but do not modify properties)
-			ArrayList<String> platformSpecificKeys = new ArrayList<>();
-			for( Object okey : properties.keySet() ) {
-				String key = (String) okey;
-				if( key.startsWith( "[" ) &&
-					(key.startsWith( "[win]" ) ||
-					 key.startsWith( "[mac]" ) ||
-					 key.startsWith( "[linux]" ) ||
-					 key.startsWith( "[light]" ) ||
-					 key.startsWith( "[dark]" )) )
-				  platformSpecificKeys.add( key );
-			}
-
-			// remove platform specific properties and re-add only properties
-			// for current platform, but with platform prefix removed
-			if( !platformSpecificKeys.isEmpty() ) {
-				// handle light/dark specific properties
-				String lightOrDarkPrefix = dark ? "[dark]" : "[light]";
-				for( String key : platformSpecificKeys ) {
-					if( key.startsWith( lightOrDarkPrefix ) )
-						properties.put( key.substring( lightOrDarkPrefix.length() ), properties.remove( key ) );
-				}
-
-				// handle platform specific properties
-				String platformPrefix =
-					SystemInfo.isWindows ? "[win]" :
-					SystemInfo.isMacOS ? "[mac]" :
-					SystemInfo.isLinux ? "[linux]" : "[unknown]";
-				for( String key : platformSpecificKeys ) {
-					Object value = properties.remove( key );
-					if( key.startsWith( platformPrefix ) )
-						properties.put( key.substring( platformPrefix.length() ), value );
-				}
-			}
-
 			// get (and remove) wildcard replacements, which override all other defaults that end with same suffix
 			HashMap<String, String> wildcards = new HashMap<>();
 			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
@@ -286,6 +289,15 @@ class UIDefaultsLoader
 
 			// remember variables in defaults to allow using them in styles
 			defaults.put( KEY_VARIABLES, variables );
+
+			// remember properties (for testing)
+			if( FlatSystemProperties.getBoolean( KEY_PROPERTIES, false ) ) {
+				Properties properties2 = new Properties();
+				properties2.putAll( properties );
+				for( Map.Entry<String, String> e : wildcards.entrySet() )
+					properties2.put( WILDCARD_PREFIX + e.getKey(), e.getValue() );
+				defaults.put( KEY_PROPERTIES, properties2 );
+			}
 
 			// clear/disable system color cache
 			systemColorCache = null;
@@ -830,6 +842,7 @@ class UIDefaultsLoader
 		try {
 			switch( function ) {
 				case "if":			return parseColorIf( value, params, resolver );
+				case "lazy":		return parseColorLazy( value, params, resolver );
 				case "systemColor":	return parseColorSystemColor( value, params, resolver );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver );
@@ -875,6 +888,32 @@ class UIDefaultsLoader
 		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
 		String ifValue = params.get( ifCondition ? 1 : 2 );
 		return parseColorOrFunction( resolver.apply( ifValue ), resolver );
+	}
+
+	/**
+	 * Syntax: lazy(uiKey)
+	 * <p>
+	 * This "lazy" function is only used if the "lazy" is passed as parameter to another
+	 * color function. Otherwise, the general "lazy" function is used.
+	 * <p>
+	 * Note: The color is resolved immediately, not lazy, because it is passed as parameter to another color function.
+	 * So e.g. {@code darken(lazy(List.background), 10%)} is the same as {@code darken($List.background, 10%)}.
+	 * <p>
+	 * Only useful if a property is defined as lazy and that property is used
+	 * in another property's color function. E.g.
+	 *
+	 * <pre>{@code
+	 * someProperty = lazy(List.background)
+	 * anotherProperty = darken($someProperty, 10%)
+	 * }</pre>
+	 */
+	private static Object parseColorLazy( String value, List<String> params, Function<String, String> resolver )
+		throws IllegalArgumentException
+	{
+		if( params.size() != 1 )
+			throw newMissingParametersException( value );
+
+		return parseColorOrFunction( resolver.apply( PROPERTY_PREFIX + params.get( 0 ) ), resolver );
 	}
 
 	/**
@@ -974,7 +1013,7 @@ class UIDefaultsLoader
 	 *         fadein(color,amount[,options]) or fadeout(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
+	 *   - options: [relative] [autoInverse] [noAutoInverse] [derived] [lazy]
 	 */
 	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
 		List<String> params, Function<String, String> resolver )
@@ -984,15 +1023,15 @@ class UIDefaultsLoader
 		int amount = parsePercentage( params.get( 1 ) );
 		boolean relative = false;
 		boolean autoInverse = false;
-		boolean lazy = false;
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
-			lazy = options.contains( "lazy" );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 
 			// use autoInverse by default for derived colors, except if noAutoInverse is set
 			if( derived && !options.contains( "noAutoInverse" ) )
@@ -1003,14 +1042,8 @@ class UIDefaultsLoader
 		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
 			hslIndex, increase, amount, relative, autoInverse );
 
-		if( lazy ) {
-			return (LazyValue) t -> {
-				Object color = lazyUIManagerGet( colorStr );
-				return (color instanceof Color)
-					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
-					: null;
-			};
-		}
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1039,14 +1072,8 @@ class UIDefaultsLoader
 		// create function
 		ColorFunction function = new ColorFunctions.Fade( amount );
 
-		if( lazy ) {
-			return (LazyValue) t -> {
-				Object color = lazyUIManagerGet( colorStr );
-				return (color instanceof Color)
-					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
-					: null;
-			};
-		}
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1056,7 +1083,7 @@ class UIDefaultsLoader
 	 * Syntax: spin(color,angle[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - angle: number of degrees to rotate
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorSpin( List<String> params, Function<String, String> resolver )
 		throws IllegalArgumentException
@@ -1064,14 +1091,19 @@ class UIDefaultsLoader
 		String colorStr = params.get( 0 );
 		int amount = parseInteger( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease( 0, true, amount, false, false );
+
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
@@ -1084,7 +1116,7 @@ class UIDefaultsLoader
 	 *         changeAlpha(color,value[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - value: for hue: number of degrees; otherwise: percentage 0-100%
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorChange( int hslIndex,
 		List<String> params, Function<String, String> resolver )
@@ -1095,27 +1127,33 @@ class UIDefaultsLoader
 			? parseInteger( params.get( 1 ) )
 			: parsePercentage( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.HSLChange( hslIndex, value );
+
+		if( lazy )
+			return newLazyColorFunction( colorStr, function );
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver );
 	}
 
 	/**
-	 * Syntax: mix(color1,color2[,weight]) or
-	 *         tint(color[,weight]) or
-	 *         shade(color[,weight])
+	 * Syntax: mix(color1,color2[,weight][,options]) or
+	 *         tint(color[,weight][,options]) or
+	 *         shade(color[,weight][,options])
 	 *   - color1: a color (e.g. #f00) or a color function
 	 *   - color2: a color (e.g. #f00) or a color function
 	 *   - weight: the weight (in range 0-100%) to mix the two colors
 	 *             larger weight uses more of first color, smaller weight more of second color
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver )
 		throws IllegalArgumentException
@@ -1124,18 +1162,36 @@ class UIDefaultsLoader
 		if( color1Str == null )
 			color1Str = params.get( i++ );
 		String color2Str = params.get( i++ );
-		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
+		int weight = 50;
+		boolean derived = false;
+		boolean lazy = false;
+
+		if( params.size() > i ) {
+			String weightStr = params.get( i );
+			if( !weightStr.isEmpty() && Character.isDigit( weightStr.charAt( 0 ) ) ) {
+				weight = parsePercentage( weightStr );
+				i++;
+			}
+		}
+		if( params.size() > i ) {
+			String options = params.get( i );
+			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
+		}
 
 		// parse second color
-		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver );
-		if( color2 == null )
+		ColorUIResource color1 = (ColorUIResource) parseColorOrFunction( resolver.apply( color1Str ), resolver );
+		if( color1 == null )
 			return null;
 
 		// create function
-		ColorFunction function = new ColorFunctions.Mix( color2, weight );
+		ColorFunction function = new ColorFunctions.Mix2( color1, weight );
+
+		if( lazy )
+			return newLazyColorFunction( color2Str, function );
 
 		// parse first color, apply function and create mixed color
-		return parseFunctionBaseColor( color1Str, function, false, resolver );
+		return parseFunctionBaseColor( color2Str, function, derived, resolver );
 	}
 
 	/**
@@ -1227,6 +1283,15 @@ class UIDefaultsLoader
 		}
 
 		return new ColorUIResource( newColor );
+	}
+
+	private static LazyValue newLazyColorFunction( String uiKey, ColorFunction function ) {
+		return (LazyValue) t -> {
+			Object color = lazyUIManagerGet( uiKey );
+			return (color instanceof Color)
+				? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
+				: null;
+		};
 	}
 
 	/**

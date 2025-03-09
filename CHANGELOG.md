@@ -7,6 +7,14 @@ FlatLaf Change Log
 
 - macOS: Re-enabled rounded popup border (see PR #772) on macOS 14.4+ (was
   disabled in 3.5.x).
+- Increased contrast of text for better readability: (PR #972; issue #762)
+  - In **FlatLaf Dark**, **FlatLaf Darcula** and many dark IntelliJ themes, made
+    all text colors brighter.
+  - In **FlatLaf Light**, **FlatLaf IntelliJ** and many light IntelliJ themes,
+    made disabled text colors slightly darker.
+  - In **FlatLaf macOS Light**, made disabled text colors darker.
+  - In **FlatLaf macOS Dark**, made text colors of "default" button and selected
+    ToggleButton lighter.
 - CheckBox: Support styling indeterminate state of
   [tri-state check boxes](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html).
   (PR #936; issue #919)
@@ -15,7 +23,27 @@ FlatLaf Change Log
 - Tree: Support wide cell renderer. (issue #922)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
-- Linux: Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
+- Linux:
+  - Rounded iconify/maximize/close buttons if using FlatLaf window decorations.
+    (PR #971)
+  - Added `libflatlaf-linux-arm64.so` for Linux on ARM64. (issue #899)
+  - Use X11 window manager events to resize window, if FlatLaf window
+    decorations are enabled. This gives FlatLaf windows a more "native" feeling.
+    (issue #866)
+- IntelliJ Themes:
+  - Updated to latest versions and fixed various issues.
+  - Support customizing through properties files. (issue #824)
+- SwingX: Support `JXTipOfTheDay` component. (issue #980)
+- Support key prefixes for Linux desktop environments (e.g. `[gnome]`, `[kde]`
+  or `[xfce]`) in properties files. (issue #974)
+- Support custom key prefixes (e.g. `[win10]` or `[test]`) in properties files.
+  (issue #649)
+- Support multi-prefixed keys (e.g. `[dark][gnome]TitlePane.buttonBackground`).
+  The value is only used if all prefixes match current platform/theme.
+- Support new component border color to indicate success state (set client
+  property `JComponent.outline` to `success`). (PR #982, issue #945)
+- Fonts: Updated **Inter** to
+  [v4.1](https://github.com/rsms/inter/releases/tag/v4.1).
 
 #### Fixed bugs
 
@@ -25,9 +53,50 @@ FlatLaf Change Log
 - FileChooser: Improved performance when navigating to large directories with
   thousands of files. (issue #953)
 - PopupFactory: Fixed NPE on Windows 10 when `owner` is `null`. (issue #952)
-- FlatLaf window decorations: Minimize and maximize icons were not shown for
-  custom scale factors less than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue
-  #951)
+- Popup: On Windows 10, drop shadow of heavy-weight popup was not updated if
+  popup moved/resized. (issue #942)
+- FlatLaf window decorations:
+  - Minimize and maximize icons were not shown for custom scale factors less
+    than 100% (e.g. `-Dflatlaf.uiScale=75%`). (issue #951)
+  - Linux: Fixed occasional maximizing of window when single-clicking the
+    window's title bar. (issue #637)
+- Styling: MigLayout visual padding was not updated after applying style to
+  Button, ComboBox, Spinner, TextField (and subclasses) and ToggleButton. (issue
+  #965)
+- Linux: Popups (menus and combobox lists) were not hidden when window is moved,
+  resized, maximized, restored, iconified or switched to another window. (issue
+  #962)
+- Fixed loading FlatLaf UI delegate classes when using FlatLaf in special
+  application where multiple class loaders are involved. E.g. in Eclipse plugin
+  or in LibreOffice extension. (issues #955 and #851)
+- HTML: Fixed rendering of `<hr noshade>` in dark themes. (issue #932)
+
+#### Incompatibilities
+
+- IntelliJ Themes:
+  - Theme prefix in `IntelliJTheme$ThemeLaf.properties` changed from
+    `[theme-name]` to `{theme-name}`.
+  - Renamed classes in package
+    `com.formdev.flatlaf.intellijthemes.materialthemeuilite` from `Flat<theme>`
+    to `FlatMT<theme>`.
+  - Removed `Gruvbox Dark Medium` and `Gruvbox Dark Soft` themes.
+- Prefixed keys in properties files (e.g. `[dark]Button.background` or
+  `[win]Button.arc`) are now handled earlier than before. In previous versions,
+  prefixed keys always had higher priority than unprefixed keys and did always
+  overwrite unprefixed keys. Now prefixed keys are handled in same order as
+  unprefixed keys, which means that if a key is prefixed and unprefixed (e.g.
+  `[win]Button.arc` and `Button.arc`), the one which is last specified in
+  properties file is used.\
+  Following worked in previous versions, but now `Button.arc` is always `6`:
+  ~~~properties
+  [win]Button.arc = 12
+  Button.arc = 6
+  ~~~
+  This works in new (and old) versions:
+  ~~~properties
+  Button.arc = 6
+  [win]Button.arc = 12
+  ~~~
 
 
 ## 3.5.4
