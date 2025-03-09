@@ -89,13 +89,16 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
- * @uiDefault TitlePane.menuBarEmbedded						boolean
  * @uiDefault TitlePane.titleMinimumWidth					int
  * @uiDefault TitlePane.buttonMinimumWidth					int
  * @uiDefault TitlePane.buttonMaximizedHeight				int
+ * @uiDefault TitlePane.buttonsGap							int
+ * @uiDefault TitlePane.buttonsMargins						Insets
+ * @uiDefault TitlePane.buttonsFillVertically				boolean
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.showIconBesideTitle					boolean
+ * @uiDefault TitlePane.menuBarEmbedded						boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
  * @uiDefault TitlePane.menuBarTitleMinimumGap				int
  * @uiDefault TitlePane.closeIcon							Icon
@@ -123,9 +126,14 @@ public class FlatTitlePane
 	/** @since 2.5 */ protected final boolean showIconInDialogs;
 	/** @since 2 */ protected final int noIconLeftGap;
 	protected final Dimension iconSize;
+	/** @since 3.6 */ protected final Insets iconMargins;
+	/** @since 3.6 */ protected final Insets titleMargins;
 	/** @since 2.4 */ protected final int titleMinimumWidth;
 	/** @since 2.4 */ protected final int buttonMinimumWidth;
 	protected final int buttonMaximizedHeight;
+	/** @since 3.6 */ protected final int buttonsGap;
+	/** @since 3.6 */ protected final Insets buttonsMargins;
+	/** @since 3.6 */ protected final boolean buttonsFillVertically;
 	protected final boolean centerTitle;
 	protected final boolean centerTitleIfMenuBarEmbedded;
 	/** @since 2.4 */ protected final boolean showIconBesideTitle;
@@ -144,6 +152,9 @@ public class FlatTitlePane
 	protected JButton maximizeButton;
 	protected JButton restoreButton;
 	protected JButton closeButton;
+
+	private JComponent iconifyMaximizeGapComp;
+	private JComponent maximizeCloseGapComp;
 
 	protected Window window;
 
@@ -179,9 +190,7 @@ public class FlatTitlePane
 	public FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
-		Window w = SwingUtilities.getWindowAncestor( rootPane );
-		String defaultWindowStyle = (w != null && w.getType() == Window.Type.UTILITY) ? WINDOW_STYLE_SMALL : null;
-		windowStyle = clientProperty( rootPane, WINDOW_STYLE, defaultWindowStyle, String.class );
+		windowStyle = getWindowStyle( rootPane );
 
 		titleFont = FlatUIUtils.getSubUIFont( "TitlePane.font", windowStyle );
 		activeBackground = FlatUIUtils.getSubUIColor( "TitlePane.background", windowStyle );
@@ -196,9 +205,14 @@ public class FlatTitlePane
 		showIconInDialogs = FlatUIUtils.getSubUIBoolean( "TitlePane.showIconInDialogs", windowStyle, true );
 		noIconLeftGap = FlatUIUtils.getSubUIInt( "TitlePane.noIconLeftGap", windowStyle, 8 );
 		iconSize = FlatUIUtils.getSubUIDimension( "TitlePane.iconSize", windowStyle );
+		iconMargins = FlatUIUtils.getSubUIInsets( "TitlePane.iconMargins", windowStyle );
+		titleMargins = FlatUIUtils.getSubUIInsets( "TitlePane.titleMargins", windowStyle );
 		titleMinimumWidth = FlatUIUtils.getSubUIInt( "TitlePane.titleMinimumWidth", windowStyle, 60 );
 		buttonMinimumWidth = FlatUIUtils.getSubUIInt( "TitlePane.buttonMinimumWidth", windowStyle, 30 );
 		buttonMaximizedHeight = FlatUIUtils.getSubUIInt( "TitlePane.buttonMaximizedHeight", windowStyle, 0 );
+		buttonsGap = FlatUIUtils.getSubUIInt( "TitlePane.buttonsGap", windowStyle, 0 );
+		buttonsMargins = FlatUIUtils.getSubUIInsets( "TitlePane.buttonsMargins", windowStyle );
+		buttonsFillVertically = FlatUIUtils.getSubUIBoolean( "TitlePane.buttonsFillVertically", windowStyle, true );
 		centerTitle = FlatUIUtils.getSubUIBoolean( "TitlePane.centerTitle", windowStyle, false );
 		centerTitleIfMenuBarEmbedded = FlatUIUtils.getSubUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", windowStyle, true );
 		showIconBesideTitle = FlatUIUtils.getSubUIBoolean( "TitlePane.showIconBesideTitle", windowStyle, false );
@@ -228,6 +242,12 @@ public class FlatTitlePane
 		applyComponentOrientation( rootPane.getComponentOrientation() );
 	}
 
+	static String getWindowStyle( JRootPane rootPane ) {
+		Window w = SwingUtilities.getWindowAncestor( rootPane );
+		String defaultWindowStyle = (w != null && w.getType() == Window.Type.UTILITY) ? WINDOW_STYLE_SMALL : null;
+		return clientProperty( rootPane, WINDOW_STYLE, defaultWindowStyle, String.class );
+	}
+
 	protected FlatTitlePaneBorder createTitlePaneBorder() {
 		return new FlatTitlePaneBorder();
 	}
@@ -245,8 +265,8 @@ public class FlatTitlePane
 				setUI( new FlatTitleLabelUI() );
 			}
 		};
-		iconLabel.setBorder( new FlatEmptyBorder( FlatUIUtils.getSubUIInsets( "TitlePane.iconMargins", windowStyle ) ) );
-		titleLabel.setBorder( new FlatEmptyBorder( FlatUIUtils.getSubUIInsets( "TitlePane.titleMargins", windowStyle ) ) );
+		iconLabel.setBorder( new FlatEmptyBorder( iconMargins ) );
+		titleLabel.setBorder( new FlatEmptyBorder( titleMargins ) );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -349,10 +369,15 @@ public class FlatTitlePane
 		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
 		closeButton = createButton( "TitlePane.closeIcon", "Close", e -> close() );
 
+		iconifyMaximizeGapComp = createButtonsGapComp();
+		maximizeCloseGapComp = createButtonsGapComp();
+
 		// initially hide buttons that are only supported in frames
 		iconifyButton.setVisible( false );
 		maximizeButton.setVisible( false );
 		restoreButton.setVisible( false );
+		iconifyMaximizeGapComp.setVisible( false );
+		maximizeCloseGapComp.setVisible( false );
 
 		buttonPanel = new JPanel() {
 			@Override
@@ -364,12 +389,13 @@ public class FlatTitlePane
 
 				if( buttonMaximizedHeight > 0 && isWindowMaximized() && !hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() ) ) {
 					// make title pane height smaller when frame is maximized
-					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight ) ) );
+					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight + buttonsMargins.top + buttonsMargins.bottom ) ) );
 				}
 				return size;
 			}
 		};
 		buttonPanel.setOpaque( false );
+		buttonPanel.setBorder( FlatUIUtils.nonUIResource( new FlatEmptyBorder( buttonsMargins ) ) );
 		buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.LINE_AXIS ) );
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
 			// JRootPane.FRAME works only for frames (and not for dialogs)
@@ -378,8 +404,10 @@ public class FlatTitlePane
 			// later in frameStateChanged(), which is invoked from addNotify()
 
 			buttonPanel.add( iconifyButton );
+			buttonPanel.add( iconifyMaximizeGapComp );
 			buttonPanel.add( maximizeButton );
 			buttonPanel.add( restoreButton );
+			buttonPanel.add( maximizeCloseGapComp );
 		}
 		buttonPanel.add( closeButton );
 
@@ -396,13 +424,17 @@ public class FlatTitlePane
 			@Override
 			public Dimension getMinimumSize() {
 				// allow the button to shrink if space is rare
-				return new Dimension( UIScale.scale( buttonMinimumWidth ), super.getMinimumSize().height );
+				return new Dimension(
+					Math.min( UIScale.scale( buttonMinimumWidth ), super.getPreferredSize().width ),
+					super.getMinimumSize().height );
 			}
 			@Override
 			public Dimension getMaximumSize() {
 				// allow the button to fill whole button area height
 				// see also BasicMenuUI.getMaximumSize()
-				return new Dimension( super.getMaximumSize().width, Short.MAX_VALUE );
+				return buttonsFillVertically
+					? new Dimension( super.getMaximumSize().width, Short.MAX_VALUE )
+					: super.getMaximumSize();
 			}
 		};
 		button.setFocusable( false );
@@ -411,6 +443,14 @@ public class FlatTitlePane
 		button.putClientProperty( AccessibleContext.ACCESSIBLE_NAME_PROPERTY, accessibleName );
 		button.addActionListener( action );
 		return button;
+	}
+
+	private JComponent createButtonsGapComp() {
+		JComponent gapComp = new JPanel();
+		gapComp.setOpaque( false );
+		gapComp.setMinimumSize( new Dimension( 0, 0 ) );
+		gapComp.setPreferredSize( new Dimension( UIScale.scale( buttonsGap ), 0 ) );
+		return gapComp;
 	}
 
 	protected void activeChanged( boolean active ) {
@@ -434,6 +474,9 @@ public class FlatTitlePane
 		closeButton.setForeground( foreground );
 
 		// this is necessary because hover/pressed colors are derived from background color
+		// (since FlatWindowAbstractIcon now invokes FlatTitlePane.getBackground()
+		//  to get base color, this is no longer necessary, but keep it for compatibility;
+		//  e.g. for custom window icons)
 		iconifyButton.setBackground( background );
 		maximizeButton.setBackground( background );
 		restoreButton.setBackground( background );
@@ -493,6 +536,13 @@ public class FlatTitlePane
 			maximizeButton.setVisible( false );
 			restoreButton.setVisible( false );
 		}
+
+		boolean iconifyVisible = iconifyButton.isVisible();
+		boolean maximizeVisible = maximizeButton.isVisible();
+		boolean restoreVisible = restoreButton.isVisible();
+		boolean closeVisible = closeButton.isVisible();
+		iconifyMaximizeGapComp.setVisible( iconifyVisible && (maximizeVisible || restoreVisible || closeVisible) );
+		maximizeCloseGapComp.setVisible( closeVisible && (maximizeVisible || restoreVisible) );
 	}
 
 	protected void updateIcon() {
@@ -746,12 +796,17 @@ public class FlatTitlePane
 		if( isFullWindowContent() )
 			return;
 
+		g.setColor( getBackground() );
+		g.fillRect( 0, 0, getWidth(), getHeight() );
+	}
+
+	@Override
+	public Color getBackground() {
 		// not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime
-		g.setColor( (UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
+		return (UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
 				clientPropertyColor( rootPane, TITLE_BAR_BACKGROUND, null ) == null)
 			? FlatUIUtils.getParentBackground( this )
-			: getBackground() );
-		g.fillRect( 0, 0, getWidth(), getHeight() );
+			: super.getBackground();
 	}
 
 	/**
@@ -1093,6 +1148,7 @@ public class FlatTitlePane
 		if( !c.isDisplayable() || !c.isVisible() || !contains( c, x, y ) || c == mouseLayer )
 			return true; // continue checking with next component
 
+		// check enabled component that has mouse listeners
 		if( c.isEnabled() &&
 			(c.getMouseListeners().length > 0 ||
 			 c.getMouseMotionListeners().length > 0) )
