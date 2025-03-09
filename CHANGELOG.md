@@ -39,6 +39,8 @@ FlatLaf Change Log
   The value is only used if all prefixes match current platform/theme.
 - Support new component border color to indicate success state (set client
   property `JComponent.outline` to `success`). (PR #982, issue #945)
+- Fonts: Updated **Inter** to
+  [v4.1](https://github.com/rsms/inter/releases/tag/v4.1).
 
 #### Fixed bugs
 
