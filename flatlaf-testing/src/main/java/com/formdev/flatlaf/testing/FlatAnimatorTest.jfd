@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -103,7 +103,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$LineChartPanel" ) {
+			add( new FormComponent( "com.formdev.flatlaf.testing.LineChartPanel" ) {
 				name: "lineChartPanel"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
@@ -114,68 +114,6 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 625, 625 )
-		} )
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$columnConstraints": "[fill][grow,fill]"
-			"$rowConstraints": "[400,grow,fill][]"
-			"$layoutConstraints": "ltr,insets 0,hidemode 3"
-		} ) {
-			name: "lineChartPanelNested"
-			auxiliary() {
-				"JavaCodeGenerator.className": "LineChartPanel"
-			}
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "lineChartScrollPane"
-				"$client.JScrollPane.smoothScrolling": false
-				add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$LineChart" ) {
-					name: "lineChart"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-						"JavaCodeGenerator.variableModifiers": 0
-					}
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "lineChartInfoLabel"
-				"text": "X: time (500ms per line) / Y: value (10% per line)"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JSlider" ) {
-				name: "secondsWidthSlider"
-				"minimum": 100
-				"maximum": 2000
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "secondsWidthChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "updateChartDelayedCheckBox"
-				"text": "Update chart delayed"
-				"mnemonic": 85
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "updateChartDelayedChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1 2 1,alignx right,growx 0"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "clearChartButton"
-				"text": "Clear Chart"
-				"mnemonic": 67
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "clearChart", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1 2 1,alignx right,growx 0"
-			} )
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 650 )
-			"size": new java.awt.Dimension( 603, 325 )
 		} )
 	}
 }

@@ -39,7 +39,7 @@ public class FlatAnimatedIconTest
 	private static final Color CHART_RADIO_BUTTON_3 = Color.green;
 	private static final Color CHART_CHECK_BOX_1 = Color.magenta;
 	private static final Color CHART_CHECK_BOX_2 = Color.orange;
-	private static final Color[] CHART_SWITCH_EX = new Color[] { Color.red, Color.green, Color.blue };
+	private static final Color[] CHART_SWITCH_EX = { Color.red, Color.green, Color.blue };
 
 	private static final String CHART_COLOR_KEY = "chartColor";
 
@@ -79,7 +79,7 @@ public class FlatAnimatedIconTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		radioButton1 = new JRadioButton();
 		radioButton1ChartColor = new FlatAnimatorTest.JChartColor();
-		lineChartPanel = new FlatAnimatorTest.LineChartPanel();
+		lineChartPanel = new LineChartPanel();
 		radioButton2 = new JRadioButton();
 		radioButton2ChartColor = new FlatAnimatorTest.JChartColor();
 		radioButton3 = new JRadioButton();
@@ -114,7 +114,7 @@ public class FlatAnimatedIconTest
 		radioButton1.setSelected(true);
 		add(radioButton1, "cell 0 0");
 		add(radioButton1ChartColor, "cell 1 0");
-		add(lineChartPanel, "cell 2 0 1 7");
+		add(lineChartPanel, "cell 2 0 1 8,growy");
 
 		//---- radioButton2 ----
 		radioButton2.setText("radio 2");
@@ -142,11 +142,11 @@ public class FlatAnimatedIconTest
 
 		//---- durationLabel ----
 		durationLabel.setText("Duration:");
-		add(durationLabel, "cell 0 7 3 1");
+		add(durationLabel, "cell 0 7 2 1");
 
 		//---- durationField ----
 		durationField.setModel(new SpinnerNumberModel(200, 0, null, 50));
-		add(durationField, "cell 0 7 3 1");
+		add(durationField, "cell 0 7 2 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -159,7 +159,7 @@ public class FlatAnimatedIconTest
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JRadioButton radioButton1;
 	private FlatAnimatorTest.JChartColor radioButton1ChartColor;
-	private FlatAnimatorTest.LineChartPanel lineChartPanel;
+	private LineChartPanel lineChartPanel;
 	private JRadioButton radioButton2;
 	private FlatAnimatorTest.JChartColor radioButton2ChartColor;
 	private JRadioButton radioButton3;
@@ -216,7 +216,7 @@ public class FlatAnimatedIconTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "radio" );
 			}
 		}
 
@@ -261,7 +261,7 @@ public class FlatAnimatedIconTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "switch" );
 			}
 		}
 
@@ -328,7 +328,7 @@ public class FlatAnimatedIconTest
 			for( int i = 0; i < animatedValues.length; i++ ) {
 				float animatedValue = animatedValues[i];
 				if( animatedValue != 0 && animatedValue != 1 )
-					lineChartPanel.lineChart.addValue( animatedValue, CHART_SWITCH_EX[i] );
+					lineChartPanel.addValue( CHART_SWITCH_EX[i], animatedValue, Integer.MIN_VALUE, "switch ex" );
 			}
 		}
 
@@ -387,7 +387,7 @@ public class FlatAnimatedIconTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "minimal" );
 			}
 		}
 

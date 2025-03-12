@@ -25,6 +25,7 @@ import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.AnimatedBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
@@ -92,7 +93,7 @@ public class FlatAnimatedBorderTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label3 = new JLabel();
-		lineChartPanel = new FlatAnimatorTest.LineChartPanel();
+		lineChartPanel = new LineChartPanel();
 		fade1TextField = new JTextField();
 		fade1ChartColor = new FlatAnimatorTest.JChartColor();
 		fade2TextField = new JTextField();
@@ -118,7 +119,7 @@ public class FlatAnimatedBorderTest
 			// columns
 			"[fill]" +
 			"[fill]para" +
-			"[fill]",
+			"[grow,fill]",
 			// rows
 			"[]" +
 			"[]" +
@@ -136,7 +137,7 @@ public class FlatAnimatedBorderTest
 		//---- label3 ----
 		label3.setText("Fade:");
 		add(label3, "cell 0 0");
-		add(lineChartPanel, "cell 2 0 1 12");
+		add(lineChartPanel, "cell 2 0 1 12,growy");
 		add(fade1TextField, "cell 0 1");
 		add(fade1ChartColor, "cell 1 1");
 		add(fade2TextField, "cell 0 2");
@@ -151,12 +152,12 @@ public class FlatAnimatedBorderTest
 		add(material2ChartColor, "cell 1 5");
 
 		//---- material3TextField ----
-		material3TextField.putClientProperty("FlatLaf.styleClass", "large");
+		material3TextField.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
 		add(material3TextField, "cell 0 6");
 		add(material3ChartColor, "cell 1 6");
 
 		//---- material4TextField ----
-		material4TextField.putClientProperty("FlatLaf.styleClass", "large");
+		material4TextField.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
 		add(material4TextField, "cell 0 7");
 		add(material4ChartColor, "cell 1 7");
 
@@ -178,7 +179,7 @@ public class FlatAnimatedBorderTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel label3;
-	private FlatAnimatorTest.LineChartPanel lineChartPanel;
+	private LineChartPanel lineChartPanel;
 	private JTextField fade1TextField;
 	private FlatAnimatorTest.JChartColor fade1ChartColor;
 	private JTextField fade2TextField;
@@ -231,7 +232,7 @@ public class FlatAnimatedBorderTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "fade" );
 			}
 		}
 
@@ -295,7 +296,7 @@ public class FlatAnimatedBorderTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "material" );
 			}
 		}
 
@@ -410,7 +411,7 @@ public class FlatAnimatedBorderTest
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
-				lineChartPanel.lineChart.addValue( animatedValue, chartColor );
+				lineChartPanel.addValue( chartColor, animatedValue, Integer.MIN_VALUE, "minimal" );
 			}
 		}
 

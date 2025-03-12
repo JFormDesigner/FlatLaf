@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -22,10 +22,10 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$LineChartPanel" ) {
+			add( new FormComponent( "com.formdev.flatlaf.testing.LineChartPanel" ) {
 				name: "lineChartPanel"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0 1 7"
+				"value": "cell 2 0 1 8,growy"
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton2"
@@ -83,7 +83,7 @@ new FormModel {
 				name: "durationLabel"
 				"text": "Duration:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7 3 1"
+				"value": "cell 0 7 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "durationField"
@@ -93,7 +93,7 @@ new FormModel {
 					value: 200
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7 3 1"
+				"value": "cell 0 7 2 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

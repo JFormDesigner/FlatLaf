@@ -77,6 +77,33 @@ class LineChartPanel
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 	}
 
+	public boolean isYZeroAtTop() {
+		return lineChart.yZeroAtTop;
+	}
+
+	public void setYZeroAtTop( boolean yZeroAtTop ) {
+		lineChart.yZeroAtTop = yZeroAtTop;
+		lineChart.repaint();
+	}
+
+	public boolean isAsynchron() {
+		return lineChart.asynchron;
+	}
+
+	public void setAsynchron( boolean asynchron ) {
+		lineChart.asynchron = asynchron;
+		lineChart.repaint();
+	}
+
+	public boolean isTemporaryValueDetection() {
+		return lineChart.temporaryValueDetection;
+	}
+
+	public void setTemporaryValueDetection( boolean temporaryValueDetection ) {
+		lineChart.temporaryValueDetection = temporaryValueDetection;
+		lineChart.repaint();
+	}
+
 	public String getLegendYValueText() {
 		return yValueLabel.getText();
 	}
@@ -101,12 +128,21 @@ class LineChartPanel
 		legend2Label.setText( s );
 	}
 
+	public int getOneSecondWidth() {
+		return oneSecondWidthSlider.getValue();
+	}
+
+	public void setOneSecondWidth( int oneSecondWidth ) {
+		oneSecondWidthSlider.setValue( oneSecondWidth );
+	}
+
 	public boolean isUpdateChartDelayed() {
 		return updateChartDelayedCheckBox.isSelected();
 	}
 
 	public void setUpdateChartDelayed( boolean updateChartDelayed ) {
 		updateChartDelayedCheckBox.setSelected( updateChartDelayed );
+		updateChartDelayedChanged();
 	}
 
 	void addValue( Color chartColor, double value, int ivalue, String name ) {
@@ -137,8 +173,8 @@ class LineChartPanel
 			oneSecondWidth <= 8000 ? 25 :
 			10;
 
-		lineChart.setOneSecondWidth( oneSecondWidth );
-		lineChart.setMsPerLineX( msPerLineX );
+		lineChart.oneSecondWidth = oneSecondWidth;
+		lineChart.msPerLineX = msPerLineX;
 		lineChart.revalidate();
 		lineChart.repaint();
 
@@ -149,7 +185,7 @@ class LineChartPanel
 	private String xLabelText;
 
 	private void updateChartDelayedChanged() {
-		lineChart.setUpdateDelayed( updateChartDelayedCheckBox.isSelected() );
+		lineChart.updateDelayed = updateChartDelayedCheckBox.isSelected();
 	}
 
 	private void clearChart() {
@@ -227,15 +263,17 @@ class LineChartPanel
 		add(oneSecondWidthLabel, "cell 0 1,alignx right,growx 0");
 
 		//---- oneSecondWidthSlider ----
-		oneSecondWidthSlider.setMinimum(1000);
+		oneSecondWidthSlider.setMinimum(100);
 		oneSecondWidthSlider.setMaximum(10000);
+		oneSecondWidthSlider.setSnapToTicks(true);
+		oneSecondWidthSlider.setMajorTickSpacing(100);
+		oneSecondWidthSlider.setValue(500);
 		oneSecondWidthSlider.addChangeListener(e -> oneSecondWidthChanged());
-		add(oneSecondWidthSlider, "cell 0 1,alignx right,growx 0,wmax 100");
+		add(oneSecondWidthSlider, "cell 0 1,alignx right,growx 0");
 
 		//---- updateChartDelayedCheckBox ----
 		updateChartDelayedCheckBox.setText("Update chart delayed");
 		updateChartDelayedCheckBox.setMnemonic('P');
-		updateChartDelayedCheckBox.setSelected(true);
 		updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
 		add(updateChartDelayedCheckBox, "cell 0 1,alignx right,growx 0");
 
@@ -267,27 +305,36 @@ class LineChartPanel
 		implements Scrollable
 	{
 		private static final int UPDATE_DELAY_MS = 20;
-
-		private static final int NEW_SEQUENCE_TIME_LAG = 500;
-		private static final int NEW_SEQUENCE_GAP = 100;
+		private static final int NEW_SEQUENCE_TIME_LAG_MS = 500;
+		private static final int NEW_SEQUENCE_GAP_MS = 100;
 		private static final int HIT_OFFSET = 4;
 
-		private int oneSecondWidth = 1000;
-		private int msPerLineX = 200;
+		private static final boolean TEST = false;
+
+		// asynchron means that chart for each color starts at x=0
+		private boolean asynchron;
+		private boolean temporaryValueDetection;
+		private boolean yZeroAtTop;
+		private int oneSecondWidth = 500;
+		private int msPerLineX = 100;
 		private final HashMap<String, String> methodHighlightMap = new HashMap<>();
 
 		private static class Data {
 			final double value;
 			final int ivalue;
+			final Color chartColor;
 			final Color dotColor;
 			final boolean dotOnly;
 			final long time; // in milliseconds
 			final String name;
 			final Exception stack;
 
-			Data( double value, int ivalue, Color dotColor, boolean dotOnly, long time, String name, Exception stack ) {
+			Data( double value, int ivalue, Color chartColor, Color dotColor,
+				boolean dotOnly, long time, String name, Exception stack )
+			{
 				this.value = value;
 				this.ivalue = ivalue;
+				this.chartColor = chartColor;
 				this.dotColor = dotColor;
 				this.dotOnly = dotOnly;
 				this.time = time;
@@ -303,7 +350,8 @@ class LineChartPanel
 			}
 		}
 
-		private final Map<Color, List<Data>> color2dataMap = new HashMap<>();
+		private final List<Data> syncChartData = new ArrayList<>();
+		private final Map<Color, List<Data>> asyncColor2dataMap = new HashMap<>();
 		private final Timer repaintTime;
 		private Color lastUsedChartColor;
 		private boolean updateDelayed;
@@ -318,11 +366,21 @@ class LineChartPanel
 			repaintTime.setRepeats( false );
 
 			ToolTipManager.sharedInstance().registerComponent( this );
+
+			if( TEST )
+				initTestData();
 		}
 
 		void addValue( Color chartColor, double value, int ivalue, Color dotColor, boolean dotOnly, String name ) {
-			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, ivalue, dotColor, dotOnly, System.nanoTime() / 1000000, name, new Exception() ) );
+			if( TEST )
+				return;
+
+			List<Data> chartData = asyncColor2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
+			Data data = new Data( value, ivalue, chartColor, dotColor, dotOnly, System.nanoTime() / 1_000_000, name, new Exception() );
+			if( asynchron )
+				chartData.add( data );
+			else
+				syncChartData.add( data );
 
 			lastUsedChartColor = chartColor;
 
@@ -334,23 +392,17 @@ class LineChartPanel
 		}
 
 		void clear() {
-			color2dataMap.clear();
+			if( TEST ) {
+				repaint();
+				return;
+			}
+
+			syncChartData.clear();
+			asyncColor2dataMap.clear();
 			lastUsedChartColor = null;
 
 			repaint();
 			revalidate();
-		}
-
-		void setUpdateDelayed( boolean updateDelayed ) {
-			this.updateDelayed = updateDelayed;
-		}
-
-		void setOneSecondWidth( int oneSecondWidth ) {
-			this.oneSecondWidth = oneSecondWidth;
-		}
-
-		void setMsPerLineX( int msPerLineX ) {
-			this.msPerLineX = msPerLineX;
 		}
 
 		private void repaintAndRevalidate() {
@@ -361,7 +413,7 @@ class LineChartPanel
 			if( lastUsedChartColor != null ) {
 				// compute chart width of last used color and start of last sequence
 				int[] lastSeqX = new int[1];
-				int cw = chartWidth( color2dataMap.get( lastUsedChartColor ), lastSeqX );
+				int cw = chartWidth( asynchron ? asyncColor2dataMap.get( lastUsedChartColor ) : syncChartData, lastSeqX );
 
 				// scroll to end of last sequence (of last used color)
 				int lastSeqWidth = cw - lastSeqX[0];
@@ -375,17 +427,17 @@ class LineChartPanel
 		protected void paintComponent( Graphics g ) {
 			Graphics g2 = g.create();
 			try {
-				HiDPIUtils.paintAtScale1x( (Graphics2D) g2, this, this::paintImpl );
+				HiDPIUtils.paintAtScale1x( (Graphics2D) g2, this, this::paintAt1x );
 			} finally {
 				g2.dispose();
 			}
 		}
 
-		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
+		private void paintAt1x( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
 			FlatUIUtils.setRenderingHints( g );
 
 			int oneSecondWidth = (int) (UIScale.scale( this.oneSecondWidth ) * scaleFactor);
-			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
+			int seqGapWidth = (oneSecondWidth * NEW_SEQUENCE_GAP_MS) / 1000;
 			int hitOffset = (int) Math.round( UIScale.scale( HIT_OFFSET ) * scaleFactor );
 
 			Color lineColor = FlatUIUtils.getUIColor( "Component.borderColor", Color.lightGray );
@@ -418,8 +470,8 @@ class LineChartPanel
 			lastSystemScaleFactor = scaleFactor;
 
 			// paint lines
-			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
-				List<Data> chartData = e.getValue();
+			for( Map.Entry<Color, List<Data>> e : asyncColor2dataMap.entrySet() ) {
+				List<Data> chartData = asynchron ? e.getValue() : syncChartData;
 				Color chartColor = e.getKey();
 				if( FlatLaf.isLafDark() )
 					chartColor = new HSLColor( chartColor ).adjustTone( 50 );
@@ -427,107 +479,121 @@ class LineChartPanel
 				Color dataPointColor = fade( chartColor, FlatLaf.isLafDark() ? 0.6f : 0.2f );
 
 				// sequence start time and x coordinate
-				long seqTime = 0;
-				int seqX = 0;
+				long seqStartTime = 0;
+				int seqStartX = 0;
 
-				// "previous" data point time, x/y coordinates and count
-				long ptime = 0;
+				// "previous" data point time and x coordinate (used for "new sequence" detection)
+				long ptime = Long.MIN_VALUE;
 				int px = 0;
-				int py = 0;
-				int pcount = 0;
 
-				boolean first = true;
+				// "line" data point x/y coordinates
+				int lx = -1;
+				int ly = -1;
+
 				boolean isTemporaryValue = false;
 				int lastTemporaryValueIndex = -1;
 
 				int size = chartData.size();
 				for( int i = 0; i < size; i++ ) {
 					Data data = chartData.get( i );
+					boolean useData = (data.chartColor == chartColor);
 
-					boolean newSeq = (data.time > ptime + NEW_SEQUENCE_TIME_LAG);
+					// start new sequence if there is a larger time gap to previous data point
+					boolean newSeq = (data.time > ptime + NEW_SEQUENCE_TIME_LAG_MS);
 					ptime = data.time;
 
 					if( newSeq ) {
-						// paint short horizontal line for previous sequence that has only one data point
-						if( !first && pcount == 0 ) {
-							g.setColor( chartColor );
-							g.drawLine( px, py, px + (int) Math.round( UIScale.scale( 8 ) * scaleFactor ), py );
-						}
-
 						// start new sequence
-						seqTime = data.time;
-						seqX = !first ? px + seqGapWidth : 0;
-						px = seqX;
-						pcount = 0;
-						first = false;
+						seqStartTime = data.time;
+						seqStartX = (i > 0) ? px + seqGapWidth : 0;
+						px = seqStartX;
+						lx = -1;
+						ly = -1;
 						isTemporaryValue = false;
 					}
 
 					// x/y coordinates of current data point
+					int dx = (int) (seqStartX + (((data.time - seqStartTime) / 1000.) * oneSecondWidth));
 					int dy = (int) ((height - 1) * data.value);
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * oneSecondWidth));
+					if( !yZeroAtTop )
+						dy = height - 1 - dy;
 
-					// paint rectangle to indicate data point
-					g.setColor( dataPointColor );
-					g.drawRect( dx - hitOffset, dy - hitOffset, hitOffset * 2, hitOffset * 2 );
+					// remember x coordinate for "new sequence" detection
+					px = dx;
+
+					if( !useData )
+						continue;
 
 					// remember data point for tooltip
 					lastPoints.add( new Point( dx, dy ) );
 					lastDatas.add( data );
 
+					// paint rectangle to indicate data point
+					g.setColor( dataPointColor );
+					g.drawRect( dx - hitOffset, dy - hitOffset, hitOffset * 2, hitOffset * 2 );
+
+					// paint dot
 					if( data.dotColor != null ) {
 						int s1 = (int) Math.round( UIScale.scale( 1 ) * scaleFactor );
 						int s3 = (int) Math.round( UIScale.scale( 3 ) * scaleFactor );
 						g.setColor( data.dotColor );
 						g.fillRect( dx - s1, dy - s1, s3, s3 );
+
 						if( data.dotOnly )
 							continue;
 					}
 
-					if( !newSeq ) {
-						if( isTemporaryValue && i > lastTemporaryValueIndex )
-							isTemporaryValue = false;
-
-						g.setColor( isTemporaryValue ? temporaryValueColor : chartColor );
-
-						// line in sequence
-						g.drawLine( px, py, dx, dy );
-
-						px = dx;
-						pcount++;
-
-						// check next data points for "temporary" value(s)
-						if( !isTemporaryValue ) {
-							// one or two values between two equal values are considered "temporary",
-							// which means that they are the target value for the following scroll animation
-							int stage = 0;
-							for( int j = i + 1; j < size && stage <= 2 && !isTemporaryValue; j++ ) {
-								Data nextData = chartData.get( j );
-								if( nextData.dotOnly )
-									continue; // ignore dots
-
-								// check whether next data point is within 10 milliseconds
-								if( nextData.time > data.time + 10 )
-									break;
-
-								if( stage >= 1 && stage <= 2 && nextData.value == data.value ) {
-									isTemporaryValue = true;
-									lastTemporaryValueIndex = j;
-								}
-								stage++;
-							}
-						}
+					// start of line?
+					if( lx < 0 ) {
+						// remember x/y coordinates for first line
+						lx = dx;
+						ly = dy;
+						continue;
 					}
 
-					py = dy;
+					if( isTemporaryValue && i > lastTemporaryValueIndex )
+						isTemporaryValue = false;
+
+					// draw line in sequence
+					g.setColor( isTemporaryValue ? temporaryValueColor : chartColor );
+					g.drawLine( lx, ly, dx, dy );
+
+					// remember x/y coordinates for next line
+					lx = dx;
+					ly = dy;
+
+					// check next data points for "temporary" value(s)
+					if( temporaryValueDetection && !isTemporaryValue ) {
+						// one or two values between two equal values are considered "temporary",
+						// which means that they are the target value for the following scroll animation
+						int stage = 0;
+						for( int j = i + 1; j < size && stage <= 2 && !isTemporaryValue; j++ ) {
+							Data nextData = chartData.get( j );
+							if( nextData.dotOnly )
+								continue; // ignore dots
+
+							// check whether next data point is within 10 milliseconds
+							if( nextData.time > data.time + 10 )
+								break;
+
+							if( stage >= 1 && stage <= 2 && nextData.value == data.value ) {
+								isTemporaryValue = true;
+								lastTemporaryValueIndex = j;
+							}
+							stage++;
+						}
+					}
 				}
 			}
 		}
 
 		private int chartWidth() {
 			int width = 0;
-			for( List<Data> chartData : color2dataMap.values() )
-				width = Math.max( width, chartWidth( chartData, null ) );
+			if( asynchron ) {
+				for( List<Data> chartData : asyncColor2dataMap.values() )
+					width = Math.max( width, chartWidth( chartData, null ) );
+			} else
+				width = Math.max( width, chartWidth( syncChartData, null ) );
 			return width;
 		}
 
@@ -536,19 +602,21 @@ class LineChartPanel
 			int seqX = 0;
 			long ptime = 0;
 			int px = 0;
+			int oneSecondWidth = UIScale.scale( this.oneSecondWidth );
+			int seqGapWidth = (oneSecondWidth * NEW_SEQUENCE_GAP_MS) / 1000;
 
 			int size = chartData.size();
 			for( int i = 0; i < size; i++ ) {
 				Data data = chartData.get( i );
 
-				if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
+				if( data.time > ptime + NEW_SEQUENCE_TIME_LAG_MS ) {
 					// start new sequence
 					seqTime = data.time;
-					seqX = (i > 0) ? px + NEW_SEQUENCE_GAP : 0;
+					seqX = (i > 0) ? px + seqGapWidth : 0;
 					px = seqX;
 				} else {
 					// line in sequence
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * UIScale.scale( oneSecondWidth )));
+					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * oneSecondWidth ));
 					px = dx;
 				}
 
@@ -618,7 +686,11 @@ class LineChartPanel
 				buf.append( "<h2>" );
 				if( data.dotOnly )
 					buf.append( "DOT: " );
-				buf.append( data.name ).append( ' ' ).append( data.ivalue ).append( "</h2>" );
+				buf.append( data.name );
+				if( data.ivalue != Integer.MIN_VALUE )
+					buf.append( ' ' ).append( data.ivalue );
+				buf.append( " (" ).append( String.format( "%.3f", data.value ) ).append( ')' );
+				buf.append( "</h2>" );
 
 				StackTraceElement[] stackTrace = data.stack.getStackTrace();
 				for( int j = 0; j < stackTrace.length; j++ ) {
@@ -678,6 +750,7 @@ class LineChartPanel
 						classAndMethod.equals( "java.awt.Component.processMouseWheelEvent" ) ||
 						classAndMethod.equals( "java.awt.Component.processMouseMotionEvent" ) ||
 						classAndMethod.equals( "javax.swing.JComponent.processKeyBinding" ) ||
+						classAndMethod.equals( "javax.swing.JComponent.paintComponent" ) ||
 						classAndMethod.equals( "com.formdev.flatlaf.util.Animator.timingEvent" ) )
 					  break;
 				}
@@ -703,6 +776,103 @@ class LineChartPanel
 
 			return buf.toString();
 		}
+
+		private void initTestData() {
+//			asynchron = true;
+
+			addTestSimpleLine( Color.red, 0.0, "red" );
+			addTestSimpleLine( Color.green, 0.1, "green" );
+			addTestSimpleLine( Color.blue, 0.2, "blue" );
+			addTestSimpleLine( Color.magenta, 0.3, "magenta" );
+
+			addTestMiddleDotOnly( Color.red, 0.0, "red" );
+			addTestMiddleDotOnly( Color.green, 0.1, "green" );
+			addTestMiddleDotOnly( Color.blue, 0.2, "blue" );
+			addTestMiddleDotOnly( Color.magenta, 0.3, "magenta" );
+
+			addTestLeadingDotOnly( Color.red, 0.0, "red" );
+			addTestLeadingDotOnly( Color.green, 0.1, "green" );
+			addTestLeadingDotOnly( Color.blue, 0.2, "blue" );
+			addTestLeadingDotOnly( Color.magenta, 0.3, "magenta" );
+
+			addTestTrailingDotOnly( Color.red, 0.0, "red" );
+			addTestTrailingDotOnly( Color.green, 0.1, "green" );
+			addTestTrailingDotOnly( Color.blue, 0.2, "blue" );
+			addTestTrailingDotOnly( Color.magenta, 0.3, "magenta" );
+
+			addTestSingleData( Color.red, 0.0, "red" );
+			addTestSingleData( Color.green, 0.1, "green" );
+			addTestSingleData( Color.blue, 0.2, "blue" );
+			addTestSingleData( Color.magenta, 0.3, "magenta" );
+
+			temporaryValueDetection = true;
+			addTestWithTemporaryValues( Color.red, 0.0, "red" );
+			addTestWithTemporaryValues( Color.green, 0.1, "green" );
+			addTestWithTemporaryValues( Color.blue, 0.2, "blue" );
+			addTestWithTemporaryValues( Color.magenta, 0.3, "magenta" );
+		}
+
+		private void addTestSimpleLine( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.0, null, false, name );
+			addTestValue( 50, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 50, chartColor, baseValue + 0.4, null, false, name );
+			testTime += 1000;
+		}
+
+		private void addTestMiddleDotOnly( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.0, null, false, name );
+			addTestValue( 20, chartColor, baseValue + 0.3, chartColor, true, name );
+			addTestValue( 30, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 20, chartColor, baseValue + 0.05, chartColor, true, name );
+			addTestValue( 30, chartColor, baseValue + 0.4, null, false, name );
+			testTime += 1000;
+		}
+
+		private void addTestLeadingDotOnly( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.05, chartColor, true, name );
+			addTestValue( 20, chartColor, baseValue + 0.0, null, false, name );
+			addTestValue( 50, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 30, chartColor, baseValue + 0.4, null, false, name );
+			testTime += 1000;
+		}
+
+		private void addTestTrailingDotOnly( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.0, null, false, name );
+			addTestValue( 50, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 30, chartColor, baseValue + 0.4, null, false, name );
+			addTestValue( 20, chartColor, baseValue + 0.05, chartColor, true, name );
+			testTime += 1000;
+		}
+
+		private void addTestSingleData( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.15, chartColor, false, name );
+			testTime += 1000;
+		}
+
+		private void addTestWithTemporaryValues( Color chartColor, double baseValue, String name ) {
+			addTestValue(  0, chartColor, baseValue + 0.0, null, false, name );
+			addTestValue( 50, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 5, chartColor, baseValue + 0.4, null, false, name );
+			addTestValue( 5, chartColor, baseValue + 0.1, null, false, name );
+			addTestValue( 40, chartColor, baseValue + 0.3, null, false, name );
+			testTime += 1000;
+		}
+
+		private void addTestValue( int timeDelta, Color chartColor, double value, Color dotColor, boolean dotOnly, String name ) {
+			testTime += timeDelta;
+
+			List<Data> chartData = asyncColor2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
+			Data data = new Data( value, testIValue++, chartColor, dotColor, dotOnly, testTime, name, new Exception() );
+			if( asynchron )
+				chartData.add( data );
+			else
+				syncChartData.add( data );
+
+			lastUsedChartColor = chartColor;
+		}
+
+		private int testIValue;
+		private long testTime;
 
 		//TODO remove and use ColorFunctions.fade() when merging to main
 		private static Color fade( Color color, float amount ) {

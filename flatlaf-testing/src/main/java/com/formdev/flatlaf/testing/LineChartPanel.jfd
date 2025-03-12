@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -90,17 +90,19 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "oneSecondWidthSlider"
-				"minimum": 1000
+				"minimum": 100
 				"maximum": 10000
+				"snapToTicks": true
+				"majorTickSpacing": 100
+				"value": 500
 				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "oneSecondWidthChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1,alignx right,growx 0,wmax 100"
+				"value": "cell 0 1,alignx right,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "updateChartDelayedCheckBox"
 				"text": "Update chart delayed"
 				"mnemonic": 80
-				"selected": true
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "updateChartDelayedChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1,alignx right,growx 0"
