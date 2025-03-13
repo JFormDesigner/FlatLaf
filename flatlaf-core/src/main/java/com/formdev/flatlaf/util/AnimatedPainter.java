@@ -25,15 +25,17 @@ import com.formdev.flatlaf.util.Animator.Interpolator;
 /**
  * Painter that automatically animates painting on component value(s) changes.
  * <p>
- * {@link #getValues(Component)} returns the value(s) of the component.
+ * {@link #getAnimatableValues(Component)} returns the animatable value(s) of the component.
  * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
  * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
- * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
+ * If {@link #getAnimatableValues(Component)} returns multiple values, then each value
+ * gets its own independent animation, which may start/end at different points in time,
+ * may have different duration, resolution and interpolator.
  * <p>
  * See {@link AnimatedBorder} or {@link AnimatedIcon} for examples.
  * <p>
  * Animation works only if the component passed to {@link #paintWithAnimation(Component, Graphics, int, int, int, int)}
- * is a instance of {@link JComponent}.
+ * is an instance of {@link JComponent}.
  * A client property is set on the component to store the animation state.
  *
  * @author Karl Tauber
@@ -42,9 +44,22 @@ import com.formdev.flatlaf.util.Animator.Interpolator;
 public interface AnimatedPainter
 {
 	/**
+	 * Gets the animatable value(s) of the component.
+	 * <p>
+	 * This can be any value(s) and depends on the component.
+	 * If the value(s) changes, then this class animates from the old value(s) to the new ones.
+	 * If multiple values are returned, then each value gets its own independent animation.
+	 * <p>
+	 * For a toggle button this could be {@code 0} for off and {@code 1} for on.
+	 * A complex check box could return values for selected, hover, pressed and focused states.
+	 * The painter then can show independent animations for those states.
+	 */
+	float[] getAnimatableValues( Component c );
+
+	/**
 	 * Starts painting.
 	 * Either invokes {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
-	 * once to paint current value(s) (see {@link #getValues(Component)}. Or if value(s) has
+	 * once to paint current value(s) (see {@link #getAnimatableValues(Component)}. Or if value(s) has
 	 * changed, compared to last painting, then it starts an animation and invokes
 	 * {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
 	 * multiple times with animated value(s) (from old value(s) to new value(s)).
@@ -57,7 +72,7 @@ public interface AnimatedPainter
 	 * @param height the height of the paint area
 	 */
 	default void paintWithAnimation( Component c, Graphics g, int x, int y, int width, int height ) {
-		AnimatedPainterSupport.paint( this, c, g, x, y, width, height );
+		AnimatedPainterSupport.paint( this, c, (Graphics2D) g, x, y, width, height );
 	}
 
 	/**
@@ -71,9 +86,9 @@ public interface AnimatedPainter
 	 * @param y the y coordinate of the paint area
 	 * @param width the width of the paint area
 	 * @param height the height of the paint area
-	 * @param animatedValues the animated values, which are either equal to what {@link #getValues(Component)}
+	 * @param animatedValues the animated values, which are either equal to what {@link #getAnimatableValues(Component)}
 	 *     returned, or somewhere between the previous values and the latest values
-	 *     that {@link #getValues(Component)} returned
+	 *     that {@link #getAnimatableValues(Component)} returned
 	 */
 	void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues );
 
@@ -90,17 +105,6 @@ public interface AnimatedPainter
 	default void repaintDuringAnimation( Component c, int x, int y, int width, int height ) {
 		c.repaint( x, y, width, height );
 	}
-
-	/**
-	 * Gets the value(s) of the component.
-	 * <p>
-	 * This can be any value and depends on the component.
-	 * If the value(s) changes, then this class animates from the old value(s) to the new ones.
-	 * If multiple values are returned, then each value gets its own independent animation.
-	 * <p>
-	 * For a toggle button this could be {@code 0} for off and {@code 1} for on.
-	 */
-	float[] getValues( Component c );
 
 	/**
 	 * Returns whether animation is enabled for this painter (default is {@code true}).
@@ -161,7 +165,7 @@ public interface AnimatedPainter
 	/**
 	 * Returns the client property key used to store the animation support.
 	 */
-	default Object getClientPropertyKey() {
+	default Object getAnimationClientPropertyKey() {
 		return getClass();
 	}
 

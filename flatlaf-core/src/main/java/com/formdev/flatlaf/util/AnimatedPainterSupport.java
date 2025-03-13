@@ -17,7 +17,6 @@
 package com.formdev.flatlaf.util;
 
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JComponent;
 
@@ -29,7 +28,8 @@ import javax.swing.JComponent;
  */
 class AnimatedPainterSupport
 {
-	private int valueIndex;
+	private final int valueIndex;
+
 	private float startValue;
 	private float targetValue;
 	private float animatedValue;
@@ -43,22 +43,26 @@ class AnimatedPainterSupport
 	private int width;
 	private int height;
 
-	static void paint( AnimatedPainter painter, Component c, Graphics g,
+	private AnimatedPainterSupport( int valueIndex ) {
+		this.valueIndex = valueIndex;
+	}
+
+	static void paint( AnimatedPainter painter, Component c, Graphics2D g,
 		int x, int y, int width, int height )
 	{
+		// get animatable component values
+		float[] values = painter.getAnimatableValues( c );
+
 		if( !isAnimationEnabled( painter, c ) ) {
 			// paint without animation if animation is disabled or
 			// component is not a JComponent and therefore does not support
 			// client properties, which are required to keep animation state
-			painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, painter.getValues( c ) );
+			painter.paintAnimated( c, g, x, y, width, height, values );
 			return;
 		}
 
-		// get component values
-		float values[] = painter.getValues( c );
-
 		JComponent jc = (JComponent) c;
-		Object key = painter.getClientPropertyKey();
+		Object key = painter.getAnimationClientPropertyKey();
 		AnimatedPainterSupport[] ass = (AnimatedPainterSupport[]) jc.getClientProperty( key );
 
 		// check whether length of values array has changed
@@ -83,8 +87,7 @@ class AnimatedPainterSupport
 
 			if( as == null ) {
 				// painted first time --> do not animate, but remember current component value
-				as = new AnimatedPainterSupport();
-				as.valueIndex = i;
+				as = new AnimatedPainterSupport( i );
 				as.startValue = as.targetValue = as.animatedValue = value;
 				ass[i] = as;
 			} else if( value != as.targetValue ) {
@@ -159,7 +162,7 @@ class AnimatedPainterSupport
 		for( int i = 0; i < ass.length; i++ )
 			animatedValues[i] = ass[i].animatedValue;
 
-		painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, animatedValues );
+		painter.paintAnimated( c, g, x, y, width, height, animatedValues );
 	}
 
 	private static boolean isAnimationEnabled( AnimatedPainter painter, Component c ) {
@@ -170,7 +173,7 @@ class AnimatedPainterSupport
 		if( !isAnimationEnabled( painter, c ) )
 			return;
 
-		AnimatedPainterSupport[] ass = (AnimatedPainterSupport[]) ((JComponent)c).getClientProperty( painter.getClientPropertyKey() );
+		AnimatedPainterSupport[] ass = (AnimatedPainterSupport[]) ((JComponent)c).getClientProperty( painter.getAnimationClientPropertyKey() );
 		if( ass != null ) {
 			for( int i = 0; i < ass.length; i++ ) {
 				AnimatedPainterSupport as = ass[i];

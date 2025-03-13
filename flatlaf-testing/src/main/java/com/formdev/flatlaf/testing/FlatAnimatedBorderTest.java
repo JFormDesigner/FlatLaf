@@ -244,7 +244,7 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 
@@ -315,7 +315,7 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 
@@ -416,7 +416,7 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 

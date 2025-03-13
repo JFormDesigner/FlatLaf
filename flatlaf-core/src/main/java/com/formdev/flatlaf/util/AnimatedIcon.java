@@ -25,16 +25,23 @@ import javax.swing.JComponent;
 /**
  * Icon that automatically animates painting on component value changes.
  * <p>
- * {@link #getValues(Component)} returns the value(s) of the component.
+ * {@link #getAnimatableValues(Component)} returns the animatable value(s) of the component.
  * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
  * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
- * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
+ * If {@link #getAnimatableValues(Component)} returns multiple values, then each value
+ * gets its own independent animation, which may start/end at different points in time,
+ * may have different duration, resolution and interpolator.
  * <p>
  * Example for an animated icon:
  * <pre>
  * private class MyAnimatedIcon
  *     implements AnimatedIcon
  * {
+ *     &#64;Override
+ *     public float[] getAnimatableValues( Component c ) {
+ *         return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
+ *     }
+ *
  *     &#64;Override public int getIconWidth() { return 100; }
  *     &#64;Override public int getIconHeight() { return 20; }
  *
@@ -44,11 +51,6 @@ import javax.swing.JComponent;
  *         g.drawRect( x, y, width - 1, height - 1 );
  *         g.fillRect( x, y, Math.round( width * animatedValues[0] ), height );
  *     }
- *
- *     &#64;Override
- *     public float[] getValues( Component c ) {
- *         return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
- *     }
  * }
  *
  * // sample usage
@@ -57,7 +59,7 @@ import javax.swing.JComponent;
  * </pre>
  *
  * Animation works only if the component passed to {@link #paintIcon(Component, Graphics, int, int)}
- * is a instance of {@link JComponent}.
+ * is an instance of {@link JComponent}.
  * A client property is set on the component to store the animation state.
  *
  * @author Karl Tauber
@@ -65,6 +67,17 @@ import javax.swing.JComponent;
 public interface AnimatedIcon
 	extends Icon, AnimatedPainter
 {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 2
+	 */
+	@Override
+	default float[] getAnimatableValues( Component c ) {
+		// for compatibility
+		return new float[] { getValue( c ) };
+	}
+
 	/**
 	 * Invokes {@link #paintWithAnimation(Component, Graphics, int, int, int, int)}.
 	 */
@@ -80,6 +93,7 @@ public interface AnimatedIcon
 	 */
 	@Override
 	default void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+		// for compatibility
 		paintIconAnimated( c, g, x, y, animatedValues[0] );
 	}
 
@@ -101,28 +115,39 @@ public interface AnimatedIcon
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @since 2
-	 */
-	@Override
-	default float[] getValues( Component c ) {
-		return new float[] { getValue( c ) };
-	}
-
-	/**
-	 * Gets the value of the component.
+	 * Gets the animatable value of the component.
 	 * <p>
 	 * This can be any value and depends on the component.
 	 * If the value changes, then this class animates from the old value to the new one.
 	 * <p>
 	 * For a toggle button this could be {@code 0} for off and {@code 1} for on.
 	 *
-	 * @deprecated override {@link #getValues(Component)} instead
+	 * @deprecated override {@link #getAnimatableValues(Component)} instead
 	 */
 	@Deprecated
 	default float getValue( Component c ) {
 		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since TODO
+	 */
+	@Override
+	default Object getAnimationClientPropertyKey() {
+		// for compatibility
+		return getClientPropertyKey();
+	}
+
+	/**
+	 * Returns the client property key used to store the animation support.
+	 *
+	 * @deprecated override {@link #getAnimationClientPropertyKey()} instead
+	 */
+	@Deprecated
+	default Object getClientPropertyKey() {
+		return getClass();
 	}
 
 	//---- class AnimationSupport ---------------------------------------------
@@ -138,7 +163,7 @@ public interface AnimatedIcon
 		 */
 		@Deprecated
 		public static void paintIcon( AnimatedIcon icon, Component c, Graphics g, int x, int y ) {
-			AnimatedPainterSupport.paint( icon, c, g, x, y, icon.getIconWidth(), icon.getIconHeight() );
+			AnimatedPainterSupport.paint( icon, c, (Graphics2D) g, x, y, icon.getIconWidth(), icon.getIconHeight() );
 		}
 
 		/**

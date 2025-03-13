@@ -25,10 +25,12 @@ import javax.swing.border.Border;
 /**
  * Border that automatically animates painting on component value changes.
  * <p>
- * {@link #getValues(Component)} returns the value(s) of the component.
+ * {@link #getAnimatableValues(Component)} returns the animatable value(s) of the component.
  * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
  * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
- * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
+ * If {@link #getAnimatableValues(Component)} returns multiple values, then each value
+ * gets its own independent animation, which may start/end at different points in time,
+ * may have different duration, resolution and interpolator.
  * <p>
  * Example for an animated border:
  * <pre>
@@ -36,16 +38,16 @@ import javax.swing.border.Border;
  *     implements AnimatedBorder
  * {
  *     &#64;Override
+ *     public float[] getAnimatableValues( Component c ) {
+ *         return new float[] { c.isFocusOwner() ? 1 : 0 };
+ *     }
+ *
+ *     &#64;Override
  *     public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
  *         int lh = UIScale.scale( 2 );
  *
  *         g.setColor( Color.blue );
  *         g.fillRect( x, y + height - lh, Math.round( width * animatedValues[0] ), lh );
- *     }
- *
- *     &#64;Override
- *     public float[] getValues( Component c ) {
- *         return new float[] { c.isFocusOwner() ? 1 : 0 };
  *     }
  *
  *     &#64;Override

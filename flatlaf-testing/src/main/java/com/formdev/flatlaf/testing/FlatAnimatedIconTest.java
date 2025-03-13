@@ -221,7 +221,7 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { ((JRadioButton)c).isSelected() ? 1 : 0 };
 		}
 
@@ -266,7 +266,7 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
 		}
 
@@ -342,7 +342,7 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			AbstractButton b = (AbstractButton) c;
 			ButtonModel bm = b.getModel();
 
@@ -392,7 +392,7 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float[] getValues( Component c ) {
+		public float[] getAnimatableValues( Component c ) {
 			return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
 		}
 
