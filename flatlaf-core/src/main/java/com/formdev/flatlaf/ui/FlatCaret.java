@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
@@ -33,6 +36,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.Position;
 import javax.swing.text.Utilities;
 
 /**
@@ -48,12 +52,15 @@ public class FlatCaret
 {
 	private static final String KEY_CARET_INFO = "FlatLaf.internal.caretInfo";
 
+	// selectAllOnFocusPolicy
+	private static final int NEVER = 0, ONCE = 1, ALWAYS = 2;
+
 	private final String selectAllOnFocusPolicy;
 	private final boolean selectAllOnMouseClick;
 
 	private boolean inInstall;
 	private boolean wasFocused;
-	private boolean wasTemporaryLost;
+	private boolean wasFocusTemporaryLost;
 	private boolean isMousePressed;
 	private boolean isWordSelection;
 	private boolean isLineSelection;
@@ -94,6 +101,9 @@ public class FlatCaret
 			// restore selection
 			select( (int) ci[1], (int) ci[0] );
 
+			if( ci[4] != 0 )
+				wasFocused = true;
+
 			// if text component is focused, then caret and selection are visible,
 			// but when switching theme, the component does not yet have
 			// a highlighter and the selection is not painted
@@ -121,6 +131,7 @@ public class FlatCaret
 			getMark(),
 			getBlinkRate(),
 			System.currentTimeMillis(),
+			wasFocused ? 1 : 0,
 		} );
 
 		super.deinstall( c );
@@ -141,10 +152,35 @@ public class FlatCaret
 	}
 
 	@Override
+	public void setDot( int dot ) {
+		super.setDot( dot );
+
+		// mark as focused if invoked from JTextComponent.setCaretPosition()
+		// to disable SELECT_ALL_ON_FOCUS_POLICY_ONCE if application explicitly changes selection
+		if( !wasFocused &&
+			getSelectAllOnFocusPolicy() == ONCE &&
+			StackUtils.wasInvokedFrom( JTextComponent.class.getName(), "setCaretPosition", 6 ) )
+		  wasFocused = true;
+	}
+
+	@Override
+	public void moveDot( int dot ) {
+		super.moveDot( dot );
+
+		// mark as focused if invoked from JTextComponent.moveCaretPosition()
+		// to disable SELECT_ALL_ON_FOCUS_POLICY_ONCE if application explicitly changes selection
+		if( !wasFocused &&
+			getSelectAllOnFocusPolicy() == ONCE &&
+			StackUtils.wasInvokedFrom( JTextComponent.class.getName(), "moveCaretPosition", 6 ) )
+		  wasFocused = true;
+	}
+
+	@Override
 	public void focusGained( FocusEvent e ) {
-		if( !inInstall && !wasTemporaryLost && (!isMousePressed || selectAllOnMouseClick) )
+		if( !inInstall && !wasFocusTemporaryLost && (!isMousePressed || isSelectAllOnMouseClick()) )
 			selectAllOnFocusGained();
-		wasTemporaryLost = false;
+
+		wasFocusTemporaryLost = false;
 		wasFocused = true;
 
 		super.focusGained( e );
@@ -152,7 +188,7 @@ public class FlatCaret
 
 	@Override
 	public void focusLost( FocusEvent e ) {
-		wasTemporaryLost = e.isTemporary();
+		wasFocusTemporaryLost = e.isTemporary();
 		super.focusLost( e );
 	}
 
@@ -232,24 +268,13 @@ public class FlatCaret
 		if( doc == null || !c.isEnabled() || !c.isEditable() || FlatUIUtils.isCellEditor( c ) )
 			return;
 
-		Object selectAllOnFocusPolicy = c.getClientProperty( SELECT_ALL_ON_FOCUS_POLICY );
-		if( selectAllOnFocusPolicy == null )
-			selectAllOnFocusPolicy = this.selectAllOnFocusPolicy;
-
-		if( selectAllOnFocusPolicy == null || SELECT_ALL_ON_FOCUS_POLICY_NEVER.equals( selectAllOnFocusPolicy ) )
+		int selectAllOnFocusPolicy = getSelectAllOnFocusPolicy();
+		if( selectAllOnFocusPolicy == NEVER )
 			return;
 
-		if( !SELECT_ALL_ON_FOCUS_POLICY_ALWAYS.equals( selectAllOnFocusPolicy ) ) {
-			// policy is "once" (or null or unknown)
-
+		if( selectAllOnFocusPolicy == ONCE && !isMousePressed ) {
 			// was already focused?
-			if( wasFocused )
-				return;
-
-			// check whether selection was modified before gaining focus
-			int dot = getDot();
-			int mark = getMark();
-			if( dot != mark || dot != doc.getLength() )
+			if( wasFocused && !(c instanceof JFormattedTextField) )
 				return;
 		}
 
@@ -265,16 +290,51 @@ public class FlatCaret
 
 				select( 0, c2.getDocument().getLength() );
 			} );
-		} else {
+		} else
 			select( 0, doc.getLength() );
-		}
 	}
 
 	private void select( int mark, int dot ) {
 		if( mark != getMark() )
-			setDot( mark );
+			setDot( mark, Position.Bias.Forward );
 		if( dot != getDot() )
-			moveDot( dot );
+			moveDot( dot, Position.Bias.Forward );
+	}
+
+	private int getSelectAllOnFocusPolicy() {
+		Object value = getClientProperty( SELECT_ALL_ON_FOCUS_POLICY );
+		// Note: using String.valueOf() because selectAllOnFocusPolicy may be null
+		switch( String.valueOf( value instanceof String ? value : selectAllOnFocusPolicy ) ) {
+			default:
+			case SELECT_ALL_ON_FOCUS_POLICY_NEVER:  return NEVER;
+			case SELECT_ALL_ON_FOCUS_POLICY_ONCE:   return ONCE;
+			case SELECT_ALL_ON_FOCUS_POLICY_ALWAYS: return ALWAYS;
+		}
+	}
+
+	private boolean isSelectAllOnMouseClick() {
+		Object value = getClientProperty( SELECT_ALL_ON_MOUSE_CLICK );
+		return (value instanceof Boolean) ? (boolean) value : selectAllOnMouseClick;
+	}
+
+	private Object getClientProperty( String key ) {
+		JTextComponent c = getComponent();
+		if( c == null )
+			return null;
+
+		Object value = c.getClientProperty( key );
+		if( value != null )
+			return value;
+
+		Container parent = c.getParent();
+		if( parent instanceof JComboBox )
+			return ((JComboBox<?>)parent).getClientProperty( key );
+		if( parent instanceof JSpinner.DefaultEditor ) {
+			parent = parent.getParent();
+			if( parent instanceof JSpinner )
+				return ((JSpinner)parent).getClientProperty( key );
+		}
+		return null;
 	}
 
 	/** @since 1.4 */

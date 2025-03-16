@@ -70,6 +70,21 @@ FlatLaf Change Log
   application where multiple class loaders are involved. E.g. in Eclipse plugin
   or in LibreOffice extension. (issues #955 and #851)
 - HTML: Fixed rendering of `<hr noshade>` in dark themes. (issue #932)
+- TextComponents: `selectAllOnFocusPolicy` related changes:
+  - No longer select all text if selection (or caret position) was changed by
+    application and `selectAllOnFocusPolicy` is `once` (the default). (issue
+    #983)
+  - FormattedTextField and Spinner: `selectAllOnFocusPolicy = once` behaves now
+    as `always` (was `never` before), which means that all text is selected when
+    component gains focus. This is because of special behavior of
+    `JFormattedTextField` that did not allow implementation of `once`.
+  - Client property `JTextField.selectAllOnFocusPolicy` now also works on
+    (editable) `JComboBox` and on `JSpinner`.
+  - Added client property `JTextField.selectAllOnMouseClick` to override UI
+    property `TextComponent.selectAllOnMouseClick`. (issue #961)
+  - For `selectAllOnMouseClick = true`, clicking with the mouse into the text
+    field, to focus it, now always selects all text, even if
+    `selectAllOnFocusPolicy` is `once`.
 
 #### Incompatibilities
 

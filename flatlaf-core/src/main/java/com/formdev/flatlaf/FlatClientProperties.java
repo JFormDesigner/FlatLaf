@@ -21,6 +21,8 @@ import java.awt.IllegalComponentStateException;
 import java.awt.Window;
 import java.util.Objects;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
 /**
@@ -1209,12 +1211,15 @@ public interface FlatClientProperties
 	/**
 	 * Specifies whether all text is selected when the text component gains focus.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Components</strong> {@link javax.swing.text.JTextComponent} (and subclasses),
+	 * {@link javax.swing.JComboBox} (since 3.6) and {@link javax.swing.JSpinner} (since 3.6)<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong>
 	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_NEVER},
 	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_ONCE} (default) or
 	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}
+	 *
+	 * @see #SELECT_ALL_ON_MOUSE_CLICK
 	 */
 	String SELECT_ALL_ON_FOCUS_POLICY = "JTextField.selectAllOnFocusPolicy";
 
@@ -1229,6 +1234,12 @@ public interface FlatClientProperties
 	 * Select all text when the text component gains focus for the first time
 	 * and selection was not modified (is at end of text).
 	 * This is the default.
+	 * <p>
+	 * <b>Limitations:</b>
+	 * For {@link JFormattedTextField} and {@link JSpinner} this behaves
+	 * as {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}.
+     * This is because of special behavior of {@link JFormattedTextField}
+     * that did not allow implementation of {@code "once"}.
 	 *
 	 * @see #SELECT_ALL_ON_FOCUS_POLICY
 	 */
@@ -1240,6 +1251,19 @@ public interface FlatClientProperties
 	 * @see #SELECT_ALL_ON_FOCUS_POLICY
 	 */
 	String SELECT_ALL_ON_FOCUS_POLICY_ALWAYS = "always";
+
+	/**
+	 * Specifies whether all text is selected when when clicking with the mouse
+	 * into the text field (and if "select all on focus" policy is enabled).
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.text.JTextComponent} (and subclasses),
+	 * {@link javax.swing.JComboBox} and {@link javax.swing.JSpinner}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @see #SELECT_ALL_ON_FOCUS_POLICY
+	 * @since 3.6
+	 */
+	String SELECT_ALL_ON_MOUSE_CLICK = "JTextField.selectAllOnMouseClick";
 
 	/**
 	 * Placeholder text that is only painted if the text field is empty.

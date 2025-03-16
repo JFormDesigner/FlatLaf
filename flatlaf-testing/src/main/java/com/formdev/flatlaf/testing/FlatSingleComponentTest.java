@@ -24,13 +24,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
+import java.util.function.Supplier;
+import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.FlatDarculaLaf;
@@ -59,11 +54,18 @@ public class FlatSingleComponentTest
 
 	private final JLabel infoLabel;
 
-	private JComponent createSingleComponent() {
+	protected JComponent createSingleComponent() {
 		return new JButton( "hello" );
 	}
 
 	public static void main( String[] args ) {
+		EventQueue.invokeLater( () -> {
+			launch( FlatSingleComponentTest::new, args );
+		} );
+	}
+
+	@SuppressWarnings( "ReturnValueIgnored" ) // Error Prone
+	protected static void launch( Supplier<FlatSingleComponentTest> factory, String[] args ) {
 		DemoPrefs.init( PREFS_ROOT_PATH );
 		DemoPrefs.initSystemScale();
 
@@ -88,10 +90,10 @@ public class FlatSingleComponentTest
 		DemoPrefs.setupLaf( args );
 
 		// create and show frame
-		new FlatSingleComponentTest();
+		factory.get();
 	}
 
-	private FlatSingleComponentTest() {
+	protected FlatSingleComponentTest() {
 		super( "FlatSingleComponentTest" );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
