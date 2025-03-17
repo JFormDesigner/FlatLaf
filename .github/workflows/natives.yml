@@ -66,10 +66,20 @@ jobs:
               #   tar.exe: Couldn't open ~/.gradle/caches/modules-2/modules-2.lock: Permission denied
               run: ./gradlew build-natives --no-daemon
 
+            - name: Set artifacts pattern
+              shell: bash
+              run: |
+                case ${{ matrix.os }} in
+                    windows-latest)    echo "artifactPattern=flatlaf-windows-*.dll"      >> $GITHUB_ENV ;;
+                    macos-latest)      echo "artifactPattern=libflatlaf-macos-*.dylib"   >> $GITHUB_ENV ;;
+                    ubuntu-latest)     echo "artifactPattern=libflatlaf-linux-x86_64.so" >> $GITHUB_ENV ;;
+                    ubuntu-24.04-arm)  echo "artifactPattern=libflatlaf-linux-arm64.so"  >> $GITHUB_ENV ;;
+                esac
+
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
               with:
                   name: FlatLaf-natives-build-artifacts-${{ matrix.os }}
                   path: |
-                      flatlaf-core/src/main/resources/com/formdev/flatlaf/natives
+                      flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/${{ env.artifactPattern }}
                       flatlaf-natives/flatlaf-natives-*/build
