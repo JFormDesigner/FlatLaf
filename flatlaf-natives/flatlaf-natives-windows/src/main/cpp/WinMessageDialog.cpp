@@ -84,10 +84,10 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_show
 
 // all values in DLUs
 
-#define INSETS_TOP				16
+#define INSETS_TOP				12
 #define INSETS_LEFT				12
 #define INSETS_RIGHT			12
-#define INSETS_BOTTOM			8
+#define INSETS_BOTTOM			6
 
 #define ICON_TEXT_GAP			8
 
@@ -96,18 +96,41 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_show
 #define LABEL_HEIGHT			8
 
 #define BUTTON_WIDTH			50
-#define BUTTON_HEIGHT			14
+#define BUTTON_HEIGHT			12
 #define BUTTON_GAP				5
-#define BUTTON_TOP_GAP			16
+#define BUTTON_TOP_GAP			14
 #define BUTTON_LEFT_RIGHT_GAP	8
 
 // based on https://learn.microsoft.com/en-us/windows/win32/dlgbox/using-dialog-boxes#creating-a-template-in-memory
 static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title, LPCWSTR text,
 	int defaultButton, int buttonCount, LPCWSTR* buttons )
 {
-	//---- calculate layout (in DLUs) ----
+	// get font info needed for DS_SETFONT
+	NONCLIENTMETRICS ncMetrics;
+	ncMetrics.cbSize = sizeof( NONCLIENTMETRICS );
+	if( !::SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncMetrics, 0 ) )
+		return NULL;
 
-	HDC hdc = GetDC( owner );
+	// create DC to use message font
+	HDC hdcOwner = ::GetDC( owner );
+	HDC hdc = ::CreateCompatibleDC( hdcOwner );
+	::ReleaseDC( owner, hdcOwner );
+	if( hdc == NULL )
+		return NULL;
+
+	HFONT hfont = ::CreateFontIndirect( &ncMetrics.lfMessageFont );
+	if( hfont == NULL ) {
+		::DeleteDC( hdc );
+		return NULL;
+	}
+
+	if( ::SelectObject( hdc, hfont ) == NULL ) {
+		::DeleteDC( hdc );
+		::DeleteObject( hfont );
+		return NULL;
+	}
+
+	//---- calculate layout (in DLUs) ----
 
 	// layout icon
 	LPWSTR icon;
@@ -226,13 +249,24 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	int bx = dw - buttonTotalWidth - BUTTON_LEFT_RIGHT_GAP;
 	int by = dh - BUTTON_HEIGHT - INSETS_BOTTOM;
 
+	// get font info needed for DS_SETFONT
+	int fontPointSize = (ncMetrics.lfMessageFont.lfHeight < 0)
+		? -MulDiv( ncMetrics.lfMessageFont.lfHeight, 72, ::GetDeviceCaps( hdc, LOGPIXELSY ) )
+		: ncMetrics.lfMessageFont.lfHeight;
+	LPCWSTR fontFaceName = ncMetrics.lfMessageFont.lfFaceName;
+
+	// delete DC and font
+	::DeleteDC( hdc );
+	::DeleteObject( hfont );
+
 	// (approximately) calculate memory size needed for in-memory template
 	int templSize = (sizeof(DLGTEMPLATE) + /*menu*/ 2 + /*class*/ 2 + /*title*/ 2)
 		+ ((sizeof(DLGITEMTEMPLATE) + /*class*/ 4 + /*title/icon*/ 4 + /*creation data*/ 2) * (/*icon+text*/2 + buttonCount))
-		+ (title != NULL ? wcslen( title ) * sizeof(wchar_t) : 0)
-		+ (wcslen( wrappedText ) * sizeof(wchar_t));
+		+ (title != NULL ? (wcslen( title ) + 1) * sizeof(wchar_t) : 0)
+		+ /*fontPointSize*/ 2 + ((wcslen( fontFaceName ) + 1) * sizeof(wchar_t))
+		+ ((wcslen( wrappedText ) + 1) * sizeof(wchar_t));
 	for( int i = 0; i < buttonCount; i++ )
-		templSize += (wcslen( buttons[i] ) * sizeof(wchar_t));
+		templSize += ((wcslen( buttons[i] ) + 1) * sizeof(wchar_t));
 
 	templSize += (2 * (1 + 1 + buttonCount)); // necessary for DWORD alignment
 	templSize += 100; // some reserve
@@ -246,7 +280,7 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	//---- define dialog box ----
 
 	LPDLGTEMPLATE lpdt = (LPDLGTEMPLATE) templ;
-	lpdt->style = WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION;
+	lpdt->style = WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION | DS_SETFONT;
 	lpdt->cdit = /*text*/ 1 + buttonCount; // number of controls
 	lpdt->x = dx;
 	lpdt->y = dy;
@@ -262,6 +296,10 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	} else
 		*lpw++ = 0; // no title
 
+	// for DS_SETFONT
+	*lpw++ = fontPointSize;
+	wcscpy( (LPWSTR) lpw, fontFaceName );
+	lpw += wcslen( fontFaceName ) + 1;
 
 	//---- define icon ----
 
@@ -342,11 +380,14 @@ static BOOL CALLBACK focusDefaultButtonProc( HWND hwnd, LPARAM lParam ) {
 }
 
 static INT_PTR CALLBACK messageDialogProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
-	if( uMsg == WM_INITDIALOG )
-		::EnumChildWindows( hwnd, focusDefaultButtonProc, 0 );
-	else if( uMsg == WM_COMMAND ) {
-		::EndDialog( hwnd, wParam );
-		return TRUE;
+	switch( uMsg ) {
+		case WM_INITDIALOG:
+			::EnumChildWindows( hwnd, focusDefaultButtonProc, 0 );
+			break;
+
+		case WM_COMMAND:
+			::EndDialog( hwnd, wParam );
+			return TRUE;
 	}
 	return FALSE;
 }
