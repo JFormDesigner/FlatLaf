@@ -73,6 +73,7 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -95,6 +96,8 @@ class FlatThemeFileEditor
 	private static final String KEY_SHOW_HSL_COLORS = "showHslColors";
 	private static final String KEY_SHOW_RGB_COLORS = "showRgbColors";
 	private static final String KEY_SHOW_COLOR_LUMA = "showColorLuma";
+
+	private static final int NEW_PROPERTIES_FILE_OPTION = 100;
 
 	private File dir;
 	private Preferences state;
@@ -227,48 +230,45 @@ class FlatThemeFileEditor
 			return;
 
 		// choose directory
-		JFileChooser chooser = new JFileChooser( dir ) {
-			@Override
-			public void approveSelection() {
-				if( !checkDirectory( this, getSelectedFile() ) )
-					return;
-
-				super.approveSelection();
-			}
-		};
-		chooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-		if( chooser.showOpenDialog( this ) != JFileChooser.APPROVE_OPTION )
+		SystemFileChooser chooser = new SystemFileChooser( dir );
+		chooser.setFileSelectionMode( SystemFileChooser.DIRECTORIES_ONLY );
+		chooser.setApproveCallback( this::checkDirectory );
+		int result = chooser.showOpenDialog( this );
+		if( result == SystemFileChooser.CANCEL_OPTION )
 			return;
 
 		File selectedFile = chooser.getSelectedFile();
 		if( selectedFile == null || selectedFile.equals( dir ) )
 			return;
 
+		if( result == NEW_PROPERTIES_FILE_OPTION ) {
+			if( !newPropertiesFile( selectedFile ) )
+				return;
+		}
+
 		// open new directory
 		loadDirectory( selectedFile );
 	}
 
-	private boolean checkDirectory( Component parentComponent, File dir ) {
+	private int checkDirectory( File[] selectedFiles, SystemFileChooser.ApproveContext context ) {
+		File dir = selectedFiles[0];
 		if( !dir.isDirectory() ) {
-			JOptionPane.showMessageDialog( parentComponent,
-				"Directory '" + dir + "' does not exist.",
-				getTitle(), JOptionPane.INFORMATION_MESSAGE );
-			return false;
+			showMessageDialog( context, "Directory '" + dir + "' does not exist.", null );
+			return SystemFileChooser.CANCEL_OPTION;
 		}
 
 		if( getPropertiesFiles( dir ).length == 0 ) {
 			UIManager.put( "OptionPane.sameSizeButtons", false );
-			int result = JOptionPane.showOptionDialog( parentComponent,
-				"Directory '" + dir + "' does not contain properties files.\n\n"
-				+ "Do you want create a new theme in this directory?\n\n"
+			int result = showMessageDialog( context,
+				"Directory '" + dir + "' does not contain properties files.",
+				"Do you want create a new theme in this directory?\n\n"
 				+ "Or do you want modify/extend core themes and create empty"
 				+ " 'FlatLightLaf.properties' and 'FlatDarkLaf.properties' files in this directory?",
-				getTitle(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-				new Object[] { "New Theme", "Modify Core Themes", "Cancel" }, null );
+				"_New Theme", "_Modify Core Themes", "_Cancel" );
 			UIManager.put( "OptionPane.sameSizeButtons", null );
 
 			if( result == 0 )
-				return newPropertiesFile( dir );
+				return NEW_PROPERTIES_FILE_OPTION;
 			else if( result == 1 ) {
 				try {
 					String content =
@@ -280,18 +280,37 @@ class FlatThemeFileEditor
 						"\n";
 					writeFile( new File( dir, "FlatLightLaf.properties" ), content );
 					writeFile( new File( dir, "FlatDarkLaf.properties" ), content );
-					return true;
+					return SystemFileChooser.APPROVE_OPTION;
 				} catch( IOException ex ) {
 					ex.printStackTrace();
 
-					JOptionPane.showMessageDialog( parentComponent,
-						"Failed to create 'FlatLightLaf.properties' or 'FlatDarkLaf.properties'." );
+					showMessageDialog( context,
+						"Failed to create 'FlatLightLaf.properties' or 'FlatDarkLaf.properties'.", null );
 				}
 			}
-			return false;
+			return SystemFileChooser.CANCEL_OPTION;
 		}
 
-		return true;
+		return SystemFileChooser.APPROVE_OPTION;
+	}
+
+	private int showMessageDialog( SystemFileChooser.ApproveContext context,
+		String primaryText, String secondaryText, String... buttons )
+	{
+		if( context != null ) {
+			// invoked from SystemFileChooser
+			return context.showMessageDialog( JOptionPane.INFORMATION_MESSAGE,
+				primaryText, secondaryText, 0, buttons );
+		} else {
+			// invoked from directoryChanged()
+			if( secondaryText != null )
+				primaryText = primaryText + "\n\n" + secondaryText;
+			for( int i = 0; i < buttons.length; i++ )
+				buttons[i] = buttons[i].replace( "_", "" );
+			return JOptionPane.showOptionDialog( this, primaryText, getTitle(),
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+				(buttons.length > 0) ? buttons : null, null );
+		}
 	}
 
 	private void directoryChanged() {
@@ -302,7 +321,15 @@ class FlatThemeFileEditor
 		if( dir == null )
 			return;
 
-		if( checkDirectory( this, dir ) )
+		directoryField.hidePopup();
+
+		int result = checkDirectory( new File[] { dir }, null );
+		if( result == NEW_PROPERTIES_FILE_OPTION ) {
+			if( !newPropertiesFile( dir ) )
+				return;
+		}
+
+		if( result != SystemFileChooser.CANCEL_OPTION )
 			loadDirectory( dir );
 		else {
 			// remove from directories history
@@ -390,6 +417,9 @@ class FlatThemeFileEditor
 		File[] propertiesFiles = dir.listFiles( (d, name) -> {
 			return name.endsWith( ".properties" );
 		} );
+		if( propertiesFiles == null )
+			propertiesFiles = new File[0];
+
 		Arrays.sort( propertiesFiles, (f1, f2) -> {
 			String n1 = toSortName( f1.getName() );
 			String n2 = toSortName( f2.getName() );
