@@ -89,10 +89,39 @@ public class FlatSystemFileChooserTest
 		currentDirCheckBox.setSelected( state.getBoolean( "systemfilechooser.currentdir.enabled", false ) );
 		selectedFileCheckBox.setSelected( state.getBoolean( "systemfilechooser.selectedfile.enabled", false ) );
 		selectedFilesCheckBox.setSelected( state.getBoolean( "systemfilechooser.selectedfiles.enabled", false ) );
+		persistStateCheckBox.setSelected( state.getBoolean( "systemfilechooser.persistState.enabled", false ) );
 
 		currentDirChanged();
 		selectedFileChanged();
 		selectedFilesChanged();
+		persistStateChanged();
+	}
+
+	private void persistStateChanged() {
+		boolean b = persistStateCheckBox.isSelected();
+
+		SystemFileChooser.setStateStore( b
+			? new SystemFileChooser.StateStore() {
+				private static final String KEY_PREFIX = "fileChooser.";
+
+				@Override
+				public String get( String key, String def ) {
+					String value = DemoPrefs.getState().get( KEY_PREFIX + key, def );
+					System.out.println( "GET " + key + " = " + value );
+					return value;
+				}
+
+				@Override
+				public void put( String key, String value ) {
+					System.out.println( "PUT " + key + " = " + value );
+					if( value != null )
+						DemoPrefs.getState().put( KEY_PREFIX + key, value );
+					else
+						DemoPrefs.getState().remove( KEY_PREFIX + key );
+				}
+			} : null );
+
+		DemoPrefs.getState().putBoolean( "systemfilechooser.persistState.enabled", b );
 	}
 
 	private void open() {
@@ -221,6 +250,9 @@ public class FlatSystemFileChooserTest
 //		fc.putPlatformProperty( SystemFileChooser.MAC_OPTIONS_CLEAR, FlatNativeMacLibrary.FC_showsTagField );
 
 //		fc.putPlatformProperty( SystemFileChooser.LINUX_OPTIONS_CLEAR, FlatNativeLinuxLibrary.FC_create_folders | FlatNativeLinuxLibrary.FC_do_overwrite_confirmation );
+
+		String id = (String) stateStoreIDField.getSelectedItem();
+		fc.setStateStoreID( id != null && !id.isEmpty() ? id : null );
 	}
 
 	private void configureSwingFileChooser( JFileChooser fc ) {
@@ -517,6 +549,9 @@ public class FlatSystemFileChooserTest
 		multiSelectionEnabledCheckBox = new JCheckBox();
 		useFileHidingCheckBox = new JCheckBox();
 		useSystemFileChooserCheckBox = new JCheckBox();
+		persistStateCheckBox = new JCheckBox();
+		JLabel stateStoreIDLabel = new JLabel();
+		stateStoreIDField = new JComboBox<>();
 		JLabel approveButtonTextLabel = new JLabel();
 		approveButtonTextField = new JTextField();
 		JLabel approveButtonMnemonicLabel = new JLabel();
@@ -605,6 +640,8 @@ public class FlatSystemFileChooserTest
 				"[]0" +
 				"[]0" +
 				"[]" +
+				"[]para" +
+				"[]" +
 				"[]"));
 
 			//---- directorySelectionCheckBox ----
@@ -624,6 +661,24 @@ public class FlatSystemFileChooserTest
 			useSystemFileChooserCheckBox.setText("use SystemFileChooser");
 			useSystemFileChooserCheckBox.setSelected(true);
 			panel1.add(useSystemFileChooserCheckBox, "cell 0 3");
+
+			//---- persistStateCheckBox ----
+			persistStateCheckBox.setText("persist state");
+			persistStateCheckBox.addActionListener(e -> persistStateChanged());
+			panel1.add(persistStateCheckBox, "cell 0 4");
+
+			//---- stateStoreIDLabel ----
+			stateStoreIDLabel.setText("ID:");
+			panel1.add(stateStoreIDLabel, "cell 0 5");
+
+			//---- stateStoreIDField ----
+			stateStoreIDField.setModel(new DefaultComboBoxModel<>(new String[] {
+				"abc",
+				"def"
+			}));
+			stateStoreIDField.setEditable(true);
+			stateStoreIDField.setSelectedIndex(-1);
+			panel1.add(stateStoreIDField, "cell 0 5,growx");
 		}
 		add(panel1, "cell 2 1 1 7,aligny top,growy 0");
 
@@ -806,6 +861,8 @@ public class FlatSystemFileChooserTest
 	private JCheckBox multiSelectionEnabledCheckBox;
 	private JCheckBox useFileHidingCheckBox;
 	private JCheckBox useSystemFileChooserCheckBox;
+	private JCheckBox persistStateCheckBox;
+	private JComboBox<String> stateStoreIDField;
 	private JTextField approveButtonTextField;
 	private JTextField approveButtonMnemonicField;
 	private JCheckBox currentDirCheckBox;

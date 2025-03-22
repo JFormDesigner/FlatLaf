@@ -60,6 +60,10 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  * {@code SystemFileChooser} requires FlatLaf native libraries (usually contained in flatlaf.jar).
  * If not available or disabled (via {@link FlatSystemProperties#USE_NATIVE_LIBRARY}
  * or {@link FlatSystemProperties#USE_SYSTEM_FILE_CHOOSER}), then {@code JFileChooser} is used.
+ * <p>
+ * To improve user experience, it is recommended to use a state storage
+ * (see {@link #setStateStore(StateStore)}), so that file dialogs open at previously
+ * visited folder.
  *
  * <h2>Limitations/incompatibilities compared to JFileChooser</h2>
  *
@@ -90,6 +94,11 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li><b>macOS</b>: By default, the user can not navigate into file packages (e.g. applications).
  *       If needed, this can be enabled by setting platform property
  *       {@link #MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES} to {@code true}.
+ *   <li>If no "current directory" is specified, then {@code JFileChooser} always opens
+ *       the users "Documents" folder (on Windows) or "Home" folder (on macOS and Linux).<br>
+ *       {@code SystemFileChooser} does the same when first shown, but then remembers
+ *       last visited folder (either in memory or in a {@link StateStore}) and
+ *       re-uses that folder when {@code SystemFileChooser} is shown again.
  * </ul>
  *
  * @author Karl Tauber
@@ -248,6 +257,25 @@ public class SystemFileChooser
 
 	private Map<String, Object> platformProperties;
 
+	private static final StateStore inMemoryStateStore = new StateStore() {
+		private final Map<String, String> state = new HashMap<>();
+
+		@Override
+		public String get( String key, String def ) {
+			return state.getOrDefault( key, def );
+		}
+
+		@Override
+		public void put( String key, String value ) {
+			if( value != null )
+				state.put( key, value );
+			else
+				state.remove( key );
+		}
+	};
+
+	private static StateStore stateStore;
+	private String stateStoreID;
 
 	/** @see JFileChooser#JFileChooser() */
 	public SystemFileChooser() {
@@ -384,18 +412,35 @@ public class SystemFileChooser
 
 	/** @see JFileChooser#getCurrentDirectory() */
 	public File getCurrentDirectory() {
+		if( currentDirectory == null ) {
+			// get current directory from state store
+			StateStore store = (stateStore != null) ? stateStore : inMemoryStateStore;
+			String path = store.get( buildStateKey( StateStore.KEY_CURRENT_DIRECTORY ), null );
+			if( path != null )
+				currentDirectory = getTraversableDirectory( FileSystemView.getFileSystemView().createFileObject( path ) );
+
+			// for compatibility with JFileChooser
+			if( currentDirectory == null )
+				currentDirectory = getTraversableDirectory( FileSystemView.getFileSystemView().getDefaultDirectory() );
+		}
+
 		return currentDirectory;
 	}
 
 	/** @see JFileChooser#setCurrentDirectory(File) */
 	public void setCurrentDirectory( File dir ) {
-		// for compatibility with JFileChooser
-		if( dir != null && !dir.exists() )
-			return;
-		if( dir == null )
-			dir = FileSystemView.getFileSystemView().getDefaultDirectory();
+		currentDirectory = getTraversableDirectory( dir );
+	}
 
-		currentDirectory = dir;
+	private File getTraversableDirectory( File dir ) {
+		if( dir == null )
+			return null;
+
+		// make sure to use existing (traversable) directory
+		FileSystemView fsv = FileSystemView.getFileSystemView();
+		while( dir != null && !fsv.isTraversable( dir ) )
+			dir = fsv.getParentDirectory( dir );
+		return dir;
 	}
 
 	/** @see JFileChooser#getSelectedFile() */
@@ -533,7 +578,7 @@ public class SystemFileChooser
 	 * Sets a callback that is invoked when user presses "OK" button (or double-clicks a file).
 	 * The file dialog is still open.
 	 * If the callback returns {@link #CANCEL_OPTION}, then the file dialog stays open.
-	 * If it returns {@link #APPROVE_OPTION} (or any other value other than {@link #CANCEL_OPTION}),
+	 * If it returns {@link #APPROVE_OPTION} (or any value other than {@link #CANCEL_OPTION}),
 	 * the file dialog is closed and the {@code show...Dialog()} methods return that value.
 	 * <p>
 	 * The callback has two parameters:
@@ -562,9 +607,9 @@ public class SystemFileChooser
 	 * }
 	 * }</pre>
 	 *
-	 * <b>WARNING:</b> Do not show a Swing dialog for the callback. This will not work!
+	 * <b>WARNING:</b> Do not show a Swing dialog from within the callback. This will not work!
 	 * <p>
-	 * Instead use {@link ApproveContext#showMessageDialog(int, String, String, int, String...)},
+	 * Instead, use {@link ApproveContext#showMessageDialog(int, String, String, int, String...)},
 	 * which shows a modal system message dialog as child of the file dialog.
 	 *
 	 * <pre>{@code
@@ -617,6 +662,43 @@ public class SystemFileChooser
 		return (value instanceof Integer) ? (Integer) value & ~optionsBlocked : 0;
 	}
 
+	/**
+	 * Returns state storage used to persist file chooser state (e.g. last used directory).
+	 * Or {@code null} if there is no state storage (the default).
+	 */
+	public static StateStore getStateStore() {
+		return stateStore;
+	}
+
+	/**
+	 * Sets state storage used to persist file chooser state (e.g. last used directory).
+	 */
+	public static void setStateStore( StateStore stateStore ) {
+		SystemFileChooser.stateStore = stateStore;
+	}
+
+	/**
+	 * Returns the ID used to prefix keys in state storage. Or {@code null} (the default).
+	 */
+	public String getStateStoreID() {
+		return stateStoreID;
+	}
+
+	/**
+	 * Sets the ID used to prefix keys in state storage. Or {@code null} (the default).
+	 * <p>
+	 * By specifying an ID, an application can have different persisted states
+	 * for different kinds of file dialogs within the application. E.g. Import/Export
+	 * file dialogs could use a different ID then Open/Save file dialogs.
+	 */
+	public void setStateStoreID( String stateStoreID ) {
+		this.stateStoreID = stateStoreID;
+	}
+
+	private String buildStateKey( String key ) {
+		return (stateStoreID != null) ? stateStoreID + '.' + key : key;
+	}
+
 	private int showDialogImpl( Component parent ) {
 		Window owner = (parent instanceof Window)
 			? (Window) parent
@@ -627,7 +709,16 @@ public class SystemFileChooser
 		approveResult = APPROVE_OPTION;
 		File[] files = getProvider().showDialog( owner, this );
 		setSelectedFiles( files );
-		return (files != null) ? approveResult : CANCEL_OPTION;
+		if( files == null )
+			return CANCEL_OPTION;
+
+		// remember current directory in state store
+		File currentDirectory = getCurrentDirectory();
+		StateStore store = (stateStore != null) ? stateStore : inMemoryStateStore;
+		store.put( buildStateKey( StateStore.KEY_CURRENT_DIRECTORY ),
+			(currentDirectory != null) ? currentDirectory.getAbsolutePath() : null );
+
+		return approveResult;
 	}
 
 	private FileChooserProvider getProvider() {
@@ -870,7 +961,7 @@ public class SystemFileChooser
 			if( (optionsClear & FlatNativeMacLibrary.FC_accessoryViewDisclosed) == 0 )
 				optionsSet |= FlatNativeMacLibrary.FC_accessoryViewDisclosed;
 			if( fc.isDirectorySelectionEnabled() ) {
-				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories;
+				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories | FlatNativeMacLibrary.FC_canCreateDirectories;
 				optionsClear |= FlatNativeMacLibrary.FC_canChooseFiles;
 				open = true;
 			}
@@ -1334,5 +1425,27 @@ public class SystemFileChooser
 		 */
 		public abstract int showMessageDialog( int messageType, String primaryText,
 			String secondaryText, int defaultButton, String... buttons );
+	}
+
+	//---- class StateStore ---------------------------------------------------
+
+	/**
+	 * Simple state storage used to persist file chooser state (e.g. last used directory).
+	 *
+	 * @see SystemFileChooser#setStateStore(StateStore)
+	 * @see SystemFileChooser#setStateStoreID(String)
+	 */
+	public interface StateStore {
+		String KEY_CURRENT_DIRECTORY = "currentDirectory";
+
+		/**
+		 * Returns the value for the given key, or the default value if there is no value stored.
+		 */
+		String get( String key, String def );
+
+		/**
+		 * Stores the given key and value. If value is {@code null}, it is removed from the store.
+		 */
+		void put( String key, String value );
 	}
 }

@@ -197,6 +197,12 @@ new FormModel {
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 4291, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveAsSystemActionPerformed", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "selectFolderSystemMenuItem"
+						"text": "Select Folder (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 70, 4291, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "selectFolderSystemActionPerformed", false ) )
+					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator2"
 					} )

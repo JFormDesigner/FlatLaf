@@ -18,6 +18,7 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -175,13 +176,19 @@ class DemoFrame
 
 	private void openSystemActionPerformed() {
 		SystemFileChooser chooser = new SystemFileChooser();
+		chooser.setMultiSelectionEnabled( true );
 		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
 			"Text Files", "txt", "md" ) );
 		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
 			"PDF Files", "pdf" ) );
 		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
 			"Archives", "zip", "tar", "jar", "7z" ) );
-		chooser.showOpenDialog( this );
+
+		if( chooser.showOpenDialog( this ) != SystemFileChooser.APPROVE_OPTION )
+			return;
+
+		File[] files = chooser.getSelectedFiles();
+		System.out.println( Arrays.toString( files ).replace( ",", "\n" ) );
 	}
 
 	private void saveAsSystemActionPerformed() {
@@ -190,7 +197,23 @@ class DemoFrame
 			"Text Files", "txt", "md" ) );
 		chooser.addChoosableFileFilter( new SystemFileChooser.FileNameExtensionFilter(
 			"Images", "png", "gif", "jpg" ) );
-		chooser.showSaveDialog( this );
+
+		if( chooser.showSaveDialog( this ) != SystemFileChooser.APPROVE_OPTION )
+			return;
+
+		File file = chooser.getSelectedFile();
+		System.out.println( file );
+	}
+
+	private void selectFolderSystemActionPerformed() {
+		SystemFileChooser chooser = new SystemFileChooser();
+		chooser.setFileSelectionMode( SystemFileChooser.DIRECTORIES_ONLY );
+
+		if( chooser.showOpenDialog( this ) != SystemFileChooser.APPROVE_OPTION )
+			return;
+
+		File directory  = chooser.getSelectedFile();
+		System.out.println( directory  );
 	}
 
 	private void exitActionPerformed() {
@@ -519,6 +542,7 @@ class DemoFrame
 		JMenuItem saveAsMenuItem = new JMenuItem();
 		JMenuItem openSystemMenuItem = new JMenuItem();
 		JMenuItem saveAsSystemMenuItem = new JMenuItem();
+		JMenuItem selectFolderSystemMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
@@ -630,6 +654,12 @@ class DemoFrame
 				saveAsSystemMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
 				saveAsSystemMenuItem.addActionListener(e -> saveAsSystemActionPerformed());
 				fileMenu.add(saveAsSystemMenuItem);
+
+				//---- selectFolderSystemMenuItem ----
+				selectFolderSystemMenuItem.setText("Select Folder (System)...");
+				selectFolderSystemMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
+				selectFolderSystemMenuItem.addActionListener(e -> selectFolderSystemActionPerformed());
+				fileMenu.add(selectFolderSystemMenuItem);
 				fileMenu.addSeparator();
 
 				//---- closeMenuItem ----
