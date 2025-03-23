@@ -228,8 +228,20 @@ class DemoFrame
 	private void windowDecorationsChanged() {
 		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
 
-		// change window decoration of all frames and dialogs
-		FlatLaf.setUseNativeWindowDecorations( windowDecorations );
+		if( SystemInfo.isLinux ) {
+			// enable/disable custom window decorations
+			JFrame.setDefaultLookAndFeelDecorated( windowDecorations );
+			JDialog.setDefaultLookAndFeelDecorated( windowDecorations );
+
+			// dispose frame, update decoration and re-show frame
+			dispose();
+			setUndecorated( windowDecorations );
+			getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+			setVisible( true );
+		} else {
+			// change window decoration of all frames and dialogs
+			FlatLaf.setUseNativeWindowDecorations( windowDecorations );
+		}
 
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
 		unifiedTitleBarMenuItem.setEnabled( windowDecorations );
@@ -486,7 +498,7 @@ class DemoFrame
 	}
 
 	private boolean supportsFlatLafWindowDecorations() {
-		return FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated());
+		return FlatLaf.supportsNativeWindowDecorations() || SystemInfo.isLinux;
 	}
 
 	private void initComponents() {
@@ -979,10 +991,9 @@ class DemoFrame
 			scrollingPopupMenu.add( "Item " + i );
 
 		if( supportsFlatLafWindowDecorations() ) {
-			if( SystemInfo.isLinux )
-				unsupported( windowDecorationsCheckBoxMenuItem );
-			else
-				windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
+			windowDecorationsCheckBoxMenuItem.setSelected( SystemInfo.isLinux
+				? JFrame.isDefaultLookAndFeelDecorated()
+				: FlatLaf.isUseNativeWindowDecorations() );
 			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
 			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
 			showTitleBarIconMenuItem.setSelected( UIManager.getBoolean( "TitlePane.showIcon" ) );
@@ -1026,7 +1037,7 @@ class DemoFrame
 	private void unsupported( JCheckBoxMenuItem menuItem ) {
 		menuItem.setEnabled( false );
 		menuItem.setSelected( false );
-		menuItem.setToolTipText( "Not supported on your system." );
+		menuItem.setToolTipText( "Not supported on this platform." );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
