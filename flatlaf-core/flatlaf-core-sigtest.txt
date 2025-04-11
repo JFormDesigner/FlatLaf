@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.5.2
+#Version 3.6
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -24,6 +24,7 @@ fld public final static java.lang.String MINIMUM_HEIGHT = "JComponent.minimumHei
 fld public final static java.lang.String MINIMUM_WIDTH = "JComponent.minimumWidth"
 fld public final static java.lang.String OUTLINE = "JComponent.outline"
 fld public final static java.lang.String OUTLINE_ERROR = "error"
+fld public final static java.lang.String OUTLINE_SUCCESS = "success"
 fld public final static java.lang.String OUTLINE_WARNING = "warning"
 fld public final static java.lang.String PLACEHOLDER_TEXT = "JTextField.placeholderText"
 fld public final static java.lang.String POPUP_BORDER_CORNER_RADIUS = "Popup.borderCornerRadius"
@@ -40,6 +41,7 @@ fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY = "JTextFiel
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_ALWAYS = "always"
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_NEVER = "never"
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_ONCE = "once"
+fld public final static java.lang.String SELECT_ALL_ON_MOUSE_CLICK = "JTextField.selectAllOnMouseClick"
 fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE = "JSplitPane.expandableSide"
 fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE_LEFT = "left"
 fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE_RIGHT = "right"
@@ -107,6 +109,7 @@ fld public final static java.lang.String TITLE_BAR_SHOW_ICONIFFY = "JRootPane.ti
 fld public final static java.lang.String TITLE_BAR_SHOW_MAXIMIZE = "JRootPane.titleBarShowMaximize"
 fld public final static java.lang.String TITLE_BAR_SHOW_TITLE = "JRootPane.titleBarShowTitle"
 fld public final static java.lang.String TREE_PAINT_SELECTION = "JTree.paintSelection"
+fld public final static java.lang.String TREE_WIDE_CELL_RENDERER = "JTree.wideCellRenderer"
 fld public final static java.lang.String TREE_WIDE_SELECTION = "JTree.wideSelection"
 fld public final static java.lang.String USE_WINDOW_DECORATIONS = "JRootPane.useWindowDecorations"
 fld public final static java.lang.String WINDOW_STYLE = "Window.style"
@@ -220,8 +223,11 @@ meth public static java.lang.String getPreferredFontFamily()
 meth public static java.lang.String getPreferredLightFontFamily()
 meth public static java.lang.String getPreferredMonospacedFontFamily()
 meth public static java.lang.String getPreferredSemiboldFontFamily()
+meth public static java.lang.String getUIKeyLightOrDarkPrefix(boolean)
 meth public static java.util.Map<java.lang.String,java.lang.Class<?>> getStyleableInfos(javax.swing.JComponent)
 meth public static java.util.Map<java.lang.String,java.lang.String> getGlobalExtraDefaults()
+meth public static java.util.Set<java.lang.String> getUIKeyPlatformPrefixes()
+meth public static java.util.Set<java.lang.String> getUIKeySpecialPrefixes()
 meth public static java.util.function.Function<java.lang.String,java.awt.Color> getSystemColorGetter()
 meth public static javax.swing.UIDefaults$ActiveValue createActiveFontValue(float)
 meth public static void disableWindowsD3Donscreen()
@@ -255,7 +261,7 @@ meth public void setExtraDefaults(java.util.Map<java.lang.String,java.lang.Strin
 meth public void uninitialize()
 meth public void unregisterUIDefaultsGetter(java.util.function.Function<java.lang.Object,java.lang.Object>)
 supr javax.swing.plaf.basic.BasicLookAndFeel
-hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,globalExtraDefaults,mnemonicHandler,oldPopupFactory,postInitialization,preferredFontFamily,preferredLightFontFamily,preferredMonospacedFontFamily,preferredSemiboldFontFamily,subMenuUsabilityHelperInstalled,systemColorGetter,uiDefaultsGetters,updateUIPending
+hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,globalExtraDefaults,linuxPopupMenuCanceler,mnemonicHandler,oldPopupFactory,postInitialization,preferredFontFamily,preferredLightFontFamily,preferredMonospacedFontFamily,preferredSemiboldFontFamily,subMenuUsabilityHelperInstalled,systemColorGetter,uiDefaultsGetters,uiKeyPlatformPrefixes,uiKeySpecialPrefixes,updateUIPending
 hcls ActiveFont,FlatUIDefaults,ImageIconUIResource
 
 CLSS public abstract interface static com.formdev.flatlaf.FlatLaf$DisabledIconProvider
@@ -318,7 +324,7 @@ meth public static boolean setup(java.io.InputStream)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(com.formdev.flatlaf.IntelliJTheme)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(java.io.InputStream) throws java.io.IOException
 supr java.lang.Object
-hfds checkboxDuplicateColors,checkboxKeyMapping,colors,icons,isMaterialUILite,namedColors,ui,uiKeyCopying,uiKeyDoNotOverride,uiKeyExcludes,uiKeyInverseMapping,uiKeyMapping
+hfds checkboxDuplicateColors,checkboxKeyMapping,jsonColors,jsonIcons,jsonUI,namedColors,uiKeyCopying,uiKeyDoNotOverride,uiKeyExcludes,uiKeyInverseMapping,uiKeyMapping
 
 CLSS public static com.formdev.flatlaf.IntelliJTheme$ThemeLaf
  outer com.formdev.flatlaf.IntelliJTheme
@@ -413,6 +419,7 @@ innr public static Fade
 innr public static HSLChange
 innr public static HSLIncreaseDecrease
 innr public static Mix
+innr public static Mix2
 meth public !varargs static java.awt.Color applyFunctions(java.awt.Color,com.formdev.flatlaf.util.ColorFunctions$ColorFunction[])
 meth public static float clamp(float)
 meth public static float luma(java.awt.Color)
@@ -469,6 +476,16 @@ CLSS public static com.formdev.flatlaf.util.ColorFunctions$Mix
 cons public init(java.awt.Color,float)
 fld public final float weight
 fld public final java.awt.Color color2
+intf com.formdev.flatlaf.util.ColorFunctions$ColorFunction
+meth public java.lang.String toString()
+meth public void apply(float[])
+supr java.lang.Object
+
+CLSS public static com.formdev.flatlaf.util.ColorFunctions$Mix2
+ outer com.formdev.flatlaf.util.ColorFunctions
+cons public init(java.awt.Color,float)
+fld public final float weight
+fld public final java.awt.Color color1
 intf com.formdev.flatlaf.util.ColorFunctions$ColorFunction
 meth public java.lang.String toString()
 meth public void apply(float[])
@@ -755,6 +772,7 @@ supr java.lang.Object
 CLSS public com.formdev.flatlaf.util.SystemInfo
 cons public init()
 fld public final static boolean isAARCH64
+fld public final static boolean isGNOME
 fld public final static boolean isJava_11_orLater
 fld public final static boolean isJava_12_orLater
 fld public final static boolean isJava_15_orLater
@@ -771,6 +789,7 @@ fld public final static boolean isMacOS_10_11_ElCapitan_orLater
 fld public final static boolean isMacOS_10_14_Mojave_orLater
 fld public final static boolean isMacOS_10_15_Catalina_orLater
 fld public final static boolean isProjector
+fld public final static boolean isUnknownOS
 fld public final static boolean isWebswing
 fld public final static boolean isWinPE
 fld public final static boolean isWindows
