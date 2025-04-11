@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.Dimension;
+import java.util.prefs.Preferences;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -27,6 +28,7 @@ import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.fonts.roboto_mono.FlatRobotoMonoFont;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -72,6 +74,28 @@ public class FlatLafDemo
 
 		DemoPrefs.init( PREFS_ROOT_PATH );
 		DemoPrefs.initSystemScale();
+
+		// SystemFileChooser state storage
+		SystemFileChooser.setStateStore( new SystemFileChooser.StateStore() {
+			private static final String KEY_PREFIX = "fileChooser.";
+			private final Preferences state = Preferences.userRoot().node( PREFS_ROOT_PATH );
+
+			@Override
+			public String get( String key, String def ) {
+				String value = state.get( KEY_PREFIX + key, def );
+				System.out.println( "SystemFileChooser State GET " + key + " = " + value );
+				return value;
+			}
+
+			@Override
+			public void put( String key, String value ) {
+				System.out.println( "SystemFileChooser State PUT " + key + " = " + value );
+				if( value != null )
+					state.put( KEY_PREFIX + key, value );
+				else
+					state.remove( KEY_PREFIX + key );
+			}
+		} );
 
 		SwingUtilities.invokeLater( () -> {
 			// install fonts for lazy loading

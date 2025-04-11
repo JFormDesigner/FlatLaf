@@ -41,6 +41,7 @@ dependencies {
 	implementation( libs.jide.oss )
 	implementation( libs.glazedlists )
 	implementation( libs.netbeans.api.awt )
+	implementation( libs.nativejfilechooser )
 
 	components.all<TargetJvmVersion8Rule>()
 }

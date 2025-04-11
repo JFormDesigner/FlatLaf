@@ -25,6 +25,7 @@ To build the library on Linux, some packages needs to be installed:
 
 - `build-essential` - GCC and development tools
 - `libxt-dev` - X11 toolkit development headers
+- `libgtk-3-dev` - GTK 3 toolkit development headers
 - `g++-aarch64-linux-gnu` - GNU C++ compiler for the arm64 architecture (only on
   x86_64 Linux for cross-compiling for arm64 architecture)
 
@@ -33,7 +34,7 @@ To build the library on Linux, some packages needs to be installed:
 
 ~~~
 sudo apt update
-sudo apt install build-essential libxt-dev
+sudo apt install build-essential libxt-dev libgtk-3-dev
 ~~~
 
 Only on x86_64 Linux for cross-compiling for arm64 architecture:
@@ -42,9 +43,27 @@ Only on x86_64 Linux for cross-compiling for arm64 architecture:
 sudo apt install g++-aarch64-linux-gnu
 ~~~
 
+Download `libgtk-3.so` for arm64 architecture:
+
+~~~
+cd flatlaf-natives/flatlaf-natives-linux/lib/aarch64
+wget --no-verbose https://ports.ubuntu.com/pool/main/g/gtk%2b3.0/libgtk-3-0_3.24.18-1ubuntu1_arm64.deb
+ar -x libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+tar -xvf data.tar.xz --wildcards --to-stdout "./usr/lib/aarch64-linux-gnu/libgtk-3.so.0.*" > libgtk-3.so
+rm libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+~~~
+
+
+### Fedora
+
+~~~
+sudo dnf group install c-development
+sudo dnf install libXt-devel gtk3-devel
+~~~
+
 
 ### CentOS
 
 ~~~
-sudo yum install libXt-devel
+sudo yum install libXt-devel gtk3-devel
 ~~~

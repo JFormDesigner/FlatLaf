@@ -75,3 +75,38 @@ jmethodID getMethodID( JNIEnv *env, jclass cls, const char* methodName, const ch
 
 	return methodID;
 }
+
+NSString* JavaToNSString( JNIEnv *env, jstring javaString ) {
+	if( javaString == NULL )
+		return NULL;
+
+	int len = env->GetStringLength( javaString );
+	const jchar* chars = env->GetStringChars( javaString, NULL );
+	if( chars == NULL )
+		return NULL;
+
+	NSString* nsString = [NSString stringWithCharacters:(unichar*)chars length:len];
+	env->ReleaseStringChars( javaString, chars );
+	return nsString;
+}
+
+jstring NSToJavaString( JNIEnv *env, NSString *nsString ) {
+	if( nsString == NULL )
+		return NULL;
+
+	jsize len = [nsString length];
+	unichar* buffer = (unichar*) calloc( len, sizeof( unichar ) );
+	if( buffer == NULL )
+		return NULL;
+
+	[nsString getCharacters:buffer];
+	jstring javaString = env->NewString( buffer, len );
+	free( buffer );
+	return javaString;
+}
+
+jstring NormalizedPathJavaFromNSString( JNIEnv* env, NSString *nsString ) {
+	return (nsString != NULL)
+		? NSToJavaString( env, [nsString precomposedStringWithCanonicalMapping] )
+		: NULL;
+}

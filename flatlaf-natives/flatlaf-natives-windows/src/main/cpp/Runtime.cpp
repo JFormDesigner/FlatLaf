@@ -36,8 +36,11 @@
  * @author Karl Tauber
  */
 
+HINSTANCE _instance;
+
 extern "C"
 BOOL WINAPI _DllMainCRTStartup( HINSTANCE instance, DWORD reason, LPVOID reserved ) {
+	_instance = instance;
 	return TRUE;
 }
 
