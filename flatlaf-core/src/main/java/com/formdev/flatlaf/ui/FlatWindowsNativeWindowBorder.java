@@ -31,9 +31,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
@@ -80,6 +78,7 @@ class FlatWindowsNativeWindowBorder
 	private boolean colorizationColorAffectsBorders;
 	private Color colorizationColor;
 	private int colorizationColorBalance;
+	private boolean isMovingOrSizing;
 
 	private static FlatWindowsNativeWindowBorder instance;
 
@@ -221,6 +220,19 @@ class FlatWindowsNativeWindowBorder
 		colorizationColor = (value != -1) ? new Color( value ) : null;
 
 		colorizationColorBalance = registryGetIntValue( subKey, "ColorizationColorBalance", -1 );
+	}
+
+	protected void updateIsMovingOrSizingValue( boolean isMovingOrSizing ) {
+		boolean oldValue = this.isMovingOrSizing;
+		this.isMovingOrSizing = isMovingOrSizing;
+
+		if(oldValue != isMovingOrSizing){
+			fireStateChanged();
+		}
+	}
+
+	public boolean isMovingOrSizing() {
+		return isMovingOrSizing;
 	}
 
 	private native static int registryGetIntValue( String key, String valueName, int defaultValue );
@@ -434,6 +446,12 @@ class FlatWindowsNativeWindowBorder
 		// invoked from native code
 		private void fireStateChangedLaterOnce() {
 			FlatWindowsNativeWindowBorder.this.fireStateChangedLaterOnce();
+		}
+
+		private void setIsMovingOrSizing( boolean isMovingOrSizing ) {
+			EventQueue.invokeLater(() ->
+				FlatWindowsNativeWindowBorder.this.updateIsMovingOrSizingValue( isMovingOrSizing )
+			);
 		}
 	}
 }
