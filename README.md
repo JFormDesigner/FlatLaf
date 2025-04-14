@@ -347,6 +347,7 @@ Applications using FlatLaf
   easy
 - [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
+- [Termora](https://github.com/TermoraDev/termora) - Terminal emulator and SSH client
 
 ### Miscellaneous
 
