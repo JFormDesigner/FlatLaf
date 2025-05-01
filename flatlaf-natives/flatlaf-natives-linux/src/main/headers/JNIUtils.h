@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 FormDev Software GmbH
+ * Copyright 2025 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
+#include <gtk/gtk.h>
 #include <jni.h>
-#include "com_formdev_flatlaf_ui_FlatNativeLibrary.h"
 
 /**
  * @author Karl Tauber
  */
 
+//---- class AutoReleaseStringUTF8 --------------------------------------------
 
-// increase this version if changing API or functionality of native library
-// also update version in Java class com.formdev.flatlaf.ui.FlatNativeWindowsLibrary
-#define API_VERSION_WINDOWS		1002
+class AutoReleaseStringUTF8 {
+	JNIEnv* env;
+	jstring javaString;
+	const char* chars;
 
+public:
+	AutoReleaseStringUTF8( JNIEnv* _env, jstring _javaString );
+	~AutoReleaseStringUTF8();
 
-//---- JNI methods ------------------------------------------------------------
-
-extern "C"
-JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLibrary_getApiVersion
-	( JNIEnv* env, jclass cls )
-{
-	return API_VERSION_WINDOWS;
-}
+	operator const gchar*() { return chars; }
+};

@@ -75,7 +75,7 @@ tasks {
 
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-x", "objective-c++", "-mmacosx-version-min=$minOs" )
+				is Gcc, is Clang -> listOf( "-x", "objective-c++", "-mmacosx-version-min=$minOs", "-fvisibility=hidden" )
 				else -> emptyList()
 			}
 		} )
