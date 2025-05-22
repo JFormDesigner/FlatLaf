@@ -189,6 +189,9 @@ Applications using FlatLaf
 - ![New](images/new.svg)
   [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) - Kafka GUI
   client
+- ![New](images/new.svg)
+  [RedisFront](https://github.com/dromara/RedisFront/blob/master/README_EN.md) -
+  Cross-platform redis GUI
 
 ### Security
 
