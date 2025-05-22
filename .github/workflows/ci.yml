@@ -105,11 +105,11 @@ jobs:
           distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
 
-      - name: Publish snapshot to oss.sonatype.org
+      - name: Publish snapshot to Sonatype Central
         run: ./gradlew publish -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
 
   release:
@@ -131,10 +131,10 @@ jobs:
           cache: gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
+        run: ./gradlew publishToSonatype closeSonatypeStagingRepository :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SIGNING_KEY:      ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
 
