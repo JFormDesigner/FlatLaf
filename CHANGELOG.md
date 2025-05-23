@@ -4,6 +4,7 @@ FlatLaf Change Log
 ## 3.7-SNAPSHOT
 
 - Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)
+- JideSplitButton: Fixed updating popup when switching theme. (issue #1000)
 
 
 ## 3.6
