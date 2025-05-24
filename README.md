@@ -191,6 +191,9 @@ Applications using FlatLaf
 - ![New](images/new.svg)
   [RedisFront](https://github.com/dromara/RedisFront/blob/master/README_EN.md) -
   Cross-platform redis GUI
+- ![New](images/new.svg)
+  [Zettelkasten](https://github.com/Zettelkasten-Team/Zettelkasten) - knowledge
+  management tool
 
 ### Security
 
@@ -227,6 +230,10 @@ Applications using FlatLaf
   systems development platform
 - ![New](images/new.svg) [Consulo](https://github.com/consulo/consulo) - open
   source cross-platform multi-language IDE (Java, .NET, JS, etc)
+- [Convertigo](https://github.com/convertigo/convertigo) - low code & no code
+  mobile & web platform
+- ![New](images/new.svg) [EduMIPS64](https://github.com/EduMIPS64/edumips64) -
+  visual MIPS64 CPU simulator
 
 ### Electrical
 
@@ -234,6 +241,11 @@ Applications using FlatLaf
   designing, simulating and explaining digital circuits
 - [Logisim-evolution](https://github.com/logisim-evolution/logisim-evolution) -
   Digital logic design tool and simulator
+- ![New](images/new.svg) [OpenPnP](https://github.com/openpnp/openpnp) - SMT
+  Pick and Place Hardware and Software
+- ![New](images/new.svg)
+  [TrainControl](https://github.com/bob123456678/TrainControl) - control Marklin
+  / Trix / DCC digital model train layout
 - [Makelangelo Software](https://github.com/MarginallyClever/Makelangelo-software) -
   for plotters, especially the wall-hanging polargraph
 - [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder) - GUI
@@ -250,6 +262,8 @@ Applications using FlatLaf
   creates photo album websites
 - [MediathekView](https://mediathekview.de/) - search in media libraries of
   various German broadcasters
+- ![New](images/new.svg) [Pixelitor](https://github.com/lbalazscs/Pixelitor) -
+  image editor
 - [Cinecred](https://loadingbyte.com/cinecred/) - create beautiful film credit
   sequences
 - [tinyMediaManager](https://www.tinymediamanager.org/) (**commercial**) - a
@@ -266,12 +280,16 @@ Applications using FlatLaf
 - [lectureStudio](https://www.lecturestudio.org/) - digitize your lectures with
   ease
 
-### Modelling
+### Modelling / Planning
 
+- ![New](images/new.svg) [Gephi](https://github.com/gephi/gephi) - the Open
+  Graph Viz Platform
 - [Astah](https://astah.net/) (**commercial**) - create UML, ER Diagram,
   Flowchart, Data Flow Diagram, Requirement Diagram, SysML diagrams and more
 - [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
   Application System
+- ![New](images/new.svg) [StarPlan](https://www.progotec.de/) (**commercial**) -
+  die Stundenplan Software für Bildungseinrichtungen
 
 ### Documents
 
@@ -294,6 +312,9 @@ Applications using FlatLaf
 
 ### Business / Legal
 
+- ![New](images/new.svg) ![Sponsor](images/sponsor.svg)
+  [Lisheane ERP](https://www.lisheane.ch/) (**commercial**) - backoffice
+  applikation
 - ![Sponsor](images/sponsor.svg)
   [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - ![Sponsor](images/sponsor.svg) [Jeyla Studio](https://www.jeylastudio.com/) -
@@ -318,6 +339,8 @@ Applications using FlatLaf
 
 - ![Sponsor](images/sponsor.svg) [BGBlitz](https://www.bgblitz.com/)
   (**commercial**) - professional Backgammon
+- ![New](images/new.svg) [josé](https://peteschaefer.github.io/jose/) - a
+  graphical chess tool
 - ![New](images/new.svg) [MCreator](https://github.com/MCreator/MCreator) - make
   Minecraft Java Edition mods, Minecraft Bedrock Edition Add-Ons, and data packs
 - [MapTool](https://github.com/RPTools/maptool) - virtual Tabletop for playing
