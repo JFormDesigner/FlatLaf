@@ -184,10 +184,9 @@ Applications using FlatLaf
   relational data browsing tool
 - ![Hot](images/hot.svg) [MagicPlot](https://magicplot.com/) (**commercial**) -
   Software for nonlinear fitting, plotting and data analysis
-- ![New](images/new.svg) [Constellation](https://www.constellation-app.com/) -
-  Data Visualization and Analytics (based on NetBeans platform)
-- ![New](images/new.svg)
-  [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) - Kafka GUI
+- [Constellation](https://www.constellation-app.com/) - Data Visualization and
+  Analytics (based on NetBeans platform)
+- [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) - Kafka GUI
   client
 - ![New](images/new.svg)
   [RedisFront](https://github.com/dromara/RedisFront/blob/master/README_EN.md) -
@@ -200,11 +199,9 @@ Applications using FlatLaf
 - ![Hot](images/hot.svg)
   [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
   (**commercial**) - the leading software for web security testing
-- ![New](images/new.svg)
-  [Ghidra](https://github.com/NationalSecurityAgency/ghidra) - a software
+- [Ghidra](https://github.com/NationalSecurityAgency/ghidra) - a software
   reverse engineering (SRE) framework
-- ![New](images/new.svg) [jadx](https://github.com/skylot/jadx) - Dex to Java
-  decompiler
+- [jadx](https://github.com/skylot/jadx) - Dex to Java decompiler
 - [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
   FlatLaf themes to Burp Suite
 - [Total Validator](https://www.totalvalidator.com/) (**commercial**) - checks
@@ -216,13 +213,12 @@ Applications using FlatLaf
 
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib)
 - [KeyStore Explorer](https://keystore-explorer.org/)
-- ![New](images/new.svg)
-  [muCommander](https://github.com/mucommander/mucommander) - lightweight
+- [muCommander](https://github.com/mucommander/mucommander) - lightweight
   cross-platform file manager
-- ![New](images/new.svg) [Guiffy](https://www.guiffy.com/) (**commercial**) -
-  advanced cross-platform Diff/Merge
-- ![New](images/new.svg) [HashGarten](https://github.com/jonelo/HashGarten) -
-  cross-platform Swing GUI for Jacksum
+- [Guiffy](https://www.guiffy.com/) (**commercial**) - advanced cross-platform
+  Diff/Merge
+- [HashGarten](https://github.com/jonelo/HashGarten) - cross-platform Swing GUI
+  for Jacksum
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
 - [Linotte](https://github.com/cpc6128/LangageLinotte) - French programming
@@ -252,8 +248,8 @@ Applications using FlatLaf
 
 - ![Hot](images/hot.svg) [jAlbum](https://jalbum.net/) (**commercial**) -
   creates photo album websites
-- ![New](images/new.svg) [MediathekView](https://mediathekview.de/) - search in
-  media libraries of various German broadcasters
+- [MediathekView](https://mediathekview.de/) - search in media libraries of
+  various German broadcasters
 - [Cinecred](https://loadingbyte.com/cinecred/) - create beautiful film credit
   sequences
 - [tinyMediaManager](https://www.tinymediamanager.org/) (**commercial**) - a
@@ -272,16 +268,15 @@ Applications using FlatLaf
 
 ### Modelling
 
-- ![New](images/new.svg) [Astah](https://astah.net/) (**commercial**) - create
-  UML, ER Diagram, Flowchart, Data Flow Diagram, Requirement Diagram, SysML
-  diagrams and more
+- [Astah](https://astah.net/) (**commercial**) - create UML, ER Diagram,
+  Flowchart, Data Flow Diagram, Requirement Diagram, SysML diagrams and more
 - [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
   Application System
 
 ### Documents
 
-- ![New](images/new.svg) [Big Faceless (BFO) PDF Viewer](https://bfo.com/)
-  (**commercial**) - Swing PDF Viewer
+- [Big Faceless (BFO) PDF Viewer](https://bfo.com/) (**commercial**) - Swing PDF
+  Viewer
 - [PDF Studio](https://www.qoppa.com/pdfstudio/) (**commercial**) - create,
   review and edit PDF documents
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) (**commercial**)
@@ -315,20 +310,18 @@ Applications using FlatLaf
 
 ### Messaging
 
-- ![New](images/new.svg) [Spark](https://github.com/igniterealtime/Spark) -
-  cross-platform IM client optimized for businesses and organizations
-- ![New](images/new.svg) [Chatty](https://github.com/chatty/chatty) - Twitch
-  Chat Client
+- [Spark](https://github.com/igniterealtime/Spark) - cross-platform IM client
+  optimized for businesses and organizations
+- [Chatty](https://github.com/chatty/chatty) - Twitch Chat Client
 
 ### Gaming
 
-- ![New](images/new.svg) ![Sponsor](images/sponsor.svg)
-  [BGBlitz](https://www.bgblitz.com/) (**commercial**) - professional Backgammon
-- ![New](images/new.svg) [MCreator](https://github.com/MCreator/MCreator) - 
-  software used to make Minecraft Java Edition mods, Minecraft Bedrock Edition Add-Ons, 
-  and data packs without programming knowledge
-- ![New](images/new.svg) [MapTool](https://github.com/RPTools/maptool) - virtual
-  Tabletop for playing role-playing games
+- ![Sponsor](images/sponsor.svg) [BGBlitz](https://www.bgblitz.com/)
+  (**commercial**) - professional Backgammon
+- ![New](images/new.svg) [MCreator](https://github.com/MCreator/MCreator) - make
+  Minecraft Java Edition mods, Minecraft Bedrock Edition Add-Ons, and data packs
+- [MapTool](https://github.com/RPTools/maptool) - virtual Tabletop for playing
+  role-playing games
 - [MegaMek](https://github.com/MegaMek/megamek),
   [MegaMekLab](https://github.com/MegaMek/megameklab) and
   [MekHQ](https://github.com/MegaMek/mekhq) - a sci-fi tabletop BattleTech
@@ -340,8 +333,7 @@ Applications using FlatLaf
 
 - [MooInfo](https://github.com/rememberber/MooInfo) - visual implementation of
   OSHI, to view information about the system and hardware
-- ![New](images/new.svg)
-  [Linux Task Manager (LTM)](https://github.com/ajee10x/LTM-LinuxTaskManager) -
+- [Linux Task Manager (LTM)](https://github.com/ajee10x/LTM-LinuxTaskManager) -
   GUI for monitoring and managing various aspects of a Linux system
 - [Rest Suite](https://github.com/supanadit/restsuite) - Rest API testing
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote) - remote Linux SSH
@@ -350,7 +342,8 @@ Applications using FlatLaf
   easy
 - [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
-- [Termora](https://github.com/TermoraDev/termora) - Terminal emulator and SSH client
+- ![New](images/new.svg) [Termora](https://github.com/TermoraDev/termora) -
+  Terminal emulator and SSH client
 
 ### Miscellaneous
 
