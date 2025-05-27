@@ -649,22 +649,26 @@ class UIDefaultsLoader
 		if( value.indexOf( ',' ) >= 0 ) {
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
-			Insets insets = parseInsets( value );
-			ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
-				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
-				: null;
-			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
-				? parseFloat( parts.get( 5 ) )
-				: 1f;
-			int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
-				? parseInteger( parts.get( 6 ) )
-				: -1;
+			try {
+				Insets insets = parseInsets( value );
+				ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
+					? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
+					: null;
+				float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
+					? parseFloat( parts.get( 5 ) )
+					: 1f;
+				int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
+					? parseInteger( parts.get( 6 ) )
+					: -1;
 
-			return (LazyValue) t -> {
-				return (lineColor != null || arc > 0)
-					? new FlatLineBorder( insets, lineColor, lineThickness, arc )
-					: new FlatEmptyBorder( insets );
-			};
+				return (LazyValue) t -> {
+					return (lineColor != null || arc > 0)
+						? new FlatLineBorder( insets, lineColor, lineThickness, arc )
+						: new FlatEmptyBorder( insets );
+				};
+			} catch( RuntimeException ex ) {
+				throw new IllegalArgumentException( "invalid border '" + value + "' (" + ex.getMessage() + ")" );
+			}
 		} else
 			return parseInstance( value, resolver, addonClassLoaders );
 	}
@@ -735,7 +739,7 @@ class UIDefaultsLoader
 				Integer.parseInt( numbers.get( 1 ) ),
 				Integer.parseInt( numbers.get( 2 ) ),
 				Integer.parseInt( numbers.get( 3 ) ) );
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid insets '" + value + "'" );
 		}
 	}
@@ -748,7 +752,7 @@ class UIDefaultsLoader
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
 				Integer.parseInt( numbers.get( 1 ) ) );
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid size '" + value + "'" );
 		}
 	}
@@ -1379,17 +1383,17 @@ class UIDefaultsLoader
 						break;
 				}
 			}
-		} catch( IOException ex ) {
-			throw new IllegalArgumentException( ex );
+		} catch( RuntimeException | IOException ex ) {
+			throw new IllegalArgumentException(  "invalid font '" + value + "' (" + ex.getMessage() + ")" );
 		}
 
 		if( style != -1 && styleChange != 0 )
-			throw new IllegalArgumentException( "can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic') in '" + value + "'" );
+			throw new IllegalArgumentException( "invalid font '" + value + "': can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic')" );
 		if( styleChange != 0 ) {
 			if( (styleChange & Font.BOLD) != 0 && (styleChange & (Font.BOLD << 16)) != 0 )
-				throw new IllegalArgumentException( "can not use '+bold' and '-bold' in '" + value + "'" );
+				throw new IllegalArgumentException( "invalid font '" + value + "': can not use '+bold' and '-bold'" );
 			if( (styleChange & Font.ITALIC) != 0 && (styleChange & (Font.ITALIC << 16)) != 0 )
-				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
+				throw new IllegalArgumentException( "invalid font '" + value + "': can not use '+italic' and '-italic'" );
 		}
 
 		font = new FlatLaf.ActiveFont( baseFontKey, families, style, styleChange, absoluteSize, relativeSize, scaleSize );
@@ -1529,7 +1533,7 @@ class UIDefaultsLoader
 			return (LazyValue) t -> {
 				return new GrayFilter( brightness, contrast, alpha );
 			};
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
 		}
 	}
