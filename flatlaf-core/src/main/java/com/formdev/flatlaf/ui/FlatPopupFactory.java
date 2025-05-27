@@ -32,7 +32,6 @@ import java.awt.Panel;
 import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -312,7 +311,7 @@ public class FlatPopupFactory
 			return null;
 
 		Rectangle screenBounds = gc.getBounds();
-		Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
+		Insets screenInsets = FlatUIUtils.getScreenInsets( gc );
 		int screenTop = screenBounds.y + screenInsets.top;
 
 		// place tooltip above mouse location if there is enough space

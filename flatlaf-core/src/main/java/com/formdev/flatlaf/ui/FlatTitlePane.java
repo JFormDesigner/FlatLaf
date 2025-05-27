@@ -914,7 +914,7 @@ public class FlatTitlePane
 			// screen insets are in physical size, except for Java 15+
 			// (see https://bugs.openjdk.java.net/browse/JDK-8243925)
 			// and except for Java 8 on secondary screens where primary screen is scaled
-			Insets screenInsets = window.getToolkit().getScreenInsets( gc );
+			Insets screenInsets = FlatUIUtils.getScreenInsets( gc );
 
 			// maximized bounds are required in physical size, except for Java 15+
 			// (see https://bugs.openjdk.java.net/browse/JDK-8231564 and

@@ -246,7 +246,7 @@ public class FlatPopupMenuUI
 		// (always subtract screen insets because there is no API to detect whether
 		// the popup can overlap the taskbar; see JPopupMenu.canPopupOverlapTaskBar())
 		Rectangle screenBounds = gc.getBounds();
-		Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
+		Insets screenInsets = FlatUIUtils.getScreenInsets( gc );
 		return FlatUIUtils.subtractInsets( screenBounds, screenInsets );
 	}
 

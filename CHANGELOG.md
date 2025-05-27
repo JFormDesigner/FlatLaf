@@ -7,6 +7,9 @@ FlatLaf Change Log
 - JideSplitButton: Fixed updating popup when switching theme. (issue #1000)
 - IntelliJ Themes: Fixed logging false errors when loading 3rd party
   `.theme.json` files. (issue #990)
+- Linux: Popups appeared in wrong position on multi-screen setup if primary
+  display is located below or right to secondary display. (see
+  [NetBeans issue #8532](https://github.com/apache/netbeans/issues/8532))
 
 
 ## 3.6
