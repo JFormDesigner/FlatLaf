@@ -28,10 +28,10 @@ jobs:
           distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
 
-      - name: Publish PR snapshot to oss.sonatype.org
+      - name: Publish PR snapshot to Sonatype Central
         run: >
           ./gradlew publish -PskipFonts -Dorg.gradle.internal.publish.checksums.insecure=true -Dorg.gradle.parallel=false
           -Pgithub.event.pull_request.number=${{ github.event.pull_request.number }}
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}

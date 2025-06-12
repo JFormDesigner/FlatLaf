@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.0.0.283" Java: "19.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -78,13 +78,17 @@ new FormModel {
 				"$columnConstraints": "[fill][fill]"
 				"$rowConstraints": "[][][][][][][]0[][]0[][]0[][][]"
 			} ) {
-				name: "panel1"
+				name: "controlPanel"
 				"border": new javax.swing.border.TitledBorder( "Control" )
 				"$client.FlatLaf.internal.testing.ignore": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "editableCheckBox"
 					"text": "editable"
 					"selected": true
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -95,6 +99,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
 					"text": "change text"
+					"focusable": false
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeText", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1 2 1,alignx left,growx 0"
@@ -162,6 +167,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "leadingIconCheckBox"
 					"text": "leading icon"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -172,6 +178,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "trailingIconCheckBox"
 					"text": "trailing icon"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -182,6 +189,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "leadingComponentCheckBox"
 					"text": "leading component"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -192,6 +200,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "trailingComponentCheckBox"
 					"text": "trailing component"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -203,6 +212,7 @@ new FormModel {
 					name: "leadingComponentVisibleCheckBox"
 					"text": "leading component visible"
 					"selected": true
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -214,6 +224,7 @@ new FormModel {
 					name: "trailingComponentVisibleCheckBox"
 					"text": "trailing component visible"
 					"selected": true
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -224,6 +235,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showClearButtonCheckBox"
 					"text": "clear button"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -234,6 +246,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showRevealButtonCheckBox"
 					"text": "password reveal button"
+					"focusable": false
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -249,8 +262,11 @@ new FormModel {
 				"$columnConstraints": "[fill][fill]"
 				"$rowConstraints": "[][][][][]"
 			} ) {
-				name: "panel2"
+				name: "placeholderPanel"
 				"border": new javax.swing.border.TitledBorder( "Placeholder" )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label7"
 					"text": "leading"
@@ -325,7 +341,7 @@ new FormModel {
 					"value": "cell 1 4"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 0 1 9,aligny top,growy 0"
+				"value": "cell 5 0 1 10,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordFieldLabel"

@@ -413,22 +413,37 @@ public class IntelliJTheme
 				key.equals( "Tree.rightChildIndent" ) )
 			  return; // ignore
 
+			// ignore icons
+			if( key.endsWith( "Icon" ) )
+				return; // ignore
+
 			// map keys
 			key = uiKeyMapping.getOrDefault( key, key );
 			if( key.isEmpty() )
 				return; // ignore key
 
-			// exclude properties
+			// exclude properties (1st level)
 			int dot = key.indexOf( '.' );
-			if( dot > 0 && uiKeyExcludes.contains( key.substring( 0, dot + 1 ) ) )
+			if( dot > 0 && uiKeyExcludesStartsWith.contains( key.substring( 0, dot + 1 ) ) )
 				return;
+
+			// exclude properties (2st level)
+			int dot2 = (dot > 0) ? key.indexOf( '.', dot + 1 ) : -1;
+			if( dot2 > 0 && uiKeyExcludesStartsWith.contains( key.substring( 0, dot2 + 1 ) ) )
+				return;
+
+			// exclude properties (contains)
+			for( String s : uiKeyExcludesContains ) {
+				if( key.contains( s ) )
+					return;
+			}
 
 			if( uiKeyDoNotOverride.contains( key ) && jsonUIKeys.contains( key ) )
 				return;
 
 			jsonUIKeys.add( key );
 
-			String valueStr = value.toString();
+			String valueStr = value.toString().trim();
 
 			// map named colors
 			String uiValue = namedColors.get( valueStr );
@@ -657,7 +672,8 @@ public class IntelliJTheme
 		}
 	}
 
-	private static final Set<String> uiKeyExcludes;
+	private static final Set<String> uiKeyExcludesStartsWith;
+	private static final String[] uiKeyExcludesContains;
 	private static final Set<String> uiKeyDoNotOverride;
 	/** Rename UI default keys (key --> value). */
 	private static final Map<String, String> uiKeyMapping = new HashMap<>();
@@ -669,7 +685,7 @@ public class IntelliJTheme
 
 	static {
 		// IntelliJ UI properties that are not used in FlatLaf
-		uiKeyExcludes = new HashSet<>( Arrays.asList(
+		uiKeyExcludesStartsWith = new HashSet<>( Arrays.asList(
 			"ActionButton.", "ActionToolbar.", "ActionsList.", "AppInspector.", "AssignedMnemonic.", "Autocomplete.",
 			"AvailableMnemonic.",
 			"Badge.", "Banner.", "BigSpinner.", "Bookmark.", "BookmarkIcon.", "BookmarkMnemonicAssigned.", "BookmarkMnemonicAvailable.",
@@ -703,13 +719,23 @@ public class IntelliJTheme
 			// possible typos in .theme.json files
 			"Checkbox.", "Toolbar.", "Tooltip.", "UiDesigner.", "link."
 		) );
+		uiKeyExcludesContains = new String[] {
+			".darcula."
+		};
 
 		uiKeyDoNotOverride = new HashSet<>( Arrays.asList(
 			"TabbedPane.selectedForeground"
 		) );
 
+		// "*."
+		uiKeyMapping.put( "*.fontFace", "" ); // ignore (used in OnePauintxi themes)
+		uiKeyMapping.put( "*.fontSize", "" ); // ignore (used in OnePauintxi themes)
+
 		// Button
 		uiKeyMapping.put( "Button.minimumSize", "" ); // ignore (used in Material Theme UI Lite)
+
+		// CheckBox.iconSize
+		uiKeyMapping.put( "CheckBox.iconSize", "" ); // ignore (used in Rider themes)
 
 		// ComboBox
 		uiKeyMapping.put( "ComboBox.background",                        "" ); // ignore
@@ -750,6 +776,9 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
 		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
+
+		// RadioButton
+		uiKeyMapping.put( "RadioButton.iconSize", "" ); // ignore (used in Rider themes)
 
 		// ScrollBar
 		uiKeyMapping.put( "ScrollBar.trackColor", "ScrollBar.track" );

@@ -882,7 +882,7 @@ public class FlatComboBoxUI
 				GraphicsConfiguration gc = comboBox.getGraphicsConfiguration();
 				if( gc != null ) {
 					Rectangle screenBounds = gc.getBounds();
-					Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
+					Insets screenInsets = FlatUIUtils.getScreenInsets( gc );
 					displayWidth = Math.min( displayWidth, screenBounds.width - screenInsets.left - screenInsets.right );
 				} else {
 					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.extras;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.Dimension2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
@@ -28,7 +29,6 @@ import javax.swing.JWindow;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.github.weisj.jsvg.SVGDocument;
-import com.github.weisj.jsvg.geometry.size.FloatSize;
 
 /**
  * Utility methods for SVG.
@@ -180,9 +180,9 @@ public class FlatSVGUtils
 	 */
 	public static BufferedImage svg2image( URL svgUrl, float scaleFactor ) {
 		SVGDocument document = FlatSVGIcon.loadSVG( svgUrl );
-		FloatSize size = document.size();
-		int width = (int) (size.width * scaleFactor);
-		int height = (int) (size.height * scaleFactor);
+		Dimension2D size = document.size();
+		int width = (int) (size.getWidth() * scaleFactor);
+		int height = (int) (size.getHeight() * scaleFactor);
 		return svg2image( document, width, height );
 	}
 
@@ -202,9 +202,9 @@ public class FlatSVGUtils
 		try {
 			FlatSVGIcon.setRenderingHints( g );
 
-			FloatSize size = document.size();
-			double sx = width / size.width;
-			double sy = height / size.height;
+			Dimension2D size = document.size();
+			double sx = width / size.getWidth();
+			double sy = height / size.getHeight();
 			if( sx != 1 || sy != 1 )
 				g.scale( sx, sy );
 

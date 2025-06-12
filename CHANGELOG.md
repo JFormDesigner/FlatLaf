@@ -1,7 +1,18 @@
 FlatLaf Change Log
 ==================
 
-## 3.6-SNAPSHOT
+## 3.7-SNAPSHOT
+
+- Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)
+- JideSplitButton: Fixed updating popup when switching theme. (issue #1000)
+- IntelliJ Themes: Fixed logging false errors when loading 3rd party
+  `.theme.json` files. (issue #990)
+- Linux: Popups appeared in wrong position on multi-screen setup if primary
+  display is located below or right to secondary display. (see
+  [NetBeans issue #8532](https://github.com/apache/netbeans/issues/8532))
+
+
+## 3.6
 
 #### New features and improvements
 
@@ -21,6 +32,8 @@ FlatLaf Change Log
 - List: Support for alternate row highlighting. (PR #939)
 - Tree: Support for alternate row highlighting. (PR #903)
 - Tree: Support wide cell renderer. (issue #922)
+- ScrollBar: Use rounded thumb also on Windows (as on macOS and Linux) and made
+  thumb slightly darker/lighter. (issue #918)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
 - Linux:
@@ -70,6 +83,21 @@ FlatLaf Change Log
   application where multiple class loaders are involved. E.g. in Eclipse plugin
   or in LibreOffice extension. (issues #955 and #851)
 - HTML: Fixed rendering of `<hr noshade>` in dark themes. (issue #932)
+- TextComponents: `selectAllOnFocusPolicy` related changes:
+  - No longer select all text if selection (or caret position) was changed by
+    application and `selectAllOnFocusPolicy` is `once` (the default). (issue
+    #983)
+  - FormattedTextField and Spinner: `selectAllOnFocusPolicy = once` behaves now
+    as `always` (was `never` before), which means that all text is selected when
+    component gains focus. This is because of special behavior of
+    `JFormattedTextField` that did not allow implementation of `once`.
+  - Client property `JTextField.selectAllOnFocusPolicy` now also works on
+    (editable) `JComboBox` and on `JSpinner`.
+  - Added client property `JTextField.selectAllOnMouseClick` to override UI
+    property `TextComponent.selectAllOnMouseClick`. (issue #961)
+  - For `selectAllOnMouseClick = true`, clicking with the mouse into the text
+    field, to focus it, now always selects all text, even if
+    `selectAllOnFocusPolicy` is `once`.
 
 #### Incompatibilities
 

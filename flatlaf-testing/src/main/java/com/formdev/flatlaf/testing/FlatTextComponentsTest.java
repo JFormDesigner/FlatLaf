@@ -18,7 +18,9 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.function.Supplier;
@@ -47,6 +49,12 @@ public class FlatTextComponentsTest
 	FlatTextComponentsTest() {
 		initComponents();
 		updatePreferredSizes();
+
+		// exclude from tab focus traversal
+		controlPanel.setFocusTraversalPolicyProvider( true );
+		controlPanel.setFocusTraversalPolicy( new NotFocusableTraversalPolicy() );
+		placeholderPanel.setFocusTraversalPolicyProvider( true );
+		placeholderPanel.setFocusTraversalPolicy( new NotFocusableTraversalPolicy() );
 	}
 
 	@Override
@@ -196,7 +204,7 @@ public class FlatTextComponentsTest
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
-		JPanel panel1 = new JPanel();
+		controlPanel = new JPanel();
 		editableCheckBox = new JCheckBox();
 		JButton button1 = new JButton();
 		JLabel leftPaddingLabel = new JLabel();
@@ -215,7 +223,7 @@ public class FlatTextComponentsTest
 		trailingComponentVisibleCheckBox = new JCheckBox();
 		showClearButtonCheckBox = new JCheckBox();
 		showRevealButtonCheckBox = new JCheckBox();
-		JPanel panel2 = new JPanel();
+		placeholderPanel = new JPanel();
 		JLabel label7 = new JLabel();
 		FlatTextField flatTextField1 = new FlatTextField();
 		JLabel label8 = new JLabel();
@@ -351,11 +359,11 @@ public class FlatTextComponentsTest
 		formattedTextField3.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "place");
 		add(formattedTextField3, "cell 2 1,growx");
 
-		//======== panel1 ========
+		//======== controlPanel ========
 		{
-			panel1.setBorder(new TitledBorder("Control"));
-			panel1.putClientProperty("FlatLaf.internal.testing.ignore", true);
-			panel1.setLayout(new MigLayout(
+			controlPanel.setBorder(new TitledBorder("Control"));
+			controlPanel.putClientProperty("FlatLaf.internal.testing.ignore", true);
+			controlPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
 				"[fill]" +
@@ -379,94 +387,104 @@ public class FlatTextComponentsTest
 			//---- editableCheckBox ----
 			editableCheckBox.setText("editable");
 			editableCheckBox.setSelected(true);
+			editableCheckBox.setFocusable(false);
 			editableCheckBox.addActionListener(e -> editableChanged());
-			panel1.add(editableCheckBox, "cell 0 0 2 1,alignx left,growx 0");
+			controlPanel.add(editableCheckBox, "cell 0 0 2 1,alignx left,growx 0");
 
 			//---- button1 ----
 			button1.setText("change text");
+			button1.setFocusable(false);
 			button1.addActionListener(e -> changeText());
-			panel1.add(button1, "cell 0 1 2 1,alignx left,growx 0");
+			controlPanel.add(button1, "cell 0 1 2 1,alignx left,growx 0");
 
 			//---- leftPaddingLabel ----
 			leftPaddingLabel.setText("Left padding:");
-			panel1.add(leftPaddingLabel, "cell 0 2");
+			controlPanel.add(leftPaddingLabel, "cell 0 2");
 
 			//---- leftPaddingField ----
 			leftPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(leftPaddingField, "cell 1 2");
+			controlPanel.add(leftPaddingField, "cell 1 2");
 
 			//---- rightPaddingLabel ----
 			rightPaddingLabel.setText("Right padding:");
-			panel1.add(rightPaddingLabel, "cell 0 3");
+			controlPanel.add(rightPaddingLabel, "cell 0 3");
 
 			//---- rightPaddingField ----
 			rightPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(rightPaddingField, "cell 1 3");
+			controlPanel.add(rightPaddingField, "cell 1 3");
 
 			//---- topPaddingLabel ----
 			topPaddingLabel.setText("Top padding:");
-			panel1.add(topPaddingLabel, "cell 0 4");
+			controlPanel.add(topPaddingLabel, "cell 0 4");
 
 			//---- topPaddingField ----
 			topPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(topPaddingField, "cell 1 4");
+			controlPanel.add(topPaddingField, "cell 1 4");
 
 			//---- bottomPaddingLabel ----
 			bottomPaddingLabel.setText("Bottom padding:");
-			panel1.add(bottomPaddingLabel, "cell 0 5");
+			controlPanel.add(bottomPaddingLabel, "cell 0 5");
 
 			//---- bottomPaddingField ----
 			bottomPaddingField.addChangeListener(e -> paddingChanged());
-			panel1.add(bottomPaddingField, "cell 1 5");
+			controlPanel.add(bottomPaddingField, "cell 1 5");
 
 			//---- leadingIconCheckBox ----
 			leadingIconCheckBox.setText("leading icon");
+			leadingIconCheckBox.setFocusable(false);
 			leadingIconCheckBox.addActionListener(e -> leadingIcon());
-			panel1.add(leadingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
+			controlPanel.add(leadingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
 
 			//---- trailingIconCheckBox ----
 			trailingIconCheckBox.setText("trailing icon");
+			trailingIconCheckBox.setFocusable(false);
 			trailingIconCheckBox.addActionListener(e -> trailingIcon());
-			panel1.add(trailingIconCheckBox, "cell 0 7 2 1,alignx left,growx 0");
+			controlPanel.add(trailingIconCheckBox, "cell 0 7 2 1,alignx left,growx 0");
 
 			//---- leadingComponentCheckBox ----
 			leadingComponentCheckBox.setText("leading component");
+			leadingComponentCheckBox.setFocusable(false);
 			leadingComponentCheckBox.addActionListener(e -> leadingComponent());
-			panel1.add(leadingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
+			controlPanel.add(leadingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
 
 			//---- trailingComponentCheckBox ----
 			trailingComponentCheckBox.setText("trailing component");
+			trailingComponentCheckBox.setFocusable(false);
 			trailingComponentCheckBox.addActionListener(e -> trailingComponent());
-			panel1.add(trailingComponentCheckBox, "cell 0 9 2 1,alignx left,growx 0");
+			controlPanel.add(trailingComponentCheckBox, "cell 0 9 2 1,alignx left,growx 0");
 
 			//---- leadingComponentVisibleCheckBox ----
 			leadingComponentVisibleCheckBox.setText("leading component visible");
 			leadingComponentVisibleCheckBox.setSelected(true);
+			leadingComponentVisibleCheckBox.setFocusable(false);
 			leadingComponentVisibleCheckBox.addActionListener(e -> leadingComponentVisible());
-			panel1.add(leadingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
+			controlPanel.add(leadingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
 
 			//---- trailingComponentVisibleCheckBox ----
 			trailingComponentVisibleCheckBox.setText("trailing component visible");
 			trailingComponentVisibleCheckBox.setSelected(true);
+			trailingComponentVisibleCheckBox.setFocusable(false);
 			trailingComponentVisibleCheckBox.addActionListener(e -> trailingComponentVisible());
-			panel1.add(trailingComponentVisibleCheckBox, "cell 0 11 2 1,alignx left,growx 0");
+			controlPanel.add(trailingComponentVisibleCheckBox, "cell 0 11 2 1,alignx left,growx 0");
 
 			//---- showClearButtonCheckBox ----
 			showClearButtonCheckBox.setText("clear button");
+			showClearButtonCheckBox.setFocusable(false);
 			showClearButtonCheckBox.addActionListener(e -> showClearButton());
-			panel1.add(showClearButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
+			controlPanel.add(showClearButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
 
 			//---- showRevealButtonCheckBox ----
 			showRevealButtonCheckBox.setText("password reveal button");
+			showRevealButtonCheckBox.setFocusable(false);
 			showRevealButtonCheckBox.addActionListener(e -> showRevealButton());
-			panel1.add(showRevealButtonCheckBox, "cell 0 13 2 1,alignx left,growx 0");
+			controlPanel.add(showRevealButtonCheckBox, "cell 0 13 2 1,alignx left,growx 0");
 		}
-		add(panel1, "cell 4 0 1 10,aligny top,growy 0");
+		add(controlPanel, "cell 4 0 1 10,aligny top,growy 0");
 
-		//======== panel2 ========
+		//======== placeholderPanel ========
 		{
-			panel2.setBorder(new TitledBorder("Placeholder"));
-			panel2.setLayout(new MigLayout(
+			placeholderPanel.setBorder(new TitledBorder("Placeholder"));
+			placeholderPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
 				"[fill]" +
@@ -480,55 +498,55 @@ public class FlatTextComponentsTest
 
 			//---- label7 ----
 			label7.setText("leading");
-			panel2.add(label7, "cell 0 0");
+			placeholderPanel.add(label7, "cell 0 0");
 
 			//---- flatTextField1 ----
 			flatTextField1.setHorizontalAlignment(SwingConstants.LEADING);
 			flatTextField1.setPlaceholderText("text");
 			flatTextField1.setColumns(10);
-			panel2.add(flatTextField1, "cell 1 0");
+			placeholderPanel.add(flatTextField1, "cell 1 0");
 
 			//---- label8 ----
 			label8.setText("left");
-			panel2.add(label8, "cell 0 1");
+			placeholderPanel.add(label8, "cell 0 1");
 
 			//---- flatTextField2 ----
 			flatTextField2.setHorizontalAlignment(SwingConstants.LEFT);
 			flatTextField2.setPlaceholderText("text");
 			flatTextField2.setColumns(10);
-			panel2.add(flatTextField2, "cell 1 1");
+			placeholderPanel.add(flatTextField2, "cell 1 1");
 
 			//---- label9 ----
 			label9.setText("center");
-			panel2.add(label9, "cell 0 2");
+			placeholderPanel.add(label9, "cell 0 2");
 
 			//---- flatTextField3 ----
 			flatTextField3.setHorizontalAlignment(SwingConstants.CENTER);
 			flatTextField3.setPlaceholderText("text");
 			flatTextField3.setColumns(10);
-			panel2.add(flatTextField3, "cell 1 2");
+			placeholderPanel.add(flatTextField3, "cell 1 2");
 
 			//---- label10 ----
 			label10.setText("right");
-			panel2.add(label10, "cell 0 3");
+			placeholderPanel.add(label10, "cell 0 3");
 
 			//---- flatTextField4 ----
 			flatTextField4.setHorizontalAlignment(SwingConstants.RIGHT);
 			flatTextField4.setPlaceholderText("text");
 			flatTextField4.setColumns(10);
-			panel2.add(flatTextField4, "cell 1 3");
+			placeholderPanel.add(flatTextField4, "cell 1 3");
 
 			//---- label11 ----
 			label11.setText("trailing");
-			panel2.add(label11, "cell 0 4");
+			placeholderPanel.add(label11, "cell 0 4");
 
 			//---- flatTextField5 ----
 			flatTextField5.setHorizontalAlignment(SwingConstants.TRAILING);
 			flatTextField5.setPlaceholderText("text");
 			flatTextField5.setColumns(10);
-			panel2.add(flatTextField5, "cell 1 4");
+			placeholderPanel.add(flatTextField5, "cell 1 4");
 		}
-		add(panel2, "cell 5 0 1 9,aligny top,growy 0");
+		add(placeholderPanel, "cell 5 0 1 10,aligny top,growy 0");
 
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
@@ -783,6 +801,7 @@ public class FlatTextComponentsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField textField1;
+	private JPanel controlPanel;
 	private JCheckBox editableCheckBox;
 	private JSpinner leftPaddingField;
 	private JSpinner rightPaddingField;
@@ -796,6 +815,7 @@ public class FlatTextComponentsTest
 	private JCheckBox trailingComponentVisibleCheckBox;
 	private JCheckBox showClearButtonCheckBox;
 	private JCheckBox showRevealButtonCheckBox;
+	private JPanel placeholderPanel;
 	private JComboBox<String> comboBox5;
 	private JSpinner spinner4;
 	private JComboBox<String> comboBox6;
@@ -806,6 +826,18 @@ public class FlatTextComponentsTest
 	private JTextPane textPane;
 	private JEditorPane editorPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- NotFocusableTraversalPolicy ----------------------------------------
+
+	private static class NotFocusableTraversalPolicy
+		extends FocusTraversalPolicy
+	{
+		@Override public Component getComponentAfter( Container aContainer, Component aComponent ) { return null; }
+		@Override public Component getComponentBefore( Container aContainer, Component aComponent ) { return null; }
+		@Override public Component getFirstComponent( Container aContainer ) { return null; }
+		@Override public Component getLastComponent( Container aContainer ) { return null; }
+		@Override public Component getDefaultComponent( Container aContainer ) { return null; }
+	}
 
 	//---- TestIcon -----------------------------------------------------------
 

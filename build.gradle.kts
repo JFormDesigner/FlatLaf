@@ -16,6 +16,7 @@
 
 import net.ltgt.gradle.errorprone.errorprone
 
+group = "com.formdev"
 version = property( if( hasProperty( "release" ) ) "flatlaf.releaseVersion" else "flatlaf.developmentVersion" ) as String
 
 // for PR snapshots change version to 'PR-<pr_number>-SNAPSHOT'
@@ -49,6 +50,7 @@ println()
 
 
 plugins {
+	alias( libs.plugins.gradle.nexus.publish.plugin )
 	alias( libs.plugins.errorprone ) apply false
 }
 
@@ -140,6 +142,23 @@ allprojects {
 					}
 				}
 			}
+		}
+	}
+}
+
+nexusPublishing {
+	repositories {
+		sonatype {
+			// see https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+			nexusUrl = uri( "https://ossrh-staging-api.central.sonatype.com/service/local/" )
+			snapshotRepositoryUrl = uri( "https://central.sonatype.com/repository/maven-snapshots/" )
+
+			// get from gradle.properties
+			val sonatypeUsername: String? by project
+			val sonatypePassword: String? by project
+
+			username = System.getenv( "SONATYPE_USERNAME" ) ?: sonatypeUsername
+			password = System.getenv( "SONATYPE_PASSWORD" ) ?: sonatypePassword
 		}
 	}
 }

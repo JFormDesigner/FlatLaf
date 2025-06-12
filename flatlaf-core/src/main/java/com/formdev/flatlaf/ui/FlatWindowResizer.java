@@ -331,7 +331,7 @@ public abstract class FlatWindowResizer
 		protected Rectangle getParentBounds() {
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 			Rectangle bounds = gc.getBounds();
-			Insets insets = window.getToolkit().getScreenInsets( gc );
+			Insets insets = FlatUIUtils.getScreenInsets( gc );
 			return new Rectangle( bounds.x + insets.left, bounds.y + insets.top,
 				bounds.width - insets.left - insets.right,
 				bounds.height - insets.top - insets.bottom );
