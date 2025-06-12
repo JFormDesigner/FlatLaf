@@ -290,6 +290,8 @@ Applications using FlatLaf
   Application System
 - ![New](images/new.svg) [StarPlan](https://www.progotec.de/) (**commercial**) -
   die Stundenplan Software für Bildungseinrichtungen
+- ![New](images/new.svg) [SSPlot](https://github.com/babaissarkar/ssplot) -
+  plotting utility for plotting CSV data
 
 ### Documents
 
