@@ -33,14 +33,16 @@ To build the library on Linux, some packages needs to be installed:
 ### Ubuntu
 
 ~~~
-sudo apt update
-sudo apt install build-essential libxt-dev libgtk-3-dev
+sudo apt-get update
+sudo apt-get install build-essential libxt-dev libgtk-3-dev
 ~~~
 
-Only on x86_64 Linux for cross-compiling for arm64 architecture:
+#### Cross-compile for arm64 architecture on x86_64 Linux
+
+Only needed on x86_64 Linux if you want cross-compile for arm64 architecture:
 
 ~~~
-sudo apt install g++-aarch64-linux-gnu
+sudo apt-get install g++-aarch64-linux-gnu
 ~~~
 
 Download `libgtk-3.so` for arm64 architecture:
