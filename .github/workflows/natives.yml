@@ -33,6 +33,10 @@ jobs:
 
             - uses: gradle/actions/wrapper-validation@v4
 
+            - name: apt update (Linux)
+              if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-24.04-arm'
+              run: sudo apt-get update
+
             - name: install libxt-dev and libgtk-3-dev (Linux)
               if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-24.04-arm'
               run: sudo apt-get install libxt-dev libgtk-3-dev
@@ -76,7 +80,7 @@ jobs:
                 folder: 'flatlaf-core/src/main/resources/com/formdev/flatlaf/natives'
 
             - name: Sign macOS natives
-              if: matrix.os == 'macos-latest'
+              if: matrix.os == 'DISABLED--macos-latest'
               env:
                 CERT_BASE64: ${{ secrets.CODE_SIGN_CERT_BASE64 }}
                 CERT_PASSWORD: ${{ secrets.CODE_SIGN_CERT_PASSWORD }}
@@ -95,10 +99,12 @@ jobs:
                 security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
                 # import certificate to keychain
                 security import $CERTIFICATE_PATH -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+                # set partition list (required for codesign)
                 security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+                # add keychain to keychain search list
                 security list-keychains -d user -s $KEYCHAIN_PATH
                 # sign code
-                codesign --sign "$CERT_IDENTITY" --force --verbose --timestamp \
+                codesign --sign "$CERT_IDENTITY" --force --verbose=4 --timestamp \
                   flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/libflatlaf-macos-*.dylib
                 codesign --display --verbose=4 flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/libflatlaf-macos-*.dylib
                 # cleanup
