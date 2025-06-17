@@ -387,7 +387,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 
 static NSArray* getDialogURLs( NSSavePanel* dialog ) {
 	if( [dialog isKindOfClass:[NSOpenPanel class]] )
-		return static_cast<NSOpenPanel*>(dialog).URLs;
+		return [[NSArray alloc] initWithArray: static_cast<NSOpenPanel*>(dialog).URLs];
 
 	NSURL* url = dialog.URL;
 	// use '[[NSArray alloc] initWithObject:url]' here because '@[url]' crashes on macOS 10.14
