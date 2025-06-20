@@ -39,6 +39,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -989,12 +990,14 @@ public class FlatTableUI
 
 		FlatBooleanRenderer() {
 			setHorizontalAlignment( SwingConstants.CENTER );
-			setIcon( new FlatCheckBoxIcon() {
+			Icon icon = new FlatCheckBoxIcon() {
 				@Override
 				protected boolean isSelected( Component c ) {
 					return selected;
 				}
-			} );
+			};
+			setIcon( icon );
+			setDisabledIcon( icon );
 		}
 
 		@Override
