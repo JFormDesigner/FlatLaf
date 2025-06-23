@@ -65,15 +65,37 @@ tasks {
 
 		includes.from(
 			"${javaHome}/include",
-			"${javaHome}/include/linux"
+			"${javaHome}/include/linux",
+
+			// for GTK
+			"/usr/include/gtk-3.0",
+			"/usr/include/glib-2.0",
+			if( name.contains( "X86-64" ) ) "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+									   else "/usr/lib/aarch64-linux-gnu/glib-2.0/include",
+			"/usr/include/gdk-pixbuf-2.0",
+			"/usr/include/atk-1.0",
+			"/usr/include/cairo",
+			"/usr/include/pango-1.0",
+			"/usr/include/harfbuzz",
 		)
 
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf()
+				is Gcc, is Clang -> listOf( "-fvisibility=hidden" )
 				else -> emptyList()
 			}
 		} )
+
+		doFirst {
+			// check required Java version
+			if( JavaVersion.current() < JavaVersion.VERSION_11 ) {
+				println()
+				println( "WARNING: Java 11 or later required to build Linux native library (running ${System.getProperty( "java.version" )})" )
+				println( "         Native library built with older Java versions throw following exception when running in Java 17+:" )
+				println( "         java.lang.UnsatisfiedLinkError: .../libjawt.so: version `SUNWprivate_1.1' not found" )
+				println()
+			}
+		}
 	}
 
 	withType<LinkSharedLibrary>().configureEach {
@@ -88,7 +110,7 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}" )
+				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}", "-lgtk-3" )
 				else -> emptyList()
 			}
 		} )
@@ -128,7 +150,20 @@ tasks {
 				"-I", "${javaHome}/include/linux",
 				"-I", "$include",
 
+				// for GTK
+				"-I", "/usr/include/gtk-3.0",
+				"-I", "/usr/include/glib-2.0",
+				"-I", "/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+				"-I", "/usr/include/gdk-pixbuf-2.0",
+				"-I", "/usr/include/atk-1.0",
+				"-I", "/usr/include/cairo",
+				"-I", "/usr/include/pango-1.0",
+				"-I", "/usr/include/harfbuzz",
+
 				"$src/ApiVersion.cpp",
+				"$src/GtkFileChooser.cpp",
+				"$src/GtkMessageDialog.cpp",
+				"$src/JNIUtils.cpp",
 				"$src/X11WmUtils.cpp",
 			)
 		}
@@ -152,10 +187,15 @@ tasks {
 				"-o", "$outDir/$libraryName",
 
 				"$objDir/ApiVersion.o",
+				"$objDir/GtkFileChooser.o",
+				"$objDir/GtkMessageDialog.o",
+				"$objDir/JNIUtils.o",
 				"$objDir/X11WmUtils.o",
 
+				"-lstdc++",
 				"-L${layout.projectDirectory}/lib/aarch64",
 				"-ljawt",
+				"-lgtk-3",
 			)
 
 			doLast {

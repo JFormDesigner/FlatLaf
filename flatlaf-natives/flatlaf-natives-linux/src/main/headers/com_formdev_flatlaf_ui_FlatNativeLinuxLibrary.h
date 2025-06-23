@@ -9,6 +9,18 @@ extern "C" {
 #endif
 #undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_MOVE
 #define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_MOVE 8L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_select_folder
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_select_folder 1L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_select_multiple
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_select_multiple 2L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_show_hidden
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_show_hidden 4L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_local_only
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_local_only 8L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_do_overwrite_confirmation
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_do_overwrite_confirmation 16L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_create_folders
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_create_folders 32L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
  * Method:    xMoveOrResizeWindow
@@ -24,6 +36,30 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_xM
  */
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_xShowWindowMenu
   (JNIEnv *, jclass, jobject, jint, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
+ * Method:    isLibAvailable
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_isLibAvailable
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
+ * Method:    showFileChooser
+ * Signature: (Ljava/awt/Window;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeLinuxLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
+  (JNIEnv *, jclass, jobject, jboolean, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
+ * Method:    showMessageDialog
+ * Signature: (JILjava/lang/String;Ljava/lang/String;I[Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showMessageDialog
+  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint, jobjectArray);
 
 #ifdef __cplusplus
 }
