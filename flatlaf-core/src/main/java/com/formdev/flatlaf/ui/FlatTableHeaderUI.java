@@ -300,7 +300,7 @@ public class FlatTableHeaderUI
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );
 		if( size.height > 0 )
-			size.height = Math.max( size.height, UIScale.scale( height ) );
+			size.height = Math.max( size.height, UIScale.scale( size.height ) );
 		return size;
 	}
 
