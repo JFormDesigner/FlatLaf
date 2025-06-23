@@ -158,8 +158,4 @@ flatlafPublish {
 		NativeArtifact( "${natives}/libflatlaf-linux-x86_64.so",    "linux-x86_64",   "so" ),
 		NativeArtifact( "${natives}/libflatlaf-linux-arm64.so",     "linux-arm64",    "so" ),
 	)
-
-	// Maven Central Snapshots repo currently does not accept .dylib files
-	if( version.toString().endsWith( "-SNAPSHOT" ) )
-		nativeArtifacts = nativeArtifacts?.filter { it.type != "dylib" }
 }
