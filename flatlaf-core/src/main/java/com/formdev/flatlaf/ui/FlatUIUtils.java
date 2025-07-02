@@ -416,7 +416,7 @@ public class FlatUIUtils
 		return (fullScreenWindow != null && fullScreenWindow == SwingUtilities.windowForComponent( c ));
 	}
 
-	/** @since 3.7 */
+	/** @since 3.6.1 */
 	public static Insets getScreenInsets( GraphicsConfiguration gc ) {
 		// on Linux, getScreenInsets() may report wrong values in multi-screen setups
 		// see https://github.com/apache/netbeans/issues/8532#issuecomment-2909687016

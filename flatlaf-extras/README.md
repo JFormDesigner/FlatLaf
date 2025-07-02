@@ -43,7 +43,7 @@ If SVG classes are used, `jsvg-<version>.jar` is also required:
 
 Supported JSVG versions:
 
-- FlatLaf 3.7+ supports JSVG 1.6.0 and later.
+- FlatLaf 3.6.1+ supports JSVG 1.6.0 and later.
 - FlatLaf 3.6- supports only JSVG 1.x (but not 2.x).
 
 
