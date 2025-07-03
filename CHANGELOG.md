@@ -4,6 +4,9 @@ FlatLaf Change Log
 ## 3.6.1-SNAPSHOT
 
 - Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)
+- FlatLaf window decorations (Windows 10/11 only): Improved diagonal window
+  resizing on top-left and top-right window corners. Top window resize area now
+  also covers iconify/maximize/close buttons. (issue #1015)
 - ToggleButton: Styling `selectedForeground` did not work if `foreground` is
   also styled. (issue #1017)
 - JideSplitButton: Fixed updating popup when switching theme. (issue #1000)

@@ -21,6 +21,7 @@ import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -39,6 +40,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 //
 // Interesting resources:
@@ -282,6 +284,8 @@ class FlatWindowsNativeWindowBorder
 			HTMINBUTTON = 8,
 			HTMAXBUTTON = 9,
 			HTTOP = 12,
+			HTTOPLEFT = 13,
+			HTTOPRIGHT = 14,
 			HTCLOSE = 20;
 
 		private Window window;
@@ -341,6 +345,31 @@ class FlatWindowsNativeWindowBorder
 			// scale-down mouse x/y because Swing coordinates/values may be scaled on a HiDPI screen
 			Point pt = scaleDown( x, y );
 
+			// limit top resize border to 4px, which seems to be standard for modern WinUI apps
+			if( isOnResizeBorder && pt.y > UIScale.scale( 4 ) )
+				isOnResizeBorder = false;
+
+			if( isOnResizeBorder ) {
+				Insets insets = window.getInsets();
+
+				// return HTTOPLEFT if mouse is over top resize border on left side
+				//   - hovering mouse shows top-left resize cursor
+				//   - left-click-and-drag resizes window
+				if( pt.x <= insets.left + UIScale.scale( 12 ) )
+					return HTTOPLEFT;
+
+				// return HTTOPRIGHT if mouse is over top resize border on right side
+				//   - hovering mouse shows top-right resize cursor
+				//   - left-click-and-drag resizes window
+				if( pt.x >= window.getWidth() - insets.right - UIScale.scale( 12 ) )
+					return HTTOPRIGHT;
+
+				// return HTTOP if mouse is over top resize border
+				//   - hovering mouse shows vertical resize cursor
+				//   - left-click-and-drag vertically resizes window
+				return HTTOP;
+			}
+
 			// return HTSYSMENU if mouse is over application icon
 			//   - left-click on HTSYSMENU area shows system menu
 			//   - double-left-click sends WM_CLOSE
@@ -363,12 +392,6 @@ class FlatWindowsNativeWindowBorder
 			//   - hovering mouse over HTCLOSE area shows tooltip on Windows 10/11
 			if( contains( closeButtonBounds, pt ) )
 				return HTCLOSE;
-
-			// return HTTOP if mouse is over top resize border
-			//   - hovering mouse shows vertical resize cursor
-			//   - left-click and drag vertically resizes window
-			if( isOnResizeBorder )
-				return HTTOP;
 
 			boolean isOnTitleBar = (pt.y < titleBarHeight);
 			if( isOnTitleBar ) {
