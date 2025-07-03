@@ -39,13 +39,15 @@
 @implementation WindowData
 @end
 
-// declare internal methods
+// declare exported methods
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
-WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
-void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden );
-int getWindowButtonAreaWidth( NSWindow* nsWindow );
-int getWindowTitleBarHeight( NSWindow* nsWindow );
-bool isWindowFullScreen( NSWindow* nsWindow );
+
+// declare internal methods
+static WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
+static void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden );
+static int getWindowButtonAreaWidth( NSWindow* nsWindow );
+static int getWindowTitleBarHeight( NSWindow* nsWindow );
+static bool isWindowFullScreen( NSWindow* nsWindow );
 
 
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
@@ -79,7 +81,7 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	return (NSWindow *) jlong_to_ptr( env->GetLongField( platformWindow, ptrID ) );
 }
 
-WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
+static WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
 	static char key;
 	WindowData* windowData = objc_getAssociatedObject( nsWindow, &key );
 	if( windowData == NULL && allocate ) {
@@ -252,7 +254,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	return FALSE;
 }
 
-void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden ) {
+static void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden ) {
 	// get buttons
 	NSView* buttons[3] = {
 		[nsWindow standardWindowButton:NSWindowCloseButton],
@@ -312,7 +314,7 @@ JNIEXPORT jobject JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWi
 	return NULL;
 }
 
-int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
+static int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 	// get buttons
 	NSView* buttons[3] = {
 		[nsWindow standardWindowButton:NSWindowCloseButton],
@@ -344,7 +346,7 @@ int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 	return right + left;
 }
 
-int getWindowTitleBarHeight( NSWindow* nsWindow ) {
+static int getWindowTitleBarHeight( NSWindow* nsWindow ) {
 	NSView* closeButton = [nsWindow standardWindowButton:NSWindowCloseButton];
 	if( closeButton == NULL )
 		return -1;
@@ -369,7 +371,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
 	return FALSE;
 }
 
-bool isWindowFullScreen( NSWindow* nsWindow ) {
+static bool isWindowFullScreen( NSWindow* nsWindow ) {
 	return ((nsWindow.styleMask & NSWindowStyleMaskFullScreen) != 0);
 }
 

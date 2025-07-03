@@ -25,10 +25,13 @@
  */
 
 
-bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
-	long data0, long data1, long data2, long data3, long data4 );
-bool isWMHintSupported( Display* display, Window rootWindow, Atom atom );
+// declare exported methods
 Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** display_return );
+
+// declare internal methods
+static bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
+	long data0, long data1, long data2, long data3, long data4 );
+static bool isWMHintSupported( Display* display, Window rootWindow, Atom atom );
 
 
 //---- JNI methods ------------------------------------------------------------
@@ -36,7 +39,7 @@ Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display** displa
 /**
  * Send _NET_WM_MOVERESIZE to window to initiate moving or resizing.
  *
- * https://specifications.freedesktop.org/wm-spec/wm-spec-latest.html#idm45446104441728
+ * https://specifications.freedesktop.org/wm-spec/latest/ar01s04.html#id-1.5.4
  * https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/x11/gdksurface-x11.c#L3841-3881
  */
 extern "C"
@@ -79,7 +82,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_xS
 		0 );
 }
 
-bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
+static bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
 	long data0, long data1, long data2, long data3, long data4 )
 {
 	// get the AWT
@@ -131,7 +134,7 @@ bool sendEvent( JNIEnv *env, jobject window, const char *atom_name,
 }
 
 
-bool isWMHintSupported( Display* display, Window rootWindow, Atom atom ) {
+static bool isWMHintSupported( Display* display, Window rootWindow, Atom atom ) {
 	Atom type;
 	int format;
 	unsigned long n_atoms;

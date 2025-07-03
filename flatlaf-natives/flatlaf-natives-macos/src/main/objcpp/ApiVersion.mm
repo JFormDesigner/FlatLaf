@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include <jni.h>
-#include "com_formdev_flatlaf_ui_FlatNativeLibrary.h"
+#import <jni.h>
+#import "com_formdev_flatlaf_ui_FlatNativeLibrary.h"
 
 /**
  * @author Karl Tauber
@@ -24,7 +24,7 @@
 
 // increase this version if changing API or functionality of native library
 // also update version in Java class com.formdev.flatlaf.ui.FlatNativeMacLibrary
-#define API_VERSION_MACOS		2001
+#define API_VERSION_MACOS		2002
 
 
 //---- JNI methods ------------------------------------------------------------
