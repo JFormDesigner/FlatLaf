@@ -618,7 +618,30 @@ public class FlatPopupFactory
 
 		void showImpl() {
 			if( delegate != null ) {
-				showPopupAndFixLocation( delegate, popupWindow );
+				// On macOS and Linux, the empty popup window is shown in popup.show()
+				// (in peer.setVisible(true) invoked from Component.show()),
+				// but the popup content is painted later via repaint manager.
+				// This may cause some flicker, especially during JVM warm-up or
+				// when running JVM in interpreter mode (option -Xint).
+				// To reduce flicker, immediately paint popup content as soon as popup window becomes visible.
+				// This also fixes a problem with JetBrainsRuntime JVM, where sometimes the popups were empty.
+				if( (SystemInfo.isMacOS || SystemInfo.isLinux) && popupWindow instanceof JWindow ) {
+					HierarchyListener l = e -> {
+						if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
+							(e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 )
+						{
+							((JWindow)popupWindow).getRootPane().paintImmediately(
+								0, 0, popupWindow.getWidth(), popupWindow.getHeight() );
+						}
+					};
+					popupWindow.addHierarchyListener( l );
+					try {
+						showPopupAndFixLocation( delegate, popupWindow );
+					} finally {
+						popupWindow.removeHierarchyListener( l );
+					}
+				} else
+					showPopupAndFixLocation( delegate, popupWindow );
 
 				// increase tooltip size if necessary because it may be too small on HiDPI screens
 				//    https://bugs.openjdk.java.net/browse/JDK-8213535
@@ -677,6 +700,21 @@ public class FlatPopupFactory
 				// restore background so that it can not affect other LaFs (when switching)
 				// because popup windows are cached and reused
 				popupWindow.setBackground( oldPopupWindowBackground );
+
+				// On macOS, popupWindow.setBackground(...) invoked from constructor,
+				// has no affect if the popup window peer (a NSWindow) is already created,
+				// which is the case when reusing a cached popup window
+				// (see class PopupFactory.HeavyWeightPopup).
+				// This may result in flicker when e.g. showing a popup in a light theme,
+				// then switching to a dark theme and again showing a popup,
+				// because the underling NSWindow still has a light background,
+				// which may be shown shortly before the actual dark popup content is shown.
+				// To fix this, dispose the popup window, which disposes the NSWindow.
+				// The AWT popup window stays in the popup cache, but when reusing it later,
+				// a new peer and a new NSWindow is created and gets the correct background.
+				if( SystemInfo.isMacOS )
+					popupWindow.dispose();
+
 				popupWindow = null;
 			}
 		}

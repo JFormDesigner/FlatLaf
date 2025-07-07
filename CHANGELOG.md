@@ -15,6 +15,8 @@ FlatLaf Change Log
 - Linux: Popups appeared in wrong position on multi-screen setup if primary
   display is located below or right to secondary display. (see
   [NetBeans issue #8532](https://github.com/apache/netbeans/issues/8532))
+- macOS: Fixed popup flickering after theme change. (issue #1009)
+- macOS with JetBrains Runtime: Fixed sometimes empty popups. (issue #1019)
 
 
 ## 3.6
