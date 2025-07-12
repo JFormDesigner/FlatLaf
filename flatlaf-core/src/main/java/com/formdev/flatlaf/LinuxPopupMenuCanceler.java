@@ -70,6 +70,8 @@ class LinuxPopupMenuCanceler
 	}
 
 	private void addWindowListeners( MenuElement selected ) {
+		removeWindowListeners();
+
 		// see BasicPopupMenuUI.MouseGrabber.grabWindow()
 		Component invoker = selected.getComponent();
 		if( invoker instanceof JPopupMenu )
