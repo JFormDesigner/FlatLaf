@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.6.1-SNAPSHOT
+## 3.6.1
 
 - Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)
 - FlatLaf window decorations (Windows 10/11 only): Improved diagonal window

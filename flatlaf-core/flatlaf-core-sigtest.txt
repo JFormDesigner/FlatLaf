@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.6
+#Version 3.6.1
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -324,7 +324,7 @@ meth public static boolean setup(java.io.InputStream)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(com.formdev.flatlaf.IntelliJTheme)
 meth public static com.formdev.flatlaf.FlatLaf createLaf(java.io.InputStream) throws java.io.IOException
 supr java.lang.Object
-hfds checkboxDuplicateColors,checkboxKeyMapping,jsonColors,jsonIcons,jsonUI,namedColors,uiKeyCopying,uiKeyDoNotOverride,uiKeyExcludes,uiKeyInverseMapping,uiKeyMapping
+hfds checkboxDuplicateColors,checkboxKeyMapping,jsonColors,jsonIcons,jsonUI,namedColors,uiKeyCopying,uiKeyDoNotOverride,uiKeyExcludesContains,uiKeyExcludesStartsWith,uiKeyInverseMapping,uiKeyMapping
 
 CLSS public static com.formdev.flatlaf.IntelliJTheme$ThemeLaf
  outer com.formdev.flatlaf.IntelliJTheme
