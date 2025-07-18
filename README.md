@@ -35,6 +35,8 @@ Sponsors
 
 ### Current Sponsors
 
+<a href="https://www.soptim.de/"><img src="https://www.formdev.com/flatlaf/sponsor/soptim.svg" width="200" alt="SOPTIM" title="SOPTIM - your expert in software solutions for the energy industry"></a>
+&nbsp; &nbsp; &nbsp; &nbsp;
 <a href="https://exocharts.com/"><img src="https://www.formdev.com/flatlaf/sponsor/Exocharts.png" width="200" alt="Exocharts" title="Exocharts - Professional Grade OrderFlow"></a>
 
 <!-- [![None Sponsors](images/none-sponsors.png)](https://www.formdev.com/flatlaf/sponsor/) -->
