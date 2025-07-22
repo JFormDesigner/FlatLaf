@@ -501,6 +501,11 @@ class DemoFrame
 		return FlatLaf.supportsNativeWindowDecorations() || SystemInfo.isLinux;
 	}
 
+	private void showCheckMenuIconsSeparately() {
+		UIManager.put( "MenuItem.checkIconSeparated", showMenuCheckIconsSeparately.isSelected() );
+		FlatLaf.updateUI();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBar = new JMenuBar();
@@ -530,6 +535,10 @@ class DemoFrame
 		scrollingPopupMenu = new JMenu();
 		JMenuItem menuItem2 = new JMenuItem();
 		htmlMenuItem = new JMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem2 = new JCheckBoxMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem3 = new JCheckBoxMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem4 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem5 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
@@ -545,6 +554,7 @@ class DemoFrame
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
+		showMenuCheckIconsSeparately = new JCheckBoxMenuItem();
 		JMenuItem showHintsMenuItem = new JMenuItem();
 		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
@@ -755,6 +765,28 @@ class DemoFrame
 				//---- htmlMenuItem ----
 				htmlMenuItem.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
 				viewMenu.add(htmlMenuItem);
+
+				//---- checkBoxMenuItem2 ----
+				checkBoxMenuItem2.setText("Check Box");
+				checkBoxMenuItem2.setSelected(true);
+				viewMenu.add(checkBoxMenuItem2);
+
+				//---- checkBoxMenuItem3 ----
+				checkBoxMenuItem3.setText("Check Box with Icon");
+				checkBoxMenuItem3.setSelected(true);
+				checkBoxMenuItem3.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/show.svg"));
+				viewMenu.add(checkBoxMenuItem3);
+
+				//---- radioButtonMenuItem4 ----
+				radioButtonMenuItem4.setText("Radio Button");
+				radioButtonMenuItem4.setSelected(true);
+				viewMenu.add(radioButtonMenuItem4);
+
+				//---- radioButtonMenuItem5 ----
+				radioButtonMenuItem5.setText("Radio Button with Icon");
+				radioButtonMenuItem5.setSelected(true);
+				radioButtonMenuItem5.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/show.svg"));
+				viewMenu.add(radioButtonMenuItem5);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----
@@ -841,6 +873,11 @@ class DemoFrame
 				animatedLafChangeMenuItem.setSelected(true);
 				animatedLafChangeMenuItem.addActionListener(e -> animatedLafChangeChanged());
 				optionsMenu.add(animatedLafChangeMenuItem);
+
+				//---- showMenuCheckIconsSeparately ----
+				showMenuCheckIconsSeparately.setText("Show check menu icons separately");
+				showMenuCheckIconsSeparately.addActionListener(e -> showCheckMenuIconsSeparately());
+				optionsMenu.add(showMenuCheckIconsSeparately);
 
 				//---- showHintsMenuItem ----
 				showHintsMenuItem.setText("Show hints");
@@ -1054,6 +1091,7 @@ class DemoFrame
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
+	private JCheckBoxMenuItem showMenuCheckIconsSeparately;
 	private JMenuItem aboutMenuItem;
 	private JToolBar toolBar;
 	private JTabbedPane tabbedPane;
