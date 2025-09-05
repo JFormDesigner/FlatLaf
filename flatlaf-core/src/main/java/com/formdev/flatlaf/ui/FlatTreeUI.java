@@ -577,7 +577,6 @@ public class FlatTreeUI
 		boolean isEditing = (editingComponent != null && editingRow == row);
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );
-		boolean needsSelectionPainting = (isSelected || isDropRow) && isPaintSelection();
 
 		// paint alternating rows
 		if( alternateRowColor != null && row % 2 != 0 ) {
@@ -608,7 +607,7 @@ public class FlatTreeUI
 			if( isSelected && isWideSelection() ) {
 				Color oldColor = g.getColor();
 				g.setColor( selectionInactiveBackground );
-				paintWideSelection( g, bounds, row );
+				paintWideSelection( g, bounds, row, false );
 				g.setColor( oldColor );
 			}
 			return;
@@ -628,7 +627,7 @@ public class FlatTreeUI
 
 		// renderer background/foreground
 		Color oldBackgroundSelectionColor = null;
-		if( isSelected && !hasFocus && !isDropRow ) {
+		if( isSelected && !hasFocus ) {
 			// apply inactive selection background/foreground if tree is not focused
 			oldBackgroundSelectionColor = setRendererBackgroundSelectionColor( rendererComponent, selectionInactiveBackground );
 			setRendererForeground( rendererComponent, selectionInactiveForeground );
@@ -655,26 +654,12 @@ public class FlatTreeUI
 		}
 
 		// paint selection background
-		if( needsSelectionPainting ) {
-			// set selection color
-			Color oldColor = g.getColor();
-			g.setColor( isDropRow
-				? UIManager.getColor( "Tree.dropCellBackground" )
-				: (rendererComponent instanceof DefaultTreeCellRenderer
-					? ((DefaultTreeCellRenderer)rendererComponent).getBackgroundSelectionColor()
-					: (hasFocus ? selectionBackground : selectionInactiveBackground)) );
+		if( isSelected && isPaintSelection() ) {
+			Color selectionColor = rendererComponent instanceof DefaultTreeCellRenderer
+				? ((DefaultTreeCellRenderer)rendererComponent).getBackgroundSelectionColor()
+				: (hasFocus ? selectionBackground : selectionInactiveBackground);
 
-			if( isWideSelection() ) {
-				// wide selection
-				paintWideSelection( g, bounds, row );
-			} else {
-				// non-wide selection
-				paintCellBackground( g, rendererComponent, bounds, row, true );
-			}
-
-			// this is actually not necessary because renderer should always set color
-			// before painting, but doing anyway to avoid any side effect (in bad renderers)
-			g.setColor( oldColor );
+			paintRowSelection( g, selectionColor, rendererComponent, bounds, row, hasFocus, false );
 		} else {
 			// paint cell background if DefaultTreeCellRenderer.getBackgroundNonSelectionColor() is set
 			if( rendererComponent instanceof DefaultTreeCellRenderer ) {
@@ -683,10 +668,17 @@ public class FlatTreeUI
 				if( bg != null && !bg.equals( defaultCellNonSelectionBackground ) ) {
 					Color oldColor = g.getColor();
 					g.setColor( bg );
-					paintCellBackground( g, rendererComponent, bounds, row, false );
+					paintCellBackground( g, rendererComponent, bounds, row, false, false );
 					g.setColor( oldColor );
 				}
 			}
+		}
+
+		// paint drop background
+		// (this needs to be an extra step for rounded selection)
+		if( isDropRow && isPaintSelection() ) {
+			paintRowSelection( g, UIManager.getColor( "Tree.dropCellBackground" ),
+				rendererComponent, bounds, row, hasFocus, true );
 		}
 
 		// paint renderer
@@ -697,6 +689,26 @@ public class FlatTreeUI
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
 		if( oldBorderSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
+	}
+
+	private void paintRowSelection( Graphics g, Color color, Component rendererComponent,
+		Rectangle bounds, int row, boolean hasFocus, boolean paintDropSelection )
+	{
+		// set selection color
+		Color oldColor = g.getColor();
+		g.setColor( color );
+
+		if( isWideSelection() ) {
+			// wide selection
+			paintWideSelection( g, bounds, row, paintDropSelection );
+		} else {
+			// non-wide selection
+			paintCellBackground( g, rendererComponent, bounds, row, true, paintDropSelection );
+		}
+
+		// this is actually not necessary because renderer should always set color
+		// before painting, but doing anyway to avoid any side effect (in bad renderers)
+		g.setColor( oldColor );
 	}
 
 	private Color setRendererBackgroundSelectionColor( Component rendererComponent, Color color ) {
@@ -735,11 +747,11 @@ public class FlatTreeUI
 		return oldColor;
 	}
 
-	private void paintWideSelection( Graphics g, Rectangle bounds, int row ) {
+	private void paintWideSelection( Graphics g, Rectangle bounds, int row, boolean paintDropSelection ) {
 		float arcTop, arcBottom;
 		arcTop = arcBottom = UIScale.scale( selectionArc / 2f );
 
-		if( useUnitedRoundedSelection() ) {
+		if( useUnitedRoundedSelection() && !paintDropSelection ) {
 			if( row > 0 && tree.isRowSelected( row - 1 ) )
 				arcTop = 0;
 			if( row < tree.getRowCount() - 1 && tree.isRowSelected( row + 1 ) )
@@ -751,7 +763,7 @@ public class FlatTreeUI
 	}
 
 	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds,
-		int row, boolean paintSelection )
+		int row, boolean paintSelection, boolean paintDropSelection )
 	{
 		int xOffset = 0;
 		int imageOffset = 0;
@@ -769,7 +781,7 @@ public class FlatTreeUI
 			float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
 			arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
 
-			if( useUnitedRoundedSelection() ) {
+			if( useUnitedRoundedSelection() && !paintDropSelection ) {
 				if( row > 0 && tree.isRowSelected( row - 1 ) ) {
 					Rectangle r = getPathBounds( tree, tree.getPathForRow( row - 1 ) );
 					arcTopLeft = Math.min( arcTopLeft, r.x - bounds.x );

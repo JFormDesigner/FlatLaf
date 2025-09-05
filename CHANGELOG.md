@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 3.7-SNAPSHOT
+
+#### Fixed bugs
+
+- Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
+
+
 ## 3.6.1
 
 - Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)

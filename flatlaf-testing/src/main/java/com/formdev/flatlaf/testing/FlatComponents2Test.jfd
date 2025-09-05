@@ -299,7 +299,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 8,hidemode 3"
 				"$columnConstraints": "[left]"
-				"$rowConstraints": "[][]0[]0[]rel[]"
+				"$rowConstraints": "[][]0[]0[]rel[][]"
 			} ) {
 				name: "generalOptionsPanel"
 				"border": new javax.swing.border.TitledBorder( "General Control" )
@@ -378,6 +378,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
+					name: "dropModeComboBox"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "DropMode"
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dropModeChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 4 4 1"

@@ -162,6 +162,11 @@ public class FlatComponents2Test
 
 		for( JTree tree : allTrees )
 			expandTree( tree );
+
+		// drop mode
+		dropModeComboBox.init( DropMode.class, false );
+		dropModeComboBox.setSelectedItem( DropMode.ON_OR_INSERT );
+		dropModeChanged();
 	}
 
 	private void initTableEditors( JTable table ) {
@@ -311,13 +316,6 @@ public class FlatComponents2Test
 		xTable1.setDragEnabled( dnd );
 		xTreeTable1.setDragEnabled( dnd );
 
-		DropMode dropMode = dnd ? DropMode.ON_OR_INSERT : DropMode.USE_SELECTION;
-		list1.setDropMode( dropMode );
-		tree1.setDropMode( dropMode );
-		table1.setDropMode( dropMode );
-		xTable1.setDropMode( dropMode );
-		xTreeTable1.setDropMode( dropMode );
-
 		String key = "FlatLaf.oldTransferHandler";
 		if( dnd ) {
 			list1.putClientProperty( key, list1.getTransferHandler() );
@@ -339,6 +337,32 @@ public class FlatComponents2Test
 			xTable1.setTransferHandler( (TransferHandler) xTable1.getClientProperty( key ) );
 			xTreeTable1.setTransferHandler( (TransferHandler) xTreeTable1.getClientProperty( key ) );
 		}
+	}
+
+	private void dropModeChanged() {
+		DropMode dropMode = dropModeComboBox.getSelectedValue();
+		DropMode dropMode2;
+		switch( dropMode ) {
+			case INSERT_ROWS:
+			case INSERT_COLS:
+				dropMode2 = DropMode.INSERT;
+				break;
+
+			case ON_OR_INSERT_ROWS:
+			case ON_OR_INSERT_COLS:
+				dropMode2 = DropMode.ON_OR_INSERT;
+				break;
+
+			default:
+				dropMode2 = dropMode;
+				break;
+		}
+
+		list1.setDropMode( dropMode2 );
+		tree1.setDropMode( dropMode2 );
+		table1.setDropMode( dropMode );
+		xTable1.setDropMode( dropMode );
+		xTreeTable1.setDropMode( dropMode );
 	}
 
 	private void tableHeaderButtonChanged() {
@@ -618,6 +642,7 @@ public class FlatComponents2Test
 		super.updateUI();
 
 		EventQueue.invokeLater( () -> {
+			dropModeChanged();
 			showHorizontalLinesChanged();
 			showVerticalLinesChanged();
 			intercellSpacingChanged();
@@ -673,6 +698,7 @@ public class FlatComponents2Test
 		leftSelectionInsetsCheckBox = new JCheckBox();
 		rightSelectionInsetsCheckBox = new JCheckBox();
 		dndCheckBox = new JCheckBox();
+		dropModeComboBox = new FlatTestEnumComboBox<>();
 		listOptionsPanel = new JPanel();
 		JLabel listRendererLabel = new JLabel();
 		listRendererComboBox = new JComboBox<>();
@@ -963,6 +989,7 @@ public class FlatComponents2Test
 				"[]0" +
 				"[]0" +
 				"[]rel" +
+				"[]" +
 				"[]"));
 
 			//---- roundedSelectionCheckBox ----
@@ -1004,6 +1031,10 @@ public class FlatComponents2Test
 			dndCheckBox.setMnemonic('D');
 			dndCheckBox.addActionListener(e -> dndChanged());
 			generalOptionsPanel.add(dndCheckBox, "cell 0 4");
+
+			//---- dropModeComboBox ----
+			dropModeComboBox.addActionListener(e -> dropModeChanged());
+			generalOptionsPanel.add(dropModeComboBox, "cell 0 5");
 		}
 		add(generalOptionsPanel, "cell 0 4 4 1");
 
@@ -1272,6 +1303,7 @@ public class FlatComponents2Test
 	private JCheckBox leftSelectionInsetsCheckBox;
 	private JCheckBox rightSelectionInsetsCheckBox;
 	private JCheckBox dndCheckBox;
+	private FlatTestEnumComboBox<DropMode> dropModeComboBox;
 	private JPanel listOptionsPanel;
 	private JComboBox<String> listRendererComboBox;
 	private JComboBox<String> listLayoutOrientationField;
