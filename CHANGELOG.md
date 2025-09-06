@@ -8,6 +8,16 @@ FlatLaf Change Log
 - Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
 
 
+#### Incompatibilities
+
+- FlatLaf properties files are now loaded using the UTF-8 character encoding
+  instead of ISO 8859-1. In usual properties files you will not notice any
+  difference because they use only ASCII characters, but if you've put localized
+  (non-English) texts (e.g. German umlauts) into your properties files, you need
+  to convert them to UTF-8. Properties files created with the FlatLaf Theme
+  Editor already use UTF-8, including in older versions. (issue #1031)
+
+
 ## 3.6.1
 
 - Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)

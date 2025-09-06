@@ -25,12 +25,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -112,6 +115,14 @@ class UIDefaultsLoader
 		Set<String> specialPrefixes = FlatLaf.getUIKeySpecialPrefixes();
 
 		return new Properties() {
+			@Override
+			public void load( InputStream in ) throws IOException {
+				// use UTF-8 to load properties file
+				try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 )) {
+					super.load( reader );
+				}
+			}
+
 			@Override
 			public synchronized Object put( Object k, Object value ) {
 				// process key prefixes (while loading properties files)
