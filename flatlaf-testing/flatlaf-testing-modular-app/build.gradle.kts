@@ -30,3 +30,20 @@ flatlafModuleInfo {
 	dependsOn( ":flatlaf-extras:jar" )
 	dependsOn( ":flatlaf-fonts-inter:jar" )
 }
+
+tasks {
+	register( "build-for-debugging" ) {
+		group = "build"
+
+		dependsOn( "build" )
+
+		doLast {
+			copy {
+				from( project.tasks["jar"].outputs )
+				from( configurations.runtimeClasspath )
+				into( "run" )
+				rename( "-[0-9][0-9.]*[0-9]", "-999" )
+			}
+		}
+	}
+}

@@ -3,6 +3,13 @@ FlatLaf Change Log
 
 ## 3.7-SNAPSHOT
 
+#### New features and improvements
+
+- If using `FlatLaf.registerCustomDefaultsSource( "com.myapp.themes" )` and
+  named Java modules, it is no longer necessary to add `opens com.myapp.themes;`
+  to `module-info.java`. (issue #1026)
+
+
 #### Fixed bugs
 
 - Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
