@@ -659,7 +659,7 @@ public class FlatTreeUI
 				? ((DefaultTreeCellRenderer)rendererComponent).getBackgroundSelectionColor()
 				: (hasFocus ? selectionBackground : selectionInactiveBackground);
 
-			paintRowSelection( g, selectionColor, rendererComponent, bounds, row, hasFocus, false );
+			paintRowSelection( g, selectionColor, rendererComponent, bounds, row, false );
 		} else {
 			// paint cell background if DefaultTreeCellRenderer.getBackgroundNonSelectionColor() is set
 			if( rendererComponent instanceof DefaultTreeCellRenderer ) {
@@ -678,7 +678,7 @@ public class FlatTreeUI
 		// (this needs to be an extra step for rounded selection)
 		if( isDropRow && isPaintSelection() ) {
 			paintRowSelection( g, UIManager.getColor( "Tree.dropCellBackground" ),
-				rendererComponent, bounds, row, hasFocus, true );
+				rendererComponent, bounds, row, true );
 		}
 
 		// paint renderer
@@ -692,7 +692,7 @@ public class FlatTreeUI
 	}
 
 	private void paintRowSelection( Graphics g, Color color, Component rendererComponent,
-		Rectangle bounds, int row, boolean hasFocus, boolean paintDropSelection )
+		Rectangle bounds, int row, boolean paintDropSelection )
 	{
 		// set selection color
 		Color oldColor = g.getColor();
