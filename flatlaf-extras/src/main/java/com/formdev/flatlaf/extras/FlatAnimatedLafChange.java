@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JRootPane;
 import javax.swing.RootPaneContainer;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.Animator;
@@ -80,7 +81,7 @@ public class FlatAnimatedLafChange
 		showSnapshot( true, oldUIsnapshots );
 	}
 
-	private static void showSnapshot( boolean useAlpha, Map<JLayeredPane, JComponent> map ) {
+	private static void showSnapshot( boolean old, Map<JLayeredPane, JComponent> map ) {
 		inShowSnapshot = true;
 
 		// create snapshots for all shown windows
@@ -107,7 +108,7 @@ public class FlatAnimatedLafChange
 					if( inShowSnapshot || snapshot.contentsLost() )
 						return;
 
-					if( useAlpha )
+					if( old )
 						((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
 					g.drawImage( snapshot, 0, 0, null );
 				}
@@ -120,13 +121,17 @@ public class FlatAnimatedLafChange
 					snapshot.flush();
 				}
 			};
-			if( !useAlpha )
+			if( !old )
 				snapshotLayer.setOpaque( true );
 			snapshotLayer.setSize( layeredPane.getSize() );
 
 			// add image layer to layered pane
-			layeredPane.add( snapshotLayer, Integer.valueOf( JLayeredPane.DRAG_LAYER + (useAlpha ? 2 : 1) ) );
+			layeredPane.add( snapshotLayer, Integer.valueOf( JLayeredPane.DRAG_LAYER + (old ? 2 : 1) ) );
 			map.put( layeredPane, snapshotLayer );
+
+			// let FlatRootPaneUI know that animated Laf change is in progress
+			if( old )
+				layeredPane.getRootPane().putClientProperty( "FlatLaf.internal.animatedLafChange", true );
 		}
 
 		inShowSnapshot = false;
@@ -180,6 +185,15 @@ public class FlatAnimatedLafChange
 		for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
 			e.getKey().remove( e.getValue() );
 			e.getKey().repaint();
+
+			// run Runnable that FlatRootPaneUI put into client properties
+			JRootPane rootPane = e.getKey().getRootPane();
+			rootPane.putClientProperty( "FlatLaf.internal.animatedLafChange", null );
+			Runnable r = (Runnable) rootPane.getClientProperty( "FlatLaf.internal.animatedLafChange.runWhenFinished" );
+			if( r != null ) {
+				rootPane.putClientProperty( "FlatLaf.internal.animatedLafChange.runWhenFinished", null );
+				r.run();
+			}
 		}
 
 		map.clear();

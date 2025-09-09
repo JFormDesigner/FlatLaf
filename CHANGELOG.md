@@ -9,11 +9,12 @@ FlatLaf Change Log
   named Java modules, it is no longer necessary to add `opens com.myapp.themes;`
   to `module-info.java`. (issue #1026)
 
-
 #### Fixed bugs
 
 - Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
-
+- macOS: Fixed window "flashing" when switching from a light to a dark theme (or
+  vice versa). Especially when using animated theme changer (see
+  [FlatLaf Extras](flatlaf-extras)).
 
 #### Incompatibilities
 
