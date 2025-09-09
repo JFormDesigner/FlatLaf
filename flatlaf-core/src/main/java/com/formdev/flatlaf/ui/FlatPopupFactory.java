@@ -546,7 +546,15 @@ public class FlatPopupFactory
 			int x = popupWindow.getX();
 			int y = popupWindow.getY();
 
-			popup.show();
+			if( !popupWindow.isVisible() )
+				popup.show();
+			else {
+				// if the popup window is already visible (because it is reused),
+				// do not invoke Popup.show() because this would invoke Window.toFront(),
+				// which may have the side effect that an inactive owner window
+				// would be also moved to front and maybe hide previously active window
+				popupWindow.pack();
+			}
 
 			// restore popup window location if it has changed
 			// (probably scaled when screens use different scale factors)

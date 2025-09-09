@@ -13,6 +13,8 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
+- Popup: Showing tooltip in inactive window brought that window to front (made
+  it active) and potentially hid the previously active window. (issue #1037)
 - macOS: Fixed window "flashing" when switching from a light to a dark theme (or
   vice versa). Especially when using animated theme changer (see
   [FlatLaf Extras](flatlaf-extras)).
