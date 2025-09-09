@@ -8,6 +8,7 @@ FlatLaf Change Log
 - If using `FlatLaf.registerCustomDefaultsSource( "com.myapp.themes" )` and
   named Java modules, it is no longer necessary to add `opens com.myapp.themes;`
   to `module-info.java`. (issue #1026)
+- Extras: Made animated theme change (class `FlatAnimatedLafChange`) smoother.
 
 #### Fixed bugs
 
