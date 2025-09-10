@@ -35,11 +35,11 @@ build script:
 
 Otherwise, download `flatlaf-extras-<version>.jar` here:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras)
+[![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf-extras?style=flat-square)](https://central.sonatype.com/artifact/com.formdev/flatlaf-extras)
 
 If SVG classes are used, `jsvg-<version>.jar` is also required:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.weisj/jsvg/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.github.weisj/jsvg)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.weisj/jsvg?style=flat-square)](https://central.sonatype.com/artifact/com.github.weisj/jsvg)
 
 Supported JSVG versions:
 

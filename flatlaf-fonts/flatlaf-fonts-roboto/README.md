@@ -99,4 +99,4 @@ build script:
 
 Otherwise, download `flatlaf-fonts-roboto-<version>.jar` here:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-roboto)
+[![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf-fonts-roboto?style=flat-square)](https://central.sonatype.com/artifact/com.formdev/flatlaf-fonts-roboto)

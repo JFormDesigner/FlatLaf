@@ -83,4 +83,4 @@ build script:
 
 Otherwise, download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono)
+[![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf-fonts-jetbrains-mono?style=flat-square)](https://central.sonatype.com/artifact/com.formdev/flatlaf-fonts-jetbrains-mono)

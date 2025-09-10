@@ -74,7 +74,7 @@ build script:
 
 Otherwise, download `flatlaf-<version>.jar` here:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf)
+[![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf?style=flat-square)](https://central.sonatype.com/artifact/com.formdev/flatlaf)
 
 See also
 [Native Libraries distribution](https://www.formdev.com/flatlaf/native-libraries/)
