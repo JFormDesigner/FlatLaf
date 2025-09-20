@@ -676,8 +676,11 @@ public class FlatPopupFactory
 				return;
 			disposed = true;
 
-			// immediately hide non-heavy weight popups or combobox popups
-			if( !(popupWindow instanceof JWindow) || contents instanceof BasicComboPopup ) {
+			// immediately hide non-heavy weight popups, popup menus and combobox popups
+			// of if system property is false
+			if( !(popupWindow instanceof JWindow) || contents instanceof JPopupMenu ||
+				!FlatSystemProperties.getBoolean( FlatSystemProperties.REUSE_VISIBLE_POPUP_WINDOW, true ) )
+			{
 				hideImpl();
 				return;
 			}

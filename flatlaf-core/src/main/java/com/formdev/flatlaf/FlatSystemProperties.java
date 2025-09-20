@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -146,6 +147,25 @@ public interface FlatSystemProperties
 	 * @since 3.5.2
 	 */
 	String USE_ROUNDED_POPUP_BORDER = "flatlaf.useRoundedPopupBorder";
+
+	/**
+	 * Species whether popup windows may be reused without (temporary) hiding them.
+	 * E.g. if "moving" a tooltip to follow the mouse pointer, normally it is necessary
+	 * to hide the tooltip and show it again at the new location, which causes some
+	 * flicker with heavy-weight popup windows that FlatLaf uses on all platforms.
+	 * <p>
+	 * If {@code true}, hiding popup window is deferred for an event cycle,
+	 * which allows reusing still visible popup window and avoids flicker when "moving" the popup.
+	 * <p>
+	 * Note that {@link JPopupMenu} popup windows (menus and combobox lists) are newer reused.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 *
+	 * @since 3.7
+	 */
+	String REUSE_VISIBLE_POPUP_WINDOW = "flatlaf.reuseVisiblePopupWindow";
+
 
 	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
