@@ -39,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -675,7 +676,7 @@ class FlatThemeFileEditor
 	{
 		try(
 			FileOutputStream out = new FileOutputStream( file );
-			Writer writer = new OutputStreamWriter( out, "UTF-8" );
+			Writer writer = new OutputStreamWriter( out, StandardCharsets.UTF_8 );
 		) {
 			writer.write( content );
 		}

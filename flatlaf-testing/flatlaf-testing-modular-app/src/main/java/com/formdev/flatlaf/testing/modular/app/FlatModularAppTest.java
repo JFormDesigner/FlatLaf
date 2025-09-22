@@ -38,8 +38,12 @@ public class FlatModularAppTest
 		SwingUtilities.invokeLater( () -> {
 			FlatInterFont.installBasic();
 
+			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.testing.modular.app.themes" );
+			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.testing.modular.app.themes2",
+				FlatModularAppTest.class.getClassLoader() );
 			FlatLaf.registerCustomDefaultsSource(
-				FlatModularAppTest.class.getResource( "/com/formdev/flatlaf/testing/modular/app/themes/" ) );
+				FlatModularAppTest.class.getResource( "/com/formdev/flatlaf/testing/modular/app/themes3" ) );
+
 			FlatLightLaf.setup();
 
 			JButton button1 = new JButton( "Hello" );

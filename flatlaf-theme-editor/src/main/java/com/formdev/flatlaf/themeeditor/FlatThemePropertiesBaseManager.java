@@ -19,6 +19,9 @@ package com.formdev.flatlaf.themeeditor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,8 +112,11 @@ class FlatThemePropertiesBaseManager
 			String propertiesName = '/' + lafClass.getName().replace( '.', '/' ) + ".properties";
 			try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
 				Properties properties = new Properties();
-				if( in != null )
-					properties.load( in );
+				if( in != null ) {
+					try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 )) {
+						properties.load( in );
+					}
+				}
 				coreThemes.put( lafClass.getSimpleName(), properties );
 			} catch( IOException ex ) {
 				ex.printStackTrace();

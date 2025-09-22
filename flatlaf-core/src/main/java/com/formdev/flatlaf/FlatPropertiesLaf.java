@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
@@ -62,8 +65,8 @@ public class FlatPropertiesLaf
 		throws IOException
 	{
 		Properties properties = new Properties();
-		try( InputStream in2 = in ) {
-			properties.load( in2 );
+		try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 )) {
+			properties.load( reader );
 		}
 		return properties;
 	}

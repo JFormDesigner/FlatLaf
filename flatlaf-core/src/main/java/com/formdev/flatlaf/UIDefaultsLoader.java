@@ -25,12 +25,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -113,6 +116,14 @@ class UIDefaultsLoader
 
 		return new Properties() {
 			@Override
+			public void load( InputStream in ) throws IOException {
+				// use UTF-8 to load properties file
+				try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 )) {
+					super.load( reader );
+				}
+			}
+
+			@Override
 			public synchronized Object put( Object k, Object value ) {
 				// process key prefixes (while loading properties files)
 				String key = (String) k;
@@ -194,20 +205,37 @@ class UIDefaultsLoader
 					if( classLoader != null && !addonClassLoaders.contains( classLoader ) )
 						addonClassLoaders.add( classLoader );
 
-					packageName = packageName.replace( '.', '/' );
 					if( classLoader == null )
 						classLoader = FlatLaf.class.getClassLoader();
 
+					// Get package URL using ClassLoader.getResource(...) because this works
+					// also in named Java modules, even without opening the package in module-info.java.
+					// This extra step is necessary because ClassLoader.getResource("<package>/<file>.properties")
+					// does not work for named Java modules.
+					URL url = classLoader.getResource( packageName.replace( '.', '/' ) );
+					if( url == null ) {
+						LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to find package '"
+							+ packageName + "' to load properties files.", null );
+						continue;
+					}
+					String packageUrl = url.toExternalForm();
+					if( !packageUrl.endsWith( "/" ) )
+						packageUrl = packageUrl.concat( "/" );
+
 					for( Class<?> lafClass : lafClasses ) {
-						String propertiesName = packageName + '/' + simpleClassName( lafClass ) + ".properties";
-						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
-							if( in != null )
-								properties.load( in );
+						URL propertiesUrl = new URL( packageUrl + simpleClassName( lafClass ) + ".properties" );
+
+						try( InputStream in = propertiesUrl.openStream() ) {
+							properties.load( in );
+						} catch( FileNotFoundException ex ) {
+							// ignore
 						}
 					}
 				} else if( source instanceof URL ) {
 					// load from package URL
-					URL packageUrl = (URL) source;
+					String packageUrl = ((URL)source).toExternalForm();
+					if( !packageUrl.endsWith( "/" ) )
+						packageUrl = packageUrl.concat( "/" );
 					for( Class<?> lafClass : lafClasses ) {
 						URL propertiesUrl = new URL( packageUrl + simpleClassName( lafClass ) + ".properties" );
 
@@ -649,22 +677,26 @@ class UIDefaultsLoader
 		if( value.indexOf( ',' ) >= 0 ) {
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
-			Insets insets = parseInsets( value );
-			ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
-				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
-				: null;
-			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
-				? parseFloat( parts.get( 5 ) )
-				: 1f;
-			int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
-				? parseInteger( parts.get( 6 ) )
-				: -1;
+			try {
+				Insets insets = parseInsets( value );
+				ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
+					? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
+					: null;
+				float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
+					? parseFloat( parts.get( 5 ) )
+					: 1f;
+				int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
+					? parseInteger( parts.get( 6 ) )
+					: -1;
 
-			return (LazyValue) t -> {
-				return (lineColor != null || arc > 0)
-					? new FlatLineBorder( insets, lineColor, lineThickness, arc )
-					: new FlatEmptyBorder( insets );
-			};
+				return (LazyValue) t -> {
+					return (lineColor != null || arc > 0)
+						? new FlatLineBorder( insets, lineColor, lineThickness, arc )
+						: new FlatEmptyBorder( insets );
+				};
+			} catch( RuntimeException ex ) {
+				throw new IllegalArgumentException( "invalid border '" + value + "' (" + ex.getMessage() + ")" );
+			}
 		} else
 			return parseInstance( value, resolver, addonClassLoaders );
 	}
@@ -735,7 +767,7 @@ class UIDefaultsLoader
 				Integer.parseInt( numbers.get( 1 ) ),
 				Integer.parseInt( numbers.get( 2 ) ),
 				Integer.parseInt( numbers.get( 3 ) ) );
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid insets '" + value + "'" );
 		}
 	}
@@ -748,7 +780,7 @@ class UIDefaultsLoader
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
 				Integer.parseInt( numbers.get( 1 ) ) );
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid size '" + value + "'" );
 		}
 	}
@@ -1379,17 +1411,17 @@ class UIDefaultsLoader
 						break;
 				}
 			}
-		} catch( IOException ex ) {
-			throw new IllegalArgumentException( ex );
+		} catch( RuntimeException | IOException ex ) {
+			throw new IllegalArgumentException(  "invalid font '" + value + "' (" + ex.getMessage() + ")" );
 		}
 
 		if( style != -1 && styleChange != 0 )
-			throw new IllegalArgumentException( "can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic') in '" + value + "'" );
+			throw new IllegalArgumentException( "invalid font '" + value + "': can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic')" );
 		if( styleChange != 0 ) {
 			if( (styleChange & Font.BOLD) != 0 && (styleChange & (Font.BOLD << 16)) != 0 )
-				throw new IllegalArgumentException( "can not use '+bold' and '-bold' in '" + value + "'" );
+				throw new IllegalArgumentException( "invalid font '" + value + "': can not use '+bold' and '-bold'" );
 			if( (styleChange & Font.ITALIC) != 0 && (styleChange & (Font.ITALIC << 16)) != 0 )
-				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
+				throw new IllegalArgumentException( "invalid font '" + value + "': can not use '+italic' and '-italic'" );
 		}
 
 		font = new FlatLaf.ActiveFont( baseFontKey, families, style, styleChange, absoluteSize, relativeSize, scaleSize );
@@ -1529,7 +1561,7 @@ class UIDefaultsLoader
 			return (LazyValue) t -> {
 				return new GrayFilter( brightness, contrast, alpha );
 			};
-		} catch( NumberFormatException ex ) {
+		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
 			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
 		}
 	}

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JRootPane;
 import javax.swing.RootPaneContainer;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.Animator;
@@ -52,15 +53,13 @@ public class FlatAnimatedLafChange
 	public static int duration = 160;
 
 	/**
-	 * The resolution of the animation in milliseconds. Default is 30 ms.
+	 * The resolution of the animation in milliseconds. Default is 16 ms.
 	 */
-	public static int resolution = 30;
+	public static int resolution = 16;
 
 	private static Animator animator;
-	private static final Map<JLayeredPane, JComponent> oldUIsnapshots = new WeakHashMap<>();
-	private static final Map<JLayeredPane, JComponent> newUIsnapshots = new WeakHashMap<>();
+	private static final Map<JLayeredPane, SnapshotLayer> snapshots = new WeakHashMap<>();
 	private static float alpha;
-	private static boolean inShowSnapshot;
 
 	/**
 	 * Create a snapshot of the old UI and shows it on top of the UI.
@@ -77,59 +76,52 @@ public class FlatAnimatedLafChange
 		alpha = 1;
 
 		// show snapshot of old UI
-		showSnapshot( true, oldUIsnapshots );
+		showSnapshot( true );
 	}
 
-	private static void showSnapshot( boolean useAlpha, Map<JLayeredPane, JComponent> map ) {
-		inShowSnapshot = true;
-
+	private static void showSnapshot( boolean old ) {
 		// create snapshots for all shown windows
 		Window[] windows = Window.getWindows();
 		for( Window window : windows ) {
 			if( !(window instanceof RootPaneContainer) || !window.isShowing() )
 				continue;
 
+			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
+
 			// create snapshot image
 			// (using volatile image to have correct sub-pixel text rendering on Java 9+)
-			VolatileImage snapshot = window.createVolatileImage( window.getWidth(), window.getHeight() );
-			if( snapshot == null )
+			VolatileImage snapshotImage = layeredPane.createVolatileImage( layeredPane.getWidth(), layeredPane.getHeight() );
+			if( snapshotImage == null )
 				continue;
 
 			// paint window to snapshot image
-			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
-			layeredPane.paint( snapshot.getGraphics() );
+			layeredPane.paint( snapshotImage.getGraphics() );
 
-			// create snapshot layer, which is added to layered pane and paints
-			// snapshot with animated alpha
-			JComponent snapshotLayer = new JComponent() {
-				@Override
-				public void paint( Graphics g ) {
-					if( inShowSnapshot || snapshot.contentsLost() )
-						return;
-
-					if( useAlpha )
-						((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
-					g.drawImage( snapshot, 0, 0, null );
-				}
-
-				@Override
-				public void removeNotify() {
-					super.removeNotify();
-
-					// release system resources used by volatile image
-					snapshot.flush();
-				}
-			};
-			if( !useAlpha )
+			if( old ) {
+				// create snapshot layer, which is added to layered pane and paints
+				// snapshot with animated alpha
+				SnapshotLayer snapshotLayer = new SnapshotLayer();
 				snapshotLayer.setOpaque( true );
-			snapshotLayer.setSize( layeredPane.getSize() );
+				snapshotLayer.setSize( layeredPane.getSize() );
+				snapshotLayer.oldSnapshotImage = snapshotImage;
 
-			// add image layer to layered pane
-			layeredPane.add( snapshotLayer, Integer.valueOf( JLayeredPane.DRAG_LAYER + (useAlpha ? 2 : 1) ) );
-			map.put( layeredPane, snapshotLayer );
+				snapshots.put( layeredPane, snapshotLayer );
+			} else {
+				SnapshotLayer snapshotLayer = snapshots.get( layeredPane );
+				if( snapshotLayer == null ) {
+					snapshotImage.flush();
+					continue;
+				}
+
+				snapshotLayer.newSnapshotImage = snapshotImage;
+
+				// add snapshot layer to layered pane
+				layeredPane.add( snapshotLayer, Integer.valueOf( JLayeredPane.DRAG_LAYER + 1 ) );
+
+				// let FlatRootPaneUI know that animated Laf change is in progress
+				layeredPane.getRootPane().putClientProperty( "FlatLaf.internal.animatedLafChange", true );
+			}
 		}
-
-		inShowSnapshot = false;
 	}
 
 	/**
@@ -141,23 +133,22 @@ public class FlatAnimatedLafChange
 		if( !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
 			return;
 
-		if( oldUIsnapshots.isEmpty() )
+		if( snapshots.isEmpty() )
 			return;
 
 		// show snapshot of new UI
-		showSnapshot( false, newUIsnapshots );
+		showSnapshot( false );
 
 		// create animator
 		animator = new Animator( duration, fraction -> {
-			if( fraction < 0.1 || fraction > 0.9 )
-				return; // ignore initial and last events
-
 			alpha = 1f - fraction;
 
 			// repaint snapshots
-			for( Map.Entry<JLayeredPane, JComponent> e : oldUIsnapshots.entrySet() ) {
-				if( e.getKey().isShowing() )
-					e.getValue().repaint();
+			for( Map.Entry<JLayeredPane, SnapshotLayer> e : snapshots.entrySet() ) {
+				if( e.getKey().isShowing() ) {
+					SnapshotLayer snapshotLayer = e.getValue();
+					snapshotLayer.paintImmediately( 0, 0, snapshotLayer.getWidth(),snapshotLayer.getHeight() );
+				}
 			}
 
 			Toolkit.getDefaultToolkit().sync();
@@ -171,18 +162,27 @@ public class FlatAnimatedLafChange
 	}
 
 	private static void hideSnapshot() {
-		hideSnapshot( oldUIsnapshots );
-		hideSnapshot( newUIsnapshots );
-	}
-
-	private static void hideSnapshot( Map<JLayeredPane, JComponent> map ) {
 		// remove snapshots
-		for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
-			e.getKey().remove( e.getValue() );
-			e.getKey().repaint();
+		for( Map.Entry<JLayeredPane, SnapshotLayer> e : snapshots.entrySet() ) {
+			JLayeredPane layeredPane = e.getKey();
+			SnapshotLayer snapshotLayer = e.getValue();
+
+			layeredPane.remove( snapshotLayer );
+			layeredPane.repaint();
+
+			snapshotLayer.flushSnapshotImages();
+
+			// run Runnable that FlatRootPaneUI put into client properties
+			JRootPane rootPane = layeredPane.getRootPane();
+			rootPane.putClientProperty( "FlatLaf.internal.animatedLafChange", null );
+			Runnable r = (Runnable) rootPane.getClientProperty( "FlatLaf.internal.animatedLafChange.runWhenFinished" );
+			if( r != null ) {
+				rootPane.putClientProperty( "FlatLaf.internal.animatedLafChange.runWhenFinished", null );
+				r.run();
+			}
 		}
 
-		map.clear();
+		snapshots.clear();
 	}
 
 	/**
@@ -193,5 +193,41 @@ public class FlatAnimatedLafChange
 			animator.stop();
 		else
 			hideSnapshot();
+	}
+
+	//---- class SnapshotLayer ------------------------------------------------
+
+	private static class SnapshotLayer
+		extends JComponent
+	{
+		VolatileImage oldSnapshotImage;
+		VolatileImage newSnapshotImage;
+
+		@Override
+		public void paint( Graphics g ) {
+			if( oldSnapshotImage.contentsLost() ||
+				newSnapshotImage == null || newSnapshotImage.contentsLost() )
+			  return;
+
+			// draw new UI snapshot
+			g.drawImage( newSnapshotImage, 0, 0, null );
+
+			// draw old UI snapshot
+			((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
+			g.drawImage( oldSnapshotImage, 0, 0, null );
+		}
+
+		@Override
+		public void removeNotify() {
+			super.removeNotify();
+			flushSnapshotImages();
+		}
+
+		void flushSnapshotImages() {
+			// release system resources used by volatile image
+			oldSnapshotImage.flush();
+			if( newSnapshotImage != null )
+				newSnapshotImage.flush();
+		}
 	}
 }

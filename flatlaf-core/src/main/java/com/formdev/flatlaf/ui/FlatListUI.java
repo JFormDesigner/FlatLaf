@@ -302,6 +302,7 @@ public class FlatListUI
 		ListModel dataModel, ListSelectionModel selModel, int leadIndex )
 	{
 		boolean isSelected = selModel.isSelectedIndex( row );
+		boolean isDropRow = isDropRow( row );
 
 		// paint alternating rows
 		if( alternateRowColor != null && row % 2 != 0 &&
@@ -335,7 +336,7 @@ public class FlatListUI
 		}
 
 		// rounded selection or selection insets
-		if( isSelected &&
+		if( (isSelected || isDropRow) &&
 			!isFileList && // rounded selection is not supported for file list
 			(rendererComponent instanceof DefaultListCellRenderer ||
 			 rendererComponent instanceof BasicComboBoxRenderer) &&
@@ -376,7 +377,22 @@ public class FlatListUI
 						this.getColor() == rendererComponent.getBackground() )
 					{
 						inPaintSelection = true;
-						paintCellSelection( this, row, x, y, width, height );
+						if( isDropRow ) {
+							// for rounded drop background, it is necessary to first
+							// paint selection background because may be not rounded on some corners
+							if( isSelected ) {
+								Color oldColor = getColor();
+								setColor( list.getSelectionBackground() );
+								paintCellSelection( this, row, x, y, width, height );
+								setColor( oldColor );
+							}
+
+							// paint drop background
+							float arc = UIScale.scale( selectionArc / 2f );
+							FlatUIUtils.paintSelection( this, x, y, width, height,
+								UIScale.scale( selectionInsets ), arc, arc, arc, arc, 0 );
+						} else
+							paintCellSelection( this, row, x, y, width, height );
 						inPaintSelection = false;
 					} else
 						super.fillRect( x, y, width, height );
@@ -474,5 +490,16 @@ public class FlatListUI
 
 		FlatListUI ui = (FlatListUI) list.getUI();
 		ui.paintCellSelection( g, row, x, y, width, height );
+	}
+
+	/**
+	 * Checks whether dropping on a row.
+	 * See DefaultListCellRenderer.getListCellRendererComponent().
+	 */
+	private boolean isDropRow( int row ) {
+		JList.DropLocation dropLocation = list.getDropLocation();
+		return dropLocation != null &&
+			!dropLocation.isInsert() &&
+			dropLocation.getIndex() == row;
 	}
 }

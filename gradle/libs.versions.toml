@@ -24,7 +24,7 @@ junit = "5.10.2"
 sigtest = "org.netbeans.tools:sigtest-maven-plugin:1.7"
 
 # flatlaf-extras
-jsvg = "com.github.weisj:jsvg:1.4.0"
+jsvg = "com.github.weisj:jsvg:2.0.0"
 
 # flatlaf-jide-oss
 jide-oss = "com.formdev:jide-oss:3.7.15"
@@ -58,4 +58,5 @@ errorprone = "com.google.errorprone:error_prone_core:2.20.0"
 
 
 [plugins]
+gradle-nexus-publish-plugin = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
 errorprone = { id = "net.ltgt.errorprone", version = "3.1.0" }

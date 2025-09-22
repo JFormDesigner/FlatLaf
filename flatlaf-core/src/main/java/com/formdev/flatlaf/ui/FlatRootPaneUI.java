@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -153,8 +154,28 @@ public class FlatRootPaneUI
 		Container parent = c.getParent();
 		if( parent instanceof JFrame || parent instanceof JDialog ) {
 			Color background = parent.getBackground();
-			if( background == null || background instanceof UIResource )
-				parent.setBackground( UIManager.getColor( "control" ) );
+			if( background == null || background instanceof UIResource ) {
+				if( SystemInfo.isMacOS ) {
+					// Setting window background on macOS immediately fills the whole window
+					// with that color, and slightly delayed, the Swing repaint manager
+					// repaints the actual window content. This results in some flashing
+					// when switching from a light to a dark theme (or vice versa).
+					// --> delay setting window background and immediately repaint window content
+					Runnable r = () -> {
+						parent.setBackground( UIManager.getColor( "control" ) );
+						c.paintImmediately( 0, 0, c.getWidth(), c.getHeight() );
+					};
+
+					// for class FlatAnimatedLafChange:
+					// if animated Laf change is in progress, set background color when
+					// animation has finished to avoid/reduce flashing
+					if( c.getClientProperty( "FlatLaf.internal.animatedLafChange" ) != null )
+						c.putClientProperty( "FlatLaf.internal.animatedLafChange.runWhenFinished", r );
+					else
+						EventQueue.invokeLater( r );
+				} else
+					parent.setBackground( UIManager.getColor( "control" ) );
+			}
 		}
 
 		macClearBackgroundForTranslucentWindow( c );

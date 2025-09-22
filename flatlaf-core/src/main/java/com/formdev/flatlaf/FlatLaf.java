@@ -911,8 +911,7 @@ public abstract class FlatLaf
 	 * <p>
 	 * Invoke this method before setting the look and feel.
 	 * <p>
-	 * If using Java modules, the package must be opened in {@code module-info.java}.
-	 * Otherwise, use {@link #registerCustomDefaultsSource(URL)}.
+	 * If using Java modules, it is not necessary to open the package in {@code module-info.java}.
 	 *
 	 * @param packageName a package name (e.g. "com.myapp.resources")
 	 */
@@ -959,9 +958,9 @@ public abstract class FlatLaf
 	 * <p>
 	 * See {@link #registerCustomDefaultsSource(String)} for details.
 	 * <p>
-	 * This method is useful if using Java modules and the package containing the properties files
-	 * is not opened in {@code module-info.java}.
 	 * E.g. {@code FlatLaf.registerCustomDefaultsSource( MyApp.class.getResource( "/com/myapp/themes/" ) )}.
+	 * <p>
+	 * If using Java modules, it is not necessary to open the package in {@code module-info.java}.
 	 *
 	 * @param packageUrl a package URL
 	 * @since 2

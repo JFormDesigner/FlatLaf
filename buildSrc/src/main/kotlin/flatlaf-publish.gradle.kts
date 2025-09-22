@@ -86,24 +86,26 @@ publishing {
 		}
 	}
 
+/*
 	repositories {
 		maven {
-			name = "OSSRH"
+			name = "MavenCentral"
 
-			val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-			val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+			val releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+			val snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
 			url = uri( if( rootProject.hasProperty( "release" ) ) releasesRepoUrl else snapshotsRepoUrl )
 
 			credentials {
 				// get from gradle.properties
-				val ossrhUsername: String? by project
-				val ossrhPassword: String? by project
+				val sonatypeUsername: String? by project
+				val sonatypePassword: String? by project
 
-				username = System.getenv( "OSSRH_USERNAME" ) ?: ossrhUsername
-				password = System.getenv( "OSSRH_PASSWORD" ) ?: ossrhPassword
+				username = System.getenv( "SONATYPE_USERNAME" ) ?: sonatypeUsername
+				password = System.getenv( "SONATYPE_PASSWORD" ) ?: sonatypePassword
 			}
 		}
 	}
+*/
 }
 
 signing {

@@ -1,7 +1,53 @@
 FlatLaf Change Log
 ==================
 
-## 3.6-SNAPSHOT
+## 3.7-SNAPSHOT
+
+#### New features and improvements
+
+- If using `FlatLaf.registerCustomDefaultsSource( "com.myapp.themes" )` and
+  named Java modules, it is no longer necessary to add `opens com.myapp.themes;`
+  to `module-info.java`. (issue #1026)
+- Extras: Made animated theme change (class `FlatAnimatedLafChange`) smoother.
+
+#### Fixed bugs
+
+- Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
+- Popup: Showing tooltip in inactive window brought that window to front (made
+  it active) and potentially hid the previously active window. (issue #1037)
+- macOS: Fixed window "flashing" when switching from a light to a dark theme (or
+  vice versa). Especially when using animated theme changer (see
+  [FlatLaf Extras](flatlaf-extras)).
+
+#### Incompatibilities
+
+- FlatLaf properties files are now loaded using the UTF-8 character encoding
+  instead of ISO 8859-1. In usual properties files you will not notice any
+  difference because they use only ASCII characters, but if you've put localized
+  (non-English) texts (e.g. German umlauts) into your properties files, you need
+  to convert them to UTF-8. Properties files created with the FlatLaf Theme
+  Editor already use UTF-8, including in older versions. (issue #1031)
+
+
+## 3.6.1
+
+- Extras: Support JSVG 2.0.0. Minimum JSVG version is now 1.6.0. (issue #997)
+- FlatLaf window decorations (Windows 10/11 only): Improved diagonal window
+  resizing on top-left and top-right window corners. Top window resize area now
+  also covers iconify/maximize/close buttons. (issue #1015)
+- ToggleButton: Styling `selectedForeground` did not work if `foreground` is
+  also styled. (issue #1017)
+- JideSplitButton: Fixed updating popup when switching theme. (issue #1000)
+- IntelliJ Themes: Fixed logging false errors when loading 3rd party
+  `.theme.json` files. (issue #990)
+- Linux: Popups appeared in wrong position on multi-screen setup if primary
+  display is located below or right to secondary display. (see
+  [NetBeans issue #8532](https://github.com/apache/netbeans/issues/8532))
+- macOS: Fixed popup flickering after theme change. (issue #1009)
+- macOS with JetBrains Runtime: Fixed sometimes empty popups. (issue #1019)
+
+
+## 3.6
 
 #### New features and improvements
 
@@ -21,6 +67,8 @@ FlatLaf Change Log
 - List: Support for alternate row highlighting. (PR #939)
 - Tree: Support for alternate row highlighting. (PR #903)
 - Tree: Support wide cell renderer. (issue #922)
+- ScrollBar: Use rounded thumb also on Windows (as on macOS and Linux) and made
+  thumb slightly darker/lighter. (issue #918)
 - Extras: `FlatSVGIcon` color filters now can access painting component to
   implement component state based color mappings. (issue #906)
 - Linux:

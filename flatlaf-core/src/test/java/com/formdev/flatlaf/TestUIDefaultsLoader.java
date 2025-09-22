@@ -18,6 +18,7 @@ package com.formdev.flatlaf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,6 +30,7 @@ import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -450,6 +452,73 @@ public class TestUIDefaultsLoader
 		Object v = UIDefaultsLoader.parseValue( "dummyColor", value, null );
 		assertInstanceOf( LazyValue.class, v );
 		return ((LazyValue)v).createValue( null );
+	}
+
+	//---- invalid values -----------------------------------------------------
+
+	@Test
+	void parseInvalidValue() {
+		assertThrows( new IllegalArgumentException( "invalid character 'abc'" ), () -> UIDefaultsLoader.parseValue( "dummyChar", "abc", null ) );
+		assertThrows( new NumberFormatException( "invalid integer or float '123abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "123abc", null ) );
+		assertThrows( new NumberFormatException( "invalid integer or float '1.23abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "1.23abc", null ) );
+
+		assertThrows( new IllegalArgumentException( "invalid insets '1,abc,3,4'" ), () -> UIDefaultsLoader.parseValue( "dummyInsets", "1,abc,3,4", null ) );
+		assertThrows( new IllegalArgumentException( "invalid insets '1,2,3'" ), () -> UIDefaultsLoader.parseValue( "dummyInsets", "1,2,3", null ) );
+		assertThrows( new IllegalArgumentException( "invalid size '1abc'" ), () -> UIDefaultsLoader.parseValue( "dummySize", "1abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid size '1'" ), () -> UIDefaultsLoader.parseValue( "dummySize", "1", null ) );
+		assertThrows( new IllegalArgumentException( "invalid color '#f0'" ), () -> UIDefaultsLoader.parseValue( "dummy", "#f0", null ) );
+		assertThrows( new IllegalArgumentException( "invalid color '#f0'" ), () -> UIDefaultsLoader.parseValue( "dummyColor", "#f0", null ) );
+	}
+
+	@Test
+	void parseInvalidValueWithJavaType() {
+		assertThrows( new IllegalArgumentException( "invalid boolean 'falseyy'" ), () -> UIDefaultsLoader.parseValue( "dummy", "falseyy", boolean.class ) );
+		assertThrows( new IllegalArgumentException( "invalid boolean 'falseyy'" ), () -> UIDefaultsLoader.parseValue( "dummy", "falseyy", Boolean.class ) );
+
+		assertThrows( new IllegalArgumentException( "invalid character 'abc'" ), () -> UIDefaultsLoader.parseValue( "dummyChar", "abc", char.class ) );
+		assertThrows( new IllegalArgumentException( "invalid character 'abc'" ), () -> UIDefaultsLoader.parseValue( "dummyChar", "abc", Character.class ) );
+		assertThrows( new NumberFormatException( "invalid integer '123abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "123abc", int.class ) );
+		assertThrows( new NumberFormatException( "invalid integer '123abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "123abc", Integer.class ) );
+		assertThrows( new NumberFormatException( "invalid float '1.23abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "1.23abc", float.class ) );
+		assertThrows( new NumberFormatException( "invalid float '1.23abc'" ), () -> UIDefaultsLoader.parseValue( "dummyWidth", "1.23abc", Float.class ) );
+
+		assertThrows( new IllegalArgumentException( "invalid insets '1,abc,3'" ), () -> UIDefaultsLoader.parseValue( "dummyInsets", "1,abc,3", Insets.class ) );
+		assertThrows( new IllegalArgumentException( "invalid insets '1,2,3'" ), () -> UIDefaultsLoader.parseValue( "dummyInsets", "1,2,3", Insets.class ) );
+		assertThrows( new IllegalArgumentException( "invalid size '1abc'" ), () -> UIDefaultsLoader.parseValue( "dummySize", "1abc", Dimension.class ) );
+		assertThrows( new IllegalArgumentException( "invalid size '1'" ), () -> UIDefaultsLoader.parseValue( "dummySize", "1", Dimension.class ) );
+		assertThrows( new IllegalArgumentException( "invalid color '#f0'" ), () -> UIDefaultsLoader.parseValue( "dummy", "#f0", Color.class ) );
+		assertThrows( new IllegalArgumentException( "invalid color '#f0'" ), () -> UIDefaultsLoader.parseValue( "dummyColor", "#f0", Color.class ) );
+	}
+
+	@Test
+	void parseInvalidBorders() {
+		assertThrows( new IllegalArgumentException( "invalid border '1,abc,3,4' (invalid insets '1,abc,3,4')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,abc,3,4", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3' (invalid insets '1,2,3')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,,,' (invalid insets '1,2,3,,,')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,,,", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f0' (invalid color '#f0')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f0", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5abc' (invalid float '2.5abc')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f00,2.5abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5,6abc' (invalid integer '6abc')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f00,2.5,6abc", null ) );
+	}
+
+	@Test
+	void parseInvalidFonts() {
+		// size
+		assertThrows( new IllegalArgumentException( "invalid font '12abc' (invalid integer '12abc')" ),    () -> UIDefaultsLoader.parseValue( "dummyFont", "12abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '+12abc' (invalid integer '+12abc')" ),  () -> UIDefaultsLoader.parseValue( "dummyFont", "+12abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '+3abc' (invalid integer '+3abc')" ),    () -> UIDefaultsLoader.parseValue( "dummyFont", "+3abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '-4abc' (invalid integer '-4abc')" ),    () -> UIDefaultsLoader.parseValue( "dummyFont", "-4abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '150abc%' (invalid integer '150abc')" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "150abc%", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font 'bold 13abc Monospaced' (invalid integer '13abc')" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "bold 13abc Monospaced", null ) );
+
+		// invalid combinations of styles
+		assertThrows( new IllegalArgumentException( "invalid font 'bold +italic': can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic')" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "bold +italic", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '+bold -bold': can not use '+bold' and '-bold'" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "+bold -bold", null ) );
+		assertThrows( new IllegalArgumentException( "invalid font '+italic -italic': can not use '+italic' and '-italic'" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "+italic -italic", null ) );
+	}
+
+	private void assertThrows( Throwable expected, Executable executable ) {
+		Throwable actual = assertThrowsExactly( expected.getClass(), executable );
+		assertEquals( expected.getMessage(), actual.getMessage() );
 	}
 
 	//---- class TestInstance -------------------------------------------------

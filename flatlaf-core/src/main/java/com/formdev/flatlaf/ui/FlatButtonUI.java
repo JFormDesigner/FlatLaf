@@ -381,6 +381,12 @@ public class FlatButtonUI
 			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
 		}
 
+		// update internal values; otherwise isCustomBackground() and isCustomForeground() would return wrong results
+		switch( key ) {
+			case "background":	background = (Color) value; break;
+			case "foreground":	foreground = (Color) value; break;
+		}
+
 		if( "iconTextGap".equals( key ) && value instanceof Integer )
 			value = UIScale.scale( (Integer) value );
 

@@ -26,6 +26,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.Paint;
@@ -34,6 +35,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -412,6 +414,17 @@ public class FlatUIUtils
 		GraphicsDevice gd = (gc != null) ? gc.getDevice() : null;
 		Window fullScreenWindow = (gd != null) ? gd.getFullScreenWindow() : null;
 		return (fullScreenWindow != null && fullScreenWindow == SwingUtilities.windowForComponent( c ));
+	}
+
+	/** @since 3.6.1 */
+	public static Insets getScreenInsets( GraphicsConfiguration gc ) {
+		// on Linux, getScreenInsets() may report wrong values in multi-screen setups
+		// see https://github.com/apache/netbeans/issues/8532#issuecomment-2909687016
+		if( SystemInfo.isLinux &&
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length > 1 )
+		  return new Insets( 0, 0, 0, 0 );
+
+		return Toolkit.getDefaultToolkit().getScreenInsets( gc );
 	}
 
 	public static Boolean isRoundRect( Component c ) {

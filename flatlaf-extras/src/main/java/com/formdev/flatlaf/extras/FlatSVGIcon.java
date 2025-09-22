@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Dimension2D;
 import java.awt.LinearGradientPaint;
 import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
@@ -52,7 +53,7 @@ import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.UIScale;
 import com.github.weisj.jsvg.SVGDocument;
-import com.github.weisj.jsvg.geometry.size.FloatSize;
+import com.github.weisj.jsvg.parser.LoaderContext;
 import com.github.weisj.jsvg.parser.SVGLoader;
 
 /**
@@ -271,7 +272,7 @@ public class FlatSVGIcon
 		this( null, -1, -1, 1, false, null, null );
 
 		try( InputStream in2 = in ) {
-			document = svgLoader.load( in2 );
+			document = svgLoader.load( in2, null, LoaderContext.createDefault() );
 
 			if( document == null ) {
 				loadFailed = true;
@@ -620,9 +621,9 @@ public class FlatSVGIcon
 
 		UIScale.scaleGraphics( g );
 		if( width > 0 || height > 0 ) {
-			FloatSize svgSize = document.size();
-			double sx = (width > 0) ? width / svgSize.width : 1;
-			double sy = (height > 0) ? height / svgSize.height : 1;
+			Dimension2D svgSize = document.size();
+			double sx = (width > 0) ? width / svgSize.getWidth() : 1;
+			double sy = (height > 0) ? height / svgSize.getHeight() : 1;
 			if( sx != 1 || sy != 1 )
 				g.scale( sx, sy );
 		}

@@ -48,6 +48,9 @@ tasks {
 
 			if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
 				attributes( "Multi-Release" to "true" )
+
+			// allow loading FlatLaf native library in Java 24+ (see https://openjdk.org/jeps/472)
+			attributes( "Enable-Native-Access" to "ALL-UNNAMED" )
 		}
 
 		exclude( "module-info.class" )
