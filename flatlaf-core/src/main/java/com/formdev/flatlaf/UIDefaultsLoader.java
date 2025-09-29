@@ -205,30 +205,43 @@ class UIDefaultsLoader
 					if( classLoader != null && !addonClassLoaders.contains( classLoader ) )
 						addonClassLoaders.add( classLoader );
 
+					packageName = packageName.replace( '.', '/' );
 					if( classLoader == null )
 						classLoader = FlatLaf.class.getClassLoader();
 
-					// Get package URL using ClassLoader.getResource(...) because this works
-					// also in named Java modules, even without opening the package in module-info.java.
-					// This extra step is necessary because ClassLoader.getResource("<package>/<file>.properties")
-					// does not work for named Java modules.
-					URL url = classLoader.getResource( packageName.replace( '.', '/' ) );
-					if( url == null ) {
-						LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to find package '"
-							+ packageName + "' to load properties files.", null );
-						continue;
-					}
-					String packageUrl = url.toExternalForm();
-					if( !packageUrl.endsWith( "/" ) )
-						packageUrl = packageUrl.concat( "/" );
-
+					boolean found = false;
 					for( Class<?> lafClass : lafClasses ) {
-						URL propertiesUrl = new URL( packageUrl + simpleClassName( lafClass ) + ".properties" );
+						String propertiesName = packageName + '/' + simpleClassName( lafClass ) + ".properties";
+						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
+							if( in != null ) {
+								properties.load( in );
+								found = true;
+							}
+						}
+					}
 
-						try( InputStream in = propertiesUrl.openStream() ) {
-							properties.load( in );
-						} catch( FileNotFoundException ex ) {
-							// ignore
+					// fallback for named Java modules
+					if( !found ) {
+						// Get package URL using ClassLoader.getResource(...) because this works
+						// also in named Java modules, even without opening the package in module-info.java.
+						// This extra step is necessary because ClassLoader.getResource("<package>/<file>.properties")
+						// does not work for named Java modules.
+						URL url = classLoader.getResource( packageName );
+						if( url == null )
+							continue;
+
+						String packageUrl = url.toExternalForm();
+						if( !packageUrl.endsWith( "/" ) )
+							packageUrl = packageUrl.concat( "/" );
+
+						for( Class<?> lafClass : lafClasses ) {
+							URL propertiesUrl = new URL( packageUrl + simpleClassName( lafClass ) + ".properties" );
+
+							try( InputStream in = propertiesUrl.openStream() ) {
+								properties.load( in );
+							} catch( FileNotFoundException ex ) {
+								// ignore
+							}
 						}
 					}
 				} else if( source instanceof URL ) {
