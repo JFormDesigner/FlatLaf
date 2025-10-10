@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.6.1
+#Version 3.6.2
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -297,6 +297,7 @@ CLSS public abstract interface com.formdev.flatlaf.FlatSystemProperties
 fld public final static java.lang.String ANIMATION = "flatlaf.animation"
 fld public final static java.lang.String MENUBAR_EMBEDDED = "flatlaf.menuBarEmbedded"
 fld public final static java.lang.String NATIVE_LIBRARY_PATH = "flatlaf.nativeLibraryPath"
+fld public final static java.lang.String REUSE_VISIBLE_POPUP_WINDOW = "flatlaf.reuseVisiblePopupWindow"
 fld public final static java.lang.String UI_SCALE = "flatlaf.uiScale"
 fld public final static java.lang.String UI_SCALE_ALLOW_SCALE_DOWN = "flatlaf.uiScale.allowScaleDown"
 fld public final static java.lang.String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled"
