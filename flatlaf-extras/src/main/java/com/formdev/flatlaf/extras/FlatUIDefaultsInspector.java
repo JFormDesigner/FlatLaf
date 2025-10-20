@@ -202,6 +202,7 @@ public class FlatUIDefaultsInspector
 		JFrame frame = new JFrame();
 		frame.setTitle( "UI Defaults Inspector" );
 		frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+		frame.setModalExclusionType( Dialog.ModalExclusionType.TOOLKIT_EXCLUDE );
 		frame.addWindowListener( new WindowAdapter() {
 			@Override
 			public void windowClosed( WindowEvent e ) {
