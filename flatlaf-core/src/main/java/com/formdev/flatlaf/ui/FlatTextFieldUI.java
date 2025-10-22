@@ -628,7 +628,7 @@ debug*/
 	/**
 	 * Returns the rectangle used to paint leading and trailing icons.
 	 * It invokes {@code super.getVisibleEditorRect()} and reduces left and/or
-	 * right margin if the text field has leading or trailing icons or components.
+	 * right insets if the text field has leading or trailing icons or components.
 	 * Also, the preferred widths of leading and trailing components are removed.
 	 *
 	 * @since 2
@@ -660,24 +660,24 @@ debug*/
 			}
 		}
 
-		// if a leading/trailing icons (or components) are shown, then the left/right margins are reduced
-		// to the top margin, which places the icon nicely centered on left/right side
+		// if a leading/trailing icons (or components) are shown, then the left/right insets are reduced
+		// to the top inset, which places the icon nicely centered on left/right side
 		if( leftVisible || (ltr ? hasLeadingIcon() : hasTrailingIcon()) ) {
-			// reduce left margin
-			Insets margin = getComponent().getMargin();
-			int newLeftMargin = Math.min( margin.left, margin.top );
-			if( newLeftMargin < margin.left ) {
-				int diff = scale( margin.left - newLeftMargin );
+			// reduce left inset
+			Insets insets = getComponent().getInsets();
+			int newLeftInset = Math.min( insets.left, insets.top );
+			if( newLeftInset < insets.left ) {
+				int diff = insets.left - newLeftInset;
 				r.x -= diff;
 				r.width += diff;
 			}
 		}
 		if( rightVisible || (ltr ? hasTrailingIcon() : hasLeadingIcon()) ) {
-			// reduce right margin
-			Insets margin = getComponent().getMargin();
-			int newRightMargin = Math.min( margin.right, margin.top );
-			if( newRightMargin < margin.left )
-				r.width += scale( margin.right - newRightMargin );
+			// reduce right inset
+			Insets insets = getComponent().getInsets();
+			int newRightInset = Math.min( insets.right, insets.top );
+			if( newRightInset < insets.left )
+				r.width += insets.right - newRightInset;
 		}
 
 		// make sure that width and height are not negative

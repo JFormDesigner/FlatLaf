@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## 3.7-SNAPSHOT
 
+- TextField: Fixed wrong leading/trailing icon placement if border is set to
+  `null`. (issue #1047)
 - Extras: UI defaults inspector: Exclude inspector window from being blocked by
   modal dialogs. (issue #1048)
 
