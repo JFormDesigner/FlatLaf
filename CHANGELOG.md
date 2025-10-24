@@ -7,7 +7,8 @@ FlatLaf Change Log
   `null`. (issue #1047)
 - Extras: UI defaults inspector: Exclude inspector window from being blocked by
   modal dialogs. (issue #1048)
-
+- JideButton, JideToggleButton, JideSplitButton and JideToggleSplitButton: Paint
+  border in button style `TOOLBAR_STYLE` if in selected state. (issue #1045)
 
 ## 3.6.2
 
