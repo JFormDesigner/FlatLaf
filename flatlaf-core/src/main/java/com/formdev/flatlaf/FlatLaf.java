@@ -368,6 +368,22 @@ public abstract class FlatLaf
 					String.format( "a, address { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
 			}
 		};
+
+		// Initialize UIScale user scale factor immediately after FlatLaf was activated,
+		// which is necessary to ensure that UIScale.setZoomFactor(float)
+		// scales FlatLaf defaultDont correctly even if UIScale.scale() was not yet used.
+		// In other words: Without this, UIScale.setZoomFactor(float) would
+		// not work correctly if invoked between FlatLaf.setup() and crating UI.
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				if( "lookAndFeel".equals( e.getPropertyName() ) ) {
+					UIManager.removePropertyChangeListener( this );
+					UIScale.getUserScaleFactor();
+				}
+			}
+		};
+		UIManager.addPropertyChangeListener( listener );
 	}
 
 	@Override
@@ -707,10 +723,21 @@ public abstract class FlatLaf
 			uiFont = ((ActiveFont)defaultFont).derive( baseFont, fontSize -> {
 				return Math.round( fontSize * UIScale.computeFontScaleFactor( baseFont ) );
 			} );
-		}
+		} else if( defaultFont instanceof LazyValue )
+			uiFont = ActiveFont.toUIResource( (Font) ((LazyValue)defaultFont).createValue( defaults ) );
 
 		// increase font size if system property "flatlaf.uiScale" is set
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
+
+		// apply zoom factor to font size
+		float zoomFactor = UIScale.getZoomFactor();
+		if( zoomFactor != 1 ) {
+			// see also UIScale.setZoomFactor()
+			int unzoomedFontSize = uiFont.getSize();
+			defaults.put( "defaultFont.unzoomedSize", unzoomedFontSize );
+			int newFontSize = Math.max( Math.round( unzoomedFontSize * zoomFactor ), 1 );
+			uiFont = new FontUIResource( uiFont.deriveFont( (float) newFontSize ) );
+		}
 
 		// set default font
 		defaults.put( "defaultFont", uiFont );
@@ -1768,7 +1795,7 @@ public abstract class FlatLaf
 				return toUIResource( baseFont );
 		}
 
-		private FontUIResource toUIResource( Font font ) {
+		private static FontUIResource toUIResource( Font font ) {
 			// make sure that font is a UIResource for LaF switching
 			return (font instanceof FontUIResource)
 				? (FontUIResource) font

@@ -111,6 +111,10 @@ class ControlBar
 		UIScale.addPropertyChangeListener( e -> {
 			// update info label because user scale factor may change
 			updateInfoLabel();
+
+			// update "Font" menu (e.g. if zoom factor changed)
+			if( UIScale.PROP_ZOOM_FACTOR.equals( e.getPropertyName() ) )
+				frame.updateFontMenuItems();
 		} );
 	}
 
@@ -192,13 +196,15 @@ class ControlBar
 		String javaVendor = System.getProperty( "java.vendor" );
 		if( "Oracle Corporation".equals( javaVendor ) )
 			javaVendor = null;
+		float zoomFactor = UIScale.getZoomFactor();
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
 		Font font = UIManager.getFont( "Label.font" );
 		String newInfo = "(Java " + System.getProperty( "java.version" )
 			+ (javaVendor != null ? ("; " + javaVendor) : "")
-			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
-			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
+			+ (zoomFactor != 1 ? (";  zoom " + zoomFactor) : "")
+			+ (systemScaleFactor != 1 ? (";  system scale " + systemScaleFactor) : "")
+			+ (userScaleFactor != 1 ? (";  user scale " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
 			+ "; " + font.getFamily() + " " + font.getSize()
 			+ (font.isBold() ? " BOLD" : "")
