@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.1.0.348" Java: "21.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -363,6 +363,31 @@ new FormModel {
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "zoomMenu"
+					"text": "Zoom"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "resetZoomMenuItem"
+						"text": "Reset Zoom"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomReset", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "incrZoomMenuItem"
+						"text": "Zoom In"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomIn", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "decrZoomMenuItem"
+						"text": "Zoom Out"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomOut", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "fontMenu"
 					"text": "Font"
 					auxiliary() {
@@ -371,19 +396,19 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "restoreFontMenuItem"
 						"text": "Restore Font"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4746, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "restoreFont", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "incrFontMenuItem"
 						"text": "Increase Font Size"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4226, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4746, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "incrFont", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "decrFontMenuItem"
 						"text": "Decrease Font Size"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4226, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4746, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decrFont", false ) )
 					} )
 				} )

@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
@@ -45,11 +46,13 @@ import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
@@ -71,6 +74,7 @@ class DemoFrame
 		Arrays.sort( availableFontFamilyNames );
 
 		initComponents();
+		initZommMenuItems();
 		updateFontMenuItems();
 		initAccentColors();
 		initFullWindowContent();
@@ -284,6 +288,92 @@ class DemoFrame
 	private void showHintsChanged() {
 		clearHints();
 		showHints();
+	}
+
+	private void initZommMenuItems() {
+		float currentZoomFactor = UIScale.getZoomFactor();
+		UIScale.setSupportedZoomFactors( new float[] { 0.7f, 0.8f, 0.9f, 1f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.75f, 2f } );
+
+		ButtonGroup group = new ButtonGroup();
+		HashMap<Float, JCheckBoxMenuItem> items = new HashMap<>();
+
+		// add supported zoom factors to "Zoom" menu
+		zoomMenu.addSeparator();
+		for( float zoomFactor : UIScale.getSupportedZoomFactors() ) {
+			JCheckBoxMenuItem item = new JCheckBoxMenuItem( (int)(zoomFactor * 100) + "%" );
+			item.setSelected( zoomFactor == currentZoomFactor );
+			item.addActionListener( this::zoomFactorChanged );
+			zoomMenu.add( item );
+
+			group.add( item );
+			items.put( zoomFactor, item );
+		}
+
+		// update menu item selection if zoom factor changed
+		UIScale.addPropertyChangeListener( e -> {
+			if( UIScale.PROP_ZOOM_FACTOR.equals( e.getPropertyName() ) ) {
+				float newZoomFactor = UIScale.getZoomFactor();
+				JCheckBoxMenuItem item = items.get( newZoomFactor );
+				if( item != null )
+					item.setSelected( true );
+
+				zoomWindowBounds( this, (float) e.getOldValue(), (float) e.getNewValue() );
+			}
+		} );
+	}
+
+	private static void zoomWindowBounds( Window window, float oldZoomFactor, float newZoomFactor ) {
+		if( window instanceof Frame && ((Frame)window).getExtendedState() != Frame.NORMAL )
+			return;
+
+		Rectangle oldBounds = window.getBounds();
+
+		// zoom window bounds
+		float factor = (1f / oldZoomFactor) * newZoomFactor;
+		int newWidth = (int) (oldBounds.width * factor);
+		int newHeight = (int) (oldBounds.height * factor);
+		int newX = oldBounds.x - ((newWidth - oldBounds.width) / 2);
+		int newY = oldBounds.y - ((newHeight - oldBounds.height) / 2);
+
+		// get maximum window bounds (screen bounds minus screen insets)
+		GraphicsConfiguration gc = window.getGraphicsConfiguration();
+		Rectangle screenBounds = gc.getBounds();
+		Insets screenInsets = FlatUIUtils.getScreenInsets( gc );
+		Rectangle maxBounds = FlatUIUtils.subtractInsets( screenBounds, screenInsets );
+
+		// limit new window width/height
+		newWidth = Math.min( newWidth, maxBounds.width );
+		newHeight = Math.min( newHeight, maxBounds.height );
+
+		// move window into screen bounds
+		newX = Math.max( Math.min( newX, maxBounds.width - newWidth ), maxBounds.x );
+		newY = Math.max( Math.min( newY, maxBounds.height - newHeight ), maxBounds.y );
+
+		// set new window bounds
+		window.setBounds( newX, newY, newWidth, newHeight );
+	}
+
+	private void zoomFactorChanged( ActionEvent e ) {
+		String zoomFactor = e.getActionCommand();
+		float zoom =  Integer.parseInt( zoomFactor.substring( 0, zoomFactor.length() - 1 ) ) / 100f;
+
+		if( UIScale.setZoomFactor( zoom ) )
+			FlatLaf.updateUI();
+	}
+
+	private void zoomReset() {
+		if( UIScale.zoomReset() )
+			FlatLaf.updateUI();
+	}
+
+	private void zoomIn() {
+		if( UIScale.zoomIn() )
+			FlatLaf.updateUI();
+	}
+
+	private void zoomOut() {
+		if( UIScale.zoomOut() )
+			FlatLaf.updateUI();
 	}
 
 	private void fontFamilyChanged( ActionEvent e ) {
@@ -533,6 +623,10 @@ class DemoFrame
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
+		zoomMenu = new JMenu();
+		JMenuItem resetZoomMenuItem = new JMenuItem();
+		JMenuItem incrZoomMenuItem = new JMenuItem();
+		JMenuItem decrZoomMenuItem = new JMenuItem();
 		fontMenu = new JMenu();
 		JMenuItem restoreFontMenuItem = new JMenuItem();
 		JMenuItem incrFontMenuItem = new JMenuItem();
@@ -778,25 +872,49 @@ class DemoFrame
 			}
 			menuBar.add(viewMenu);
 
+			//======== zoomMenu ========
+			{
+				zoomMenu.setText("Zoom");
+
+				//---- resetZoomMenuItem ----
+				resetZoomMenuItem.setText("Reset Zoom");
+				resetZoomMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				resetZoomMenuItem.addActionListener(e -> zoomReset());
+				zoomMenu.add(resetZoomMenuItem);
+
+				//---- incrZoomMenuItem ----
+				incrZoomMenuItem.setText("Zoom In");
+				incrZoomMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				incrZoomMenuItem.addActionListener(e -> zoomIn());
+				zoomMenu.add(incrZoomMenuItem);
+
+				//---- decrZoomMenuItem ----
+				decrZoomMenuItem.setText("Zoom Out");
+				decrZoomMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				decrZoomMenuItem.addActionListener(e -> zoomOut());
+				zoomMenu.add(decrZoomMenuItem);
+			}
+			menuBar.add(zoomMenu);
+
 			//======== fontMenu ========
 			{
 				fontMenu.setText("Font");
 
 				//---- restoreFontMenuItem ----
 				restoreFontMenuItem.setText("Restore Font");
-				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.ALT_DOWN_MASK));
 				restoreFontMenuItem.addActionListener(e -> restoreFont());
 				fontMenu.add(restoreFontMenuItem);
 
 				//---- incrFontMenuItem ----
 				incrFontMenuItem.setText("Increase Font Size");
-				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.ALT_DOWN_MASK));
 				incrFontMenuItem.addActionListener(e -> incrFont());
 				fontMenu.add(incrFontMenuItem);
 
 				//---- decrFontMenuItem ----
 				decrFontMenuItem.setText("Decrease Font Size");
-				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.ALT_DOWN_MASK));
 				decrFontMenuItem.addActionListener(e -> decrFont());
 				fontMenu.add(decrFontMenuItem);
 			}
@@ -1045,6 +1163,7 @@ class DemoFrame
 	private JMenuItem exitMenuItem;
 	private JMenu scrollingPopupMenu;
 	private JMenuItem htmlMenuItem;
+	private JMenu zoomMenu;
 	private JMenu fontMenu;
 	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
