@@ -113,6 +113,10 @@ tasks {
 					"version" to version,
 					"release" to "1.8", // Java version
 					"failonerror" to "true" )
+
+				"fixcrlf"(
+					"file" to "${project.name}-sigtest.txt",
+					"eol" to "lf" )
 			}
 		}
 	}
