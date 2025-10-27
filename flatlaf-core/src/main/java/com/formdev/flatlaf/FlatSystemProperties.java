@@ -235,7 +235,7 @@ public interface FlatSystemProperties
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	String USE_SYSTEM_FILE_CHOOSER = "flatlaf.useSystemFileChooser";
 

@@ -102,7 +102,7 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  * </ul>
  *
  * @author Karl Tauber
- * @since 3.6
+ * @since 3.7
  */
 public class SystemFileChooser
 {

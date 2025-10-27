@@ -142,7 +142,7 @@ public class FlatNativeLinuxLibrary
 	 * This works because Java uses {@code dlopen(RTLD_LAZY)} to load JNI libraries,
 	 * which only resolves symbols as the code that references them is executed.
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public static boolean isGtk3Available() {
 		if( isGtk3Available == null )
@@ -155,7 +155,7 @@ public class FlatNativeLinuxLibrary
 	/**
 	 * https://docs.gtk.org/gtk3/iface.FileChooser.html#properties
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public static final int
 		FC_select_folder					= 1 << 0,
@@ -197,14 +197,14 @@ public class FlatNativeLinuxLibrary
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String currentName, String currentFolder,
 		int optionsSet, int optionsClear, FileChooserCallback callback,
 		int fileTypeIndex, String... fileTypes );
 
-	/** @since 3.6 */
+	/** @since 3.7 */
 	public interface FileChooserCallback {
 		boolean approve( String[] files, long hwndFileDialog );
 	}
@@ -229,7 +229,7 @@ public class FlatNativeLinuxLibrary
 	 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
 	 * @return index of pressed button; or -1 for ESC key
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static int showMessageDialog( long hwndParent, int messageType,
 		String primaryText, String secondaryText, int defaultButton, String... buttons );

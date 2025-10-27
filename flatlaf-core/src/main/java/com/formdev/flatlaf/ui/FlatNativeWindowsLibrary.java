@@ -165,7 +165,7 @@ public class FlatNativeWindowsLibrary
 	 * FILEOPENDIALOGOPTIONS
 	 * see https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/ne-shobjidl_core-_fileopendialogoptions
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public static final int
 		FOS_OVERWRITEPROMPT = 0x2,		// default for Save
@@ -229,7 +229,7 @@ public class FlatNativeWindowsLibrary
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String fileNameLabel, String fileName,
@@ -237,7 +237,7 @@ public class FlatNativeWindowsLibrary
 		int optionsSet, int optionsClear, FileChooserCallback callback,
 		int fileTypeIndex, String... fileTypes );
 
-	/** @since 3.6 */
+	/** @since 3.7 */
 	public interface FileChooserCallback {
 		boolean approve( String[] files, long hwndFileDialog );
 	}
@@ -260,7 +260,7 @@ public class FlatNativeWindowsLibrary
 	 *        Use '&amp;&amp;' for '&amp;' character (e.g. "Choose &amp;&amp; Quit").
 	 * @return index of pressed button; or -1 for ESC key
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static int showMessageDialog( long hwndParent, int messageType,
 		String title, String text, int defaultButton, String... buttons );
@@ -277,7 +277,7 @@ public class FlatNativeWindowsLibrary
 	 * @param type see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#parameters">MessageBox parameter uType</a>
 	 * @return see <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox#return-value">MessageBox Return value</a>
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static int showMessageBox( long hwndParent, String text, String caption, int type );
 }

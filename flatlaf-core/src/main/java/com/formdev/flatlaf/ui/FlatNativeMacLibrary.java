@@ -71,7 +71,7 @@ public class FlatNativeMacLibrary
 	/** @since 3.4 */ public native static boolean toggleWindowFullScreen( Window window );
 
 
-	/** @since 3.6 */
+	/** @since 3.7 */
 	public static final int
 		// NSOpenPanel (extends NSSavePanel)
 		FC_canChooseFiles					= 1 << 0,  // default
@@ -120,7 +120,7 @@ public class FlatNativeMacLibrary
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static String[] showFileChooser( Window owner, int dark, boolean open,
 		String title, String prompt, String message, String filterFieldLabel,
@@ -128,7 +128,7 @@ public class FlatNativeMacLibrary
 		int optionsSet, int optionsClear, FileChooserCallback callback,
 		int fileTypeIndex, String... fileTypes );
 
-	/** @since 3.6 */
+	/** @since 3.7 */
 	public interface FileChooserCallback {
 		boolean approve( String[] files, long hwndFileDialog );
 	}
@@ -149,7 +149,7 @@ public class FlatNativeMacLibrary
 	 * @param buttons texts of the buttons; if no buttons given the a default "OK" button is shown
 	 * @return index of pressed button
 	 *
-	 * @since 3.6
+	 * @since 3.7
 	 */
 	public native static int showMessageDialog( long hwndParent, int alertStyle,
 		String messageText, String informativeText, int defaultButton, String... buttons );
