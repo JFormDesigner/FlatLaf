@@ -3,12 +3,20 @@ FlatLaf Change Log
 
 ## 3.7-SNAPSHOT
 
+#### New features and improvements
+
+- System File Chooser allows using **operating system file dialogs** in Java
+  Swing applications. (PR #988)
+
+#### Fixed bugs
+
 - TextField: Fixed wrong leading/trailing icon placement if border is set to
   `null`. (issue #1047)
 - Extras: UI defaults inspector: Exclude inspector window from being blocked by
   modal dialogs. (issue #1048)
 - JideButton, JideToggleButton, JideSplitButton and JideToggleSplitButton: Paint
   border in button style `TOOLBAR_STYLE` if in selected state. (issue #1045)
+
 
 ## 3.6.2
 

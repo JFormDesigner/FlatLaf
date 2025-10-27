@@ -46,7 +46,33 @@
 		JNI_COCOA_CATCH() \
 	}
 
+#define JNI_THREAD_ENTER( jvm, returnValue ) \
+	JNIEnv *env; \
+	bool detach = false; \
+	switch( jvm->GetEnv( (void**) &env, JNI_VERSION_1_6 ) ) { \
+		case JNI_OK: break; \
+		case JNI_EDETACHED: \
+			if( jvm->AttachCurrentThread( (void**) &env, NULL ) != JNI_OK ) \
+				return returnValue; \
+			detach = true; \
+			break; \
+		default: return returnValue; \
+	} \
+	@try {
+
+#define JNI_THREAD_EXIT( jvm ) \
+	} @finally { \
+		if( env->ExceptionCheck() ) \
+			env->ExceptionDescribe(); \
+		if( detach ) \
+			jvm->DetachCurrentThread(); \
+	}
+
 
 jclass findClass( JNIEnv *env, const char* className, bool globalRef );
 jfieldID getFieldID( JNIEnv *env, jclass cls, const char* fieldName, const char* fieldSignature, bool staticField );
 jmethodID getMethodID( JNIEnv *env, jclass cls, const char* methodName, const char* methodSignature, bool staticMethod );
+
+NSString* JavaToNSString( JNIEnv *env, jstring javaString );
+jstring NSToJavaString( JNIEnv *env, NSString *nsString );
+jstring NormalizedPathJavaFromNSString( JNIEnv* env, NSString *nsString );

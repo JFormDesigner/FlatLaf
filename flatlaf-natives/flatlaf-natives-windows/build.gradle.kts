@@ -64,7 +64,7 @@ tasks {
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
 				is Gcc, is Clang -> listOf( "-O2", "-DUNICODE" )
-				is VisualCpp -> listOf( "/O2", "/Zl", "/GS-", "/DUNICODE" )
+				is VisualCpp -> listOf( "/O2", "/GS-", "/DUNICODE" )
 				else -> emptyList()
 			}
 		} )
@@ -80,8 +80,8 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi" )
-				is VisualCpp -> listOf( "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "/NODEFAULTLIB" )
+				is Gcc, is Clang -> listOf( "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32", "-lDwmapi", "-lOle32", "-luuid" )
+				is VisualCpp -> listOf( "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "Dwmapi.lib", "Ole32.lib", "uuid.lib" )
 				else -> emptyList()
 			}
 		} )
@@ -93,6 +93,15 @@ tasks {
 				into( nativesDir )
 				rename( linkedFile.get().asFile.name, libraryName )
 			}
+
+/*dump
+			val dumpbin = "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/dumpbin.exe"
+			val dll = linkedFile.asFile.get()
+			val dllDir = dll.parent
+			exec { commandLine( dumpbin, "/all", "/rawdata:none", "/out:$dllDir/objdump.txt", dll ) }
+			exec { commandLine( dumpbin, "/all", "/out:$dllDir/full-contents.txt", dll ) }
+			exec { commandLine( dumpbin, "/disasm", "/out:$dllDir/disassemble.txt", dll ) }
+dump*/
 		}
 	}
 }

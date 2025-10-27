@@ -16,8 +16,10 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -245,6 +247,17 @@ public interface FlatSystemProperties
 	 * @since 3.5.1
 	 */
 	String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle";
+
+	/**
+	 * Specifies whether {@link SystemFileChooser} uses operating system file dialogs.
+	 * If set to {@code false}, the {@link JFileChooser} is used instead.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 *
+	 * @since 3.7
+	 */
+	String USE_SYSTEM_FILE_CHOOSER = "flatlaf.useSystemFileChooser";
 
 	/**
 	 * Checks whether a system property is set and returns {@code true} if its value
