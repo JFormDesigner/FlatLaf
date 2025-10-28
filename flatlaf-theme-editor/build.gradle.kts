@@ -44,7 +44,7 @@ tasks {
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.themeeditor.FlatLafThemeEditor" )
 
-			if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+			if( java.toolchain.languageVersion.get().asInt() >= 9 )
 				attributes( "Multi-Release" to "true" )
 
 			// allow loading FlatLaf native library in Java 24+ (see https://openjdk.org/jeps/472)

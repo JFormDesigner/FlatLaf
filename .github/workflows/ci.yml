@@ -36,6 +36,7 @@ jobs:
           cache: gradle
 
       - name: Check with Error Prone
+        if: github.repository == 'JFormDesigner/FlatLaf'
         run: ./gradlew errorprone clean
 
       - name: Build with Gradle
@@ -67,23 +68,20 @@ jobs:
           - 8
           - 17  # LTS
           - 21  # LTS
-        toolchain: [""]
-        include:
-          - java: 21
-            toolchain: 25  # LTS
+          - 25  # LTS
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Java ${{ matrix.java }}
+      - name: Setup Java 11
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java }}
-          distribution: temurin  # Java 8, 11, 17 and 21 are pre-installed on ubuntu-latest
+          java-version: 11
+          distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
 
       - name: Build with Gradle
-        run: ./gradlew build -Dtoolchain=${{ matrix.toolchain }}
+        run: ./gradlew build -Dtoolchain=${{ matrix.java }}
 
 
   snapshot:

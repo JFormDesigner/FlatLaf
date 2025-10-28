@@ -43,9 +43,7 @@ println( "----------------------------------------------------------------------
 println( "FlatLaf Version: ${version}" )
 println( "Gradle ${gradle.gradleVersion} at ${gradle.gradleHomeDir}" )
 println( "Java ${System.getProperty( "java.version" )}" )
-val toolchainJavaVersion = System.getProperty( "toolchain" )
-if( !toolchainJavaVersion.isNullOrEmpty() )
-	println( "Java toolchain ${toolchainJavaVersion}" )
+println( "Java toolchain ${System.getProperty( "toolchain", "11" )}" )
 println()
 
 

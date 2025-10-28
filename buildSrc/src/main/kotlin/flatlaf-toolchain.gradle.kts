@@ -18,9 +18,6 @@ plugins {
 	java
 }
 
-val toolchainJavaVersion = System.getProperty( "toolchain" )
-if( !toolchainJavaVersion.isNullOrEmpty() ) {
-	java.toolchain {
-		languageVersion = JavaLanguageVersion.of( toolchainJavaVersion )
-	}
+java.toolchain {
+	languageVersion = JavaLanguageVersion.of( System.getProperty( "toolchain", "11" ) )
 }

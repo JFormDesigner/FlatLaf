@@ -29,7 +29,7 @@ plugins {
 	java
 }
 
-if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+if( java.toolchain.languageVersion.get().asInt() >= 9 ) {
 	sourceSets {
 		create( "module-info" ) {
 			java {
