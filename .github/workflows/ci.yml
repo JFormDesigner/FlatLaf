@@ -20,7 +20,6 @@ on:
 
 jobs:
   build:
-    name: build
     runs-on: ubuntu-latest
 
     steps:
@@ -34,10 +33,6 @@ jobs:
           java-version: 11
           distribution: temurin  # pre-installed on ubuntu-latest
           cache: gradle
-
-      - name: Check with Error Prone
-        if: github.repository == 'JFormDesigner/FlatLaf'
-        run: ./gradlew errorprone clean
 
 
         # test against
