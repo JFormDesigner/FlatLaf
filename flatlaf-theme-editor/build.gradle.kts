@@ -41,15 +41,13 @@ tasks {
 		dependsOn( ":flatlaf-fonts-roboto:jar" )
 		dependsOn( ":flatlaf-fonts-roboto-mono:jar" )
 
-		manifest {
-			attributes( "Main-Class" to "com.formdev.flatlaf.themeeditor.FlatLafThemeEditor" )
-
-			if( java.toolchain.languageVersion.get().asInt() >= 9 )
-				attributes( "Multi-Release" to "true" )
+		manifest.attributes(
+			"Main-Class" to "com.formdev.flatlaf.themeeditor.FlatLafThemeEditor",
+			"Multi-Release" to "true",
 
 			// allow loading FlatLaf native library in Java 24+ (see https://openjdk.org/jeps/472)
-			attributes( "Enable-Native-Access" to "ALL-UNNAMED" )
-		}
+			"Enable-Native-Access" to "ALL-UNNAMED",
+		)
 
 		exclude( "module-info.class" )
 		exclude( "META-INF/versions/*/module-info.class" )

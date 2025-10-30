@@ -34,4 +34,4 @@ jobs:
           cache: gradle
 
       - name: Check with Error Prone
-        run: ./gradlew errorprone clean
+        run: ./gradlew errorprone

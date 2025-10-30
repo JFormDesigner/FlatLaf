@@ -40,9 +40,9 @@ jobs:
         # - Java LTS versions (11, 17, ...)
         # - latest Java version(s)
 
-      - name: Build with Java 8
+      - name: Build with Java 11 LTS
         if: github.repository == 'JFormDesigner/FlatLaf'
-        run: ./gradlew build clean -Dtoolchain=8
+        run: ./gradlew build clean -Dtoolchain=11
 
       - name: Build with Java 17 LTS
         if: github.repository == 'JFormDesigner/FlatLaf'
@@ -57,9 +57,9 @@ jobs:
         run: ./gradlew build clean -Dtoolchain=25
 
 
-      # build with Java 11 for snapshot
+        # build with Java 8 for snapshot
 
-      - name: Build with Java 11 LTS
+      - name: Build with Java 8
         run: ./gradlew build
 
       - name: Upload artifacts to GitHub Actions
