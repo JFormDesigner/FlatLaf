@@ -80,6 +80,10 @@ allprojects {
 			}
 		}
 
+		withType<AbstractArchiveTask>().configureEach {
+			isPreserveFileTimestamps = true
+		}
+
 		withType<Javadoc>().configureEach {
 			options {
 				this as StandardJavadocDocletOptions
@@ -92,6 +96,12 @@ allprojects {
 				links( "https://docs.oracle.com/en/java/javase/11/docs/api/" )
 			}
 			isFailOnError = false
+
+			// use Java 25 to generate javadoc
+			val javaToolchains = (project as ExtensionAware).extensions.getByName("javaToolchains") as JavaToolchainService
+			javadocTool.set( javaToolchains.javadocToolFor {
+				languageVersion.set( JavaLanguageVersion.of( 25 ) )
+			} )
 		}
 	}
 

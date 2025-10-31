@@ -41,6 +41,9 @@ var javaHome = System.getProperty( "java.home" )
 if( javaHome.endsWith( "jre" ) )
 	javaHome += "/.."
 
+interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
+val injected = project.objects.newInstance<InjectedExecOps>()
+
 tasks {
 	register( "build-natives" ) {
 		group = "build"
@@ -98,9 +101,9 @@ tasks {
 			val dumpbin = "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/dumpbin.exe"
 			val dll = linkedFile.asFile.get()
 			val dllDir = dll.parent
-			exec { commandLine( dumpbin, "/all", "/rawdata:none", "/out:$dllDir/objdump.txt", dll ) }
-			exec { commandLine( dumpbin, "/all", "/out:$dllDir/full-contents.txt", dll ) }
-			exec { commandLine( dumpbin, "/disasm", "/out:$dllDir/disassemble.txt", dll ) }
+			injected.execOps.exec { commandLine( dumpbin, "/all", "/rawdata:none", "/out:$dllDir/objdump.txt", dll ) }
+			injected.execOps.exec { commandLine( dumpbin, "/all", "/out:$dllDir/full-contents.txt", dll ) }
+			injected.execOps.exec { commandLine( dumpbin, "/disasm", "/out:$dllDir/disassemble.txt", dll ) }
 dump*/
 		}
 	}
