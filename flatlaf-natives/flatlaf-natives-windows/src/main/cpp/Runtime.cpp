@@ -83,3 +83,16 @@ int __cdecl printf( const char* format, ... ) {
 	return retValue;
 }
 */
+
+size_t rt_wcslen( const wchar_t* str ) {
+	const wchar_t* s = str;
+	while( *s != '\0' )
+		s++;
+	return (size_t) (s - str);
+}
+
+void rt_wcscpy( wchar_t* dest, const wchar_t* src ) {
+	while( *src != '\0' )
+		*dest++ = *src++;
+	*dest = '\0';
+}

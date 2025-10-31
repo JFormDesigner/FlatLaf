@@ -32,6 +32,10 @@
 // declare external fields
 extern HINSTANCE _instance;
 
+// declare external methods
+extern size_t rt_wcslen( const wchar_t* str );
+extern void rt_wcscpy( wchar_t* dest, const wchar_t* src );
+
 // declare internal methods
 static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title, LPCWSTR text,
 	int defaultButton, int buttonCount, LPCWSTR* buttons );
@@ -154,8 +158,8 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	int th = 0;
 	if( text == NULL )
 		text = L"";
-	LPWSTR wrappedText = new WCHAR[wcslen( text ) + 1];
-	wcscpy( wrappedText, text );
+	LPWSTR wrappedText = new WCHAR[rt_wcslen( text ) + 1];
+	rt_wcscpy( wrappedText, text );
 	LPWSTR lineStart = wrappedText;
 	for( LPWSTR t = wrappedText; ; t++ ) {
 		if( *t != '\n' && *t != 0 )
@@ -193,11 +197,11 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 				th += LABEL_HEIGHT;
 
 				// duplicate string
-				LPWSTR wrappedText2 = new WCHAR[wcslen( wrappedText ) + 1 + 1];
+				LPWSTR wrappedText2 = new WCHAR[rt_wcslen( wrappedText ) + 1 + 1];
 				// use wcscpy(), instead of wcsncpy(), because this method is inlined and does not require linking to runtime lib
-				wcscpy( wrappedText2, wrappedText );
+				rt_wcscpy( wrappedText2, wrappedText );
 				wrappedText2[breakIndex] = '\n';
-				wcscpy( wrappedText2 + breakIndex + 1, wrappedText + breakIndex );
+				rt_wcscpy( wrappedText2 + breakIndex + 1, wrappedText + breakIndex );
 
 				// delete old text
 				delete[] wrappedText;
@@ -262,11 +266,11 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	// (approximately) calculate memory size needed for in-memory template
 	int templSize = (sizeof(DLGTEMPLATE) + /*menu*/ 2 + /*class*/ 2 + /*title*/ 2)
 		+ ((sizeof(DLGITEMTEMPLATE) + /*class*/ 4 + /*title/icon*/ 4 + /*creation data*/ 2) * (/*icon+text*/2 + buttonCount))
-		+ (title != NULL ? (wcslen( title ) + 1) * sizeof(wchar_t) : 0)
-		+ /*fontPointSize*/ 2 + ((wcslen( fontFaceName ) + 1) * sizeof(wchar_t))
-		+ ((wcslen( wrappedText ) + 1) * sizeof(wchar_t));
+		+ (title != NULL ? (rt_wcslen( title ) + 1) * sizeof(wchar_t) : 0)
+		+ /*fontPointSize*/ 2 + ((rt_wcslen( fontFaceName ) + 1) * sizeof(wchar_t))
+		+ ((rt_wcslen( wrappedText ) + 1) * sizeof(wchar_t));
 	for( int i = 0; i < buttonCount; i++ )
-		templSize += ((wcslen( buttons[i] ) + 1) * sizeof(wchar_t));
+		templSize += ((rt_wcslen( buttons[i] ) + 1) * sizeof(wchar_t));
 
 	templSize += (2 * (1 + 1 + buttonCount)); // necessary for DWORD alignment
 	templSize += 100; // some reserve
@@ -291,15 +295,15 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 	*lpw++ = 0; // no menu
 	*lpw++ = 0; // predefined dialog box class (by default)
 	if( title != NULL ) {
-		wcscpy( (LPWSTR) lpw, title );
-		lpw += wcslen( title ) + 1;
+		rt_wcscpy( (LPWSTR) lpw, title );
+		lpw += rt_wcslen( title ) + 1;
 	} else
 		*lpw++ = 0; // no title
 
 	// for DS_SETFONT
 	*lpw++ = fontPointSize;
-	wcscpy( (LPWSTR) lpw, fontFaceName );
-	lpw += wcslen( fontFaceName ) + 1;
+	rt_wcscpy( (LPWSTR) lpw, fontFaceName );
+	lpw += rt_wcslen( fontFaceName ) + 1;
 
 	//---- define icon ----
 
@@ -335,7 +339,7 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 
 	lpw = (LPWORD) (lpdit + 1);
 	*lpw++ = 0xffff; *lpw++ = 0x0082;										// Static class
-	wcscpy( (LPWSTR) lpw, wrappedText ); lpw += wcslen( wrappedText ) + 1;	// text
+	rt_wcscpy( (LPWSTR) lpw, wrappedText ); lpw += rt_wcslen( wrappedText ) + 1;	// text
 	*lpw++ = 0;																// creation data
 
 
@@ -356,7 +360,7 @@ static byte* createInMemoryTemplate( HWND owner, int messageType, LPCWSTR title,
 
 		lpw = (LPWORD) (lpdit + 1);
 		*lpw++ = 0xffff; *lpw++ = 0x0080;										// Button class
-		wcscpy( (LPWSTR) lpw, buttons[i] ); lpw += wcslen( buttons[i] ) + 1;	// text
+		rt_wcscpy( (LPWSTR) lpw, buttons[i] ); lpw += rt_wcslen( buttons[i] ) + 1;	// text
 		*lpw++ = 0;																// creation data
 
 		bx += bw[i] + BUTTON_GAP;
@@ -394,7 +398,7 @@ static INT_PTR CALLBACK messageDialogProc( HWND hwnd, UINT uMsg, WPARAM wParam, 
 
 static int textLengthAsDLUs( HDC hdc, LPCWSTR str, int strLen ) {
 	SIZE size{ 0 };
-	::GetTextExtentPoint32( hdc, str, (strLen >= 0) ? strLen : wcslen( str ), &size );
+	::GetTextExtentPoint32( hdc, str, (strLen >= 0) ? strLen : rt_wcslen( str ), &size );
 	return pixel2dluX( size.cx );
 }
 

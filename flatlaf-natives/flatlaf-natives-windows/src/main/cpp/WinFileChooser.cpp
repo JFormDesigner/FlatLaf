@@ -29,6 +29,7 @@
 
 // declare external methods
 extern HWND getWindowHandle( JNIEnv* env, jobject window );
+extern size_t rt_wcslen( const wchar_t* str );
 
 // declare internal methods
 static jobjectArray getFiles( JNIEnv* env, jboolean open, IFileDialog* dialog );
@@ -202,7 +203,7 @@ static jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
 }
 
 static jstring newJavaString( JNIEnv* env, LPWSTR str ) {
-	return env->NewString( reinterpret_cast<jchar*>( str ), static_cast<jsize>( wcslen( str ) ) );
+	return env->NewString( reinterpret_cast<jchar*>( str ), static_cast<jsize>( rt_wcslen( str ) ) );
 }
 
 //---- JNI methods ------------------------------------------------------------
