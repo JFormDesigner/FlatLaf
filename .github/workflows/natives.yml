@@ -63,7 +63,9 @@ jobs:
               with:
                   java-version: 21
                   distribution: temurin
-                  cache: gradle
+
+            - name: Cache Gradle
+              uses: ./.github/actions/cache-gradle
 
             - name: Build with Gradle
               # --no-daemon is necessary on Windows otherwise caching Gradle would fail with:

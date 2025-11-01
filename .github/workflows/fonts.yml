@@ -39,7 +39,9 @@ jobs:
               with:
                   java-version: 21
                   distribution: temurin  # pre-installed on ubuntu-latest
-                  cache: gradle
+
+            - name: Cache Gradle
+              uses: ./.github/actions/cache-gradle
 
             - name: Build with Gradle
               run: ./gradlew :flatlaf-fonts-${{ matrix.font }}:build

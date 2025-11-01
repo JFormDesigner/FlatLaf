@@ -7,6 +7,11 @@ charset = latin1
 indent_style = tab
 indent_size = 4
 
+[{*.yaml,*.yml}]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
 [*.java]
 indent_style = tab
 ij_continuation_indent_size = 4
