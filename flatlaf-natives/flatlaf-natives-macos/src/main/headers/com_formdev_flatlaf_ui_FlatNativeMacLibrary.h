@@ -13,6 +13,32 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_MEDIUM 1L
 #undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_BUTTONS_SPACING_LARGE 2L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canChooseFiles
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canChooseFiles 1L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canChooseDirectories
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canChooseDirectories 2L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_resolvesAliases
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_resolvesAliases 4L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsMultipleSelection
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsMultipleSelection 8L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_accessoryViewDisclosed
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_accessoryViewDisclosed 16L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsTagField
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsTagField 256L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canCreateDirectories
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canCreateDirectories 512L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canSelectHiddenExtension
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_canSelectHiddenExtension 1024L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsHiddenFiles
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showsHiddenFiles 2048L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_extensionHidden
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_extensionHidden 4096L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsOtherFileTypes
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_allowsOtherFileTypes 8192L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_treatsFilePackagesAsDirectories
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_treatsFilePackagesAsDirectories 16384L
+#undef com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showSingleFilterField
+#define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showSingleFilterField 16777216L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
@@ -52,6 +78,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
  */
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_toggleWindowFullScreen
   (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    showFileChooser
+ * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showFileChooser
+  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    showMessageDialog
+ * Signature: (JILjava/lang/String;Ljava/lang/String;I[Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showMessageDialog
+  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint, jobjectArray);
 
 #ifdef __cplusplus
 }

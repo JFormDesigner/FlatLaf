@@ -16,6 +16,8 @@
 
 import net.ltgt.gradle.errorprone.errorprone
 
+
+// initialize version
 group = "com.formdev"
 version = property( if( hasProperty( "release" ) ) "flatlaf.releaseVersion" else "flatlaf.developmentVersion" ) as String
 
@@ -24,18 +26,16 @@ val pullRequestNumber = findProperty( "github.event.pull_request.number" )
 if( pullRequestNumber != null )
 	version = "PR-${pullRequestNumber}-SNAPSHOT"
 
-
-allprojects {
+// apply version to all subprojects
+subprojects {
 	version = rootProject.version
-
-	repositories {
-		mavenCentral()
-	}
 }
 
-// check required Java version
-if( JavaVersion.current() < JavaVersion.VERSION_1_8 )
-	throw RuntimeException( "Java 8 or later required (running ${System.getProperty( "java.version" )})" )
+
+// initialize toolchain version (default is Java 8)
+val toolchainJavaVersion: String by extra {
+	System.getProperty( "toolchain", "8" )
+}
 
 // log version, Gradle and Java versions
 println()
@@ -43,9 +43,7 @@ println( "----------------------------------------------------------------------
 println( "FlatLaf Version: ${version}" )
 println( "Gradle ${gradle.gradleVersion} at ${gradle.gradleHomeDir}" )
 println( "Java ${System.getProperty( "java.version" )}" )
-val toolchainJavaVersion = System.getProperty( "toolchain" )
-if( !toolchainJavaVersion.isNullOrEmpty() )
-	println( "Java toolchain ${toolchainJavaVersion}" )
+println( "Java toolchain ${toolchainJavaVersion}" )
 println()
 
 
@@ -55,6 +53,10 @@ plugins {
 }
 
 allprojects {
+	repositories {
+		mavenCentral()
+	}
+
 	tasks {
 		withType<JavaCompile>().configureEach {
 			sourceCompatibility = "1.8"
@@ -78,6 +80,10 @@ allprojects {
 			}
 		}
 
+		withType<AbstractArchiveTask>().configureEach {
+			isPreserveFileTimestamps = true
+		}
+
 		withType<Javadoc>().configureEach {
 			options {
 				this as StandardJavadocDocletOptions
@@ -90,6 +96,12 @@ allprojects {
 				links( "https://docs.oracle.com/en/java/javase/11/docs/api/" )
 			}
 			isFailOnError = false
+
+			// use Java 25 to generate javadoc
+			val javaToolchains = (project as ExtensionAware).extensions.getByName("javaToolchains") as JavaToolchainService
+			javadocTool.set( javaToolchains.javadocToolFor {
+				languageVersion.set( JavaLanguageVersion.of( 25 ) )
+			} )
 		}
 	}
 
@@ -140,6 +152,15 @@ allprojects {
 							"JavaUtilDate",			// reports usage of class Date
 						)
 					}
+				}
+
+				// Error Prone requires at lease Java 11
+				val java = (project as ExtensionAware).extensions.getByName("java") as JavaPluginExtension
+				val javaToolchains = (project as ExtensionAware).extensions.getByName("javaToolchains") as JavaToolchainService
+				if( java.toolchain.languageVersion.get().asInt() < 11 ) {
+					javaCompiler.set( javaToolchains.compilerFor {
+						languageVersion.set( JavaLanguageVersion.of( 11 ) )
+					} )
 				}
 			}
 		}

@@ -16,7 +16,10 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -148,6 +151,25 @@ public interface FlatSystemProperties
 	String USE_ROUNDED_POPUP_BORDER = "flatlaf.useRoundedPopupBorder";
 
 	/**
+	 * Species whether popup windows may be reused without (temporary) hiding them.
+	 * E.g. if "moving" a tooltip to follow the mouse pointer, normally it is necessary
+	 * to hide the tooltip and show it again at the new location, which causes some
+	 * flicker with heavy-weight popup windows that FlatLaf uses on all platforms.
+	 * <p>
+	 * If {@code true}, hiding popup window is deferred for an event cycle,
+	 * which allows reusing still visible popup window and avoids flicker when "moving" the popup.
+	 * <p>
+	 * Note that {@link JPopupMenu} popup windows (menus and combobox lists) are newer reused.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 *
+	 * @since 3.6.2
+	 */
+	String REUSE_VISIBLE_POPUP_WINDOW = "flatlaf.reuseVisiblePopupWindow";
+
+
+	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
@@ -225,6 +247,17 @@ public interface FlatSystemProperties
 	 * @since 3.5.1
 	 */
 	String USE_SUB_MENU_SAFE_TRIANGLE = "flatlaf.useSubMenuSafeTriangle";
+
+	/**
+	 * Specifies whether {@link SystemFileChooser} uses operating system file dialogs.
+	 * If set to {@code false}, the {@link JFileChooser} is used instead.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 *
+	 * @since 3.7
+	 */
+	String USE_SYSTEM_FILE_CHOOSER = "flatlaf.useSystemFileChooser";
 
 	/**
 	 * Checks whether a system property is set and returns {@code true} if its value

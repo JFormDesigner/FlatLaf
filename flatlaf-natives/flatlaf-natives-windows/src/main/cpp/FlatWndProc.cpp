@@ -30,6 +30,7 @@
  * @author Karl Tauber
  */
 
+// declare exported methods
 HWND getWindowHandle( JNIEnv* env, jobject window );
 
 //---- JNI methods ------------------------------------------------------------

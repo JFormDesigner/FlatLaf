@@ -29,7 +29,14 @@ plugins {
 	java
 }
 
-if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+// for Eclipse IDE project import, exclude if:
+// - plugin "eclipse" is applied; e.g. if running in Eclipse IDE with buildship plugin
+// - no taskNames specified at command line; e.g. if buildship synchronizes projects
+val exclude =
+	rootProject.plugins.hasPlugin( "eclipse" ) &&
+	gradle.startParameter.taskNames.isEmpty()
+
+if( !exclude ) {
 	sourceSets {
 		create( "module-info" ) {
 			java {
@@ -58,6 +65,13 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 			options.compilerArgs.add( "--module-path" )
 			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath
 				+ File.pathSeparator + configurations.compileClasspath.get().asPath )
+
+			// if global toolchain is Java 8, then use Java 11 to build
+			if( java.toolchain.languageVersion.get().asInt() < 9 ) {
+				javaCompiler.set( javaToolchains.compilerFor {
+					languageVersion.set( JavaLanguageVersion.of( 11 ) )
+				} )
+			}
 		}
 
 		jar {

@@ -15,7 +15,7 @@
  */
 
 
-open class NativeArtifact( val fileName: String, val classifier: String, val type: String ) {}
+open class NativeArtifact( val fileName: String, val classifier: String, val extension: String ) {}
 
 open class PublishExtension {
 	var artifactId: String? = null
@@ -77,10 +77,10 @@ publishing {
 
 			afterEvaluate {
 				extension.nativeArtifacts?.forEach {
-					artifact( artifacts.add( "archives", file( it.fileName ) ) {
+					artifact( file( it.fileName ) ) {
 						classifier = it.classifier
-						type = it.type
-					} )
+						extension = it.extension
+					}
 				}
 			}
 		}

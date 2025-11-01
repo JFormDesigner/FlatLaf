@@ -25,8 +25,8 @@
  * @author Karl Tauber
  */
 
-// see FlatWndProc.cpp
-HWND getWindowHandle( JNIEnv* env, jobject window );
+// declare external methods
+extern HWND getWindowHandle( JNIEnv* env, jobject window );
 
 //---- Utility ----------------------------------------------------------------
 

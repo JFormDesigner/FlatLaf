@@ -65,6 +65,7 @@ public class FlatJidePainter
 			Color oldColor = g.getColor();
 			g.setColor( FlatUIUtils.deriveColor( background, c.getBackground() ) );
 			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+			float arc = UIScale.scale( (float) this.arc );
 
 			if( c instanceof JideSplitButton ) {
 				// For split buttons, this method is invoked twice:
@@ -74,6 +75,8 @@ public class FlatJidePainter
 				// the rounded rectangle with component bounds, but clip to the passed rectangle.
 
 				boolean horizontal = (((JideSplitButton)c).getOrientation() == SwingConstants.HORIZONTAL);
+				int width = horizontal ? c.getWidth() : c.getHeight();
+				int height = horizontal ? c.getHeight() : c.getWidth();
 
 				// for vertical orientation, the graphics context is rotated, but 1px wrong
 				if( !horizontal )
@@ -82,10 +85,13 @@ public class FlatJidePainter
 				Shape oldClip = g.getClip();
 				g.clipRect( rect.x, rect.y, rect.width, rect.height );
 
-				FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0,
-					horizontal ? c.getWidth() : c.getHeight(),
-					horizontal ? c.getHeight() : c.getWidth(),
-					0, UIScale.scale( (float) arc ) );
+				FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, width, height, 0, arc );
+
+				if( borderColor != null ) {
+					g.setColor( borderColor );
+					FlatUIUtils.paintOutlinedComponent( (Graphics2D) g, 0, 0, width, height,
+						0, 0, 0, UIScale.scale( 1f ), arc, null, borderColor, null );
+				}
 
 				g.setClip( oldClip );
 
@@ -98,8 +104,15 @@ public class FlatJidePainter
 				if( !horizontal )
 					g.translate( 0, 1 );
 			} else {
-				FlatUIUtils.paintComponentBackground( (Graphics2D) g, rect.x, rect.y,
-					rect.width, rect.height, 0, UIScale.scale( (float) arc ) );
+				FlatUIUtils.paintComponentBackground( (Graphics2D) g,
+					rect.x, rect.y, rect.width, rect.height, 0, arc );
+
+				if( borderColor != null ) {
+					g.setColor( borderColor );
+					FlatUIUtils.paintOutlinedComponent( (Graphics2D) g,
+						rect.x, rect.y, rect.width, rect.height,
+						0, 0, 0, UIScale.scale( 1f ), arc, null, borderColor, null );
+				}
 			}
 
 			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );

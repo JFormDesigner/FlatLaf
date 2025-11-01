@@ -90,7 +90,7 @@ tasks {
 		useJUnitPlatform()
 		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 
-		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+		if( java.toolchain.languageVersion.get().asInt() >= 9 )
 			jvmArgs( listOf( "--add-opens", "java.desktop/javax.swing.plaf.basic=ALL-UNNAMED" ) )
 	}
 
@@ -113,6 +113,10 @@ tasks {
 					"version" to version,
 					"release" to "1.8", // Java version
 					"failonerror" to "true" )
+
+				"fixcrlf"(
+					"file" to "${project.name}-sigtest.txt",
+					"eol" to "lf" )
 			}
 		}
 	}

@@ -245,6 +245,9 @@ public class FlatTestFrame
 		super.dispose();
 
 		FlatUIDefaultsInspector.hide();
+
+		if( getDefaultCloseOperation() == JFrame.EXIT_ON_CLOSE )
+			System.exit( 0 );
 	}
 
 	private void updateTitle() {

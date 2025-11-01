@@ -196,6 +196,8 @@ Applications using FlatLaf
 - ![New](images/new.svg)
   [Zettelkasten](https://github.com/Zettelkasten-Team/Zettelkasten) - knowledge
   management tool
+- ![New](images/new.svg) [QStudio](https://www.timestored.com/qstudio/) - free
+  SQL editor
 
 ### Security
 
@@ -236,6 +238,8 @@ Applications using FlatLaf
   mobile & web platform
 - ![New](images/new.svg) [EduMIPS64](https://github.com/EduMIPS64/edumips64) -
   visual MIPS64 CPU simulator
+- ![New](images/new.svg) [Launch4j](https://launch4j.sourceforge.net/) -
+  cross-platform Java executable wrapper
 
 ### Electrical
 
@@ -281,9 +285,16 @@ Applications using FlatLaf
   from any webnovel and lightnovel site
 - [lectureStudio](https://www.lecturestudio.org/) - digitize your lectures with
   ease
+- ![New](images/new.svg) [Nortantis](https://jandjheydorn.com/nortantis) -
+  fantasy map generator and editor
 
 ### Modelling / Planning
 
+- ![New](images/new.svg) [OpenRocket](https://github.com/openrocket/openrocket) -
+  model-rocketry aerodynamics and trajectory simulation software
+- ![New](images/new.svg)
+  [Warteschlangensimulator](https://github.com/A-Herzog/Warteschlangensimulator) -
+  discrete-event stochastic simulator
 - ![New](images/new.svg) [Gephi](https://github.com/gephi/gephi) - the Open
   Graph Viz Platform
 - [Astah](https://astah.net/) (**commercial**) - create UML, ER Diagram,

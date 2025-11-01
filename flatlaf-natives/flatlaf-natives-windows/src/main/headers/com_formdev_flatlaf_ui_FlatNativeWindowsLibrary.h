@@ -27,6 +27,52 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_DEFAULT -1L
 #undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_NONE
 #define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_DWMWA_COLOR_NONE -2L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_OVERWRITEPROMPT
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_OVERWRITEPROMPT 2L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_STRICTFILETYPES
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_STRICTFILETYPES 4L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOCHANGEDIR
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOCHANGEDIR 8L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_PICKFOLDERS
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_PICKFOLDERS 32L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCEFILESYSTEM
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCEFILESYSTEM 64L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_ALLNONSTORAGEITEMS
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_ALLNONSTORAGEITEMS 128L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOVALIDATE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOVALIDATE 256L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_ALLOWMULTISELECT
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_ALLOWMULTISELECT 512L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_PATHMUSTEXIST
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_PATHMUSTEXIST 2048L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FILEMUSTEXIST
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FILEMUSTEXIST 4096L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_CREATEPROMPT
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_CREATEPROMPT 8192L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_SHAREAWARE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_SHAREAWARE 16384L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOREADONLYRETURN
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOREADONLYRETURN 32768L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOTESTFILECREATE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NOTESTFILECREATE 65536L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_HIDEMRUPLACES
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_HIDEMRUPLACES 131072L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_HIDEPINNEDPLACES
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_HIDEPINNEDPLACES 262144L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NODEREFERENCELINKS
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_NODEREFERENCELINKS 1048576L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_OKBUTTONNEEDSINTERACTION
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_OKBUTTONNEEDSINTERACTION 2097152L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_DONTADDTORECENT
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_DONTADDTORECENT 33554432L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCESHOWHIDDEN
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCESHOWHIDDEN 268435456L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_DEFAULTNOMINIMODE
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_DEFAULTNOMINIMODE 536870912L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCEPREVIEWPANEON
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_FORCEPREVIEWPANEON 1073741824L
+#undef com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_SUPPORTSTREAMABLEITEMS
+#define com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_FOS_SUPPORTSTREAMABLEITEMS -2147483648L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
  * Method:    getOSBuildNumberImpl
@@ -66,6 +112,30 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_
  */
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_dwmSetWindowAttributeDWORD
   (JNIEnv *, jclass, jlong, jint, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    showFileChooser
+ * Signature: (Ljava/awt/Window;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeWindowsLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showFileChooser
+  (JNIEnv *, jclass, jobject, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    showMessageDialog
+ * Signature: (JILjava/lang/String;Ljava/lang/String;I[Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageDialog
+  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint, jobjectArray);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    showMessageBox
+ * Signature: (JLjava/lang/String;Ljava/lang/String;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_showMessageBox
+  (JNIEnv *, jclass, jlong, jstring, jstring, jint);
 
 #ifdef __cplusplus
 }

@@ -44,6 +44,7 @@ fifesoft-autocomplete = "com.fifesoft:autocomplete:3.3.1"
 # flatlaf-testing
 glazedlists = "com.glazedlists:glazedlists:1.11.0"
 netbeans-api-awt = "org.netbeans.api:org-openide-awt:RELEASE112"
+nativejfilechooser = "li.flor:native-j-file-chooser:1.6.4"
 
 # flatlaf-natives-jna
 jna = "net.java.dev.jna:jna:5.15.0"

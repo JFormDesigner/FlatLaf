@@ -1,0 +1,37 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Error Prone
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '[0-9]*'
+    paths-ignore:
+      - '**.md'
+      - '.*'
+      - '**/.settings/**'
+      - 'flatlaf-core/svg/**'
+      - 'flatlaf-testing/dumps/**'
+      - 'flatlaf-testing/misc/**'
+      - 'images/**'
+
+jobs:
+  error-prone:
+    runs-on: ubuntu-latest
+    if: github.repository == 'JFormDesigner/FlatLaf'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin  # pre-installed on ubuntu-latest
+          cache: gradle
+
+      - name: Check with Error Prone
+        run: ./gradlew errorprone

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.1.0.348" Java: "21.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -181,6 +181,27 @@ new FormModel {
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 4226, false )
 						"mnemonic": 83
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveAsActionPerformed", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator9"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "openSystemMenuItem"
+						"text": "Open (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 79, 4291, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openSystemActionPerformed", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "saveAsSystemMenuItem"
+						"text": "Save As (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 4291, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveAsSystemActionPerformed", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "selectFolderSystemMenuItem"
+						"text": "Select Folder (System)..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 70, 4291, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "selectFolderSystemActionPerformed", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator2"

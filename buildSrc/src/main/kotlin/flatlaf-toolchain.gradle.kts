@@ -18,9 +18,8 @@ plugins {
 	java
 }
 
-val toolchainJavaVersion = System.getProperty( "toolchain" )
-if( !toolchainJavaVersion.isNullOrEmpty() ) {
-	java.toolchain {
-		languageVersion = JavaLanguageVersion.of( toolchainJavaVersion )
-	}
+val toolchainJavaVersion: String by rootProject.extra
+
+java.toolchain {
+	languageVersion = JavaLanguageVersion.of( toolchainJavaVersion )
 }

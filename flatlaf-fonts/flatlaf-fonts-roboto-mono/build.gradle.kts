@@ -26,6 +26,7 @@ if( !rootProject.hasProperty( "release" ) )
 
 plugins {
 	`java-library`
+	`flatlaf-toolchain`
 	`flatlaf-module-info`
 	`flatlaf-publish`
 }

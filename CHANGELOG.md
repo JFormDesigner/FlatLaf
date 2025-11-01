@@ -5,6 +5,23 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- System File Chooser allows using **operating system file dialogs** in Java
+  Swing applications. (PR #988)
+
+#### Fixed bugs
+
+- TextField: Fixed wrong leading/trailing icon placement if border is set to
+  `null`. (issue #1047)
+- Extras: UI defaults inspector: Exclude inspector window from being blocked by
+  modal dialogs. (issue #1048)
+- JideButton, JideToggleButton, JideSplitButton and JideToggleSplitButton: Paint
+  border in button style `TOOLBAR_STYLE` if in selected state. (issue #1045)
+
+
+## 3.6.2
+
+#### New features and improvements
+
 - If using `FlatLaf.registerCustomDefaultsSource( "com.myapp.themes" )` and
   named Java modules, it is no longer necessary to add `opens com.myapp.themes;`
   to `module-info.java`. (issue #1026)
@@ -15,6 +32,8 @@ FlatLaf Change Log
 - Tree and List: Fixed painting of rounded drop backgrounds. (issue #1023)
 - Popup: Showing tooltip in inactive window brought that window to front (made
   it active) and potentially hid the previously active window. (issue #1037)
+- Popup: No longer reuse popup windows for menus to avoid immediately closing
+  dialogs on ChromeOS. (issue #1029)
 - macOS: Fixed window "flashing" when switching from a light to a dark theme (or
   vice versa). Especially when using animated theme changer (see
   [FlatLaf Extras](flatlaf-extras)).
