@@ -14,6 +14,7 @@ on:
       - '.*'
       - '**/.settings/**'
       - 'flatlaf-core/svg/**'
+      - 'flatlaf-natives/**'
       - 'flatlaf-testing/dumps/**'
       - 'flatlaf-testing/misc/**'
       - 'images/**'
@@ -31,7 +32,9 @@ jobs:
         with:
           java-version: 21
           distribution: temurin  # pre-installed on ubuntu-latest
-          cache: gradle
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Check with Error Prone
         run: ./gradlew errorprone

@@ -1,0 +1,32 @@
+# https://docs.github.com/en/actions/tutorials/create-actions/create-a-composite-action#creating-a-composite-action-within-the-same-repository
+
+# cache uses two files:
+#
+#   - gradle-wrapper-<os>-<arch>-<hash>:
+#       contains the Gradle wrapper/distribution (~/.gradle/wrapper)
+#       and is updated when the Gradle version changed
+#   - gradle-caches-<os>-<arch>-<hash>:
+#       contains the Gradle caches (~/.gradle/caches), buildSrc/build and buildSrc/.gradle
+#       and is updated when Gradle related files were changed
+#       buildSrc/.gradle is needed so that buildSrc tasks are UP-TO-DATE
+
+name: 'Cache Gradle'
+runs:
+  using: "composite"
+  steps:
+
+    - name: Cache '.gradle/wrapper'
+      uses: actions/cache@v4
+      with:
+        key: gradle-wrapper-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( 'gradle/wrapper/gradle-wrapper.properties' ) }}
+        path: |
+          ~/.gradle/wrapper
+
+    - name: Cache '.gradle/caches' and 'buildSrc/build'
+      uses: actions/cache@v4
+      with:
+        key: gradle-caches-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( '**/*.gradle*', 'gradle/**', 'gradle.properties', 'buildSrc/src/**' ) }}
+        path: |
+          ~/.gradle/caches
+          buildSrc/build
+          buildSrc/.gradle

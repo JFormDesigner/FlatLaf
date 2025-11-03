@@ -14,6 +14,7 @@ on:
       - '.*'
       - '**/.settings/**'
       - 'flatlaf-core/svg/**'
+      - 'flatlaf-natives/**'
       - 'flatlaf-testing/dumps/**'
       - 'flatlaf-testing/misc/**'
       - 'images/**'
@@ -32,7 +33,9 @@ jobs:
         with:
           java-version: 21
           distribution: temurin  # pre-installed on ubuntu-latest
-          cache: gradle
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
 
         # test against
@@ -100,7 +103,9 @@ jobs:
         with:
           java-version: 21
           distribution: temurin  # pre-installed on ubuntu-latest
-          cache: gradle
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Release a new stable version to Maven Central
         run: ./gradlew publishToSonatype closeSonatypeStagingRepository :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
