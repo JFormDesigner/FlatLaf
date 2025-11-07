@@ -2707,8 +2707,22 @@ debug*/
 
 			// because this listener receives mouse events for the whole tabbed pane,
 			// we have to check whether the mouse is located over the viewport
-			if( !isInViewport( e.getX(), e.getY() ) )
+			if( !isInViewport( e.getX(), e.getY() ) ) {
+				// if it is not in the viewport, retarget the even to a parent container
+				// which might support scrolling (e.g. a surrounding ScrollPane)
+				Container parent = getParent();
+      			while (parent != null) {
+					// informing the first parent with a mouse wheel listener should be sufficient.
+					if (parent.getMouseWheelListeners().length > 0) {
+						for (MouseWheelListener parentListener : parent.getMouseWheelListeners()) {
+							parentListener.mouseWheelMoved(e);
+						}
+						return;
+					}
+					parent = parent.getContainer();
+				}
 				return;
+			}
 
 			lastMouseX = e.getX();
 			lastMouseY = e.getY();
