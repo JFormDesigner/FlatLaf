@@ -33,6 +33,7 @@ private:
 	static jmethodID onNcHitTestMID;
 	static jmethodID isFullscreenMID;
 	static jmethodID fireStateChangedLaterOnceMID;
+	static jmethodID setIsMovingOrSizingMID;
 
 	static HWNDMap* hwndMap;
 	static DWORD osBuildNumber;
@@ -63,6 +64,7 @@ private:
 	BOOL isFullscreen();
 	int onNcHitTest( int x, int y, boolean isOnResizeBorder );
 	void fireStateChangedLaterOnce();
+	void setIsMovingOrSizing( boolean isMovingOrSizing );
 	JNIEnv* getEnv();
 
 	void sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam );
