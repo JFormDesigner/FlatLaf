@@ -203,10 +203,15 @@ public class FlatRadioButtonUI
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		// style icon
 		if( key.startsWith( "icon." ) ) {
-			if( !(icon instanceof FlatCheckBoxIcon) )
+			Icon styleIcon = b.getIcon();
+
+			if (styleIcon == null)
+				styleIcon = icon;
+
+			if( !(styleIcon instanceof FlatCheckBoxIcon) )
 				return new UnknownStyleException( key );
 
-			if( iconShared ) {
+            if( styleIcon == icon && iconShared ) {
 				icon = FlatStylingSupport.cloneIcon( icon );
 				iconShared = false;
 			}
