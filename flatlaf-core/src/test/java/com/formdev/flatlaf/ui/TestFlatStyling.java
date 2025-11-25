@@ -33,6 +33,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.ColorFunctions;
 
 /**
@@ -697,8 +698,15 @@ public class TestFlatStyling
 
 		//---- icon ----
 
-		if( b.getIcon() instanceof CustomIcon )
+		if( b.getIcon() instanceof CustomIcon ) {
+			try {
+				ui.applyStyle( b, "icon.focusWidth: 1.5" );
+				assertTrue( false );
+			} catch( UnknownStyleException ex ) {
+				assertEquals( new UnknownStyleException( "icon.focusWidth" ).getMessage(), ex.getMessage() );
+			}
 			return;
+		}
 
 		ui.applyStyle( b, "icon.focusWidth: 1.5" );
 		ui.applyStyle( b, "icon.focusColor: #fff" );

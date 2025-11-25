@@ -77,6 +77,7 @@ import com.formdev.flatlaf.icons.FlatRadioButtonMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.ui.TestFlatStyling.CustomCheckBoxIcon;
 import com.formdev.flatlaf.ui.TestFlatStyling.CustomIcon;
 import com.formdev.flatlaf.ui.TestFlatStyling.CustomRadioButtonIcon;
@@ -574,6 +575,12 @@ public class TestFlatStyleableValue
 		//---- icon ----
 
 		if( b.getIcon() instanceof CustomIcon ) {
+			try {
+				ui.applyStyle( b, "icon.focusWidth: 1.23" );
+				assertTrue( false );
+			} catch( UnknownStyleException ex ) {
+				assertEquals( new UnknownStyleException( "icon.focusWidth" ).getMessage(), ex.getMessage() );
+			}
 			assertEquals( null, ui.getStyleableValue( b, "icon.focusWidth" ) );
 			return;
 		}

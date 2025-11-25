@@ -370,7 +370,7 @@ public class FlatButtonUI
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		if( key.startsWith( "help." ) ) {
 			if( !(helpButtonIcon instanceof FlatHelpButtonIcon) )
-				return new UnknownStyleException( key );
+				throw new UnknownStyleException( key );
 
 			if( helpButtonIconShared ) {
 				helpButtonIcon = FlatStylingSupport.cloneIcon( helpButtonIcon );

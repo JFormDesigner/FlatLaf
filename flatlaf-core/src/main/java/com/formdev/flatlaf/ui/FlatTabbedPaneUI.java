@@ -671,7 +671,7 @@ public class FlatTabbedPaneUI
 		// close icon
 		if( key.startsWith( "close" ) ) {
 			if( !(closeIcon instanceof FlatTabbedPaneCloseIcon) )
-				return new UnknownStyleException( key );
+				throw new UnknownStyleException( key );
 
 			if( closeIconShared ) {
 				closeIcon = FlatStylingSupport.cloneIcon( closeIcon );

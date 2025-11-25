@@ -205,7 +205,7 @@ public class FlatRadioButtonUI
 		if( key.startsWith( "icon." ) ) {
 			Icon icon = getRealIcon( b );
 			if( !(icon instanceof FlatCheckBoxIcon) )
-				return new UnknownStyleException( key );
+				throw new UnknownStyleException( key );
 
 			if( icon == this.icon && iconShared ) {
 				this.icon = icon = FlatStylingSupport.cloneIcon( icon );
