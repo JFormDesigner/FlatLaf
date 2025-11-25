@@ -45,10 +45,11 @@ if( !exclude ) {
 				setSrcDirs( listOf( "src/main/module-info", "src/main/java", "src/main/java9" ) )
 
 				// exclude Java 8 source file if an equally named Java 9+ source file exists
+				val projectDir = projectDir // necessary for configuration cache
 				exclude {
 					if( it.isDirectory )
 						return@exclude false
-					val java9file = file( "${projectDir}/src/main/java9/${it.path}" )
+					val java9file = File( "${projectDir}/src/main/java9/${it.path}" )
 					java9file.exists() && java9file != it.file
 				}
 			}

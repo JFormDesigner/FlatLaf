@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import io.github.gradlenexus.publishplugin.CloseNexusStagingRepository
 import net.ltgt.gradle.errorprone.errorprone
+import org.gradle.kotlin.dsl.withType
 
 
 // initialize version
@@ -102,6 +104,17 @@ allprojects {
 			javadocTool.set( javaToolchains.javadocToolFor {
 				languageVersion.set( JavaLanguageVersion.of( 25 ) )
 			} )
+		}
+
+		// mark some publishing related tasks as not compatible with configuration cache
+		withType<Sign>().configureEach {
+			notCompatibleWithConfigurationCache( "not compatible" )
+		}
+		withType<PublishToMavenRepository>().configureEach {
+			notCompatibleWithConfigurationCache( "not compatible" )
+		}
+		withType<CloseNexusStagingRepository>().configureEach {
+			notCompatibleWithConfigurationCache( "not compatible" )
 		}
 	}
 

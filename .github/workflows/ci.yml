@@ -107,7 +107,7 @@ jobs:
       - name: Cache Gradle
         uses: ./.github/actions/cache-gradle
 
-      - name: Release a new stable version to Maven Central
+      - name: Release a new stable version to Maven Central and build demo and theme editor
         run: ./gradlew publishToSonatype closeSonatypeStagingRepository :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}

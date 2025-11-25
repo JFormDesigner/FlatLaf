@@ -40,6 +40,11 @@ var javaHome = System.getProperty( "java.home" )
 if( javaHome.endsWith( "jre" ) && !file( "${javaHome}/include" ).exists() )
 	javaHome += "/.."
 
+interface InjectedOps {
+	@get:Inject val fs: FileSystemOperations
+	@get:Inject val e: ExecOperations
+}
+
 tasks {
 	register( "build-natives" ) {
 		group = "build"
@@ -115,16 +120,18 @@ tasks {
 			}
 		} )
 
+		val injectedOps = project.objects.newInstance<InjectedOps>()
+
 		doLast {
 			// copy shared library to flatlaf-core resources
-			copy {
+			injectedOps.fs.copy {
 				from( linkedFile )
 				into( nativesDir )
 				rename( linkedFile.get().asFile.name, libraryName )
 			}
-
-//			dump( linkedFile.asFile.get(), true )
 		}
+
+//		dump( linkedFile, true, injectedOps )
 	}
 
 	if( org.gradle.internal.os.OperatingSystem.current().isLinux &&
@@ -198,43 +205,44 @@ tasks {
 				"-lgtk-3",
 			)
 
+			val injectedOps = project.objects.newInstance<InjectedOps>()
+
 			doLast {
 				// copy shared library to flatlaf-core resources
-				copy {
+				injectedOps.fs.copy {
 					from( "$outDir/$libraryName" )
 					into( nativesDir )
 				}
-
-//				dump( file( "$outDir/$libraryName" ), false )
 			}
+
+//			dump( file( "$outDir/$libraryName" ), false, injectedOps )
 		}
 	}
 }
 
 /*dump
-interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
-val injected = project.objects.newInstance<InjectedExecOps>()
-
-fun dump( dylib: File, disassemble: Boolean ) {
-
-	val dylibDir = dylib.parent
-	injected.execOps.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
-	injected.execOps.exec {
-		commandLine( "objdump",
-			// commands
-			"--archive-headers",
-			"--section-headers",
-			"--private-headers",
-			"--reloc",
-			"--dynamic-reloc",
-			"--syms",
-			// files
-			dylib )
-		standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+fun Task.dump( f: Any, disassemble: Boolean, injectedOps: InjectedOps ) {
+	doLast {
+		val dylib = if( f is RegularFileProperty) f.get().asFile else f as File
+		val dylibDir = dylib.parent
+		injectedOps.e.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
+		injectedOps.e.exec {
+			commandLine( "objdump",
+				// commands
+				"--archive-headers",
+				"--section-headers",
+				"--private-headers",
+				"--reloc",
+				"--dynamic-reloc",
+				"--syms",
+				// files
+				dylib )
+			standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
+		}
+		if( disassemble )
+			injectedOps.e.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+		injectedOps.e.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+		injectedOps.e.exec { commandLine( "hexdump", dylib ); standardOutput = FileOutputStream( "$dylibDir/hexdump.txt" ) }
 	}
-	if( disassemble )
-		injected.execOps.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
-	injected.execOps.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
-	injected.execOps.exec { commandLine( "hexdump", dylib ); standardOutput = FileOutputStream( "$dylibDir/hexdump.txt" ) }
 }
 dump*/

@@ -98,24 +98,30 @@ tasks {
 		group = "verification"
 		dependsOn( "jar" )
 
+		// necessary for configuration cache
+		val classpath = sigtest.asPath
+		val signatureFile = "${project.name}-sigtest.txt"
+		val jarPath = jar.get().outputs.files.asPath
+		val version = version
+
 		doLast {
 			ant.withGroovyBuilder {
 				"taskdef"(
 					"name" to "sigtest",
 					"classname" to "org.netbeans.apitest.Sigtest",
-					"classpath" to sigtest.asPath )
+					"classpath" to classpath )
 
 				"sigtest"(
 					"action" to "generate",
-					"fileName" to "${project.name}-sigtest.txt",
-					"classpath" to jar.get().outputs.files.asPath,
+					"fileName" to signatureFile,
+					"classpath" to jarPath,
 					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.themes,com.formdev.flatlaf.util",
 					"version" to version,
 					"release" to "1.8", // Java version
 					"failonerror" to "true" )
 
 				"fixcrlf"(
-					"file" to "${project.name}-sigtest.txt",
+					"file" to signatureFile,
 					"eol" to "lf" )
 			}
 		}
@@ -125,17 +131,23 @@ tasks {
 		group = "verification"
 		dependsOn( "jar" )
 
+		// necessary for configuration cache
+		val classpath = sigtest.asPath
+		val signatureFile = "${project.name}-sigtest.txt"
+		val jarPath = jar.get().outputs.files.asPath
+		val version = version
+
 		doLast {
 			ant.withGroovyBuilder {
 				"taskdef"(
 					"name" to "sigtest",
 					"classname" to "org.netbeans.apitest.Sigtest",
-					"classpath" to sigtest.asPath )
+					"classpath" to classpath )
 
 				"sigtest"(
 					"action" to "check",
-					"fileName" to "${project.name}-sigtest.txt",
-					"classpath" to jar.get().outputs.files.asPath,
+					"fileName" to signatureFile,
+					"classpath" to jarPath,
 					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.util",
 					"version" to version,
 					"release" to "1.8", // Java version

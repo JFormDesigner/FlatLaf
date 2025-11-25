@@ -43,8 +43,10 @@ var javaHome = System.getProperty( "java.home" )
 if( javaHome.endsWith( "jre" ) )
 	javaHome += "/.."
 
-interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
-val injected = project.objects.newInstance<InjectedExecOps>()
+interface InjectedOps {
+	@get:Inject val fs: FileSystemOperations
+	@get:Inject val e: ExecOperations
+}
 
 tasks {
 	register( "build-natives" ) {
@@ -96,12 +98,14 @@ tasks {
 			}
 		} )
 
+		val injectedOps = project.objects.newInstance<InjectedOps>()
+
 		doLast {
 			// sign shared library
-//			injected.execOps.exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
+//			injectedOps.e.exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
 
 			// copy shared library to flatlaf-core resources
-			copy {
+			injectedOps.fs.copy {
 				from( linkedFile )
 				into( nativesDir )
 				rename( linkedFile.get().asFile.name, libraryName )
@@ -110,9 +114,9 @@ tasks {
 /*dump
 			val dylib = linkedFile.asFile.get()
 			val dylibDir = dylib.parent
-			injected.execOps.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
-			injected.execOps.exec { commandLine( "size", "-m", dylib ); standardOutput = FileOutputStream( "$dylibDir/size-m.txt" ) }
-			injected.execOps.exec {
+			injectedOps.e.exec { commandLine( "size", dylib ); standardOutput = FileOutputStream( "$dylibDir/size.txt" ) }
+			injectedOps.e.exec { commandLine( "size", "-m", dylib ); standardOutput = FileOutputStream( "$dylibDir/size-m.txt" ) }
+			injectedOps.e.exec {
 				commandLine( "objdump",
 					// commands
 					"--archive-headers",
@@ -130,8 +134,8 @@ tasks {
 					dylib )
 				standardOutput = FileOutputStream( "$dylibDir/objdump.txt" )
 			}
-			injected.execOps.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
-			injected.execOps.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
+			injectedOps.e.exec { commandLine( "objdump", "--disassemble-all", dylib ); standardOutput = FileOutputStream( "$dylibDir/disassemble.txt" ) }
+			injectedOps.e.exec { commandLine( "objdump", "--full-contents", dylib ); standardOutput = FileOutputStream( "$dylibDir/full-contents.txt" ) }
 dump*/
 		}
 	}

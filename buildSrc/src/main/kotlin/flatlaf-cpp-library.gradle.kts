@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import org.gradle.kotlin.dsl.support.serviceOf
+
 plugins {
 	`cpp-library`
 }
@@ -37,9 +39,14 @@ tasks {
 		doFirst {
 			println( "Used Tool Chain:" )
 			println( "  - ${toolChain.get()}" )
-			println( "Available Tool Chains:" )
-			toolChains.forEach {
-				println( "  - $it" )
+		}
+
+		if( !project.gradle.serviceOf<BuildFeatures>().configurationCache.active.get() ) {
+			doFirst {
+				println( "Available Tool Chains:" )
+				toolChains.forEach {
+					println( "  - $it" )
+				}
 			}
 		}
 	}

@@ -85,27 +85,6 @@ publishing {
 			}
 		}
 	}
-
-/*
-	repositories {
-		maven {
-			name = "MavenCentral"
-
-			val releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
-			val snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
-			url = uri( if( rootProject.hasProperty( "release" ) ) releasesRepoUrl else snapshotsRepoUrl )
-
-			credentials {
-				// get from gradle.properties
-				val sonatypeUsername: String? by project
-				val sonatypePassword: String? by project
-
-				username = System.getenv( "SONATYPE_USERNAME" ) ?: sonatypeUsername
-				password = System.getenv( "SONATYPE_PASSWORD" ) ?: sonatypePassword
-			}
-		}
-	}
-*/
 }
 
 signing {
@@ -125,10 +104,22 @@ tasks.withType<Sign>().configureEach {
 	onlyIf { rootProject.hasProperty( "release" ) }
 }
 
-// check whether parallel build is enabled
-tasks.withType<AbstractPublishToMaven>().configureEach {
-	doFirst {
-		if( System.getProperty( "org.gradle.parallel" ) == "true" )
-			throw RuntimeException( "Publishing does not work correctly with enabled parallel build. Disable parallel build with VM option '-Dorg.gradle.parallel=false'." )
+tasks {
+	// check whether parallel build is enabled
+	withType<AbstractPublishToMaven>().configureEach {
+		doFirst {
+			if( System.getProperty( "org.gradle.parallel" ) == "true" )
+				throw RuntimeException( "Publishing does not work correctly with enabled parallel build. Disable parallel build with VM option '-Dorg.gradle.parallel=false'." )
+		}
+	}
+
+	register( "publishToSonatypeAndCloseStagingRepo" ) {
+		group = "publishing"
+		description = "Publish to Sonatype Maven Central and close staging repository"
+
+		dependsOn(
+			"publishToSonatype",
+			":closeSonatypeStagingRepository"
+		)
 	}
 }

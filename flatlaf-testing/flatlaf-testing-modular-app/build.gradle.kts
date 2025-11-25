@@ -32,16 +32,25 @@ flatlafModuleInfo {
 	dependsOn( ":flatlaf-fonts-inter:jar" )
 }
 
+interface InjectedOps {
+	@get:Inject val fs: FileSystemOperations
+}
+
 tasks {
 	register( "build-for-debugging" ) {
 		group = "build"
 
 		dependsOn( "build" )
 
+		// necessary for configuration cache
+		val jar = project.tasks["jar"].outputs.files
+		val runtimeJars = configurations.runtimeClasspath.get().files
+		val injectedOps = project.objects.newInstance<InjectedOps>()
+
 		doLast {
-			copy {
-				from( project.tasks["jar"].outputs )
-				from( configurations.runtimeClasspath )
+			injectedOps.fs.copy {
+				from( jar )
+				from( runtimeJars )
 				into( "run" )
 				rename( "-[0-9][0-9.]*[0-9]", "-999" )
 			}
