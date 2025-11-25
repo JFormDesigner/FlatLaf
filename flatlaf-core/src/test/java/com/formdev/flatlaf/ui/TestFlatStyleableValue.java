@@ -77,6 +77,9 @@ import com.formdev.flatlaf.icons.FlatRadioButtonMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomCheckBoxIcon;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomIcon;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomRadioButtonIcon;
 
 /**
  * @author Karl Tauber
@@ -269,11 +272,20 @@ public class TestFlatStyleableValue
 
 	@Test
 	void checkBox() {
-		JCheckBox c = new JCheckBox();
+		checkBox( new JCheckBox() );
+		checkBox( new JCheckBox( new CustomCheckBoxIcon() ) );
+		checkBox( new JCheckBox( new CustomIcon() ) );
+	}
+
+	private void checkBox( JCheckBox c ) {
 		FlatCheckBoxUI ui = (FlatCheckBoxUI) c.getUI();
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		radioButton( ui, c );
+
+		// necessary to clear FlatRadioButtonUI.oldStyleValues because
+		// ui.applyStyle(...) operates on shared instance
+		ui.uninstallUI( c );
 	}
 
 	@Test
@@ -536,20 +548,35 @@ public class TestFlatStyleableValue
 
 	@Test
 	void radioButton() {
-		JRadioButton c = new JRadioButton();
+		radioButton( new JRadioButton() );
+		radioButton( new JRadioButton( new CustomRadioButtonIcon() ) );
+		radioButton( new JRadioButton( new CustomIcon() ) );
+	}
+
+	private void radioButton( JRadioButton c ) {
 		FlatRadioButtonUI ui = (FlatRadioButtonUI) c.getUI();
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
 		radioButton( ui, c );
 
-		testFloat( c, ui, "icon.centerDiameter", 1.23f );
+		if( !(c.getIcon() instanceof CustomIcon) )
+			testFloat( c, ui, "icon.centerDiameter", 1.23f );
+
+		// necessary to clear FlatRadioButtonUI.oldStyleValues because
+		// ui.applyStyle(...) operates on shared instance
+		ui.uninstallUI( c );
 	}
 
 	private void radioButton( FlatRadioButtonUI ui, AbstractButton b ) {
 		testColor( b, ui, "disabledText", 0x123456 );
 
 		//---- icon ----
+
+		if( b.getIcon() instanceof CustomIcon ) {
+			assertEquals( null, ui.getStyleableValue( b, "icon.focusWidth" ) );
+			return;
+		}
 
 		testFloat( b, ui, "icon.focusWidth", 1.23f );
 		testColor( b, ui, "icon.focusColor", 0x123456 );

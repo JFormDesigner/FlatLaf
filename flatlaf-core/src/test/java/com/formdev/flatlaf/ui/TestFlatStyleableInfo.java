@@ -30,6 +30,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomCheckBoxIcon;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomIcon;
+import com.formdev.flatlaf.ui.TestFlatStyling.CustomRadioButtonIcon;
 
 /**
  * @author Karl Tauber
@@ -144,7 +147,12 @@ public class TestFlatStyleableInfo
 
 	@Test
 	void checkBox() {
-		JCheckBox c = new JCheckBox();
+		checkBox( new JCheckBox() );
+		checkBox( new JCheckBox( new CustomIcon() ) );
+		checkBox( new JCheckBox( new CustomCheckBoxIcon() ) );
+	}
+
+	private void checkBox( JCheckBox c ) {
 		FlatCheckBoxUI ui = (FlatCheckBoxUI) c.getUI();
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
@@ -152,6 +160,11 @@ public class TestFlatStyleableInfo
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		radioButton( expected );
+
+		// remove "icon." keys if check box has custom icon
+		Icon icon = c.getIcon();
+		if( icon != null && !(icon instanceof FlatCheckBoxIcon) )
+			expected.keySet().removeIf( key -> key.startsWith( "icon." ) );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -492,7 +505,12 @@ public class TestFlatStyleableInfo
 
 	@Test
 	void radioButton() {
-		JRadioButton c = new JRadioButton();
+		radioButton( new JRadioButton() );
+		radioButton( new JRadioButton( new CustomIcon() ) );
+		radioButton( new JRadioButton( new CustomRadioButtonIcon() ) );
+	}
+
+	private void radioButton( JRadioButton c ) {
 		FlatRadioButtonUI ui = (FlatRadioButtonUI) c.getUI();
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
@@ -503,6 +521,11 @@ public class TestFlatStyleableInfo
 		expectedMap( expected,
 			"icon.centerDiameter", float.class
 		);
+
+		// remove "icon." keys if radio button has custom icon
+		Icon icon = c.getIcon();
+		if( icon != null && !(icon instanceof FlatRadioButtonIcon) )
+			expected.keySet().removeIf( key -> key.startsWith( "icon." ) );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
