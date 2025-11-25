@@ -19,7 +19,9 @@ package com.formdev.flatlaf.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
@@ -294,13 +296,22 @@ public class TestFlatStyling
 
 	@Test
 	void checkBox() {
-		JCheckBox c = new JCheckBox();
+		checkBox( new JCheckBox() );
+		checkBox( new JCheckBox( new CustomIcon() ) );
+		checkBox( new JCheckBox( new CustomCheckBoxIcon() ) );
+	}
+
+	private void checkBox( JCheckBox c ) {
 		FlatCheckBoxUI ui = (FlatCheckBoxUI) c.getUI();
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		radioButton( ui, c );
+
+		// necessary to clear FlatRadioButtonUI.oldStyleValues because
+		// ui.applyStyle(...) operates on shared instance
+		ui.uninstallUI( c );
 	}
 
 	@Test
@@ -651,14 +662,24 @@ public class TestFlatStyling
 
 	@Test
 	void radioButton() {
-		JRadioButton c = new JRadioButton();
+		radioButton( new JRadioButton() );
+		radioButton( new JRadioButton( new CustomIcon() ) );
+		radioButton( new JRadioButton( new CustomRadioButtonIcon() ) );
+	}
+
+	private void radioButton( JRadioButton c ) {
 		FlatRadioButtonUI ui = (FlatRadioButtonUI) c.getUI();
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
 		radioButton( ui, c );
 
-		ui.applyStyle( c, "icon.centerDiameter: 8" );
+		if( !(c.getIcon() instanceof CustomIcon) )
+			ui.applyStyle( c, "icon.centerDiameter: 8" );
+
+		// necessary to clear FlatRadioButtonUI.oldStyleValues because
+		// ui.applyStyle(...) operates on shared instance
+		ui.uninstallUI( c );
 	}
 
 	private void radioButton( FlatRadioButtonUI ui, AbstractButton b ) {
@@ -675,6 +696,9 @@ public class TestFlatStyling
 		ui.applyStyle( b, "iconTextGap: 4" );
 
 		//---- icon ----
+
+		if( b.getIcon() instanceof CustomIcon )
+			return;
 
 		ui.applyStyle( b, "icon.focusWidth: 1.5" );
 		ui.applyStyle( b, "icon.focusColor: #fff" );
@@ -1564,5 +1588,35 @@ public class TestFlatStyling
 
 		UIManager.put( "test.enum", null );
 		assertEquals( SomeEnum.enumValue1, FlatUIUtils.getUIEnum( "test.enum", SomeEnum.class, SomeEnum.enumValue1 ) );
+	}
+
+	//---- class CustomIcon ---------------------------------------------------
+
+	static class CustomIcon
+		implements Icon
+	{
+		@Override public void paintIcon( Component c, Graphics g, int x, int y ) {}
+		@Override public int getIconWidth() { return 1; }
+		@Override public int getIconHeight() { return 1; }
+	}
+
+	//---- class CustomCheckBoxIcon ----------------------------------------
+
+	static class CustomCheckBoxIcon
+		extends FlatCheckBoxIcon
+	{
+		CustomCheckBoxIcon() {
+			background = Color.green;
+		}
+	}
+
+	//---- class CustomRadioButtonIcon ----------------------------------------
+
+	static class CustomRadioButtonIcon
+		extends FlatRadioButtonIcon
+	{
+		CustomRadioButtonIcon() {
+			background = Color.green;
+		}
 	}
 }
