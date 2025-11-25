@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - System File Chooser allows using **operating system file dialogs** in Java
   Swing applications. (PR #988)
+- Zooming API. (PR #1051)
 
 #### Fixed bugs
 
