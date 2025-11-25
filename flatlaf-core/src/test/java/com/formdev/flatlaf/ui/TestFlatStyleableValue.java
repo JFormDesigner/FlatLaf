@@ -67,6 +67,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatClearIcon;
@@ -1322,6 +1323,13 @@ public class TestFlatStyleableValue
 		testValue( icon, "searchIconColor", Color.WHITE );
 		testValue( icon, "searchIconHoverColor", Color.WHITE );
 		testValue( icon, "searchIconPressedColor", Color.WHITE );
+	}
+
+	@Test
+	void flatCapsLockIcon() {
+		FlatCapsLockIcon icon = new FlatCapsLockIcon();
+
+		testValue( icon, "capsLockIconColor", Color.WHITE );
 	}
 
 	//---- class TestIcon -----------------------------------------------------

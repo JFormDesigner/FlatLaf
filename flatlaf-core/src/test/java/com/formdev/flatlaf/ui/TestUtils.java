@@ -17,9 +17,14 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Font;
+import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
 import javax.swing.UIManager;
+import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -57,12 +62,44 @@ public class TestUtils
 
 	public static void assertMapEquals( Map<?, ?> expected, Map<?, ?> actual ) {
 		if( !Objects.equals( expected, actual ) ) {
-			String expectedStr = String.valueOf( expected ).replace( ", ", ",\n" );
-			String actualStr = String.valueOf( actual ).replace( ", ", ",\n" );
+			String expectedStr = String.valueOf( new TreeMap<>( expected ) ).replace( ", ", ",\n" );
+			String actualStr = String.valueOf( new TreeMap<>( actual ) ).replace( ", ", ",\n" );
 			String msg = String.format( "expected: <%s> but was: <%s>", expectedStr, actualStr );
 
 			// pass expected/actual strings to exception for nice diff in IDE
 			throw new AssertionFailedError( msg, expectedStr, actualStr );
 		}
+	}
+
+	public static void checkImplementedTests( Set<String> excludes, Class<?> baseClass, Class<?>... classes ) {
+		Set<String> expected = getTestMethods( baseClass );
+
+		for( Class<?> cls : classes ) {
+			Set<String> actual = getTestMethods( cls );
+
+			for( String methodName : expected ) {
+				if( !actual.contains( methodName ) && !excludes.contains( methodName ) ) {
+					throw new AssertionFailedError( "missing " + cls.getSimpleName() + '.' + methodName
+						+ "() for " + baseClass.getSimpleName() + '.' + methodName + "()" );
+				}
+			}
+
+			for( String methodName : actual ) {
+				if( !expected.contains( methodName ) && !excludes.contains( methodName ) ) {
+					throw new AssertionFailedError( "missing " + baseClass.getSimpleName() + '.' + methodName
+						+ "() for " + cls.getSimpleName() + '.' + methodName + "()" );
+				}
+			}
+		}
+	}
+
+	private static Set<String> getTestMethods( Class<?> cls ) {
+		HashSet<String> tests = new HashSet<>();
+		Method[] methods = cls.getDeclaredMethods();
+		for( Method m : methods ) {
+			if( m.isAnnotationPresent( Test.class ) )
+				tests.add( m.getName() );
+		}
+		return tests;
 	}
 }

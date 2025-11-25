@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -230,7 +229,8 @@ public class FlatPasswordFieldUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = super.getStyleableInfos( c );
-		infos.put( "capsLockIconColor", Color.class );
+		if( capsLockIcon instanceof FlatCapsLockIcon )
+			infos.putAll( ((FlatCapsLockIcon)capsLockIcon).getStyleableInfos() );
 		return infos;
 	}
 

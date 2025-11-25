@@ -23,8 +23,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -50,6 +53,14 @@ public class TestFlatStyling
 		FlatLaf.setGlobalExtraDefaults( globalExtraDefaults );
 
 		TestUtils.setup( false );
+
+		Set<String> excludes = new HashSet<>();
+		Collections.addAll( excludes,
+			"parse", "parseIfFunction", "parseColorFunctions",
+			"parseReferences", "parseVariables", "parseRecursiveVariables",
+			"enumField", "enumProperty", "enumUIDefaults" );
+		TestUtils.checkImplementedTests( excludes, TestFlatStyling.class,
+			TestFlatStyleableValue.class, TestFlatStyleableInfo.class );
 	}
 
 	@AfterAll
@@ -1366,6 +1377,16 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void flatScrollPaneBorder() {
+		FlatScrollPaneBorder border = new FlatScrollPaneBorder();
+
+		// FlatScrollPaneBorder extends FlatBorder
+		flatBorder( border );
+
+		border.applyStyleProperty( "arc", 6 );
+	}
+
+	@Test
 	void flatTextBorder() {
 		FlatTextBorder border = new FlatTextBorder();
 
@@ -1562,6 +1583,13 @@ public class TestFlatStyling
 		icon.applyStyleProperty( "searchIconColor", Color.WHITE );
 		icon.applyStyleProperty( "searchIconHoverColor", Color.WHITE );
 		icon.applyStyleProperty( "searchIconPressedColor", Color.WHITE );
+	}
+
+	@Test
+	void flatCapsLockIcon() {
+		FlatCapsLockIcon icon = new FlatCapsLockIcon();
+
+		icon.applyStyleProperty( "capsLockIconColor", Color.WHITE );
 	}
 
 	//---- enums --------------------------------------------------------------

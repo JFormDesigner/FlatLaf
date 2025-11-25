@@ -1136,6 +1136,16 @@ public class TestFlatStyleableInfo
 	}
 
 	@Test
+	void flatScrollPaneBorder() {
+		FlatScrollPaneBorder border = new FlatScrollPaneBorder();
+
+		Map<String, Class<?>> expected = new LinkedHashMap<>();
+		flatScrollPaneBorder( expected );
+
+		assertMapEquals( expected, border.getStyleableInfos() );
+	}
+
+	@Test
 	void flatTextBorder() {
 		FlatTextBorder border = new FlatTextBorder();
 
@@ -1314,6 +1324,58 @@ public class TestFlatStyleableInfo
 			"pressedBackground", Color.class,
 			"questionMarkColor", Color.class,
 			"disabledQuestionMarkColor", Color.class
+		);
+
+		assertMapEquals( expected, icon.getStyleableInfos() );
+	}
+
+	@Test
+	void flatClearIcon() {
+		FlatClearIcon icon = new FlatClearIcon();
+
+		Map<String, Class<?>> expected = expectedMap(
+			"clearIconColor", Color.class,
+			"clearIconHoverColor", Color.class,
+			"clearIconPressedColor", Color.class
+		);
+
+		assertMapEquals( expected, icon.getStyleableInfos() );
+	}
+
+	@Test
+	void flatSearchIcon() {
+		FlatSearchIcon icon = new FlatSearchIcon();
+
+		Map<String, Class<?>> expected = new LinkedHashMap<>();
+		flatSearchIcon( expected );
+
+		assertMapEquals( expected, icon.getStyleableInfos() );
+	}
+
+	@Test
+	void flatSearchWithHistoryIcon() {
+		FlatSearchWithHistoryIcon icon = new FlatSearchWithHistoryIcon();
+
+		Map<String, Class<?>> expected = new LinkedHashMap<>();
+		flatSearchIcon( expected );
+
+		assertMapEquals( expected, icon.getStyleableInfos() );
+	}
+
+	private void flatSearchIcon( Map<String, Class<?>> expected ) {
+		expectedMap( expected,
+			"searchIconColor", Color.class,
+			"searchIconHoverColor", Color.class,
+			"searchIconPressedColor", Color.class
+		);
+	}
+
+	@Test
+	void flatCapsLockIcon() {
+		FlatCapsLockIcon icon = new FlatCapsLockIcon();
+
+		Map<String, Class<?>> expected = expectedMap(
+			"capsLockIconColor", Color.class
 		);
 
 		assertMapEquals( expected, icon.getStyleableInfos() );
