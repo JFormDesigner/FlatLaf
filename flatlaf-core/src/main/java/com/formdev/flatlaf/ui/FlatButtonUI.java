@@ -58,8 +58,8 @@ import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -369,7 +369,7 @@ public class FlatButtonUI
 	/** @since 2 */
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		if( key.startsWith( "help." ) ) {
-			if( !(helpButtonIcon instanceof FlatHelpButtonIcon) )
+			if( !(helpButtonIcon instanceof StyleableObject) )
 				throw new UnknownStyleException( key );
 
 			if( helpButtonIconShared ) {
@@ -378,7 +378,7 @@ public class FlatButtonUI
 			}
 
 			key = key.substring( "help.".length() );
-			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
+			return ((StyleableObject)helpButtonIcon).applyStyleProperty( key, value );
 		}
 
 		// update internal values; otherwise isCustomBackground() and isCustomForeground() would return wrong results
@@ -399,8 +399,8 @@ public class FlatButtonUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this, c.getBorder() );
-		if( helpButtonIcon instanceof FlatHelpButtonIcon )
-			FlatStylingSupport.putAllPrefixKey( infos, "help.", ((FlatHelpButtonIcon)helpButtonIcon).getStyleableInfos() );
+		if( helpButtonIcon instanceof StyleableObject )
+			FlatStylingSupport.putAllPrefixKey( infos, "help.", ((StyleableObject)helpButtonIcon).getStyleableInfos() );
 		return infos;
 	}
 
@@ -408,8 +408,8 @@ public class FlatButtonUI
 	@Override
 	public Object getStyleableValue( JComponent c, String key ) {
 		if( key.startsWith( "help." ) ) {
-			return (helpButtonIcon instanceof FlatHelpButtonIcon)
-				? ((FlatHelpButtonIcon)helpButtonIcon).getStyleableValue( key.substring( "help.".length() ) )
+			return (helpButtonIcon instanceof StyleableObject)
+				? ((StyleableObject)helpButtonIcon).getStyleableValue( key.substring( "help.".length() ) )
 				: null;
 		}
 

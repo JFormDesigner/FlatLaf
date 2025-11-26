@@ -51,6 +51,9 @@ import com.formdev.flatlaf.util.StringUtils;
  */
 public class FlatStylingSupport
 {
+
+	//---- annotations --------------------------------------------------------
+
 	/**
 	 * Indicates that a field is intended to be used by FlatLaf styling support.
 	 * <p>
@@ -98,17 +101,56 @@ public class FlatStylingSupport
 	}
 
 
+	//---- interfaces ---------------------------------------------------------
+
 	/** @since 2 */
 	public interface StyleableUI {
 		Map<String, Class<?>> getStyleableInfos( JComponent c ) throws IllegalArgumentException;
 		/** @since 2.5 */ Object getStyleableValue( JComponent c, String key ) throws IllegalArgumentException;
 	}
 
-	/** @since 2 */
-	public interface StyleableBorder {
-		Object applyStyleProperty( String key, Object value );
-		Map<String, Class<?>> getStyleableInfos() throws IllegalArgumentException;
-		/** @since 2.5 */ Object getStyleableValue( String key ) throws IllegalArgumentException;
+	/**
+	 * An object that implements this interface is intended to support FlatLaf styling.
+	 *
+	 * @since 3.7
+	 */
+	public interface StyleableObject {
+		/**
+		 * Applies the given value to this object.
+		 * <p>
+		 * The default implementation invokes {@link FlatStylingSupport#applyToAnnotatedObject(Object, String, Object)}.
+		 *
+		 * @param key the name of the property
+		 * @param value the new value
+		 * @return the old value of the property
+		 */
+		default Object applyStyleProperty( String key, Object value )
+			throws UnknownStyleException, IllegalArgumentException
+		{
+			return applyToAnnotatedObject( this, key, value );
+		}
+
+		/**
+		 * Returns a map of all styleable properties.
+		 * The key is the name of the property and the value the type of the property.
+		 * <p>
+		 * The default implementation invokes {@link FlatStylingSupport#getAnnotatedStyleableInfos(Object)}.
+		 */
+		default Map<String, Class<?>> getStyleableInfos() throws IllegalArgumentException {
+			return getAnnotatedStyleableInfos( this );
+		}
+
+		/**
+		 * Returns the current value for the given property key.
+		 * <p>
+		 * The default implementation invokes {@link FlatStylingSupport#getAnnotatedStyleableValue(Object, String)}.
+		 *
+		 * @param key the name of the property
+		 * @return the current value of the property
+		 */
+		default Object getStyleableValue( String key ) throws IllegalArgumentException {
+			return getAnnotatedStyleableValue( this, key );
+		}
 	}
 
 	/** @since 2.5 */
@@ -116,6 +158,8 @@ public class FlatStylingSupport
 		MethodHandles.Lookup getLookupForStyling();
 	}
 
+
+	//---- methods ------------------------------------------------------------
 
 	/**
 	 * Returns the style specified in client property {@link FlatClientProperties#STYLE}.
@@ -675,7 +719,7 @@ public class FlatStylingSupport
 		} catch( UnknownStyleException ex ) {
 			// apply to border
 			Border border = c.getBorder();
-			if( border instanceof StyleableBorder ) {
+			if( border instanceof StyleableObject ) {
 				if( borderShared.get() ) {
 					border = cloneBorder( border );
 					c.setBorder( border );
@@ -683,7 +727,7 @@ public class FlatStylingSupport
 				}
 
 				try {
-					return ((StyleableBorder)border).applyStyleProperty( key, value );
+					return ((StyleableObject)border).applyStyleProperty( key, value );
 				} catch( UnknownStyleException ex2 ) {
 					// ignore
 				}
@@ -833,8 +877,8 @@ public class FlatStylingSupport
 	}
 
 	public static void collectStyleableInfos( Border border, Map<String, Class<?>> infos ) {
-		if( border instanceof StyleableBorder )
-			infos.putAll( ((StyleableBorder)border).getStyleableInfos() );
+		if( border instanceof StyleableObject )
+			infos.putAll( ((StyleableObject)border).getStyleableInfos() );
 	}
 
 	public static void putAllPrefixKey( Map<String, Class<?>> infos, String keyPrefix, Map<String, Class<?>> infos2 ) {
@@ -882,8 +926,8 @@ public class FlatStylingSupport
 	}
 
 	public static Object getAnnotatedStyleableValue( Object obj, Border border, String key ) {
-		if( border instanceof StyleableBorder ) {
-			Object value = ((StyleableBorder)border).getStyleableValue( key );
+		if( border instanceof StyleableObject ) {
+			Object value = ((StyleableObject)border).getStyleableValue( key );
 			if( value != null )
 				return value;
 		}

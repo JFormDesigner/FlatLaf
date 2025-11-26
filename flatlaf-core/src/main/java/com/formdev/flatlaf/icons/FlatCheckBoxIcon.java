@@ -24,13 +24,12 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
-import com.formdev.flatlaf.ui.FlatStylingSupport;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -103,6 +102,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  */
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
+	implements StyleableObject
 {
 	protected final String style = UIManager.getString( getPropertyPrefix() + "icon.style" );
 	@Styleable protected float focusWidth = getUIFloat( "CheckBox.icon.focusWidth", UIManager.getInt( "Component.focusWidth" ), style );
@@ -195,21 +195,6 @@ public class FlatCheckBoxIcon
 
 	public FlatCheckBoxIcon() {
 		super( ICON_SIZE, ICON_SIZE, null );
-	}
-
-	/** @since 2 */
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

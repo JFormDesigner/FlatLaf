@@ -92,8 +92,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
@@ -670,7 +670,7 @@ public class FlatTabbedPaneUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		// close icon
 		if( key.startsWith( "close" ) ) {
-			if( !(closeIcon instanceof FlatTabbedPaneCloseIcon) )
+			if( !(closeIcon instanceof StyleableObject) )
 				throw new UnknownStyleException( key );
 
 			if( closeIconShared ) {
@@ -678,7 +678,7 @@ public class FlatTabbedPaneUI
 				closeIconShared = false;
 			}
 
-			return ((FlatTabbedPaneCloseIcon)closeIcon).applyStyleProperty( key, value );
+			return ((StyleableObject)closeIcon).applyStyleProperty( key, value );
 		}
 
 		if( value instanceof String ) {
@@ -720,8 +720,8 @@ public class FlatTabbedPaneUI
 		infos.put( "tabAreaInsets", Insets.class );
 		infos.put( "textIconGap", int.class );
 		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
-		if( closeIcon instanceof FlatTabbedPaneCloseIcon )
-			infos.putAll( ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableInfos() );
+		if( closeIcon instanceof StyleableObject )
+			infos.putAll( ((StyleableObject)closeIcon).getStyleableInfos() );
 		return infos;
 	}
 
@@ -730,8 +730,8 @@ public class FlatTabbedPaneUI
 	public Object getStyleableValue( JComponent c, String key ) {
 		// close icon
 		if( key.startsWith( "close" ) ) {
-			return (closeIcon instanceof FlatTabbedPaneCloseIcon)
-				? ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableValue( key )
+			return (closeIcon instanceof StyleableObject)
+				? ((StyleableObject)closeIcon).getStyleableValue( key )
 				: null;
 		}
 

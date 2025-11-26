@@ -23,7 +23,7 @@ import java.awt.Insets;
 import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -37,7 +37,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatPopupMenuBorder
 	extends FlatLineBorder
-	implements StyleableBorder
+	implements StyleableObject
 {
 	private Color borderColor;
 

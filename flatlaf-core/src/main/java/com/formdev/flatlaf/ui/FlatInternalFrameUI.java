@@ -35,7 +35,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 
@@ -209,7 +209,7 @@ public class FlatInternalFrameUI
 
 	public static class FlatInternalFrameBorder
 		extends FlatEmptyBorder
-		implements StyleableBorder
+		implements StyleableObject
 	{
 		@Styleable protected Color activeBorderColor = UIManager.getColor( "InternalFrame.activeBorderColor" );
 		@Styleable protected Color inactiveBorderColor = UIManager.getColor( "InternalFrame.inactiveBorderColor" );

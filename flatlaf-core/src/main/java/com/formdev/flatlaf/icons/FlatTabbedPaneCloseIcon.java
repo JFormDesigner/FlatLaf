@@ -22,11 +22,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
-import com.formdev.flatlaf.ui.FlatStylingSupport;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -48,6 +47,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  */
 public class FlatTabbedPaneCloseIcon
 	extends FlatAbstractIcon
+	implements StyleableObject
 {
 	@Styleable protected Dimension closeSize = UIManager.getDimension( "TabbedPane.closeSize" );
 	@Styleable protected int closeArc = UIManager.getInt( "TabbedPane.closeArc" );
@@ -63,21 +63,6 @@ public class FlatTabbedPaneCloseIcon
 
 	public FlatTabbedPaneCloseIcon() {
 		super( 16, 16, null );
-	}
-
-	/** @since 2 */
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

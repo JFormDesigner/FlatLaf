@@ -23,7 +23,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
-import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -32,7 +31,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.util.DerivedColor;
 
 /**
@@ -67,7 +66,7 @@ import com.formdev.flatlaf.util.DerivedColor;
  */
 public class FlatBorder
 	extends BasicBorders.MarginBorder
-	implements StyleableBorder
+	implements StyleableObject
 {
 	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	@Styleable protected float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
@@ -91,24 +90,6 @@ public class FlatBorder
 	/** @since 2 */ @Styleable protected String outline;
 	/** @since 2 */ @Styleable protected Color outlineColor;
 	/** @since 2 */ @Styleable protected Color outlineFocusedColor;
-
-	/** @since 2 */
-	@Override
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	@Override
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	@Override
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
-	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {

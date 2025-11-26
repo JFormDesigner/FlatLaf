@@ -24,11 +24,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
-import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
-import com.formdev.flatlaf.ui.FlatStylingSupport;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -54,6 +53,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  */
 public class FlatHelpButtonIcon
 	extends FlatAbstractIcon
+	implements StyleableObject
 {
 	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	@Styleable protected Color focusColor = UIManager.getColor( "Component.focusColor" );
@@ -74,21 +74,6 @@ public class FlatHelpButtonIcon
 
 	public FlatHelpButtonIcon() {
 		super( 0, 0, null );
-	}
-
-	/** @since 2 */
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

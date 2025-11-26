@@ -21,12 +21,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStylingSupport;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 
 /**
  * "arrow" icon for {@link javax.swing.JMenu}.
@@ -41,6 +40,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
  */
 public class FlatMenuArrowIcon
 	extends FlatAbstractIcon
+	implements StyleableObject
 {
 	@Styleable protected String arrowType = UIManager.getString( "Component.arrowType" );
 	@Styleable protected Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
@@ -49,21 +49,6 @@ public class FlatMenuArrowIcon
 
 	public FlatMenuArrowIcon() {
 		super( 6, 10, null );
-	}
-
-	/** @since 2 */
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

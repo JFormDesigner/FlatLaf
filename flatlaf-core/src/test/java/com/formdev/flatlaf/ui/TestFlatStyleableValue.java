@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.awt.Component;
@@ -77,6 +78,7 @@ import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
 import com.formdev.flatlaf.icons.FlatRadioButtonMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.ui.TestFlatStyling.CustomCheckBoxIcon;
@@ -181,17 +183,13 @@ public class TestFlatStyleableValue
 	}
 
 	private void testValue( Object obj, String key, Object value ) {
-		try {
-			Method m = obj.getClass().getMethod( "applyStyleProperty", String.class, Object.class );
-			m.invoke( obj, key, value );
+		assertInstanceOf( StyleableObject.class, obj );
 
-			m = obj.getClass().getMethod( "getStyleableValue", String.class );
-			Object actualValue = m.invoke( obj, key );
+		StyleableObject sobj = (StyleableObject) obj;
+		sobj.applyStyleProperty( key, value );
+		Object actualValue = sobj.getStyleableValue( key );
 
-			assertEquals( value, actualValue );
-		} catch( Exception ex ) {
-			Assertions.fail( ex );
-		}
+		assertEquals( value, actualValue );
 	}
 
 	//---- components ---------------------------------------------------------

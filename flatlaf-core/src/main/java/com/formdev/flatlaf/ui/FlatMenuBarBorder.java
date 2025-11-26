@@ -25,7 +25,7 @@ import java.util.Map;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 
 /**
  * Border for {@link javax.swing.JMenuBar}.
@@ -36,7 +36,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
  */
 public class FlatMenuBarBorder
 	extends FlatMarginBorder
-	implements StyleableBorder
+	implements StyleableObject
 {
 	@Styleable protected Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
 

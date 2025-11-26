@@ -45,6 +45,7 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -204,7 +205,7 @@ public class FlatRadioButtonUI
 		// style icon
 		if( key.startsWith( "icon." ) ) {
 			Icon icon = getRealIcon( b );
-			if( !(icon instanceof FlatCheckBoxIcon) )
+			if( !(icon instanceof StyleableObject) )
 				throw new UnknownStyleException( key );
 
 			if( icon == this.icon && iconShared ) {
@@ -213,7 +214,7 @@ public class FlatRadioButtonUI
 			}
 
 			key = key.substring( "icon.".length() );
-			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
+			return ((StyleableObject)icon).applyStyleProperty( key, value );
 		}
 
 		if( "iconTextGap".equals( key ) && value instanceof Integer )
@@ -227,8 +228,8 @@ public class FlatRadioButtonUI
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		Icon icon = getRealIcon( c );
-		if( icon instanceof FlatCheckBoxIcon ) {
-			for( Map.Entry<String, Class<?>> e : ((FlatCheckBoxIcon)icon).getStyleableInfos().entrySet() )
+		if( icon instanceof StyleableObject ) {
+			for( Map.Entry<String, Class<?>> e : ((StyleableObject)icon).getStyleableInfos().entrySet() )
 				infos.put( "icon.".concat( e.getKey() ), e.getValue() );
 		}
 		return infos;
@@ -240,8 +241,8 @@ public class FlatRadioButtonUI
 		// style icon
 		if( key.startsWith( "icon." ) ) {
 			Icon icon = getRealIcon( c );
-			return (icon instanceof FlatCheckBoxIcon)
-				? ((FlatCheckBoxIcon)icon).getStyleableValue( key.substring( "icon.".length() ) )
+			return (icon instanceof StyleableObject)
+				? ((StyleableObject)icon).getStyleableValue( key.substring( "icon.".length() ) )
 				: null;
 		}
 

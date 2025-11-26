@@ -21,12 +21,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStylingSupport;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 
 /**
  * Icon for {@link javax.swing.JCheckBoxMenuItem}.
@@ -40,6 +39,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
  */
 public class FlatCheckBoxMenuItemIcon
 	extends FlatAbstractIcon
+	implements StyleableObject
 {
 	@Styleable protected Color checkmarkColor = UIManager.getColor( "CheckBoxMenuItem.icon.checkmarkColor" );
 	@Styleable protected Color disabledCheckmarkColor = UIManager.getColor( "CheckBoxMenuItem.icon.disabledCheckmarkColor" );
@@ -47,21 +47,6 @@ public class FlatCheckBoxMenuItemIcon
 
 	public FlatCheckBoxMenuItemIcon() {
 		super( 15, 15, null );
-	}
-
-	/** @since 2 */
-	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
-	}
-
-	/** @since 2 */
-	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
-	}
-
-	/** @since 2.5 */
-	public Object getStyleableValue( String key ) {
-		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override
