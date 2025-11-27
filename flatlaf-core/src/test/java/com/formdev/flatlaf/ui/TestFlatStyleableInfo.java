@@ -149,7 +149,15 @@ public class TestFlatStyleableInfo
 	@Test
 	void checkBox() {
 		checkBox( new JCheckBox() );
+	}
+
+	@Test
+	void checkBox2() {
 		checkBox( new JCheckBox( new CustomIcon() ) );
+	}
+
+	@Test
+	void checkBox3() {
 		checkBox( new JCheckBox( new CustomCheckBoxIcon() ) );
 	}
 
@@ -507,7 +515,15 @@ public class TestFlatStyleableInfo
 	@Test
 	void radioButton() {
 		radioButton( new JRadioButton() );
+	}
+
+	@Test
+	void radioButton2() {
 		radioButton( new JRadioButton( new CustomIcon() ) );
+	}
+
+	@Test
+	void radioButton3() {
 		radioButton( new JRadioButton( new CustomRadioButtonIcon() ) );
 	}
 

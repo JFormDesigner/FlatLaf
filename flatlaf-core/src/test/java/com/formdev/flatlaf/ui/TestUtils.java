@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
@@ -65,6 +66,19 @@ public class TestUtils
 			String expectedStr = String.valueOf( new TreeMap<>( expected ) ).replace( ", ", ",\n" );
 			String actualStr = String.valueOf( new TreeMap<>( actual ) ).replace( ", ", ",\n" );
 			String msg = String.format( "expected: <%s> but was: <%s>", expectedStr, actualStr );
+
+			// pass expected/actual strings to exception for nice diff in IDE
+			throw new AssertionFailedError( msg, expectedStr, actualStr );
+		}
+	}
+
+	public static void assertSetEquals( Set<?> expected, Set<?> actual, String message ) {
+		if( !Objects.equals( expected, actual ) ) {
+			String expectedStr = String.valueOf( new TreeSet<>( expected ) ).replace( ", ", ",\n" );
+			String actualStr = String.valueOf( new TreeSet<>( actual ) ).replace( ", ", ",\n" );
+			String msg = String.format( "expected: <%s> but was: <%s>", expectedStr, actualStr );
+			if( message != null )
+				msg = message + " ==> " + msg;
 
 			// pass expected/actual strings to exception for nice diff in IDE
 			throw new AssertionFailedError( msg, expectedStr, actualStr );

@@ -26,14 +26,21 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.JTextComponent;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 import com.formdev.flatlaf.icons.*;
 import com.formdev.flatlaf.ui.FlatInternalFrameUI.FlatInternalFrameBorder;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
@@ -58,65 +65,98 @@ public class TestFlatStyleableValue
 		TestUtils.cleanup();
 	}
 
+	private Map<String, Class<?>> expectedStyleableInfos;
+	private final Set<String> testedKeys = new HashSet<>();
+
+	@BeforeEach
+	void beforeTest() {
+		expectedStyleableInfos = null;
+		testedKeys.clear();
+	}
+
+	@AfterEach
+	void afterTest() {
+		if( expectedStyleableInfos == null )
+			throw new AssertionFailedError( "missing 'expectedStyleableInfos'" );
+
+		TestUtils.assertSetEquals( expectedStyleableInfos.keySet(), testedKeys, "untested keys" );
+	}
+
 	private void testString( JComponent c, StyleableUI ui, String key, String value ) {
 		applyStyle( c, ui, String.format( "%s: %s", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testBoolean( JComponent c, StyleableUI ui, String key, boolean value ) {
 		applyStyle( c, ui, String.format( "%s: %s", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testInteger( JComponent c, StyleableUI ui, String key, int value ) {
 		applyStyle( c, ui, String.format( "%s: %d", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testFloat( JComponent c, StyleableUI ui, String key, float value ) {
 		applyStyle( c, ui, String.format( Locale.ENGLISH, "%s: %f", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testColor( JComponent c, StyleableUI ui, String key, int rgb ) {
 		applyStyle( c, ui, String.format( "%s: #%06x", key, rgb ) );
 		assertEquals( new Color( rgb ), ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testInsets( JComponent c, StyleableUI ui, String key, int top, int left, int bottom, int right ) {
 		applyStyle( c,ui, String.format( "%s: %d,%d,%d,%d", key, top, left, bottom, right ) );
 		assertEquals( new Insets( top, left, bottom, right ), ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testDimension( JComponent c, StyleableUI ui, String key, int width, int height ) {
 		applyStyle( c,ui, String.format( "%s: %d,%d", key, width, height ) );
 		assertEquals( new Dimension( width, height ), ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testFont( JComponent c, StyleableUI ui, String key, String style, Font expectedFont ) {
 		applyStyle( c,ui, String.format( "%s: %s", key, style ) );
 		assertEquals( expectedFont, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void testIcon( JComponent c, StyleableUI ui, String key, String classname, Icon expectedIcon ) {
 		applyStyle( c,ui, String.format( "%s: %s", key, classname ) );
 		assertEquals( expectedIcon, ui.getStyleableValue( c, key ) );
+		testedKeys.add( key );
 	}
 
 	private void applyStyle( JComponent c, StyleableUI ui, String style ) {
-		Method m = findMethod( ui, "applyStyle", Object.class );
+		Class<?> uiClass = ui.getClass();
+		Class<?> compClass = c.getClass();
+		CacheKey key = new CacheKey( uiClass, compClass );
+
+		Method m = methodCache.get( key );
 		if( m == null )
-			m = findMethod( ui, "applyStyle", c.getClass(), Object.class );
+			m = findMethod( uiClass, "applyStyle", Object.class );
 		if( m == null )
-			m = findMethod( ui, "applyStyle", c.getClass().getSuperclass(), Object.class );
+			m = findMethod( uiClass, "applyStyle", compClass, Object.class );
 		if( m == null )
-			m = findMethod( ui, "applyStyle", c.getClass().getSuperclass().getSuperclass(), Object.class );
+			m = findMethod( uiClass, "applyStyle", compClass.getSuperclass(), Object.class );
+		if( m == null )
+			m = findMethod( uiClass, "applyStyle", compClass.getSuperclass().getSuperclass(), Object.class );
 		if( m == null ) {
-			Assertions.fail( "missing method '" + ui.getClass()
-				+ ".applyStyle( Object )' or 'applyStyle( " + c.getClass().getSimpleName()
+			Assertions.fail( "missing method '" + uiClass
+				+ ".applyStyle( Object )' or 'applyStyle( " + compClass.getSimpleName()
 				+ ", Object )'" );
 			return;
 		}
+		methodCache.put( key, m );
 
 		try {
 			m.setAccessible( true );
@@ -129,8 +169,8 @@ public class TestFlatStyleableValue
 		}
 	}
 
-	private Method findMethod( StyleableUI ui, String name, Class<?>... parameterTypes ) {
-		for( Class<?> cls = ui.getClass(); cls != null; cls = cls.getSuperclass() ) {
+	private Method findMethod( Class<?> uiClass, String name, Class<?>... parameterTypes ) {
+		for( Class<?> cls = uiClass; cls != null; cls = cls.getSuperclass() ) {
 			try {
 				return cls.getDeclaredMethod( name, parameterTypes );
 			} catch( Exception ex ) {
@@ -140,6 +180,28 @@ public class TestFlatStyleableValue
 		return null;
 	}
 
+	private static class CacheKey {
+		private final Class<?> uiClass;
+		private final Class<?> compClass;
+
+		CacheKey( Class<?> uiClass, Class<?> compClass ) {
+			this.uiClass = uiClass;
+			this.compClass = compClass;
+		}
+
+		@Override
+		public boolean equals( Object obj ) {
+			return uiClass == ((CacheKey)obj).uiClass && compClass == ((CacheKey)obj).compClass;
+		}
+
+		@Override
+		public int hashCode() {
+			return uiClass.hashCode() * 13 + compClass.hashCode();
+		}
+	}
+
+	private final Map<CacheKey, Method> methodCache = new HashMap<>();
+
 	private void testValue( Object obj, String key, Object value ) {
 		assertInstanceOf( StyleableObject.class, obj );
 
@@ -148,6 +210,8 @@ public class TestFlatStyleableValue
 		Object actualValue = sobj.getStyleableValue( key );
 
 		assertEquals( value, actualValue );
+
+		testedKeys.add( key );
 	}
 
 	//---- components ---------------------------------------------------------
@@ -156,6 +220,7 @@ public class TestFlatStyleableValue
 	void button() {
 		JButton c = new JButton();
 		FlatButtonUI ui = (FlatButtonUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		button( c, ui );
 
@@ -231,12 +296,21 @@ public class TestFlatStyleableValue
 	@Test
 	void checkBox() {
 		checkBox( new JCheckBox() );
+	}
+
+	@Test
+	void checkBox2() {
 		checkBox( new JCheckBox( new CustomCheckBoxIcon() ) );
+	}
+
+	@Test
+	void checkBox3() {
 		checkBox( new JCheckBox( new CustomIcon() ) );
 	}
 
 	private void checkBox( JCheckBox c ) {
 		FlatCheckBoxUI ui = (FlatCheckBoxUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		radioButton( ui, c );
@@ -250,6 +324,7 @@ public class TestFlatStyleableValue
 	void comboBox() {
 		JComboBox<Object> c = new JComboBox<>();
 		FlatComboBoxUI ui = (FlatComboBoxUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInsets( c, ui, "padding", 1,2,3,4 );
 
@@ -287,6 +362,7 @@ public class TestFlatStyleableValue
 	void editorPane() {
 		JEditorPane c = new JEditorPane();
 		FlatEditorPaneUI ui = (FlatEditorPaneUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "minimumWidth", 123 );
 		testColor( c, ui, "disabledBackground", 0x123456 );
@@ -298,6 +374,7 @@ public class TestFlatStyleableValue
 	void formattedTextField() {
 		JFormattedTextField c = new JFormattedTextField();
 		FlatFormattedTextFieldUI ui = (FlatFormattedTextFieldUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		// FlatFormattedTextFieldUI extends FlatTextFieldUI
 		textField( c, ui );
@@ -307,6 +384,7 @@ public class TestFlatStyleableValue
 	void internalFrame() {
 		JInternalFrame c = new JInternalFrame();
 		FlatInternalFrameUI ui = (FlatInternalFrameUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "activeBorderColor", 0x123456 );
 		testColor( c, ui, "inactiveBorderColor", 0x123456 );
@@ -326,6 +404,7 @@ public class TestFlatStyleableValue
 	void label() {
 		JLabel c = new JLabel();
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "disabledForeground", 0x123456 );
 		testInteger( c, ui, "arc", 123 );
@@ -335,6 +414,7 @@ public class TestFlatStyleableValue
 	void list() {
 		JList<Object> c = new JList<>();
 		FlatListUI ui = (FlatListUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "selectionBackground", 0x123456 );
 		testColor( c, ui, "selectionForeground", 0x123456 );
@@ -354,8 +434,12 @@ public class TestFlatStyleableValue
 	void menuBar() {
 		JMenuBar c = new JMenuBar();
 		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInsets( c, ui, "itemMargins", 1,2,3,4 );
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInsets( c, ui, "selectionEmbeddedInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 8 );
 		testColor( c, ui, "hoverBackground", 0x123456 );
 		testColor( c, ui, "selectionBackground", 0x123456 );
 		testColor( c, ui, "selectionForeground", 0x123456 );
@@ -371,6 +455,7 @@ public class TestFlatStyleableValue
 	void menu() {
 		JMenu c = new JMenu();
 		FlatMenuUI ui = (FlatMenuUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		menuItem( c, ui );
 		menuItem_arrowIcon( c, ui );
@@ -380,6 +465,7 @@ public class TestFlatStyleableValue
 	void menuItem() {
 		JMenuItem c = new JMenuItem();
 		FlatMenuItemUI ui = (FlatMenuItemUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		menuItem( c, ui );
 	}
@@ -388,6 +474,7 @@ public class TestFlatStyleableValue
 	void checkBoxMenuItem() {
 		JCheckBoxMenuItem c = new JCheckBoxMenuItem();
 		FlatCheckBoxMenuItemUI ui = (FlatCheckBoxMenuItemUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		menuItem( c, ui );
 		menuItem_checkIcon( c, ui );
@@ -397,6 +484,7 @@ public class TestFlatStyleableValue
 	void radioButtonMenuItem() {
 		JRadioButtonMenuItem c = new JRadioButtonMenuItem();
 		FlatRadioButtonMenuItemUI ui = (FlatRadioButtonMenuItemUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		menuItem( c, ui );
 		menuItem_checkIcon( c, ui );
@@ -424,6 +512,9 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "checkBackground", 0x123456 );
 		testInsets( c, ui, "checkMargins", 1,2,3,4 );
 
+		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
+		testInteger( c, ui, "selectionArc", 8 );
+
 		testColor( c, ui, "underlineSelectionBackground", 0x123456 );
 		testColor( c, ui, "underlineSelectionCheckBackground", 0x123456 );
 		testColor( c, ui, "underlineSelectionColor", 0x123456 );
@@ -447,6 +538,7 @@ public class TestFlatStyleableValue
 	void panel() {
 		JPanel c = new JPanel();
 		FlatPanelUI ui = (FlatPanelUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "arc", 123 );
 	}
@@ -455,6 +547,7 @@ public class TestFlatStyleableValue
 	void passwordField() {
 		JPasswordField c = new JPasswordField();
 		FlatPasswordFieldUI ui = (FlatPasswordFieldUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		// FlatPasswordFieldUI extends FlatTextFieldUI
 		textField( c, ui );
@@ -473,6 +566,7 @@ public class TestFlatStyleableValue
 	void popupMenu() {
 		JPopupMenu c = new JPopupMenu();
 		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testString( c, ui, "arrowType", "chevron" );
 		testColor( c, ui, "scrollArrowColor", 0x123456 );
@@ -486,6 +580,7 @@ public class TestFlatStyleableValue
 	void popupMenuSeparator() {
 		JPopupMenu.Separator c = new JPopupMenu.Separator();
 		FlatPopupMenuSeparatorUI ui = (FlatPopupMenuSeparatorUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		// FlatPopupMenuSeparatorUI extends FlatSeparatorUI
 		separator( ui, c );
@@ -495,6 +590,7 @@ public class TestFlatStyleableValue
 	void progressBar() {
 		JProgressBar c = new JProgressBar();
 		FlatProgressBarUI ui = (FlatProgressBarUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "arc", 123 );
 		testDimension( c, ui, "horizontalSize", 1,2 );
@@ -507,12 +603,21 @@ public class TestFlatStyleableValue
 	@Test
 	void radioButton() {
 		radioButton( new JRadioButton() );
+	}
+
+	@Test
+	void radioButton2() {
 		radioButton( new JRadioButton( new CustomRadioButtonIcon() ) );
+	}
+
+	@Test
+	void radioButton3() {
 		radioButton( new JRadioButton( new CustomIcon() ) );
 	}
 
 	private void radioButton( JRadioButton c ) {
 		FlatRadioButtonUI ui = (FlatRadioButtonUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
@@ -547,6 +652,8 @@ public class TestFlatStyleableValue
 		testFloat( b, ui, "icon.borderWidth", 1.23f );
 		testFloat( b, ui, "icon.selectedBorderWidth", 1.23f );
 		testFloat( b, ui, "icon.disabledSelectedBorderWidth", 1.23f );
+		testFloat( b, ui, "icon.indeterminateBorderWidth", 1.23f );
+		testFloat( b, ui, "icon.disabledIndeterminateBorderWidth", 1.23f );
 		testInteger( b, ui, "icon.arc", 123 );
 
 		// enabled
@@ -555,6 +662,9 @@ public class TestFlatStyleableValue
 		testColor( b, ui, "icon.selectedBorderColor", 0x123456 );
 		testColor( b, ui, "icon.selectedBackground", 0x123456 );
 		testColor( b, ui, "icon.checkmarkColor", 0x123456 );
+		testColor( b, ui, "icon.indeterminateBorderColor", 0x123456 );
+		testColor( b, ui, "icon.indeterminateBackground", 0x123456 );
+		testColor( b, ui, "icon.indeterminateCheckmarkColor", 0x123456 );
 
 		// disabled
 		testColor( b, ui, "icon.disabledBorderColor", 0x123456 );
@@ -562,6 +672,9 @@ public class TestFlatStyleableValue
 		testColor( b, ui, "icon.disabledSelectedBorderColor", 0x123456 );
 		testColor( b, ui, "icon.disabledSelectedBackground", 0x123456 );
 		testColor( b, ui, "icon.disabledCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.disabledIndeterminateBorderColor", 0x123456 );
+		testColor( b, ui, "icon.disabledIndeterminateBackground", 0x123456 );
+		testColor( b, ui, "icon.disabledIndeterminateCheckmarkColor", 0x123456 );
 
 		// focused
 		testColor( b, ui, "icon.focusedBorderColor", 0x123456 );
@@ -569,6 +682,9 @@ public class TestFlatStyleableValue
 		testColor( b, ui, "icon.focusedSelectedBorderColor", 0x123456 );
 		testColor( b, ui, "icon.focusedSelectedBackground", 0x123456 );
 		testColor( b, ui, "icon.focusedCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.focusedIndeterminateBorderColor", 0x123456 );
+		testColor( b, ui, "icon.focusedIndeterminateBackground", 0x123456 );
+		testColor( b, ui, "icon.focusedIndeterminateCheckmarkColor", 0x123456 );
 
 		// hover
 		testColor( b, ui, "icon.hoverBorderColor", 0x123456 );
@@ -576,6 +692,9 @@ public class TestFlatStyleableValue
 		testColor( b, ui, "icon.hoverSelectedBorderColor", 0x123456 );
 		testColor( b, ui, "icon.hoverSelectedBackground", 0x123456 );
 		testColor( b, ui, "icon.hoverCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.hoverIndeterminateBorderColor", 0x123456 );
+		testColor( b, ui, "icon.hoverIndeterminateBackground", 0x123456 );
+		testColor( b, ui, "icon.hoverIndeterminateCheckmarkColor", 0x123456 );
 
 		// pressed
 		testColor( b, ui, "icon.pressedBorderColor", 0x123456 );
@@ -583,12 +702,16 @@ public class TestFlatStyleableValue
 		testColor( b, ui, "icon.pressedSelectedBorderColor", 0x123456 );
 		testColor( b, ui, "icon.pressedSelectedBackground", 0x123456 );
 		testColor( b, ui, "icon.pressedCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.pressedIndeterminateBorderColor", 0x123456 );
+		testColor( b, ui, "icon.pressedIndeterminateBackground", 0x123456 );
+		testColor( b, ui, "icon.pressedIndeterminateCheckmarkColor", 0x123456 );
 	}
 
 	@Test
 	void scrollBar() {
 		JScrollBar c = new JScrollBar();
 		FlatScrollBarUI ui = (FlatScrollBarUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "track", 0x123456 );
 		testColor( c, ui, "thumb", 0x123456 );
@@ -621,6 +744,7 @@ public class TestFlatStyleableValue
 	void scrollPane() {
 		JScrollPane c = new JScrollPane();
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		// border
 		flatScrollPaneBorder( c, ui );
@@ -632,6 +756,7 @@ public class TestFlatStyleableValue
 	void separator() {
 		JSeparator c = new JSeparator();
 		FlatSeparatorUI ui = (FlatSeparatorUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		separator( ui, c );
 	}
@@ -646,6 +771,7 @@ public class TestFlatStyleableValue
 	void slider() {
 		JSlider c = new JSlider();
 		FlatSliderUI ui = (FlatSliderUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "trackWidth", 123 );
 		testDimension( c, ui, "thumbSize", 1,2 );
@@ -670,6 +796,7 @@ public class TestFlatStyleableValue
 	void spinner() {
 		JSpinner c = new JSpinner();
 		FlatSpinnerUI ui = (FlatSpinnerUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "minimumWidth", 123 );
 		testString( c, ui, "buttonStyle", "button" );
@@ -695,6 +822,7 @@ public class TestFlatStyleableValue
 	void splitPane() {
 		JSplitPane c = new JSplitPane();
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testString( c, ui, "arrowType", "chevron" );
 		testColor( c, ui, "draggingColor", 0x123456 );
@@ -715,6 +843,7 @@ public class TestFlatStyleableValue
 	void tabbedPane() {
 		JTabbedPane c = new JTabbedPane();
 		FlatTabbedPaneUI ui = (FlatTabbedPaneUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInsets( c, ui, "tabInsets", 1,2,3,4 );
 		testInsets( c, ui, "tabAreaInsets", 1,2,3,4 );
@@ -793,6 +922,7 @@ public class TestFlatStyleableValue
 	void table() {
 		JTable c = new JTable();
 		FlatTableUI ui = (FlatTableUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testBoolean( c, ui, "showTrailingVerticalLine", true );
 		testColor( c, ui, "selectionBackground", 0x123456 );
@@ -812,6 +942,7 @@ public class TestFlatStyleableValue
 	void tableHeader() {
 		JTableHeader c = new JTableHeader();
 		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "hoverBackground", 0x123456 );
 		testColor( c, ui, "hoverForeground", 0x123456 );
@@ -835,6 +966,7 @@ public class TestFlatStyleableValue
 	void textArea() {
 		JTextArea c = new JTextArea();
 		FlatTextAreaUI ui = (FlatTextAreaUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "minimumWidth", 123 );
 		testColor( c, ui, "disabledBackground", 0x123456 );
@@ -846,6 +978,7 @@ public class TestFlatStyleableValue
 	void textField() {
 		JTextField c = new JTextField();
 		FlatTextFieldUI ui = (FlatTextFieldUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		textField( c, ui );
 	}
@@ -870,6 +1003,7 @@ public class TestFlatStyleableValue
 	void textPane() {
 		JTextPane c = new JTextPane();
 		FlatTextPaneUI ui = (FlatTextPaneUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "minimumWidth", 123 );
 		testColor( c, ui, "disabledBackground", 0x123456 );
@@ -881,6 +1015,7 @@ public class TestFlatStyleableValue
 	void toggleButton() {
 		JToggleButton b = new JToggleButton();
 		FlatToggleButtonUI ui = (FlatToggleButtonUI) b.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( b );
 
 		// FlatToggleButtonUI extends FlatButtonUI
 		button( b, ui );
@@ -900,9 +1035,12 @@ public class TestFlatStyleableValue
 	void toolBar() {
 		JToolBar c = new JToolBar();
 		FlatToolBarUI ui = (FlatToolBarUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testBoolean( c, ui, "focusableButtons", true );
 		testBoolean( c, ui, "arrowKeysOnlyNavigation", true );
+		testInteger( c, ui, "hoverButtonGroupArc", 12 );
+		testColor( c, ui, "hoverButtonGroupBackground", 0x123456 );
 
 		testInsets( c, ui, "borderMargins", 1,2,3,4 );
 		testColor( c, ui, "gripColor", 0x123456 );
@@ -915,6 +1053,7 @@ public class TestFlatStyleableValue
 	void toolBarSeparator() {
 		JToolBar.Separator c = new JToolBar.Separator();
 		FlatToolBarSeparatorUI ui = (FlatToolBarSeparatorUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "separatorWidth", 123 );
 		testColor( c, ui, "separatorColor", 0x123456 );
@@ -924,6 +1063,7 @@ public class TestFlatStyleableValue
 	void tree() {
 		JTree c = new JTree();
 		FlatTreeUI ui = (FlatTreeUI) c.getUI();
+		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testColor( c, ui, "selectionBackground", 0x123456 );
 		testColor( c, ui, "selectionForeground", 0x123456 );
@@ -1029,6 +1169,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatButtonBorder() {
 		FlatButtonBorder border = new FlatButtonBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		// FlatButtonBorder extends FlatBorder
 		flatBorder( border );
@@ -1063,6 +1204,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatRoundBorder() {
 		FlatRoundBorder border = new FlatRoundBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		// FlatRoundBorder extends FlatBorder
 		flatBorder( border );
@@ -1074,6 +1216,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatScrollPaneBorder() {
 		FlatScrollPaneBorder border = new FlatScrollPaneBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		// FlatScrollPaneBorder extends FlatBorder
 		flatBorder( border );
@@ -1084,6 +1227,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatTextBorder() {
 		FlatTextBorder border = new FlatTextBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		// FlatTextBorder extends FlatBorder
 		flatBorder( border );
@@ -1095,6 +1239,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatBorder() {
 		FlatBorder border = new FlatBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		flatBorder( border );
 	}
@@ -1117,11 +1262,16 @@ public class TestFlatStyleableValue
 		testValue( border, "success.borderColor", Color.WHITE );
 		testValue( border, "success.focusedBorderColor", Color.WHITE );
 		testValue( border, "custom.borderColor", Color.WHITE );
+
+		testValue( border, "outline", "error" );
+		testValue( border, "outlineColor", Color.WHITE );
+		testValue( border, "outlineFocusedColor", Color.WHITE );
 	}
 
 	@Test
 	void flatDropShadowBorder() {
 		FlatDropShadowBorder border = new FlatDropShadowBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		testValue( border, "shadowColor", Color.WHITE );
 		testValue( border, "shadowInsets", new Insets( 1, 2, 3, 4 ) );
@@ -1131,6 +1281,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatMenuBarBorder() {
 		FlatMenuBarBorder border = new FlatMenuBarBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		testValue( border, "borderColor", Color.WHITE );
 	}
@@ -1138,6 +1289,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatPopupMenuBorder() {
 		FlatPopupMenuBorder border = new FlatPopupMenuBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		testValue( border, "borderInsets", new Insets( 1, 2, 3, 4 ) );
 		testValue( border, "borderColor", Color.WHITE );
@@ -1146,6 +1298,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatInternalFrameBorder() {
 		FlatInternalFrameBorder border = new FlatInternalFrameBorder();
+		expectedStyleableInfos = border.getStyleableInfos();
 
 		testValue( border, "activeBorderColor", Color.WHITE );
 		testValue( border, "inactiveBorderColor", Color.WHITE );
@@ -1166,6 +1319,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatCheckBoxIcon() {
 		FlatCheckBoxIcon icon = new FlatCheckBoxIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		flatCheckBoxIcon( icon );
 	}
@@ -1173,6 +1327,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatRadioButtonIcon() {
 		FlatRadioButtonIcon icon = new FlatRadioButtonIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		// FlatRadioButtonIcon extends FlatCheckBoxIcon
 		flatCheckBoxIcon( icon );
@@ -1244,6 +1399,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatCheckBoxMenuItemIcon() {
 		FlatCheckBoxMenuItemIcon icon = new FlatCheckBoxMenuItemIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		flatCheckBoxMenuItemIcon( icon );
 	}
@@ -1251,6 +1407,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatRadioButtonMenuItemIcon() {
 		FlatRadioButtonMenuItemIcon icon = new FlatRadioButtonMenuItemIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		// FlatRadioButtonMenuItemIcon extends FlatCheckBoxMenuItemIcon
 		flatCheckBoxMenuItemIcon( icon );
@@ -1265,6 +1422,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatMenuArrowIcon() {
 		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		testValue( icon, "arrowType", "chevron" );
 		testValue( icon, "arrowColor", Color.WHITE );
@@ -1275,6 +1433,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatHelpButtonIcon() {
 		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		testValue( icon, "focusWidth", 2 );
 		testValue( icon, "focusColor", Color.WHITE );
@@ -1297,6 +1456,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatClearIcon() {
 		FlatClearIcon icon = new FlatClearIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		testValue( icon, "clearIconColor", Color.WHITE );
 		testValue( icon, "clearIconHoverColor", Color.WHITE );
@@ -1306,6 +1466,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatSearchIcon() {
 		FlatSearchIcon icon = new FlatSearchIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		flatSearchIcon( icon );
 	}
@@ -1313,6 +1474,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatSearchWithHistoryIcon() {
 		FlatSearchWithHistoryIcon icon = new FlatSearchWithHistoryIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		flatSearchIcon( icon );
 	}
@@ -1326,6 +1488,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatCapsLockIcon() {
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		testValue( icon, "capsLockIconColor", Color.WHITE );
 	}
@@ -1333,6 +1496,7 @@ public class TestFlatStyleableValue
 	@Test
 	void flatTabbedPaneCloseIcon() {
 		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
+		expectedStyleableInfos = icon.getStyleableInfos();
 
 		testValue( icon, "closeSize", new Dimension( 1, 2 ) );
 		testValue( icon, "closeArc", 123 );
