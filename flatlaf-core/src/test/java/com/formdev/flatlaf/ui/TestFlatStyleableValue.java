@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -55,6 +56,8 @@ import com.formdev.flatlaf.ui.TestFlatStyling.CustomRadioButtonIcon;
  */
 public class TestFlatStyleableValue
 {
+	private final Random random = new Random();
+
 	@BeforeAll
 	static void setup() {
 		TestUtils.setup( false );
@@ -92,37 +95,47 @@ public class TestFlatStyleableValue
 		testedKeys.add( key );
 	}
 
-	private void testBoolean( JComponent c, StyleableUI ui, String key, boolean value ) {
+	private void testBoolean( JComponent c, StyleableUI ui, String key ) {
+		boolean value = random.nextBoolean();
 		applyStyle( c, ui, String.format( "%s: %s", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
 	}
 
-	private void testInteger( JComponent c, StyleableUI ui, String key, int value ) {
+	private void testInteger( JComponent c, StyleableUI ui, String key ) {
+		int value = random.nextInt();
 		applyStyle( c, ui, String.format( "%s: %d", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
 	}
 
-	private void testFloat( JComponent c, StyleableUI ui, String key, float value ) {
+	private void testFloat( JComponent c, StyleableUI ui, String key ) {
+		float value = Math.round( random.nextFloat() * 100f ) / 100f;
 		applyStyle( c, ui, String.format( Locale.ENGLISH, "%s: %f", key, value ) );
 		assertEquals( value, ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
 	}
 
-	private void testColor( JComponent c, StyleableUI ui, String key, int rgb ) {
+	private void testColor( JComponent c, StyleableUI ui, String key ) {
+		int rgb = random.nextInt() & 0xffffff;
 		applyStyle( c, ui, String.format( "%s: #%06x", key, rgb ) );
 		assertEquals( new Color( rgb ), ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
 	}
 
-	private void testInsets( JComponent c, StyleableUI ui, String key, int top, int left, int bottom, int right ) {
+	private void testInsets( JComponent c, StyleableUI ui, String key ) {
+		int top = random.nextInt();
+		int left = random.nextInt();
+		int bottom = random.nextInt();
+		int right = random.nextInt();
 		applyStyle( c,ui, String.format( "%s: %d,%d,%d,%d", key, top, left, bottom, right ) );
 		assertEquals( new Insets( top, left, bottom, right ), ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
 	}
 
-	private void testDimension( JComponent c, StyleableUI ui, String key, int width, int height ) {
+	private void testDimension( JComponent c, StyleableUI ui, String key ) {
+		int width = random.nextInt();
+		int height = random.nextInt();
 		applyStyle( c,ui, String.format( "%s: %d,%d", key, width, height ) );
 		assertEquals( new Dimension( width, height ), ui.getStyleableValue( c, key ) );
 		testedKeys.add( key );
@@ -206,6 +219,34 @@ public class TestFlatStyleableValue
 
 	private final Map<CacheKey, Method> methodCache = new HashMap<>();
 
+	private void testValueString( Object obj, String key, String value ) {
+		testValue( obj, key, value );
+	}
+
+	private void testValueBoolean( Object obj, String key ) {
+		testValue( obj, key, random.nextBoolean() );
+	}
+
+	private void testValueInteger( Object obj, String key ) {
+		testValue( obj, key, random.nextInt() );
+	}
+
+	private void testValueFloat( Object obj, String key ) {
+		testValue( obj, key, Math.round( random.nextFloat() * 100f ) / 100f );
+	}
+
+	private void testValueColor( Object obj, String key ) {
+		testValue( obj, key, new Color( random.nextInt() & 0xffffff ) );
+	}
+
+	private void testValueInsets( Object obj, String key ) {
+		testValue( obj, key, new Insets( random.nextInt(), random.nextInt(), random.nextInt(), random.nextInt() ) );
+	}
+
+	private void testValueDimension( Object obj, String key ) {
+		testValue( obj, key, new Dimension( random.nextInt(), random.nextInt() ) );
+	}
+
 	private void testValue( Object obj, String key, Object value ) {
 		assertInstanceOf( StyleableObject.class, obj );
 
@@ -230,68 +271,68 @@ public class TestFlatStyleableValue
 
 		//---- FlatHelpButtonIcon ----
 
-		testInteger( c, ui, "help.focusWidth", 123 );
-		testColor( c, ui, "help.focusColor", 0x123456 );
-		testFloat( c, ui, "help.innerFocusWidth", 1.23f );
-		testInteger( c, ui, "help.borderWidth", 123 );
+		testInteger( c, ui, "help.focusWidth" );
+		testColor( c, ui, "help.focusColor" );
+		testFloat( c, ui, "help.innerFocusWidth" );
+		testInteger( c, ui, "help.borderWidth" );
 
-		testColor( c, ui, "help.borderColor", 0x123456 );
-		testColor( c, ui, "help.disabledBorderColor", 0x354678 );
-		testColor( c, ui, "help.focusedBorderColor", 0x123456 );
-		testColor( c, ui, "help.hoverBorderColor", 0x123456 );
-		testColor( c, ui, "help.background", 0x132456 );
-		testColor( c, ui, "help.disabledBackground", 0x123456 );
-		testColor( c, ui, "help.focusedBackground", 0x123456 );
-		testColor( c, ui, "help.hoverBackground", 0x123456 );
-		testColor( c, ui, "help.pressedBackground", 0x123456 );
-		testColor( c, ui, "help.questionMarkColor", 0x123456 );
-		testColor( c, ui, "help.disabledQuestionMarkColor", 0x123456 );
+		testColor( c, ui, "help.borderColor" );
+		testColor( c, ui, "help.disabledBorderColor" );
+		testColor( c, ui, "help.focusedBorderColor" );
+		testColor( c, ui, "help.hoverBorderColor" );
+		testColor( c, ui, "help.background" );
+		testColor( c, ui, "help.disabledBackground" );
+		testColor( c, ui, "help.focusedBackground" );
+		testColor( c, ui, "help.hoverBackground" );
+		testColor( c, ui, "help.pressedBackground" );
+		testColor( c, ui, "help.questionMarkColor" );
+		testColor( c, ui, "help.disabledQuestionMarkColor" );
 	}
 
 	private void button( AbstractButton c, FlatButtonUI ui ) {
-		testInteger( c, ui, "minimumWidth", 123 );
+		testInteger( c, ui, "minimumWidth" );
 
-		testColor( c, ui, "focusedBackground", 0x123456 );
-		testColor( c, ui, "focusedForeground", 0x123456 );
-		testColor( c, ui, "hoverBackground", 0x123456 );
-		testColor( c, ui, "hoverForeground", 0x123456 );
-		testColor( c, ui, "pressedBackground", 0x123456 );
-		testColor( c, ui, "pressedForeground", 0x123456 );
-		testColor( c, ui, "selectedBackground", 0x123456 );
-		testColor( c, ui, "selectedForeground", 0x123456 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "disabledText", 0x123456 );
-		testColor( c, ui, "disabledSelectedBackground", 0x123456 );
-		testColor( c, ui, "disabledSelectedForeground", 0x123456 );
+		testColor( c, ui, "focusedBackground" );
+		testColor( c, ui, "focusedForeground" );
+		testColor( c, ui, "hoverBackground" );
+		testColor( c, ui, "hoverForeground" );
+		testColor( c, ui, "pressedBackground" );
+		testColor( c, ui, "pressedForeground" );
+		testColor( c, ui, "selectedBackground" );
+		testColor( c, ui, "selectedForeground" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "disabledText" );
+		testColor( c, ui, "disabledSelectedBackground" );
+		testColor( c, ui, "disabledSelectedForeground" );
 
-		testColor( c, ui, "default.background", 0x123456 );
-		testColor( c, ui, "default.foreground", 0x123456 );
-		testColor( c, ui, "default.focusedBackground", 0x123456 );
-		testColor( c, ui, "default.focusedForeground", 0x123456 );
-		testColor( c, ui, "default.hoverBackground", 0x123456 );
-		testColor( c, ui, "default.hoverForeground", 0x123456 );
-		testColor( c, ui, "default.pressedBackground", 0x123456 );
-		testColor( c, ui, "default.pressedForeground", 0x123456 );
-		testBoolean( c, ui, "default.boldText", true );
+		testColor( c, ui, "default.background" );
+		testColor( c, ui, "default.foreground" );
+		testColor( c, ui, "default.focusedBackground" );
+		testColor( c, ui, "default.focusedForeground" );
+		testColor( c, ui, "default.hoverBackground" );
+		testColor( c, ui, "default.hoverForeground" );
+		testColor( c, ui, "default.pressedBackground" );
+		testColor( c, ui, "default.pressedForeground" );
+		testBoolean( c, ui, "default.boldText" );
 
-		testBoolean( c, ui, "paintShadow", true );
-		testInteger( c, ui, "shadowWidth", 123 );
-		testColor( c, ui, "shadowColor", 0x123456 );
-		testColor( c, ui, "default.shadowColor", 0x123456 );
+		testBoolean( c, ui, "paintShadow" );
+		testInteger( c, ui, "shadowWidth" );
+		testColor( c, ui, "shadowColor" );
+		testColor( c, ui, "default.shadowColor" );
 
-		testInsets( c, ui, "toolbar.spacingInsets", 1,2,3,4 );
-		testColor( c, ui, "toolbar.hoverBackground", 0x123456 );
-		testColor( c, ui, "toolbar.hoverForeground", 0x123456 );
-		testColor( c, ui, "toolbar.pressedBackground", 0x123456 );
-		testColor( c, ui, "toolbar.pressedForeground", 0x123456 );
-		testColor( c, ui, "toolbar.selectedBackground", 0x123456 );
-		testColor( c, ui, "toolbar.selectedForeground", 0x123456 );
-		testColor( c, ui, "toolbar.disabledSelectedBackground", 0x123456 );
-		testColor( c, ui, "toolbar.disabledSelectedForeground", 0x123456 );
+		testInsets( c, ui, "toolbar.spacingInsets" );
+		testColor( c, ui, "toolbar.hoverBackground" );
+		testColor( c, ui, "toolbar.hoverForeground" );
+		testColor( c, ui, "toolbar.pressedBackground" );
+		testColor( c, ui, "toolbar.pressedForeground" );
+		testColor( c, ui, "toolbar.selectedBackground" );
+		testColor( c, ui, "toolbar.selectedForeground" );
+		testColor( c, ui, "toolbar.disabledSelectedBackground" );
+		testColor( c, ui, "toolbar.disabledSelectedForeground" );
 
 		testString( c, ui, "buttonType", "help" );
-		testBoolean( c, ui, "squareSize", true );
-		testInteger( c, ui, "minimumHeight", 123 );
+		testBoolean( c, ui, "squareSize" );
+		testInteger( c, ui, "minimumHeight" );
 
 		// border
 		flatButtonBorder( c, ui );
@@ -330,33 +371,33 @@ public class TestFlatStyleableValue
 		FlatComboBoxUI ui = (FlatComboBoxUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInsets( c, ui, "padding", 1,2,3,4 );
+		testInsets( c, ui, "padding" );
 
-		testInteger( c, ui, "minimumWidth", 123 );
-		testInteger( c, ui, "editorColumns", 123 );
+		testInteger( c, ui, "minimumWidth" );
+		testInteger( c, ui, "editorColumns" );
 		testString( c, ui, "buttonStyle", "auto" );
 		testString( c, ui, "arrowType", "chevron" );
 
-		testColor( c, ui, "editableBackground", 123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "disabledForeground", 0x123456 );
+		testColor( c, ui, "editableBackground" );
+		testColor( c, ui, "focusedBackground" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "disabledForeground" );
 
-		testColor( c, ui, "buttonBackground", 0x123456 );
-		testColor( c, ui, "buttonFocusedBackground", 0x123456 );
-		testColor( c, ui, "buttonEditableBackground", 0x123456 );
-		testFloat( c, ui, "buttonSeparatorWidth", 1.23f );
-		testColor( c, ui, "buttonSeparatorColor", 0x123456 );
-		testColor( c, ui, "buttonDisabledSeparatorColor", 0x123456 );
-		testColor( c, ui, "buttonArrowColor", 0x123456 );
-		testColor( c, ui, "buttonDisabledArrowColor", 0x123456 );
-		testColor( c, ui, "buttonHoverArrowColor", 0x123456 );
-		testColor( c, ui, "buttonPressedArrowColor", 0x123456 );
+		testColor( c, ui, "buttonBackground" );
+		testColor( c, ui, "buttonFocusedBackground" );
+		testColor( c, ui, "buttonEditableBackground" );
+		testFloat( c, ui, "buttonSeparatorWidth" );
+		testColor( c, ui, "buttonSeparatorColor" );
+		testColor( c, ui, "buttonDisabledSeparatorColor" );
+		testColor( c, ui, "buttonArrowColor" );
+		testColor( c, ui, "buttonDisabledArrowColor" );
+		testColor( c, ui, "buttonHoverArrowColor" );
+		testColor( c, ui, "buttonPressedArrowColor" );
 
-		testColor( c, ui, "popupBackground", 0x123456 );
-		testInsets( c, ui, "popupInsets", 1,2,3,4 );
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 123 );
+		testColor( c, ui, "popupBackground" );
+		testInsets( c, ui, "popupInsets" );
+		testInsets( c, ui, "selectionInsets" );
+		testInteger( c, ui, "selectionArc" );
 
 		// border
 		flatRoundBorder( c, ui );
@@ -368,10 +409,10 @@ public class TestFlatStyleableValue
 		FlatEditorPaneUI ui = (FlatEditorPaneUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "minimumWidth", 123 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "inactiveBackground", 0x123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
+		testInteger( c, ui, "minimumWidth" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "inactiveBackground" );
+		testColor( c, ui, "focusedBackground" );
 	}
 
 	@Test
@@ -390,18 +431,18 @@ public class TestFlatStyleableValue
 		FlatInternalFrameUI ui = (FlatInternalFrameUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "activeBorderColor", 0x123456 );
-		testColor( c, ui, "inactiveBorderColor", 0x123456 );
-		testInteger( c, ui, "borderLineWidth", 123 );
-		testBoolean( c, ui, "dropShadowPainted", false );
-		testInsets( c, ui, "borderMargins", 1,2,3,4 );
+		testColor( c, ui, "activeBorderColor" );
+		testColor( c, ui, "inactiveBorderColor" );
+		testInteger( c, ui, "borderLineWidth" );
+		testBoolean( c, ui, "dropShadowPainted" );
+		testInsets( c, ui, "borderMargins" );
 
-		testColor( c, ui, "activeDropShadowColor", 0x123456 );
-		testInsets( c, ui, "activeDropShadowInsets", 1,2,3,4 );
-		testFloat( c, ui, "activeDropShadowOpacity", 1.23f );
-		testColor( c, ui, "inactiveDropShadowColor", 0x123456 );
-		testInsets( c, ui, "inactiveDropShadowInsets", 1,2,3,4 );
-		testFloat( c, ui, "inactiveDropShadowOpacity", 1.23f );
+		testColor( c, ui, "activeDropShadowColor" );
+		testInsets( c, ui, "activeDropShadowInsets" );
+		testFloat( c, ui, "activeDropShadowOpacity" );
+		testColor( c, ui, "inactiveDropShadowColor" );
+		testInsets( c, ui, "inactiveDropShadowInsets" );
+		testFloat( c, ui, "inactiveDropShadowOpacity" );
 	}
 
 	@Test
@@ -410,8 +451,8 @@ public class TestFlatStyleableValue
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "disabledForeground", 0x123456 );
-		testInteger( c, ui, "arc", 123 );
+		testColor( c, ui, "disabledForeground" );
+		testInteger( c, ui, "arc" );
 	}
 
 	@Test
@@ -420,18 +461,18 @@ public class TestFlatStyleableValue
 		FlatListUI ui = (FlatListUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "selectionBackground", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
-		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
-		testColor( c, ui, "selectionInactiveForeground", 0x123456 );
-		testColor( c, ui, "alternateRowColor", 0x123456 );
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 123 );
+		testColor( c, ui, "selectionBackground" );
+		testColor( c, ui, "selectionForeground" );
+		testColor( c, ui, "selectionInactiveBackground" );
+		testColor( c, ui, "selectionInactiveForeground" );
+		testColor( c, ui, "alternateRowColor" );
+		testInsets( c, ui, "selectionInsets" );
+		testInteger( c, ui, "selectionArc" );
 
 		// FlatListCellBorder
-		testInsets( c, ui, "cellMargins", 1,2,3,4 );
-		testColor( c, ui, "cellFocusColor", 0x123456 );
-		testBoolean( c, ui, "showCellFocusIndicator", true );
+		testInsets( c, ui, "cellMargins" );
+		testColor( c, ui, "cellFocusColor" );
+		testBoolean( c, ui, "showCellFocusIndicator" );
 	}
 
 	@Test
@@ -440,19 +481,19 @@ public class TestFlatStyleableValue
 		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInsets( c, ui, "itemMargins", 1,2,3,4 );
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInsets( c, ui, "selectionEmbeddedInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 8 );
-		testColor( c, ui, "hoverBackground", 0x123456 );
-		testColor( c, ui, "selectionBackground", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
-		testColor( c, ui, "underlineSelectionBackground", 0x123456 );
-		testColor( c, ui, "underlineSelectionColor", 0x123456 );
-		testInteger( c, ui, "underlineSelectionHeight", 123 );
+		testInsets( c, ui, "itemMargins" );
+		testInsets( c, ui, "selectionInsets" );
+		testInsets( c, ui, "selectionEmbeddedInsets" );
+		testInteger( c, ui, "selectionArc" );
+		testColor( c, ui, "hoverBackground" );
+		testColor( c, ui, "selectionBackground" );
+		testColor( c, ui, "selectionForeground" );
+		testColor( c, ui, "underlineSelectionBackground" );
+		testColor( c, ui, "underlineSelectionColor" );
+		testInteger( c, ui, "underlineSelectionHeight" );
 
 		// FlatMenuBarBorder
-		testColor( c, ui, "borderColor", 0x123456 );
+		testColor( c, ui, "borderColor" );
 	}
 
 	@Test
@@ -495,47 +536,47 @@ public class TestFlatStyleableValue
 	}
 
 	private void menuItem( JComponent c, StyleableUI ui ) {
-		testColor( c, ui, "selectionBackground", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
-		testColor( c, ui, "disabledForeground", 0x123456 );
-		testColor( c, ui, "acceleratorForeground", 0x123456 );
-		testColor( c, ui, "acceleratorSelectionForeground", 0x123456 );
+		testColor( c, ui, "selectionBackground" );
+		testColor( c, ui, "selectionForeground" );
+		testColor( c, ui, "disabledForeground" );
+		testColor( c, ui, "acceleratorForeground" );
+		testColor( c, ui, "acceleratorSelectionForeground" );
 		testFont( c, ui, "acceleratorFont", "italic 12 monospaced", new Font( "monospaced", Font.ITALIC, 12 ) );
 
 		menuItemRenderer( c, ui );
 	}
 
 	private void menuItemRenderer( JComponent c, StyleableUI ui ) {
-		testBoolean( c, ui, "verticallyAlignText", false );
-		testInteger( c, ui, "minimumWidth", 123 );
-		testDimension( c, ui, "minimumIconSize", 1,2 );
-		testInteger( c, ui, "textAcceleratorGap", 123 );
-		testInteger( c, ui, "textNoAcceleratorGap", 123 );
-		testInteger( c, ui, "acceleratorArrowGap", 123 );
+		testBoolean( c, ui, "verticallyAlignText" );
+		testInteger( c, ui, "minimumWidth" );
+		testDimension( c, ui, "minimumIconSize" );
+		testInteger( c, ui, "textAcceleratorGap" );
+		testInteger( c, ui, "textNoAcceleratorGap" );
+		testInteger( c, ui, "acceleratorArrowGap" );
 
-		testColor( c, ui, "checkBackground", 0x123456 );
-		testInsets( c, ui, "checkMargins", 1,2,3,4 );
+		testColor( c, ui, "checkBackground" );
+		testInsets( c, ui, "checkMargins" );
 
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 8 );
+		testInsets( c, ui, "selectionInsets" );
+		testInteger( c, ui, "selectionArc" );
 
-		testColor( c, ui, "underlineSelectionBackground", 0x123456 );
-		testColor( c, ui, "underlineSelectionCheckBackground", 0x123456 );
-		testColor( c, ui, "underlineSelectionColor", 0x123456 );
-		testInteger( c, ui, "underlineSelectionHeight", 123 );
+		testColor( c, ui, "underlineSelectionBackground" );
+		testColor( c, ui, "underlineSelectionCheckBackground" );
+		testColor( c, ui, "underlineSelectionColor" );
+		testInteger( c, ui, "underlineSelectionHeight" );
 	}
 
 	private void menuItem_checkIcon( JComponent c, StyleableUI ui ) {
-		testColor( c, ui, "icon.checkmarkColor", 0x123456 );
-		testColor( c, ui, "icon.disabledCheckmarkColor", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
+		testColor( c, ui, "icon.checkmarkColor" );
+		testColor( c, ui, "icon.disabledCheckmarkColor" );
+		testColor( c, ui, "selectionForeground" );
 	}
 
 	private void menuItem_arrowIcon( JComponent c, StyleableUI ui ) {
 		testString( c, ui, "icon.arrowType", "chevron" );
-		testColor( c, ui, "icon.arrowColor", 0x123456 );
-		testColor( c, ui, "icon.disabledArrowColor", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
+		testColor( c, ui, "icon.arrowColor" );
+		testColor( c, ui, "icon.disabledArrowColor" );
+		testColor( c, ui, "selectionForeground" );
 	}
 
 	@Test
@@ -544,7 +585,7 @@ public class TestFlatStyleableValue
 		FlatPanelUI ui = (FlatPanelUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "arc", 123 );
+		testInteger( c, ui, "arc" );
 	}
 
 	@Test
@@ -556,11 +597,11 @@ public class TestFlatStyleableValue
 		// FlatPasswordFieldUI extends FlatTextFieldUI
 		textField( c, ui );
 
-		testBoolean( c, ui, "showCapsLock", true );
-		testBoolean( c, ui, "showRevealButton", true );
+		testBoolean( c, ui, "showCapsLock" );
+		testBoolean( c, ui, "showRevealButton" );
 
 		// capsLockIcon
-		testColor( c, ui, "capsLockIconColor", 0x123456 );
+		testColor( c, ui, "capsLockIconColor" );
 
 		// border
 		flatTextBorder( c, ui );
@@ -573,11 +614,11 @@ public class TestFlatStyleableValue
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testString( c, ui, "arrowType", "chevron" );
-		testColor( c, ui, "scrollArrowColor", 0x123456 );
-		testColor( c, ui, "hoverScrollArrowBackground", 0x123456 );
+		testColor( c, ui, "scrollArrowColor" );
+		testColor( c, ui, "hoverScrollArrowBackground" );
 
-		testInsets( c, ui, "borderInsets", 1,2,3,4 );
-		testColor( c, ui, "borderColor", 0x123456 );
+		testInsets( c, ui, "borderInsets" );
+		testColor( c, ui, "borderColor" );
 	}
 
 	@Test
@@ -596,12 +637,12 @@ public class TestFlatStyleableValue
 		FlatProgressBarUI ui = (FlatProgressBarUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "arc", 123 );
-		testDimension( c, ui, "horizontalSize", 1,2 );
-		testDimension( c, ui, "verticalSize", 1,2 );
+		testInteger( c, ui, "arc" );
+		testDimension( c, ui, "horizontalSize" );
+		testDimension( c, ui, "verticalSize" );
 
-		testBoolean( c, ui, "largeHeight", true );
-		testBoolean( c, ui, "square", true );
+		testBoolean( c, ui, "largeHeight" );
+		testBoolean( c, ui, "square" );
 	}
 
 	@Test
@@ -628,7 +669,7 @@ public class TestFlatStyleableValue
 		radioButton( ui, c );
 
 		if( !(c.getIcon() instanceof CustomIcon) )
-			testFloat( c, ui, "icon.centerDiameter", 1.23f );
+			testFloat( c, ui, "icon.centerDiameter" );
 
 		// necessary to clear FlatRadioButtonUI.oldStyleValues because
 		// ui.applyStyle(...) operates on shared instance
@@ -636,7 +677,7 @@ public class TestFlatStyleableValue
 	}
 
 	private void radioButton( FlatRadioButtonUI ui, AbstractButton b ) {
-		testColor( b, ui, "disabledText", 0x123456 );
+		testColor( b, ui, "disabledText" );
 
 		//---- icon ----
 
@@ -651,64 +692,64 @@ public class TestFlatStyleableValue
 			return;
 		}
 
-		testFloat( b, ui, "icon.focusWidth", 1.23f );
-		testColor( b, ui, "icon.focusColor", 0x123456 );
-		testFloat( b, ui, "icon.borderWidth", 1.23f );
-		testFloat( b, ui, "icon.selectedBorderWidth", 1.23f );
-		testFloat( b, ui, "icon.disabledSelectedBorderWidth", 1.23f );
-		testFloat( b, ui, "icon.indeterminateBorderWidth", 1.23f );
-		testFloat( b, ui, "icon.disabledIndeterminateBorderWidth", 1.23f );
-		testInteger( b, ui, "icon.arc", 123 );
+		testFloat( b, ui, "icon.focusWidth" );
+		testColor( b, ui, "icon.focusColor" );
+		testFloat( b, ui, "icon.borderWidth" );
+		testFloat( b, ui, "icon.selectedBorderWidth" );
+		testFloat( b, ui, "icon.disabledSelectedBorderWidth" );
+		testFloat( b, ui, "icon.indeterminateBorderWidth" );
+		testFloat( b, ui, "icon.disabledIndeterminateBorderWidth" );
+		testInteger( b, ui, "icon.arc" );
 
 		// enabled
-		testColor( b, ui, "icon.borderColor", 0x123456 );
-		testColor( b, ui, "icon.background", 0x901324 );
-		testColor( b, ui, "icon.selectedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.selectedBackground", 0x123456 );
-		testColor( b, ui, "icon.checkmarkColor", 0x123456 );
-		testColor( b, ui, "icon.indeterminateBorderColor", 0x123456 );
-		testColor( b, ui, "icon.indeterminateBackground", 0x123456 );
-		testColor( b, ui, "icon.indeterminateCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.borderColor" );
+		testColor( b, ui, "icon.background" );
+		testColor( b, ui, "icon.selectedBorderColor" );
+		testColor( b, ui, "icon.selectedBackground" );
+		testColor( b, ui, "icon.checkmarkColor" );
+		testColor( b, ui, "icon.indeterminateBorderColor" );
+		testColor( b, ui, "icon.indeterminateBackground" );
+		testColor( b, ui, "icon.indeterminateCheckmarkColor" );
 
 		// disabled
-		testColor( b, ui, "icon.disabledBorderColor", 0x123456 );
-		testColor( b, ui, "icon.disabledBackground", 0x123456 );
-		testColor( b, ui, "icon.disabledSelectedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.disabledSelectedBackground", 0x123456 );
-		testColor( b, ui, "icon.disabledCheckmarkColor", 0x123456 );
-		testColor( b, ui, "icon.disabledIndeterminateBorderColor", 0x123456 );
-		testColor( b, ui, "icon.disabledIndeterminateBackground", 0x123456 );
-		testColor( b, ui, "icon.disabledIndeterminateCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.disabledBorderColor" );
+		testColor( b, ui, "icon.disabledBackground" );
+		testColor( b, ui, "icon.disabledSelectedBorderColor" );
+		testColor( b, ui, "icon.disabledSelectedBackground" );
+		testColor( b, ui, "icon.disabledCheckmarkColor" );
+		testColor( b, ui, "icon.disabledIndeterminateBorderColor" );
+		testColor( b, ui, "icon.disabledIndeterminateBackground" );
+		testColor( b, ui, "icon.disabledIndeterminateCheckmarkColor" );
 
 		// focused
-		testColor( b, ui, "icon.focusedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.focusedBackground", 0x123456 );
-		testColor( b, ui, "icon.focusedSelectedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.focusedSelectedBackground", 0x123456 );
-		testColor( b, ui, "icon.focusedCheckmarkColor", 0x123456 );
-		testColor( b, ui, "icon.focusedIndeterminateBorderColor", 0x123456 );
-		testColor( b, ui, "icon.focusedIndeterminateBackground", 0x123456 );
-		testColor( b, ui, "icon.focusedIndeterminateCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.focusedBorderColor" );
+		testColor( b, ui, "icon.focusedBackground" );
+		testColor( b, ui, "icon.focusedSelectedBorderColor" );
+		testColor( b, ui, "icon.focusedSelectedBackground" );
+		testColor( b, ui, "icon.focusedCheckmarkColor" );
+		testColor( b, ui, "icon.focusedIndeterminateBorderColor" );
+		testColor( b, ui, "icon.focusedIndeterminateBackground" );
+		testColor( b, ui, "icon.focusedIndeterminateCheckmarkColor" );
 
 		// hover
-		testColor( b, ui, "icon.hoverBorderColor", 0x123456 );
-		testColor( b, ui, "icon.hoverBackground", 0x123456 );
-		testColor( b, ui, "icon.hoverSelectedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.hoverSelectedBackground", 0x123456 );
-		testColor( b, ui, "icon.hoverCheckmarkColor", 0x123456 );
-		testColor( b, ui, "icon.hoverIndeterminateBorderColor", 0x123456 );
-		testColor( b, ui, "icon.hoverIndeterminateBackground", 0x123456 );
-		testColor( b, ui, "icon.hoverIndeterminateCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.hoverBorderColor" );
+		testColor( b, ui, "icon.hoverBackground" );
+		testColor( b, ui, "icon.hoverSelectedBorderColor" );
+		testColor( b, ui, "icon.hoverSelectedBackground" );
+		testColor( b, ui, "icon.hoverCheckmarkColor" );
+		testColor( b, ui, "icon.hoverIndeterminateBorderColor" );
+		testColor( b, ui, "icon.hoverIndeterminateBackground" );
+		testColor( b, ui, "icon.hoverIndeterminateCheckmarkColor" );
 
 		// pressed
-		testColor( b, ui, "icon.pressedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.pressedBackground", 0x123456 );
-		testColor( b, ui, "icon.pressedSelectedBorderColor", 0x123456 );
-		testColor( b, ui, "icon.pressedSelectedBackground", 0x123456 );
-		testColor( b, ui, "icon.pressedCheckmarkColor", 0x123456 );
-		testColor( b, ui, "icon.pressedIndeterminateBorderColor", 0x123456 );
-		testColor( b, ui, "icon.pressedIndeterminateBackground", 0x123456 );
-		testColor( b, ui, "icon.pressedIndeterminateCheckmarkColor", 0x123456 );
+		testColor( b, ui, "icon.pressedBorderColor" );
+		testColor( b, ui, "icon.pressedBackground" );
+		testColor( b, ui, "icon.pressedSelectedBorderColor" );
+		testColor( b, ui, "icon.pressedSelectedBackground" );
+		testColor( b, ui, "icon.pressedCheckmarkColor" );
+		testColor( b, ui, "icon.pressedIndeterminateBorderColor" );
+		testColor( b, ui, "icon.pressedIndeterminateBackground" );
+		testColor( b, ui, "icon.pressedIndeterminateCheckmarkColor" );
 	}
 
 	@Test
@@ -717,31 +758,31 @@ public class TestFlatStyleableValue
 		FlatScrollBarUI ui = (FlatScrollBarUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "track", 0x123456 );
-		testColor( c, ui, "thumb", 0x123456 );
-		testInteger( c, ui, "width", 123 );
-		testDimension( c, ui, "minimumThumbSize", 1,2 );
-		testDimension( c, ui, "maximumThumbSize", 1,2 );
-		testBoolean( c, ui, "allowsAbsolutePositioning", true );
+		testColor( c, ui, "track" );
+		testColor( c, ui, "thumb" );
+		testInteger( c, ui, "width" );
+		testDimension( c, ui, "minimumThumbSize" );
+		testDimension( c, ui, "maximumThumbSize" );
+		testBoolean( c, ui, "allowsAbsolutePositioning" );
 
-		testDimension( c, ui, "minimumButtonSize", 1,2 );
-		testInsets( c, ui, "trackInsets", 1,2,3,4 );
-		testInsets( c, ui, "thumbInsets", 1,2,3,4 );
-		testInteger( c, ui, "trackArc", 123 );
-		testInteger( c, ui, "thumbArc", 123 );
-		testColor( c, ui, "hoverTrackColor", 0x123456 );
-		testColor( c, ui, "hoverThumbColor", 0x123456 );
-		testBoolean( c, ui, "hoverThumbWithTrack", true );
-		testColor( c, ui, "pressedTrackColor", 0x123456 );
-		testColor( c, ui, "pressedThumbColor", 0x123456 );
-		testBoolean( c, ui, "pressedThumbWithTrack", true );
+		testDimension( c, ui, "minimumButtonSize" );
+		testInsets( c, ui, "trackInsets" );
+		testInsets( c, ui, "thumbInsets" );
+		testInteger( c, ui, "trackArc" );
+		testInteger( c, ui, "thumbArc" );
+		testColor( c, ui, "hoverTrackColor" );
+		testColor( c, ui, "hoverThumbColor" );
+		testBoolean( c, ui, "hoverThumbWithTrack" );
+		testColor( c, ui, "pressedTrackColor" );
+		testColor( c, ui, "pressedThumbColor" );
+		testBoolean( c, ui, "pressedThumbWithTrack" );
 
-		testBoolean( c, ui, "showButtons", true );
+		testBoolean( c, ui, "showButtons" );
 		testString( c, ui, "arrowType", "chevron" );
-		testColor( c, ui, "buttonArrowColor", 0x123456 );
-		testColor( c, ui, "buttonDisabledArrowColor", 0x123456 );
-		testColor( c, ui, "hoverButtonBackground", 0x123456 );
-		testColor( c, ui, "pressedButtonBackground", 0x123456 );
+		testColor( c, ui, "buttonArrowColor" );
+		testColor( c, ui, "buttonDisabledArrowColor" );
+		testColor( c, ui, "hoverButtonBackground" );
+		testColor( c, ui, "pressedButtonBackground" );
 	}
 
 	@Test
@@ -753,7 +794,7 @@ public class TestFlatStyleableValue
 		// border
 		flatScrollPaneBorder( c, ui );
 
-		testBoolean( c, ui, "showButtons", true );
+		testBoolean( c, ui, "showButtons" );
 	}
 
 	@Test
@@ -766,9 +807,9 @@ public class TestFlatStyleableValue
 	}
 
 	private void separator( FlatSeparatorUI ui, JSeparator c ) {
-		testInteger( c, ui, "height", 123 );
-		testInteger( c, ui, "stripeWidth", 123 );
-		testInteger( c, ui, "stripeIndent", 123 );
+		testInteger( c, ui, "height" );
+		testInteger( c, ui, "stripeWidth" );
+		testInteger( c, ui, "stripeIndent" );
 	}
 
 	@Test
@@ -777,23 +818,23 @@ public class TestFlatStyleableValue
 		FlatSliderUI ui = (FlatSliderUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "trackWidth", 123 );
-		testDimension( c, ui, "thumbSize", 1,2 );
-		testInteger( c, ui, "focusWidth", 123 );
-		testFloat( c, ui, "thumbBorderWidth", 1.23f );
+		testInteger( c, ui, "trackWidth" );
+		testDimension( c, ui, "thumbSize" );
+		testInteger( c, ui, "focusWidth" );
+		testFloat( c, ui, "thumbBorderWidth" );
 
-		testColor( c, ui, "trackValueColor", 0x123456 );
-		testColor( c, ui, "trackColor", 0x123456 );
-		testColor( c, ui, "thumbColor", 0x123456 );
-		testColor( c, ui, "thumbBorderColor", 0x123456 );
-		testColor( c, ui, "focusedColor", 0x123456 );
-		testColor( c, ui, "focusedThumbBorderColor", 0x123456 );
-		testColor( c, ui, "hoverThumbColor", 0x123456 );
-		testColor( c, ui, "pressedThumbColor", 0x123456 );
-		testColor( c, ui, "disabledTrackColor", 0x123456 );
-		testColor( c, ui, "disabledThumbColor", 0x123456 );
-		testColor( c, ui, "disabledThumbBorderColor", 0x123456 );
-		testColor( c, ui, "tickColor", 0x123456 );
+		testColor( c, ui, "trackValueColor" );
+		testColor( c, ui, "trackColor" );
+		testColor( c, ui, "thumbColor" );
+		testColor( c, ui, "thumbBorderColor" );
+		testColor( c, ui, "focusedColor" );
+		testColor( c, ui, "focusedThumbBorderColor" );
+		testColor( c, ui, "hoverThumbColor" );
+		testColor( c, ui, "pressedThumbColor" );
+		testColor( c, ui, "disabledTrackColor" );
+		testColor( c, ui, "disabledThumbColor" );
+		testColor( c, ui, "disabledThumbBorderColor" );
+		testColor( c, ui, "tickColor" );
 	}
 
 	@Test
@@ -802,21 +843,21 @@ public class TestFlatStyleableValue
 		FlatSpinnerUI ui = (FlatSpinnerUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "minimumWidth", 123 );
+		testInteger( c, ui, "minimumWidth" );
 		testString( c, ui, "buttonStyle", "button" );
 		testString( c, ui, "arrowType", "chevron" );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "disabledForeground", 0x123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
-		testColor( c, ui, "buttonBackground", 0x123456 );
-		testFloat( c, ui, "buttonSeparatorWidth", 1.23f );
-		testColor( c, ui, "buttonSeparatorColor", 0x123456 );
-		testColor( c, ui, "buttonDisabledSeparatorColor", 0x123456 );
-		testColor( c, ui, "buttonArrowColor", 0x123456 );
-		testColor( c, ui, "buttonDisabledArrowColor", 0x123456 );
-		testColor( c, ui, "buttonHoverArrowColor", 0x123456 );
-		testColor( c, ui, "buttonPressedArrowColor", 0x123456 );
-		testInsets( c, ui, "padding", 1,2,3,4 );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "disabledForeground" );
+		testColor( c, ui, "focusedBackground" );
+		testColor( c, ui, "buttonBackground" );
+		testFloat( c, ui, "buttonSeparatorWidth" );
+		testColor( c, ui, "buttonSeparatorColor" );
+		testColor( c, ui, "buttonDisabledSeparatorColor" );
+		testColor( c, ui, "buttonArrowColor" );
+		testColor( c, ui, "buttonDisabledArrowColor" );
+		testColor( c, ui, "buttonHoverArrowColor" );
+		testColor( c, ui, "buttonPressedArrowColor" );
+		testInsets( c, ui, "padding" );
 
 		// border
 		flatRoundBorder( c, ui );
@@ -829,18 +870,18 @@ public class TestFlatStyleableValue
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testString( c, ui, "arrowType", "chevron" );
-		testColor( c, ui, "draggingColor", 0x123456 );
-		testColor( c, ui, "hoverColor", 0x123456 );
-		testColor( c, ui, "pressedColor", 0x123456 );
-		testColor( c, ui, "oneTouchArrowColor", 0x123456 );
-		testColor( c, ui, "oneTouchHoverArrowColor", 0x123456 );
-		testColor( c, ui, "oneTouchPressedArrowColor", 0x123456 );
+		testColor( c, ui, "draggingColor" );
+		testColor( c, ui, "hoverColor" );
+		testColor( c, ui, "pressedColor" );
+		testColor( c, ui, "oneTouchArrowColor" );
+		testColor( c, ui, "oneTouchHoverArrowColor" );
+		testColor( c, ui, "oneTouchPressedArrowColor" );
 
 		testString( c, ui, "style", "grip" );
-		testColor( c, ui, "gripColor", 0x123456 );
-		testInteger( c, ui, "gripDotCount", 123 );
-		testInteger( c, ui, "gripDotSize", 123 );
-		testInteger( c, ui, "gripGap", 123 );
+		testColor( c, ui, "gripColor" );
+		testInteger( c, ui, "gripDotCount" );
+		testInteger( c, ui, "gripDotSize" );
+		testInteger( c, ui, "gripGap" );
 	}
 
 	@Test
@@ -849,40 +890,40 @@ public class TestFlatStyleableValue
 		FlatTabbedPaneUI ui = (FlatTabbedPaneUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInsets( c, ui, "tabInsets", 1,2,3,4 );
-		testInsets( c, ui, "tabAreaInsets", 1,2,3,4 );
-		testInteger( c, ui, "textIconGap", 123 );
+		testInsets( c, ui, "tabInsets" );
+		testInsets( c, ui, "tabAreaInsets" );
+		testInteger( c, ui, "textIconGap" );
 
-		testColor( c, ui, "disabledForeground", 0x123456 );
+		testColor( c, ui, "disabledForeground" );
 
-		testColor( c, ui, "selectedBackground", 0x123456 );
-		testColor( c, ui, "selectedForeground", 0x123456 );
-		testColor( c, ui, "underlineColor", 0x123456 );
-		testColor( c, ui, "inactiveUnderlineColor", 0x123456 );
-		testColor( c, ui, "disabledUnderlineColor", 0x123456 );
-		testColor( c, ui, "hoverColor", 0x123456 );
-		testColor( c, ui, "hoverForeground", 0x123456 );
-		testColor( c, ui, "focusColor", 0x123456 );
-		testColor( c, ui, "focusForeground", 0x123456 );
-		testColor( c, ui, "tabSeparatorColor", 0x123456 );
-		testColor( c, ui, "contentAreaColor", 0x123456 );
+		testColor( c, ui, "selectedBackground" );
+		testColor( c, ui, "selectedForeground" );
+		testColor( c, ui, "underlineColor" );
+		testColor( c, ui, "inactiveUnderlineColor" );
+		testColor( c, ui, "disabledUnderlineColor" );
+		testColor( c, ui, "hoverColor" );
+		testColor( c, ui, "hoverForeground" );
+		testColor( c, ui, "focusColor" );
+		testColor( c, ui, "focusForeground" );
+		testColor( c, ui, "tabSeparatorColor" );
+		testColor( c, ui, "contentAreaColor" );
 
-		testInteger( c, ui, "minimumTabWidth", 123 );
-		testInteger( c, ui, "maximumTabWidth", 123 );
-		testInteger( c, ui, "tabHeight", 123 );
-		testInteger( c, ui, "tabSelectionHeight", 123 );
-		testInteger( c, ui, "cardTabSelectionHeight", 123 );
-		testInteger( c, ui, "tabArc", 123 );
-		testInteger( c, ui, "tabSelectionArc", 123 );
-		testInteger( c, ui, "cardTabArc", 123 );
-		testInsets( c, ui, "selectedInsets", 1,2,3,4 );
-		testInsets( c, ui, "tabSelectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "contentSeparatorHeight", 123 );
-		testBoolean( c, ui, "showTabSeparators", false );
-		testBoolean( c, ui, "tabSeparatorsFullHeight", false );
-		testBoolean( c, ui, "hasFullBorder", false );
-		testBoolean( c, ui, "tabsOpaque", false );
-		testBoolean( c, ui, "rotateTabRuns", false );
+		testInteger( c, ui, "minimumTabWidth" );
+		testInteger( c, ui, "maximumTabWidth" );
+		testInteger( c, ui, "tabHeight" );
+		testInteger( c, ui, "tabSelectionHeight" );
+		testInteger( c, ui, "cardTabSelectionHeight" );
+		testInteger( c, ui, "tabArc" );
+		testInteger( c, ui, "tabSelectionArc" );
+		testInteger( c, ui, "cardTabArc" );
+		testInsets( c, ui, "selectedInsets" );
+		testInsets( c, ui, "tabSelectionInsets" );
+		testInteger( c, ui, "contentSeparatorHeight" );
+		testBoolean( c, ui, "showTabSeparators" );
+		testBoolean( c, ui, "tabSeparatorsFullHeight" );
+		testBoolean( c, ui, "hasFullBorder" );
+		testBoolean( c, ui, "tabsOpaque" );
+		testBoolean( c, ui, "rotateTabRuns" );
 
 		testString( c, ui, "tabType", "card" );
 		testString( c, ui, "tabsPopupPolicy", "asNeeded" );
@@ -895,31 +936,31 @@ public class TestFlatStyleableValue
 		testString( c, ui, "tabRotation", "none" );
 
 		testString( c, ui, "arrowType", "chevron" );
-		testInsets( c, ui, "buttonInsets", 1,2,3,4 );
-		testInteger( c, ui, "buttonArc", 123 );
-		testColor( c, ui, "buttonHoverBackground", 0x123456 );
-		testColor( c, ui, "buttonPressedBackground", 0x123456 );
+		testInsets( c, ui, "buttonInsets" );
+		testInteger( c, ui, "buttonArc" );
+		testColor( c, ui, "buttonHoverBackground" );
+		testColor( c, ui, "buttonPressedBackground" );
 
 		testString( c, ui, "moreTabsButtonToolTipText", "Gimme more" );
 		testString( c, ui, "tabCloseToolTipText", "Close me" );
 
-		testBoolean( c, ui, "showContentSeparator", true );
-		testBoolean( c, ui, "hideTabAreaWithOneTab", true );
-		testBoolean( c, ui, "tabClosable", true );
+		testBoolean( c, ui, "showContentSeparator" );
+		testBoolean( c, ui, "hideTabAreaWithOneTab" );
+		testBoolean( c, ui, "tabClosable" );
 		testString( c, ui, "tabIconPlacement", "top" );
 
 		// FlatTabbedPaneCloseIcon
-		testDimension( c, ui, "closeSize", 1,2 );
-		testInteger( c, ui, "closeArc", 123 );
-		testFloat( c, ui, "closeCrossPlainSize", 1.23f );
-		testFloat( c, ui, "closeCrossFilledSize", 1.23f );
-		testFloat( c, ui, "closeCrossLineWidth", 1.23f );
-		testColor( c, ui, "closeBackground", 0x123456 );
-		testColor( c, ui, "closeForeground", 0x123456 );
-		testColor( c, ui, "closeHoverBackground", 0x123456 );
-		testColor( c, ui, "closeHoverForeground", 0x123456 );
-		testColor( c, ui, "closePressedBackground", 0x123456 );
-		testColor( c, ui, "closePressedForeground", 0x123456 );
+		testDimension( c, ui, "closeSize" );
+		testInteger( c, ui, "closeArc" );
+		testFloat( c, ui, "closeCrossPlainSize" );
+		testFloat( c, ui, "closeCrossFilledSize" );
+		testFloat( c, ui, "closeCrossLineWidth" );
+		testColor( c, ui, "closeBackground" );
+		testColor( c, ui, "closeForeground" );
+		testColor( c, ui, "closeHoverBackground" );
+		testColor( c, ui, "closeHoverForeground" );
+		testColor( c, ui, "closePressedBackground" );
+		testColor( c, ui, "closePressedForeground" );
 	}
 
 	@Test
@@ -928,18 +969,18 @@ public class TestFlatStyleableValue
 		FlatTableUI ui = (FlatTableUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testBoolean( c, ui, "showTrailingVerticalLine", true );
-		testColor( c, ui, "selectionBackground", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
-		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
-		testColor( c, ui, "selectionInactiveForeground", 0x901324 );
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 123 );
+		testBoolean( c, ui, "showTrailingVerticalLine" );
+		testColor( c, ui, "selectionBackground" );
+		testColor( c, ui, "selectionForeground" );
+		testColor( c, ui, "selectionInactiveBackground" );
+		testColor( c, ui, "selectionInactiveForeground" );
+		testInsets( c, ui, "selectionInsets" );
+		testInteger( c, ui, "selectionArc" );
 
 		// FlatTableCellBorder
-		testInsets( c, ui, "cellMargins", 1,2,3,4 );
-		testColor( c, ui, "cellFocusColor", 0x123456 );
-		testBoolean( c, ui, "showCellFocusIndicator", true );
+		testInsets( c, ui, "cellMargins" );
+		testColor( c, ui, "cellFocusColor" );
+		testBoolean( c, ui, "showCellFocusIndicator" );
 	}
 
 	@Test
@@ -948,22 +989,22 @@ public class TestFlatStyleableValue
 		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "hoverBackground", 0x123456 );
-		testColor( c, ui, "hoverForeground", 0x123456 );
-		testColor( c, ui, "pressedBackground", 0x123456 );
-		testColor( c, ui, "pressedForeground", 0x123456 );
-		testColor( c, ui, "bottomSeparatorColor", 0x123456 );
-		testInteger( c, ui, "height", 123 );
+		testColor( c, ui, "hoverBackground" );
+		testColor( c, ui, "hoverForeground" );
+		testColor( c, ui, "pressedBackground" );
+		testColor( c, ui, "pressedForeground" );
+		testColor( c, ui, "bottomSeparatorColor" );
+		testInteger( c, ui, "height" );
 		testString( c, ui, "sortIconPosition", "top" );
 
 		// FlatTableHeaderBorder
-		testInsets( c, ui, "cellMargins", 1,2,3,4 );
-		testColor( c, ui, "separatorColor", 0x123456 );
-		testBoolean( c, ui, "showTrailingVerticalLine", true );
+		testInsets( c, ui, "cellMargins" );
+		testColor( c, ui, "separatorColor" );
+		testBoolean( c, ui, "showTrailingVerticalLine" );
 
 		// FlatAscendingSortIcon and FlatDescendingSortIcon
 		testString( c, ui, "arrowType", "chevron" );
-		testColor( c, ui, "sortIconColor", 0x123456 );
+		testColor( c, ui, "sortIconColor" );
 	}
 
 	@Test
@@ -972,10 +1013,10 @@ public class TestFlatStyleableValue
 		FlatTextAreaUI ui = (FlatTextAreaUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "minimumWidth", 123 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "inactiveBackground", 0x123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
+		testInteger( c, ui, "minimumWidth" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "inactiveBackground" );
+		testColor( c, ui, "focusedBackground" );
 	}
 
 	@Test
@@ -988,16 +1029,16 @@ public class TestFlatStyleableValue
 	}
 
 	private void textField( JTextComponent c, FlatTextFieldUI ui ) {
-		testInteger( c, ui, "minimumWidth", 123 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "inactiveBackground", 0x123456 );
-		testColor( c, ui, "placeholderForeground", 0x123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
-		testInteger( c, ui, "iconTextGap", 123 );
+		testInteger( c, ui, "minimumWidth" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "inactiveBackground" );
+		testColor( c, ui, "placeholderForeground" );
+		testColor( c, ui, "focusedBackground" );
+		testInteger( c, ui, "iconTextGap" );
 		testIcon( c, ui, "leadingIcon", TestIcon.class.getName(), new TestIcon() );
 		testIcon( c, ui, "trailingIcon", TestIcon.class.getName(), new TestIcon() );
 
-		testBoolean( c, ui, "showClearButton", true );
+		testBoolean( c, ui, "showClearButton" );
 
 		// border
 		flatTextBorder( c, ui );
@@ -1009,10 +1050,10 @@ public class TestFlatStyleableValue
 		FlatTextPaneUI ui = (FlatTextPaneUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "minimumWidth", 123 );
-		testColor( c, ui, "disabledBackground", 0x123456 );
-		testColor( c, ui, "inactiveBackground", 0x123456 );
-		testColor( c, ui, "focusedBackground", 0x123456 );
+		testInteger( c, ui, "minimumWidth" );
+		testColor( c, ui, "disabledBackground" );
+		testColor( c, ui, "inactiveBackground" );
+		testColor( c, ui, "focusedBackground" );
 	}
 
 	@Test
@@ -1024,15 +1065,15 @@ public class TestFlatStyleableValue
 		// FlatToggleButtonUI extends FlatButtonUI
 		button( b, ui );
 
-		testInteger( b, ui, "tab.underlineHeight", 123 );
-		testColor( b, ui, "tab.underlineColor", 0x123456 );
-		testColor( b, ui, "tab.disabledUnderlineColor", 0x123456 );
-		testColor( b, ui, "tab.selectedBackground", 0x123456 );
-		testColor( b, ui, "tab.selectedForeground", 0x123456 );
-		testColor( b, ui, "tab.hoverBackground", 0x123456 );
-		testColor( b, ui, "tab.hoverForeground", 0x123456 );
-		testColor( b, ui, "tab.focusBackground", 0x123456 );
-		testColor( b, ui, "tab.focusForeground", 0x123456 );
+		testInteger( b, ui, "tab.underlineHeight" );
+		testColor( b, ui, "tab.underlineColor" );
+		testColor( b, ui, "tab.disabledUnderlineColor" );
+		testColor( b, ui, "tab.selectedBackground" );
+		testColor( b, ui, "tab.selectedForeground" );
+		testColor( b, ui, "tab.hoverBackground" );
+		testColor( b, ui, "tab.hoverForeground" );
+		testColor( b, ui, "tab.focusBackground" );
+		testColor( b, ui, "tab.focusForeground" );
 	}
 
 	@Test
@@ -1041,16 +1082,16 @@ public class TestFlatStyleableValue
 		FlatToolBarUI ui = (FlatToolBarUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testBoolean( c, ui, "focusableButtons", true );
-		testBoolean( c, ui, "arrowKeysOnlyNavigation", true );
-		testInteger( c, ui, "hoverButtonGroupArc", 12 );
-		testColor( c, ui, "hoverButtonGroupBackground", 0x123456 );
+		testBoolean( c, ui, "focusableButtons" );
+		testBoolean( c, ui, "arrowKeysOnlyNavigation" );
+		testInteger( c, ui, "hoverButtonGroupArc" );
+		testColor( c, ui, "hoverButtonGroupBackground" );
 
-		testInsets( c, ui, "borderMargins", 1,2,3,4 );
-		testColor( c, ui, "gripColor", 0x123456 );
+		testInsets( c, ui, "borderMargins" );
+		testColor( c, ui, "gripColor" );
 
-		testInteger( c, ui, "separatorWidth", 123 );
-		testColor( c, ui, "separatorColor", 0x123456 );
+		testInteger( c, ui, "separatorWidth" );
+		testColor( c, ui, "separatorColor" );
 	}
 
 	@Test
@@ -1059,8 +1100,8 @@ public class TestFlatStyleableValue
 		FlatToolBarSeparatorUI ui = (FlatToolBarSeparatorUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testInteger( c, ui, "separatorWidth", 123 );
-		testColor( c, ui, "separatorColor", 0x123456 );
+		testInteger( c, ui, "separatorWidth" );
+		testColor( c, ui, "separatorColor" );
 	}
 
 	@Test
@@ -1069,27 +1110,27 @@ public class TestFlatStyleableValue
 		FlatTreeUI ui = (FlatTreeUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testColor( c, ui, "selectionBackground", 0x123456 );
-		testColor( c, ui, "selectionForeground", 0x123456 );
-		testColor( c, ui, "selectionInactiveBackground", 0x123456 );
-		testColor( c, ui, "selectionInactiveForeground", 0x123456 );
-		testColor( c, ui, "selectionBorderColor", 0x123456 );
-		testColor( c, ui, "alternateRowColor", 0x123456 );
-		testInsets( c, ui, "selectionInsets", 1,2,3,4 );
-		testInteger( c, ui, "selectionArc", 123 );
-		testBoolean( c, ui, "wideSelection", true );
-		testBoolean( c, ui, "wideCellRenderer", true );
-		testBoolean( c, ui, "showCellFocusIndicator", true );
+		testColor( c, ui, "selectionBackground" );
+		testColor( c, ui, "selectionForeground" );
+		testColor( c, ui, "selectionInactiveBackground" );
+		testColor( c, ui, "selectionInactiveForeground" );
+		testColor( c, ui, "selectionBorderColor" );
+		testColor( c, ui, "alternateRowColor" );
+		testInsets( c, ui, "selectionInsets" );
+		testInteger( c, ui, "selectionArc" );
+		testBoolean( c, ui, "wideSelection" );
+		testBoolean( c, ui, "wideCellRenderer" );
+		testBoolean( c, ui, "showCellFocusIndicator" );
 
-		testBoolean( c, ui, "paintSelection", false );
+		testBoolean( c, ui, "paintSelection" );
 
 		// icons
 		testString( c, ui, "icon.arrowType", "chevron" );
-		testColor( c, ui, "icon.expandedColor", 0x123456 );
-		testColor( c, ui, "icon.collapsedColor", 0x123456 );
-		testColor( c, ui, "icon.leafColor", 0x123456 );
-		testColor( c, ui, "icon.closedColor", 0x123456 );
-		testColor( c, ui, "icon.openColor", 0x123456 );
+		testColor( c, ui, "icon.expandedColor" );
+		testColor( c, ui, "icon.collapsedColor" );
+		testColor( c, ui, "icon.leafColor" );
+		testColor( c, ui, "icon.closedColor" );
+		testColor( c, ui, "icon.openColor" );
 	}
 
 	//---- component borders --------------------------------------------------
@@ -1097,75 +1138,75 @@ public class TestFlatStyleableValue
 	private void flatButtonBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
-		testInteger( c, ui, "arc", 123 );
+		testInteger( c, ui, "arc" );
 
-		testColor( c, ui, "borderColor", 0x123456 );
-		testColor( c, ui, "disabledBorderColor", 0x123456 );
-		testColor( c, ui, "focusedBorderColor", 0x123456 );
-		testColor( c, ui, "hoverBorderColor", 0x123456 );
-		testColor( c, ui, "pressedBorderColor", 0x123456 );
+		testColor( c, ui, "borderColor" );
+		testColor( c, ui, "disabledBorderColor" );
+		testColor( c, ui, "focusedBorderColor" );
+		testColor( c, ui, "hoverBorderColor" );
+		testColor( c, ui, "pressedBorderColor" );
 
-		testColor( c, ui, "selectedBorderColor", 0x123456 );
-		testColor( c, ui, "disabledSelectedBorderColor", 0x123456 );
-		testColor( c, ui, "focusedSelectedBorderColor", 0x123456 );
-		testColor( c, ui, "hoverSelectedBorderColor", 0x123456 );
-		testColor( c, ui, "pressedSelectedBorderColor", 0x123456 );
+		testColor( c, ui, "selectedBorderColor" );
+		testColor( c, ui, "disabledSelectedBorderColor" );
+		testColor( c, ui, "focusedSelectedBorderColor" );
+		testColor( c, ui, "hoverSelectedBorderColor" );
+		testColor( c, ui, "pressedSelectedBorderColor" );
 
-		testFloat( c, ui, "default.borderWidth", 1.23f );
-		testColor( c, ui, "default.borderColor", 0x123456 );
-		testColor( c, ui, "default.focusedBorderColor", 0x123456 );
-		testColor( c, ui, "default.focusColor", 0x123456 );
-		testColor( c, ui, "default.hoverBorderColor", 0x123456 );
-		testColor( c, ui, "default.pressedBorderColor", 0x123456 );
+		testFloat( c, ui, "default.borderWidth" );
+		testColor( c, ui, "default.borderColor" );
+		testColor( c, ui, "default.focusedBorderColor" );
+		testColor( c, ui, "default.focusColor" );
+		testColor( c, ui, "default.hoverBorderColor" );
+		testColor( c, ui, "default.pressedBorderColor" );
 
-		testFloat( c, ui, "toolbar.focusWidth", 1.23f );
-		testColor( c, ui, "toolbar.focusColor", 0x123456 );
-		testInsets( c, ui, "toolbar.margin", 1,2,3,4 );
-		testInsets( c, ui, "toolbar.spacingInsets", 1,2,3,4 );
+		testFloat( c, ui, "toolbar.focusWidth" );
+		testColor( c, ui, "toolbar.focusColor" );
+		testInsets( c, ui, "toolbar.margin" );
+		testInsets( c, ui, "toolbar.spacingInsets" );
 	}
 
 	private void flatRoundBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
-		testInteger( c, ui, "arc", 123 );
-		testBoolean( c, ui, "roundRect", true );
+		testInteger( c, ui, "arc" );
+		testBoolean( c, ui, "roundRect" );
 	}
 
 	private void flatScrollPaneBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
-		testInteger( c, ui, "arc", 123 );
+		testInteger( c, ui, "arc" );
 	}
 
 	private void flatTextBorder( JComponent c, StyleableUI ui ) {
 		flatBorder( c, ui );
 
-		testInteger( c, ui, "arc", 123 );
-		testBoolean( c, ui, "roundRect", true );
+		testInteger( c, ui, "arc" );
+		testBoolean( c, ui, "roundRect" );
 	}
 
 	private void flatBorder( JComponent c, StyleableUI ui ) {
-		testInteger( c, ui, "focusWidth", 123 );
-		testFloat( c, ui, "innerFocusWidth", 1.23f );
-		testFloat( c, ui, "innerOutlineWidth", 1.23f );
-		testFloat( c, ui, "borderWidth", 1.23f );
+		testInteger( c, ui, "focusWidth" );
+		testFloat( c, ui, "innerFocusWidth" );
+		testFloat( c, ui, "innerOutlineWidth" );
+		testFloat( c, ui, "borderWidth" );
 
-		testColor( c, ui, "focusColor", 0x123456 );
-		testColor( c, ui, "borderColor", 0x123456 );
-		testColor( c, ui, "disabledBorderColor", 0x123456 );
-		testColor( c, ui, "focusedBorderColor", 0x123456 );
+		testColor( c, ui, "focusColor" );
+		testColor( c, ui, "borderColor" );
+		testColor( c, ui, "disabledBorderColor" );
+		testColor( c, ui, "focusedBorderColor" );
 
-		testColor( c, ui, "error.borderColor", 0x123456 );
-		testColor( c, ui, "error.focusedBorderColor", 0x123456 );
-		testColor( c, ui, "warning.borderColor", 0x123456 );
-		testColor( c, ui, "warning.focusedBorderColor", 0x123456 );
-		testColor( c, ui, "success.borderColor", 0x123456 );
-		testColor( c, ui, "success.focusedBorderColor", 0x123456 );
-		testColor( c, ui, "custom.borderColor", 0x123456 );
+		testColor( c, ui, "error.borderColor" );
+		testColor( c, ui, "error.focusedBorderColor" );
+		testColor( c, ui, "warning.borderColor" );
+		testColor( c, ui, "warning.focusedBorderColor" );
+		testColor( c, ui, "success.borderColor" );
+		testColor( c, ui, "success.focusedBorderColor" );
+		testColor( c, ui, "custom.borderColor" );
 
 		testString( c, ui, "outline", "error" );
-		testColor( c, ui, "outlineColor", 0x123456 );
-		testColor( c, ui, "outlineFocusedColor", 0x123456 );
+		testColor( c, ui, "outlineColor" );
+		testColor( c, ui, "outlineFocusedColor" );
 	}
 
 	//---- borders ------------------------------------------------------------
@@ -1178,31 +1219,31 @@ public class TestFlatStyleableValue
 		// FlatButtonBorder extends FlatBorder
 		flatBorder( border );
 
-		testValue( border, "arc", 6 );
+		testValueInteger( border, "arc" );
 
-		testValue( border, "borderColor", Color.WHITE );
-		testValue( border, "disabledBorderColor", Color.WHITE );
-		testValue( border, "focusedBorderColor", Color.WHITE );
-		testValue( border, "hoverBorderColor", Color.WHITE );
-		testValue( border, "pressedBorderColor", Color.WHITE );
+		testValueColor( border, "borderColor" );
+		testValueColor( border, "disabledBorderColor" );
+		testValueColor( border, "focusedBorderColor" );
+		testValueColor( border, "hoverBorderColor" );
+		testValueColor( border, "pressedBorderColor" );
 
-		testValue( border, "selectedBorderColor", Color.WHITE );
-		testValue( border, "disabledSelectedBorderColor", Color.WHITE );
-		testValue( border, "focusedSelectedBorderColor", Color.WHITE );
-		testValue( border, "hoverSelectedBorderColor", Color.WHITE );
-		testValue( border, "pressedSelectedBorderColor", Color.WHITE );
+		testValueColor( border, "selectedBorderColor" );
+		testValueColor( border, "disabledSelectedBorderColor" );
+		testValueColor( border, "focusedSelectedBorderColor" );
+		testValueColor( border, "hoverSelectedBorderColor" );
+		testValueColor( border, "pressedSelectedBorderColor" );
 
-		testValue( border, "default.borderWidth", 2f );
-		testValue( border, "default.borderColor", Color.WHITE );
-		testValue( border, "default.focusedBorderColor", Color.WHITE );
-		testValue( border, "default.focusColor", Color.WHITE );
-		testValue( border, "default.hoverBorderColor", Color.WHITE );
-		testValue( border, "default.pressedBorderColor", Color.WHITE );
+		testValueFloat( border, "default.borderWidth" );
+		testValueColor( border, "default.borderColor" );
+		testValueColor( border, "default.focusedBorderColor" );
+		testValueColor( border, "default.focusColor" );
+		testValueColor( border, "default.hoverBorderColor" );
+		testValueColor( border, "default.pressedBorderColor" );
 
-		testValue( border, "toolbar.focusWidth", 1.5f );
-		testValue( border, "toolbar.focusColor", Color.WHITE );
-		testValue( border, "toolbar.margin", new Insets( 1, 2, 3, 4 ) );
-		testValue( border, "toolbar.spacingInsets", new Insets( 1, 2, 3, 4 ) );
+		testValueFloat( border, "toolbar.focusWidth" );
+		testValueColor( border, "toolbar.focusColor" );
+		testValueInsets( border, "toolbar.margin" );
+		testValueInsets( border, "toolbar.spacingInsets" );
 	}
 
 	@Test
@@ -1213,8 +1254,8 @@ public class TestFlatStyleableValue
 		// FlatRoundBorder extends FlatBorder
 		flatBorder( border );
 
-		testValue( border, "arc", 6 );
-		testValue( border, "roundRect", true );
+		testValueInteger( border, "arc" );
+		testValueBoolean( border, "roundRect" );
 	}
 
 	@Test
@@ -1225,7 +1266,7 @@ public class TestFlatStyleableValue
 		// FlatScrollPaneBorder extends FlatBorder
 		flatBorder( border );
 
-		testValue( border, "arc", 6 );
+		testValueInteger( border, "arc" );
 	}
 
 	@Test
@@ -1236,8 +1277,8 @@ public class TestFlatStyleableValue
 		// FlatTextBorder extends FlatBorder
 		flatBorder( border );
 
-		testValue( border, "arc", 6 );
-		testValue( border, "roundRect", true );
+		testValueInteger( border, "arc" );
+		testValueBoolean( border, "roundRect" );
 	}
 
 	@Test
@@ -1249,27 +1290,27 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatBorder( FlatBorder border ) {
-		testValue( border, "focusWidth", 2 );
-		testValue( border, "innerFocusWidth", 0.5f );
-		testValue( border, "innerOutlineWidth", 1.5f );
-		testValue( border, "borderWidth", 1f );
+		testValueInteger( border, "focusWidth" );
+		testValueFloat( border, "innerFocusWidth" );
+		testValueFloat( border, "innerOutlineWidth" );
+		testValueFloat( border, "borderWidth" );
 
-		testValue( border, "focusColor", Color.WHITE );
-		testValue( border, "borderColor", Color.WHITE );
-		testValue( border, "disabledBorderColor", Color.WHITE );
-		testValue( border, "focusedBorderColor", Color.WHITE );
+		testValueColor( border, "focusColor" );
+		testValueColor( border, "borderColor" );
+		testValueColor( border, "disabledBorderColor" );
+		testValueColor( border, "focusedBorderColor" );
 
-		testValue( border, "error.borderColor", Color.WHITE );
-		testValue( border, "error.focusedBorderColor", Color.WHITE );
-		testValue( border, "warning.borderColor", Color.WHITE );
-		testValue( border, "warning.focusedBorderColor", Color.WHITE );
-		testValue( border, "success.borderColor", Color.WHITE );
-		testValue( border, "success.focusedBorderColor", Color.WHITE );
-		testValue( border, "custom.borderColor", Color.WHITE );
+		testValueColor( border, "error.borderColor" );
+		testValueColor( border, "error.focusedBorderColor" );
+		testValueColor( border, "warning.borderColor" );
+		testValueColor( border, "warning.focusedBorderColor" );
+		testValueColor( border, "success.borderColor" );
+		testValueColor( border, "success.focusedBorderColor" );
+		testValueColor( border, "custom.borderColor" );
 
-		testValue( border, "outline", "error" );
-		testValue( border, "outlineColor", Color.WHITE );
-		testValue( border, "outlineFocusedColor", Color.WHITE );
+		testValueString( border, "outline", "error" );
+		testValueColor( border, "outlineColor" );
+		testValueColor( border, "outlineFocusedColor" );
 	}
 
 	@Test
@@ -1277,9 +1318,9 @@ public class TestFlatStyleableValue
 		FlatDropShadowBorder border = new FlatDropShadowBorder();
 		expectedStyleableInfos = border.getStyleableInfos();
 
-		testValue( border, "shadowColor", Color.WHITE );
-		testValue( border, "shadowInsets", new Insets( 1, 2, 3, 4 ) );
-		testValue( border, "shadowOpacity", 1.23f );
+		testValueColor( border, "shadowColor" );
+		testValueInsets( border, "shadowInsets" );
+		testValueFloat( border, "shadowOpacity" );
 	}
 
 	@Test
@@ -1287,7 +1328,7 @@ public class TestFlatStyleableValue
 		FlatMenuBarBorder border = new FlatMenuBarBorder();
 		expectedStyleableInfos = border.getStyleableInfos();
 
-		testValue( border, "borderColor", Color.WHITE );
+		testValueColor( border, "borderColor" );
 	}
 
 	@Test
@@ -1295,8 +1336,8 @@ public class TestFlatStyleableValue
 		FlatPopupMenuBorder border = new FlatPopupMenuBorder();
 		expectedStyleableInfos = border.getStyleableInfos();
 
-		testValue( border, "borderInsets", new Insets( 1, 2, 3, 4 ) );
-		testValue( border, "borderColor", Color.WHITE );
+		testValueInsets( border, "borderInsets" );
+		testValueColor( border, "borderColor" );
 	}
 
 	@Test
@@ -1304,18 +1345,18 @@ public class TestFlatStyleableValue
 		FlatInternalFrameBorder border = new FlatInternalFrameBorder();
 		expectedStyleableInfos = border.getStyleableInfos();
 
-		testValue( border, "activeBorderColor", Color.WHITE );
-		testValue( border, "inactiveBorderColor", Color.WHITE );
-		testValue( border, "borderLineWidth", 123 );
-		testValue( border, "dropShadowPainted", false );
-		testValue( border, "borderMargins", new Insets( 1, 2, 3, 4 ) );
+		testValueColor( border, "activeBorderColor" );
+		testValueColor( border, "inactiveBorderColor" );
+		testValueInteger( border, "borderLineWidth" );
+		testValueBoolean( border, "dropShadowPainted" );
+		testValueInsets( border, "borderMargins" );
 
-		testValue( border, "activeDropShadowColor", Color.WHITE );
-		testValue( border, "activeDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
-		testValue( border, "activeDropShadowOpacity", 1.23f );
-		testValue( border, "inactiveDropShadowColor", Color.WHITE );
-		testValue( border, "inactiveDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
-		testValue( border, "inactiveDropShadowOpacity", 1.23f );
+		testValueColor( border, "activeDropShadowColor" );
+		testValueInsets( border, "activeDropShadowInsets" );
+		testValueFloat( border, "activeDropShadowOpacity" );
+		testValueColor( border, "inactiveDropShadowColor" );
+		testValueInsets( border, "inactiveDropShadowInsets" );
+		testValueFloat( border, "inactiveDropShadowOpacity" );
 	}
 
 	//---- icons --------------------------------------------------------------
@@ -1336,68 +1377,68 @@ public class TestFlatStyleableValue
 		// FlatRadioButtonIcon extends FlatCheckBoxIcon
 		flatCheckBoxIcon( icon );
 
-		testValue( icon, "centerDiameter", 8f );
+		testValueFloat( icon, "centerDiameter" );
 	}
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
-		testValue( icon, "focusWidth", 1.5f );
-		testValue( icon, "focusColor", Color.WHITE );
-		testValue( icon, "borderWidth", 1.5f );
-		testValue( icon, "selectedBorderWidth", 1.5f );
-		testValue( icon, "disabledSelectedBorderWidth", 1.5f );
-		testValue( icon, "indeterminateBorderWidth", 1.5f );
-		testValue( icon, "disabledIndeterminateBorderWidth", 1.5f );
-		testValue( icon, "arc", 5 );
+		testValueFloat( icon, "focusWidth" );
+		testValueColor( icon, "focusColor" );
+		testValueFloat( icon, "borderWidth" );
+		testValueFloat( icon, "selectedBorderWidth" );
+		testValueFloat( icon, "disabledSelectedBorderWidth" );
+		testValueFloat( icon, "indeterminateBorderWidth" );
+		testValueFloat( icon, "disabledIndeterminateBorderWidth" );
+		testValueInteger( icon, "arc" );
 
 		// enabled
-		testValue( icon, "borderColor", Color.WHITE );
-		testValue( icon, "background", Color.WHITE );
-		testValue( icon, "selectedBorderColor", Color.WHITE );
-		testValue( icon, "selectedBackground", Color.WHITE );
-		testValue( icon, "checkmarkColor", Color.WHITE );
-		testValue( icon, "indeterminateBorderColor", Color.WHITE );
-		testValue( icon, "indeterminateBackground", Color.WHITE );
-		testValue( icon, "indeterminateCheckmarkColor", Color.WHITE );
+		testValueColor( icon, "borderColor" );
+		testValueColor( icon, "background" );
+		testValueColor( icon, "selectedBorderColor" );
+		testValueColor( icon, "selectedBackground" );
+		testValueColor( icon, "checkmarkColor" );
+		testValueColor( icon, "indeterminateBorderColor" );
+		testValueColor( icon, "indeterminateBackground" );
+		testValueColor( icon, "indeterminateCheckmarkColor" );
 
 		// disabled
-		testValue( icon, "disabledBorderColor", Color.WHITE );
-		testValue( icon, "disabledBackground", Color.WHITE );
-		testValue( icon, "disabledSelectedBorderColor", Color.WHITE );
-		testValue( icon, "disabledSelectedBackground", Color.WHITE );
-		testValue( icon, "disabledCheckmarkColor", Color.WHITE );
-		testValue( icon, "disabledIndeterminateBorderColor", Color.WHITE );
-		testValue( icon, "disabledIndeterminateBackground", Color.WHITE );
-		testValue( icon, "disabledIndeterminateCheckmarkColor", Color.WHITE );
+		testValueColor( icon, "disabledBorderColor" );
+		testValueColor( icon, "disabledBackground" );
+		testValueColor( icon, "disabledSelectedBorderColor" );
+		testValueColor( icon, "disabledSelectedBackground" );
+		testValueColor( icon, "disabledCheckmarkColor" );
+		testValueColor( icon, "disabledIndeterminateBorderColor" );
+		testValueColor( icon, "disabledIndeterminateBackground" );
+		testValueColor( icon, "disabledIndeterminateCheckmarkColor" );
 
 		// focused
-		testValue( icon, "focusedBorderColor", Color.WHITE );
-		testValue( icon, "focusedBackground", Color.WHITE );
-		testValue( icon, "focusedSelectedBorderColor", Color.WHITE );
-		testValue( icon, "focusedSelectedBackground", Color.WHITE );
-		testValue( icon, "focusedCheckmarkColor", Color.WHITE );
-		testValue( icon, "focusedIndeterminateBorderColor", Color.WHITE );
-		testValue( icon, "focusedIndeterminateBackground", Color.WHITE );
-		testValue( icon, "focusedIndeterminateCheckmarkColor", Color.WHITE );
+		testValueColor( icon, "focusedBorderColor" );
+		testValueColor( icon, "focusedBackground" );
+		testValueColor( icon, "focusedSelectedBorderColor" );
+		testValueColor( icon, "focusedSelectedBackground" );
+		testValueColor( icon, "focusedCheckmarkColor" );
+		testValueColor( icon, "focusedIndeterminateBorderColor" );
+		testValueColor( icon, "focusedIndeterminateBackground" );
+		testValueColor( icon, "focusedIndeterminateCheckmarkColor" );
 
 		// hover
-		testValue( icon, "hoverBorderColor", Color.WHITE );
-		testValue( icon, "hoverBackground", Color.WHITE );
-		testValue( icon, "hoverSelectedBorderColor", Color.WHITE );
-		testValue( icon, "hoverSelectedBackground", Color.WHITE );
-		testValue( icon, "hoverCheckmarkColor", Color.WHITE );
-		testValue( icon, "hoverIndeterminateBorderColor", Color.WHITE );
-		testValue( icon, "hoverIndeterminateBackground", Color.WHITE );
-		testValue( icon, "hoverIndeterminateCheckmarkColor", Color.WHITE );
+		testValueColor( icon, "hoverBorderColor" );
+		testValueColor( icon, "hoverBackground" );
+		testValueColor( icon, "hoverSelectedBorderColor" );
+		testValueColor( icon, "hoverSelectedBackground" );
+		testValueColor( icon, "hoverCheckmarkColor" );
+		testValueColor( icon, "hoverIndeterminateBorderColor" );
+		testValueColor( icon, "hoverIndeterminateBackground" );
+		testValueColor( icon, "hoverIndeterminateCheckmarkColor" );
 
 		// pressed
-		testValue( icon, "pressedBorderColor", Color.WHITE );
-		testValue( icon, "pressedBackground", Color.WHITE );
-		testValue( icon, "pressedSelectedBorderColor", Color.WHITE );
-		testValue( icon, "pressedSelectedBackground", Color.WHITE );
-		testValue( icon, "pressedCheckmarkColor", Color.WHITE );
-		testValue( icon, "pressedIndeterminateBorderColor", Color.WHITE );
-		testValue( icon, "pressedIndeterminateBackground", Color.WHITE );
-		testValue( icon, "pressedIndeterminateCheckmarkColor", Color.WHITE );
+		testValueColor( icon, "pressedBorderColor" );
+		testValueColor( icon, "pressedBackground" );
+		testValueColor( icon, "pressedSelectedBorderColor" );
+		testValueColor( icon, "pressedSelectedBackground" );
+		testValueColor( icon, "pressedCheckmarkColor" );
+		testValueColor( icon, "pressedIndeterminateBorderColor" );
+		testValueColor( icon, "pressedIndeterminateBackground" );
+		testValueColor( icon, "pressedIndeterminateCheckmarkColor" );
 	}
 
 	@Test
@@ -1418,9 +1459,9 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatCheckBoxMenuItemIcon( FlatCheckBoxMenuItemIcon icon ) {
-		testValue( icon, "checkmarkColor", Color.WHITE );
-		testValue( icon, "disabledCheckmarkColor", Color.WHITE );
-		testValue( icon, "selectionForeground", Color.WHITE );
+		testValueColor( icon, "checkmarkColor" );
+		testValueColor( icon, "disabledCheckmarkColor" );
+		testValueColor( icon, "selectionForeground" );
 	}
 
 	@Test
@@ -1428,10 +1469,10 @@ public class TestFlatStyleableValue
 		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
-		testValue( icon, "arrowType", "chevron" );
-		testValue( icon, "arrowColor", Color.WHITE );
-		testValue( icon, "disabledArrowColor", Color.WHITE );
-		testValue( icon, "selectionForeground", Color.WHITE );
+		testValueString( icon, "arrowType", "chevron" );
+		testValueColor( icon, "arrowColor" );
+		testValueColor( icon, "disabledArrowColor" );
+		testValueColor( icon, "selectionForeground" );
 	}
 
 	@Test
@@ -1439,22 +1480,22 @@ public class TestFlatStyleableValue
 		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
-		testValue( icon, "focusWidth", 2 );
-		testValue( icon, "focusColor", Color.WHITE );
-		testValue( icon, "innerFocusWidth", 0.5f );
-		testValue( icon, "borderWidth", 1 );
+		testValueInteger( icon, "focusWidth" );
+		testValueColor( icon, "focusColor" );
+		testValueFloat( icon, "innerFocusWidth" );
+		testValueInteger( icon, "borderWidth" );
 
-		testValue( icon, "borderColor", Color.WHITE );
-		testValue( icon, "disabledBorderColor", Color.WHITE );
-		testValue( icon, "focusedBorderColor", Color.WHITE );
-		testValue( icon, "hoverBorderColor", Color.WHITE );
-		testValue( icon, "background", Color.WHITE );
-		testValue( icon, "disabledBackground", Color.WHITE );
-		testValue( icon, "focusedBackground", Color.WHITE );
-		testValue( icon, "hoverBackground", Color.WHITE );
-		testValue( icon, "pressedBackground", Color.WHITE );
-		testValue( icon, "questionMarkColor", Color.WHITE );
-		testValue( icon, "disabledQuestionMarkColor", Color.WHITE );
+		testValueColor( icon, "borderColor" );
+		testValueColor( icon, "disabledBorderColor" );
+		testValueColor( icon, "focusedBorderColor" );
+		testValueColor( icon, "hoverBorderColor" );
+		testValueColor( icon, "background" );
+		testValueColor( icon, "disabledBackground" );
+		testValueColor( icon, "focusedBackground" );
+		testValueColor( icon, "hoverBackground" );
+		testValueColor( icon, "pressedBackground" );
+		testValueColor( icon, "questionMarkColor" );
+		testValueColor( icon, "disabledQuestionMarkColor" );
 	}
 
 	@Test
@@ -1462,9 +1503,9 @@ public class TestFlatStyleableValue
 		FlatClearIcon icon = new FlatClearIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
-		testValue( icon, "clearIconColor", Color.WHITE );
-		testValue( icon, "clearIconHoverColor", Color.WHITE );
-		testValue( icon, "clearIconPressedColor", Color.WHITE );
+		testValueColor( icon, "clearIconColor" );
+		testValueColor( icon, "clearIconHoverColor" );
+		testValueColor( icon, "clearIconPressedColor" );
 	}
 
 	@Test
@@ -1484,9 +1525,9 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatSearchIcon( FlatSearchIcon icon ) {
-		testValue( icon, "searchIconColor", Color.WHITE );
-		testValue( icon, "searchIconHoverColor", Color.WHITE );
-		testValue( icon, "searchIconPressedColor", Color.WHITE );
+		testValueColor( icon, "searchIconColor" );
+		testValueColor( icon, "searchIconHoverColor" );
+		testValueColor( icon, "searchIconPressedColor" );
 	}
 
 	@Test
@@ -1494,7 +1535,7 @@ public class TestFlatStyleableValue
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
-		testValue( icon, "capsLockIconColor", Color.WHITE );
+		testValueColor( icon, "capsLockIconColor" );
 	}
 
 	@Test
@@ -1502,17 +1543,17 @@ public class TestFlatStyleableValue
 		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
-		testValue( icon, "closeSize", new Dimension( 1, 2 ) );
-		testValue( icon, "closeArc", 123 );
-		testValue( icon, "closeCrossPlainSize", 1.23f );
-		testValue( icon, "closeCrossFilledSize", 1.23f );
-		testValue( icon, "closeCrossLineWidth", 1.23f );
-		testValue( icon, "closeBackground", Color.WHITE );
-		testValue( icon, "closeForeground", Color.WHITE );
-		testValue( icon, "closeHoverBackground", Color.WHITE );
-		testValue( icon, "closeHoverForeground", Color.WHITE );
-		testValue( icon, "closePressedBackground", Color.WHITE );
-		testValue( icon, "closePressedForeground", Color.WHITE );
+		testValueDimension( icon, "closeSize" );
+		testValueInteger( icon, "closeArc" );
+		testValueFloat( icon, "closeCrossPlainSize" );
+		testValueFloat( icon, "closeCrossFilledSize" );
+		testValueFloat( icon, "closeCrossLineWidth" );
+		testValueColor( icon, "closeBackground" );
+		testValueColor( icon, "closeForeground" );
+		testValueColor( icon, "closeHoverBackground" );
+		testValueColor( icon, "closeHoverForeground" );
+		testValueColor( icon, "closePressedBackground" );
+		testValueColor( icon, "closePressedForeground" );
 	}
 
 	//---- class TestIcon -----------------------------------------------------
