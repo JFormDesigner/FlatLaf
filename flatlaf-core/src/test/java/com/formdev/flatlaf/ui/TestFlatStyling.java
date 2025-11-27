@@ -36,6 +36,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.ui.FlatInternalFrameUI.FlatInternalFrameBorder;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.ColorFunctions;
 
@@ -1423,6 +1424,48 @@ public class TestFlatStyling
 		border.applyStyleProperty( "custom.borderColor", Color.WHITE );
 	}
 
+	@Test
+	void flatDropShadowBorder() {
+		FlatDropShadowBorder border = new FlatDropShadowBorder();
+
+		border.applyStyleProperty( "shadowColor", Color.WHITE );
+		border.applyStyleProperty( "shadowInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "shadowOpacity", 1.23f );
+	}
+
+	@Test
+	void flatMenuBarBorder() {
+		FlatMenuBarBorder border = new FlatMenuBarBorder();
+
+		border.applyStyleProperty( "borderColor", Color.WHITE );
+	}
+
+	@Test
+	void flatPopupMenuBorder() {
+		FlatPopupMenuBorder border = new FlatPopupMenuBorder();
+
+		border.applyStyleProperty( "borderInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "borderColor", Color.WHITE );
+	}
+
+	@Test
+	void flatInternalFrameBorder() {
+		FlatInternalFrameBorder border = new FlatInternalFrameBorder();
+
+		border.applyStyleProperty( "activeBorderColor", Color.WHITE );
+		border.applyStyleProperty( "inactiveBorderColor", Color.WHITE );
+		border.applyStyleProperty( "borderLineWidth", 123 );
+		border.applyStyleProperty( "dropShadowPainted", false );
+		border.applyStyleProperty( "borderMargins", new Insets( 1, 2, 3, 4 ) );
+
+		border.applyStyleProperty( "activeDropShadowColor", Color.WHITE );
+		border.applyStyleProperty( "activeDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "activeDropShadowOpacity", 1.23f );
+		border.applyStyleProperty( "inactiveDropShadowColor", Color.WHITE );
+		border.applyStyleProperty( "inactiveDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "inactiveDropShadowOpacity", 1.23f );
+	}
+
 	//---- icons --------------------------------------------------------------
 
 	@Test
@@ -1590,6 +1633,23 @@ public class TestFlatStyling
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
 
 		icon.applyStyleProperty( "capsLockIconColor", Color.WHITE );
+	}
+
+	@Test
+	void flatTabbedPaneCloseIcon() {
+		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
+
+		icon.applyStyleProperty( "closeSize", new Dimension( 1, 2 ) );
+		icon.applyStyleProperty( "closeArc", 123 );
+		icon.applyStyleProperty( "closeCrossPlainSize", 1.23f );
+		icon.applyStyleProperty( "closeCrossFilledSize", 1.23f );
+		icon.applyStyleProperty( "closeCrossLineWidth", 1.23f );
+		icon.applyStyleProperty( "closeBackground", Color.WHITE );
+		icon.applyStyleProperty( "closeForeground", Color.WHITE );
+		icon.applyStyleProperty( "closeHoverBackground", Color.WHITE );
+		icon.applyStyleProperty( "closeHoverForeground", Color.WHITE );
+		icon.applyStyleProperty( "closePressedBackground", Color.WHITE );
+		icon.applyStyleProperty( "closePressedForeground", Color.WHITE );
 	}
 
 	//---- enums --------------------------------------------------------------

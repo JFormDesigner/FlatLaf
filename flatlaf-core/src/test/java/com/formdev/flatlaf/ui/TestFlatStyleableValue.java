@@ -27,57 +27,15 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.lang.reflect.Method;
 import java.util.Locale;
-import javax.swing.AbstractButton;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JFormattedTextField;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.JTextComponent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import com.formdev.flatlaf.icons.FlatCapsLockIcon;
-import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
-import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
-import com.formdev.flatlaf.icons.FlatClearIcon;
-import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
-import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
-import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
-import com.formdev.flatlaf.icons.FlatRadioButtonMenuItemIcon;
-import com.formdev.flatlaf.icons.FlatSearchIcon;
-import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
+import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.ui.FlatInternalFrameUI.FlatInternalFrameBorder;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
@@ -1161,6 +1119,48 @@ public class TestFlatStyleableValue
 		testValue( border, "custom.borderColor", Color.WHITE );
 	}
 
+	@Test
+	void flatDropShadowBorder() {
+		FlatDropShadowBorder border = new FlatDropShadowBorder();
+
+		testValue( border, "shadowColor", Color.WHITE );
+		testValue( border, "shadowInsets", new Insets( 1, 2, 3, 4 ) );
+		testValue( border, "shadowOpacity", 1.23f );
+	}
+
+	@Test
+	void flatMenuBarBorder() {
+		FlatMenuBarBorder border = new FlatMenuBarBorder();
+
+		testValue( border, "borderColor", Color.WHITE );
+	}
+
+	@Test
+	void flatPopupMenuBorder() {
+		FlatPopupMenuBorder border = new FlatPopupMenuBorder();
+
+		testValue( border, "borderInsets", new Insets( 1, 2, 3, 4 ) );
+		testValue( border, "borderColor", Color.WHITE );
+	}
+
+	@Test
+	void flatInternalFrameBorder() {
+		FlatInternalFrameBorder border = new FlatInternalFrameBorder();
+
+		testValue( border, "activeBorderColor", Color.WHITE );
+		testValue( border, "inactiveBorderColor", Color.WHITE );
+		testValue( border, "borderLineWidth", 123 );
+		testValue( border, "dropShadowPainted", false );
+		testValue( border, "borderMargins", new Insets( 1, 2, 3, 4 ) );
+
+		testValue( border, "activeDropShadowColor", Color.WHITE );
+		testValue( border, "activeDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
+		testValue( border, "activeDropShadowOpacity", 1.23f );
+		testValue( border, "inactiveDropShadowColor", Color.WHITE );
+		testValue( border, "inactiveDropShadowInsets", new Insets( 1, 2, 3, 4 ) );
+		testValue( border, "inactiveDropShadowOpacity", 1.23f );
+	}
+
 	//---- icons --------------------------------------------------------------
 
 	@Test
@@ -1328,6 +1328,23 @@ public class TestFlatStyleableValue
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
 
 		testValue( icon, "capsLockIconColor", Color.WHITE );
+	}
+
+	@Test
+	void flatTabbedPaneCloseIcon() {
+		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
+
+		testValue( icon, "closeSize", new Dimension( 1, 2 ) );
+		testValue( icon, "closeArc", 123 );
+		testValue( icon, "closeCrossPlainSize", 1.23f );
+		testValue( icon, "closeCrossFilledSize", 1.23f );
+		testValue( icon, "closeCrossLineWidth", 1.23f );
+		testValue( icon, "closeBackground", Color.WHITE );
+		testValue( icon, "closeForeground", Color.WHITE );
+		testValue( icon, "closeHoverBackground", Color.WHITE );
+		testValue( icon, "closeHoverForeground", Color.WHITE );
+		testValue( icon, "closePressedBackground", Color.WHITE );
+		testValue( icon, "closePressedForeground", Color.WHITE );
 	}
 
 	//---- class TestIcon -----------------------------------------------------
