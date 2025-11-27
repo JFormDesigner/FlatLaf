@@ -58,6 +58,10 @@ public class TestFlatStyleableValue
 	@BeforeAll
 	static void setup() {
 		TestUtils.setup( false );
+
+		Set<String> excludes = new HashSet<>();
+		TestUtils.checkImplementedTests( excludes, TestFlatStyleableValue.class,
+			TestFlatStyleableInfo.class );
 	}
 
 	@AfterAll
