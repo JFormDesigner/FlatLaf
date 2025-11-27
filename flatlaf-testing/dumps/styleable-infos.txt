@@ -1,0 +1,1262 @@
+#---- JButton ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+buttonType                                         java.lang.String
+custom.borderColor                                 java.awt.Color
+default.background                                 java.awt.Color
+default.boldText                                   boolean
+default.borderColor                                java.awt.Color
+default.borderWidth                                float
+default.focusColor                                 java.awt.Color
+default.focusedBackground                          java.awt.Color
+default.focusedBorderColor                         java.awt.Color
+default.focusedForeground                          java.awt.Color
+default.foreground                                 java.awt.Color
+default.hoverBackground                            java.awt.Color
+default.hoverBorderColor                           java.awt.Color
+default.hoverForeground                            java.awt.Color
+default.pressedBackground                          java.awt.Color
+default.pressedBorderColor                         java.awt.Color
+default.pressedForeground                          java.awt.Color
+default.shadowColor                                java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledSelectedBackground                         java.awt.Color
+disabledSelectedBorderColor                        java.awt.Color
+disabledSelectedForeground                         java.awt.Color
+disabledText                                       java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusedForeground                                  java.awt.Color
+focusedSelectedBorderColor                         java.awt.Color
+focusWidth                                         int
+help.background                                    java.awt.Color
+help.borderColor                                   java.awt.Color
+help.borderWidth                                   int
+help.disabledBackground                            java.awt.Color
+help.disabledBorderColor                           java.awt.Color
+help.disabledQuestionMarkColor                     java.awt.Color
+help.focusColor                                    java.awt.Color
+help.focusedBackground                             java.awt.Color
+help.focusedBorderColor                            java.awt.Color
+help.focusWidth                                    int
+help.hoverBackground                               java.awt.Color
+help.hoverBorderColor                              java.awt.Color
+help.innerFocusWidth                               float
+help.pressedBackground                             java.awt.Color
+help.questionMarkColor                             java.awt.Color
+hoverBackground                                    java.awt.Color
+hoverBorderColor                                   java.awt.Color
+hoverForeground                                    java.awt.Color
+hoverSelectedBorderColor                           java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+minimumHeight                                      int
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+paintShadow                                        boolean
+pressedBackground                                  java.awt.Color
+pressedBorderColor                                 java.awt.Color
+pressedForeground                                  java.awt.Color
+pressedSelectedBorderColor                         java.awt.Color
+selectedBackground                                 java.awt.Color
+selectedBorderColor                                java.awt.Color
+selectedForeground                                 java.awt.Color
+shadowColor                                        java.awt.Color
+shadowWidth                                        int
+squareSize                                         boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+toolbar.disabledSelectedBackground                 java.awt.Color
+toolbar.disabledSelectedForeground                 java.awt.Color
+toolbar.focusColor                                 java.awt.Color
+toolbar.focusWidth                                 float
+toolbar.hoverBackground                            java.awt.Color
+toolbar.hoverForeground                            java.awt.Color
+toolbar.margin                                     java.awt.Insets
+toolbar.pressedBackground                          java.awt.Color
+toolbar.pressedForeground                          java.awt.Color
+toolbar.selectedBackground                         java.awt.Color
+toolbar.selectedForeground                         java.awt.Color
+toolbar.spacingInsets                              java.awt.Insets
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JCheckBox ----
+
+disabledText                                       java.awt.Color
+icon.arc                                           int
+icon.background                                    java.awt.Color
+icon.borderColor                                   java.awt.Color
+icon.borderWidth                                   float
+icon.checkmarkColor                                java.awt.Color
+icon.disabledBackground                            java.awt.Color
+icon.disabledBorderColor                           java.awt.Color
+icon.disabledCheckmarkColor                        java.awt.Color
+icon.disabledIndeterminateBackground               java.awt.Color
+icon.disabledIndeterminateBorderColor              java.awt.Color
+icon.disabledIndeterminateBorderWidth              float
+icon.disabledIndeterminateCheckmarkColor           java.awt.Color
+icon.disabledSelectedBackground                    java.awt.Color
+icon.disabledSelectedBorderColor                   java.awt.Color
+icon.disabledSelectedBorderWidth                   float
+icon.focusColor                                    java.awt.Color
+icon.focusedBackground                             java.awt.Color
+icon.focusedBorderColor                            java.awt.Color
+icon.focusedCheckmarkColor                         java.awt.Color
+icon.focusedIndeterminateBackground                java.awt.Color
+icon.focusedIndeterminateBorderColor               java.awt.Color
+icon.focusedIndeterminateCheckmarkColor            java.awt.Color
+icon.focusedSelectedBackground                     java.awt.Color
+icon.focusedSelectedBorderColor                    java.awt.Color
+icon.focusWidth                                    float
+icon.hoverBackground                               java.awt.Color
+icon.hoverBorderColor                              java.awt.Color
+icon.hoverCheckmarkColor                           java.awt.Color
+icon.hoverIndeterminateBackground                  java.awt.Color
+icon.hoverIndeterminateBorderColor                 java.awt.Color
+icon.hoverIndeterminateCheckmarkColor              java.awt.Color
+icon.hoverSelectedBackground                       java.awt.Color
+icon.hoverSelectedBorderColor                      java.awt.Color
+icon.indeterminateBackground                       java.awt.Color
+icon.indeterminateBorderColor                      java.awt.Color
+icon.indeterminateBorderWidth                      float
+icon.indeterminateCheckmarkColor                   java.awt.Color
+icon.pressedBackground                             java.awt.Color
+icon.pressedBorderColor                            java.awt.Color
+icon.pressedCheckmarkColor                         java.awt.Color
+icon.pressedIndeterminateBackground                java.awt.Color
+icon.pressedIndeterminateBorderColor               java.awt.Color
+icon.pressedIndeterminateCheckmarkColor            java.awt.Color
+icon.pressedSelectedBackground                     java.awt.Color
+icon.pressedSelectedBorderColor                    java.awt.Color
+icon.selectedBackground                            java.awt.Color
+icon.selectedBorderColor                           java.awt.Color
+icon.selectedBorderWidth                           float
+
+
+#---- JCheckBoxMenuItem ----
+
+acceleratorArrowGap                                int
+acceleratorFont                                    java.awt.Font
+acceleratorForeground                              java.awt.Color
+acceleratorSelectionForeground                     java.awt.Color
+checkBackground                                    java.awt.Color
+checkMargins                                       java.awt.Insets
+disabledForeground                                 java.awt.Color
+icon.checkmarkColor                                java.awt.Color
+icon.disabledCheckmarkColor                        java.awt.Color
+minimumIconSize                                    java.awt.Dimension
+minimumWidth                                       int
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInsets                                    java.awt.Insets
+textAcceleratorGap                                 int
+textNoAcceleratorGap                               int
+underlineSelectionBackground                       java.awt.Color
+underlineSelectionCheckBackground                  java.awt.Color
+underlineSelectionColor                            java.awt.Color
+underlineSelectionHeight                           int
+verticallyAlignText                                boolean
+
+
+#---- JComboBox ----
+
+arc                                                int
+arrowType                                          java.lang.String
+borderColor                                        java.awt.Color
+borderWidth                                        float
+buttonArrowColor                                   java.awt.Color
+buttonBackground                                   java.awt.Color
+buttonDisabledArrowColor                           java.awt.Color
+buttonDisabledSeparatorColor                       java.awt.Color
+buttonEditableBackground                           java.awt.Color
+buttonFocusedBackground                            java.awt.Color
+buttonHoverArrowColor                              java.awt.Color
+buttonPressedArrowColor                            java.awt.Color
+buttonSeparatorColor                               java.awt.Color
+buttonSeparatorWidth                               float
+buttonStyle                                        java.lang.String
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledForeground                                 java.awt.Color
+editableBackground                                 java.awt.Color
+editorColumns                                      int
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+padding                                            java.awt.Insets
+popupBackground                                    java.awt.Color
+popupInsets                                        java.awt.Insets
+roundRect                                          java.lang.Boolean
+selectionArc                                       int
+selectionInsets                                    java.awt.Insets
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JEditorPane ----
+
+disabledBackground                                 java.awt.Color
+focusedBackground                                  java.awt.Color
+inactiveBackground                                 java.awt.Color
+minimumWidth                                       int
+
+
+#---- JFormattedTextField ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+iconTextGap                                        int
+inactiveBackground                                 java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+leadingIcon                                        javax.swing.Icon
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+placeholderForeground                              java.awt.Color
+roundRect                                          java.lang.Boolean
+showClearButton                                    boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+trailingIcon                                       javax.swing.Icon
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JInternalFrame ----
+
+activeBorderColor                                  java.awt.Color
+activeDropShadowColor                              java.awt.Color
+activeDropShadowInsets                             java.awt.Insets
+activeDropShadowOpacity                            float
+borderLineWidth                                    int
+borderMargins                                      java.awt.Insets
+dropShadowPainted                                  boolean
+inactiveBorderColor                                java.awt.Color
+inactiveDropShadowColor                            java.awt.Color
+inactiveDropShadowInsets                           java.awt.Insets
+inactiveDropShadowOpacity                          float
+
+
+#---- JLabel ----
+
+arc                                                int
+disabledForeground                                 java.awt.Color
+
+
+#---- JList ----
+
+alternateRowColor                                  java.awt.Color
+cellFocusColor                                     java.awt.Color
+cellMargins                                        java.awt.Insets
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInactiveBackground                        java.awt.Color
+selectionInactiveForeground                        java.awt.Color
+selectionInsets                                    java.awt.Insets
+showCellFocusIndicator                             java.lang.Boolean
+
+
+#---- JMenu ----
+
+acceleratorArrowGap                                int
+acceleratorFont                                    java.awt.Font
+acceleratorForeground                              java.awt.Color
+acceleratorSelectionForeground                     java.awt.Color
+checkBackground                                    java.awt.Color
+checkMargins                                       java.awt.Insets
+disabledForeground                                 java.awt.Color
+icon.arrowColor                                    java.awt.Color
+icon.arrowType                                     java.lang.String
+icon.disabledArrowColor                            java.awt.Color
+minimumIconSize                                    java.awt.Dimension
+minimumWidth                                       int
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInsets                                    java.awt.Insets
+textAcceleratorGap                                 int
+textNoAcceleratorGap                               int
+underlineSelectionBackground                       java.awt.Color
+underlineSelectionCheckBackground                  java.awt.Color
+underlineSelectionColor                            java.awt.Color
+underlineSelectionHeight                           int
+verticallyAlignText                                boolean
+
+
+#---- JMenuBar ----
+
+borderColor                                        java.awt.Color
+hoverBackground                                    java.awt.Color
+itemMargins                                        java.awt.Insets
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionEmbeddedInsets                            java.awt.Insets
+selectionForeground                                java.awt.Color
+selectionInsets                                    java.awt.Insets
+underlineSelectionBackground                       java.awt.Color
+underlineSelectionColor                            java.awt.Color
+underlineSelectionHeight                           int
+
+
+#---- JMenuItem ----
+
+acceleratorArrowGap                                int
+acceleratorFont                                    java.awt.Font
+acceleratorForeground                              java.awt.Color
+acceleratorSelectionForeground                     java.awt.Color
+checkBackground                                    java.awt.Color
+checkMargins                                       java.awt.Insets
+disabledForeground                                 java.awt.Color
+minimumIconSize                                    java.awt.Dimension
+minimumWidth                                       int
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInsets                                    java.awt.Insets
+textAcceleratorGap                                 int
+textNoAcceleratorGap                               int
+underlineSelectionBackground                       java.awt.Color
+underlineSelectionCheckBackground                  java.awt.Color
+underlineSelectionColor                            java.awt.Color
+underlineSelectionHeight                           int
+verticallyAlignText                                boolean
+
+
+#---- JPanel ----
+
+arc                                                int
+
+
+#---- JPasswordField ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+capsLockIconColor                                  java.awt.Color
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+iconTextGap                                        int
+inactiveBackground                                 java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+leadingIcon                                        javax.swing.Icon
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+placeholderForeground                              java.awt.Color
+roundRect                                          java.lang.Boolean
+showCapsLock                                       boolean
+showClearButton                                    boolean
+showRevealButton                                   boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+trailingIcon                                       javax.swing.Icon
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JPopupMenu ----
+
+arrowType                                          java.lang.String
+borderColor                                        java.awt.Color
+borderInsets                                       java.awt.Insets
+hoverScrollArrowBackground                         java.awt.Color
+scrollArrowColor                                   java.awt.Color
+
+
+#---- JPopupMenu.Separator ----
+
+height                                             int
+stripeIndent                                       int
+stripeWidth                                        int
+
+
+#---- JProgressBar ----
+
+arc                                                int
+horizontalSize                                     java.awt.Dimension
+largeHeight                                        boolean
+square                                             boolean
+verticalSize                                       java.awt.Dimension
+
+
+#---- JRadioButton ----
+
+disabledText                                       java.awt.Color
+icon.arc                                           int
+icon.background                                    java.awt.Color
+icon.borderColor                                   java.awt.Color
+icon.borderWidth                                   float
+icon.centerDiameter                                float
+icon.checkmarkColor                                java.awt.Color
+icon.disabledBackground                            java.awt.Color
+icon.disabledBorderColor                           java.awt.Color
+icon.disabledCheckmarkColor                        java.awt.Color
+icon.disabledIndeterminateBackground               java.awt.Color
+icon.disabledIndeterminateBorderColor              java.awt.Color
+icon.disabledIndeterminateBorderWidth              float
+icon.disabledIndeterminateCheckmarkColor           java.awt.Color
+icon.disabledSelectedBackground                    java.awt.Color
+icon.disabledSelectedBorderColor                   java.awt.Color
+icon.disabledSelectedBorderWidth                   float
+icon.focusColor                                    java.awt.Color
+icon.focusedBackground                             java.awt.Color
+icon.focusedBorderColor                            java.awt.Color
+icon.focusedCheckmarkColor                         java.awt.Color
+icon.focusedIndeterminateBackground                java.awt.Color
+icon.focusedIndeterminateBorderColor               java.awt.Color
+icon.focusedIndeterminateCheckmarkColor            java.awt.Color
+icon.focusedSelectedBackground                     java.awt.Color
+icon.focusedSelectedBorderColor                    java.awt.Color
+icon.focusWidth                                    float
+icon.hoverBackground                               java.awt.Color
+icon.hoverBorderColor                              java.awt.Color
+icon.hoverCheckmarkColor                           java.awt.Color
+icon.hoverIndeterminateBackground                  java.awt.Color
+icon.hoverIndeterminateBorderColor                 java.awt.Color
+icon.hoverIndeterminateCheckmarkColor              java.awt.Color
+icon.hoverSelectedBackground                       java.awt.Color
+icon.hoverSelectedBorderColor                      java.awt.Color
+icon.indeterminateBackground                       java.awt.Color
+icon.indeterminateBorderColor                      java.awt.Color
+icon.indeterminateBorderWidth                      float
+icon.indeterminateCheckmarkColor                   java.awt.Color
+icon.pressedBackground                             java.awt.Color
+icon.pressedBorderColor                            java.awt.Color
+icon.pressedCheckmarkColor                         java.awt.Color
+icon.pressedIndeterminateBackground                java.awt.Color
+icon.pressedIndeterminateBorderColor               java.awt.Color
+icon.pressedIndeterminateCheckmarkColor            java.awt.Color
+icon.pressedSelectedBackground                     java.awt.Color
+icon.pressedSelectedBorderColor                    java.awt.Color
+icon.selectedBackground                            java.awt.Color
+icon.selectedBorderColor                           java.awt.Color
+icon.selectedBorderWidth                           float
+
+
+#---- JRadioButtonMenuItem ----
+
+acceleratorArrowGap                                int
+acceleratorFont                                    java.awt.Font
+acceleratorForeground                              java.awt.Color
+acceleratorSelectionForeground                     java.awt.Color
+checkBackground                                    java.awt.Color
+checkMargins                                       java.awt.Insets
+disabledForeground                                 java.awt.Color
+icon.checkmarkColor                                java.awt.Color
+icon.disabledCheckmarkColor                        java.awt.Color
+minimumIconSize                                    java.awt.Dimension
+minimumWidth                                       int
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInsets                                    java.awt.Insets
+textAcceleratorGap                                 int
+textNoAcceleratorGap                               int
+underlineSelectionBackground                       java.awt.Color
+underlineSelectionCheckBackground                  java.awt.Color
+underlineSelectionColor                            java.awt.Color
+underlineSelectionHeight                           int
+verticallyAlignText                                boolean
+
+
+#---- JScrollBar ----
+
+allowsAbsolutePositioning                          boolean
+arrowType                                          java.lang.String
+buttonArrowColor                                   java.awt.Color
+buttonDisabledArrowColor                           java.awt.Color
+hoverButtonBackground                              java.awt.Color
+hoverThumbColor                                    java.awt.Color
+hoverThumbWithTrack                                boolean
+hoverTrackColor                                    java.awt.Color
+maximumThumbSize                                   java.awt.Dimension
+minimumButtonSize                                  java.awt.Dimension
+minimumThumbSize                                   java.awt.Dimension
+pressedButtonBackground                            java.awt.Color
+pressedThumbColor                                  java.awt.Color
+pressedThumbWithTrack                              boolean
+pressedTrackColor                                  java.awt.Color
+showButtons                                        boolean
+thumb                                              java.awt.Color
+thumbArc                                           int
+thumbInsets                                        java.awt.Insets
+track                                              java.awt.Color
+trackArc                                           int
+trackInsets                                        java.awt.Insets
+width                                              int
+
+
+#---- JScrollPane ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+showButtons                                        java.lang.Boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JSeparator ----
+
+height                                             int
+stripeIndent                                       int
+stripeWidth                                        int
+
+
+#---- JSlider ----
+
+disabledThumbBorderColor                           java.awt.Color
+disabledThumbColor                                 java.awt.Color
+disabledTrackColor                                 java.awt.Color
+focusedColor                                       java.awt.Color
+focusedThumbBorderColor                            java.awt.Color
+focusWidth                                         int
+hoverThumbColor                                    java.awt.Color
+pressedThumbColor                                  java.awt.Color
+thumbBorderColor                                   java.awt.Color
+thumbBorderWidth                                   float
+thumbColor                                         java.awt.Color
+thumbSize                                          java.awt.Dimension
+tickColor                                          java.awt.Color
+trackColor                                         java.awt.Color
+trackValueColor                                    java.awt.Color
+trackWidth                                         int
+
+
+#---- JSpinner ----
+
+arc                                                int
+arrowType                                          java.lang.String
+borderColor                                        java.awt.Color
+borderWidth                                        float
+buttonArrowColor                                   java.awt.Color
+buttonBackground                                   java.awt.Color
+buttonDisabledArrowColor                           java.awt.Color
+buttonDisabledSeparatorColor                       java.awt.Color
+buttonHoverArrowColor                              java.awt.Color
+buttonPressedArrowColor                            java.awt.Color
+buttonSeparatorColor                               java.awt.Color
+buttonSeparatorWidth                               float
+buttonStyle                                        java.lang.String
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledForeground                                 java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+padding                                            java.awt.Insets
+roundRect                                          java.lang.Boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JSplitPane ----
+
+arrowType                                          java.lang.String
+draggingColor                                      java.awt.Color
+gripColor                                          java.awt.Color
+gripDotCount                                       int
+gripDotSize                                        int
+gripGap                                            int
+hoverColor                                         java.awt.Color
+oneTouchArrowColor                                 java.awt.Color
+oneTouchHoverArrowColor                            java.awt.Color
+oneTouchPressedArrowColor                          java.awt.Color
+pressedColor                                       java.awt.Color
+style                                              java.lang.String
+
+
+#---- JTabbedPane ----
+
+arrowType                                          java.lang.String
+buttonArc                                          int
+buttonHoverBackground                              java.awt.Color
+buttonInsets                                       java.awt.Insets
+buttonPressedBackground                            java.awt.Color
+cardTabArc                                         int
+cardTabSelectionHeight                             int
+closeArc                                           int
+closeBackground                                    java.awt.Color
+closeCrossFilledSize                               float
+closeCrossLineWidth                                float
+closeCrossPlainSize                                float
+closeForeground                                    java.awt.Color
+closeHoverBackground                               java.awt.Color
+closeHoverForeground                               java.awt.Color
+closePressedBackground                             java.awt.Color
+closePressedForeground                             java.awt.Color
+closeSize                                          java.awt.Dimension
+contentAreaColor                                   java.awt.Color
+contentSeparatorHeight                             int
+disabledForeground                                 java.awt.Color
+disabledUnderlineColor                             java.awt.Color
+focusColor                                         java.awt.Color
+focusForeground                                    java.awt.Color
+hasFullBorder                                      boolean
+hideTabAreaWithOneTab                              boolean
+hoverColor                                         java.awt.Color
+hoverForeground                                    java.awt.Color
+inactiveUnderlineColor                             java.awt.Color
+maximumTabWidth                                    int
+minimumTabWidth                                    int
+moreTabsButtonToolTipText                          java.lang.String
+rotateTabRuns                                      boolean
+scrollButtonsPlacement                             java.lang.String
+scrollButtonsPolicy                                java.lang.String
+selectedBackground                                 java.awt.Color
+selectedForeground                                 java.awt.Color
+selectedInsets                                     java.awt.Insets
+showContentSeparator                               boolean
+showTabSeparators                                  boolean
+tabAlignment                                       java.lang.String
+tabArc                                             int
+tabAreaAlignment                                   java.lang.String
+tabAreaInsets                                      java.awt.Insets
+tabClosable                                        boolean
+tabCloseToolTipText                                java.lang.String
+tabHeight                                          int
+tabIconPlacement                                   int
+tabInsets                                          java.awt.Insets
+tabRotation                                        java.lang.String
+tabSelectionArc                                    int
+tabSelectionHeight                                 int
+tabSelectionInsets                                 java.awt.Insets
+tabSeparatorColor                                  java.awt.Color
+tabSeparatorsFullHeight                            boolean
+tabsOpaque                                         boolean
+tabsPopupPolicy                                    java.lang.String
+tabType                                            java.lang.String
+tabWidthMode                                       java.lang.String
+textIconGap                                        int
+underlineColor                                     java.awt.Color
+
+
+#---- JTable ----
+
+cellFocusColor                                     java.awt.Color
+cellMargins                                        java.awt.Insets
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInactiveBackground                        java.awt.Color
+selectionInactiveForeground                        java.awt.Color
+selectionInsets                                    java.awt.Insets
+showCellFocusIndicator                             java.lang.Boolean
+showTrailingVerticalLine                           boolean
+
+
+#---- JTableHeader ----
+
+arrowType                                          java.lang.String
+bottomSeparatorColor                               java.awt.Color
+cellMargins                                        java.awt.Insets
+height                                             int
+hoverBackground                                    java.awt.Color
+hoverForeground                                    java.awt.Color
+pressedBackground                                  java.awt.Color
+pressedForeground                                  java.awt.Color
+separatorColor                                     java.awt.Color
+showTrailingVerticalLine                           java.lang.Boolean
+sortIconColor                                      java.awt.Color
+sortIconPosition                                   java.lang.String
+
+
+#---- JTextArea ----
+
+disabledBackground                                 java.awt.Color
+focusedBackground                                  java.awt.Color
+inactiveBackground                                 java.awt.Color
+minimumWidth                                       int
+
+
+#---- JTextField ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+iconTextGap                                        int
+inactiveBackground                                 java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+leadingIcon                                        javax.swing.Icon
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+placeholderForeground                              java.awt.Color
+roundRect                                          java.lang.Boolean
+showClearButton                                    boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+trailingIcon                                       javax.swing.Icon
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JTextPane ----
+
+disabledBackground                                 java.awt.Color
+focusedBackground                                  java.awt.Color
+inactiveBackground                                 java.awt.Color
+minimumWidth                                       int
+
+
+#---- JToggleButton ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+buttonType                                         java.lang.String
+custom.borderColor                                 java.awt.Color
+default.background                                 java.awt.Color
+default.boldText                                   boolean
+default.borderColor                                java.awt.Color
+default.borderWidth                                float
+default.focusColor                                 java.awt.Color
+default.focusedBackground                          java.awt.Color
+default.focusedBorderColor                         java.awt.Color
+default.focusedForeground                          java.awt.Color
+default.foreground                                 java.awt.Color
+default.hoverBackground                            java.awt.Color
+default.hoverBorderColor                           java.awt.Color
+default.hoverForeground                            java.awt.Color
+default.pressedBackground                          java.awt.Color
+default.pressedBorderColor                         java.awt.Color
+default.pressedForeground                          java.awt.Color
+default.shadowColor                                java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledSelectedBackground                         java.awt.Color
+disabledSelectedBorderColor                        java.awt.Color
+disabledSelectedForeground                         java.awt.Color
+disabledText                                       java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusedForeground                                  java.awt.Color
+focusedSelectedBorderColor                         java.awt.Color
+focusWidth                                         int
+hoverBackground                                    java.awt.Color
+hoverBorderColor                                   java.awt.Color
+hoverForeground                                    java.awt.Color
+hoverSelectedBorderColor                           java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+minimumHeight                                      int
+minimumWidth                                       int
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+paintShadow                                        boolean
+pressedBackground                                  java.awt.Color
+pressedBorderColor                                 java.awt.Color
+pressedForeground                                  java.awt.Color
+pressedSelectedBorderColor                         java.awt.Color
+selectedBackground                                 java.awt.Color
+selectedBorderColor                                java.awt.Color
+selectedForeground                                 java.awt.Color
+shadowColor                                        java.awt.Color
+shadowWidth                                        int
+squareSize                                         boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+tab.disabledUnderlineColor                         java.awt.Color
+tab.focusBackground                                java.awt.Color
+tab.focusForeground                                java.awt.Color
+tab.hoverBackground                                java.awt.Color
+tab.hoverForeground                                java.awt.Color
+tab.selectedBackground                             java.awt.Color
+tab.selectedForeground                             java.awt.Color
+tab.underlineColor                                 java.awt.Color
+tab.underlineHeight                                int
+toolbar.disabledSelectedBackground                 java.awt.Color
+toolbar.disabledSelectedForeground                 java.awt.Color
+toolbar.focusColor                                 java.awt.Color
+toolbar.focusWidth                                 float
+toolbar.hoverBackground                            java.awt.Color
+toolbar.hoverForeground                            java.awt.Color
+toolbar.margin                                     java.awt.Insets
+toolbar.pressedBackground                          java.awt.Color
+toolbar.pressedForeground                          java.awt.Color
+toolbar.selectedBackground                         java.awt.Color
+toolbar.selectedForeground                         java.awt.Color
+toolbar.spacingInsets                              java.awt.Insets
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JToolBar ----
+
+arrowKeysOnlyNavigation                            boolean
+borderMargins                                      java.awt.Insets
+focusableButtons                                   boolean
+gripColor                                          java.awt.Color
+hoverButtonGroupArc                                int
+hoverButtonGroupBackground                         java.awt.Color
+separatorColor                                     java.awt.Color
+separatorWidth                                     java.lang.Integer
+
+
+#---- JToolBar.Separator ----
+
+separatorColor                                     java.awt.Color
+separatorWidth                                     int
+
+
+#---- JTree ----
+
+alternateRowColor                                  java.awt.Color
+icon.arrowType                                     java.lang.String
+icon.closedColor                                   java.awt.Color
+icon.collapsedColor                                java.awt.Color
+icon.expandedColor                                 java.awt.Color
+icon.leafColor                                     java.awt.Color
+icon.openColor                                     java.awt.Color
+paintSelection                                     boolean
+selectionArc                                       int
+selectionBackground                                java.awt.Color
+selectionBorderColor                               java.awt.Color
+selectionForeground                                java.awt.Color
+selectionInactiveBackground                        java.awt.Color
+selectionInactiveForeground                        java.awt.Color
+selectionInsets                                    java.awt.Insets
+showCellFocusIndicator                             boolean
+wideCellRenderer                                   boolean
+wideSelection                                      boolean
+
+
+#---- FlatBorder ----
+
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- FlatButtonBorder ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+default.borderColor                                java.awt.Color
+default.borderWidth                                float
+default.focusColor                                 java.awt.Color
+default.focusedBorderColor                         java.awt.Color
+default.hoverBorderColor                           java.awt.Color
+default.pressedBorderColor                         java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledSelectedBorderColor                        java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusedSelectedBorderColor                         java.awt.Color
+focusWidth                                         int
+hoverBorderColor                                   java.awt.Color
+hoverSelectedBorderColor                           java.awt.Color
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+pressedBorderColor                                 java.awt.Color
+pressedSelectedBorderColor                         java.awt.Color
+selectedBorderColor                                java.awt.Color
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+toolbar.focusColor                                 java.awt.Color
+toolbar.focusWidth                                 float
+toolbar.margin                                     java.awt.Insets
+toolbar.spacingInsets                              java.awt.Insets
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- FlatDropShadowBorder ----
+
+shadowColor                                        java.awt.Color
+shadowInsets                                       java.awt.Insets
+shadowOpacity                                      float
+
+
+#---- FlatMenuBarBorder ----
+
+borderColor                                        java.awt.Color
+
+
+#---- FlatPopupMenuBorder ----
+
+borderColor                                        java.awt.Color
+borderInsets                                       java.awt.Insets
+
+
+#---- FlatRoundBorder ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+roundRect                                          java.lang.Boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- FlatScrollPaneBorder ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- FlatTextBorder ----
+
+arc                                                int
+borderColor                                        java.awt.Color
+borderWidth                                        float
+custom.borderColor                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+roundRect                                          java.lang.Boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- FlatInternalFrameBorder ----
+
+activeBorderColor                                  java.awt.Color
+activeDropShadowColor                              java.awt.Color
+activeDropShadowInsets                             java.awt.Insets
+activeDropShadowOpacity                            float
+borderLineWidth                                    int
+borderMargins                                      java.awt.Insets
+dropShadowPainted                                  boolean
+inactiveBorderColor                                java.awt.Color
+inactiveDropShadowColor                            java.awt.Color
+inactiveDropShadowInsets                           java.awt.Insets
+inactiveDropShadowOpacity                          float
+
+
+#---- FlatCapsLockIcon ----
+
+capsLockIconColor                                  java.awt.Color
+
+
+#---- FlatCheckBoxIcon ----
+
+arc                                                int
+background                                         java.awt.Color
+borderColor                                        java.awt.Color
+borderWidth                                        float
+checkmarkColor                                     java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledCheckmarkColor                             java.awt.Color
+disabledIndeterminateBackground                    java.awt.Color
+disabledIndeterminateBorderColor                   java.awt.Color
+disabledIndeterminateBorderWidth                   float
+disabledIndeterminateCheckmarkColor                java.awt.Color
+disabledSelectedBackground                         java.awt.Color
+disabledSelectedBorderColor                        java.awt.Color
+disabledSelectedBorderWidth                        float
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusedCheckmarkColor                              java.awt.Color
+focusedIndeterminateBackground                     java.awt.Color
+focusedIndeterminateBorderColor                    java.awt.Color
+focusedIndeterminateCheckmarkColor                 java.awt.Color
+focusedSelectedBackground                          java.awt.Color
+focusedSelectedBorderColor                         java.awt.Color
+focusWidth                                         float
+hoverBackground                                    java.awt.Color
+hoverBorderColor                                   java.awt.Color
+hoverCheckmarkColor                                java.awt.Color
+hoverIndeterminateBackground                       java.awt.Color
+hoverIndeterminateBorderColor                      java.awt.Color
+hoverIndeterminateCheckmarkColor                   java.awt.Color
+hoverSelectedBackground                            java.awt.Color
+hoverSelectedBorderColor                           java.awt.Color
+indeterminateBackground                            java.awt.Color
+indeterminateBorderColor                           java.awt.Color
+indeterminateBorderWidth                           float
+indeterminateCheckmarkColor                        java.awt.Color
+pressedBackground                                  java.awt.Color
+pressedBorderColor                                 java.awt.Color
+pressedCheckmarkColor                              java.awt.Color
+pressedIndeterminateBackground                     java.awt.Color
+pressedIndeterminateBorderColor                    java.awt.Color
+pressedIndeterminateCheckmarkColor                 java.awt.Color
+pressedSelectedBackground                          java.awt.Color
+pressedSelectedBorderColor                         java.awt.Color
+selectedBackground                                 java.awt.Color
+selectedBorderColor                                java.awt.Color
+selectedBorderWidth                                float
+
+
+#---- FlatCheckBoxMenuItemIcon ----
+
+checkmarkColor                                     java.awt.Color
+disabledCheckmarkColor                             java.awt.Color
+selectionForeground                                java.awt.Color
+
+
+#---- FlatClearIcon ----
+
+clearIconColor                                     java.awt.Color
+clearIconHoverColor                                java.awt.Color
+clearIconPressedColor                              java.awt.Color
+
+
+#---- FlatHelpButtonIcon ----
+
+background                                         java.awt.Color
+borderColor                                        java.awt.Color
+borderWidth                                        int
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledQuestionMarkColor                          java.awt.Color
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+hoverBackground                                    java.awt.Color
+hoverBorderColor                                   java.awt.Color
+innerFocusWidth                                    float
+pressedBackground                                  java.awt.Color
+questionMarkColor                                  java.awt.Color
+
+
+#---- FlatMenuArrowIcon ----
+
+arrowColor                                         java.awt.Color
+arrowType                                          java.lang.String
+disabledArrowColor                                 java.awt.Color
+selectionForeground                                java.awt.Color
+
+
+#---- FlatRadioButtonIcon ----
+
+arc                                                int
+background                                         java.awt.Color
+borderColor                                        java.awt.Color
+borderWidth                                        float
+centerDiameter                                     float
+checkmarkColor                                     java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+disabledCheckmarkColor                             java.awt.Color
+disabledIndeterminateBackground                    java.awt.Color
+disabledIndeterminateBorderColor                   java.awt.Color
+disabledIndeterminateBorderWidth                   float
+disabledIndeterminateCheckmarkColor                java.awt.Color
+disabledSelectedBackground                         java.awt.Color
+disabledSelectedBorderColor                        java.awt.Color
+disabledSelectedBorderWidth                        float
+focusColor                                         java.awt.Color
+focusedBackground                                  java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusedCheckmarkColor                              java.awt.Color
+focusedIndeterminateBackground                     java.awt.Color
+focusedIndeterminateBorderColor                    java.awt.Color
+focusedIndeterminateCheckmarkColor                 java.awt.Color
+focusedSelectedBackground                          java.awt.Color
+focusedSelectedBorderColor                         java.awt.Color
+focusWidth                                         float
+hoverBackground                                    java.awt.Color
+hoverBorderColor                                   java.awt.Color
+hoverCheckmarkColor                                java.awt.Color
+hoverIndeterminateBackground                       java.awt.Color
+hoverIndeterminateBorderColor                      java.awt.Color
+hoverIndeterminateCheckmarkColor                   java.awt.Color
+hoverSelectedBackground                            java.awt.Color
+hoverSelectedBorderColor                           java.awt.Color
+indeterminateBackground                            java.awt.Color
+indeterminateBorderColor                           java.awt.Color
+indeterminateBorderWidth                           float
+indeterminateCheckmarkColor                        java.awt.Color
+pressedBackground                                  java.awt.Color
+pressedBorderColor                                 java.awt.Color
+pressedCheckmarkColor                              java.awt.Color
+pressedIndeterminateBackground                     java.awt.Color
+pressedIndeterminateBorderColor                    java.awt.Color
+pressedIndeterminateCheckmarkColor                 java.awt.Color
+pressedSelectedBackground                          java.awt.Color
+pressedSelectedBorderColor                         java.awt.Color
+selectedBackground                                 java.awt.Color
+selectedBorderColor                                java.awt.Color
+selectedBorderWidth                                float
+
+
+#---- FlatRadioButtonMenuItemIcon ----
+
+checkmarkColor                                     java.awt.Color
+disabledCheckmarkColor                             java.awt.Color
+selectionForeground                                java.awt.Color
+
+
+#---- FlatSearchIcon ----
+
+searchIconColor                                    java.awt.Color
+searchIconHoverColor                               java.awt.Color
+searchIconPressedColor                             java.awt.Color
+
+
+#---- FlatSearchWithHistoryIcon ----
+
+searchIconColor                                    java.awt.Color
+searchIconHoverColor                               java.awt.Color
+searchIconPressedColor                             java.awt.Color
+
+
+#---- FlatTabbedPaneCloseIcon ----
+
+closeArc                                           int
+closeBackground                                    java.awt.Color
+closeCrossFilledSize                               float
+closeCrossLineWidth                                float
+closeCrossPlainSize                                float
+closeForeground                                    java.awt.Color
+closeHoverBackground                               java.awt.Color
+closeHoverForeground                               java.awt.Color
+closePressedBackground                             java.awt.Color
+closePressedForeground                             java.awt.Color
+closeSize                                          java.awt.Dimension
+
+
