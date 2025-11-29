@@ -606,7 +606,7 @@ Menu.submenuPopupOffsetY       [active] -4
 
 MenuBar.background             #323232  HSL   0   0  20    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.border                 [lazy] 0,0,1,0  false    com.formdev.flatlaf.ui.FlatMenuBarBorder [UI]
-MenuBar.borderColor            #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.borderColor            #464646  HSL   0   0  27    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.font                   [active] $defaultFont [UI]
 MenuBar.foreground             #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.highlight              #bfbfbf19  10%  HSLA   0   0  75 10    javax.swing.plaf.ColorUIResource [UI]
