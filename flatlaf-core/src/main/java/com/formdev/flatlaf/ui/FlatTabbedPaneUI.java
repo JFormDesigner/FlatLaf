@@ -2718,8 +2718,13 @@ debug*/
 
 			// because this listener receives mouse events for the whole tabbed pane,
 			// we have to check whether the mouse is located over the viewport
-			if( !isInViewport( e.getX(), e.getY() ) )
+			if( !isInViewport( e.getX(), e.getY() ) ) {
+				// if it is not in the viewport, retarget the event to a parent container
+				// which might support scrolling (e.g. a surrounding ScrollPane)
+				Container parent = tabPane.getParent();
+				parent.dispatchEvent( SwingUtilities.convertMouseEvent( tabPane, e, parent ) );
 				return;
+			}
 
 			lastMouseX = e.getX();
 			lastMouseY = e.getY();

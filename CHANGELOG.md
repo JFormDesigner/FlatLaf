@@ -11,6 +11,9 @@ FlatLaf Change Log
 - TabbedPane: Added icon-only tab mode, which shows tab icons but hides tab
   titles. Tab titles are used in "Show Hidden Tabs" popup menu. (set client
   property `JTabbedPane.tabWidthMode` to `"iconOnly"`)
+- TabbedPane: In scroll tab layout, propagate mouse wheel events to ancestors.
+  This allows mouse wheel scrolling if JTabbedPane is inside a JScrollPane. (PR
+  #1030)
 
 #### Fixed bugs
 
