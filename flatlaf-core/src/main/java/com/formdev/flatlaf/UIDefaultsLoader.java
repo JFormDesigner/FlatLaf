@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.swing.Icon;
@@ -431,7 +432,7 @@ class UIDefaultsLoader
 	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, INTEGERORFLOAT, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, FONT,
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
 
-	private static final ValueType[] tempResultValueType = new ValueType[1];
+	private static final AtomicReference<ValueType> tempResultValueType = new AtomicReference<>();
 	private static Map<Class<?>, ValueType> javaValueTypes;
 	private static Map<String, ValueType> knownValueTypes;
 
@@ -441,7 +442,7 @@ class UIDefaultsLoader
 		return parseValue( key, value, valueType, null, v -> v, Collections.emptyList() );
 	}
 
-	static Object parseValue( String key, String value, Class<?> javaValueType, ValueType[] resultValueType,
+	static Object parseValue( String key, String value, Class<?> javaValueType, AtomicReference<ValueType> resultValueType,
 		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
 			throws IllegalArgumentException
 	{
@@ -450,7 +451,7 @@ class UIDefaultsLoader
 
 		// do not parse styles here
 		if( key.startsWith( "[style]" ) ) {
-			resultValueType[0] = ValueType.STRING;
+			resultValueType.set( ValueType.STRING );
 			return value;
 		}
 
@@ -458,7 +459,7 @@ class UIDefaultsLoader
 
 		// null
 		if( value.equals( "null" ) || value.isEmpty() ) {
-			resultValueType[0] = ValueType.NULL;
+			resultValueType.set( ValueType.NULL );
 			return null;
 		}
 
@@ -514,14 +515,14 @@ class UIDefaultsLoader
 		} else {
 			// false, true
 			switch( value ) {
-				case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
-				case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
+				case "false":	resultValueType.set( ValueType.BOOLEAN ); return false;
+				case "true":	resultValueType.set( ValueType.BOOLEAN ); return true;
 			}
 
 			// check for function "lazy"
 			//     Syntax: lazy(uiKey)
 			if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
-				resultValueType[0] = ValueType.LAZY;
+				resultValueType.set( ValueType.LAZY );
 				String uiKey = StringUtils.substringTrimmed( value, 5, value.length() - 1 );
 				return (LazyValue) t -> {
 					return lazyUIManagerGet( uiKey );
@@ -602,7 +603,7 @@ class UIDefaultsLoader
 			}
 		}
 
-		resultValueType[0] = valueType;
+		resultValueType.set( valueType );
 
 		// parse value
 		switch( valueType ) {
@@ -629,14 +630,14 @@ class UIDefaultsLoader
 			default:
 				// string
 				if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
-					resultValueType[0] = ValueType.STRING;
+					resultValueType.set( ValueType.STRING );
 					return value.substring( 1, value.length() - 1 );
 				}
 
 				// colors
 				if( value.startsWith( "#" ) || value.endsWith( ")" ) ) {
 					Object color = parseColorOrFunction( value, resolver );
-					resultValueType[0] = (color != null) ? ValueType.COLOR : ValueType.NULL;
+					resultValueType.set( (color != null) ? ValueType.COLOR : ValueType.NULL );
 					return color;
 				}
 
@@ -648,7 +649,7 @@ class UIDefaultsLoader
 					// integer
 					try {
 						Integer integer = parseInteger( value );
-						resultValueType[0] = ValueType.INTEGER;
+						resultValueType.set( ValueType.INTEGER );
 						return integer;
 					} catch( NumberFormatException ex ) {
 						// ignore
@@ -657,7 +658,7 @@ class UIDefaultsLoader
 					// float
 					try {
 						Float f = parseFloat( value );
-						resultValueType[0] = ValueType.FLOAT;
+						resultValueType.set( ValueType.FLOAT );
 						return f;
 					} catch( NumberFormatException ex ) {
 						// ignore
@@ -665,7 +666,7 @@ class UIDefaultsLoader
 				}
 
 				// string
-				resultValueType[0] = ValueType.STRING;
+				resultValueType.set( ValueType.STRING );
 				return value;
 		}
 	}

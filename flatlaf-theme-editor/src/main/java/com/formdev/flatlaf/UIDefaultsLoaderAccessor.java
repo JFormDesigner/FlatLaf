@@ -18,6 +18,7 @@ package com.formdev.flatlaf;
 
 import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import com.formdev.flatlaf.UIDefaultsLoader.ValueType;
 
@@ -57,14 +58,14 @@ public class UIDefaultsLoaderAccessor
 		return UIDefaultsLoader.resolveValue( value, propertiesGetter );
 	}
 
-	public static Object parseValue( String key, String value, Object[] resultValueType,
+	public static Object parseValue( String key, String value, AtomicReference<Object> resultValueType,
 		Function<String, String> resolver )
 			throws IllegalArgumentException
 	{
-		ValueType[] resultValueType2 = new ValueType[1];
+		AtomicReference<ValueType> resultValueType2 = new AtomicReference<>();
 		Object result = UIDefaultsLoader.parseValue( key, value, null,
 			resultValueType2, resolver, Collections.emptyList() );
-		resultValueType[0] = resultValueType2[0];
+		resultValueType.set( resultValueType2.get() );
 		return result;
 	}
 

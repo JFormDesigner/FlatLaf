@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import javax.swing.UIDefaults;
 import javax.swing.event.DocumentEvent;
@@ -96,7 +97,7 @@ class FlatThemePropertiesSupport
 			return null;
 
 		try {
-			Object[] resultValueType = new Object[1];
+			AtomicReference<Object> resultValueType = new AtomicReference<>();
 			String value = resolveValue( keyValue.value );
 			parsedValue = UIDefaultsLoaderAccessor.parseValue( keyValue.key, value, resultValueType, resolver );
 			parsedValueCache.put( lineKey, parsedValue );
@@ -156,7 +157,7 @@ class FlatThemePropertiesSupport
 			return null;
 
 		try {
-			Object[] resultValueType = new Object[1];
+			AtomicReference<Object> resultValueType = new AtomicReference<>();
 			String value = resolveValue( str );
 			parsedValue = UIDefaultsLoaderAccessor.parseValue( key, value, resultValueType, resolver );
 			parsedValueCache2.put( key, parsedValue );

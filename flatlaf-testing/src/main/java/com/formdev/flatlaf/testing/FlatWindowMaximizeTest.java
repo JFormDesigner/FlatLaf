@@ -23,6 +23,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -143,7 +144,7 @@ public class FlatWindowMaximizeTest
 	}
 
 	private static void testMaximize( String msg, int expectedState, boolean showLater, Consumer<JFrame> testFunc ) {
-		JFrame[] pFrame = new JFrame[1];
+		AtomicReference<JFrame> pFrame = new AtomicReference<>();
 		EventQueue.invokeLater( () -> {
 			JFrame frame = new JFrame( "test" );
 			frame.setName( msg );
@@ -164,7 +165,7 @@ public class FlatWindowMaximizeTest
 			testFunc.accept( frame );
 			if( !showLater )
 				frame.setVisible( true );
-			pFrame[0] = frame;
+			pFrame.set( frame );
 		} );
 
 		try {
@@ -172,14 +173,14 @@ public class FlatWindowMaximizeTest
 				Thread.sleep( 500 );
 
 				EventQueue.invokeLater( () -> {
-					pFrame[0].setVisible( true );
+					pFrame.get().setVisible( true );
 				} );
 			}
 
 			Thread.sleep( 500 );
 
 			EventQueue.invokeAndWait( () -> {
-				int state = pFrame[0].getExtendedState();
+				int state = pFrame.get().getExtendedState();
 				System.out.printf( "    %-15s: %d  %s\n", msg, state, (state != expectedState ? "  FAILED" : "") );
 			} );
 		} catch( Exception ex ) {

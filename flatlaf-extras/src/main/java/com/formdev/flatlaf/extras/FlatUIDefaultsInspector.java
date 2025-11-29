@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
@@ -310,7 +311,7 @@ public class FlatUIDefaultsInspector
 		Set<Entry<Object, Object>> defaultsSet = defaults.entrySet();
 		ArrayList<Item> items = new ArrayList<>( defaultsSet.size() );
 		HashSet<Object> keys = new HashSet<>( defaultsSet.size() );
-		Color[] pBaseColor = new Color[1];
+		AtomicReference<Color> pBaseColor = new AtomicReference<>();
 		for( Entry<Object,Object> e : defaultsSet ) {
 			Object key = e.getKey();
 
@@ -336,7 +337,7 @@ public class FlatUIDefaultsInspector
 			if( value instanceof DerivedColor ) {
 				Color resolvedColor = resolveDerivedColor( defaults, (String) key, (DerivedColor) value, pBaseColor );
 				if( resolvedColor != value )
-					info = new Color[] { resolvedColor, pBaseColor[0] };
+					info = new Color[] { resolvedColor, pBaseColor.get() };
 			}
 
 			// check whether key was overridden using UIManager.put(key,value)
@@ -351,9 +352,9 @@ public class FlatUIDefaultsInspector
 		return items.toArray( new Item[items.size()] );
 	}
 
-	private Color resolveDerivedColor( UIDefaults defaults, String key, Color color, Color[] pBaseColor ) {
+	private Color resolveDerivedColor( UIDefaults defaults, String key, Color color, AtomicReference<Color> pBaseColor ) {
 		if( pBaseColor != null )
-			pBaseColor[0] = null;
+			pBaseColor.set( null );
 
 		if( !(color instanceof DerivedColor) )
 			return color;
@@ -377,7 +378,7 @@ public class FlatUIDefaultsInspector
 			baseColor = resolveDerivedColor( defaults, (String) baseKey, baseColor, null );
 
 		if( pBaseColor != null )
-			pBaseColor[0] = baseColor;
+			pBaseColor.set( baseColor );
 
 		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
 
