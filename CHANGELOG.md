@@ -8,11 +8,16 @@ FlatLaf Change Log
 - System File Chooser allows using **operating system file dialogs** in Java
   Swing applications. (PR #988)
 - Zooming API. (PR #1051)
+- TabbedPane: Added icon-only tab mode, which shows tab icons but hides tab
+  titles. Tab titles are used in "Show Hidden Tabs" popup menu. (set client
+  property `JTabbedPane.tabWidthMode` to `"iconOnly"`)
 
 #### Fixed bugs
 
 - CheckBox and RadioButton: Fixed styling of custom icon. Also fixed focus width
   (and preferred size) if using custom icon. (PR #1060)
+- TabbedPane: In "Show Hidden Tabs" popup menu, do not show text "x. Tab" if tab
+  has icon but no title. (issue #1062)
 - TextField: Fixed wrong leading/trailing icon placement if border is set to
   `null`. (issue #1047)
 - Extras: UI defaults inspector: Exclude inspector window from being blocked by

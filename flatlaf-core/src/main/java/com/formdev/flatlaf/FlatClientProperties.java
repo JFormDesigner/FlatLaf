@@ -1086,8 +1086,9 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong>
 	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_PREFERRED} (default),
-	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL} or
-	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT}
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL},
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT} or
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY}
 	 */
 	String TABBED_PANE_TAB_WIDTH_MODE = "JTabbedPane.tabWidthMode";
 
@@ -1112,6 +1113,14 @@ public interface FlatClientProperties
 	 * @see #TABBED_PANE_TAB_WIDTH_MODE
 	 */
 	String TABBED_PANE_TAB_WIDTH_MODE_COMPACT = "compact";
+
+	/**
+	 * All tabs are smaller because they show only the tab icon, but no tab title.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 * @since 3.7
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY = "iconOnly";
 
 	/**
 	 * Specifies the tab icon placement (relative to tab title).

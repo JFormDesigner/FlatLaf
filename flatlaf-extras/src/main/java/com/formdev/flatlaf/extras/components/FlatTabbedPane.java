@@ -484,7 +484,7 @@ public class FlatTabbedPane
 
 
 	// NOTE: enum names must be equal to allowed strings
-	public enum TabWidthMode { preferred, equal, compact }
+	public enum TabWidthMode { preferred, equal, compact, /** @since 3.7 */ iconOnly }
 
 	/**
 	 * Returns how the tabs should be sized.

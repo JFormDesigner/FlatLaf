@@ -69,6 +69,7 @@ class TabsPanel
 		initTabWidthMode( widthPreferredTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_PREFERRED );
 		initTabWidthMode( widthEqualTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_EQUAL );
 		initTabWidthMode( widthCompactTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_COMPACT );
+		initTabWidthMode( widthIconOnlyTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY );
 	}
 
 	private void initTabPlacementTabs( JTabbedPane tabbedPane ) {
@@ -262,7 +263,9 @@ class TabsPanel
 
 	private void initTabWidthMode( JTabbedPane tabbedPane, String tabWidthMode ) {
 		tabbedPane.putClientProperty( TABBED_PANE_TAB_WIDTH_MODE, tabWidthMode );
-		if( tabWidthMode.equals( TABBED_PANE_TAB_WIDTH_MODE_COMPACT ) ) {
+		if( tabWidthMode.equals( TABBED_PANE_TAB_WIDTH_MODE_COMPACT ) ||
+			tabWidthMode.equals( TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY ) )
+		{
 			tabbedPane.addTab( "Search", new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/search.svg", 16, 16 ), null );
 			tabbedPane.addTab( "Recents", new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/RecentlyUsed.svg", 16, 16 ), null );
 			tabbedPane.addTab( "Favorites", new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/favorite.svg", 16, 16 ), null );
@@ -390,6 +393,7 @@ class TabsPanel
 		widthPreferredTabbedPane = new JTabbedPane();
 		widthEqualTabbedPane = new JTabbedPane();
 		widthCompactTabbedPane = new JTabbedPane();
+		widthIconOnlyTabbedPane = new JTabbedPane();
 		JLabel minMaxTabWidthLabel = new JLabel();
 		minimumTabWidthTabbedPane = new JTabbedPane();
 		maximumTabWidthTabbedPane = new JTabbedPane();
@@ -684,6 +688,7 @@ class TabsPanel
 						"[]" +
 						"[]" +
 						"[]" +
+						"[]" +
 						"[]para" +
 						"[]" +
 						"[]" +
@@ -697,25 +702,56 @@ class TabsPanel
 					panel3.add(tabWidthModeLabel, "cell 0 0");
 
 					//---- tabWidthModeNoteLabel ----
-					tabWidthModeNoteLabel.setText("(preferred/equal/compact)");
+					tabWidthModeNoteLabel.setText("(preferred/equal/compact/iconOnly)");
 					tabWidthModeNoteLabel.setEnabled(false);
 					tabWidthModeNoteLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 					panel3.add(tabWidthModeNoteLabel, "cell 0 1");
+
+					//======== widthPreferredTabbedPane ========
+					{
+						widthPreferredTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
 					panel3.add(widthPreferredTabbedPane, "cell 0 2");
+
+					//======== widthEqualTabbedPane ========
+					{
+						widthEqualTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
 					panel3.add(widthEqualTabbedPane, "cell 0 3");
+
+					//======== widthCompactTabbedPane ========
+					{
+						widthCompactTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
 					panel3.add(widthCompactTabbedPane, "cell 0 4");
+
+					//======== widthIconOnlyTabbedPane ========
+					{
+						widthIconOnlyTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
+					panel3.add(widthIconOnlyTabbedPane, "cell 0 5");
 
 					//---- minMaxTabWidthLabel ----
 					minMaxTabWidthLabel.setText("Minimum/maximum tab width");
 					minMaxTabWidthLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
-					panel3.add(minMaxTabWidthLabel, "cell 0 5");
-					panel3.add(minimumTabWidthTabbedPane, "cell 0 6");
-					panel3.add(maximumTabWidthTabbedPane, "cell 0 7");
+					panel3.add(minMaxTabWidthLabel, "cell 0 6");
+
+					//======== minimumTabWidthTabbedPane ========
+					{
+						minimumTabWidthTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
+					panel3.add(minimumTabWidthTabbedPane, "cell 0 7");
+
+					//======== maximumTabWidthTabbedPane ========
+					{
+						maximumTabWidthTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+					}
+					panel3.add(maximumTabWidthTabbedPane, "cell 0 8");
 
 					//---- tabAlignmentLabel ----
 					tabAlignmentLabel.setText("Tab title alignment");
 					tabAlignmentLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
-					panel3.add(tabAlignmentLabel, "cell 0 8");
+					panel3.add(tabAlignmentLabel, "cell 0 9");
 
 					//======== panel5 ========
 					{
@@ -742,17 +778,33 @@ class TabsPanel
 						tabAlignmentNoteLabel2.setEnabled(false);
 						tabAlignmentNoteLabel2.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 						panel5.add(tabAlignmentNoteLabel2, "cell 1 0,alignx right,growx 0");
+
+						//======== tabAlignLeadingTabbedPane ========
+						{
+							tabAlignLeadingTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+						}
 						panel5.add(tabAlignLeadingTabbedPane, "cell 0 1");
 
 						//======== tabAlignVerticalTabbedPane ========
 						{
 							tabAlignVerticalTabbedPane.setTabPlacement(SwingConstants.LEFT);
+							tabAlignVerticalTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
 						}
 						panel5.add(tabAlignVerticalTabbedPane, "cell 1 1 1 4,growy");
+
+						//======== tabAlignCenterTabbedPane ========
+						{
+							tabAlignCenterTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+						}
 						panel5.add(tabAlignCenterTabbedPane, "cell 0 2");
+
+						//======== tabAlignTrailingTabbedPane ========
+						{
+							tabAlignTrailingTabbedPane.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, 28);
+						}
 						panel5.add(tabAlignTrailingTabbedPane, "cell 0 3");
 					}
-					panel3.add(panel5, "cell 0 9");
+					panel3.add(panel5, "cell 0 10");
 				}
 				panel6.add(panel3, "cell 2 0");
 			}
@@ -1027,6 +1079,7 @@ class TabsPanel
 	private JTabbedPane widthPreferredTabbedPane;
 	private JTabbedPane widthEqualTabbedPane;
 	private JTabbedPane widthCompactTabbedPane;
+	private JTabbedPane widthIconOnlyTabbedPane;
 	private JTabbedPane minimumTabWidthTabbedPane;
 	private JTabbedPane maximumTabWidthTabbedPane;
 	private JPanel panel5;

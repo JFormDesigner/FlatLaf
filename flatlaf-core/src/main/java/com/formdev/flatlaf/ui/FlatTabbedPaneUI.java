@@ -205,6 +205,7 @@ public class FlatTabbedPaneUI
 	protected static final int WIDTH_MODE_PREFERRED = 0;
 	protected static final int WIDTH_MODE_EQUAL = 1;
 	protected static final int WIDTH_MODE_COMPACT = 2;
+	/** @since 3.7 */ protected static final int WIDTH_MODE_ICON_ONLY = 3;
 
 	// tab rotation
 	/** @since 3.3 */ protected static final int NONE = -1;
@@ -780,6 +781,7 @@ public class FlatTabbedPaneUI
 					case WIDTH_MODE_PREFERRED:	return TABBED_PANE_TAB_WIDTH_MODE_PREFERRED;
 					case WIDTH_MODE_EQUAL:		return TABBED_PANE_TAB_WIDTH_MODE_EQUAL;
 					case WIDTH_MODE_COMPACT:	return TABBED_PANE_TAB_WIDTH_MODE_COMPACT;
+					case WIDTH_MODE_ICON_ONLY:	return TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY;
 				}
 
 			case "tabRotation":
@@ -926,9 +928,10 @@ public class FlatTabbedPaneUI
 
 		int tabWidth;
 		Icon icon;
-		if( tabWidthMode == WIDTH_MODE_COMPACT &&
-			tabIndex != tabPane.getSelectedIndex() &&
-			isHorizontalOrRotated( tabPlacement ) &&
+		if( ((tabWidthMode == WIDTH_MODE_COMPACT &&
+			  tabIndex != tabPane.getSelectedIndex() &&
+			  isHorizontalOrRotated( tabPlacement )) ||
+			 tabWidthMode == WIDTH_MODE_ICON_ONLY) &&
 			tabPane.getTabComponentAt( tabIndex ) == null &&
 			(icon = getIconForTab( tabIndex )) != null )
 		{
@@ -1247,7 +1250,8 @@ public class FlatTabbedPaneUI
 		Font font = tabPane.getFont();
 		FontMetrics metrics = tabPane.getFontMetrics( font );
 		boolean isCompact = (icon != null && !isSelected && getTabWidthMode() == WIDTH_MODE_COMPACT && isHorizontalOrRotated( tabPlacement ));
-		if( isCompact )
+		boolean isIconOnly = (icon != null && getTabWidthMode() == WIDTH_MODE_ICON_ONLY);
+		if( isCompact || isIconOnly )
 			title = null;
 		String clippedTitle = layoutAndClipLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
 
@@ -1283,7 +1287,7 @@ debug*/
 		}
 
 		// paint title and icon
-		if( !isCompact )
+		if( !isCompact || isIconOnly )
 			paintText( g, tabPlacement, font, metrics, tabIndex, clippedTitle, textRect, isSelected );
 		paintIcon( g, tabPlacement, tabIndex, icon, iconRect, isSelected );
 	}
@@ -2160,6 +2164,7 @@ debug*/
 			case TABBED_PANE_TAB_WIDTH_MODE_PREFERRED:	return WIDTH_MODE_PREFERRED;
 			case TABBED_PANE_TAB_WIDTH_MODE_EQUAL:		return WIDTH_MODE_EQUAL;
 			case TABBED_PANE_TAB_WIDTH_MODE_COMPACT:	return WIDTH_MODE_COMPACT;
+			case TABBED_PANE_TAB_WIDTH_MODE_ICON_ONLY:	return WIDTH_MODE_ICON_ONLY;
 		}
 	}
 
@@ -2508,7 +2513,7 @@ debug*/
 			//   2. text of label or text component in custom tab component (including children)
 			//   3. accessible name of tab
 			//   4. accessible name of custom tab component (including children)
-			//   5. string "n. Tab"
+			//   5. string "n. Tab", if tab does not have an icon
 			String title = tabPane.getTitleAt( tabIndex );
 			if( StringUtils.isEmpty( title ) ) {
 				Component tabComp = tabPane.getTabComponentAt( tabIndex );
@@ -2518,7 +2523,7 @@ debug*/
 					title = tabPane.getAccessibleContext().getAccessibleChild( tabIndex ).getAccessibleContext().getAccessibleName();
 				if( StringUtils.isEmpty( title ) && tabComp instanceof Accessible )
 					title = findTabTitleInAccessible( (Accessible) tabComp );
-				if( StringUtils.isEmpty( title ) )
+				if( StringUtils.isEmpty( title ) && tabPane.getIconAt( tabIndex ) == null )
 					title = (tabIndex + 1) + ". Tab";
 			}
 
@@ -2538,6 +2543,12 @@ debug*/
 
 			if( !tabPane.isEnabled() || !tabPane.isEnabledAt( tabIndex ) )
 				menuItem.setEnabled( false );
+
+			// make menu item smaller if it contains icon only
+			if( StringUtils.isEmpty( title ) ) {
+				menuItem.putClientProperty( FlatClientProperties.STYLE,
+					"minimumWidth: 0; textNoAcceleratorGap: 0; acceleratorArrowGap: 0" );
+			}
 
 			menuItem.addActionListener( e -> selectTab( tabIndex ) );
 			return menuItem;
