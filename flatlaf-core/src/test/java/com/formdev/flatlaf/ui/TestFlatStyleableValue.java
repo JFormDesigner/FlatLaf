@@ -208,7 +208,9 @@ public class TestFlatStyleableValue
 
 		@Override
 		public boolean equals( Object obj ) {
-			return uiClass == ((CacheKey)obj).uiClass && compClass == ((CacheKey)obj).compClass;
+			return obj instanceof CacheKey &&
+				uiClass == ((CacheKey)obj).uiClass &&
+				compClass == ((CacheKey)obj).compClass;
 		}
 
 		@Override
