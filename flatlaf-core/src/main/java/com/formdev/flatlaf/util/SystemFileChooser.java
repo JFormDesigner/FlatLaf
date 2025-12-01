@@ -22,9 +22,10 @@ import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -590,7 +591,7 @@ public class SystemFileChooser
 		if( filters.size() == 1 &&
 			filters.get( 0 ) == getAcceptAllFileFilter() &&
 			(fileFilter == getAcceptAllFileFilter() || fileFilter == null) )
-		  return Collections.emptyList();
+		  return new ArrayList<>();
 
 		// check whether current filter is already in list
 		if( (fileFilter != null && filters.contains( fileFilter )) || fileFilter == null )
@@ -1074,6 +1075,15 @@ public class SystemFileChooser
 		extends SystemFileChooserProvider
 	{
 		@Override
+		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			// fallback to Swing file chooser if JavaFX is initialized
+			if( isFXinitialized() )
+				return new SwingFileChooserProvider().showDialog( owner, fc );
+
+			return super.showDialog( owner, fc );
+		}
+
+		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
 			boolean open = (fc.getDialogType() == OPEN_DIALOG);
 			String approveButtonText = fc.getApproveButtonText();
@@ -1173,6 +1183,41 @@ public class SystemFileChooser
 					buf.append( ch );
 			}
 			return buf.toString();
+		}
+
+
+		private static Boolean fxinitialized;
+
+		boolean isFXinitialized() {
+			if( fxinitialized != null )
+				return fxinitialized;
+
+			// check whether JavaFX is available
+			try {
+				Class.forName( "javafx.application.Platform", false, getClass().getClassLoader() );
+			} catch( ClassNotFoundException ex ) {
+				// JavaFX is not available
+				fxinitialized = false;
+				return fxinitialized;
+			}
+
+			// check whether JavaFX is initialized
+			try {
+				Class<?> cls = Class.forName( "javafx.application.Platform" );
+				Method m = cls.getMethod( "runLater", Runnable.class );
+				m.invoke( null, (Runnable) () -> {} );
+				fxinitialized = true;
+				return fxinitialized;
+			} catch( InvocationTargetException ex ) {
+				if( ex.getCause() instanceof IllegalStateException )
+					return false; // JavaFX is available, but not (yet) initialized
+			} catch( Throwable ex ) {
+				// ignore
+			}
+
+			// other error --> assume that JavaFX is not initialized
+			fxinitialized = false;
+			return fxinitialized;
 		}
 
 		//---- class LinuxApproveContext ----

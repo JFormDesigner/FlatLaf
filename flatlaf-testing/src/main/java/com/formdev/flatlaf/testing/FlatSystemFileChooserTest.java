@@ -77,7 +77,7 @@ public class FlatSystemFileChooserTest
 	FlatSystemFileChooserTest() {
 		initComponents();
 
-		if( !NativeJFileChooser.FX_AVAILABLE ) {
+		if( SystemInfo.isLinux || !NativeJFileChooser.FX_AVAILABLE ) {
 			javafxOpenButton.setEnabled( false );
 			javafxSaveButton.setEnabled( false );
 		}
@@ -231,7 +231,7 @@ public class FlatSystemFileChooserTest
 		int fileTypeIndex = fileTypeIndexSlider.getValue();
 		if( !useAcceptAllFileFilterCheckBox.isSelected() )
 			fc.setAcceptAllFileFilterUsed( false );
-		for( int i  = 0; i  < fileTypes.length; i += 2 ) {
+		for( int i = 0; i < fileTypes.length; i += 2 ) {
 			fc.addChoosableFileFilter( "*".equals( fileTypes[i+1] )
 				? fc.getAcceptAllFileFilter()
 				: new SystemFileChooser.FileNameExtensionFilter( fileTypes[i], fileTypes[i+1].split( ";" ) ) );
@@ -282,7 +282,7 @@ public class FlatSystemFileChooserTest
 		int fileTypeIndex = fileTypeIndexSlider.getValue();
 		if( !useAcceptAllFileFilterCheckBox.isSelected() )
 			fc.setAcceptAllFileFilterUsed( false );
-		for( int i  = 0; i  < fileTypes.length; i += 2 ) {
+		for( int i = 0; i < fileTypes.length; i += 2 ) {
 			fc.addChoosableFileFilter( "*".equals( fileTypes[i+1] )
 				? fc.getAcceptAllFileFilter()
 				: new FileNameExtensionFilter( fileTypes[i], fileTypes[i+1].split( ";" ) ) );
