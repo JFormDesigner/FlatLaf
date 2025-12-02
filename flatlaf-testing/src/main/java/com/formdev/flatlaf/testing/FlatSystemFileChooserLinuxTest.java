@@ -24,6 +24,7 @@ import java.awt.Window;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import com.formdev.flatlaf.testing.FlatSystemFileChooserTest.DummyModalDialog;
@@ -121,8 +122,9 @@ public class FlatSystemFileChooserLinuxTest
 
 		System.out.println( FlatNativeLinuxLibrary.isGtk3Available() );
 
+		int dark = FlatLaf.isLafDark() ? 1 : 0;
 		if( direct ) {
-			String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, open,
+			String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
 				title, okButtonLabel, currentName, currentFolder,
 				optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes );
 
@@ -132,7 +134,7 @@ public class FlatSystemFileChooserLinuxTest
 
 			String[] fileTypes2 = fileTypes;
 			new Thread( () -> {
-				String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, open,
+				String[] files = FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
 					title, okButtonLabel, currentName, currentFolder,
 					optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes2 );
 

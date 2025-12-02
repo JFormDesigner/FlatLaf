@@ -168,7 +168,7 @@ static void handle_response( GtkWidget* dialog, gint responseId, gpointer data )
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
-	( JNIEnv* env, jclass cls, jobject owner, jboolean open,
+	( JNIEnv* env, jclass cls, jobject owner, jint dark, jboolean open,
 		jstring title, jstring okButtonLabel, jstring currentName, jstring currentFolder,
 		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
 {
@@ -226,10 +226,40 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 		gtk_window_set_modal( GTK_WINDOW( dialog ), true );
 
 		// file dialog should use same screen as owner
-		gtk_window_set_screen( GTK_WINDOW( dialog ), gdk_window_get_screen( gdkOwner ) );
+		GdkScreen* screen = gdk_window_get_screen( gdkOwner );
+		gtk_window_set_screen( GTK_WINDOW( dialog ), screen );
 
 		// set the transient when the file dialog is realized
 		g_signal_connect( dialog, "realize", G_CALLBACK( handle_realize ), gdkOwner );
+
+		// set light/dark appearance
+		if( dark >= 0 ) {
+			GtkSettings *settings = gtk_settings_get_for_screen( screen );
+
+			// get current GTK theme
+			gchar* currentGtkTheme;
+			g_object_get( settings, "gtk-theme-name", &currentGtkTheme, NULL );
+
+			const char* darkSuffix = "-dark";
+			bool isDarkGtkTheme = g_str_has_suffix( currentGtkTheme, darkSuffix );
+			if( isDarkGtkTheme && dark == 0 ) {
+				// current GTK theme is dark, but FlatLaf theme is light
+				// in this case, "gtk-application-prefer-dark-theme" does not work
+				// and there is no "gtk-application-prefer-light-theme" setting
+				// --> try to switch to light GTK theme (if available)
+				gchar* lightGtkTheme = g_strndup( currentGtkTheme, strlen( currentGtkTheme ) - strlen( darkSuffix ) );
+				gchar* themeDir = g_strdup_printf( "/usr/share/themes/%s", lightGtkTheme );
+				if( g_file_test( themeDir, G_FILE_TEST_IS_DIR ) )
+					g_object_set( settings, "gtk-theme-name", lightGtkTheme, NULL );
+				g_free( themeDir );
+				g_free( lightGtkTheme );
+			}
+
+			g_free( currentGtkTheme );
+
+			// let GTK know whether we prefer a dark theme
+			g_object_set( settings, "gtk-application-prefer-dark-theme", (dark == 1), NULL );
+		}
 	}
 
 	// show dialog

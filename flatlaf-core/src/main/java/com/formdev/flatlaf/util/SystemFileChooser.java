@@ -1085,6 +1085,7 @@ public class SystemFileChooser
 
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
+			int dark = FlatLaf.isLafDark() ? 1 : 0;
 			boolean open = (fc.getDialogType() == OPEN_DIALOG);
 			String approveButtonText = fc.getApproveButtonText();
 			int approveButtonMnemonic = fc.getApproveButtonMnemonic();
@@ -1162,7 +1163,7 @@ public class SystemFileChooser
 				} : null;
 
 			// show system file dialog
-			return FlatNativeLinuxLibrary.showFileChooser( owner, open,
+			return FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
 				optionsSet, optionsClear, callback,
 				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );

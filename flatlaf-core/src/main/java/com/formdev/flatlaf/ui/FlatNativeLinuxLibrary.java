@@ -37,7 +37,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeLinuxLibrary
 {
-	private static int API_VERSION_LINUX = 3002;
+	private static int API_VERSION_LINUX = 3003;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -178,6 +178,7 @@ public class FlatNativeLinuxLibrary
 	 * to avoid blocking the AWT event dispatching thread.
 	 *
 	 * @param owner the owner of the file dialog; or {@code null}
+	 * @param dark preferred appearance of the file dialog: {@code 1} = prefer dark, {@code 0} = prefer light, {@code -1} = default
 	 * @param open if {@code true}, shows the open dialog; if {@code false}, shows the save dialog
 	 * @param title text displayed in dialog title; or {@code null}
 	 * @param okButtonLabel text displayed in default button; or {@code null}.
@@ -199,7 +200,7 @@ public class FlatNativeLinuxLibrary
 	 *
 	 * @since 3.7
 	 */
-	public native static String[] showFileChooser( Window owner, boolean open,
+	public native static String[] showFileChooser( Window owner, int dark, boolean open,
 		String title, String okButtonLabel, String currentName, String currentFolder,
 		int optionsSet, int optionsClear, FileChooserCallback callback,
 		int fileTypeIndex, String... fileTypes );

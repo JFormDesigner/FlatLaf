@@ -7,6 +7,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOPLEFT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOPLEFT 0L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOP
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOP 1L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOPRIGHT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_TOPRIGHT 2L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_RIGHT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_RIGHT 3L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOMRIGHT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOMRIGHT 4L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOM
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOM 5L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOMLEFT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_BOTTOMLEFT 6L
+#undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_LEFT
+#define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_SIZE_LEFT 7L
 #undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_MOVE
 #define com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_MOVE 8L
 #undef com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_FC_select_folder
@@ -48,10 +64,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_is
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
  * Method:    showFileChooser
- * Signature: (Ljava/awt/Window;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeLinuxLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeLinuxLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
-  (JNIEnv *, jclass, jobject, jboolean, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
