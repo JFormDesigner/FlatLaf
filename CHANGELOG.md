@@ -32,6 +32,8 @@ FlatLaf Change Log
   modal dialogs. (issue #1048)
 - JideButton, JideToggleButton, JideSplitButton and JideToggleSplitButton: Paint
   border in button style `TOOLBAR_STYLE` if in selected state. (issue #1045)
+- IntelliJ Themes: Fixed problem when using theme instance more than once when
+  switching to that theme. (issue #990)
 
 
 ## 3.6.2

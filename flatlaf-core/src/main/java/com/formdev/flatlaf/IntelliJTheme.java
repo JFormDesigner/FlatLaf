@@ -58,9 +58,9 @@ public class IntelliJTheme
 	public final boolean dark;
 	public final String author;
 
-	private Map<String, String> jsonColors;
-	private Map<String, Object> jsonUI;
-	private Map<String, Object> jsonIcons;
+	private final Map<String, String> jsonColors;
+	private final Map<String, Object> jsonUI;
+	private final Map<String, Object> jsonIcons;
 
 	private Map<String, String> namedColors = Collections.emptyMap();
 
@@ -276,11 +276,6 @@ public class IntelliJTheme
 
 			put( properties, key, value );
 		}
-
-		// let Java release memory
-		jsonColors = null;
-		jsonUI = null;
-		jsonIcons = null;
 	}
 
 	private String get( Properties properties, Map<String, String> themeSpecificProps, String key ) {
