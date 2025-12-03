@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.icons;
 
-import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -29,7 +28,7 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Base class for icons that scales width and height, creates and initializes
  * a scaled graphics context for icon painting.
- *
+ * <p>
  * Subclasses do not need to scale icon painting.
  *
  * @author Karl Tauber
@@ -37,9 +36,14 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatAbstractIcon
 	implements Icon, UIResource
 {
+	/** Unscaled icon width. */
 	protected final int width;
+	/** Unscaled icon height. */
 	protected final int height;
 	protected Color color;
+
+	/** Additional icon scale factor. */
+	private float scale = 1;
 
 	public FlatAbstractIcon( int width, int height, Color color ) {
 		this.width = width;
@@ -61,6 +65,9 @@ public abstract class FlatAbstractIcon
 
 			g2.translate( x, y );
 			UIScale.scaleGraphics( g2 );
+			float scale = getScale();
+			if( scale != 1 )
+				g2.scale( scale, scale );
 
 			if( color != null )
 				g2.setColor( color );
@@ -71,19 +78,71 @@ public abstract class FlatAbstractIcon
 		}
 	}
 
-	/** @since 3.5.2 */
+	/**
+	 * Paints icon background. Default implementation does nothing.
+	 * Can be overridden to paint specific icon background.
+	 * <p>
+	 * The bounds of the area to be filled are:
+	 * x, y, {@link #getIconWidth()}, {@link #getIconHeight()}.
+	 * <p>
+	 * In contrast to {@link #paintIcon(Component, Graphics2D)},
+	 * the graphics context {@code g} is not translated and not scaled.
+	 *
+	 * @since 3.5.2
+	 */
 	protected void paintBackground( Component c, Graphics2D g, int x, int y ) {
 	}
 
+	/**
+	 * Paints icon.
+	 * <p>
+	 * The graphics context is translated and scaled.
+	 * This means that icon x,y coordinates are {@code 0,0}
+	 * and it is not necessary to scale coordinates within this method.
+	 * <p>
+	 * The bounds to be used for icon painting are:
+	 * 0, 0, {@link #width}, {@link #height}.
+	 */
 	protected abstract void paintIcon( Component c, Graphics2D g );
 
+	/**
+	 * Returns the scaled icon width.
+	 */
 	@Override
 	public int getIconWidth() {
-		return scale( width );
+		return scale( UIScale.scale( width ) );
 	}
 
+	/**
+	 * Returns the scaled icon height.
+	 */
 	@Override
 	public int getIconHeight() {
-		return scale( height );
+		return scale( UIScale.scale( height ) );
+	}
+
+	/** @since 3.7 */
+	public float getScale() {
+		return scale;
+	}
+
+	/** @since 3.7 */
+	public void setScale( float scale ) {
+		this.scale = scale;
+	}
+
+	/**
+	 * Multiplies the given value by the icon scale factor {@link #getScale()} and rounds the result.
+	 * <p>
+	 * If you want scale a {@code float} or {@code double} value,
+	 * simply use: {@code myFloatValue * }{@link #getScale()}.
+	 * <p>
+	 * Do not use this method when painting icon in {@link #paintIcon(Component, Graphics2D)}.
+	 *
+	 * @since 3.7
+	 */
+	protected int scale( int size ) {
+		float scale = getScale();
+		return (scale == 1) ? size : Math.round( size * scale );
 	}
 }

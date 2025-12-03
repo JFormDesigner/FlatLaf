@@ -25,6 +25,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
@@ -38,6 +39,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @author Karl Tauber
  * @since 1.5
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="clearIconScale", fieldName="scale" )
 public class FlatClearIcon
 	extends FlatAbstractIcon
 	implements StyleableObject

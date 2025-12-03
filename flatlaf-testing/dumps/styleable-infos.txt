@@ -50,6 +50,7 @@ help.hoverBorderColor                              java.awt.Color
 help.innerFocusWidth                               float
 help.pressedBackground                             java.awt.Color
 help.questionMarkColor                             java.awt.Color
+help.scale                                         float
 hoverBackground                                    java.awt.Color
 hoverBorderColor                                   java.awt.Color
 hoverForeground                                    java.awt.Color
@@ -138,6 +139,7 @@ icon.pressedIndeterminateBorderColor               java.awt.Color
 icon.pressedIndeterminateCheckmarkColor            java.awt.Color
 icon.pressedSelectedBackground                     java.awt.Color
 icon.pressedSelectedBorderColor                    java.awt.Color
+icon.scale                                         float
 icon.selectedBackground                            java.awt.Color
 icon.selectedBorderColor                           java.awt.Color
 icon.selectedBorderWidth                           float
@@ -154,6 +156,7 @@ checkMargins                                       java.awt.Insets
 disabledForeground                                 java.awt.Color
 icon.checkmarkColor                                java.awt.Color
 icon.disabledCheckmarkColor                        java.awt.Color
+icon.scale                                         float
 minimumIconSize                                    java.awt.Dimension
 minimumWidth                                       int
 selectionArc                                       int
@@ -304,6 +307,7 @@ disabledForeground                                 java.awt.Color
 icon.arrowColor                                    java.awt.Color
 icon.arrowType                                     java.lang.String
 icon.disabledArrowColor                            java.awt.Color
+icon.scale                                         float
 minimumIconSize                                    java.awt.Dimension
 minimumWidth                                       int
 selectionArc                                       int
@@ -369,6 +373,7 @@ arc                                                int
 borderColor                                        java.awt.Color
 borderWidth                                        float
 capsLockIconColor                                  java.awt.Color
+capsLockIconScale                                  float
 custom.borderColor                                 java.awt.Color
 disabledBackground                                 java.awt.Color
 disabledBorderColor                                java.awt.Color
@@ -473,6 +478,7 @@ icon.pressedIndeterminateBorderColor               java.awt.Color
 icon.pressedIndeterminateCheckmarkColor            java.awt.Color
 icon.pressedSelectedBackground                     java.awt.Color
 icon.pressedSelectedBorderColor                    java.awt.Color
+icon.scale                                         float
 icon.selectedBackground                            java.awt.Color
 icon.selectedBorderColor                           java.awt.Color
 icon.selectedBorderWidth                           float
@@ -489,6 +495,7 @@ checkMargins                                       java.awt.Insets
 disabledForeground                                 java.awt.Color
 icon.checkmarkColor                                java.awt.Color
 icon.disabledCheckmarkColor                        java.awt.Color
+icon.scale                                         float
 minimumIconSize                                    java.awt.Dimension
 minimumWidth                                       int
 selectionArc                                       int
@@ -656,6 +663,7 @@ closeHoverBackground                               java.awt.Color
 closeHoverForeground                               java.awt.Color
 closePressedBackground                             java.awt.Color
 closePressedForeground                             java.awt.Color
+closeScale                                         float
 closeSize                                          java.awt.Dimension
 contentAreaColor                                   java.awt.Color
 contentSeparatorHeight                             int
@@ -1076,6 +1084,7 @@ inactiveDropShadowOpacity                          float
 #---- FlatCapsLockIcon ----
 
 capsLockIconColor                                  java.awt.Color
+capsLockIconScale                                  float
 
 
 #---- FlatCheckBoxIcon ----
@@ -1125,6 +1134,7 @@ pressedIndeterminateBorderColor                    java.awt.Color
 pressedIndeterminateCheckmarkColor                 java.awt.Color
 pressedSelectedBackground                          java.awt.Color
 pressedSelectedBorderColor                         java.awt.Color
+scale                                              float
 selectedBackground                                 java.awt.Color
 selectedBorderColor                                java.awt.Color
 selectedBorderWidth                                float
@@ -1134,6 +1144,7 @@ selectedBorderWidth                                float
 
 checkmarkColor                                     java.awt.Color
 disabledCheckmarkColor                             java.awt.Color
+scale                                              float
 selectionForeground                                java.awt.Color
 
 
@@ -1142,6 +1153,7 @@ selectionForeground                                java.awt.Color
 clearIconColor                                     java.awt.Color
 clearIconHoverColor                                java.awt.Color
 clearIconPressedColor                              java.awt.Color
+clearIconScale                                     float
 
 
 #---- FlatHelpButtonIcon ----
@@ -1161,6 +1173,7 @@ hoverBorderColor                                   java.awt.Color
 innerFocusWidth                                    float
 pressedBackground                                  java.awt.Color
 questionMarkColor                                  java.awt.Color
+scale                                              float
 
 
 #---- FlatMenuArrowIcon ----
@@ -1168,6 +1181,7 @@ questionMarkColor                                  java.awt.Color
 arrowColor                                         java.awt.Color
 arrowType                                          java.lang.String
 disabledArrowColor                                 java.awt.Color
+scale                                              float
 selectionForeground                                java.awt.Color
 
 
@@ -1219,6 +1233,7 @@ pressedIndeterminateBorderColor                    java.awt.Color
 pressedIndeterminateCheckmarkColor                 java.awt.Color
 pressedSelectedBackground                          java.awt.Color
 pressedSelectedBorderColor                         java.awt.Color
+scale                                              float
 selectedBackground                                 java.awt.Color
 selectedBorderColor                                java.awt.Color
 selectedBorderWidth                                float
@@ -1228,6 +1243,7 @@ selectedBorderWidth                                float
 
 checkmarkColor                                     java.awt.Color
 disabledCheckmarkColor                             java.awt.Color
+scale                                              float
 selectionForeground                                java.awt.Color
 
 
@@ -1236,6 +1252,7 @@ selectionForeground                                java.awt.Color
 searchIconColor                                    java.awt.Color
 searchIconHoverColor                               java.awt.Color
 searchIconPressedColor                             java.awt.Color
+searchIconScale                                    float
 
 
 #---- FlatSearchWithHistoryIcon ----
@@ -1243,6 +1260,7 @@ searchIconPressedColor                             java.awt.Color
 searchIconColor                                    java.awt.Color
 searchIconHoverColor                               java.awt.Color
 searchIconPressedColor                             java.awt.Color
+searchIconScale                                    float
 
 
 #---- FlatTabbedPaneCloseIcon ----
@@ -1257,6 +1275,7 @@ closeHoverBackground                               java.awt.Color
 closeHoverForeground                               java.awt.Color
 closePressedBackground                             java.awt.Color
 closePressedForeground                             java.awt.Color
+closeScale                                         float
 closeSize                                          java.awt.Dimension
 
 

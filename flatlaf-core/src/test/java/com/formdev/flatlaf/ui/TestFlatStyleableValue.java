@@ -273,6 +273,8 @@ public class TestFlatStyleableValue
 
 		//---- FlatHelpButtonIcon ----
 
+		testFloat( c, ui, "help.scale" );
+
 		testInteger( c, ui, "help.focusWidth" );
 		testColor( c, ui, "help.focusColor" );
 		testFloat( c, ui, "help.innerFocusWidth" );
@@ -569,12 +571,16 @@ public class TestFlatStyleableValue
 	}
 
 	private void menuItem_checkIcon( JComponent c, StyleableUI ui ) {
+		testFloat( c, ui, "icon.scale" );
+
 		testColor( c, ui, "icon.checkmarkColor" );
 		testColor( c, ui, "icon.disabledCheckmarkColor" );
 		testColor( c, ui, "selectionForeground" );
 	}
 
 	private void menuItem_arrowIcon( JComponent c, StyleableUI ui ) {
+		testFloat( c, ui, "icon.scale" );
+
 		testString( c, ui, "icon.arrowType", "chevron" );
 		testColor( c, ui, "icon.arrowColor" );
 		testColor( c, ui, "icon.disabledArrowColor" );
@@ -603,6 +609,7 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "showRevealButton" );
 
 		// capsLockIcon
+		testFloat( c, ui, "capsLockIconScale" );
 		testColor( c, ui, "capsLockIconColor" );
 
 		// border
@@ -693,6 +700,8 @@ public class TestFlatStyleableValue
 			assertEquals( null, ui.getStyleableValue( b, "icon.focusWidth" ) );
 			return;
 		}
+
+		testFloat( b, ui, "icon.scale" );
 
 		testFloat( b, ui, "icon.focusWidth" );
 		testColor( b, ui, "icon.focusColor" );
@@ -952,6 +961,7 @@ public class TestFlatStyleableValue
 		testString( c, ui, "tabIconPlacement", "top" );
 
 		// FlatTabbedPaneCloseIcon
+		testFloat( c, ui, "closeScale" );
 		testDimension( c, ui, "closeSize" );
 		testInteger( c, ui, "closeArc" );
 		testFloat( c, ui, "closeCrossPlainSize" );
@@ -1383,6 +1393,8 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
+		testValueFloat( icon, "scale" );
+
 		testValueFloat( icon, "focusWidth" );
 		testValueColor( icon, "focusColor" );
 		testValueFloat( icon, "borderWidth" );
@@ -1461,6 +1473,8 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatCheckBoxMenuItemIcon( FlatCheckBoxMenuItemIcon icon ) {
+		testValueFloat( icon, "scale" );
+
 		testValueColor( icon, "checkmarkColor" );
 		testValueColor( icon, "disabledCheckmarkColor" );
 		testValueColor( icon, "selectionForeground" );
@@ -1470,6 +1484,8 @@ public class TestFlatStyleableValue
 	void flatMenuArrowIcon() {
 		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
+
+		testValueFloat( icon, "scale" );
 
 		testValueString( icon, "arrowType", "chevron" );
 		testValueColor( icon, "arrowColor" );
@@ -1481,6 +1497,8 @@ public class TestFlatStyleableValue
 	void flatHelpButtonIcon() {
 		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
+
+		testValueFloat( icon, "scale" );
 
 		testValueInteger( icon, "focusWidth" );
 		testValueColor( icon, "focusColor" );
@@ -1505,6 +1523,8 @@ public class TestFlatStyleableValue
 		FlatClearIcon icon = new FlatClearIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
+		testValueFloat( icon, "clearIconScale" );
+
 		testValueColor( icon, "clearIconColor" );
 		testValueColor( icon, "clearIconHoverColor" );
 		testValueColor( icon, "clearIconPressedColor" );
@@ -1527,6 +1547,8 @@ public class TestFlatStyleableValue
 	}
 
 	private void flatSearchIcon( FlatSearchIcon icon ) {
+		testValueFloat( icon, "searchIconScale" );
+
 		testValueColor( icon, "searchIconColor" );
 		testValueColor( icon, "searchIconHoverColor" );
 		testValueColor( icon, "searchIconPressedColor" );
@@ -1537,6 +1559,7 @@ public class TestFlatStyleableValue
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
 
+		testValueFloat( icon, "capsLockIconScale" );
 		testValueColor( icon, "capsLockIconColor" );
 	}
 
@@ -1544,6 +1567,8 @@ public class TestFlatStyleableValue
 	void flatTabbedPaneCloseIcon() {
 		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
 		expectedStyleableInfos = icon.getStyleableInfos();
+
+		testValueFloat( icon, "closeScale" );
 
 		testValueDimension( icon, "closeSize" );
 		testValueInteger( icon, "closeArc" );

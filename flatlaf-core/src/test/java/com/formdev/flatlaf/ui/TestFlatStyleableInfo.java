@@ -74,6 +74,8 @@ public class TestFlatStyleableInfo
 		//---- FlatHelpButtonIcon ----
 
 		expectedMap( expected,
+			"help.scale", float.class,
+
 			"help.focusWidth", int.class,
 			"help.focusColor", Color.class,
 			"help.innerFocusWidth", float.class,
@@ -413,6 +415,8 @@ public class TestFlatStyleableInfo
 
 	private void menuItem_checkIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"icon.scale", float.class,
+
 			"icon.checkmarkColor", Color.class,
 			"icon.disabledCheckmarkColor", Color.class,
 			"selectionForeground", Color.class
@@ -421,6 +425,8 @@ public class TestFlatStyleableInfo
 
 	private void menuItem_arrowIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"icon.scale", float.class,
+
 			"icon.arrowType", String.class,
 			"icon.arrowColor", Color.class,
 			"icon.disabledArrowColor", Color.class,
@@ -456,7 +462,8 @@ public class TestFlatStyleableInfo
 
 		expectedMap( expected,
 			// capsLockIcon
-			"capsLockIconColor", Color.class
+			"capsLockIconColor", Color.class,
+			"capsLockIconScale", float.class
 		);
 
 		// border
@@ -552,6 +559,8 @@ public class TestFlatStyleableInfo
 			"disabledText", Color.class,
 
 			//---- icon ----
+
+			"icon.scale", float.class,
 
 			"icon.focusWidth", float.class,
 			"icon.focusColor", Color.class,
@@ -831,6 +840,7 @@ public class TestFlatStyleableInfo
 			"tabIconPlacement", int.class,
 
 			// FlatTabbedPaneCloseIcon
+			"closeScale", float.class,
 			"closeSize", Dimension.class,
 			"closeArc", int.class,
 			"closeCrossPlainSize", float.class,
@@ -1269,6 +1279,8 @@ public class TestFlatStyleableInfo
 
 	private void flatCheckBoxIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"scale", float.class,
+
 			"focusWidth", float.class,
 			"focusColor", Color.class,
 			"borderWidth", float.class,
@@ -1353,6 +1365,8 @@ public class TestFlatStyleableInfo
 
 	private void flatCheckBoxMenuItemIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"scale", float.class,
+
 			"checkmarkColor", Color.class,
 			"disabledCheckmarkColor", Color.class,
 			"selectionForeground", Color.class
@@ -1371,6 +1385,8 @@ public class TestFlatStyleableInfo
 
 	private void flatMenuArrowIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"scale", float.class,
+
 			"arrowType", String.class,
 			"arrowColor", Color.class,
 			"disabledArrowColor", Color.class,
@@ -1383,6 +1399,8 @@ public class TestFlatStyleableInfo
 		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"scale", float.class,
+
 			"focusWidth", int.class,
 			"focusColor", Color.class,
 			"innerFocusWidth", float.class,
@@ -1409,6 +1427,8 @@ public class TestFlatStyleableInfo
 		FlatClearIcon icon = new FlatClearIcon();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"clearIconScale", float.class,
+
 			"clearIconColor", Color.class,
 			"clearIconHoverColor", Color.class,
 			"clearIconPressedColor", Color.class
@@ -1439,6 +1459,8 @@ public class TestFlatStyleableInfo
 
 	private void flatSearchIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"searchIconScale", float.class,
+
 			"searchIconColor", Color.class,
 			"searchIconHoverColor", Color.class,
 			"searchIconPressedColor", Color.class
@@ -1450,6 +1472,8 @@ public class TestFlatStyleableInfo
 		FlatCapsLockIcon icon = new FlatCapsLockIcon();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"capsLockIconScale", float.class,
+
 			"capsLockIconColor", Color.class
 		);
 
@@ -1461,6 +1485,10 @@ public class TestFlatStyleableInfo
 		FlatTabbedPaneCloseIcon icon = new FlatTabbedPaneCloseIcon();
 
 		Map<String, Class<?>> expected = expectedMap(
+			//TODO closeScale ?
+//			"scale", float.class,
+			"closeScale", float.class,
+
 			"closeSize", Dimension.class,
 			"closeArc", int.class,
 			"closeCrossPlainSize", float.class,

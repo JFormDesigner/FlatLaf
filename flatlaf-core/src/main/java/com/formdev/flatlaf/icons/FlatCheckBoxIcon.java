@@ -29,6 +29,7 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
@@ -100,6 +101,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="scale" )
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 	implements StyleableObject
@@ -291,7 +293,7 @@ public class FlatCheckBoxIcon
 
 	/** @since 2 */
 	public float getFocusWidth() {
-		return focusWidth;
+		return focusWidth * getScale();
 	}
 
 	protected Color getFocusColor( Component c ) {

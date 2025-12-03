@@ -214,7 +214,7 @@ public class FlatPasswordFieldUI
 	/** @since 2 */
 	@Override
 	protected Object applyStyleProperty( String key, Object value ) {
-		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof StyleableObject ) {
+		if( key.startsWith( "capsLockIcon" ) && capsLockIcon instanceof StyleableObject ) {
 			if( capsLockIconShared ) {
 				capsLockIcon = FlatStylingSupport.cloneIcon( capsLockIcon );
 				capsLockIconShared = false;
@@ -236,7 +236,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	public Object getStyleableValue( JComponent c, String key ) {
-		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof StyleableObject )
+		if( key.startsWith( "capsLockIcon" ) && capsLockIcon instanceof StyleableObject )
 			return ((StyleableObject)capsLockIcon).getStyleableValue( key );
 
 		return super.getStyleableValue( c, key );

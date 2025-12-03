@@ -17,8 +17,6 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.beans.Beans;
 import java.util.function.Predicate;
 import javax.swing.*;
@@ -797,31 +795,8 @@ class FlatThemePreviewSwitches
 		extends FlatCheckBoxIcon
 	{
 		@Override
-		public void paintIcon( Component c, Graphics g, int x, int y ) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			try {
-				g2.translate( x, y );
-				g2.scale( zoom, zoom );
-
-				super.paintIcon( c, g2, 0, 0 );
-			} finally {
-				g2.dispose();
-			}
-		}
-
-		@Override
-		public int getIconWidth() {
-			return Math.round( super.getIconWidth() * zoom );
-		}
-
-		@Override
-		public int getIconHeight() {
-			return Math.round( super.getIconHeight() * zoom );
-		}
-
-		@Override
-		public float getFocusWidth() {
-			return super.getFocusWidth() * zoom;
+		public float getScale() {
+			return zoom;
 		}
 	}
 
@@ -831,31 +806,8 @@ class FlatThemePreviewSwitches
 		extends FlatRadioButtonIcon
 	{
 		@Override
-		public void paintIcon( Component c, Graphics g, int x, int y ) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			try {
-				g2.translate( x, y );
-				g2.scale( zoom, zoom );
-
-				super.paintIcon( c, g2, 0, 0 );
-			} finally {
-				g2.dispose();
-			}
-		}
-
-		@Override
-		public int getIconWidth() {
-			return Math.round( super.getIconWidth() * zoom );
-		}
-
-		@Override
-		public int getIconHeight() {
-			return Math.round( super.getIconHeight() * zoom );
-		}
-
-		@Override
-		public float getFocusWidth() {
-			return super.getFocusWidth() * zoom;
+		public float getScale() {
+			return zoom;
 		}
 	}
 }

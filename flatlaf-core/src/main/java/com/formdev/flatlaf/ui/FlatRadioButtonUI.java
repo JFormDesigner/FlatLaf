@@ -228,10 +228,8 @@ public class FlatRadioButtonUI
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		Icon icon = getRealIcon( c );
-		if( icon instanceof StyleableObject ) {
-			for( Map.Entry<String, Class<?>> e : ((StyleableObject)icon).getStyleableInfos().entrySet() )
-				infos.put( "icon.".concat( e.getKey() ), e.getValue() );
-		}
+		if( icon instanceof StyleableObject )
+			FlatStylingSupport.putAllPrefixKey( infos, "icon.", ((StyleableObject)icon).getStyleableInfos() );
 		return infos;
 	}
 

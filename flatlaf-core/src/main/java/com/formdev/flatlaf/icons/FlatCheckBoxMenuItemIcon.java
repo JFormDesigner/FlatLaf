@@ -25,6 +25,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 
 /**
@@ -37,6 +38,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="scale" )
 public class FlatCheckBoxMenuItemIcon
 	extends FlatAbstractIcon
 	implements StyleableObject

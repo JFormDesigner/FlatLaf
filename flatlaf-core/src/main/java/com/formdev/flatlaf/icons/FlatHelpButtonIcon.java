@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.icons;
 
-import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,7 +26,9 @@ import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
+import com.formdev.flatlaf.util.UIScale;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -51,6 +52,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="scale" )
 public class FlatHelpButtonIcon
 	extends FlatAbstractIcon
 	implements StyleableObject
@@ -152,12 +154,12 @@ public class FlatHelpButtonIcon
 
 	@Override
 	public int getIconWidth() {
-		return scale( iconSize() );
+		return scale( UIScale.scale( iconSize() ) );
 	}
 
 	@Override
 	public int getIconHeight() {
-		return scale( iconSize() );
+		return scale( UIScale.scale( iconSize() ) );
 	}
 
 	private int iconSize() {

@@ -24,6 +24,7 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
@@ -37,6 +38,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @author Karl Tauber
  * @since 1.5
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="searchIconScale", fieldName="scale" )
 public class FlatSearchIcon
 	extends FlatAbstractIcon
 	implements StyleableObject

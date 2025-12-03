@@ -17,7 +17,6 @@
 package com.formdev.flatlaf.icons;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -25,11 +24,9 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Collections;
-import java.util.Map;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
-import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -39,6 +36,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=FlatAbstractIcon.class, key="capsLockIconScale", fieldName="scale" )
+@StyleableField( cls=FlatAbstractIcon.class, key="capsLockIconColor", fieldName="color" )
 public class FlatCapsLockIcon
 	extends FlatAbstractIcon
 	implements StyleableObject
@@ -47,31 +46,6 @@ public class FlatCapsLockIcon
 
 	public FlatCapsLockIcon() {
 		super( 16, 16, UIManager.getColor( "PasswordField.capsLockIconColor" ) );
-	}
-
-	/** @since 2 */
-	@Override
-	public Object applyStyleProperty( String key, Object value ) {
-		Object oldValue;
-		switch( key ) {
-			case "capsLockIconColor": oldValue = color; color = (Color) value; return oldValue;
-			default: throw new UnknownStyleException( key );
-		}
-	}
-
-	/** @since 3.7 */
-	@Override
-	public Map<String, Class<?>> getStyleableInfos() throws IllegalArgumentException {
-		return Collections.singletonMap( "capsLockIconColor", Color.class );
-	}
-
-	/** @since 2.5 */
-	@Override
-	public Object getStyleableValue( String key ) {
-		switch( key ) {
-			case "capsLockIconColor": return color;
-			default: return null;
-		}
 	}
 
 	@Override
