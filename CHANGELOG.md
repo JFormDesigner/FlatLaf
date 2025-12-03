@@ -8,6 +8,11 @@ FlatLaf Change Log
 - System File Chooser allows using **operating system file dialogs** in Java
   Swing applications. (PR #988)
 - Zooming API. (PR #1051)
+- Icons:
+  - Support scaling Laf icons (checkbox, radiobutton, etc). (issue #1061)
+  - Scale checkbox and radiobutton icons when using
+    [text styles](https://www.formdev.com/flatlaf/typography/#text_styles)
+    `large`, `medium`, `small` and `mini`.
 - TabbedPane: Added icon-only tab mode, which shows tab icons but hides tab
   titles. Tab titles are used in "Show Hidden Tabs" popup menu. (set client
   property `JTabbedPane.tabWidthMode` to `"iconOnly"`)

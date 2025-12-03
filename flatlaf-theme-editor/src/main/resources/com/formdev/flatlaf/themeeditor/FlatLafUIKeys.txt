@@ -1319,6 +1319,14 @@ ViewportUI
 [style].small
 [style]Button.clearButton
 [style]Button.inTextField
+[style]CheckBox.large
+[style]CheckBox.medium
+[style]CheckBox.mini
+[style]CheckBox.small
+[style]RadioButton.large
+[style]RadioButton.medium
+[style]RadioButton.mini
+[style]RadioButton.small
 [style]ToggleButton.inTextField
 [style]ToolBar.inTextField
 [style]ToolBarSeparator.inTextField

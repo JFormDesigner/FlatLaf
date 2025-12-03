@@ -1508,6 +1508,22 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 [style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: darken($TextField.background,4%); toolbar.pressedBackground: darken($TextField.background,8%); toolbar.selectedBackground: darken($TextField.background,12%)
 
 
+#---- [style]CheckBox ----
+
+[style]CheckBox.large          icon.scale: @largeScale; iconTextGap: 5
+[style]CheckBox.medium         icon.scale: @mediumScale
+[style]CheckBox.mini           icon.scale: @miniScale; iconTextGap: 3
+[style]CheckBox.small          icon.scale: @smallScale; iconTextGap: 3
+
+
+#---- [style]RadioButton ----
+
+[style]RadioButton.large       icon.scale: @largeScale; iconTextGap: 5
+[style]RadioButton.medium      icon.scale: @mediumScale
+[style]RadioButton.mini        icon.scale: @miniScale; iconTextGap: 3
+[style]RadioButton.small       icon.scale: @smallScale; iconTextGap: 3
+
+
 #---- [style]ToggleButton ----
 
 [style]ToggleButton.inTextField focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: darken($TextField.background,4%); toolbar.pressedBackground: darken($TextField.background,8%); toolbar.selectedBackground: darken($TextField.background,12%)

@@ -206,6 +206,24 @@ class FlatThemePreviewSwitches
 		JLabel label32 = new JLabel();
 		FlatThemePreviewSwitches.ZoomRadioButton radioButton1 = new FlatThemePreviewSwitches.ZoomRadioButton();
 		FlatThemePreviewSwitches.ZoomRadioButton radioButton2 = new FlatThemePreviewSwitches.ZoomRadioButton();
+		JLabel label39 = new JLabel();
+		JLabel label5 = new JLabel();
+		JLabel label6 = new JLabel();
+		JLabel largeLabel = new JLabel();
+		JCheckBox largeCheckBox = new JCheckBox();
+		JRadioButton largeRadioButton = new JRadioButton();
+		JLabel defaultLabel = new JLabel();
+		JCheckBox defaultCheckBox = new JCheckBox();
+		JRadioButton defaultRadioButton = new JRadioButton();
+		JLabel mediumLabel = new JLabel();
+		JCheckBox mediumCheckBox = new JCheckBox();
+		JRadioButton mediumRadioButton = new JRadioButton();
+		JLabel smallLabel = new JLabel();
+		JCheckBox smallCheckBox = new JCheckBox();
+		JRadioButton smallRadioButton = new JRadioButton();
+		JLabel miniLabel = new JLabel();
+		JCheckBox miniCheckBox = new JCheckBox();
+		JRadioButton miniRadioButton = new JRadioButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -236,6 +254,13 @@ class FlatThemePreviewSwitches
 			"[]" +
 			"[]" +
 			"[]unrel" +
+			"[]para" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]"));
 
 		//======== panel1 ========
@@ -582,6 +607,91 @@ class FlatThemePreviewSwitches
 		//---- radioButton2 ----
 		radioButton2.setSelected(true);
 		add(radioButton2, "cell 2 16");
+
+		//---- label39 ----
+		label39.setText("Sizes");
+		label39.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
+		add(label39, "cell 0 17 3 1");
+
+		//---- label5 ----
+		label5.setText("JCheckBox");
+		add(label5, "cell 1 18 3 1,alignx left,growx 0");
+
+		//---- label6 ----
+		label6.setText("JRadioButton");
+		add(label6, "cell 4 18 3 1,alignx left,growx 0");
+
+		//---- largeLabel ----
+		largeLabel.setText("large");
+		largeLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
+		add(largeLabel, "cell 0 19");
+
+		//---- largeCheckBox ----
+		largeCheckBox.setText("Text");
+		largeCheckBox.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
+		add(largeCheckBox, "cell 1 19 3 1,alignx left,growx 0");
+
+		//---- largeRadioButton ----
+		largeRadioButton.setText("Text");
+		largeRadioButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "large");
+		add(largeRadioButton, "cell 4 19 3 1,alignx left,growx 0");
+
+		//---- defaultLabel ----
+		defaultLabel.setText("default");
+		add(defaultLabel, "cell 0 20");
+
+		//---- defaultCheckBox ----
+		defaultCheckBox.setText("Text");
+		add(defaultCheckBox, "cell 1 20 3 1,alignx left,growx 0");
+
+		//---- defaultRadioButton ----
+		defaultRadioButton.setText("Text");
+		add(defaultRadioButton, "cell 4 20 3 1,alignx left,growx 0");
+
+		//---- mediumLabel ----
+		mediumLabel.setText("medium");
+		mediumLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
+		add(mediumLabel, "cell 0 21");
+
+		//---- mediumCheckBox ----
+		mediumCheckBox.setText("Text");
+		mediumCheckBox.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
+		add(mediumCheckBox, "cell 1 21 3 1,alignx left,growx 0");
+
+		//---- mediumRadioButton ----
+		mediumRadioButton.setText("Text");
+		mediumRadioButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "medium");
+		add(mediumRadioButton, "cell 4 21 3 1,alignx left,growx 0");
+
+		//---- smallLabel ----
+		smallLabel.setText("small");
+		smallLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+		add(smallLabel, "cell 0 22");
+
+		//---- smallCheckBox ----
+		smallCheckBox.setText("Text");
+		smallCheckBox.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+		add(smallCheckBox, "cell 1 22 3 1,alignx left,growx 0");
+
+		//---- smallRadioButton ----
+		smallRadioButton.setText("Text");
+		smallRadioButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+		add(smallRadioButton, "cell 4 22 3 1,alignx left,growx 0");
+
+		//---- miniLabel ----
+		miniLabel.setText("mini");
+		miniLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
+		add(miniLabel, "cell 0 23");
+
+		//---- miniCheckBox ----
+		miniCheckBox.setText("Text");
+		miniCheckBox.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
+		add(miniCheckBox, "cell 1 23 3 1,alignx left,growx 0");
+
+		//---- miniRadioButton ----
+		miniRadioButton.setText("Text");
+		miniRadioButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "mini");
+		add(miniRadioButton, "cell 4 23 3 1,alignx left,growx 0");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
