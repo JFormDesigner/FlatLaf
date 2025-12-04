@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.util;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -265,11 +267,13 @@ public class SystemFileChooser
 
 		@Override
 		public String get( String key, String def ) {
+//			System.out.println( "mem GET " + key + " = " + state.getOrDefault( key, def ) );
 			return state.getOrDefault( key, def );
 		}
 
 		@Override
 		public void put( String key, String value ) {
+//			System.out.println( "mem PUT " + key + " = " + value );
 			if( value != null )
 				state.put( key, value );
 			else
@@ -1317,7 +1321,34 @@ public class SystemFileChooser
 			chooser.setCurrentDirectory( fc.getCurrentDirectory() );
 			chooser.setSelectedFile( fc.getSelectedFile() );
 
-			if( chooser.showDialog( owner, null ) != JFileChooser.APPROVE_OPTION )
+			// restore window size
+			StateStore store = (stateStore != null) ? stateStore : inMemoryStateStore;
+			String keyLastWindowSize = fc.buildStateKey( "lastWindowSize" );
+			String lastWindowSize = store.get( keyLastWindowSize, null );
+			if( lastWindowSize != null ) {
+				try( Scanner s = new Scanner( lastWindowSize ) ) {
+					int width = UIScale.scale( s.nextInt() );
+					int height = UIScale.scale( s.nextInt() );
+					Dimension prefSize = chooser.getPreferredSize();
+					chooser.setPreferredSize( new Dimension(
+						Math.max( width, prefSize.width ),
+						Math.max( height, prefSize.height ) ) );
+				} catch( RuntimeException ex ) {
+					// ignore
+				}
+			}
+
+			// show dialog
+			int result = chooser.showDialog( owner, null );
+
+			// save window size
+			Dimension windowSize = chooser.getSize();
+			if( windowSize.width > 0 && windowSize.height > 0 ) {
+				store.put( keyLastWindowSize, UIScale.unscale( windowSize.width )
+					+ " " + UIScale.unscale( windowSize.height ) );
+			}
+
+			if( result != JFileChooser.APPROVE_OPTION )
 				return null;
 
 			return chooser.isMultiSelectionEnabled()
