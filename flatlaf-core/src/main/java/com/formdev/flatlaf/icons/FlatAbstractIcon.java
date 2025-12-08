@@ -45,6 +45,10 @@ public abstract class FlatAbstractIcon
 	/** Additional icon scale factor. */
 	private float scale = 1;
 
+    /** Scaled icon translation. */
+    private int xOffset = 0;
+    private int yOffset = 0;
+
 	public FlatAbstractIcon( int width, int height, Color color ) {
 		this.width = width;
 		this.height = height;
@@ -68,6 +72,9 @@ public abstract class FlatAbstractIcon
 			float scale = getScale();
 			if( scale != 1 )
 				g2.scale( scale, scale );
+
+            if( xOffset != 0 || yOffset != 0 )
+                g2.translate( xOffset, yOffset );
 
 			if( color != null )
 				g2.setColor( color );
@@ -130,6 +137,22 @@ public abstract class FlatAbstractIcon
 	public void setScale( float scale ) {
 		this.scale = scale;
 	}
+
+    public int getXOffset() {
+        return xOffset;
+    }
+
+    public void setXOffset( int xOffset ) {
+        this.xOffset = xOffset;
+    }
+
+    public int getYOffset() {
+        return yOffset;
+    }
+
+    public void setYOffset( int yOffset ) {
+        this.yOffset = yOffset;
+    }
 
 	/**
 	 * Multiplies the given value by the icon scale factor {@link #getScale()} and rounds the result.
