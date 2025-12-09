@@ -67,14 +67,11 @@ public abstract class FlatAbstractIcon
 
 			paintBackground( c, g2, x, y );
 
-			g2.translate( x, y );
+			g2.translate( x + xOffset, y + yOffset );
 			UIScale.scaleGraphics( g2 );
 			float scale = getScale();
 			if( scale != 1 )
 				g2.scale( scale, scale );
-
-            if( xOffset != 0 || yOffset != 0 )
-                g2.translate( xOffset, yOffset );
 
 			if( color != null )
 				g2.setColor( color );
