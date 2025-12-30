@@ -108,10 +108,8 @@ public class FlatPopupFactory
 			}
 		}
 
-		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
-
 		if( !isOptionEnabled( owner, contents, FlatClientProperties.POPUP_DROP_SHADOW_PAINTED, "Popup.dropShadowPainted" ) || SystemInfo.isProjector || SystemInfo.isWebswing )
-			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
+			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, isForceHeavyWeight( owner, contents, x, y ) ), owner, contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
@@ -131,12 +129,8 @@ public class FlatPopupFactory
 			return popup;
 		}
 
-		// check whether popup overlaps a heavy weight component
-		if( !forceHeavyWeight && overlapsHeavyWeightComponent( owner, contents, x, y ) )
-			forceHeavyWeight = true;
-
 		// create drop shadow popup
-		Popup popupForScreenOfOwner = getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight );
+		Popup popupForScreenOfOwner = getPopupForScreenOfOwner( owner, contents, x, y, isForceHeavyWeight( owner, contents, x, y ) );
 		GraphicsConfiguration gc = (owner != null) ? owner.getGraphicsConfiguration() : null;
 		return (gc != null && gc.isTranslucencyCapable())
 			? new DropShadowPopup( popupForScreenOfOwner, owner, contents )
@@ -224,6 +218,11 @@ public class FlatPopupFactory
 			// fallback
 			return super.getPopup( owner, contents, x, y );
 		}
+	}
+
+	private static boolean isForceHeavyWeight( Component owner, Component contents, int x, int y ) {
+		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
+		return forceHeavyWeight || hasVisibleGlassPane( owner ) || overlapsHeavyWeightComponent( owner, contents, x, y );
 	}
 
 	private static boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
@@ -468,6 +467,18 @@ public class FlatPopupFactory
 	}
 
 	//---- fixes --------------------------------------------------------------
+
+	private static boolean hasVisibleGlassPane( Component owner ) {
+		if( owner == null )
+			return false;
+
+		Window window = SwingUtilities.windowForComponent( owner );
+		if( !(window instanceof RootPaneContainer) )
+			return false;
+
+		Component glassPane = ((RootPaneContainer)window).getGlassPane();
+		return (glassPane != null && glassPane.isVisible());
+	}
 
 	private static boolean overlapsHeavyWeightComponent( Component owner, Component contents, int x, int y ) {
 		if( owner == null )

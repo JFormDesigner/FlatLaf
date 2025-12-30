@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## 3.7.1-SNAPSHOT
+
+- Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is
+  visible and frame is maximized. (issue #1071)
+
+
 ## 3.7
 
 #### New features and improvements
