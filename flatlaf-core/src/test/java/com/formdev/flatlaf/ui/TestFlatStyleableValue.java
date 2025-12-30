@@ -388,8 +388,9 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "disabledForeground" );
 
 		testColor( c, ui, "buttonBackground" );
-		testColor( c, ui, "buttonFocusedBackground" );
 		testColor( c, ui, "buttonEditableBackground" );
+		testColor( c, ui, "buttonFocusedBackground" );
+		testColor( c, ui, "buttonFocusedEditableBackground" );
 		testFloat( c, ui, "buttonSeparatorWidth" );
 		testColor( c, ui, "buttonSeparatorColor" );
 		testColor( c, ui, "buttonDisabledSeparatorColor" );

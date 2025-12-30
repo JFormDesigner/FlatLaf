@@ -184,6 +184,7 @@ buttonDisabledArrowColor                           java.awt.Color
 buttonDisabledSeparatorColor                       java.awt.Color
 buttonEditableBackground                           java.awt.Color
 buttonFocusedBackground                            java.awt.Color
+buttonFocusedEditableBackground                    java.awt.Color
 buttonHoverArrowColor                              java.awt.Color
 buttonPressedArrowColor                            java.awt.Color
 buttonSeparatorColor                               java.awt.Color

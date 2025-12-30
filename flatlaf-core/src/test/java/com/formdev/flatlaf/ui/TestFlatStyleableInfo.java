@@ -199,8 +199,9 @@ public class TestFlatStyleableInfo
 			"disabledForeground", Color.class,
 
 			"buttonBackground", Color.class,
-			"buttonFocusedBackground", Color.class,
 			"buttonEditableBackground", Color.class,
+			"buttonFocusedBackground", Color.class,
+			"buttonFocusedEditableBackground", Color.class,
 			"buttonSeparatorWidth", float.class,
 			"buttonSeparatorColor", Color.class,
 			"buttonDisabledSeparatorColor", Color.class,

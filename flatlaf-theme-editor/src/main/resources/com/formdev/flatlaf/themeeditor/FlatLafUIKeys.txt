@@ -226,6 +226,7 @@ ComboBox.buttonDisabledArrowColor
 ComboBox.buttonDisabledSeparatorColor
 ComboBox.buttonEditableBackground
 ComboBox.buttonFocusedBackground
+ComboBox.buttonFocusedEditableBackground
 ComboBox.buttonHighlight
 ComboBox.buttonHoverArrowColor
 ComboBox.buttonPressedArrowColor

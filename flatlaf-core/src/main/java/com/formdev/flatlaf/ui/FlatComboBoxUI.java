@@ -113,6 +113,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.buttonBackground			Color	optional
  * @uiDefault ComboBox.buttonEditableBackground	Color	optional
  * @uiDefault ComboBox.buttonFocusedBackground	Color	optional; defaults to ComboBox.focusedBackground
+ * @uiDefault ComboBox.buttonFocusedEditableBackground	Color	optional; defaults to ComboBox.buttonEditableBackground
  * @uiDefault ComboBox.buttonSeparatorWidth		int or float	optional; defaults to Component.borderWidth
  * @uiDefault ComboBox.buttonSeparatorColor		Color	optional
  * @uiDefault ComboBox.buttonDisabledSeparatorColor Color	optional
@@ -147,6 +148,7 @@ public class FlatComboBoxUI
 	@Styleable protected Color buttonBackground;
 	@Styleable protected Color buttonEditableBackground;
 	@Styleable protected Color buttonFocusedBackground;
+	/** @since 3.7.1 */ @Styleable protected Color buttonFocusedEditableBackground;
 	/** @since 2 */ @Styleable protected float buttonSeparatorWidth;
 	/** @since 2 */ @Styleable protected Color buttonSeparatorColor;
 	/** @since 2 */ @Styleable protected Color buttonDisabledSeparatorColor;
@@ -258,6 +260,7 @@ public class FlatComboBoxUI
 
 		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
 		buttonFocusedBackground = UIManager.getColor( "ComboBox.buttonFocusedBackground" );
+		buttonFocusedEditableBackground = UIManager.getColor( "ComboBox.buttonFocusedEditableBackground" );
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
 		buttonSeparatorWidth = FlatUIUtils.getUIFloat( "ComboBox.buttonSeparatorWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ) );
 		buttonSeparatorColor = UIManager.getColor( "ComboBox.buttonSeparatorColor" );
@@ -293,6 +296,7 @@ public class FlatComboBoxUI
 		buttonBackground = null;
 		buttonEditableBackground = null;
 		buttonFocusedBackground = null;
+		buttonFocusedEditableBackground = null;
 		buttonSeparatorColor = null;
 		buttonDisabledSeparatorColor = null;
 		buttonArrowColor = null;
@@ -587,7 +591,7 @@ public class FlatComboBoxUI
 			// paint arrow button background
 			if( enabled && !isCellRenderer && arrowButton.isVisible() ) {
 				Color buttonColor = paintButton
-					? buttonEditableBackground
+					? (buttonFocusedEditableBackground != null && isPermanentFocusOwner( comboBox ) ? buttonFocusedEditableBackground : buttonEditableBackground)
 					: (buttonFocusedBackground != null || focusedBackground != null) && isPermanentFocusOwner( comboBox )
 						? (buttonFocusedBackground != null ? buttonFocusedBackground : focusedBackground)
 						: buttonBackground;
