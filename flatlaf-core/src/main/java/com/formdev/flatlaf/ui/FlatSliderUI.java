@@ -227,7 +227,11 @@ public class FlatSliderUI
 
 	/** @since 2 */
 	protected void applyStyle( Object style ) {
+	    boolean recalc = ( oldStyleValues != null && !oldStyleValues.isEmpty() );
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+        recalc |= ( oldStyleValues != null && !oldStyleValues.isEmpty() );
+		if( recalc )
+            calculateGeometry();
 	}
 
 	/** @since 2 */
