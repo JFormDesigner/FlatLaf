@@ -25,6 +25,7 @@ include( "flatlaf-demo" )
 include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
 
+includeProject( "flatlaf-fonts-cairo",          "flatlaf-fonts/flatlaf-fonts-cairo" )
 includeProject( "flatlaf-fonts-inter",          "flatlaf-fonts/flatlaf-fonts-inter" )
 includeProject( "flatlaf-fonts-jetbrains-mono", "flatlaf-fonts/flatlaf-fonts-jetbrains-mono" )
 includeProject( "flatlaf-fonts-roboto",         "flatlaf-fonts/flatlaf-fonts-roboto" )
