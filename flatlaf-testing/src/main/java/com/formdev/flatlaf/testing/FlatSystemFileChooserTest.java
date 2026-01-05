@@ -310,7 +310,8 @@ public class FlatSystemFileChooserTest
 			"result", result,
 			"currentDirectory", fc.getCurrentDirectory(),
 			"selectedFile", fc.getSelectedFile(),
-			"selectedFiles", fc.getSelectedFiles() );
+			"selectedFiles", fc.getSelectedFiles(),
+			"fileFilter", fc.getFileFilter() );
 	}
 
 	private void outputSwingFileChooser( String type, JFileChooser fc, int result ) {
@@ -319,7 +320,8 @@ public class FlatSystemFileChooserTest
 			"result", result,
 			"currentDirectory", fc.getCurrentDirectory(),
 			"selectedFile", fc.getSelectedFile(),
-			"selectedFiles", fc.getSelectedFiles() );
+			"selectedFiles", fc.getSelectedFiles(),
+			"fileFilter", fc.getFileFilter() );
 	}
 
 	private void outputAWTFileChooser( FileDialog fc ) {

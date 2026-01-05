@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## 3.7.1-SNAPSHOT
 
+- System File Chooser: Update current filter before invoking approve callback
+  and after closing dialog. (issue #1065)
 - ComboBox: Added UI property `ComboBox.buttonFocusedEditableBackground`. (issue
   #1068)
 - Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is

@@ -31,7 +31,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeWindowsLibrary
 {
-	private static int API_VERSION_WINDOWS = 1002;
+	private static int API_VERSION_WINDOWS = 1003;
 
 	private static long osBuildNumber = Long.MIN_VALUE;
 
@@ -226,20 +226,21 @@ public class FlatNativeWindowsLibrary
 	 *        Pairs of strings are required for each filter.
 	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
 	 *        Second string is the filter pattern (e.g. "*.txt", "*.exe;*.dll" or "*.*").
+	 * @param retFileTypeIndex returns selected file type (zero-based); array must be have one element
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
-	 * @since 3.7
+	 * @since 3.7.1
 	 */
 	public native static String[] showFileChooser( Window owner, boolean open,
 		String title, String okButtonLabel, String fileNameLabel, String fileName,
 		String folder, String saveAsItem, String defaultFolder, String defaultExtension,
 		int optionsSet, int optionsClear, FileChooserCallback callback,
-		int fileTypeIndex, String... fileTypes );
+		int fileTypeIndex, String[] fileTypes, int[] retFileTypeIndex );
 
-	/** @since 3.7 */
+	/** @since 3.7.1 */
 	public interface FileChooserCallback {
-		boolean approve( String[] files, long hwndFileDialog );
+		boolean approve( String[] files, int fileTypeIndex, long hwndFileDialog );
 	}
 
 	/**

@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -607,6 +608,11 @@ public class SystemFileChooser
 		return filters2;
 	}
 
+	private void updateFileFilter( List<FileFilter> filters, int index ) {
+		if( index >= 0 && index < filters.size() )
+			setFileFilter( filters.get( index ) );
+	}
+
 	public ApproveCallback getApproveCallback() {
 		return approveCallback;
 	}
@@ -890,6 +896,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -898,9 +905,11 @@ public class SystemFileChooser
 						if( filter instanceof FileNameExtensionFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*." + String.join( ";*.", ((FileNameExtensionFilter)filter).getExtensions() ) );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*.*" );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -916,19 +925,24 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeWindowsLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new WindowsApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeWindowsLibrary.showFileChooser( owner, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText,
 				fc.getPlatformProperty( WINDOWS_FILE_NAME_LABEL ),
 				fileName, folder, saveAsItem,
 				fc.getPlatformProperty( WINDOWS_DEFAULT_FOLDER ),
 				fc.getPlatformProperty( WINDOWS_DEFAULT_EXTENSION ),
 				optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		//---- class WindowsApproveContext ----
@@ -1013,6 +1027,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -1023,10 +1038,12 @@ public class SystemFileChooser
 							for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
 								fileTypes.add( ext );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*" );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -1034,18 +1051,23 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeMacLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new MacApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeMacLibrary.showFileChooser( owner, dark, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeMacLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), fc.getApproveButtonText(),
 				fc.getPlatformProperty( MAC_MESSAGE ),
 				fc.getPlatformProperty( MAC_FILTER_FIELD_LABEL ),
 				fc.getPlatformProperty( MAC_NAME_FIELD_LABEL ),
 				nameFieldStringValue, directoryURL, optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		//---- class MacApproveContext ----
@@ -1141,6 +1163,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -1151,10 +1174,12 @@ public class SystemFileChooser
 							for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
 								fileTypes.add( caseInsensitiveGlobPattern( ext ) );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*" );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -1162,15 +1187,20 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeLinuxLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new LinuxApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
 				optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		private String caseInsensitiveGlobPattern( String ext ) {
@@ -1253,6 +1283,8 @@ public class SystemFileChooser
 	{
 		@Override
 		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			IdentityHashMap<javax.swing.filechooser.FileFilter, FileFilter> filterMap = new IdentityHashMap<>();
+
 			JFileChooser chooser = new JFileChooser() {
 				@Override
 				public void approveSelection() {
@@ -1273,6 +1305,7 @@ public class SystemFileChooser
 					// callback
 					ApproveCallback approveCallback = fc.getApproveCallback();
 					if( approveCallback != null ) {
+						updateFileFilter( fc, this, filterMap );
 						int result = approveCallback.approve( files, new SwingApproveContext( this ) );
 						if( result == CANCEL_OPTION )
 							return;
@@ -1313,6 +1346,7 @@ public class SystemFileChooser
 						chooser.addChoosableFileFilter( jfilter );
 						if( filter == currentFilter )
 							chooser.setFileFilter( jfilter );
+						filterMap.put( jfilter, filter );
 					}
 				}
 			}
@@ -1340,6 +1374,7 @@ public class SystemFileChooser
 
 			// show dialog
 			int result = chooser.showDialog( owner, null );
+			updateFileFilter( fc, chooser, filterMap );
 
 			// save window size
 			Dimension windowSize = chooser.getSize();
@@ -1365,6 +1400,14 @@ public class SystemFileChooser
 				return chooser.getAcceptAllFileFilter();
 			else
 				return null;
+		}
+
+		private void updateFileFilter( SystemFileChooser fc, JFileChooser chooser,
+			IdentityHashMap<javax.swing.filechooser.FileFilter, FileFilter> filterMap )
+		{
+			FileFilter fileFilter = filterMap.get( chooser.getFileFilter() );
+			if( fileFilter != null )
+				fc.setFileFilter( fileFilter );
 		}
 
 		private static boolean checkMustExist( JFileChooser chooser, File[] files ) {
