@@ -3,8 +3,11 @@ FlatLaf Change Log
 
 ## 3.7.1-SNAPSHOT
 
-- System File Chooser: Update current filter before invoking approve callback
-  and after closing dialog. (issue #1065)
+- System File Chooser:
+  - Update current filter before invoking approve callback and after closing
+    dialog. (issue #1065)
+  - On Linux: Check whether required GSettings schemas are installed to avoid
+    application crash (occurred on NixOS with Plasma/KDE desktop). (issue #1069)
 - ComboBox: Added UI property `ComboBox.buttonFocusedEditableBackground`. (issue
   #1068)
 - Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is

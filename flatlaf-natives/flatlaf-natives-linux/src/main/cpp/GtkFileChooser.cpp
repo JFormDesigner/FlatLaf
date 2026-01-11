@@ -33,6 +33,9 @@ extern Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display**
 // declare internal methods
 static jobjectArray fileListToStringArray( JNIEnv* env, GSList* fileList );
 
+// fields
+static int settingsSchemaInstalled = -1;
+
 //---- helper -----------------------------------------------------------------
 
 #define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_ ## option) != 0)
@@ -186,6 +189,22 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 {
 	// initialize GTK
 	if( !gtk_init_check( NULL, NULL ) )
+		return NULL;
+
+	// check whether required GSettings schemas are installed (e.g. on NixOS)
+	// this avoids output of following message on console, followed by an application crash:
+	//   GLib-GIO-ERROR: No GSettings schemas are installed on the system
+	if( settingsSchemaInstalled < 0 ) {
+		GSettingsSchemaSource* schemaSource = g_settings_schema_source_get_default();
+		GSettingsSchema* schema = (schemaSource != NULL)
+			? g_settings_schema_source_lookup( schemaSource, "org.gtk.Settings.FileChooser", FALSE )
+			: NULL;
+		if( schema != NULL )
+			g_settings_schema_unref( schema );
+
+		settingsSchemaInstalled = (schema != NULL);
+	}
+	if( settingsSchemaInstalled <= 0 )
 		return NULL;
 
 	// convert Java strings to C strings
