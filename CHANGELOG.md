@@ -6,6 +6,8 @@ FlatLaf Change Log
 - System File Chooser:
   - Update current filter before invoking approve callback and after closing
     dialog. (issue #1065)
+  - Fixed: System and Swing file dialogs were shown at the same time if
+    application has no other displayable window. (issue #1078)
   - On Linux: Check whether required GSettings schemas are installed to avoid
     application crash (occurred on NixOS with Plasma/KDE desktop). (issue #1069)
 - ComboBox: Added UI property `ComboBox.buttonFocusedEditableBackground`. (issue

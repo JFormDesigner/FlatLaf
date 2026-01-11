@@ -18,6 +18,8 @@ package com.formdev.flatlaf.util;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
@@ -743,6 +745,9 @@ public class SystemFileChooser
 	}
 
 	private int showDialogImpl( Component parent ) {
+		if( !EventQueue.isDispatchThread() )
+			throw new IllegalStateException( "Must be invoked from the AWT/Swing event dispatch thread" );
+
 		Window owner = (parent instanceof Window)
 			? (Window) parent
 			: (parent != null) ? SwingUtilities.windowForComponent( parent ) : null;
@@ -791,6 +796,16 @@ public class SystemFileChooser
 	{
 		@Override
 		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			// if there is no displayable window, then AWT's auto-shutdown feature
+			// quits our secondary event loop (see below) immediately
+			// https://docs.oracle.com/en/java/javase/25/docs/api/java.desktop/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown
+			Window dummyWindow = null;
+			if( !hasDisplayableWindow( owner ) ) {
+				// create a (not visible) displayable window to avoid AWT auto-shutdown
+				dummyWindow = new Window( (Frame) null );
+				dummyWindow.addNotify();
+			}
+
 			AtomicReference<String[]> filenamesRef = new AtomicReference<>();
 
 			// create secondary event look and invoke system file dialog on a new thread
@@ -800,6 +815,10 @@ public class SystemFileChooser
 				secondaryLoop.exit();
 			}, "FlatLaf SystemFileChooser" ).start();
 			secondaryLoop.enter();
+
+			// dispose dummy window to allow AWT to auto-shutdown
+			if( dummyWindow != null )
+				dummyWindow.dispose();
 
 			String[] filenames = filenamesRef.get();
 
@@ -836,6 +855,17 @@ public class SystemFileChooser
 			for( int i = 0; i < filenames.length; i++ )
 				files[i] = fsv.createFileObject( filenames[i] );
 			return files;
+		}
+
+		private static boolean hasDisplayableWindow( Window owner ) {
+			if( owner != null && owner.isDisplayable() )
+				return true;
+
+			for( Window window : Window.getWindows() ) {
+				if( window.isDisplayable() )
+					return true;
+			}
+			return false;
 		}
 	}
 
