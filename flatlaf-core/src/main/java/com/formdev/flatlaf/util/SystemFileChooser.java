@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -90,7 +91,8 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li>{@link JFileChooser#FILES_AND_DIRECTORIES} is not supported.
  *   <li>{@link #getSelectedFiles()} returns selected file also in single selection mode.
  *       {@link JFileChooser#getSelectedFiles()} only in multi selection mode.
- *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported.
+ *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported on all platforms.
+ *   <li>Pattern filters (see {@link PatternFilter}) are only supported on Windows and Linux, but not on macOS.
  *   <li>If adding choosable file filters and {@link #isAcceptAllFileFilterUsed()} is {@code true},
  *       then the <b>All Files</b> filter is placed at the end of the combobox list
  *       (as usual in current operating systems) and the first choosable filter is selected by default.
@@ -587,6 +589,7 @@ public class SystemFileChooser
 	private void checkSupportedFileFilter( FileFilter filter ) throws IllegalArgumentException {
 		if( filter == null ||
 			filter instanceof FileNameExtensionFilter ||
+			filter instanceof PatternFilter ||
 			filter instanceof AcceptAllFileFilter )
 		  return;
 
@@ -936,6 +939,10 @@ public class SystemFileChooser
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*." + String.join( ";*.", ((FileNameExtensionFilter)filter).getExtensions() ) );
 							fileTypeFilters.add( filter );
+						} else if( filter instanceof PatternFilter ) {
+							fileTypes.add( filter.getDescription() );
+							fileTypes.add( String.join( ";", ((PatternFilter)filter).getPatterns() ) );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*.*" );
@@ -1013,6 +1020,26 @@ public class SystemFileChooser
 	private static class MacFileChooserProvider
 		extends SystemFileChooserProvider
 	{
+		@Override
+		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			// fallback to Swing file chooser if PatternFilter is used
+			boolean usesPatternFilter = (fc.getFileFilter() instanceof PatternFilter);
+			if( !usesPatternFilter ) {
+				for( FileFilter filter : fc.getChoosableFileFilters() ) {
+					if( filter instanceof PatternFilter ) {
+						usesPatternFilter = true;
+						break;
+					}
+				}
+			}
+			if( usesPatternFilter ) {
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: SystemFileChooser.PatternFilter is not supported on macOS. Using Swing JFileChooser.", null );
+				return new SwingFileChooserProvider().showDialog( owner, fc );
+			}
+
+			return super.showDialog( owner, fc );
+		}
+
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
 			int dark = FlatLaf.isLafDark() ? 1 : 0;
@@ -1202,8 +1229,13 @@ public class SystemFileChooser
 						if( filter instanceof FileNameExtensionFilter ) {
 							fileTypes.add( filter.getDescription() );
 							for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
-								fileTypes.add( caseInsensitiveGlobPattern( ext ) );
+								fileTypes.add( "*." + caseInsensitiveGlobPattern( ext ) );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
+						} else if( filter instanceof PatternFilter ) {
+							fileTypes.add( filter.getDescription() );
+							for( String pattern : ((PatternFilter)filter).getPatterns() )
+								fileTypes.add( caseInsensitiveGlobPattern( pattern ) );
 							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
@@ -1235,7 +1267,6 @@ public class SystemFileChooser
 
 		private String caseInsensitiveGlobPattern( String ext ) {
 			StringBuilder buf = new StringBuilder();
-			buf.append( "*." );
 			int len = ext.length();
 			for( int i = 0; i < len; i++ ) {
 				char ch = ext.charAt( i );
@@ -1426,6 +1457,10 @@ public class SystemFileChooser
 				return new javax.swing.filechooser.FileNameExtensionFilter(
 					((FileNameExtensionFilter)filter).getDescription(),
 					((FileNameExtensionFilter)filter).getExtensions() );
+			} else if( filter instanceof PatternFilter ) {
+				return new SwingGlobFilter(
+					((PatternFilter)filter).getDescription(),
+					((PatternFilter)filter).getPatterns() );
 			} else if( filter instanceof AcceptAllFileFilter )
 				return chooser.getAcceptAllFileFilter();
 			else
@@ -1515,6 +1550,86 @@ public class SystemFileChooser
 					null, buttons, buttons[Math.min( Math.max( defaultButton, 0 ), buttons.length - 1 )] );
 			}
 		}
+
+		//---- class SwingGlobFilter ------------------------------------------
+
+		private static class SwingGlobFilter
+			extends javax.swing.filechooser.FileFilter
+		{
+			private final String description;
+			private final String[] patterns;
+			private Pattern regexPattern;
+
+			SwingGlobFilter( String description, String... patterns ) {
+				this.description = description;
+				this.patterns = patterns;
+			}
+
+			@Override
+			public String getDescription() {
+				return description;
+			}
+
+			@Override
+			public boolean accept( File f ) {
+				if( f == null )
+					return false;
+
+				if( f.isDirectory() )
+					return true;
+
+				initRegexPattern();
+				return regexPattern.matcher( f.getName() ).matches();
+			}
+
+			private void initRegexPattern() {
+				if( regexPattern != null )
+					return;
+
+				StringBuilder buf = new StringBuilder();
+				for( String pattern : patterns ) {
+					if( buf.length() > 0 )
+						buf.append( '|' );
+					glob2regexPattern( pattern, buf );
+				}
+				regexPattern = Pattern.compile( buf.toString(), Pattern.CASE_INSENSITIVE );
+			}
+
+			private static void glob2regexPattern( String globPattern, StringBuilder buf ) {
+				int globLength = globPattern.length();
+
+				// on windows, a pattern ending with "*.*" is equal to ending with "*"
+				if( SystemInfo.isWindows && globPattern.endsWith( "*.*" ) )
+					globLength -= 2;
+
+				for( int i = 0; i < globLength; i++ ) {
+					char ch = globPattern.charAt( i );
+					switch( ch ) {
+						// glob pattern
+						case '*': buf.append( ".*" ); break;
+						case '?': buf.append( '.' ); break;
+
+						// escape special regex characters
+						case '\\':
+						case '.':
+						case '+':
+						case '^':
+						case '$':
+						case '(':
+						case ')':
+						case '{':
+						case '}':
+						case '[':
+						case ']':
+						case '|':
+							buf.append( '\\' ).append( ch );
+							break;
+
+						default: buf.append( ch ); break;
+					}
+				}
+			}
+		}
 	}
 
 	//---- class FileFilter ---------------------------------------------------
@@ -1563,6 +1678,67 @@ public class SystemFileChooser
 		@Override
 		public String toString() {
 			return super.toString() + "[description=" + description + " extensions=" + Arrays.toString( extensions ) + "]";
+		}
+	}
+
+	//---- class PatternFilter ------------------------------------------------
+
+	/**
+	 * A case-insensitive file filter which accepts file patterns containing
+     * the wildcard characters {@code *?} on Windows and Linux.
+     * <ul>
+     *   <li>{@code '*'} matches any sequence of characters.
+     *   <li>{@code '?'} matches any single character.
+     * </ul>
+	 * Sample filters: {@code *.tar.gz} or {@code *_copy.txt}
+	 * <p>
+	 * <b>Warning</b>: This filter is <b>not supported on macOS</b>.
+	 * If used on macOS, the Swing file chooser {@link JFileChooser} is shown
+	 * (instead of macOS file dialog) and a warning is logged.
+	 * To avoid this, do not use this filter on macOS.
+	 * <p>
+	 * E.g.:
+	 * <pre>{@code
+	 * if( SystemInfo.isMacOS )
+	 *     chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Compressed TAR", "tgz" ) );
+	 * else
+	 *     chooser.addChoosableFileFilter( new PatternFilter( "Compressed TAR", "*.tar.gz" ) );
+	 * } );
+	 * }</pre>
+	 *
+	 * @see FileNameExtensionFilter
+	 * @since 3.7.1
+	 */
+	public static final class PatternFilter
+		extends FileFilter
+	{
+		private final String description;
+		private final String[] patterns;
+
+		public PatternFilter( String description, String... patterns ) {
+			if( patterns == null || patterns.length == 0 )
+				throw new IllegalArgumentException( "Missing patterns" );
+			for( String extension : patterns ) {
+				if( extension == null || extension.isEmpty() )
+					throw new IllegalArgumentException( "Pattern is null or empty string" );
+			}
+
+			this.description = description;
+			this.patterns = patterns.clone();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
+
+		public String[] getPatterns() {
+			return patterns.clone();
+		}
+
+		@Override
+		public String toString() {
+			return super.toString() + "[description=" + description + " patterns=" + Arrays.toString( patterns ) + "]";
 		}
 	}
 

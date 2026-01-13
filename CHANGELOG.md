@@ -6,6 +6,8 @@ FlatLaf Change Log
 - System File Chooser:
   - Update current filter before invoking approve callback and after closing
     dialog. (issue #1065)
+  - Added `PatternFilter` to support glob file filter (e.g. `*.tar.gz`) on
+    Windows and on Linux, but not on macOS. (issue #1076)
   - Fixed: System and Swing file dialogs were shown at the same time if
     application has no other displayable window. (issue #1078)
   - On Linux: Check whether required GSettings schemas are installed to avoid

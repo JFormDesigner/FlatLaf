@@ -115,7 +115,7 @@ public class FlatNativeMacLibrary
 	 * @param fileTypes file types that the dialog can open or save.
 	 *        Two or more strings and {@code null} are required for each filter.
 	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
-	 *        Subsequent strings are the filter patterns (e.g. "txt" or "*").
+	 *        Subsequent strings are the file name extensions (e.g. "txt" or "*"; '.' is not supported).
 	 *        {@code null} is required to mark end of filter.
 	 * @param retFileTypeIndex returns selected file type (zero-based); array must be have one element
 	 * @return file path(s) that the user selected; an empty array if canceled;
