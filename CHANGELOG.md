@@ -8,6 +8,10 @@ FlatLaf Change Log
 - Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is
   visible and frame is maximized. (issue #1071)
 - ToolBar: Grip disappeared when switching between Look and Feels. (issue #1075)
+- Extras:
+  - UI defaults inspector: Fixed NPE if color of `FlatLineBorder` is null. Also
+    use `FlatLineBorder` line color as cell background color in "Value" column.
+    (PR #1080)
 
 
 ## 3.7

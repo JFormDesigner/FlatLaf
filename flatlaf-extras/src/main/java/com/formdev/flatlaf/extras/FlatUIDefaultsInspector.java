@@ -777,6 +777,9 @@ public class FlatUIDefaultsInspector
 
 		@SuppressWarnings( "FormatString" ) // Error Prone
 		private static String color2hex( Color color ) {
+			if( color == null )
+				return "";
+
 			int rgb = color.getRGB();
 			boolean hasAlpha = color.getAlpha() != 255;
 
@@ -1018,28 +1021,36 @@ public class FlatUIDefaultsInspector
 			item = (Item) value;
 			init( table, item.key, isSelected, row );
 
-			// reset background, foreground and icon
-			if( !(item.value instanceof Color) ) {
+			// get color of value
+			valueColor = null;
+			if( item.value instanceof Color )
+				valueColor = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
+			else if( item.value instanceof FlatLineBorder )
+				valueColor = ((FlatLineBorder)item.value).getLineColor();
+
+			// reset background and foreground
+			if( valueColor == null ) {
 				setBackground( null );
 				setForeground( null );
 			}
-			if( !(item.value instanceof Icon) )
-				setIcon( null );
 
 			// value to string
 			value = item.getValueAsString();
 
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
-			if( item.value instanceof Color ) {
-				Color color = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
-				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
-				valueColor = color;
+			// set foreground, if value has color
+			if( valueColor != null ) {
+				boolean isDark = new HSLColor( valueColor ).getLuminance() < 70 && valueColor.getAlpha() >= 128;
 				setForeground( isDark ? Color.white : Color.black );
-			} else if( item.value instanceof Icon ) {
+			}
+
+			// set icon
+			if( item.value instanceof Icon ) {
 				Icon icon = (Icon) item.value;
 				setIcon( new SafeIcon( icon ) );
-			}
+			} else
+				setIcon( null );
 
 			// set tooltip
 			String toolTipText = (item.value instanceof Object[])
@@ -1056,7 +1067,7 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			if( item.value instanceof Color ) {
+			if( valueColor != null ) {
 				int width = getWidth();
 				int height = getHeight();
 				Color background = valueColor;
