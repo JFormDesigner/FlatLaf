@@ -44,6 +44,8 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.IdentityHashMap;
 import java.util.WeakHashMap;
 import java.util.function.Predicate;
@@ -1411,6 +1413,49 @@ debug*/
 		@Override
 		public boolean isBorderOpaque() {
 			return delegate.isBorderOpaque();
+		}
+	}
+
+	//---- class FlatPropertyWatcher ------------------------------------------
+
+	/**
+	 * Listener that watches for change of a property from application code.
+	 * This information can be used to decide whether FlatLaf modifies the property.
+	 * If it is modified in application code, FlatLaf no longer changes it.
+	 * <p>
+	 * The listener is added once for a property, but never removed.
+	 * So switching Laf/theme reuses existing listener.
+	 */
+	static class FlatPropertyWatcher
+		implements PropertyChangeListener
+	{
+		private boolean changed;
+
+		static void runIfNotChanged( JComponent c, String propName, Runnable runnable ) {
+			FlatPropertyWatcher watcher = getOrInstall( c, propName );
+			if( watcher.changed )
+				return;
+
+			runnable.run();
+			watcher.changed = false;
+		}
+
+		private static FlatPropertyWatcher getOrInstall( JComponent c, String propName ) {
+			for( PropertyChangeListener l : c.getPropertyChangeListeners( propName ) ) {
+				if( l instanceof FlatPropertyWatcher )
+					return (FlatPropertyWatcher) l;
+			}
+
+			FlatPropertyWatcher watcher = new FlatPropertyWatcher();
+			c.addPropertyChangeListener( propName, watcher );
+			return watcher;
+		}
+
+		//---- interface PropertyChangeListener ----
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			changed = true;
 		}
 	}
 }

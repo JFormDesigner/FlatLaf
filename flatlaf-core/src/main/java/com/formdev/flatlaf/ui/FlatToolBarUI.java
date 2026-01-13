@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatUIUtils.FlatPropertyWatcher;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
@@ -144,11 +145,13 @@ public class FlatToolBarUI
 		hoverButtonGroupBackground = UIManager.getColor( "ToolBar.hoverButtonGroupBackground" );
 
 		// floatable
+		oldFloatable = null;
 		if( !UIManager.getBoolean( "ToolBar.floatable" ) ) {
-			oldFloatable = toolBar.isFloatable();
-			toolBar.setFloatable( false );
-		} else
-			oldFloatable = null;
+			FlatPropertyWatcher.runIfNotChanged( toolBar, "floatable", () -> {
+				oldFloatable = toolBar.isFloatable();
+				toolBar.setFloatable( false );
+			} );
+		}
 	}
 
 	@Override
@@ -158,7 +161,9 @@ public class FlatToolBarUI
 		hoverButtonGroupBackground = null;
 
 		if( oldFloatable != null ) {
-			toolBar.setFloatable( oldFloatable );
+			FlatPropertyWatcher.runIfNotChanged( toolBar, "floatable", () -> {
+				toolBar.setFloatable( oldFloatable );
+			} );
 			oldFloatable = null;
 		}
 	}

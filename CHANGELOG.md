@@ -7,6 +7,7 @@ FlatLaf Change Log
   #1068)
 - Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is
   visible and frame is maximized. (issue #1071)
+- ToolBar: Grip disappeared when switching between Look and Feels. (issue #1075)
 
 
 ## 3.7
