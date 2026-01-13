@@ -777,6 +777,9 @@ public class FlatUIDefaultsInspector
 
 		@SuppressWarnings( "FormatString" ) // Error Prone
 		private static String color2hex( Color color ) {
+
+			if ( color == null ) return "#none";
+
 			int rgb = color.getRGB();
 			boolean hasAlpha = color.getAlpha() != 255;
 
@@ -1019,7 +1022,7 @@ public class FlatUIDefaultsInspector
 			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
-			if( !(item.value instanceof Color) ) {
+			if( !isTargetClass() ) {
 				setBackground( null );
 				setForeground( null );
 			}
@@ -1033,12 +1036,19 @@ public class FlatUIDefaultsInspector
 
 			if( item.value instanceof Color ) {
 				Color color = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
-				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
 				valueColor = color;
-				setForeground( isDark ? Color.white : Color.black );
+				setForeground( fgColor( color ) );
 			} else if( item.value instanceof Icon ) {
 				Icon icon = (Icon) item.value;
 				setIcon( new SafeIcon( icon ) );
+			} else if ( item.value instanceof FlatLineBorder ) {
+				Color lineColor = ((FlatLineBorder)item.value).getLineColor();
+				valueColor = lineColor == null
+					? (isSelected ? table.getSelectionBackground() : table.getBackground())
+					: lineColor;
+				setForeground( lineColor == null
+					? (isSelected ? table.getSelectionForeground() : table.getForeground())
+					: fgColor( lineColor ) );
 			}
 
 			// set tooltip
@@ -1054,9 +1064,18 @@ public class FlatUIDefaultsInspector
 			return this;
 		}
 
+		private boolean isTargetClass() {
+			return item.value instanceof Color || item.value instanceof FlatLineBorder;
+		}
+
+		private Color fgColor( Color color ) {
+			boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
+			return isDark ? Color.white : Color.black;
+		}
+
 		@Override
 		protected void paintComponent( Graphics g ) {
-			if( item.value instanceof Color ) {
+			if( isTargetClass() ) {
 				int width = getWidth();
 				int height = getHeight();
 				Color background = valueColor;
