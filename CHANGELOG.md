@@ -7,6 +7,8 @@ FlatLaf Change Log
   #1068)
 - Popup: Fixed scrolling popup painting issue on Windows 10 when a glass pane is
   visible and frame is maximized. (issue #1071)
+- Slider: Styling `thumbSize` or `focusWidth` did not update slider size/layout.
+  (PR #1074)
 - ToolBar: Grip disappeared when switching between Look and Feels. (issue #1075)
 - Extras:
   - UI defaults inspector: Fixed NPE if color of `FlatLineBorder` is null. Also

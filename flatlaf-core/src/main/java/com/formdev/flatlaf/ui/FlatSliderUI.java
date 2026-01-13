@@ -227,7 +227,13 @@ public class FlatSliderUI
 
 	/** @since 2 */
 	protected void applyStyle( Object style ) {
+		Dimension oldThumbSize = thumbSize;
+		int oldFocusWidth = focusWidth;
+
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( !thumbSize.equals( oldThumbSize ) || focusWidth != oldFocusWidth )
+			calculateGeometry();
 	}
 
 	/** @since 2 */
