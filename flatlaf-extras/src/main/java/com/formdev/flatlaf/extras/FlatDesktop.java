@@ -43,7 +43,8 @@ public class FlatDesktop
 	public static boolean isSupported( Action action ) {
 		if( SystemInfo.isJava_9_orLater ) {
 			try {
-				return Desktop.getDesktop().isSupported( Enum.valueOf( Desktop.Action.class, action.name() ) );
+				return Desktop.isDesktopSupported() &&
+					Desktop.getDesktop().isSupported( Enum.valueOf( Desktop.Action.class, action.name() ) );
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( null, ex );
 				return false;

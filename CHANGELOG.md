@@ -14,6 +14,8 @@ FlatLaf Change Log
   - UI defaults inspector: Fixed NPE if color of `FlatLineBorder` is null. Also
     use `FlatLineBorder` line color as cell background color in "Value" column.
     (PR #1080)
+  - `FlatDesktop`: Avoid unnecessary logging if desktop is not supported (e.g.
+    on NixOS with Plasma/KDE desktop).
 
 
 ## 3.7
