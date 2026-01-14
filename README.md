@@ -76,10 +76,16 @@ Otherwise, download `flatlaf-<version>.jar` here:
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf?style=flat-square)](https://central.sonatype.com/artifact/com.formdev/flatlaf)
 
-See also
-[Native Libraries distribution](https://www.formdev.com/flatlaf/native-libraries/)
-for instructions on how to redistribute FlatLaf native libraries with your
-application.
+- See
+  [Native Libraries distribution](https://www.formdev.com/flatlaf/native-libraries/)
+  for instructions on how to redistribute FlatLaf native libraries with your
+  application.
+- If repackaging FlatLaf (and other) JARs into a single fat/uber JAR:
+  - add `Multi-Release: true` to `META-INF/MANIFEST.MF`
+  - keep `META-INF/versions/` and `META-INF/services/` directories
+  - merge content of equally named files in `META-INF/services/`
+- If using obfuscation/minimizing/shrinking tools (e.g. **ProGuard** or
+  **Shadow**), exclude package `com.formdev.flatlaf` and all sub-packages.
 
 
 ### Snapshots
