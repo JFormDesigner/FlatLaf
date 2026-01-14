@@ -33,6 +33,9 @@ extern Window getWindowHandle( JNIEnv* env, JAWT* awt, jobject window, Display**
 // declare internal methods
 static jobjectArray fileListToStringArray( JNIEnv* env, GSList* fileList );
 
+// fields
+static int settingsSchemaInstalled = -1;
+
 //---- helper -----------------------------------------------------------------
 
 #define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_ ## option) != 0)
@@ -58,6 +61,7 @@ static void initFilters( GtkFileChooser* chooser, JNIEnv* env, jint fileTypeInde
 				gtk_file_chooser_add_filter( chooser, filter );
 				if( fileTypeIndex == filterIndex )
 					gtk_file_chooser_set_filter( chooser, filter );
+				g_object_set_data( G_OBJECT( filter ), "flatlaf-filter-index", GINT_TO_POINTER( filterIndex + 1 ) );
 				filter = NULL;
 				filterIndex++;
 			}
@@ -130,32 +134,42 @@ struct ResponseData {
 	JNIEnv* env;
 	jobject callback;
 	GSList* fileList;
+	int filterIndex;
 
 	ResponseData( JNIEnv* _env, jobject _callback ) {
 		env = _env;
 		callback = _callback;
 		fileList = NULL;
+		filterIndex = -1;
 	}
 };
 
 static void handle_response( GtkWidget* dialog, gint responseId, gpointer data ) {
+	GtkFileChooser* chooser = GTK_FILE_CHOOSER( dialog );
+	ResponseData *response = static_cast<ResponseData*>( data );
+
+	// get selected filter (even if user cancels dialog)
+	GtkFileFilter* filter = gtk_file_chooser_get_filter( chooser );
+	response->filterIndex = (filter != NULL)
+		? GPOINTER_TO_INT( g_object_get_data( G_OBJECT( filter ), "flatlaf-filter-index" ) ) - 1
+		: -1;
+
 	// get filenames if user pressed OK
 	if( responseId == GTK_RESPONSE_ACCEPT ) {
-		ResponseData *response = static_cast<ResponseData*>( data );
 		if( response->callback != NULL ) {
-			GSList* fileList = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
+			GSList* fileList = gtk_file_chooser_get_filenames( chooser );
 			jobjectArray files = fileListToStringArray( response->env, fileList );
-
+			jint filterIndex = response->filterIndex;
 			GtkWindow* window = GTK_WINDOW( dialog );
 
 			// invoke callback: boolean approve( String[] files, long hwnd );
 			jclass cls = response->env->GetObjectClass( response->callback );
-			jmethodID approveID = response->env->GetMethodID( cls, "approve", "([Ljava/lang/String;J)Z" );
-			if( approveID != NULL && !response->env->CallBooleanMethod( response->callback, approveID, files, window ) )
+			jmethodID approveID = response->env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
+			if( approveID != NULL && !response->env->CallBooleanMethod( response->callback, approveID, files, filterIndex, window ) )
 				return; // keep dialog open
 		}
 
-		response->fileList = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER( dialog ) );
+		response->fileList = gtk_file_chooser_get_filenames( chooser );
 	}
 
 	// hide/destroy file dialog and quit loop
@@ -170,10 +184,27 @@ extern "C"
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
 	( JNIEnv* env, jclass cls, jobject owner, jint dark, jboolean open,
 		jstring title, jstring okButtonLabel, jstring currentName, jstring currentFolder,
-		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
+		jint optionsSet, jint optionsClear, jobject callback,
+		jint fileTypeIndex, jobjectArray fileTypes, jintArray retFileTypeIndex )
 {
 	// initialize GTK
 	if( !gtk_init_check( NULL, NULL ) )
+		return NULL;
+
+	// check whether required GSettings schemas are installed (e.g. on NixOS)
+	// this avoids output of following message on console, followed by an application crash:
+	//   GLib-GIO-ERROR: No GSettings schemas are installed on the system
+	if( settingsSchemaInstalled < 0 ) {
+		GSettingsSchemaSource* schemaSource = g_settings_schema_source_get_default();
+		GSettingsSchema* schema = (schemaSource != NULL)
+			? g_settings_schema_source_lookup( schemaSource, "org.gtk.Settings.FileChooser", FALSE )
+			: NULL;
+		if( schema != NULL )
+			g_settings_schema_unref( schema );
+
+		settingsSchemaInstalled = (schema != NULL);
+	}
+	if( settingsSchemaInstalled <= 0 )
 		return NULL;
 
 	// convert Java strings to C strings
@@ -282,7 +313,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 	// start event loop (will be quit in respone handler)
 	gtk_main();
 
-	// canceled?
+	// return selected filter
+	jint selectedFilterIndex = responseData.filterIndex;
+	env->SetIntArrayRegion( retFileTypeIndex, 0, 1, &selectedFilterIndex );
+
+	// return empty array if canceled
 	if( responseData.fileList == NULL )
 		return newJavaStringArray( env, 0 );
 

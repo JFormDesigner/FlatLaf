@@ -128,6 +128,11 @@ public:
 		} else
 			files = getFiles( env, false, dialog );
 
+		// get selected filter
+		UINT selectedFileTypeIndex = 0;
+		dialog->GetFileTypeIndex( &selectedFileTypeIndex );
+		jint jselectedFileTypeIndex = selectedFileTypeIndex - 1;
+
 		// get hwnd of file dialog
 		HWND hwndFileDialog = 0;
 		AutoReleasePtr<IOleWindow> window;
@@ -136,10 +141,10 @@ public:
 
 		// invoke callback: boolean approve( String[] files, long hwnd );
 		jclass cls = env->GetObjectClass( callback );
-		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;J)Z" );
+		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
 		if( approveID == NULL )
 			return S_OK;
-		return env->CallBooleanMethod( callback, approveID, files, hwndFileDialog ) ? S_OK : S_FALSE;
+		return env->CallBooleanMethod( callback, approveID, files, jselectedFileTypeIndex, hwndFileDialog ) ? S_OK : S_FALSE;
 	}
 
 	IFACEMETHODIMP OnFolderChange( IFileDialog* ) { return S_OK; }
@@ -147,7 +152,7 @@ public:
 	IFACEMETHODIMP OnHelp( IFileDialog* ) { return S_OK; }
 	IFACEMETHODIMP OnSelectionChange( IFileDialog* ) { return S_OK; }
 	IFACEMETHODIMP OnShareViolation( IFileDialog*, IShellItem*, FDE_SHAREVIOLATION_RESPONSE* ) { return S_OK; }
-	IFACEMETHODIMP OnTypeChange( IFileDialog*pfd ) { return S_OK; }
+	IFACEMETHODIMP OnTypeChange( IFileDialog* ) { return S_OK; }
 	IFACEMETHODIMP OnOverwrite( IFileDialog*, IShellItem*, FDE_OVERWRITE_RESPONSE* ) { return S_OK; }
 
 	//---- IUnknown methods ----
@@ -213,7 +218,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 	( JNIEnv* env, jclass cls, jobject owner, jboolean open,
 		jstring title, jstring okButtonLabel, jstring fileNameLabel, jstring fileName,
 		jstring folder, jstring saveAsItem, jstring defaultFolder, jstring defaultExtension,
-		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
+		jint optionsSet, jint optionsClear, jobject callback,
+		jint fileTypeIndex, jobjectArray fileTypes, jintArray retFileTypeIndex )
 {
 	// initialize COM library
 	CoInitializer coInitializer;
@@ -285,6 +291,14 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibr
 	HWND hwndOwner = (owner != NULL) ? getWindowHandle( env, owner ) : NULL;
 	HRESULT hr = dialog->Show( hwndOwner );
 	dialog->Unadvise( dwCookie );
+
+	// return selected filter
+	UINT selectedFileTypeIndex = 0;
+	CHECK_HRESULT( dialog->GetFileTypeIndex( &selectedFileTypeIndex ) );
+	jint jselectedFileTypeIndex = selectedFileTypeIndex - 1;
+	env->SetIntArrayRegion( retFileTypeIndex, 0, 1, &jselectedFileTypeIndex );
+
+	// return empty array if canceled
 	if( hr == HRESULT_FROM_WIN32(ERROR_CANCELLED) )
 		return newJavaStringArray( env, 0 );
 	CHECK_HRESULT( hr );

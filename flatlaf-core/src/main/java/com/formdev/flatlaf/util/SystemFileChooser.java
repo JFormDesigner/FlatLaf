@@ -18,6 +18,8 @@ package com.formdev.flatlaf.util;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
@@ -28,11 +30,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -87,7 +91,8 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li>{@link JFileChooser#FILES_AND_DIRECTORIES} is not supported.
  *   <li>{@link #getSelectedFiles()} returns selected file also in single selection mode.
  *       {@link JFileChooser#getSelectedFiles()} only in multi selection mode.
- *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported.
+ *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported on all platforms.
+ *   <li>Pattern filters (see {@link PatternFilter}) are only supported on Windows and Linux, but not on macOS.
  *   <li>If adding choosable file filters and {@link #isAcceptAllFileFilterUsed()} is {@code true},
  *       then the <b>All Files</b> filter is placed at the end of the combobox list
  *       (as usual in current operating systems) and the first choosable filter is selected by default.
@@ -584,6 +589,7 @@ public class SystemFileChooser
 	private void checkSupportedFileFilter( FileFilter filter ) throws IllegalArgumentException {
 		if( filter == null ||
 			filter instanceof FileNameExtensionFilter ||
+			filter instanceof PatternFilter ||
 			filter instanceof AcceptAllFileFilter )
 		  return;
 
@@ -605,6 +611,11 @@ public class SystemFileChooser
 		List<FileFilter> filters2 = new ArrayList<>( filters );
 		filters2.add( 0, fileFilter );
 		return filters2;
+	}
+
+	private void updateFileFilter( List<FileFilter> filters, int index ) {
+		if( index >= 0 && index < filters.size() )
+			setFileFilter( filters.get( index ) );
 	}
 
 	public ApproveCallback getApproveCallback() {
@@ -737,6 +748,9 @@ public class SystemFileChooser
 	}
 
 	private int showDialogImpl( Component parent ) {
+		if( !EventQueue.isDispatchThread() )
+			throw new IllegalStateException( "Must be invoked from the AWT/Swing event dispatch thread" );
+
 		Window owner = (parent instanceof Window)
 			? (Window) parent
 			: (parent != null) ? SwingUtilities.windowForComponent( parent ) : null;
@@ -785,6 +799,16 @@ public class SystemFileChooser
 	{
 		@Override
 		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			// if there is no displayable window, then AWT's auto-shutdown feature
+			// quits our secondary event loop (see below) immediately
+			// https://docs.oracle.com/en/java/javase/25/docs/api/java.desktop/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown
+			Window dummyWindow = null;
+			if( !hasDisplayableWindow( owner ) ) {
+				// create a (not visible) displayable window to avoid AWT auto-shutdown
+				dummyWindow = new Window( (Frame) null );
+				dummyWindow.addNotify();
+			}
+
 			AtomicReference<String[]> filenamesRef = new AtomicReference<>();
 
 			// create secondary event look and invoke system file dialog on a new thread
@@ -794,6 +818,10 @@ public class SystemFileChooser
 				secondaryLoop.exit();
 			}, "FlatLaf SystemFileChooser" ).start();
 			secondaryLoop.enter();
+
+			// dispose dummy window to allow AWT to auto-shutdown
+			if( dummyWindow != null )
+				dummyWindow.dispose();
 
 			String[] filenames = filenamesRef.get();
 
@@ -830,6 +858,17 @@ public class SystemFileChooser
 			for( int i = 0; i < filenames.length; i++ )
 				files[i] = fsv.createFileObject( filenames[i] );
 			return files;
+		}
+
+		private static boolean hasDisplayableWindow( Window owner ) {
+			if( owner != null && owner.isDisplayable() )
+				return true;
+
+			for( Window window : Window.getWindows() ) {
+				if( window.isDisplayable() )
+					return true;
+			}
+			return false;
 		}
 	}
 
@@ -890,6 +929,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -898,9 +938,15 @@ public class SystemFileChooser
 						if( filter instanceof FileNameExtensionFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*." + String.join( ";*.", ((FileNameExtensionFilter)filter).getExtensions() ) );
+							fileTypeFilters.add( filter );
+						} else if( filter instanceof PatternFilter ) {
+							fileTypes.add( filter.getDescription() );
+							fileTypes.add( String.join( ";", ((PatternFilter)filter).getPatterns() ) );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*.*" );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -916,19 +962,24 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeWindowsLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new WindowsApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeWindowsLibrary.showFileChooser( owner, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				fc.getDialogTitle(), approveButtonText,
 				fc.getPlatformProperty( WINDOWS_FILE_NAME_LABEL ),
 				fileName, folder, saveAsItem,
 				fc.getPlatformProperty( WINDOWS_DEFAULT_FOLDER ),
 				fc.getPlatformProperty( WINDOWS_DEFAULT_EXTENSION ),
 				optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		//---- class WindowsApproveContext ----
@@ -969,6 +1020,26 @@ public class SystemFileChooser
 	private static class MacFileChooserProvider
 		extends SystemFileChooserProvider
 	{
+		@Override
+		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			// fallback to Swing file chooser if PatternFilter is used
+			boolean usesPatternFilter = (fc.getFileFilter() instanceof PatternFilter);
+			if( !usesPatternFilter ) {
+				for( FileFilter filter : fc.getChoosableFileFilters() ) {
+					if( filter instanceof PatternFilter ) {
+						usesPatternFilter = true;
+						break;
+					}
+				}
+			}
+			if( usesPatternFilter ) {
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: SystemFileChooser.PatternFilter is not supported on macOS. Using Swing JFileChooser.", null );
+				return new SwingFileChooserProvider().showDialog( owner, fc );
+			}
+
+			return super.showDialog( owner, fc );
+		}
+
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
 			int dark = FlatLaf.isLafDark() ? 1 : 0;
@@ -1013,6 +1084,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -1023,10 +1095,12 @@ public class SystemFileChooser
 							for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
 								fileTypes.add( ext );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*" );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -1034,18 +1108,23 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeMacLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new MacApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeMacLibrary.showFileChooser( owner, dark, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeMacLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), fc.getApproveButtonText(),
 				fc.getPlatformProperty( MAC_MESSAGE ),
 				fc.getPlatformProperty( MAC_FILTER_FIELD_LABEL ),
 				fc.getPlatformProperty( MAC_NAME_FIELD_LABEL ),
 				nameFieldStringValue, directoryURL, optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		//---- class MacApproveContext ----
@@ -1141,6 +1220,7 @@ public class SystemFileChooser
 			// filter
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
+			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
 			if( !fc.isDirectorySelectionEnabled() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
@@ -1149,12 +1229,19 @@ public class SystemFileChooser
 						if( filter instanceof FileNameExtensionFilter ) {
 							fileTypes.add( filter.getDescription() );
 							for( String ext : ((FileNameExtensionFilter)filter).getExtensions() )
-								fileTypes.add( caseInsensitiveGlobPattern( ext ) );
+								fileTypes.add( "*." + caseInsensitiveGlobPattern( ext ) );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
+						} else if( filter instanceof PatternFilter ) {
+							fileTypes.add( filter.getDescription() );
+							for( String pattern : ((PatternFilter)filter).getPatterns() )
+								fileTypes.add( caseInsensitiveGlobPattern( pattern ) );
+							fileTypeFilters.add( filter );
 						} else if( filter instanceof AcceptAllFileFilter ) {
 							fileTypes.add( filter.getDescription() );
 							fileTypes.add( "*" );
 							fileTypes.add( null );
+							fileTypeFilters.add( filter );
 						}
 					}
 				}
@@ -1162,20 +1249,24 @@ public class SystemFileChooser
 
 			// callback
 			FlatNativeLinuxLibrary.FileChooserCallback callback = (fc.getApproveCallback() != null)
-				? (files, hwndFileDialog) -> {
+				? (files, fileTypeIndex2, hwndFileDialog) -> {
+					fc.updateFileFilter( fileTypeFilters, fileTypeIndex2 );
 					return invokeApproveCallback( fc, files, new LinuxApproveContext( hwndFileDialog ) );
 				} : null;
 
 			// show system file dialog
-			return FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
+			int[] retFileTypeIndex = { -1 };
+			String[] result = FlatNativeLinuxLibrary.showFileChooser( owner, dark, open,
 				fc.getDialogTitle(), approveButtonText, currentName, currentFolder,
 				optionsSet, optionsClear, callback,
-				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ) );
+				fileTypeIndex, fileTypes.toArray( new String[fileTypes.size()] ), retFileTypeIndex );
+			if( result != null )
+				fc.updateFileFilter( fileTypeFilters, retFileTypeIndex[0] );
+			return result;
 		}
 
 		private String caseInsensitiveGlobPattern( String ext ) {
 			StringBuilder buf = new StringBuilder();
-			buf.append( "*." );
 			int len = ext.length();
 			for( int i = 0; i < len; i++ ) {
 				char ch = ext.charAt( i );
@@ -1253,6 +1344,8 @@ public class SystemFileChooser
 	{
 		@Override
 		public File[] showDialog( Window owner, SystemFileChooser fc ) {
+			IdentityHashMap<javax.swing.filechooser.FileFilter, FileFilter> filterMap = new IdentityHashMap<>();
+
 			JFileChooser chooser = new JFileChooser() {
 				@Override
 				public void approveSelection() {
@@ -1273,6 +1366,7 @@ public class SystemFileChooser
 					// callback
 					ApproveCallback approveCallback = fc.getApproveCallback();
 					if( approveCallback != null ) {
+						updateFileFilter( fc, this, filterMap );
 						int result = approveCallback.approve( files, new SwingApproveContext( this ) );
 						if( result == CANCEL_OPTION )
 							return;
@@ -1313,6 +1407,7 @@ public class SystemFileChooser
 						chooser.addChoosableFileFilter( jfilter );
 						if( filter == currentFilter )
 							chooser.setFileFilter( jfilter );
+						filterMap.put( jfilter, filter );
 					}
 				}
 			}
@@ -1340,6 +1435,7 @@ public class SystemFileChooser
 
 			// show dialog
 			int result = chooser.showDialog( owner, null );
+			updateFileFilter( fc, chooser, filterMap );
 
 			// save window size
 			Dimension windowSize = chooser.getSize();
@@ -1361,10 +1457,22 @@ public class SystemFileChooser
 				return new javax.swing.filechooser.FileNameExtensionFilter(
 					((FileNameExtensionFilter)filter).getDescription(),
 					((FileNameExtensionFilter)filter).getExtensions() );
+			} else if( filter instanceof PatternFilter ) {
+				return new SwingGlobFilter(
+					((PatternFilter)filter).getDescription(),
+					((PatternFilter)filter).getPatterns() );
 			} else if( filter instanceof AcceptAllFileFilter )
 				return chooser.getAcceptAllFileFilter();
 			else
 				return null;
+		}
+
+		private void updateFileFilter( SystemFileChooser fc, JFileChooser chooser,
+			IdentityHashMap<javax.swing.filechooser.FileFilter, FileFilter> filterMap )
+		{
+			FileFilter fileFilter = filterMap.get( chooser.getFileFilter() );
+			if( fileFilter != null )
+				fc.setFileFilter( fileFilter );
 		}
 
 		private static boolean checkMustExist( JFileChooser chooser, File[] files ) {
@@ -1442,6 +1550,86 @@ public class SystemFileChooser
 					null, buttons, buttons[Math.min( Math.max( defaultButton, 0 ), buttons.length - 1 )] );
 			}
 		}
+
+		//---- class SwingGlobFilter ------------------------------------------
+
+		private static class SwingGlobFilter
+			extends javax.swing.filechooser.FileFilter
+		{
+			private final String description;
+			private final String[] patterns;
+			private Pattern regexPattern;
+
+			SwingGlobFilter( String description, String... patterns ) {
+				this.description = description;
+				this.patterns = patterns;
+			}
+
+			@Override
+			public String getDescription() {
+				return description;
+			}
+
+			@Override
+			public boolean accept( File f ) {
+				if( f == null )
+					return false;
+
+				if( f.isDirectory() )
+					return true;
+
+				initRegexPattern();
+				return regexPattern.matcher( f.getName() ).matches();
+			}
+
+			private void initRegexPattern() {
+				if( regexPattern != null )
+					return;
+
+				StringBuilder buf = new StringBuilder();
+				for( String pattern : patterns ) {
+					if( buf.length() > 0 )
+						buf.append( '|' );
+					glob2regexPattern( pattern, buf );
+				}
+				regexPattern = Pattern.compile( buf.toString(), Pattern.CASE_INSENSITIVE );
+			}
+
+			private static void glob2regexPattern( String globPattern, StringBuilder buf ) {
+				int globLength = globPattern.length();
+
+				// on windows, a pattern ending with "*.*" is equal to ending with "*"
+				if( SystemInfo.isWindows && globPattern.endsWith( "*.*" ) )
+					globLength -= 2;
+
+				for( int i = 0; i < globLength; i++ ) {
+					char ch = globPattern.charAt( i );
+					switch( ch ) {
+						// glob pattern
+						case '*': buf.append( ".*" ); break;
+						case '?': buf.append( '.' ); break;
+
+						// escape special regex characters
+						case '\\':
+						case '.':
+						case '+':
+						case '^':
+						case '$':
+						case '(':
+						case ')':
+						case '{':
+						case '}':
+						case '[':
+						case ']':
+						case '|':
+							buf.append( '\\' ).append( ch );
+							break;
+
+						default: buf.append( ch ); break;
+					}
+				}
+			}
+		}
 	}
 
 	//---- class FileFilter ---------------------------------------------------
@@ -1490,6 +1678,67 @@ public class SystemFileChooser
 		@Override
 		public String toString() {
 			return super.toString() + "[description=" + description + " extensions=" + Arrays.toString( extensions ) + "]";
+		}
+	}
+
+	//---- class PatternFilter ------------------------------------------------
+
+	/**
+	 * A case-insensitive file filter which accepts file patterns containing
+     * the wildcard characters {@code *?} on Windows and Linux.
+     * <ul>
+     *   <li>{@code '*'} matches any sequence of characters.
+     *   <li>{@code '?'} matches any single character.
+     * </ul>
+	 * Sample filters: {@code *.tar.gz} or {@code *_copy.txt}
+	 * <p>
+	 * <b>Warning</b>: This filter is <b>not supported on macOS</b>.
+	 * If used on macOS, the Swing file chooser {@link JFileChooser} is shown
+	 * (instead of macOS file dialog) and a warning is logged.
+	 * To avoid this, do not use this filter on macOS.
+	 * <p>
+	 * E.g.:
+	 * <pre>{@code
+	 * if( SystemInfo.isMacOS )
+	 *     chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Compressed TAR", "tgz" ) );
+	 * else
+	 *     chooser.addChoosableFileFilter( new PatternFilter( "Compressed TAR", "*.tar.gz" ) );
+	 * } );
+	 * }</pre>
+	 *
+	 * @see FileNameExtensionFilter
+	 * @since 3.7.1
+	 */
+	public static final class PatternFilter
+		extends FileFilter
+	{
+		private final String description;
+		private final String[] patterns;
+
+		public PatternFilter( String description, String... patterns ) {
+			if( patterns == null || patterns.length == 0 )
+				throw new IllegalArgumentException( "Missing patterns" );
+			for( String extension : patterns ) {
+				if( extension == null || extension.isEmpty() )
+					throw new IllegalArgumentException( "Pattern is null or empty string" );
+			}
+
+			this.description = description;
+			this.patterns = patterns.clone();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
+
+		public String[] getPatterns() {
+			return patterns.clone();
+		}
+
+		@Override
+		public String toString() {
+			return super.toString() + "[description=" + description + " patterns=" + Arrays.toString( patterns ) + "]";
 		}
 	}
 

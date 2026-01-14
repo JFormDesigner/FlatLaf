@@ -35,6 +35,7 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 @interface FileChooserDelegate : NSObject <NSOpenSavePanelDelegate, NSWindowDelegate> {
 		NSArray* _filters;
+		int _selectedFormatIndex;
 
 		JavaVM* _jvm;
 		jobject _callback;
@@ -43,18 +44,26 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 	@property (nonatomic, assign) NSSavePanel* dialog;
 
+	- (id) init;
 	- (void) initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
 		:(NSString*)filterFieldLabel :(bool)showSingleFilterField;
 	- (void) selectFormat: (id)sender;
 	- (void) selectFormatAtIndex: (int)index;
+	- (int) selectedFormatIndex;
 @end
 
 @implementation FileChooserDelegate
+
+	- (id) init {
+		_selectedFormatIndex = -1;
+		return self;
+	}
 
 	- (void) initFilterAccessoryView: (NSMutableArray*)filters :(int)filterIndex
 		:(NSString*)filterFieldLabel :(bool)showSingleFilterField
 	{
 		_filters = filters;
+		_selectedFormatIndex = filterIndex;
 
 		// get filter names
 		NSArray* filterNames = filters.lastObject;
@@ -125,6 +134,12 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		// to support older macOS versions 10.14+ and because of some problems with allowedContentTypes:
 		// https://github.com/chromium/chromium/blob/d8e0032963b7ca4728ff4117933c0feb3e479b7a/components/remote_cocoa/app_shim/select_file_dialog_bridge.mm#L209-232
 		_dialog.allowedFileTypes = [fileTypes containsObject:@"*"] ? nil : fileTypes;
+
+		_selectedFormatIndex = index;
+	}
+
+	- (int) selectedFormatIndex {
+		return _selectedFormatIndex;
 	}
 
 	//---- NSOpenSavePanelDelegate ----
@@ -161,12 +176,13 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		JNI_THREAD_ENTER( _jvm, true )
 
 		jobjectArray files = urlsToStringArray( env, urls );
+		jint selectedFormatIndex = ((FileChooserDelegate*)((NSSavePanel*)sender).delegate).selectedFormatIndex;
 		jlong window = (jlong) sender;
 
 		// invoke callback: boolean approve( String[] files, long hwnd );
 		jclass cls = env->GetObjectClass( _callback );
-		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;J)Z" );
-		if( approveID != NULL && !env->CallBooleanMethod( _callback, approveID, files, window ) ) {
+		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
+		if( approveID != NULL && !env->CallBooleanMethod( _callback, approveID, files, selectedFormatIndex, window ) ) {
 			_urlsSet = NULL;
 			return false; // keep dialog open
 		}
@@ -265,7 +281,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 	( JNIEnv* env, jclass cls, jobject owner, jint dark, jboolean open,
 		jstring title, jstring prompt, jstring message, jstring filterFieldLabel,
 		jstring nameFieldLabel, jstring nameFieldStringValue, jstring directoryURL,
-		jint optionsSet, jint optionsClear, jobject callback, jint fileTypeIndex, jobjectArray fileTypes )
+		jint optionsSet, jint optionsClear, jobject callback,
+		jint fileTypeIndex, jobjectArray fileTypes, jintArray retFileTypeIndex )
 {
 	JNI_COCOA_ENTER()
 
@@ -365,17 +382,26 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 
 		// show dialog
 		NSModalResponse response = [dialog runModal];
+
+		// return selected filter
+		jint selectedFormatIndex = delegate.selectedFormatIndex;
+		env->SetIntArrayRegion( retFileTypeIndex, 0, 1, &selectedFormatIndex );
+
 		[delegate release];
+
+		// return empty array if canceled
 		if( response != NSModalResponseOK ) {
 			*purls = @[];
 			return;
 		}
 
+		// get selected file(s)
 		*purls = getDialogURLs( dialog );
 
 		JNI_COCOA_CATCH()
 	}];
 
+	// return null on failures
 	if( urls == NULL )
 		return NULL;
 

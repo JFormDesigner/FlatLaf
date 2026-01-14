@@ -24,7 +24,7 @@
 
 // increase this version if changing API or functionality of native library
 // also update version in Java class com.formdev.flatlaf.ui.FlatNativeMacLibrary
-#define API_VERSION_MACOS		2002
+#define API_VERSION_MACOS		2003
 
 
 //---- JNI methods ------------------------------------------------------------

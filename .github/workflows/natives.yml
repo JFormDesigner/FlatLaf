@@ -73,7 +73,8 @@ jobs:
               run: ./gradlew build-natives --no-daemon
 
             - name: Sign Windows DLLs
-              if: matrix.os == 'windows-latest'
+              if: false
+#              if: matrix.os == 'windows-latest'
               uses: skymatic/code-sign-action@v3
               with:
                 certificate: '${{ secrets.CODE_SIGN_CERT_BASE64 }}'
@@ -82,7 +83,8 @@ jobs:
                 folder: 'flatlaf-core/src/main/resources/com/formdev/flatlaf/natives'
 
             - name: Sign macOS natives
-              if: matrix.os == 'DISABLED--macos-latest'
+              if: false
+#              if: matrix.os == 'DISABLED--macos-latest'
               env:
                 CERT_BASE64: ${{ secrets.CODE_SIGN_CERT_BASE64 }}
                 CERT_PASSWORD: ${{ secrets.CODE_SIGN_CERT_PASSWORD }}

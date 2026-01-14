@@ -64,10 +64,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_is
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
  * Method:    showFileChooser
- * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeLinuxLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeLinuxLibrary/FileChooserCallback;I[Ljava/lang/String;[I)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrary_showFileChooser
-  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray, jintArray);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeLinuxLibrary
