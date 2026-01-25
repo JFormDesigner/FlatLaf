@@ -72,14 +72,36 @@ jobs:
               #   tar.exe: Couldn't open ~/.gradle/caches/modules-2/modules-2.lock: Permission denied
               run: ./gradlew build-natives --no-daemon
 
-            - name: Sign Windows DLLs
-              if: matrix.os == 'windows-latest'
-              uses: skymatic/code-sign-action@v3
+            - name: Upload unsigned Windows DLLs for signing by SignPath.org
+              if: matrix.os == 'windows-latest' && github.repository == 'JFormDesigner/FlatLaf'
+              id: windows-unsigned
+              uses: actions/upload-artifact@v4
               with:
-                certificate: '${{ secrets.CODE_SIGN_CERT_BASE64 }}'
-                password: '${{ secrets.CODE_SIGN_CERT_PASSWORD }}'
-                certificatesha1: '${{ secrets.CODE_SIGN_CERT_SHA1 }}'
-                folder: 'flatlaf-core/src/main/resources/com/formdev/flatlaf/natives'
+                  name: FlatLaf-natives-windows-unsigned
+                  path: flatlaf-natives/flatlaf-natives-windows/build/lib/main/release/**/*.dll
+
+            - name: Sign Windows DLLs using SignPath.org
+              if: matrix.os == 'windows-latest' && github.repository == 'JFormDesigner/FlatLaf'
+              uses: signpath/github-action-submit-signing-request@v2
+              with:
+                api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+                organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+                project-slug: FlatLaf
+                signing-policy-slug: release-signing
+                artifact-configuration-slug: windows-dlls
+                github-artifact-id: ${{ steps.windows-unsigned.outputs.artifact-id }}
+                wait-for-completion: true
+                output-artifact-directory: flatlaf-natives/flatlaf-natives-windows/build/lib/signed
+
+            - name: Copy signed Windows DLLs to flatlaf-core
+              if: matrix.os == 'windows-latest' && github.repository == 'JFormDesigner/FlatLaf'
+              shell: bash
+              run: |
+                SRC=flatlaf-natives/flatlaf-natives-windows/build/lib/signed
+                DEST=flatlaf-core/src/main/resources/com/formdev/flatlaf/natives
+                cp $SRC/aarch64/flatlaf-natives-windows.dll $DEST/flatlaf-windows-arm64.dll
+                cp $SRC/x86/flatlaf-natives-windows.dll     $DEST/flatlaf-windows-x86.dll
+                cp $SRC/x86-64/flatlaf-natives-windows.dll  $DEST/flatlaf-windows-x86_64.dll
 
             - name: Sign macOS natives
               if: matrix.os == 'DISABLED--macos-latest'
@@ -112,7 +134,7 @@ jobs:
                 # cleanup
                 security delete-keychain $KEYCHAIN_PATH
 
-            - name: Set artifacts pattern
+            - name: Set artifacts pattern for upload step
               shell: bash
               run: |
                 case ${{ matrix.os }} in
