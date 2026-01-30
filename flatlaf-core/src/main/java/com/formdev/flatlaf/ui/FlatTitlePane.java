@@ -484,7 +484,7 @@ public class FlatTitlePane
 	}
 
 	protected void frameStateChanged() {
-		if( window == null || rootPane.getWindowDecorationStyle() != JRootPane.FRAME )
+		if( window == null || rootPane.getWindowDecorationStyle() == JRootPane.NONE )
 			return;
 
 		updateVisibility();
