@@ -310,8 +310,8 @@ public abstract class FlatLaf
 		// install submenu usability helper
 		subMenuUsabilityHelperInstalled = SubMenuUsabilityHelper.install();
 
-		// install Linux popup menu canceler
-		if( SystemInfo.isLinux )
+		// install Linux/macOS popup menu canceler
+		if( SystemInfo.isLinux || SystemInfo.isMacOS )
 			linuxPopupMenuCanceler = new LinuxPopupMenuCanceler();
 
 		// listen to desktop property changes to update UI if system font or scaling changes

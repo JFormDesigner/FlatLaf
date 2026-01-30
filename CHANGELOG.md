@@ -12,6 +12,8 @@ FlatLaf Change Log
 - Slider: Styling `thumbSize` or `focusWidth` did not update slider size/layout.
   (PR #1074)
 - ToolBar: Grip disappeared when switching between Look and Feels. (issue #1075)
+- macOS: Popups (menus and combobox lists) were not always hidden when window is
+  resized. (issue #1082)
 - Extras:
   - UI defaults inspector: Fixed NPE if color of `FlatLineBorder` is null. Also
     use `FlatLineBorder` line color as cell background color in "Value" column.

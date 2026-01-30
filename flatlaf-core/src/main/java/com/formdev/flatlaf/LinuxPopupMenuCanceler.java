@@ -30,7 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * Cancels (hides) popup menus on Linux.
+ * Cancels (hides) popup menus on Linux and macOS.
  * <p>
  * On Linux, popups are not hidden under following conditions, which results in
  * misplaced popups:
@@ -41,7 +41,13 @@ import javax.swing.event.ChangeListener;
  *   <li>window deactivated (e.g. activated other application)
  * </ul>
  *
- * On Windows and macOS, popups are automatically hidden.
+ * On macOS, popups are usually automatically hidden, but not always.
+ * When resizing a window, then it depends where clicking to start resizing (and on the Java version).
+ * E.g. with Java 25, clicking at bottom-right corner inside of the window does not hide the popups.
+ * But clicking on same corner outside of the window, hides the popup.
+ *
+ * <p>
+ * On Windows, popups are automatically hidden.
  * <p>
  * The implementation is similar to what's done in
  * {@code javax.swing.plaf.basic.BasicPopupMenuUI.MouseGrabber},
