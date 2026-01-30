@@ -524,7 +524,9 @@ public class FlatSVGIcon
 	private URL getIconURL( String name, boolean dark ) {
 		if( dark ) {
 			int dotIndex = name.lastIndexOf( '.' );
-			name = name.substring( 0, dotIndex ) + "_dark" + name.substring( dotIndex );
+			name = (dotIndex > 0)
+				? name.substring( 0, dotIndex ) + "_dark" + name.substring( dotIndex )
+				: name + "_dark";
 		}
 
 		ClassLoader cl = (classLoader != null) ? classLoader : FlatSVGIcon.class.getClassLoader();
