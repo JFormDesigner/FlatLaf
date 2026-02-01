@@ -82,10 +82,10 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    showFileChooser
- * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FileChooserCallback;I[Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FileChooserCallback;I[Ljava/lang/String;[I)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showFileChooser
-  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray);
+  (JNIEnv *, jclass, jobject, jint, jboolean, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jobject, jint, jobjectArray, jintArray);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary

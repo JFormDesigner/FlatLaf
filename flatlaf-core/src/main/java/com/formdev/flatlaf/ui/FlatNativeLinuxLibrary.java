@@ -37,7 +37,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeLinuxLibrary
 {
-	private static int API_VERSION_LINUX = 3003;
+	private static int API_VERSION_LINUX = 3004;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -186,8 +186,8 @@ public class FlatNativeLinuxLibrary
 	 *        Use '__' for '_' character (e.g. "Choose__and__Quit").
 	 * @param currentName user-editable filename currently shown in the filename field in save dialog; or {@code null}
 	 * @param currentFolder current directory shown in the dialog; or {@code null}
-	 * @param optionsSet options to set; see {@code FOS_*} constants
-	 * @param optionsClear options to clear; see {@code FOS_*} constants
+	 * @param optionsSet options to set; see {@code FC_*} constants
+	 * @param optionsClear options to clear; see {@code FC_*} constants
 	 * @param callback approve callback; or {@code null}
 	 * @param fileTypeIndex the file type that appears as selected (zero-based)
 	 * @param fileTypes file types that the dialog can open or save.
@@ -195,19 +195,20 @@ public class FlatNativeLinuxLibrary
 	 *        First string is the display name of the filter shown in the combobox (e.g. "Text Files").
 	 *        Subsequent strings are the filter patterns (e.g. "*.txt" or "*").
 	 *        {@code null} is required to mark end of filter.
+	 * @param retFileTypeIndex returns selected file type (zero-based); array must be have one element
 	 * @return file path(s) that the user selected; an empty array if canceled;
 	 *         or {@code null} on failures (no dialog shown)
 	 *
-	 * @since 3.7
+	 * @since 3.7.1
 	 */
 	public native static String[] showFileChooser( Window owner, int dark, boolean open,
 		String title, String okButtonLabel, String currentName, String currentFolder,
 		int optionsSet, int optionsClear, FileChooserCallback callback,
-		int fileTypeIndex, String... fileTypes );
+		int fileTypeIndex, String[] fileTypes, int[] retFileTypeIndex );
 
-	/** @since 3.7 */
+	/** @since 3.7.1 */
 	public interface FileChooserCallback {
-		boolean approve( String[] files, long hwndFileDialog );
+		boolean approve( String[] files, int fileTypeIndex, long hwndFileDialog );
 	}
 
 	/**

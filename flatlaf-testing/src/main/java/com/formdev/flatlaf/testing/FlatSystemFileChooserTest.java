@@ -234,7 +234,9 @@ public class FlatSystemFileChooserTest
 		for( int i = 0; i < fileTypes.length; i += 2 ) {
 			fc.addChoosableFileFilter( "*".equals( fileTypes[i+1] )
 				? fc.getAcceptAllFileFilter()
-				: new SystemFileChooser.FileNameExtensionFilter( fileTypes[i], fileTypes[i+1].split( ";" ) ) );
+				: ((fileTypes[i+1].indexOf( '*' ) >= 0 || fileTypes[i+1].indexOf( '?' ) >= 0)
+					? new SystemFileChooser.PatternFilter( fileTypes[i], fileTypes[i+1].split( ";" ) )
+					: new SystemFileChooser.FileNameExtensionFilter( fileTypes[i], fileTypes[i+1].split( ";" ) )) );
 		}
 		SystemFileChooser.FileFilter[] filters = fc.getChoosableFileFilters();
 		if( filters.length > 0 )
@@ -310,7 +312,8 @@ public class FlatSystemFileChooserTest
 			"result", result,
 			"currentDirectory", fc.getCurrentDirectory(),
 			"selectedFile", fc.getSelectedFile(),
-			"selectedFiles", fc.getSelectedFiles() );
+			"selectedFiles", fc.getSelectedFiles(),
+			"fileFilter", fc.getFileFilter() );
 	}
 
 	private void outputSwingFileChooser( String type, JFileChooser fc, int result ) {
@@ -319,7 +322,8 @@ public class FlatSystemFileChooserTest
 			"result", result,
 			"currentDirectory", fc.getCurrentDirectory(),
 			"selectedFile", fc.getSelectedFile(),
-			"selectedFiles", fc.getSelectedFiles() );
+			"selectedFiles", fc.getSelectedFiles(),
+			"fileFilter", fc.getFileFilter() );
 	}
 
 	private void outputAWTFileChooser( FileDialog fc ) {
