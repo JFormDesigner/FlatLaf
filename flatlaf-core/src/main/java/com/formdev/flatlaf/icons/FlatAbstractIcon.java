@@ -45,6 +45,10 @@ public abstract class FlatAbstractIcon
 	/** Additional icon scale factor. */
 	private float scale = 1;
 
+    /** Scaled icon translation. */
+    private int xOffset = 0;
+    private int yOffset = 0;
+
 	public FlatAbstractIcon( int width, int height, Color color ) {
 		this.width = width;
 		this.height = height;
@@ -63,7 +67,7 @@ public abstract class FlatAbstractIcon
 
 			paintBackground( c, g2, x, y );
 
-			g2.translate( x, y );
+			g2.translate( x + xOffset, y + yOffset );
 			UIScale.scaleGraphics( g2 );
 			float scale = getScale();
 			if( scale != 1 )
@@ -130,6 +134,22 @@ public abstract class FlatAbstractIcon
 	public void setScale( float scale ) {
 		this.scale = scale;
 	}
+
+    public int getXOffset() {
+        return xOffset;
+    }
+
+    public void setXOffset( int xOffset ) {
+        this.xOffset = xOffset;
+    }
+
+    public int getYOffset() {
+        return yOffset;
+    }
+
+    public void setYOffset( int yOffset ) {
+        this.yOffset = yOffset;
+    }
 
 	/**
 	 * Multiplies the given value by the icon scale factor {@link #getScale()} and rounds the result.
