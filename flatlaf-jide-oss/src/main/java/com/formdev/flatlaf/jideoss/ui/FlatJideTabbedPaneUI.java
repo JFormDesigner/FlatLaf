@@ -36,6 +36,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
@@ -80,6 +81,13 @@ public class FlatJideTabbedPaneUI
 	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
+
+	private static final int TAB_TYPE_UNDERLINED = 0;
+	private static final int TAB_TYPE_CARD = 1;
+
+	private int tabType;
+	private int cardTabSelectionHeight;
+	private int cardTabArc;
 
 	protected Icon closeIcon;
 	protected Icon arrowIcon;
@@ -151,6 +159,10 @@ public class FlatJideTabbedPaneUI
 		buttonArc = UIManager.getInt( "TabbedPane.buttonArc" );
 		buttonHoverBackground = UIManager.getColor( "TabbedPane.buttonHoverBackground" );
 		buttonPressedBackground = UIManager.getColor( "TabbedPane.buttonPressedBackground" );
+
+		tabType = parseTabType( UIManager.getString( "TabbedPane.tabType" ) );
+		cardTabSelectionHeight = UIManager.getInt( "TabbedPane.cardTabSelectionHeight" );
+		cardTabArc = UIManager.getInt( "TabbedPane.cardTabArc" );
 
 		closeButtonLeftMarginUnscaled = _closeButtonLeftMargin;
 		closeButtonRightMarginUnscaled = _closeButtonRightMargin;
@@ -356,15 +368,23 @@ public class FlatJideTabbedPaneUI
 	{
 		// paint tab background
 		boolean enabled = _tabPane.isEnabled();
-		g.setColor( enabled && _tabPane.isEnabledAt( tabIndex ) &&
-				(_indexMouseOver == tabIndex || (_closeButtons != null && ((JideTabbedPane.NoFocusButton)_closeButtons[tabIndex]).isMouseOver()))
+		boolean hovering = enabled && _tabPane.isEnabledAt( tabIndex ) &&
+			(_indexMouseOver == tabIndex || (_closeButtons != null &&
+				_closeButtons[tabIndex] instanceof JideTabbedPane.NoFocusButton &&
+				((JideTabbedPane.NoFocusButton)_closeButtons[tabIndex]).isMouseOver()));
+
+		g.setColor( hovering
 			? hoverColor
 			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( _tabPane )
 				? focusColor
 				: (selectedBackground != null && enabled && isSelected
 					? selectedBackground
 					: _tabPane.getBackgroundAt( tabIndex ))) );
-		g.fillRect( x, y, w, h );
+
+		if( isCardTabType() && cardTabArc > 0 )
+			((Graphics2D) g).fill( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
+		else
+			g.fillRect( x, y, w, h );
 	}
 
 	@Override
@@ -412,11 +432,19 @@ public class FlatJideTabbedPaneUI
 	{
 		// paint tab separators
 		if( clientPropertyBoolean( _tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
-			!isLastInRun( tabIndex ) )
-		  paintTabSeparator( g, tabPlacement, x, y, w, h );
+			!isLastInRun( tabIndex ) ) {
+			if( !isCardTabType() || !isSelected ) {
+				int selectedIndex = _tabPane.getSelectedIndex();
+				if( !isCardTabType() || (tabIndex != selectedIndex - 1 && tabIndex != selectedIndex) )
+					paintTabSeparator( g, tabPlacement, x, y, w, h );
+			}
+		}
 
-		if( isSelected )
+		if( isSelected ) {
+			if( isCardTabType() )
+				paintCardTabBorder( g, tabPlacement, x, y, w, h );
 			paintTabSelection( g, tabPlacement, x, y, w, h );
+		}
 	}
 
 	protected void paintTabSeparator( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
@@ -439,6 +467,11 @@ public class FlatJideTabbedPaneUI
 	protected void paintTabSelection( Graphics g, int tabPlacement,  int x, int y, int w, int h ) {
 		if( !_tabPane.isTabShown() )
 			return;
+
+		if( isCardTabType() ) {
+			paintCardTabSelection( g, tabPlacement, x, y, w, h );
+			return;
+		}
 
 		// increase clip bounds in scroll-tab-layout to paint over the separator line
 		Rectangle clipBounds = scrollableTabLayoutEnabled() ? g.getClipBounds() : null;
@@ -554,11 +587,43 @@ public class FlatJideTabbedPaneUI
 		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
 
 		// paint content area
-		g.setColor( contentAreaColor );
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		path.append( new Rectangle2D.Float( x, y, w, h ), false );
 		path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
 			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
+
+		// card tab gap for the selected tab
+		if( isCardTabType() && selectedIndex >= 0 ) {
+			float csh = scale( (float) contentSeparatorHeight );
+			Rectangle tabRect = getTabBounds( _tabPane, selectedIndex );
+			Rectangle2D.Float inner = new Rectangle2D.Float(
+				tabRect.x + csh, tabRect.y + csh,
+				tabRect.width - csh * 2, tabRect.height - csh * 2 );
+
+			if( scrollableTabLayoutEnabled() && _tabScroller != null && _tabScroller.viewport != null )
+				Rectangle2D.intersect( _tabScroller.viewport.getBounds(), inner, inner );
+
+			Rectangle2D.Float gap = null;
+			boolean horiz = (tabPlacement == TOP || tabPlacement == BOTTOM);
+			if( horiz && inner.width > 0 ) {
+				float gy = (tabPlacement == TOP) ? y : y + h - csh;
+				gap = new Rectangle2D.Float( inner.x, gy, inner.width, csh );
+			} else if( !horiz && inner.height > 0 ) {
+				float gx = (tabPlacement == LEFT) ? x : x + w - csh;
+				gap = new Rectangle2D.Float( gx, inner.y, csh, inner.height );
+			}
+
+			if( gap != null ) {
+				path.append( gap, false );
+
+				// fill gap with the tab's background colour
+				Color bg = getSelectedTabBackground( tabPlacement, selectedIndex );
+				g.setColor( FlatUIUtils.deriveColor( bg, _tabPane.getBackground() ) );
+				((Graphics2D) g).fill( gap );
+			}
+		}
+
+		g.setColor( contentAreaColor );
 		((Graphics2D)g).fill( path );
 
 		// repaint selection in scroll-tab-layout because it may be painted before
@@ -625,6 +690,100 @@ public class FlatJideTabbedPaneUI
 	private boolean isHorizontalTabPlacement() {
 		int tabPlacement = _tabPane.getTabPlacement();
 		return tabPlacement == TOP || tabPlacement == BOTTOM;
+	}
+
+	//---- card tab type helpers -----------------------------------------------
+
+	private static int parseTabType( String str ) {
+		return "card".equals( str ) ? TAB_TYPE_CARD : TAB_TYPE_UNDERLINED;
+	}
+
+	private int getTabType() {
+		Object value = _tabPane.getClientProperty( "JTabbedPane.tabType" );
+		if( value instanceof String )
+			return parseTabType( (String) value );
+		return tabType;
+	}
+
+	private boolean isCardTabType() {
+		return getTabType() == TAB_TYPE_CARD;
+	}
+
+	private Shape createCardTabOuterPath( int tabPlacement, int x, int y, int w, int h ) {
+		float arc = scale( (float) cardTabArc ) / 2f;
+		switch( tabPlacement ) {
+			default:
+			case TOP:    return FlatUIUtils.createRoundRectanglePath( x, y, w, h, arc, arc, 0, 0 );
+			case BOTTOM: return FlatUIUtils.createRoundRectanglePath( x, y, w, h, 0, 0, arc, arc );
+			case LEFT:   return FlatUIUtils.createRoundRectanglePath( x, y, w, h, arc, 0, arc, 0 );
+			case RIGHT:  return FlatUIUtils.createRoundRectanglePath( x, y, w, h, 0, arc, 0, arc );
+		}
+	}
+
+	private Shape createCardTabInnerPath( int tabPlacement, int x, int y, int w, int h ) {
+		float bw  = scale( (float) contentSeparatorHeight );
+		float arc = (scale( (float) cardTabArc ) / 2f) - bw;
+		switch( tabPlacement ) {
+			default:
+			case TOP:    return FlatUIUtils.createRoundRectanglePath( x + bw, y + bw, w - bw * 2, h - bw,     arc, arc, 0, 0 );
+			case BOTTOM: return FlatUIUtils.createRoundRectanglePath( x + bw, y,      w - bw * 2, h - bw,     0, 0, arc, arc );
+			case LEFT:   return FlatUIUtils.createRoundRectanglePath( x + bw, y + bw, w - bw,     h - bw * 2, arc, 0, arc, 0 );
+			case RIGHT:  return FlatUIUtils.createRoundRectanglePath( x,      y + bw, w - bw,     h - bw * 2, 0, arc, 0, arc );
+		}
+	}
+
+	private void paintCardTabBorder( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( createCardTabOuterPath( tabPlacement, x, y, w, h ), false );
+		path.append( createCardTabInnerPath( tabPlacement, x, y, w, h ), false );
+
+		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+		((Graphics2D) g).fill( path );
+	}
+
+	private void paintCardTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
+		g.setColor( _tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
+
+		int selH = scale( cardTabSelectionHeight );
+		float arc = scale( (float) cardTabArc ) / 2f;
+		int sx = x, sy = y, sw = w, sh = h;
+
+		switch( tabPlacement ) {
+			case TOP:
+			default:
+				sy = y;
+				sh = selH;
+				break;
+			case BOTTOM:
+				sy = y + h - selH;
+				sh = selH;
+				break;
+			case LEFT:
+				sx = x;
+				sw = selH;
+				break;
+			case RIGHT:
+				sx = x + w - selH;
+				sw = selH;
+				break;
+		}
+
+		if( arc <= 0 )
+			g.fillRect( sx, sy, sw, sh );
+		else {
+			Area area = new Area( createCardTabOuterPath( tabPlacement, x, y, w, h ) );
+			area.intersect( new Area( new Rectangle2D.Float( sx, sy, sw, sh ) ) );
+			((Graphics2D) g).fill( area );
+		}
+	}
+
+	private Color getSelectedTabBackground( int tabPlacement, int tabIndex ) {
+		boolean enabled = _tabPane.isEnabled();
+		if( enabled && FlatUIUtils.isPermanentFocusOwner( _tabPane ) && focusColor != null )
+			return focusColor;
+		if( selectedBackground != null && enabled )
+			return selectedBackground;
+		return _tabPane.getBackgroundAt( tabIndex );
 	}
 
 	@Override
