@@ -131,8 +131,8 @@ public class FlatSystemFileChooserWindowsTest
 			fileTypes = fileTypesStr.trim().split( "[,]+" );
 		int fileTypeIndex = fileTypeIndexSlider.getValue();
 
-		FlatNativeWindowsLibrary.FileChooserCallback callback = (files, hwndFileDialog) -> {
-			System.out.println( "  -- callback " + hwndFileDialog + "  " + Arrays.toString( files ) );
+		FlatNativeWindowsLibrary.FileChooserCallback callback = (files, fileTypeIndex2, hwndFileDialog) -> {
+			System.out.println( "  -- callback " + hwndFileDialog + "  " + Arrays.toString( files ) + "  " + fileTypeIndex2 );
 			if( showMessageDialogOnOKCheckBox.isSelected() ) {
 				System.out.println( FlatNativeWindowsLibrary.showMessageDialog( hwndFileDialog,
 					JOptionPane.INFORMATION_MESSAGE,
@@ -142,32 +142,41 @@ public class FlatSystemFileChooserWindowsTest
 		};
 
 		if( direct ) {
+			int[] retFileTypeIndex = { -1 };
 			String[] files = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 				title, okButtonLabel, fileNameLabel, fileName,
 				folder, saveAsItem, defaultFolder, defaultExtension,
-				optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes );
+				optionsSet.get(), optionsClear.get(), callback,
+				fileTypeIndex, fileTypes, retFileTypeIndex );
 
-			filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
+			outputResult( files, retFileTypeIndex[0] );
 		} else {
 			SecondaryLoop secondaryLoop = Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
 
 			String[] fileTypes2 = fileTypes;
 			new Thread( () -> {
+				int[] retFileTypeIndex = { -1 };
 				String[] files = FlatNativeWindowsLibrary.showFileChooser( owner, open,
 					title, okButtonLabel, fileNameLabel, fileName,
 					folder, saveAsItem, defaultFolder, defaultExtension,
-					optionsSet.get(), optionsClear.get(), callback, fileTypeIndex, fileTypes2 );
+					optionsSet.get(), optionsClear.get(), callback,
+					fileTypeIndex, fileTypes2, retFileTypeIndex );
 
 				System.out.println( "    secondaryLoop.exit() returned " + secondaryLoop.exit() );
 
 				EventQueue.invokeLater( () -> {
-					filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
+					outputResult( files, retFileTypeIndex[0] );
 				} );
 			} ).start();
 
 			System.out.println( "---- enter secondary loop ----" );
 			System.out.println( "---- secondary loop exited (secondaryLoop.enter() returned " + secondaryLoop.enter() + ") ----" );
 		}
+	}
+
+	private void outputResult( String[] files, int retFileTypeIndex ) {
+		filesField.setText( (files != null) ? Arrays.toString( files ).replace( ',', '\n' ) : "null" );
+		filesField.append( "\n\nretFileTypeIndex " + retFileTypeIndex );
 	}
 
 	private static String n( String s ) {
