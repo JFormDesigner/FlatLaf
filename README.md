@@ -80,6 +80,9 @@ Otherwise, download `flatlaf-<version>.jar` here:
   [Native Libraries distribution](https://www.formdev.com/flatlaf/native-libraries/)
   for instructions on how to redistribute FlatLaf native libraries with your
   application.
+- Windows DLLs: Free code signing provided by
+  [SignPath.io](https://about.signpath.io/), certificate by
+  [SignPath Foundation](https://signpath.org/).
 - If repackaging FlatLaf (and other) JARs into a single fat/uber JAR:
   - add `Multi-Release: true` to `META-INF/MANIFEST.MF`
   - keep `META-INF/versions/` and `META-INF/services/` directories
