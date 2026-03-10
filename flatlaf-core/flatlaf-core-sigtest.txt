@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.7
+#Version 3.7.1
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -800,6 +800,7 @@ innr public abstract interface static StateStore
 innr public abstract static ApproveContext
 innr public abstract static FileFilter
 innr public final static FileNameExtensionFilter
+innr public final static PatternFilter
 meth public <%0 extends java.lang.Object> {%%0} getPlatformProperty(java.lang.String)
 meth public boolean isAcceptAllFileFilterUsed()
 meth public boolean isDirectorySelectionEnabled()
@@ -871,6 +872,15 @@ meth public java.lang.String toString()
 meth public java.lang.String[] getExtensions()
 supr com.formdev.flatlaf.util.SystemFileChooser$FileFilter
 hfds description,extensions
+
+CLSS public final static com.formdev.flatlaf.util.SystemFileChooser$PatternFilter
+ outer com.formdev.flatlaf.util.SystemFileChooser
+cons public !varargs init(java.lang.String,java.lang.String[])
+meth public java.lang.String getDescription()
+meth public java.lang.String toString()
+meth public java.lang.String[] getPatterns()
+supr com.formdev.flatlaf.util.SystemFileChooser$FileFilter
+hfds description,patterns
 
 CLSS public abstract interface static com.formdev.flatlaf.util.SystemFileChooser$StateStore
  outer com.formdev.flatlaf.util.SystemFileChooser

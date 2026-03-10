@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.7.1-SNAPSHOT
+## 3.7.1
 
 - System File Chooser:
   - Update current filter before invoking approve callback and after closing
