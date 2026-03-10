@@ -76,6 +76,7 @@ int FlatWndProc::initialized = 0;
 jmethodID FlatWndProc::onNcHitTestMID;
 jmethodID FlatWndProc::isFullscreenMID;
 jmethodID FlatWndProc::fireStateChangedLaterOnceMID;
+jmethodID FlatWndProc::setIsMovingOrSizingMID;
 
 HWNDMap* FlatWndProc::hwndMap;
 DWORD FlatWndProc::osBuildNumber = 0;
@@ -176,11 +177,13 @@ void FlatWndProc::initIDs( JNIEnv *env, jobject obj ) {
 	onNcHitTestMID = env->GetMethodID( cls, "onNcHitTest", "(IIZ)I" );
 	isFullscreenMID = env->GetMethodID( cls, "isFullscreen", "()Z" );
 	fireStateChangedLaterOnceMID = env->GetMethodID( cls, "fireStateChangedLaterOnce", "()V" );
+	setIsMovingOrSizingMID = env->GetMethodID( cls, "setIsMovingOrSizing", "(Z)V" );
 
 	// check whether all IDs were found
 	if( onNcHitTestMID != NULL &&
 		isFullscreenMID != NULL &&
-		fireStateChangedLaterOnceMID != NULL )
+		fireStateChangedLaterOnceMID != NULL &&
+		setIsMovingOrSizingMID != NULL )
 	  initialized = 1;
 }
 
@@ -277,10 +280,12 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 
 		case WM_ENTERSIZEMOVE:
 			isMovingOrSizing = true;
+			setIsMovingOrSizing ( true );
 			break;
 
 		case WM_EXITSIZEMOVE:
 			isMovingOrSizing = isMoving = false;
+			setIsMovingOrSizing ( false );
 			break;
 
 		case WM_MOVE:
@@ -521,6 +526,14 @@ void FlatWndProc::fireStateChangedLaterOnce() {
 		return;
 
 	env->CallVoidMethod( obj, fireStateChangedLaterOnceMID );
+}
+
+void FlatWndProc::setIsMovingOrSizing( boolean isMovingOrSizing ) {
+	JNIEnv* env = getEnv();
+	if( env == NULL )
+		return;
+
+	env->CallIntMethod( obj, setIsMovingOrSizingMID, (jboolean) isMovingOrSizing );
 }
 
 // similar to JNU_GetEnv() in jni_util.c
