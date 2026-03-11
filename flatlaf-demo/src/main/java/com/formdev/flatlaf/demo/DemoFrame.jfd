@@ -357,6 +357,28 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem2"
+						"text": "Check Box"
+						"selected": true
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem3"
+						"text": "Check Box with Icon"
+						"selected": true
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/show.svg" )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem4"
+						"text": "Radio Button"
+						"selected": true
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem5"
+						"text": "Radio Button with Icon"
+						"selected": true
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/show.svg" )
+					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator8"
 					} )
@@ -495,6 +517,14 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "animatedLafChangeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showMenuCheckIconsSeparately"
+						"text": "Show check menu icons separately"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showCheckMenuIconsSeparately", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "showHintsMenuItem"
