@@ -178,6 +178,7 @@ public class FlatRootPaneUI
 			}
 		}
 
+		macSetWindowAppearance( c );
 		macClearBackgroundForTranslucentWindow( c );
 	}
 
@@ -369,6 +370,17 @@ public class FlatRootPaneUI
 		return SystemInfo.isMacOS && SystemInfo.isJava_17_orLater && FlatNativeMacLibrary.isLoaded();
 	}
 
+	private void macSetWindowAppearance( JRootPane c ) {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		Window window = getParentWindow( c );
+		if( window != null && FlatNativeMacLibrary.isLoaded() ) {
+			FlatNativeMacLibrary.setWindowAppearance( window, FlatLaf.isLafDark()
+				? "NSAppearanceNameDarkAqua" : "NSAppearanceNameAqua" );
+		}
+	}
+
 	private void macInstallWindowBackgroundListener( JRootPane c ) {
 		if( !SystemInfo.isMacOS )
 			return;
@@ -511,6 +523,7 @@ public class FlatRootPaneUI
 					if( titlePane != null && !Objects.equals( titlePane.windowStyle, FlatTitlePane.getWindowStyle( rootPane ) ) )
 						setTitlePane( createTitlePane() );
 
+					macSetWindowAppearance( rootPane );
 					macClearBackgroundForTranslucentWindow( rootPane );
 				}
 

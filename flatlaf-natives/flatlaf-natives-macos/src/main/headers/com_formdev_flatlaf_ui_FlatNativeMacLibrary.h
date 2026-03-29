@@ -41,6 +41,14 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatNativeMacLibrary_FC_showSingleFilterField 16777216L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    setWindowAppearance
+ * Signature: (Ljava/awt/Window;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowAppearance
+  (JNIEnv *, jclass, jobject, jstring);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowRoundedBorder
  * Signature: (Ljava/awt/Window;FFI)Z
  */

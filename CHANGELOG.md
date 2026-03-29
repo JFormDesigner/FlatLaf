@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## 3.7.2-SNAPSHOT
+
+- macOS: Fixed missing close/iconify/maximize buttons on inactive window, if
+  system appearance is dark, but application appearance is light. (issue #1032)
+
+
 ## 3.7.1
 
 - System File Chooser:

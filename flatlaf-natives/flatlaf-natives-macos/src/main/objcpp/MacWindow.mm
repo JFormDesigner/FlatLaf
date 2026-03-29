@@ -92,6 +92,37 @@ static WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
 }
 
 extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowAppearance
+	( JNIEnv* env, jclass cls, jobject window, jstring appearance )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return FALSE;
+
+	// convert Java strings to NSString (on Java thread)
+	NSString* nsAppearance = JavaToNSString( env, appearance );
+
+	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		JNI_COCOA_TRY()
+
+		NSAppearance *appearance = [NSAppearance appearanceNamed:nsAppearance];
+		if( appearance != NULL )
+			nsWindow.appearance = appearance;
+		else
+			NSLog( @"FlatLaf: unknown window appearance '%@'", nsAppearance );
+
+		JNI_COCOA_CATCH()
+	}];
+
+	return TRUE;
+
+	JNI_COCOA_EXIT()
+	return FALSE;
+}
+
+extern "C"
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowRoundedBorder
 	( JNIEnv* env, jclass cls, jobject window, jfloat radius, jfloat borderWidth, jint borderColor )
 {

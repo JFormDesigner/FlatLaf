@@ -45,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeMacLibrary
 {
-	private static int API_VERSION_MACOS = 2003;
+	private static int API_VERSION_MACOS = 2004;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -57,6 +57,7 @@ public class FlatNativeMacLibrary
 		return SystemInfo.isMacOS && FlatNativeLibrary.isLoaded( API_VERSION_MACOS );
 	}
 
+	/** @since 3.7.2 */ public native static boolean setWindowAppearance( Window window, String appearance );
 	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
 
 	/** @since 3.4 */
