@@ -212,12 +212,66 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		int count = [mainMenu numberOfItems];
 		for( int i = 0; i < count; i++ ) {
 			NSMenuItem* menuItem = [mainMenu itemAtIndex:i];
-			NSMenu *subenu = [menuItem submenu];
-			if( [subenu isJavaMenu] )
+			NSMenu *submenu = [menuItem submenu];
+			if( [submenu isJavaMenu] )
 				[menuItem setEnabled:NO];
 		}
 
+
+		// "Select All (Cmd+A)" in file dialog requires that a menu item
+		// with "selectAll:" selector exists in main menu bar.
+
+		// change action of (disabled) Swing "Select All" menu item (if exists) to "selectAll:"
+		NSMenuItem* swingSelectAllItem = [self findSelectAllMenuItem:mainMenu];
+		if( swingSelectAllItem != nil )
+			swingSelectAllItem.action = @selector(selectAll:);
+
+		// add invisible "Select All" menu item to application menu
+		NSMenuItem *selectAllItem = [[NSMenuItem alloc] initWithTitle:@""
+			action:@selector(selectAll:) keyEquivalent:@"a"];
+		selectAllItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+		selectAllItem.target = nil; // use responder chain
+		selectAllItem.view = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
+		NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
+		[appMenu addItem:selectAllItem];
+
 		JNI_COCOA_CATCH()
+	}
+
+	- (void) windowDidResignMain:(NSNotification *) notification {
+		JNI_COCOA_TRY()
+
+		NSMenu* mainMenu = [NSApp mainMenu];
+
+		// remove invisible "Select All" menu item from application menu
+		NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
+		int lastIndex = appMenu.numberOfItems - 1;
+		NSMenuItem* mi = [appMenu itemAtIndex:lastIndex];
+		if( mi.keyEquivalentModifierMask == NSEventModifierFlagCommand && [@"a" isEqual:mi.keyEquivalent] )
+			[appMenu removeItemAtIndex:lastIndex];
+
+		// restore Swing "Select All" action
+		NSMenuItem* swingSelectAllItem = [self findSelectAllMenuItem:mainMenu];
+		if( swingSelectAllItem != nil )
+			swingSelectAllItem.action = @selector(handleAction:);
+
+		JNI_COCOA_CATCH()
+	}
+
+	- (NSMenuItem*) findSelectAllMenuItem:(NSMenu *) menu {
+		int count = [menu numberOfItems];
+		for( int i = 0; i < count; i++ ) {
+			NSMenuItem* mi = [menu itemAtIndex:i];
+			if( mi.keyEquivalentModifierMask == NSEventModifierFlagCommand && [@"a" isEqual:mi.keyEquivalent] )
+				return mi;
+
+			if( mi.hasSubmenu ) {
+				NSMenuItem* mi2 = [self findSelectAllMenuItem:mi.submenu];
+				if( mi2 != nil )
+					return mi2;
+			}
+		}
+		return nil;
 	}
 
 @end

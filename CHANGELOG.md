@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## 3.7.2-SNAPSHOT
 
+- System File Chooser:
+  - macOS: `Cmd+A` (**Select All**) did not work in file dialog. (issue #1084)
 - macOS: Fixed missing close/iconify/maximize buttons on inactive window, if
   system appearance is dark, but application appearance is light. (issue #1032)
 
