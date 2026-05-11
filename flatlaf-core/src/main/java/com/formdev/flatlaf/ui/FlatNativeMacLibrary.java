@@ -45,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeMacLibrary
 {
-	private static int API_VERSION_MACOS = 2004;
+	private static int API_VERSION_MACOS = 2005;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -70,6 +70,41 @@ public class FlatNativeMacLibrary
 	/** @since 3.4 */ public native static Rectangle getWindowButtonsBounds( Window window );
 	/** @since 3.4 */ public native static boolean isWindowFullScreen( Window window );
 	/** @since 3.4 */ public native static boolean toggleWindowFullScreen( Window window );
+
+	/**
+	 * Registers a hit-test callback used to decide whether a left mouse down event
+	 * in a fullWindowContent macOS window's title bar area should start a native
+	 * window drag instead of being delivered to AWT.
+	 * <p>
+	 * The window must already use {@code apple.awt.fullWindowContent=true}.
+	 * Passing the same window twice replaces the previously registered callback.
+	 *
+	 * @since 3.7.2
+	 */
+	public native static boolean setupFullWindowContentTitleBarCaption( Window window, FullWindowContentTitleBarCaptionCallback callback );
+
+	/**
+	 * Removes the callback previously installed with
+	 * {@link #setupFullWindowContentTitleBarCaption(Window, FullWindowContentTitleBarCaptionCallback)}.
+	 *
+	 * @since 3.7.2
+	 */
+	public native static boolean removeFullWindowContentTitleBarCaption( Window window );
+
+	/** @since 3.7.2 */
+	public interface FullWindowContentTitleBarCaptionCallback {
+		/**
+		 * Invoked on the AppKit main thread (not the AWT event dispatching thread)
+		 * before the mouse event is dispatched to AWT.
+		 * It <b>must not</b> change any component property or layout because this could cause a dead lock.
+		 *
+		 * @param x x coordinate in AWT window coordinates (origin top-left)
+		 * @param y y coordinate in AWT window coordinates (origin top-left)
+		 * @return {@code true} if the location should behave as title bar caption
+		 *         (i.e. start a native window drag instead of being delivered to AWT)
+		 */
+		boolean isTitleBarCaptionAt( int x, int y );
+	}
 
 
 	/** @since 3.7 */
