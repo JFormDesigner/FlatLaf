@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -305,5 +306,85 @@ class FullWindowContentSupport
 	 */
 	private static boolean contains( Component c, int x, int y ) {
 		return x >= 0 && y >= 0 && x < c.getWidth() && y < c.getHeight();
+	}
+
+	//---- macOS title bar caption support ------------------------------------
+	//
+	// On macOS in fullWindowContent mode, the title bar area is transparent and
+	// Swing content extends into it. To make components marked with
+	// JComponent.titleBarCaption act as window-draggable caption (even when they
+	// have mouse listeners), we register a per-window callback with the native
+	// library. The native side (MacTitleBarCaption.mm) intercepts left mouse
+	// down events in the title bar area before AWT dispatch and, on caption
+	// points, hands off to -[NSWindow performWindowDragWithEvent:].
+
+	static void macInstallTitleBarCaption( JRootPane rootPane ) {
+		if( !SystemInfo.isMacFullWindowContentSupported || !FlatNativeMacLibrary.isLoaded() )
+			return;
+
+		Window window = SwingUtilities.getWindowAncestor( rootPane );
+		if( window == null || !window.isDisplayable() )
+			return;
+
+		FlatNativeMacLibrary.setupFullWindowContentTitleBarCaption( window,
+			new MacTitleBarCaptionCallback( rootPane ) );
+	}
+
+	static void macUninstallTitleBarCaption( JRootPane rootPane ) {
+		if( !SystemInfo.isMacFullWindowContentSupported || !FlatNativeMacLibrary.isLoaded() )
+			return;
+
+		Window window = SwingUtilities.getWindowAncestor( rootPane );
+		if( window == null || !window.isDisplayable() )
+			return;
+
+		FlatNativeMacLibrary.removeFullWindowContentTitleBarCaption( window );
+	}
+
+	private static class MacTitleBarCaptionCallback
+		implements FlatNativeMacLibrary.FullWindowContentTitleBarCaptionCallback
+	{
+		private final WeakReference<JRootPane> rootPaneRef;
+
+		MacTitleBarCaptionCallback( JRootPane rootPane ) {
+			this.rootPaneRef = new WeakReference<>( rootPane );
+		}
+
+		/**
+		 * Invoked on the AppKit main thread (not the AWT event dispatching
+		 * thread), before the mouse event is dispatched to AWT.
+		 * Must return quickly and must not change any component property or
+		 * layout because this could cause a dead lock.
+		 */
+		@Override
+		public boolean isTitleBarCaptionAt( int x, int y ) {
+			JRootPane rootPane = rootPaneRef.get();
+			if( rootPane == null || !rootPane.isShowing() )
+				return false;
+
+			// bail out quickly if click is below the title bar
+			Rectangle buttonsBounds = (Rectangle) rootPane.getClientProperty(
+				FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS );
+			int titleBarHeight = (buttonsBounds != null && buttonsBounds.height > 0)
+				? buttonsBounds.height
+				: 28; // default size, matches macUpdateFullWindowContentButtonsBoundsProperty()
+
+			// convert from AWT window coordinates to layeredPane coordinates
+			// by walking the parent chain; not using SwingUtilities.convertPoint()
+			// because that calls Component.getLocationOnScreen(), which acquires
+			// the AWT tree lock and could cause a dead lock here
+			JLayeredPane layeredPane = rootPane.getLayeredPane();
+			int dx = 0, dy = 0;
+			for( Component c = layeredPane; c != null && !(c instanceof Window); c = c.getParent() ) {
+				dx += c.getX();
+				dy += c.getY();
+			}
+			int lx = x - dx;
+			int ly = y - dy;
+			if( ly < 0 || ly >= titleBarHeight )
+				return false;
+
+			return FullWindowContentSupport.isTitleBarCaptionAt( layeredPane, lx, ly, null );
+		}
 	}
 }
