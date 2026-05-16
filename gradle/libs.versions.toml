@@ -24,7 +24,7 @@ junit = "5.10.2"
 sigtest = "org.netbeans.tools:sigtest-maven-plugin:1.7"
 
 # flatlaf-extras
-jsvg = "com.github.weisj:jsvg:2.0.0"
+jsvg = "com.github.weisj:jsvg:2.1.0"
 
 # flatlaf-jide-oss
 jide-oss = "com.formdev:jide-oss:3.7.15"
@@ -47,8 +47,8 @@ netbeans-api-awt = "org.netbeans.api:org-openide-awt:RELEASE112"
 nativejfilechooser = "li.flor:native-j-file-chooser:1.6.4"
 
 # flatlaf-natives-jna
-jna = "net.java.dev.jna:jna:5.15.0"
-jna-platform = "net.java.dev.jna:jna-platform:5.15.0"
+jna = "net.java.dev.jna:jna:5.18.1"
+jna-platform = "net.java.dev.jna:jna-platform:5.18.1"
 
 # junit
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
@@ -60,4 +60,5 @@ errorprone = "com.google.errorprone:error_prone_core:2.20.0"
 
 [plugins]
 gradle-nexus-publish-plugin = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
-errorprone = { id = "net.ltgt.errorprone", version = "3.1.0" }
+gradle-versions-plugin = { id = "com.github.ben-manes.versions", version = "0.54.0" }
+errorprone = { id = "net.ltgt.errorprone", version = "5.1.0" }

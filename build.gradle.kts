@@ -51,6 +51,7 @@ println()
 
 plugins {
 	alias( libs.plugins.gradle.nexus.publish.plugin )
+	alias( libs.plugins.gradle.versions.plugin )
 	alias( libs.plugins.errorprone ) apply false
 }
 
