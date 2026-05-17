@@ -14,6 +14,8 @@ FlatLaf Change Log
 - Linux with JetBrains Runtime: Fixed mouse "jumping" to other position when
   moving window on scaled secondary screen, if using FlatLaf window decorations.
   (issue #1103)
+- TableHeader: Fixed custom table header renderer background stops painting
+  after hover interactions. (issue #1089)
 - TextComponents: Fixed preferred width when leading/trailing components or
   icons are present. (issue #1110)
 - Tree: Fixed repainting multi-selection when tree looses or gains focus. (issue

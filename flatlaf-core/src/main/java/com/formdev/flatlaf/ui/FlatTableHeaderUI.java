@@ -354,10 +354,14 @@ public class FlatTableHeaderUI
 				return;
 			}
 
+			// add renderer component to renderer pane (same as done in super.paintComponent())
+			// necessary because some methods (isOpaque(), getBackground() and getForeground()) may use parent
+			if( c.getParent() != this )
+				add( c );
+
 			JLabel l = (JLabel) c;
 			Color oldBackground = null;
 			Color oldForeground = null;
-			boolean oldOpaque = false;
 			Icon oldIcon = null;
 			int oldHorizontalTextPosition = -1;
 
@@ -377,9 +381,15 @@ public class FlatTableHeaderUI
 			}
 			if( background != null ) {
 				oldBackground = l.getBackground();
-				oldOpaque = l.isOpaque();
 				l.setBackground( FlatUIUtils.deriveColor( background, header.getBackground() ) );
-				l.setOpaque( true );
+
+				// if renderer component is not opaque, fill background
+				if( !l.isOpaque() ) {
+					Color oldColor = g.getColor();
+					g.setColor( l.getBackground() );
+					g.fillRect( x, y, w, h );
+					g.setColor( oldColor );
+				}
 			}
 			if( foreground != null ) {
 				oldForeground = l.getForeground();
@@ -416,10 +426,8 @@ public class FlatTableHeaderUI
 			}
 
 			// restore modified renderer component properties
-			if( background != null ) {
+			if( background != null )
 				l.setBackground( oldBackground );
-				l.setOpaque( oldOpaque );
-			}
 			if( foreground != null )
 				l.setForeground( oldForeground );
 			if( oldIcon != null )
