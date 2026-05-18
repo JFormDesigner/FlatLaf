@@ -48,7 +48,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -65,7 +64,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
-import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder.WindowTopBorder;
@@ -1145,77 +1143,7 @@ public class FlatTitlePane
 	}
 
 	private boolean isTitleBarCaptionAt( Component c, int x, int y ) {
-		if( !c.isDisplayable() || !c.isVisible() || !contains( c, x, y ) || c == mouseLayer )
-			return true; // continue checking with next component
-
-		// check enabled component that has mouse listeners
-		if( c.isEnabled() &&
-			(c.getMouseListeners().length > 0 ||
-			 c.getMouseMotionListeners().length > 0) )
-		{
-			if( !(c instanceof JComponent) )
-				return false; // assume that this is not a caption because the component has mouse listeners
-
-			// check client property boolean value
-			Object caption = ((JComponent)c).getClientProperty( COMPONENT_TITLE_BAR_CAPTION );
-			if( caption instanceof Boolean )
-				return (boolean) caption;
-
-			// if component is not fully layouted, do not invoke function
-			// because it is too dangerous that the function tries to layout the component,
-			// which could cause a dead lock
-			if( !c.isValid() ) {
-				// revalidate if necessary so that it is valid when invoked again later
-				EventQueue.invokeLater( () -> {
-					Window w = SwingUtilities.windowForComponent( c );
-					if( w != null )
-						w.revalidate();
-					else
-						c.revalidate();
-				} );
-
-				return false; // assume that this is not a caption because the component has mouse listeners
-			}
-
-			if( caption instanceof Function ) {
-				// check client property function value
-				@SuppressWarnings( "unchecked" )
-				Function<Point, Boolean> hitTest = (Function<Point, Boolean>) caption;
-				Boolean result = hitTest.apply( new Point( x, y ) );
-				if( result != null )
-					return result;
-			} else {
-				// check component UI
-				ComponentUI ui = JavaCompatibility2.getUI( (JComponent) c );
-				if( !(ui instanceof TitleBarCaptionHitTest) )
-					return false; // assume that this is not a caption because the component has mouse listeners
-
-				Boolean result = ((TitleBarCaptionHitTest)ui).isTitleBarCaptionAt( x, y );
-				if( result != null )
-					return result;
-			}
-
-			// else continue checking children
-		}
-
-		// check children
-		if( c instanceof Container ) {
-			for( Component child : ((Container)c).getComponents() ) {
-				if( !isTitleBarCaptionAt( child, x - child.getX(), y - child.getY() ) )
-					return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Same as {@link Component#contains(int, int)}, but not using that method
-	 * because it may be overridden by custom components and invoke code that
-	 * tries to request AWT tree lock on 'AWT-Windows' thread.
-	 * This could freeze the application if AWT tree is already locked on 'AWT-EventQueue' thread.
-	 */
-	private boolean contains( Component c, int x, int y ) {
-		return x >= 0 && y >= 0 && x < c.getWidth() && y < c.getHeight();
+		return FullWindowContentSupport.isTitleBarCaptionAt( c, x, y, mouseLayer );
 	}
 
 	private int lastCaptionHitTestX;
