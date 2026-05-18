@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import static com.formdev.flatlaf.FlatClientProperties.*;
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -33,6 +34,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,8 +51,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -1294,38 +1300,77 @@ debug*/
 
 	@Override
 	protected void paintText( Graphics g, int tabPlacement, Font font, FontMetrics metrics,
-		int tabIndex, String title, Rectangle textRect, boolean isSelected )
-	{
+		int tabIndex, String title, Rectangle textRect, boolean isSelected ) {
+
 		g.setFont( font );
 
-		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+		Graphics2D g2 = (Graphics2D)g.create();
+
+		try {
 			// html
 			View view = getTextViewForTab( tabIndex );
+
 			if( view != null ) {
-				AffineTransform oldTransform = rotateGraphics( g, tabPlacement, textRect );
+
+				AffineTransform oldTransform = rotateGraphics( g2, tabPlacement, textRect );
 				Rectangle textRect2 = (oldTransform != null)
 					? new Rectangle( textRect.x, textRect.y, textRect.height, textRect.width )
 					: textRect;
 
-				view.paint( g, textRect2 );
+				view.paint( g2, textRect2 );
 
-				if( oldTransform != null )
-					((Graphics2D)g).setTransform( oldTransform );
+				return;
+
+			}
+
+			if( title == null || title.isEmpty() )
+				return;
+
+			AffineTransform oldTransform = rotateGraphics( g2, tabPlacement, textRect );
+			g2.setColor( getTabForeground( tabPlacement, tabIndex, isSelected ) );
+
+			int ni = FlatLaf.isShowMnemonics()
+				? tabPane.getDisplayedMnemonicIndexAt( tabIndex )
+				: -1;
+
+			// horizontal
+			if( oldTransform == null ) {
+				FlatUIUtils.drawStringUnderlineCharAt( tabPane, g2, title, ni, textRect.x,
+					textRect.y + metrics.getAscent() );
 				return;
 			}
 
-			// rotate text if necessary
-			AffineTransform oldTransform = rotateGraphics( g, tabPlacement, textRect );
+			// vertical
+			FontRenderContext frc = g2.getFontRenderContext();
+			TextLayout layout = new TextLayout( title, font, frc );
 
-			// plain text
-			int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
-			g.setColor( getTabForeground( tabPlacement, tabIndex, isSelected ) );
-			FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
-				textRect.x, textRect.y + metrics.getAscent() );
+			float xPos = (float) textRect.x;
+			float yPos = (float) textRect.y + metrics.getAscent();
 
-			if( oldTransform != null )
-				((Graphics2D)g).setTransform( oldTransform );
-		} );
+			Shape outline = layout.getOutline( AffineTransform.getTranslateInstance( xPos, yPos ) );
+			g2.fill( outline );
+
+			// underline vertical
+			if( ni >= 0 && ni < title.length() ) {
+
+				Shape charShape = layout.getVisualHighlightShape( TextHitInfo.leading( ni ), TextHitInfo.trailing( ni ) );
+				Rectangle2D charBounds = charShape.getBounds2D();
+
+				float thickness = 1.0f;
+				float yUnderline = yPos + thickness + 1.0f;
+
+				Line2D.Float underline = new Line2D.Float( (float) (xPos + charBounds.getX()), yUnderline,
+					(float) (xPos + charBounds.getX() + charBounds.getWidth()), yUnderline );
+
+				g2.setStroke( new BasicStroke( thickness ) );
+				g2.draw( underline );
+
+			}
+
+		} finally {
+			g2.dispose();
+		}
+
 	}
 
 	@Override
