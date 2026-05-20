@@ -21,7 +21,7 @@ junit = "5.10.2"
 [libraries]
 
 # flatlaf-core
-sigtest = "org.netbeans.tools:sigtest-maven-plugin:1.7"
+sigtest = "jakarta.tck:sigtest-maven-plugin:2.6"
 
 # flatlaf-extras
 jsvg = "com.github.weisj:jsvg:2.1.0"

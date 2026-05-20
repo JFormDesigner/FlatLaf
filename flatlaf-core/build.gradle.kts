@@ -30,7 +30,7 @@ dependencies {
 	testImplementation( libs.junit )
 	testRuntimeOnly( libs.junit.launcher )
 
-	// https://github.com/jtulach/netbeans-apitest
+	// https://github.com/eclipse-ee4j/jakartaee-tck-tools/tree/master/tools/sigtest
 	sigtest( libs.sigtest )
 }
 
