@@ -9,6 +9,8 @@ FlatLaf Change Log
     shown. (issue #1100)
   - Windows: Fixed too small message dialogs (shown from approve callback).
     (issue #1119)
+  - Windows: Don't allow selecting non-filesystem nodes (e.g. "This PC") in
+    "Select Folder" dialog. (issue #1126)
 - macOS: Fixed missing close/iconify/maximize buttons on inactive window, if
   system appearance is dark, but application appearance is light. (issue #1032)
 - Linux with JetBrains Runtime: Fixed mouse "jumping" to other position when

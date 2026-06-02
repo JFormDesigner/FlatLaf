@@ -996,8 +996,12 @@ public class SystemFileChooser
 			// options
 			int optionsBlocked = FlatNativeWindowsLibrary.FOS_PICKFOLDERS
 				| FlatNativeWindowsLibrary.FOS_ALLOWMULTISELECT
-				| FlatNativeWindowsLibrary.FOS_FORCESHOWHIDDEN;
-			int optionsSet = fc.getPlatformOptions( WINDOWS_OPTIONS_SET, optionsBlocked );
+				| FlatNativeWindowsLibrary.FOS_FORCESHOWHIDDEN
+				| FlatNativeWindowsLibrary.FOS_FORCEFILESYSTEM
+				| FlatNativeWindowsLibrary.FOS_NOCHANGEDIR;
+			int optionsSet = fc.getPlatformOptions( WINDOWS_OPTIONS_SET, optionsBlocked )
+				| FlatNativeWindowsLibrary.FOS_FORCEFILESYSTEM	// don't allow choosing "This PC" in "Select Folder" dialog
+				| FlatNativeWindowsLibrary.FOS_NOCHANGEDIR;
 			int optionsClear = fc.getPlatformOptions( WINDOWS_OPTIONS_CLEAR, optionsBlocked );
 			if( (optionsClear & FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT) == 0 )
 				optionsSet |= FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT;
