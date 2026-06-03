@@ -16,6 +16,12 @@ FlatLaf Change Log
 - Linux with JetBrains Runtime: Fixed mouse "jumping" to other position when
   moving window on scaled secondary screen, if using FlatLaf window decorations.
   (issue #1103)
+- Linux with OpenJDK Project Wakefield (e.g. JetBrains JBR 25) and VM option
+  `-Dawt.toolkit.name=WLToolkit` (issue #1107):
+  - Disabled FlatLaf window decorations because of bug
+    [JBR-10322](https://youtrack.jetbrains.com/issue/JBR-10322).
+  - Disabled System File Chooser because application hangs after closing it.
+    Uses `JFileChooser` instead.
 - TableHeader: Fixed custom table header renderer background stops painting
   after hover interactions. (issue #1089)
 - TextComponents: Fixed preferred width when leading/trailing components or

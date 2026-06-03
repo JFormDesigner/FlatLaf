@@ -632,7 +632,8 @@ class DemoFrame
 	}
 
 	private boolean supportsFlatLafWindowDecorations() {
-		return FlatLaf.supportsNativeWindowDecorations() || SystemInfo.isLinux;
+		return FlatLaf.supportsNativeWindowDecorations() ||
+			(SystemInfo.isLinux && new FlatLightLaf().getSupportsWindowDecorations());
 	}
 
 	private void initComponents() {

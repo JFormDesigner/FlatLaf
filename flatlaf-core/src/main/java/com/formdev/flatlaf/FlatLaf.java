@@ -245,6 +245,14 @@ public abstract class FlatLaf
 			FlatNativeWindowBorder.isSupported() )
 		  return false;
 
+		// Disable FlatLaf window decorations on Linux if using Wayland toolkit
+		// because moving window does not work because of bug:
+		//     https://youtrack.jetbrains.com/issue/JBR-10322
+		// Note: This affects only Java distributions that support Wayland toolkit
+		// (e.g. JetBrains JBR) and have enabled it with VM option: -Dawt.toolkit.name=WLToolkit
+		if( SystemInfo.isLinux && Toolkit.getDefaultToolkit().getClass().getName().endsWith( ".WLToolkit" ) )
+			return false;
+
 		return SystemInfo.isWindows_10_orLater || SystemInfo.isLinux;
 	}
 
