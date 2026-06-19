@@ -207,8 +207,7 @@ Applications using FlatLaf
 
 ### Security
 
-- ![Hot](images/hot.svg)
-  [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
+- [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
   (**commercial**) - the leading software for web security testing
 - [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
   FlatLaf themes to Burp Suite
@@ -228,14 +227,18 @@ Applications using FlatLaf
   multi-language IDE (Java, .NET, JS, etc)
 - [Convertigo](https://github.com/convertigo/convertigo) - low code & no code
   mobile & web platform
+- ![New](images/new.svg)
+  [EasyPostman](https://github.com/lakernote/easy-postman) - API debugging and
+  stress testing
 - [EduMIPS64](https://github.com/EduMIPS64/edumips64) - visual MIPS64 CPU
   simulator
 - [Guiffy](https://www.guiffy.com/) (**commercial**) - advanced cross-platform
   Diff/Merge
 - [HashGarten](https://github.com/jonelo/HashGarten) - cross-platform Swing GUI
   for Jacksum
-- [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib)
-- [KeyStore Explorer](https://keystore-explorer.org/)
+- ![Hot](images/hot.svg)
+  [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib)
+- ![Hot](images/hot.svg) [KeyStore Explorer](https://keystore-explorer.org/)
 - [Launch4j](https://launch4j.sourceforge.net/) - cross-platform Java executable
   wrapper
 - [Linotte](https://github.com/cpc6128/LangageLinotte) - French programming
@@ -246,6 +249,8 @@ Applications using FlatLaf
   cross-platform file manager
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
+- ![New](images/new.svg) [Sierra](https://github.com/HTTP-RPC/Sierra) -
+  declarative UI for Java
 
 ### Electrical
 
@@ -296,11 +301,12 @@ Applications using FlatLaf
 
 - [Astah](https://astah.net/) (**commercial**) - create UML, ER Diagram,
   Flowchart, Data Flow Diagram, Requirement Diagram, SysML diagrams and more
-- [Gephi](https://github.com/gephi/gephi) - the Open Graph Viz Platform
+- ![Hot](images/hot.svg) [Gephi](https://github.com/gephi/gephi) - the Open
+  Graph Viz Platform
 - [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
   Application System
-- [OpenRocket](https://github.com/openrocket/openrocket) - model-rocketry
-  aerodynamics and trajectory simulation software
+- ![Hot](images/hot.svg) [OpenRocket](https://github.com/openrocket/openrocket) -
+  model-rocketry aerodynamics and trajectory simulation software
 - [SSPlot](https://github.com/babaissarkar/ssplot) - plotting utility for
   plotting CSV data
 - [StarPlan](https://www.progotec.de/) (**commercial**) - die Stundenplan
@@ -377,6 +383,8 @@ Applications using FlatLaf
   GUI for monitoring and managing various aspects of a Linux system
 - [MooInfo](https://github.com/rememberber/MooInfo) - visual implementation of
   OSHI, to view information about the system and hardware
+- ![New](images/new.svg) [QTranslate](https://github.com/ahatem/QTranslate) -
+  desktop translation suite (translation, OCR, TTS, spell-checking)
 - [Rest Suite](https://github.com/supanadit/restsuite) - Rest API testing
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote) - remote Linux SSH
   connections manager
