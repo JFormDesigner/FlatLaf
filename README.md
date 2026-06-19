@@ -199,14 +199,11 @@ Applications using FlatLaf
   Analytics (based on NetBeans platform)
 - [Kafka Visualizer](https://github.com/kumait/kafkavisualizer) - Kafka GUI
   client
-- ![New](images/new.svg)
-  [RedisFront](https://github.com/dromara/RedisFront/blob/master/README_EN.md) -
+- [RedisFront](https://github.com/dromara/RedisFront/blob/master/README_EN.md) -
   Cross-platform redis GUI
-- ![New](images/new.svg)
-  [Zettelkasten](https://github.com/Zettelkasten-Team/Zettelkasten) - knowledge
+- [Zettelkasten](https://github.com/Zettelkasten-Team/Zettelkasten) - knowledge
   management tool
-- ![New](images/new.svg) [QStudio](https://www.timestored.com/qstudio/) - free
-  SQL editor
+- [QStudio](https://www.timestored.com/qstudio/) - free SQL editor
 
 ### Security
 
@@ -241,14 +238,14 @@ Applications using FlatLaf
   language created to learn programming
 - [lsfusion platform](https://github.com/lsfusion/platform) - information
   systems development platform
-- ![New](images/new.svg) [Consulo](https://github.com/consulo/consulo) - open
-  source cross-platform multi-language IDE (Java, .NET, JS, etc)
+- [Consulo](https://github.com/consulo/consulo) - open source cross-platform
+  multi-language IDE (Java, .NET, JS, etc)
 - [Convertigo](https://github.com/convertigo/convertigo) - low code & no code
   mobile & web platform
-- ![New](images/new.svg) [EduMIPS64](https://github.com/EduMIPS64/edumips64) -
-  visual MIPS64 CPU simulator
-- ![New](images/new.svg) [Launch4j](https://launch4j.sourceforge.net/) -
-  cross-platform Java executable wrapper
+- [EduMIPS64](https://github.com/EduMIPS64/edumips64) - visual MIPS64 CPU
+  simulator
+- [Launch4j](https://launch4j.sourceforge.net/) - cross-platform Java executable
+  wrapper
 
 ### Electrical
 
@@ -256,10 +253,9 @@ Applications using FlatLaf
   designing, simulating and explaining digital circuits
 - [Logisim-evolution](https://github.com/logisim-evolution/logisim-evolution) -
   Digital logic design tool and simulator
-- ![New](images/new.svg) [OpenPnP](https://github.com/openpnp/openpnp) - SMT
-  Pick and Place Hardware and Software
-- ![New](images/new.svg)
-  [TrainControl](https://github.com/bob123456678/TrainControl) - control Marklin
+- [OpenPnP](https://github.com/openpnp/openpnp) - SMT Pick and Place Hardware
+  and Software
+- [TrainControl](https://github.com/bob123456678/TrainControl) - control Marklin
   / Trix / DCC digital model train layout
 - [Makelangelo Software](https://github.com/MarginallyClever/Makelangelo-software) -
   for plotters, especially the wall-hanging polargraph
@@ -277,8 +273,7 @@ Applications using FlatLaf
   creates photo album websites
 - [MediathekView](https://mediathekview.de/) - search in media libraries of
   various German broadcasters
-- ![New](images/new.svg) [Pixelitor](https://github.com/lbalazscs/Pixelitor) -
-  image editor
+- [Pixelitor](https://github.com/lbalazscs/Pixelitor) - image editor
 - [Cinecred](https://loadingbyte.com/cinecred/) - create beautiful film credit
   sequences
 - [tinyMediaManager](https://www.tinymediamanager.org/) (**commercial**) - a
@@ -294,26 +289,24 @@ Applications using FlatLaf
   from any webnovel and lightnovel site
 - [lectureStudio](https://www.lecturestudio.org/) - digitize your lectures with
   ease
-- ![New](images/new.svg) [Nortantis](https://jandjheydorn.com/nortantis) -
-  fantasy map generator and editor
+- [Nortantis](https://jandjheydorn.com/nortantis) - fantasy map generator and
+  editor
 
 ### Modelling / Planning
 
-- ![New](images/new.svg) [OpenRocket](https://github.com/openrocket/openrocket) -
-  model-rocketry aerodynamics and trajectory simulation software
-- ![New](images/new.svg)
-  [Warteschlangensimulator](https://github.com/A-Herzog/Warteschlangensimulator) -
+- [OpenRocket](https://github.com/openrocket/openrocket) - model-rocketry
+  aerodynamics and trajectory simulation software
+- [Warteschlangensimulator](https://github.com/A-Herzog/Warteschlangensimulator) -
   discrete-event stochastic simulator
-- ![New](images/new.svg) [Gephi](https://github.com/gephi/gephi) - the Open
-  Graph Viz Platform
+- [Gephi](https://github.com/gephi/gephi) - the Open Graph Viz Platform
 - [Astah](https://astah.net/) (**commercial**) - create UML, ER Diagram,
   Flowchart, Data Flow Diagram, Requirement Diagram, SysML diagrams and more
 - [IGMAS+](https://www.gfz-potsdam.de/igmas) - Interactive Gravity and Magnetic
   Application System
-- ![New](images/new.svg) [StarPlan](https://www.progotec.de/) (**commercial**) -
-  die Stundenplan Software für Bildungseinrichtungen
-- ![New](images/new.svg) [SSPlot](https://github.com/babaissarkar/ssplot) -
-  plotting utility for plotting CSV data
+- [StarPlan](https://www.progotec.de/) (**commercial**) - die Stundenplan
+  Software für Bildungseinrichtungen
+- [SSPlot](https://github.com/babaissarkar/ssplot) - plotting utility for
+  plotting CSV data
 
 ### Documents
 
@@ -336,9 +329,8 @@ Applications using FlatLaf
 
 ### Business / Legal
 
-- ![New](images/new.svg) ![Sponsor](images/sponsor.svg)
-  [Lisheane ERP](https://www.lisheane.ch/) (**commercial**) - backoffice
-  applikation
+- ![Sponsor](images/sponsor.svg) [Lisheane ERP](https://www.lisheane.ch/)
+  (**commercial**) - backoffice applikation
 - ![Sponsor](images/sponsor.svg)
   [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - ![Sponsor](images/sponsor.svg) [Jeyla Studio](https://www.jeylastudio.com/) -
@@ -363,10 +355,9 @@ Applications using FlatLaf
 
 - ![Sponsor](images/sponsor.svg) [BGBlitz](https://www.bgblitz.com/)
   (**commercial**) - professional Backgammon
-- ![New](images/new.svg) [josé](https://peteschaefer.github.io/jose/) - a
-  graphical chess tool
-- ![New](images/new.svg) [MCreator](https://github.com/MCreator/MCreator) - make
-  Minecraft Java Edition mods, Minecraft Bedrock Edition Add-Ons, and data packs
+- [josé](https://peteschaefer.github.io/jose/) - a graphical chess tool
+- [MCreator](https://github.com/MCreator/MCreator) - make Minecraft Java Edition
+  mods, Minecraft Bedrock Edition Add-Ons, and data packs
 - [MapTool](https://github.com/RPTools/maptool) - virtual Tabletop for playing
   role-playing games
 - [MegaMek](https://github.com/MegaMek/megamek),
@@ -389,8 +380,8 @@ Applications using FlatLaf
   easy
 - [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
-- ![New](images/new.svg) [Termora](https://github.com/TermoraDev/termora) -
-  Terminal emulator and SSH client
+- [Termora](https://github.com/TermoraDev/termora) - Terminal emulator and SSH
+  client
 
 ### Miscellaneous
 
