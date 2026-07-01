@@ -20,12 +20,8 @@ package com.formdev.flatlaf.extras;
  * Implement this interface in a {@link java.awt.Component} to let {@link FlatInspector}
  * show additional, component-specific information in its debug tooltip.
  * <p>
- * {@link #appendInspectorInfo(StringBuilder)} is invoked while {@code FlatInspector} is
- * building the HTML tooltip content for the inspected component. Append zero or more
- * HTML table rows in the form:
- * <pre>
- * "&lt;tr&gt;&lt;td valign=\"top\"&gt;" + key + ":&lt;/td&gt;&lt;td&gt;" + value + "&lt;/td&gt;&lt;/tr&gt;"
- * </pre>
+ * {@link #appendInspectorInfo(StringBuilder,boolean)} is invoked while
+ * {@code FlatInspector} is building the HTML tooltip content for the inspected component.
  * The rows are appended after the built-in "FlatLaf Style" row and before the footer
  * that shows the parent inspection level and key bindings hint.
  */
@@ -33,8 +29,24 @@ public interface FlatInspectorInfoProvider
 {
 	/**
 	 * Appends additional HTML table rows with component-specific debug information.
+	 * <p>
+	 * Use {@link FlatInspector#appendRow(StringBuilder, String, String)} to append rows,
+	 * and the {@code FlatInspector.toString(...)} helpers (for {@link Class},
+	 * {@link java.awt.Insets}, {@link java.awt.Color}, {@link java.awt.Font},
+	 * {@link javax.swing.border.Border}) to format values the same way the rest of the
+	 * tooltip does, e.g.:
+	 * <pre>
+	 * FlatInspector.appendRow( buf, "Model",
+	 *     FlatInspector.toString( model.getClass(), showClassHierarchy ) );
+	 * </pre>
+	 * Values are inserted as-is (not HTML-escaped), so avoid passing raw user text that
+	 * may contain {@code <}, {@code >} or {@code &} unless it is already safe to embed
+	 * as HTML.
 	 *
-	 * @param buf the buffer used to build the tooltip HTML; append {@code <tr><td>...} rows to it
+	 * @param buf the buffer used to build the tooltip HTML
+	 * @param showClassHierarchy whether the user has toggled display of the full class
+	 *        hierarchy (Alt key); pass this through to
+	 *        {@code FlatInspector.toString(Class, boolean)} calls for consistency
 	 */
-	void appendInspectorInfo( StringBuilder buf );
+	void appendInspectorInfo( StringBuilder buf, boolean showClassHierarchy );
 }
