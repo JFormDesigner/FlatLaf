@@ -554,10 +554,14 @@ public class FlatInspector
 		appendRow( buf, "Left-to-right", String.valueOf( c.getComponentOrientation().isLeftToRight() ) );
 		appendRow( buf, "Parent", (c.getParent() != null ? toString( c.getParent().getClass(), classHierarchy ) : "null") );
 
-		if( c instanceof JComponent ) {
+	if( c instanceof JComponent ) {
 			Object style = ((JComponent)c).getClientProperty( FlatClientProperties.STYLE );
 			if( style != null )
 				appendRow( buf, "FlatLaf Style", style.toString() );
+		}
+
+		if( c instanceof FlatInspectorInfoProvider ) {
+			((FlatInspectorInfoProvider) c).appendInspectorInfo( buf );
 		}
 
 		// append parent level
