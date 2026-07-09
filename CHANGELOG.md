@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 3.7.2-SNAPSHOT
+## 3.7.2
 
 - System File Chooser:
   - macOS: `Cmd+A` (**Select All**) did not work in file dialog. (issue #1084)
