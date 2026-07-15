@@ -122,11 +122,12 @@ public class ColorFunctions
 	 * Returns a color that is a mixture of two colors.
 	 * <p>
 	 * This can be used to animate a color change from {@code color1} to {@code color2}
-	 * by invoking this method multiple times with growing {@code weight} (from 0 to 1).
+	 * by invoking this method multiple times with decreasing {@code weight} (from 1 to 0).
 	 *
 	 * @param color1 first color
 	 * @param color2 second color
-	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 * @param weight the weight of first color (in range 0-1), used to mix the two colors.
+	 *               Weight of second color is {@code 1-weight}.
 	 *               Larger weight uses more of first color, smaller weight more of second color.
 	 * @return mixture of colors
 	 */
