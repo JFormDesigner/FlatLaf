@@ -554,10 +554,14 @@ public class FlatInspector
 		appendRow( buf, "Left-to-right", String.valueOf( c.getComponentOrientation().isLeftToRight() ) );
 		appendRow( buf, "Parent", (c.getParent() != null ? toString( c.getParent().getClass(), classHierarchy ) : "null") );
 
-		if( c instanceof JComponent ) {
+	if( c instanceof JComponent ) {
 			Object style = ((JComponent)c).getClientProperty( FlatClientProperties.STYLE );
 			if( style != null )
 				appendRow( buf, "FlatLaf Style", style.toString() );
+		}
+
+		if( c instanceof FlatInspectorInfoProvider ) {
+			((FlatInspectorInfoProvider) c).appendInspectorInfo( buf, classHierarchy );
 		}
 
 		// append parent level
@@ -582,7 +586,7 @@ public class FlatInspector
 		return buf.toString();
 	}
 
-	private static void appendRow( StringBuilder buf, String key, String value ) {
+	public static void appendRow( StringBuilder buf, String key, String value ) {
 		buf.append( "<tr><td valign=\"top\">" )
 			.append( key )
 			.append( ":</td><td>" )
@@ -590,7 +594,7 @@ public class FlatInspector
 			.append( "</td></tr>" );
 	}
 
-	private static String toString( Class<?> cls, boolean classHierarchy ) {
+	public static String toString( Class<?> cls, boolean classHierarchy ) {
 		StringBuilder buf = new StringBuilder( 100 );
 		int level = 0;
 
@@ -623,7 +627,7 @@ public class FlatInspector
 		return buf.toString();
 	}
 
-	private static String toString( Insets insets ) {
+	public static String toString( Insets insets ) {
 		if( insets == null )
 			return "null";
 
@@ -631,7 +635,7 @@ public class FlatInspector
 			+ (insets instanceof UIResource ? " UI" : "");
 	}
 
-	private static String toString( Color c ) {
+	public static String toString( Color c ) {
 		if( c == null )
 			return "null";
 
@@ -660,7 +664,7 @@ public class FlatInspector
 		return buf.toString();
 	}
 
-	private static String toString( Font f ) {
+	public static String toString( Font f ) {
 		if( f == null )
 			return "null";
 
@@ -668,7 +672,7 @@ public class FlatInspector
 			+ (f instanceof UIResource ? " UI" : "");
 	}
 
-	private static String toString( Border b, boolean classHierarchy ) {
+	public static String toString( Border b, boolean classHierarchy ) {
 		if( b == null )
 			return "null";
 
