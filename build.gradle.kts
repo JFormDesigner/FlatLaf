@@ -35,9 +35,8 @@ subprojects {
 
 
 // initialize toolchain version (default is Java 8)
-val toolchainJavaVersion: String by extra {
-	System.getProperty( "toolchain", "8" )
-}
+val toolchainJavaVersion = System.getProperty( "toolchain", "8" )
+extra["toolchainJavaVersion"] = toolchainJavaVersion
 
 // log version, Gradle and Java versions
 println()
@@ -189,8 +188,8 @@ nexusPublishing {
 			snapshotRepositoryUrl = uri( "https://central.sonatype.com/repository/maven-snapshots/" )
 
 			// get from gradle.properties
-			val sonatypeUsername: String? by project
-			val sonatypePassword: String? by project
+			val sonatypeUsername = project.findProperty( "sonatypeUsername" ) as String?
+			val sonatypePassword = project.findProperty( "sonatypePassword" ) as String?
 
 			username = System.getenv( "SONATYPE_USERNAME" ) ?: sonatypeUsername
 			password = System.getenv( "SONATYPE_PASSWORD" ) ?: sonatypePassword

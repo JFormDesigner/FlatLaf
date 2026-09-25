@@ -18,7 +18,7 @@ plugins {
 	java
 }
 
-val toolchainJavaVersion: String by rootProject.extra
+val toolchainJavaVersion = rootProject.extra["toolchainJavaVersion"] as String
 
 java.toolchain {
 	languageVersion = JavaLanguageVersion.of( toolchainJavaVersion )

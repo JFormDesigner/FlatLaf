@@ -92,8 +92,8 @@ publishing {
 
 signing {
 	// get from gradle.properties
-	val signingKey: String? by project
-	val signingPassword: String? by project
+	val signingKey = project.findProperty( "signingKey" ) as String?
+	val signingPassword = project.findProperty( "signingPassword" ) as String?
 
 	val key = System.getenv( "SIGNING_KEY" ) ?: signingKey
 	val password = System.getenv( "SIGNING_PASSWORD" ) ?: signingPassword
