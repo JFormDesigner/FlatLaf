@@ -51,6 +51,7 @@ println()
 plugins {
 	alias( libs.plugins.gradle.nexus.publish.plugin )
 	alias( libs.plugins.gradle.versions.plugin )
+	alias( libs.plugins.caupain )
 	alias( libs.plugins.errorprone ) apply false
 }
 
@@ -167,7 +168,7 @@ allprojects {
 					}
 				}
 
-				// Error Prone requires at lease Java 11
+				// Error Prone requires at least Java 11
 				val java = (project as ExtensionAware).extensions.getByName("java") as JavaPluginExtension
 				val javaToolchains = (project as ExtensionAware).extensions.getByName("javaToolchains") as JavaToolchainService
 				if( java.toolchain.languageVersion.get().asInt() < 11 ) {
@@ -178,6 +179,10 @@ allprojects {
 			}
 		}
 	}
+}
+
+tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
+	group = "verification"
 }
 
 nexusPublishing {
