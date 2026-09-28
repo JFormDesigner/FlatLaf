@@ -45,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeMacLibrary
 {
-	private static int API_VERSION_MACOS = 2004;
+	private static int API_VERSION_MACOS = 2005;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -70,6 +70,17 @@ public class FlatNativeMacLibrary
 	/** @since 3.4 */ public native static Rectangle getWindowButtonsBounds( Window window );
 	/** @since 3.4 */ public native static boolean isWindowFullScreen( Window window );
 	/** @since 3.4 */ public native static boolean toggleWindowFullScreen( Window window );
+
+	/**
+	 * Re-assigns the application main menu, which forces macOS to redraw the screen menu bar.
+	 * <p>
+	 * Workaround for a macOS 27 issue where the screen menu bar shows only the Apple menu
+	 * and the application menu, if the Java menu bar was installed a bit "late" after
+	 * application launch. (issue #1153)
+	 *
+	 * @since 3.8
+	 */
+	public native static boolean refreshScreenMenuBar();
 
 
 	/** @since 3.7 */

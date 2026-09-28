@@ -425,3 +425,30 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 	JNI_COCOA_EXIT()
 	return FALSE;
 }
+
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_refreshScreenMenuBar
+	( JNIEnv* env, jclass cls )
+{
+	JNI_COCOA_ENTER()
+
+	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		JNI_COCOA_TRY()
+
+		// On macOS 27, the screen menu bar is not redrawn if the main menu was
+		// installed "late" after application launch (only Apple and application
+		// menus are shown). Re-assigning the main menu forces a redraw.
+		NSMenu* mainMenu = NSApp.mainMenu;
+		if( mainMenu != NULL ) {
+			NSApp.mainMenu = nil;
+			NSApp.mainMenu = mainMenu;
+		}
+
+		JNI_COCOA_CATCH()
+	}];
+
+	return TRUE;
+
+	JNI_COCOA_EXIT()
+	return FALSE;
+}

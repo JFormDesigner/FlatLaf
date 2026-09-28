@@ -27,6 +27,12 @@ FlatLaf Change Log
   HTML. (issue #1143)
 - Make sure that `META-INF/MANIFEST.MF` is first jar entry, so that tools that
   use `JarInputStream` readers see `Multi-Release: true`. (issue #1139)
+- macOS 27: Screen menu bar (`apple.laf.useScreenMenuBar=true`) showed only the
+  Apple menu and the application menu, but no Java menus, until hovering the
+  menu bar or switching to another application and back. This is a macOS issue,
+  which also occurs without FlatLaf, when the menu bar is installed a bit "late"
+  after application launch. FlatLaf now forces a redraw of the screen menu bar
+  (requires FlatLaf native library). (issue #1153)
 - Native libraries: Fixed `IllegalArgumentException: URI has an authority component`
   trying to load native library when running application from a Windows network drive.
   (issue #1145)
