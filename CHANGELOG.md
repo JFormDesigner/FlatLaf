@@ -16,6 +16,9 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - ColorChooser: Do not use rounded border for color palette boxes. (issue #1150)
+- System File Chooser: Fixed application hang when dragging files from the
+  system file dialog into an application window. Also fixed unusable modal
+  dialogs shown from a drop handler while the system file dialog is open.
 - FileChooser:
   - Fixed selection painting in "Details" view when theme uses rounded
     selection. (issue #1137)
