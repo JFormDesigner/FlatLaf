@@ -30,6 +30,9 @@ import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
 import java.awt.Window;
 import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
@@ -89,6 +92,8 @@ public class FlatRootPaneUI
 	private LayoutManager oldLayout;
 	private ComponentListener macFullWindowContentListener;
 	private PropertyChangeListener macWindowBackgroundListener;
+	private WindowListener macScreenMenuBarRefreshListener;
+	private static boolean macScreenMenuBarRefreshed;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -202,6 +207,7 @@ public class FlatRootPaneUI
 		if( SystemInfo.isMacFullWindowContentSupported )
 			macFullWindowContentListener = FullWindowContentSupport.macInstallListeners( root );
 		macInstallWindowBackgroundListener( root );
+		macInstallScreenMenuBarRefreshListener( root );
 	}
 
 	@Override
@@ -213,6 +219,7 @@ public class FlatRootPaneUI
 			macFullWindowContentListener = null;
 		}
 		macUninstallWindowBackgroundListener( root );
+		macUninstallScreenMenuBarRefreshListener( root );
 	}
 
 	/** @since 1.1.2 */
@@ -404,6 +411,50 @@ public class FlatRootPaneUI
 	}
 
 	/**
+	 * On macOS 27, the screen menu bar shows only the Apple menu and the application menu
+	 * (but no Java menus), if the Java menu bar was installed a bit "late" after
+	 * application launch (e.g. because of longer application startup).
+	 * Hovering the menu bar or switching to another application and back fixes it.
+	 * <p>
+	 * To work around this problem, force a redraw of the screen menu bar
+	 * when the first frame that has a menu bar becomes active. (issue #1153)
+	 */
+	private void macInstallScreenMenuBarRefreshListener( JRootPane c ) {
+		if( !SystemInfo.isMacOS ||
+			macScreenMenuBarRefreshed ||
+			SystemInfo.osVersion < SystemInfo.toVersion( 27, 0, 0, 0 ) ||
+			!Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
+		  return;
+
+		Window window = getParentWindow( c );
+		if( window instanceof Frame && macScreenMenuBarRefreshListener == null && FlatNativeMacLibrary.isLoaded() ) {
+			macScreenMenuBarRefreshListener = new WindowAdapter() {
+				@Override
+				public void windowActivated( WindowEvent e ) {
+					if( macScreenMenuBarRefreshed || c.getJMenuBar() == null )
+						return;
+
+					macScreenMenuBarRefreshed = true;
+					FlatNativeMacLibrary.refreshScreenMenuBar();
+					macUninstallScreenMenuBarRefreshListener( c );
+				}
+			};
+			window.addWindowListener( macScreenMenuBarRefreshListener );
+		}
+	}
+
+	private void macUninstallScreenMenuBarRefreshListener( JRootPane c ) {
+		if( !SystemInfo.isMacOS )
+			return;
+
+		Window window = getParentWindow( c );
+		if( window != null && macScreenMenuBarRefreshListener != null ) {
+			window.removeWindowListener( macScreenMenuBarRefreshListener );
+			macScreenMenuBarRefreshListener = null;
+		}
+	}
+
+	/**
 	 * When setting window background to translucent color (alpha < 255),
 	 * Swing paints that window translucent on Windows and Linux, but not on macOS.
 	 * The reason for this is that FlatLaf sets the background color of the root pane,
@@ -529,6 +580,9 @@ public class FlatRootPaneUI
 
 				macUninstallWindowBackgroundListener( rootPane );
 				macInstallWindowBackgroundListener( rootPane );
+
+				macUninstallScreenMenuBarRefreshListener( rootPane );
+				macInstallScreenMenuBarRefreshListener( rootPane );
 
 				// FlatNativeMacLibrary.setWindowButtonsSpacing() and
 				// FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty()

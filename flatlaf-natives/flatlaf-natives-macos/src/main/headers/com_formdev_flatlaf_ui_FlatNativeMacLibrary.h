@@ -89,6 +89,14 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    refreshScreenMenuBar
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_refreshScreenMenuBar
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    showFileChooser
  * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FileChooserCallback;I[Ljava/lang/String;[I)[Ljava/lang/String;
  */
