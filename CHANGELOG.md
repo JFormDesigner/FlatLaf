@@ -15,6 +15,10 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- System File Chooser:
+  - Linux: Fixed deadlock when invoking `java.awt.Desktop` methods `open()`,
+    `browse()` or `mail()` after a `SystemFileChooser` was shown at some point
+    prior. (issue #1158)
 - ColorChooser: Do not use rounded border for color palette boxes. (issue #1150)
 - FileChooser:
   - Fixed selection painting in "Details" view when theme uses rounded

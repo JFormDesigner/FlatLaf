@@ -310,8 +310,16 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeLinuxLibrar
 		gtk_window_present_with_time( GTK_WINDOW( dialog ), gdk_x11_get_server_time( gdkWindow ) );
 	}
 
-	// start event loop (will be quit in respone handler)
+	// necessary because gtk_main() internally invokes gdk_threads_leave() followed by gdk_threads_enter()
+	// see https://github.com/GNOME/gtk/blob/gtk-3-24-50/gtk/gtkmain.c#L1331-L1333
+	gdk_threads_enter();
+
+	// start event loop (will be quit in response handler)
 	gtk_main();
+
+	// without this, GDK threads would be locked after gtk_main() and cause deadlock
+	// in java.awt.Desktop methods  
+	gdk_threads_leave();
 
 	// return selected filter
 	jint selectedFilterIndex = responseData.filterIndex;
