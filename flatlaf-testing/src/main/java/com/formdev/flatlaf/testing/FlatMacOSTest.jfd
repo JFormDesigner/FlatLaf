@@ -19,13 +19,38 @@ new FormModel {
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "West"
 				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "captionDemoButtonsPanel"
+					"visible": false
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "captionTrueButton"
+						"text": "caption=true (clicks: 0)"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionTrueClicked", false ) )
+					}, new FormLayoutConstraints( null ) )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "captionFalseButton"
+						"text": "caption=false (clicks: 0)"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionFalseClicked", false ) )
+					}, new FormLayoutConstraints( null ) )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "East"
+				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "First"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 				"$columnConstraints": "[left][left][left][left]para[fill]"
-				"$rowConstraints": "[][][][fill][][]para[]"
+				"$rowConstraints": "[][][][fill][][]para[][]"
 			} ) {
 				name: "panel2"
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -174,6 +199,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "toggleFullScreen", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 6"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "captionDemoCheckBox"
+					"text": "Show caption demo buttons"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "captionDemoChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7 4 1"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"

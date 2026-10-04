@@ -296,6 +296,8 @@ public interface FlatClientProperties
 	 *       and should therefore return quickly.
 	 *   <li>This function is invoked on 'AWT-Windows' thread (not 'AWT-EventQueue' thread)
 	 *       while processing Windows messages.
+	 *       On macOS in fullWindowContent mode (since 3.7.2), it is invoked on the AppKit
+	 *       main thread before the mouse event is dispatched to AWT.
 	 *       It <b>must not</b> change any component property or layout because this could cause a dead lock.
 	 * </ul>
 	 * <p>

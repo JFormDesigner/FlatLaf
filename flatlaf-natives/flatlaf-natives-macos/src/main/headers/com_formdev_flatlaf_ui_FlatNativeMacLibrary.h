@@ -89,6 +89,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    setupFullWindowContentTitleBarCaption
+ * Signature: (Ljava/awt/Window;Lcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FullWindowContentTitleBarCaptionCallback;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setupFullWindowContentTitleBarCaption
+  (JNIEnv *, jclass, jobject, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    removeFullWindowContentTitleBarCaption
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_removeFullWindowContentTitleBarCaption
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    showFileChooser
  * Signature: (Ljava/awt/Window;IZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IILcom/formdev/flatlaf/ui/FlatNativeMacLibrary/FileChooserCallback;I[Ljava/lang/String;[I)[Ljava/lang/String;
  */
