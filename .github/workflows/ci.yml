@@ -59,9 +59,9 @@ jobs:
         if: github.repository == 'JFormDesigner/FlatLaf'
         run: ./gradlew build clean -Dtoolchain=25
 
-      - name: Build with Java 26
+      - name: Build with Java 27
         if: github.repository == 'JFormDesigner/FlatLaf'
-        run: ./gradlew build clean -Dtoolchain=26
+        run: ./gradlew build clean -Dtoolchain=27
 
 
         # build with Java 8 for snapshot
