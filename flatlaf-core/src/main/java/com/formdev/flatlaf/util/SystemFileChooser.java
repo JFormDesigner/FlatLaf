@@ -108,6 +108,16 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li><b>macOS</b>: By default, the user can not navigate into file packages (e.g. applications).
  *       If needed, this can be enabled by setting platform property
  *       {@link #MAC_TREATS_FILE_PACKAGES_AS_DIRECTORIES} to {@code true}.
+ *   <li><b>macOS</b>: The file dialog (buttons, warnings, etc.) is shown in English,
+ *       even if the macOS system language is different,
+ *       unless the application bundle declares the supported languages
+ *       in key {@code CFBundleLocalizations} of its {@code Info.plist}
+ *       (e.g. {@code <array><string>en</string><string>de</string></array>}).
+ *       {@code CFBundleAllowMixedLocalizations} (used by jpackage) is not sufficient.
+ *       When running an application with the {@code java} command (not bundled),
+ *       the file dialog is always in English.
+ *       This is a macOS limitation. There is no API to change the language of file dialogs.
+ *       (issue #1121)
  *   <li>If no "current directory" is specified, then {@code JFileChooser} always opens
  *       the users "Documents" folder (on Windows) or "Home" folder (on macOS and Linux).<br>
  *       {@code SystemFileChooser} does the same when first shown, but then remembers
