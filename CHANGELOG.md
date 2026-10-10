@@ -12,6 +12,8 @@ FlatLaf Change Log
   components. (PR #1142, issue #1095)
 - Publish Maven/Gradle BOM (Bill of Materials) to Maven Central. Artifact ID
   is `flatlaf-bom`. (issue #1146)
+- System File Chooser: Support selection mode `FILES_AND_DIRECTORIES` on macOS
+  (in Open dialogs). On other platforms, it behaves like `FILES_ONLY`.
 
 #### Fixed bugs
 

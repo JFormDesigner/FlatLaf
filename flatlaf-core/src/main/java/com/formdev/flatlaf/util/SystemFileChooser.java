@@ -92,7 +92,8 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  *   <li><b>Save File</b> dialog does not support multi-selection.
  *   <li>For selection mode {@link #DIRECTORIES_ONLY}, dialog type {@link #SAVE_DIALOG} is ignored.
  *       Operating system file dialogs support folder selection only in "Open" dialogs.
- *   <li>{@link JFileChooser#FILES_AND_DIRECTORIES} is not supported.
+ *   <li>{@link #FILES_AND_DIRECTORIES} is only supported in <b>Open</b> dialogs on <b>macOS</b>.
+ *       On Windows and Linux (and in macOS <b>Save</b> dialogs), it behaves like {@link #FILES_ONLY}.
  *   <li>{@link #getSelectedFiles()} returns selected file also in single selection mode.
  *       {@link JFileChooser#getSelectedFiles()} only in multi selection mode.
  *   <li>Only file name extension filters (see {@link FileNameExtensionFilter}) are supported on all platforms.
@@ -147,6 +148,15 @@ public class SystemFileChooser
 
 	/** @see JFileChooser#DIRECTORIES_ONLY */
 	public static final int DIRECTORIES_ONLY = JFileChooser.DIRECTORIES_ONLY;
+
+	/**
+	 * Allows selecting files and directories.
+	 * Only supported in <b>Open</b> dialogs on <b>macOS</b>.
+	 * On other platforms (and in macOS <b>Save</b> dialogs), behaves like {@link #FILES_ONLY}.
+	 *
+	 * @see JFileChooser#FILES_AND_DIRECTORIES
+	 */
+	public static final int FILES_AND_DIRECTORIES = JFileChooser.FILES_AND_DIRECTORIES;
 
 	private int dialogType = OPEN_DIALOG;
 	private String dialogTitle;
@@ -395,7 +405,8 @@ public class SystemFileChooser
 
 	/**
 	 * Returns file-selection mode.
-	 * Possible values are {@link #FILES_ONLY} and {@link #DIRECTORIES_ONLY}.
+	 * Possible values are {@link #FILES_ONLY}, {@link #DIRECTORIES_ONLY}
+	 * and {@link #FILES_AND_DIRECTORIES} (macOS only; see there).
 	 * Default is {@link #FILES_ONLY}.
 	 *
 	 * @see JFileChooser#getFileSelectionMode()
@@ -406,12 +417,14 @@ public class SystemFileChooser
 
 	/**
 	 * Sets file-selection mode.
-	 * Possible values are {@link #FILES_ONLY} and {@link #DIRECTORIES_ONLY}.
+	 * Possible values are {@link #FILES_ONLY}, {@link #DIRECTORIES_ONLY}
+	 * and {@link #FILES_AND_DIRECTORIES} (macOS only; see there).
 	 *
 	 * @see JFileChooser#setFileSelectionMode(int)
 	 */
 	public void setFileSelectionMode( int fileSelectionMode ) {
-		if( fileSelectionMode != FILES_ONLY && fileSelectionMode != DIRECTORIES_ONLY )
+		if( fileSelectionMode != FILES_ONLY && fileSelectionMode != DIRECTORIES_ONLY &&
+			fileSelectionMode != FILES_AND_DIRECTORIES )
 			throw new IllegalArgumentException( "Invalid file selection mode " + fileSelectionMode );
 
 		this.fileSelectionMode = fileSelectionMode;
@@ -419,11 +432,16 @@ public class SystemFileChooser
 
 	/** @see JFileChooser#isFileSelectionEnabled() */
 	public boolean isFileSelectionEnabled() {
-		return fileSelectionMode == FILES_ONLY;
+		return fileSelectionMode == FILES_ONLY || fileSelectionMode == FILES_AND_DIRECTORIES;
 	}
 
 	/** @see JFileChooser#isDirectorySelectionEnabled() */
 	public boolean isDirectorySelectionEnabled() {
+		return fileSelectionMode == DIRECTORIES_ONLY || fileSelectionMode == FILES_AND_DIRECTORIES;
+	}
+
+	/** Returns whether only directories can be selected (mode {@link #DIRECTORIES_ONLY}). */
+	private boolean isDirectoriesOnly() {
 		return fileSelectionMode == DIRECTORIES_ONLY;
 	}
 
@@ -1017,7 +1035,7 @@ public class SystemFileChooser
 			int optionsClear = fc.getPlatformOptions( WINDOWS_OPTIONS_CLEAR, optionsBlocked );
 			if( (optionsClear & FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT) == 0 )
 				optionsSet |= FlatNativeWindowsLibrary.FOS_OVERWRITEPROMPT;
-			if( fc.isDirectorySelectionEnabled() )
+			if( fc.isDirectoriesOnly() ) // FILES_AND_DIRECTORIES is mapped to FILES_ONLY
 				optionsSet |= FlatNativeWindowsLibrary.FOS_PICKFOLDERS;
 			if( fc.isMultiSelectionEnabled() )
 				optionsSet |= FlatNativeWindowsLibrary.FOS_ALLOWMULTISELECT;
@@ -1028,7 +1046,7 @@ public class SystemFileChooser
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
 			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
-			if( !fc.isDirectorySelectionEnabled() ) {
+			if( !fc.isDirectoriesOnly() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
 					fileTypeIndex = filters.indexOf( fc.getFileFilter() );
@@ -1167,10 +1185,14 @@ public class SystemFileChooser
 			int optionsClear = fc.getPlatformOptions( MAC_OPTIONS_CLEAR, optionsBlocked );
 			if( (optionsClear & FlatNativeMacLibrary.FC_accessoryViewDisclosed) == 0 )
 				optionsSet |= FlatNativeMacLibrary.FC_accessoryViewDisclosed;
-			if( fc.isDirectorySelectionEnabled() ) {
+			if( fc.isDirectoriesOnly() ) {
 				optionsSet |= FlatNativeMacLibrary.FC_canChooseDirectories | FlatNativeMacLibrary.FC_canCreateDirectories;
 				optionsClear |= FlatNativeMacLibrary.FC_canChooseFiles;
 				open = true;
+			} else if( fc.getFileSelectionMode() == FILES_AND_DIRECTORIES && open ) {
+				// NSOpenPanel supports choosing files and directories at the same time
+				// (NSSavePanel does not; there it behaves like FILES_ONLY)
+				optionsSet |= FlatNativeMacLibrary.FC_canChooseFiles | FlatNativeMacLibrary.FC_canChooseDirectories;
 			}
 			if( fc.isMultiSelectionEnabled() )
 				optionsSet |= FlatNativeMacLibrary.FC_allowsMultipleSelection;
@@ -1183,7 +1205,7 @@ public class SystemFileChooser
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
 			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
-			if( !fc.isDirectorySelectionEnabled() ) {
+			if( !fc.isDirectoriesOnly() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
 					fileTypeIndex = filters.indexOf( fc.getFileFilter() );
@@ -1306,7 +1328,7 @@ public class SystemFileChooser
 			int optionsClear = fc.getPlatformOptions( LINUX_OPTIONS_CLEAR, optionsBlocked );
 			if( (optionsClear & FlatNativeLinuxLibrary.FC_do_overwrite_confirmation) == 0 )
 				optionsSet |= FlatNativeLinuxLibrary.FC_do_overwrite_confirmation;
-			if( fc.isDirectorySelectionEnabled() )
+			if( fc.isDirectoriesOnly() ) // FILES_AND_DIRECTORIES is mapped to FILES_ONLY
 				optionsSet |= FlatNativeLinuxLibrary.FC_select_folder;
 			if( fc.isMultiSelectionEnabled() )
 				optionsSet |= FlatNativeLinuxLibrary.FC_select_multiple;
@@ -1319,7 +1341,7 @@ public class SystemFileChooser
 			int fileTypeIndex = 0;
 			ArrayList<String> fileTypes = new ArrayList<>();
 			ArrayList<FileFilter> fileTypeFilters = new ArrayList<>();
-			if( !fc.isDirectorySelectionEnabled() ) {
+			if( !fc.isDirectoriesOnly() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
 					fileTypeIndex = filters.indexOf( fc.getFileFilter() );
@@ -1480,7 +1502,11 @@ public class SystemFileChooser
 			chooser.setDialogTitle( fc.getDialogTitle() );
 			chooser.setApproveButtonText( fc.getApproveButtonText() );
 			chooser.setApproveButtonMnemonic( fc.getApproveButtonMnemonic() );
-			chooser.setFileSelectionMode( fc.getFileSelectionMode() );
+			int fileSelectionMode = fc.getFileSelectionMode();
+			if( fileSelectionMode == FILES_AND_DIRECTORIES &&
+				(!SystemInfo.isMacOS || fc.getDialogType() != OPEN_DIALOG) )
+			  fileSelectionMode = FILES_ONLY;
+			chooser.setFileSelectionMode( fileSelectionMode );
 			chooser.setMultiSelectionEnabled( fc.isMultiSelectionEnabled() );
 			chooser.setFileHidingEnabled( fc.isFileHidingEnabled() );
 			chooser.setAcceptAllFileFilterUsed( fc.isAcceptAllFileFilterUsed() );
@@ -1492,7 +1518,7 @@ public class SystemFileChooser
 			  chooser.setMultiSelectionEnabled( false );
 
 			// filter
-			if( !fc.isDirectorySelectionEnabled() ) {
+			if( !fc.isDirectoriesOnly() ) {
 				List<FileFilter> filters = fc.getFiltersForDialog();
 				if( !filters.isEmpty() ) {
 					FileFilter currentFilter = fc.getFileFilter();
