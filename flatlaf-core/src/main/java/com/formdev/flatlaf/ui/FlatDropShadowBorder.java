@@ -161,7 +161,7 @@ debug*/
 		int wh = (shadowSize * 2) - 1;
 		int center = shadowSize - 1;
 
-		// left-top edge
+		// left-top corner
 		if( left > 0 || top > 0 ) {
 			g.drawImage( shadowImage, x1o, y1o, x1i, y1i,
 				0, 0, center, center, null );
@@ -173,7 +173,7 @@ debug*/
 				center, 0, center + 1, center, null );
 		}
 
-		// right-top edge
+		// right-top corner
 		if( right > 0 || top > 0 ) {
 			g.drawImage( shadowImage, x2i, y1o, x2o, y1i,
 				center, 0, wh, center, null );
@@ -191,7 +191,7 @@ debug*/
 				center, center, wh, center + 1, null );
 		}
 
-		// left-bottom edge
+		// left-bottom corner
 		if( left > 0 || bottom > 0 ) {
 			g.drawImage( shadowImage, x1o, y2i, x1i, y2o,
 				0, center, center, wh, null );
@@ -203,7 +203,7 @@ debug*/
 				center, center, center + 1, wh, null );
 		}
 
-		// right-bottom edge
+		// right-bottom corner
 		if( right > 0 || bottom > 0 ) {
 			g.drawImage( shadowImage, x2i, y2i, x2o, y2o,
 				center, center, wh, wh, null );

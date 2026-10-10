@@ -650,7 +650,7 @@ public class FlatComboBoxUI
 		c.setForeground( getForeground( enabled ) );
 
 		// make renderer component temporary non-opaque to avoid that renderer paints
-		// background outside of border if combobox uses larger arc for edges
+		// background outside of border if combobox uses larger arc for corners
 		// (e.g. FlatClientProperties.COMPONENT_ROUND_RECT is true)
 		if( c instanceof JComponent )
 			((JComponent)c).setOpaque( false );

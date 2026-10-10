@@ -44,14 +44,14 @@ public class FlatProgressBar
 
 
 	/**
-	 * Returns whether the progress bar is paint with square edges.
+	 * Returns whether the progress bar is paint with square corners.
 	 */
 	public boolean isSquare() {
 		return getClientPropertyBoolean( PROGRESS_BAR_SQUARE, false );
 	}
 
 	/**
-	 * Specifies whether the progress bar is paint with square edges.
+	 * Specifies whether the progress bar is paint with square corners.
 	 */
 	public void setSquare( boolean square ) {
 		putClientPropertyBoolean( PROGRESS_BAR_SQUARE, square, false );

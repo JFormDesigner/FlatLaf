@@ -219,14 +219,14 @@ public class FlatTextField
 
 
 	/**
-	 * Returns whether the component is painted with round edges.
+	 * Returns whether the component is painted with round corners.
 	 */
 	public boolean isRoundRect() {
 		return getClientPropertyBoolean( COMPONENT_ROUND_RECT, false );
 	}
 
 	/**
-	 * Specifies whether the component is painted with round edges.
+	 * Specifies whether the component is painted with round corners.
 	 */
 	public void setRoundRect( boolean roundRect ) {
 		putClientPropertyBoolean( COMPONENT_ROUND_RECT, roundRect, false );

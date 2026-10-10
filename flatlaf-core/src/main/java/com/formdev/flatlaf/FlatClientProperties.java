@@ -50,7 +50,7 @@ public interface FlatClientProperties
 	String BUTTON_TYPE = "JButton.buttonType";
 
 	/**
-	 * Paint the button with square edges.
+	 * Paint the button with square corners.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
 	 *
@@ -59,7 +59,7 @@ public interface FlatClientProperties
 	String BUTTON_TYPE_SQUARE = "square";
 
 	/**
-	 * Paint the button with round edges.
+	 * Paint the button with round corners.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
 	 *
@@ -203,7 +203,8 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
-	 * Paint the component with round edges.
+	 * Paint the component with round corners if set to {@code true},
+	 * or with square corners if set to {@code false}.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
 	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
@@ -451,7 +452,7 @@ public interface FlatClientProperties
 	String PROGRESS_BAR_LARGE_HEIGHT = "JProgressBar.largeHeight";
 
 	/**
-	 * Specifies whether the progress bar is paint with square edges.
+	 * Specifies whether the progress bar is paint with square corners.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -1277,7 +1278,7 @@ public interface FlatClientProperties
 	/**
 	 * Placeholder text that is only painted if the text field is empty.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses) or {@link javax.swing.JComboBox}<br>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses) or editable {@link javax.swing.JComboBox}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
