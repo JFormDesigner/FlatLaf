@@ -836,6 +836,13 @@ public class SystemFileChooser
 					try {
 						filenamesRef.set( showSystemDialog( owner, fc ) );
 					} finally {
+						// stop blocking input events as soon as the system file dialog is closed;
+						// if a modal dialog was shown while the file dialog was open
+						// (e.g. from a drop handler when dragging a file from the file dialog
+						// into the application), secondaryLoop.enter() does not return before
+						// that modal dialog is closed, and the modal dialog must be usable
+						if( queue != null )
+							queue.stopBlocking();
 						secondaryLoop.exit();
 					}
 				}, "FlatLaf SystemFileChooser" ).start();
@@ -916,6 +923,9 @@ public class SystemFileChooser
 		{
 			private static boolean problemLogged;
 
+			private volatile boolean blocking = true;
+			private int dropDispatchDepth; // only accessed on EDT
+
 			static InputBlockingEventQueue install() {
 				InputBlockingEventQueue queue = new InputBlockingEventQueue();
 
@@ -950,8 +960,38 @@ public class SystemFileChooser
 				super.pop();
 			}
 
+			void stopBlocking() {
+				blocking = false;
+			}
+
 			@Override
 			protected void dispatchEvent( AWTEvent event ) {
+				// Never block drag-and-drop events (class sun.awt.dnd.SunDropTargetEvent,
+				// which extends MouseEvent and uses mouse event IDs).
+				// The toolkit thread (e.g. AppKit thread on macOS) waits until those events
+				// are dispatched, and blocking them would hang the application
+				// (e.g. when dragging a file from the system file dialog into an application window).
+				//
+				// Also do not block any events while the application handles a drop.
+				// The drop handler may show a modal dialog (e.g. asking how to add dropped files).
+				// On macOS, the system file dialog can not return before the drop is completed
+				// (the AppKit thread waits for it), so the modal dialog must stay usable,
+				// even after the file dialog was closed.
+				if( isDropTargetEvent( event ) ) {
+					dropDispatchDepth++;
+					try {
+						super.dispatchEvent( event );
+					} finally {
+						dropDispatchDepth--;
+					}
+					return;
+				}
+
+				if( !blocking || dropDispatchDepth > 0 ) {
+					super.dispatchEvent( event );
+					return;
+				}
+
 				int eventID = event.getID();
 				if( (eventID >= MouseEvent.MOUSE_FIRST && eventID <= MouseEvent.MOUSE_LAST) ||
 					(eventID >= KeyEvent.KEY_FIRST && eventID <= KeyEvent.KEY_LAST) ||
@@ -962,6 +1002,14 @@ public class SystemFileChooser
 				}
 
 				super.dispatchEvent( event );
+			}
+
+			private static boolean isDropTargetEvent( AWTEvent event ) {
+				for( Class<?> cls = event.getClass(); cls != null && cls != MouseEvent.class; cls = cls.getSuperclass() ) {
+					if( cls.getName().equals( "sun.awt.dnd.SunDropTargetEvent" ) )
+						return true;
+				}
+				return false;
 			}
 		}
 	}
