@@ -31,7 +31,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 /**
  * Fills entire screen with white or black.
- * Use as background when tacking screenshots to avoid that light/dark background
+ * Use as background when taking screenshots to avoid that light/dark background
  * shines through window border.
  *
  * @author Karl Tauber

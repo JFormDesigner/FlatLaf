@@ -142,7 +142,7 @@ public class FlatInspector
 				if( activeWindow instanceof RootPaneContainer )
 					rootPaneContainer = (RootPaneContainer) activeWindow;
 				else {
-					// search for root pain container in children
+					// search for root pane container in children
 					// (e.g. for Swing embedded into SWT)
 					for( Component child : activeWindow.getComponents() ) {
 						if( child instanceof RootPaneContainer ) {

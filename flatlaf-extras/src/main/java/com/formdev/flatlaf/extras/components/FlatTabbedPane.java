@@ -558,9 +558,9 @@ public class FlatTabbedPane
 	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the preferred component width and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the preferred component height.
 	 */
 	public void setLeadingComponent( Component leadingComponent ) {
@@ -578,9 +578,9 @@ public class FlatTabbedPane
 	/**
 	 * Specifies a component that will be placed at the trailing edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the available horizontal space (minimum is preferred component width) and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the available vertical space (minimum is preferred component height).
 	 */
 	public void setTrailingComponent( Component trailingComponent ) {

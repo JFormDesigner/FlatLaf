@@ -729,7 +729,7 @@ public class FlatPopupFactory
 				// (see class PopupFactory.HeavyWeightPopup).
 				// This may result in flicker when e.g. showing a popup in a light theme,
 				// then switching to a dark theme and again showing a popup,
-				// because the underling NSWindow still has a light background,
+				// because the underlying NSWindow still has a light background,
 				// which may be shown shortly before the actual dark popup content is shown.
 				// To fix this, dispose the popup window, which disposes the NSWindow.
 				// The AWT popup window stays in the popup cache, but when reusing it later,

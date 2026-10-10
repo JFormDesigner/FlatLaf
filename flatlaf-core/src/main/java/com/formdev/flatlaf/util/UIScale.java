@@ -71,7 +71,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
  *
  * <h2>Zooming</h2>
  *
- * Zooming allows appliations to easily zoom their UI, if FlatLaf is active Laf.
+ * Zooming allows applications to easily zoom their UI, if FlatLaf is active Laf.
  * This is done by changing user scale factor and default font.
  * There are methods to increase, decrease and reset zoom factor.
  * <p>

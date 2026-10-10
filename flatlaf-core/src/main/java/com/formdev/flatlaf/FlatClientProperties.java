@@ -311,14 +311,14 @@ public interface FlatClientProperties
 	//---- Panel --------------------------------------------------------------
 
 	/**
-	 * Marks the panel as placeholder for the iconfify/maximize/close buttons
+	 * Marks the panel as placeholder for the iconify/maximize/close buttons
 	 * in fullWindowContent mode. See {@link #FULL_WINDOW_CONTENT}.
 	 * <p>
 	 * If fullWindowContent mode is enabled, the preferred size of the panel is equal
-	 * to the size of the iconfify/maximize/close buttons. Otherwise is is {@code 0,0}.
+	 * to the size of the iconify/maximize/close buttons. Otherwise it is {@code 0,0}.
 	 * <p>
 	 * You're responsible to layout that panel at the top-left or top-right corner,
-	 * depending on platform, where the iconfify/maximize/close buttons are located.
+	 * depending on platform, where the iconify/maximize/close buttons are located.
 	 * <p>
 	 * Syntax of the value string is: {@code "win|mac [horizontal|vertical] [zeroInFullScreen] [leftToRight|rightToLeft]"}.
 	 * <p>
@@ -513,7 +513,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * If {@code true}, the content pane (and the glass pane) is extended into
 	 * the title bar area. The window icon and title are hidden.
-	 * Only the iconfify/maximize/close buttons stay visible in the upper right corner
+	 * Only the iconify/maximize/close buttons stay visible in the upper right corner
 	 * (and overlap the content pane).
 	 * <p>
 	 * The user can left-click-and-drag on the title bar area to move the window,
@@ -529,7 +529,7 @@ public interface FlatClientProperties
 	String FULL_WINDOW_CONTENT = "FlatLaf.fullWindowContent";
 
 	/**
-	 * Contains the current bounds of the iconfify/maximize/close buttons
+	 * Contains the current bounds of the iconify/maximize/close buttons
 	 * (in root pane coordinates) if fullWindowContent mode is enabled.
 	 * Otherwise its value is {@code null}.
 	 * <p>

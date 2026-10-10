@@ -353,7 +353,7 @@ public class FlatSVGIcon
 	}
 
 	/**
-	 * Returns whether the icon is pained in "disabled" state.
+	 * Returns whether the icon is painted in "disabled" state.
 	 *
 	 * @see #getDisabledIcon()
 	 * @since 1.2

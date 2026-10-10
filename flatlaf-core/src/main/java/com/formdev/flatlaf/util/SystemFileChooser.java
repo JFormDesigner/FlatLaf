@@ -1099,7 +1099,7 @@ public class SystemFileChooser
 				if( secondaryText != null )
 					primaryText = primaryText + "\n\n" + secondaryText;
 
-				// button menmonics ("&" -> "&&", "__" -> "_", "_" -> "&")
+				// button mnemonics ("&" -> "&&", "__" -> "_", "_" -> "&")
 				for( int i = 0; i < buttons.length; i++ )
 					buttons[i] = buttons[i].replace( "&", "&&" ).replace( "__", "\u0001" ).replace( '_', '&' ).replace( '\u0001', '_' );
 
@@ -1240,7 +1240,7 @@ public class SystemFileChooser
 			public int showMessageDialog( int messageType, String primaryText,
 				String secondaryText, int defaultButton, String... buttons )
 			{
-				// remove button menmonics ("__" -> "_", "_" -> "")
+				// remove button mnemonics ("__" -> "_", "_" -> "")
 				for( int i = 0; i < buttons.length; i++ )
 					buttons[i] = buttons[i].replace( "__", "\u0001" ).replace( "_", "" ).replace( "\u0001", "_" );
 
@@ -1635,7 +1635,7 @@ public class SystemFileChooser
 				if( secondaryText != null )
 					primaryText = primaryText + "\n\n" + secondaryText;
 
-				// remove button menmonics ("__" -> "_", "_" -> "")
+				// remove button mnemonics ("__" -> "_", "_" -> "")
 				for( int i = 0; i < buttons.length; i++ )
 					buttons[i] = buttons[i].replace( "__", "\u0001" ).replace( "_", "" ).replace( "\u0001", "_" );
 

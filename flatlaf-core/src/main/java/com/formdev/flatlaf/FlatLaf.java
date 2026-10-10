@@ -381,7 +381,7 @@ public abstract class FlatLaf
 		// which is necessary to ensure that UIScale.setZoomFactor(float)
 		// scales FlatLaf defaultDont correctly even if UIScale.scale() was not yet used.
 		// In other words: Without this, UIScale.setZoomFactor(float) would
-		// not work correctly if invoked between FlatLaf.setup() and crating UI.
+		// not work correctly if invoked between FlatLaf.setup() and creating UI.
 		PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent e ) {

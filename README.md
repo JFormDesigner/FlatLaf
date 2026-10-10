@@ -343,7 +343,7 @@ Applications using FlatLaf
 - ![Sponsor](images/sponsor.svg)
   [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - ![Sponsor](images/sponsor.svg) [Lisheane ERP](https://www.lisheane.ch/)
-  (**commercial**) - backoffice applikation
+  (**commercial**) - backoffice application
 - [mendelson AS2](https://sourceforge.net/projects/mec-as2/),
   [AS4](https://sourceforge.net/projects/mendelson-as4/) and
   [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
