@@ -66,6 +66,14 @@ public class FlatStylingSupport
 	public @interface Styleable {
 		boolean dot() default false;
 		Class<?> type() default Void.class;
+
+		/**
+		 * Name of a boolean field (in same class as styled field),
+		 * that is set to {@code true} if the field is set via styling.
+		 *
+		 * @since 3.8
+		 */
+		String flagFieldName() default "";
 	}
 
 	/**
@@ -337,8 +345,14 @@ public class FlatStylingSupport
 	{
 		// restore previous values
 		if( oldStyleValues != null ) {
-			for( Map.Entry<String, Object> e : oldStyleValues.entrySet() )
-				applyProperty.apply( e.getKey(), e.getValue() );
+			boolean oldInRestoreOldValues = inRestoreOldValues;
+			inRestoreOldValues = true;
+			try {
+				for( Map.Entry<String, Object> e : oldStyleValues.entrySet() )
+					applyProperty.apply( e.getKey(), e.getValue() );
+			} finally {
+				inRestoreOldValues = oldInRestoreOldValues;
+			}
 		}
 
 		// ignore empty style
@@ -360,6 +374,8 @@ public class FlatStylingSupport
 		} else
 			return null;
 	}
+
+	private static boolean inRestoreOldValues;
 
 	private static Map<String, Object> applyStyle( Map<String, Object> style,
 		BiFunction<String, Object, Object> applyProperty )
@@ -557,9 +573,35 @@ public class FlatStylingSupport
 			// get old value and set new value
 			Object oldValue = f.get( obj );
 			f.set( obj, convertToEnum( value, f.getType() ) );
+
+			// set flag field
+			setFlagField( f, obj, !inRestoreOldValues );
+
 			return oldValue;
 		} catch( IllegalAccessException ex ) {
 			throw newFieldAccessFailed( f, ex );
+		}
+	}
+
+	private static void setFlagField( Field f, Object obj, boolean flagValue )
+		throws IllegalArgumentException
+	{
+		Styleable styleable = f.getAnnotation( Styleable.class );
+		if( styleable == null || styleable.flagFieldName().isEmpty() )
+			return;
+
+		String flagFieldName = styleable.flagFieldName();
+		try {
+			Field ff = obj.getClass().getDeclaredField( flagFieldName );
+			checkValidField( ff );
+			try {
+				ff.setAccessible( true );
+				ff.set( obj, flagValue );
+			} catch( IllegalAccessException ex ) {
+				throw newFieldAccessFailed( ff, ex );
+			}
+		} catch( NoSuchFieldException ex ) {
+			throw new IllegalArgumentException( "flag field '" + obj.getClass().getName() + "." + flagFieldName + "' not found", ex );
 		}
 	}
 

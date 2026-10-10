@@ -27,6 +27,9 @@ FlatLaf Change Log
 - ScrollPane: When using rounded border and scrollpane width was near view
   width, then the horizontal scrollbar was shown even when it was not necessary.
   (issue #1135)
+- Spinner: For button style `mac` (used in macOS themes), it is now possible to
+  use rounded corners by setting UI property `TextComponent.arc` or styling
+  (e.g. `arc: 4`). (issue #1151)
 - TabbedPane: Titles of disabled tabs were not grayed out if title contains
   HTML. (issue #1143)
 - Make sure that `META-INF/MANIFEST.MF` is first jar entry, so that tools that

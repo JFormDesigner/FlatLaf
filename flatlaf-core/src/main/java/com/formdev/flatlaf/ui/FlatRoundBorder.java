@@ -33,7 +33,8 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 public class FlatRoundBorder
 	extends FlatBorder
 {
-	@Styleable protected int arc = UIManager.getInt( "Component.arc" );
+	@Styleable( flagFieldName = "arcStyled" ) protected int arc = UIManager.getInt( "Component.arc" );
+	private boolean arcStyled;
 
 	// only used via styling (not in UI defaults, but has likewise client properties)
 	/** @since 2 */ @Styleable protected Boolean roundRect;
@@ -61,7 +62,9 @@ public class FlatRoundBorder
 			roundRect = this.roundRect;
 		return roundRect != null
 			? (roundRect ? Short.MAX_VALUE : 0)
-			: (isMacStyleSpinner( c ) ? 0 : arc);
+			: (isMacStyleSpinner( c ) && !arcStyled
+				? UIManager.getInt( "TextComponent.arc" )
+				: arc);
 	}
 
 	private boolean isMacStyleSpinner( Component c ) {

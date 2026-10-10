@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -30,6 +32,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.util.ColorFunctions;
 
 /**
@@ -255,6 +258,35 @@ public class TestFlatStyling
 		assertEquals( SomeEnum.enumValue1, FlatUIUtils.getUIEnum( "test.enum", SomeEnum.class, SomeEnum.enumValue1 ) );
 	}
 
+	@Test
+	void flagField() {
+		TestObject o = new TestObject();
+		o.value = 123;
+		o.value2 = 888;
+
+		// test whether flag 'TestObject.valueStyled' is set to true
+		Map<String, Object> oldStyleValues = FlatStylingSupport.parseAndApply(
+			null, "value: 345", (key, value) -> {
+				return FlatStylingSupport.applyToAnnotatedObject( o, key, value );
+			} );
+		assertEquals( expectedMap( "value", 123 ), oldStyleValues );
+		assertEquals( 345, o.value );
+		assertEquals( 888, o.value2 );
+		assertTrue( o.valueStyled );
+		assertFalse( o.valueStyled2 );
+
+		// test whether flag 'TestObject.valueStyled' is reset to false
+		Map<String, Object> oldStyleValues2 = FlatStylingSupport.parseAndApply(
+			oldStyleValues, "value2: 999", (key, value) -> {
+				return FlatStylingSupport.applyToAnnotatedObject( o, key, value );
+			} );
+		assertEquals( expectedMap( "value2", 888 ), oldStyleValues2 );
+		assertEquals( 123, o.value );
+		assertEquals( 999, o.value2 );
+		assertFalse( o.valueStyled );
+		assertTrue( o.valueStyled2 );
+	}
+
 	//---- class CustomIcon ---------------------------------------------------
 
 	static class CustomIcon
@@ -282,6 +314,21 @@ public class TestFlatStyling
 	{
 		CustomRadioButtonIcon() {
 			background = Color.green;
+		}
+	}
+
+	//---- class TestObject ---------------------------------------------------
+
+	static class TestObject {
+		@Styleable( flagFieldName = "valueStyled")  protected int value;
+		@Styleable( flagFieldName = "valueStyled2") protected int value2;
+
+		private boolean valueStyled;
+		private boolean valueStyled2;
+
+		@Override
+		public String toString() {
+			return value + " " + valueStyled;
 		}
 	}
 }
