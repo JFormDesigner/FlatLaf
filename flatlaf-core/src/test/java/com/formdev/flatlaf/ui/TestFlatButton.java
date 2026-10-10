@@ -368,6 +368,73 @@ public class TestFlatButton
 		rootPane.getContentPane().remove( b );
 	}
 
+	@Test
+	void backgroundStyledWithoutStateColors() {
+		// issue #1096: styled background must not be replaced by focused background from UI defaults
+		JButton b = new JButton();
+		b.putClientProperty( FlatClientProperties.STYLE, "background: #020001" );
+
+		testButtonColors( b, b2 -> ((FlatButtonUI)b2.getUI()).getBackground( b2 ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.disabledBackground" ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.hoverBackground" ),
+			UIManager.getColor( "Button.pressedBackground" ) );
+
+		// borderless
+		b.putClientProperty( FlatClientProperties.STYLE, "buttonType: borderless; background: #020001" );
+		assertEquals( new Color( 0x020001 ), ((FlatButtonUI)b.getUI()).getBackground( b ) );
+
+		// default
+		b.putClientProperty( FlatClientProperties.STYLE, "background: #020001" );
+		JRootPane rootPane = new JRootPane();
+		rootPane.getContentPane().add( b );
+		rootPane.setDefaultButton( b );
+		testButtonColors( b, b2 -> ((FlatButtonUI)b2.getUI()).getBackground( b2 ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.disabledBackground" ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.default.hoverBackground" ),
+			UIManager.getColor( "Button.default.pressedBackground" ) );
+		rootPane.getContentPane().remove( b );
+	}
+
+	@Test
+	void foregroundStyledWithoutStateColors() {
+		// issue #1096: styled foreground must not be replaced by focused/selected foreground from UI defaults
+		JButton b = new JButton();
+		b.putClientProperty( FlatClientProperties.STYLE, "foreground: #020001" );
+
+		testButtonColors( b, b2 -> ((FlatButtonUI)b2.getUI()).getForeground( b2 ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.disabledText" ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.hoverForeground" ),
+			UIManager.getColor( "Button.pressedForeground" ) );
+
+		// selected
+		b.setSelected( true );
+		testButtonColors( b, b2 -> ((FlatButtonUI)b2.getUI()).getForeground( b2 ),
+			new Color( 0x020001 ),
+			FlatUIUtils.getUIColor( "Button.disabledSelectedForeground", "Button.disabledText" ),
+			null,
+			null,
+			UIManager.getColor( "Button.pressedForeground" ) );
+		b.setSelected( false );
+
+		// default
+		JRootPane rootPane = new JRootPane();
+		rootPane.getContentPane().add( b );
+		rootPane.setDefaultButton( b );
+		testButtonColors( b, b2 -> ((FlatButtonUI)b2.getUI()).getForeground( b2 ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.disabledText" ),
+			new Color( 0x020001 ),
+			UIManager.getColor( "Button.default.hoverForeground" ),
+			UIManager.getColor( "Button.default.pressedForeground" ) );
+		rootPane.getContentPane().remove( b );
+	}
+
 	private void testButtonColors( JButton b, Function<JButton, Color> f,
 		Color expectedEnabled, Color expectedDisabled, Color expectedFocused,
 		Color expectedHover, Color expectedPressed
