@@ -1003,11 +1003,13 @@ Slider.onlyLeftMouseButtonDrag true
 Slider.pressedThumbColor       #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 Slider.pressedTrackColor       #88ff88  HSL 120 100  77    javax.swing.plaf.ColorUIResource [UI]
 Slider.shadow                  #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbArc                999
 Slider.thumbBorderColor        #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbBorderWidth        1.5
 Slider.thumbColor              #ffaaaa  HSL   0 100  83    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackArc                999
 Slider.trackColor              #88ff88  HSL 120 100  77    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackWidth              2
 Slider.verticalSize            21,200    java.awt.Dimension

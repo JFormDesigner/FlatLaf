@@ -819,11 +819,13 @@ Slider.onlyLeftMouseButtonDrag
 Slider.pressedThumbColor
 Slider.pressedTrackColor
 Slider.shadow
+Slider.thumbArc
 Slider.thumbBorderColor
 Slider.thumbBorderWidth
 Slider.thumbColor
 Slider.thumbSize
 Slider.tickColor
+Slider.trackArc
 Slider.trackColor
 Slider.trackValueColor
 Slider.trackWidth

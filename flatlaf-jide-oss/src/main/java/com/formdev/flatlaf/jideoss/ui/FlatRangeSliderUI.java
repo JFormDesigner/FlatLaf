@@ -49,6 +49,8 @@ public class FlatRangeSliderUI
 	protected Dimension thumbSize;
 	protected int focusWidth;
 	/** @since 2 */ protected float thumbBorderWidth;
+	/** @since 3.8 */ protected int trackArc;
+	/** @since 3.8 */ protected int thumbArc;
 
 	protected Color trackValueColor;
 	protected Color trackColor;
@@ -122,6 +124,8 @@ public class FlatRangeSliderUI
 		thumbSize = UIManager.getDimension( "Slider.thumbSize" );
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
 		thumbBorderWidth = FlatUIUtils.getUIFloat( "Slider.thumbBorderWidth", 1 );
+		trackArc = FlatUIUtils.getUIInt( "Slider.trackArc", 999 );
+		thumbArc = FlatUIUtils.getUIInt( "Slider.thumbArc", 999 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
@@ -258,7 +262,7 @@ debug*/
 	public void paintTrack( Graphics g ) {
 		boolean enabled = slider.isEnabled();
 		float tw = UIScale.scale( (float) trackWidth );
-		float arc = tw;
+		float arc = Math.min( Math.max( UIScale.scale( (float) trackArc ), 0 ), tw );
 
 		// get rectangle of second thumb
 		Point p = adjustThumbForHighValue();
@@ -326,7 +330,7 @@ debug*/
 		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
 			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
-		FlatSliderUI.paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth );
+		FlatSliderUI.paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth, thumbArc );
 	}
 
 	protected Color getTrackValueColor() {

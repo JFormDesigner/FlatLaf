@@ -973,9 +973,11 @@ Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
 Slider.pressedThumbColor       #1a70c0  HSL 209  76  43    com.formdev.flatlaf.util.DerivedColor [UI]    darken(8% autoInverse)
 Slider.shadow                  #c2c2c2  HSL   0   0  76    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbArc                999
 Slider.thumbColor              #2285e1  HSL 209  76  51    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #808080  HSL   0   0  50    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackArc                999
 Slider.trackColor              #c4c4c4  HSL   0   0  77    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackValueColor         #2285e1  HSL 209  76  51    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackWidth              2

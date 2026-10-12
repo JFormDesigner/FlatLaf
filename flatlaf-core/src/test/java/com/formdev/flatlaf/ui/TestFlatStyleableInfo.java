@@ -704,6 +704,8 @@ public class TestFlatStyleableInfo
 			"thumbSize", Dimension.class,
 			"focusWidth", int.class,
 			"thumbBorderWidth", float.class,
+			"trackArc", int.class,
+			"thumbArc", int.class,
 
 			"trackValueColor", Color.class,
 			"trackColor", Color.class,

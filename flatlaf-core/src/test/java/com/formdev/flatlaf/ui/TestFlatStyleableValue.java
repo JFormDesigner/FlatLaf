@@ -834,6 +834,8 @@ public class TestFlatStyleableValue
 		testDimension( c, ui, "thumbSize" );
 		testInteger( c, ui, "focusWidth" );
 		testFloat( c, ui, "thumbBorderWidth" );
+		testInteger( c, ui, "trackArc" );
+		testInteger( c, ui, "thumbArc" );
 
 		testColor( c, ui, "trackValueColor" );
 		testColor( c, ui, "trackColor" );

@@ -580,11 +580,13 @@ focusedThumbBorderColor                            java.awt.Color
 focusWidth                                         int
 hoverThumbColor                                    java.awt.Color
 pressedThumbColor                                  java.awt.Color
+thumbArc                                           int
 thumbBorderColor                                   java.awt.Color
 thumbBorderWidth                                   float
 thumbColor                                         java.awt.Color
 thumbSize                                          java.awt.Dimension
 tickColor                                          java.awt.Color
+trackArc                                           int
 trackColor                                         java.awt.Color
 trackValueColor                                    java.awt.Color
 trackWidth                                         int

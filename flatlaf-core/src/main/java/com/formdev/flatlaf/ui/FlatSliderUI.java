@@ -30,6 +30,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
@@ -68,6 +69,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.thumbSize				Dimension
  * @uiDefault Slider.focusWidth				int
  * @uiDefault Slider.thumbBorderWidth		int or float
+ * @uiDefault Slider.trackArc				int	optional; defaults to 999 (fully rounded)
+ * @uiDefault Slider.thumbArc				int	optional; defaults to 999 (fully rounded); used only for round thumb (no ticks/labels)
  *
  * @uiDefault Slider.trackValueColor		Color	optional; defaults to Slider.thumbColor
  * @uiDefault Slider.trackColor				Color
@@ -91,6 +94,8 @@ public class FlatSliderUI
 	@Styleable protected Dimension thumbSize;
 	@Styleable protected int focusWidth;
 	/** @since 2 */ @Styleable protected float thumbBorderWidth;
+	/** @since 3.8 */ @Styleable protected int trackArc;
+	/** @since 3.8 */ @Styleable protected int thumbArc;
 
 	@Styleable protected Color trackValueColor;
 	@Styleable protected Color trackColor;
@@ -145,6 +150,8 @@ public class FlatSliderUI
 		}
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
 		thumbBorderWidth = FlatUIUtils.getUIFloat( "Slider.thumbBorderWidth", 1 );
+		trackArc = FlatUIUtils.getUIInt( "Slider.trackArc", 999 );
+		thumbArc = FlatUIUtils.getUIInt( "Slider.thumbArc", 999 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
@@ -369,7 +376,7 @@ debug*/
 	public void paintTrack( Graphics g ) {
 		boolean enabled = slider.isEnabled();
 		float tw = UIScale.scale( (float) trackWidth );
-		float arc = tw;
+		float arc = Math.min( Math.max( UIScale.scale( (float) trackArc ), 0 ), tw );
 
 		RoundRectangle2D coloredTrack = null;
 		RoundRectangle2D track;
@@ -440,11 +447,13 @@ debug*/
 		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
 			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
-		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth );
+		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth, thumbArc );
 	}
 
-	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
-		Color thumbColor, Color thumbBorderColor, Color focusedColor, float thumbBorderWidth, int focusWidth )
+	/** @since 3.8 */
+	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect,
+		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor,
+		float thumbBorderWidth, int focusWidth, int thumbArc )
 	{
 		double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
 		if( systemScaleFactor != (int) systemScaleFactor ) {
@@ -454,19 +463,20 @@ debug*/
 					paintThumbImpl( g, slider, x2, y2, width2, height2,
 						roundThumb, thumbColor, thumbBorderColor, focusedColor,
 						(float) (thumbBorderWidth * scaleFactor),
-						(float) (focusWidth * scaleFactor) );
+						(float) (focusWidth * scaleFactor),
+						(float) (thumbArc * scaleFactor) );
 				} );
 			return;
 		}
 
 		paintThumbImpl( g, slider, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
-			roundThumb, thumbColor, thumbBorderColor, focusedColor, thumbBorderWidth, focusWidth );
+			roundThumb, thumbColor, thumbBorderColor, focusedColor, thumbBorderWidth, focusWidth, thumbArc );
 
 	}
 
 	private static void paintThumbImpl( Graphics g, JSlider slider, int x, int y, int width, int height,
 		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor,
-		float thumbBorderWidth, float focusWidth )
+		float thumbBorderWidth, float focusWidth, float thumbArc )
 	{
 		int fw = Math.round( UIScale.scale( focusWidth ) );
 		int tx = x + fw;
@@ -476,26 +486,28 @@ debug*/
 		boolean focused = FlatUIUtils.isPermanentFocusOwner( slider );
 
 		if( roundThumb ) {
+			float arc = Math.min( Math.max( UIScale.scale( thumbArc ), 0 ), Math.min( tw, th ) );
+
 			// paint thumb focus border
 			if( focused ) {
 				g.setColor( focusedColor );
-				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
+				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height, arc + fw + fw ) );
 			}
 
 			if( thumbBorderColor != null ) {
 				// paint thumb border
 				g.setColor( thumbBorderColor );
-				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
+				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th, arc ) );
 
 				// paint thumb background
 				float lw = UIScale.scale( thumbBorderWidth );
 				g.setColor( thumbColor );
 				((Graphics2D)g).fill( createRoundThumbShape( tx + lw, ty + lw,
-					tw - lw - lw, th - lw - lw ) );
+					tw - lw - lw, th - lw - lw, arc - lw - lw ) );
 			} else {
 				// paint thumb background
 				g.setColor( thumbColor );
-				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
+				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th, arc ) );
 			}
 		} else {
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -544,13 +556,15 @@ debug*/
 		}
 	}
 
-	public static Shape createRoundThumbShape( float x, float y, float w, float h ) {
-		if( w == h )
+	/** @since 3.8 */
+	public static Shape createRoundThumbShape( float x, float y, float w, float h, float arc ) {
+		arc = Math.min( arc, Math.min( w, h ) );
+		if( arc <= 0 )
+			return new Rectangle2D.Float( x, y, w, h );
+		else if( w == h && arc == w )
 			return new Ellipse2D.Float( x, y, w, h );
-		else {
-			float arc = Math.min( w, h );
+		else
 			return new RoundRectangle2D.Float( x, y, w, h, arc, arc );
-		}
 	}
 
 	public static Shape createDirectionalThumbShape( float x, float y, float w, float h, float arc ) {

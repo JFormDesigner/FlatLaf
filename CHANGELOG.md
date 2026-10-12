@@ -12,6 +12,8 @@ FlatLaf Change Log
   components. (PR #1142, issue #1095)
 - Publish Maven/Gradle BOM (Bill of Materials) to Maven Central. Artifact ID
   is `flatlaf-bom`. (issue #1146)
+- Slider: Added UI values `Slider.trackArc` and `Slider.thumbArc` to customize
+  track and thumb corner diameter. (issue #1041)
 
 #### Fixed bugs
 
