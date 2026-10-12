@@ -765,6 +765,10 @@ public class UIDefaultsDump
 			}
 
 			switch( borderClassName ) {
+				case "com.formdev.flatlaf.ui.FlatScrollPaneBorder":
+					c = new JScrollPane();
+					break;
+
 				case "com.apple.laf.AquaToolBarUI$ToolBarBorder":
 				case "org.pushingpixels.radiance.theming.internal.utils.border.RadianceToolBarBorder":
 					c = new JToolBar();
