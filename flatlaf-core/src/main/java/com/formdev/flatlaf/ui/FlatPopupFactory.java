@@ -171,7 +171,7 @@ public class FlatPopupFactory
 				popupWindow.getGraphicsConfiguration() == owner.getGraphicsConfiguration() )
 			  return popup;
 
-			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
+			// avoid endless loop (should never happen; PopupFactory cache size is 5)
 			if( ++count > 10 )
 				return popup;
 

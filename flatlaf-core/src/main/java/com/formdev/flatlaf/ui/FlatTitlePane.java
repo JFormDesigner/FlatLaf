@@ -1489,7 +1489,7 @@ debug*/
 		@Override
 		public void mousePressed( MouseEvent e ) {
 			if( window == null )
-				return; // should newer occur
+				return; // should never occur
 
 			// on Linux, show window menu
 			if( SwingUtilities.isRightMouseButton( e ) &&
@@ -1516,7 +1516,7 @@ debug*/
 		@Override
 		public void mouseDragged( MouseEvent e ) {
 			if( window == null || dragOffset == null )
-				return; // should newer occur
+				return; // should never occur
 
 			if( linuxNativeMove )
 				return;
