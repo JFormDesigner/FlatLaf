@@ -75,7 +75,8 @@ public class FlatTreeCollapsedIcon
 	}
 
 	void setStyleColorFromTreeUI( Component c, Graphics2D g ) {
-		setStyleColorFromTreeUI( c, g, ui -> ui.iconCollapsedColor );
+		setStyleColorFromTreeUI( c, g, ui -> (ui.iconWideSelectionColor != null)
+			? ui.iconWideSelectionColor : ui.iconCollapsedColor );
 	}
 
 	void rotate( Component c, Graphics2D g ) {

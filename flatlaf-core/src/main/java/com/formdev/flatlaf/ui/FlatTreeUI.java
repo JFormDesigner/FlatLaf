@@ -176,6 +176,10 @@ public class FlatTreeUI
 	private Color defaultSelectionBorderColor;
 	private Map<String, Object> oldStyleValues;
 
+	// color of tree icons (expanded/collapsed/leaf/closed/open) of currently painted row;
+	// set in paintRow() if wide selection is painted; otherwise null
+	/** @since 3.8 */ public Color iconWideSelectionColor;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTreeUI();
 	}
@@ -551,7 +555,9 @@ public class FlatTreeUI
 						// need to paint after painting lines
 						Rectangle bounds2 = new Rectangle( bounds );
 						int row2 = row;
+						Color iconWideSelectionColor2 = iconWideSelectionColor;
 						paintExpandControlsLater.add( () -> {
+							iconWideSelectionColor = iconWideSelectionColor2;
 							paintExpandControl( g, clipBounds, insets, bounds2, path, row2, isExpanded, hasBeenExpanded, isLeaf );
 						} );
 					} else
@@ -585,6 +591,8 @@ public class FlatTreeUI
 				for( Runnable r : paintExpandControlsLater )
 					r.run();
 			}
+
+			iconWideSelectionColor = null;
 		}
 
 		paintDropLine( g );
@@ -603,6 +611,8 @@ public class FlatTreeUI
 		boolean isEditing = (editingComponent != null && editingRow == row);
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );
+
+		iconWideSelectionColor = null;
 
 		// paint alternating rows
 		if( alternateRowColor != null && row % 2 != 0 ) {
@@ -686,6 +696,12 @@ public class FlatTreeUI
 				: (hasFocus ? selectionBackground : selectionInactiveBackground);
 
 			paintRowSelection( g, selectionColor, rendererComponent, bounds, row, false );
+
+			// expanded/collapsed icons and renderer icons (leaf/closed/open)
+			// are painted on wide selection background
+			// --> use selection foreground for icons
+			if( isWideSelection() )
+				iconWideSelectionColor = hasFocus ? selectionForeground : selectionInactiveForeground;
 		} else {
 			// paint cell background if DefaultTreeCellRenderer.getBackgroundNonSelectionColor() is set
 			if( rendererComponent instanceof DefaultTreeCellRenderer ) {

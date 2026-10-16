@@ -14,6 +14,8 @@ FlatLaf Change Log
   is `flatlaf-bom`. (issue #1146)
 - Slider: Added UI values `Slider.trackArc` and `Slider.thumbArc` to customize
   track and thumb corner diameter. (issue #1041)
+- Tree: Use selection foreground color for expanded, collapsed, leaf, closed and
+  open icons of selected rows (if wide selection is enabled). (issue #925)
 
 #### Fixed bugs
 

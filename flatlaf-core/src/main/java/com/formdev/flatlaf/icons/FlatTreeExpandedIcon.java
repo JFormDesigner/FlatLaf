@@ -36,7 +36,8 @@ public class FlatTreeExpandedIcon
 
 	@Override
 	void setStyleColorFromTreeUI( Component c, Graphics2D g ) {
-		setStyleColorFromTreeUI( c, g, ui -> ui.iconExpandedColor );
+		setStyleColorFromTreeUI( c, g, ui -> (ui.iconWideSelectionColor != null)
+			? ui.iconWideSelectionColor : ui.iconExpandedColor );
 	}
 
 	@Override

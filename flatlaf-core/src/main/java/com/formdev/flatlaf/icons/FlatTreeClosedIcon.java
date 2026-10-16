@@ -40,7 +40,8 @@ public class FlatTreeClosedIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		FlatTreeCollapsedIcon.setStyleColorFromTreeUI( c, g, ui -> ui.iconClosedColor );
+		FlatTreeCollapsedIcon.setStyleColorFromTreeUI( c, g, ui -> (ui.iconWideSelectionColor != null)
+			? ui.iconWideSelectionColor : ui.iconClosedColor );
 
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
