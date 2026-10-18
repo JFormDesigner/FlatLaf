@@ -1029,6 +1029,7 @@ SplitPaneDivider.gripDotCount  3
 SplitPaneDivider.gripDotSize   3
 SplitPaneDivider.gripGap       2
 SplitPaneDivider.oneTouchArrowColor #666666  HSL   0   0  40    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchButtonsPlacement leading
 SplitPaneDivider.oneTouchHoverArrowColor #999999  HSL   0   0  60    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
 SplitPaneDivider.oneTouchPressedArrowColor #b3b3b3  HSL   0   0  70    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(30%)
 SplitPaneDivider.style         grip

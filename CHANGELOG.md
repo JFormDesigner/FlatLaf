@@ -14,6 +14,9 @@ FlatLaf Change Log
   is `flatlaf-bom`. (issue #1146)
 - Slider: Added UI values `Slider.trackArc` and `Slider.thumbArc` to customize
   track and thumb corner diameter. (issue #1041)
+- SplitPane: Support placing one-touch buttons in the center or at the end of
+  the divider via UI property `SplitPaneDivider.oneTouchButtonsPlacement`
+  (`leading`, `center` or `trailing`). (issue #1116)
 - Tree: Use selection foreground color for expanded, collapsed, leaf, closed and
   open icons of selected rows (if wide selection is enabled). (issue #925)
 - System File Chooser: Support selection mode `FILES_AND_DIRECTORIES` on macOS

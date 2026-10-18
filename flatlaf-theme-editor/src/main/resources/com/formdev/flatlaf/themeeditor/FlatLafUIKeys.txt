@@ -870,6 +870,7 @@ SplitPaneDivider.gripDotSize
 SplitPaneDivider.gripGap
 SplitPaneDivider.hoverColor
 SplitPaneDivider.oneTouchArrowColor
+SplitPaneDivider.oneTouchButtonsPlacement
 SplitPaneDivider.oneTouchHoverArrowColor
 SplitPaneDivider.oneTouchPressedArrowColor
 SplitPaneDivider.pressedColor

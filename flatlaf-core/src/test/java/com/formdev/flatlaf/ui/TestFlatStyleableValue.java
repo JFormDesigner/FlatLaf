@@ -890,6 +890,7 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "oneTouchArrowColor" );
 		testColor( c, ui, "oneTouchHoverArrowColor" );
 		testColor( c, ui, "oneTouchPressedArrowColor" );
+		testString( c, ui, "oneTouchButtonsPlacement", "center" );
 
 		testString( c, ui, "style", "grip" );
 		testColor( c, ui, "gripColor" );

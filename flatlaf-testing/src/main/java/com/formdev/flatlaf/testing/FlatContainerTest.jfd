@@ -18,22 +18,47 @@ new FormModel {
 			} ) {
 				name: "panel9"
 				"opaque": false
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "splitPaneLabel"
-					"text": "JSplitPane:"
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "continuousLayoutCheckBox"
-					"text": "Continuous Layout"
-					"selected": true
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "continuousLayoutChanged", false ) )
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "default:grow, labelcompgap, default, unrelgap, default, labelcompgap, default"
+					"$rowSpecs": "default"
+				} ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "splitPaneLabel"
+						"text": "JSplitPane:"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "continuousLayoutCheckBox"
+						"text": "Continuous Layout"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "continuousLayoutChanged", false ) )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"hAlign": sfield com.jgoodies.forms.layout.CellConstraints RIGHT
+						"gridX": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "oneTouchButtonsPlacementLabel"
+						"text": "Buttons Placement:"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 5
+						"gridY": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumSelector" ) {
+						name: "oneTouchButtonsPlacementField"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+							"JavaCodeGenerator.typeParameters": "SplitPaneOneTouchButtonsPlacement"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "oneTouchButtonsPlacementChanged", false ) )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 7
+						"gridY": 1
+					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 3
-					"gridY": 1
-					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints RIGHT
+					"gridWidth": 3
 				} )
 				add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
 					name: "splitPane3"

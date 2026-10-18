@@ -74,6 +74,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
  * @uiDefault SplitPaneDivider.oneTouchPressedArrowColor Color
+ * @uiDefault SplitPaneDivider.oneTouchButtonsPlacement	String	leading (default), center or trailing
  * @uiDefault SplitPaneDivider.style					String	grip (default) or plain
  * @uiDefault SplitPaneDivider.gripColor				Color
  * @uiDefault SplitPaneDivider.gripDotCount				int
@@ -241,6 +242,7 @@ public class FlatSplitPaneUI
 	protected class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
+		/** @since 3.8 */ @Styleable protected String oneTouchButtonsPlacement = UIManager.getString( "SplitPaneDivider.oneTouchButtonsPlacement" );
 		@Styleable protected String style = UIManager.getString( "SplitPaneDivider.style" );
 		/** @since 3.3 */ @Styleable protected Color hoverColor = UIManager.getColor( "SplitPaneDivider.hoverColor" );
 		/** @since 3.3 */ @Styleable protected Color pressedColor = UIManager.getColor( "SplitPaneDivider.pressedColor" );
@@ -275,6 +277,9 @@ public class FlatSplitPaneUI
 				((FlatOneTouchButton)leftButton).updateStyle();
 			if( rightButton instanceof FlatOneTouchButton )
 				((FlatOneTouchButton)rightButton).updateStyle();
+
+			// necessary if oneTouchButtonsPlacement has changed
+			revalidate();
 		}
 
 		@Override
@@ -303,6 +308,7 @@ public class FlatSplitPaneUI
 					break;
 
 				case FlatClientProperties.SPLIT_PANE_EXPANDABLE_SIDE:
+				case "componentOrientation":
 					revalidate();
 					break;
 			}
@@ -328,7 +334,8 @@ public class FlatSplitPaneUI
 
 		/** @since 3.3 */
 		protected void paintStyle( Graphics g, int x, int y, int width, int height ) {
-			if( "plain".equals( style ) )
+			// do not paint grip if one-touch buttons are centered (they would overlap)
+			if( "plain".equals( style ) || isOneTouchButtonsCentered() )
 				return;
 
 			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
@@ -343,6 +350,13 @@ public class FlatSplitPaneUI
 			FlatUIUtils.paintGrip( g, x, y, width, height,
 				splitPane.getOrientation() == JSplitPane.VERTICAL_SPLIT,
 				gripDotCount, gripDotSize, gripGap, true );
+		}
+
+		/** @since 3.8 */
+		protected boolean isOneTouchButtonsCentered() {
+			return "center".equals( oneTouchButtonsPlacement ) &&
+				splitPane.isOneTouchExpandable() &&
+				leftButton != null && rightButton != null;
 		}
 
 		protected boolean isLeftCollapsed() {
@@ -480,6 +494,41 @@ public class FlatSplitPaneUI
 				// move right button if left button is hidden
 				if( !leftButton.isVisible() )
 					rightButton.setLocation( leftButton.getLocation() );
+
+				// move buttons to center or end of divider
+				// (if buttons are laid out horizontally, leading and trailing respect component orientation)
+				boolean vertical = (orientation == JSplitPane.VERTICAL_SPLIT);
+				boolean center = "center".equals( oneTouchButtonsPlacement );
+				boolean trailing = "trailing".equals( oneTouchButtonsPlacement );
+				if( vertical && !splitPane.getComponentOrientation().isLeftToRight() && !center )
+					trailing = !trailing;
+				if( center || trailing ) {
+					int buttonsLength = 0;
+					if( leftButton.isVisible() )
+						buttonsLength += vertical ? leftButton.getWidth() : leftButton.getHeight();
+					if( rightButton.isVisible() )
+						buttonsLength += vertical ? rightButton.getWidth() : rightButton.getHeight();
+
+					// for trailing placement, use same gap at end as leading placement uses at start
+					int dividerLength = vertical ? c.getWidth() : c.getHeight();
+					int leadingGap = vertical ? leftButton.getX() : leftButton.getY();
+					int pos = center
+						? (dividerLength - buttonsLength) / 2
+						: dividerLength - buttonsLength - leadingGap;
+					if( leftButton.isVisible() ) {
+						if( vertical )
+							leftButton.setLocation( pos, leftButton.getY() );
+						else
+							leftButton.setLocation( leftButton.getX(), pos );
+						pos += vertical ? leftButton.getWidth() : leftButton.getHeight();
+					}
+					if( rightButton.isVisible() ) {
+						if( vertical )
+							rightButton.setLocation( pos, rightButton.getY() );
+						else
+							rightButton.setLocation( rightButton.getX(), pos );
+					}
+				}
 			}
 		}
 	}

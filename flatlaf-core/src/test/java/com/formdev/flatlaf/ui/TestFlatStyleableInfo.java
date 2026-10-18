@@ -766,6 +766,7 @@ public class TestFlatStyleableInfo
 			"oneTouchArrowColor", Color.class,
 			"oneTouchHoverArrowColor", Color.class,
 			"oneTouchPressedArrowColor", Color.class,
+			"oneTouchButtonsPlacement", String.class,
 
 			"style", String.class,
 			"gripColor", Color.class,

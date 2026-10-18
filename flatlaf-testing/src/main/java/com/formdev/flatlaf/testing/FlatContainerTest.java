@@ -27,6 +27,7 @@ import java.awt.event.MouseWheelListener;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.FlatTabbedPane;
 import com.formdev.flatlaf.extras.components.FlatTabbedPane.*;
@@ -53,6 +54,8 @@ public class FlatContainerTest
 
 	public FlatContainerTest() {
 		initComponents();
+
+		oneTouchButtonsPlacementField.init( SplitPaneOneTouchButtonsPlacement.class, true );
 
 		tabTypeComboBox.init( TabType.class, true );
 
@@ -82,6 +85,14 @@ public class FlatContainerTest
 		splitPane1.setContinuousLayout( continuousLayout );
 		splitPane2.setContinuousLayout( continuousLayout );
 		splitPane3.setContinuousLayout( continuousLayout );
+	}
+
+	private void oneTouchButtonsPlacementChanged() {
+		SplitPaneOneTouchButtonsPlacement placement = oneTouchButtonsPlacementField.getSelectedValue();
+		String style = (placement != null) ? "oneTouchButtonsPlacement: " + placement : null;
+		splitPane1.putClientProperty( FlatClientProperties.STYLE, style );
+		splitPane2.putClientProperty( FlatClientProperties.STYLE, style );
+		splitPane3.putClientProperty( FlatClientProperties.STYLE, style );
 	}
 
 	private void showOnlyOne() {
@@ -550,8 +561,11 @@ public class FlatContainerTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
+		FlatTestFrame.NoRightToLeftPanel panel3 = new FlatTestFrame.NoRightToLeftPanel();
 		JLabel splitPaneLabel = new JLabel();
 		continuousLayoutCheckBox = new JCheckBox();
+		JLabel oneTouchButtonsPlacementLabel = new JLabel();
+		oneTouchButtonsPlacementField = new FlatTestEnumSelector<>();
 		splitPane3 = new JSplitPane();
 		splitPane1 = new JSplitPane();
 		FlatContainerTest.Panel1 panel15 = new FlatContainerTest.Panel1();
@@ -631,15 +645,31 @@ public class FlatContainerTest
 				"70dlu:grow, $ugap, 70dlu:grow",
 				"default, $lgap, fill:70dlu, $pgap, pref, $lgap, fill:80dlu:grow, $ugap, fill:80dlu:grow, $pgap, pref"));
 
-			//---- splitPaneLabel ----
-			splitPaneLabel.setText("JSplitPane:");
-			panel9.add(splitPaneLabel, cc.xy(1, 1));
+			//======== panel3 ========
+			{
+				panel3.setLayout(new FormLayout(
+					"default:grow, $lcgap, default, $ugap, default, $lcgap, default",
+					"default"));
 
-			//---- continuousLayoutCheckBox ----
-			continuousLayoutCheckBox.setText("Continuous Layout");
-			continuousLayoutCheckBox.setSelected(true);
-			continuousLayoutCheckBox.addActionListener(e -> continuousLayoutChanged());
-			panel9.add(continuousLayoutCheckBox, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+				//---- splitPaneLabel ----
+				splitPaneLabel.setText("JSplitPane:");
+				panel3.add(splitPaneLabel, cc.xy(1, 1));
+
+				//---- continuousLayoutCheckBox ----
+				continuousLayoutCheckBox.setText("Continuous Layout");
+				continuousLayoutCheckBox.setSelected(true);
+				continuousLayoutCheckBox.addActionListener(e -> continuousLayoutChanged());
+				panel3.add(continuousLayoutCheckBox, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+
+				//---- oneTouchButtonsPlacementLabel ----
+				oneTouchButtonsPlacementLabel.setText("Buttons Placement:");
+				panel3.add(oneTouchButtonsPlacementLabel, cc.xy(5, 1));
+
+				//---- oneTouchButtonsPlacementField ----
+				oneTouchButtonsPlacementField.addActionListener(e -> oneTouchButtonsPlacementChanged());
+				panel3.add(oneTouchButtonsPlacementField, cc.xy(7, 1));
+			}
+			panel9.add(panel3, cc.xywh(1, 1, 3, 1));
 
 			//======== splitPane3 ========
 			{
@@ -976,6 +1006,7 @@ public class FlatContainerTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox continuousLayoutCheckBox;
+	private FlatTestEnumSelector<SplitPaneOneTouchButtonsPlacement> oneTouchButtonsPlacementField;
 	private JSplitPane splitPane3;
 	private JSplitPane splitPane1;
 	private JSplitPane splitPane2;
@@ -1024,6 +1055,10 @@ public class FlatContainerTest
 	private FlatTabbedPane[] allTabbedPanes;
 	private MouseWheelListener customMouseWheelScroller;
 	private MouseListener contextMenuListener;
+
+	//---- enum SplitPaneOneTouchButtonsPlacement -----------------------------
+
+	enum SplitPaneOneTouchButtonsPlacement { leading, center, trailing }
 
 	//---- enum TabPlacement --------------------------------------------------
 
