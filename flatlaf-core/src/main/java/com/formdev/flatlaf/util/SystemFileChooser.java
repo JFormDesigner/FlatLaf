@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
@@ -893,6 +894,13 @@ public class SystemFileChooser
 
 		abstract String[] showSystemDialog( Window owner, SystemFileChooser fc );
 
+		int getLafDark() {
+			LookAndFeel laf = UIManager.getLookAndFeel();
+			return (laf instanceof FlatLaf)
+				? (((FlatLaf)laf).isDark() ? 1 : 0)
+				: -1;
+		}
+
 		boolean invokeApproveCallback( SystemFileChooser fc, String[] files, ApproveContext context ) {
 			if( files == null || files.length == 0 )
 				return false; // should never happen
@@ -1207,7 +1215,7 @@ public class SystemFileChooser
 
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
-			int dark = FlatLaf.isLafDark() ? 1 : 0;
+			int dark = getLafDark();
 			boolean open = (fc.getDialogType() == OPEN_DIALOG);
 			String nameFieldStringValue = null;
 			String directoryURL = null;
@@ -1337,7 +1345,7 @@ public class SystemFileChooser
 
 		@Override
 		String[] showSystemDialog( Window owner, SystemFileChooser fc ) {
-			int dark = FlatLaf.isLafDark() ? 1 : 0;
+			int dark = getLafDark();
 			boolean open = (fc.getDialogType() == OPEN_DIALOG);
 			String approveButtonText = fc.getApproveButtonText();
 			int approveButtonMnemonic = fc.getApproveButtonMnemonic();
