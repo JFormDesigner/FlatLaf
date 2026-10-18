@@ -16,6 +16,9 @@ FlatLaf Change Log
   track and thumb corner diameter. (issue #1041)
 - Tree: Use selection foreground color for expanded, collapsed, leaf, closed and
   open icons of selected rows (if wide selection is enabled). (issue #925)
+- System File Chooser: Support selection mode `FILES_AND_DIRECTORIES` on macOS
+  (in Open dialogs). On other platforms, it behaves like `FILES_ONLY`. (PR
+  #1157)
 
 #### Fixed bugs
 
