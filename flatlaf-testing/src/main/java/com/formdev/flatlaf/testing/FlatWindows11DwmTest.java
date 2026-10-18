@@ -106,7 +106,7 @@ public class FlatWindows11DwmTest
 		else if( cornerRoundSmallRadioButton.isSelected() )
 			cornerPreference = FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL;
 
-		FlatNativeWindowsLibrary.setWindowCornerPreference( getHWND(), cornerPreference );
+		FlatNativeWindowsLibrary.dwmSetWindowCornerPreference( getHWND(), cornerPreference );
 	}
 
 	private long getHWND() {

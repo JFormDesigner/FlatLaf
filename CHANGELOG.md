@@ -38,6 +38,8 @@ FlatLaf Change Log
   HTML. (issue #1143)
 - Make sure that `META-INF/MANIFEST.MF` is first jar entry, so that tools that
   use `JarInputStream` readers see `Multi-Release: true`. (issue #1139)
+- Windows 11: Fixed missing popup borders in VMs without 3D acceleration and in
+  remote sessions. (issues #968 and #1101)
 - macOS 27: Screen menu bar (`apple.laf.useScreenMenuBar=true`) showed only the
   Apple menu and the application menu, but no Java menus, until hovering the
   menu bar or switching to another application and back. This is a macOS issue,

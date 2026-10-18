@@ -24,7 +24,7 @@
 
 // increase this version if changing API or functionality of native library
 // also update version in Java class com.formdev.flatlaf.ui.FlatNativeWindowsLibrary
-#define API_VERSION_WINDOWS		1003
+#define API_VERSION_WINDOWS		1004
 
 
 //---- JNI methods ------------------------------------------------------------

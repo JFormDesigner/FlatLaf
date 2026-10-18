@@ -44,6 +44,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -120,8 +121,8 @@ public class FlatPopupFactory
 		}
 
 		// Windows 11 with FlatLaf native library can use rounded corners and shows drop shadow for heavy weight popups
-		if( isWindows11BorderSupported() &&
-			getBorderCornerRadius( owner, contents ) > 0 )
+		if( getBorderCornerRadius( owner, contents ) > 0 &&
+			isWindows11BorderSupported() )
 		{
 			NonFlashingPopup popup = new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), owner, contents );
 			if( popup.popupWindow != null )
@@ -359,7 +360,20 @@ public class FlatPopupFactory
 	private static boolean isWindows11BorderSupported() {
 		return SystemInfo.isWindows_11_orLater &&
 			FlatSystemProperties.getBoolean( FlatSystemProperties.USE_ROUNDED_POPUP_BORDER, true ) &&
-			FlatNativeWindowsLibrary.isLoaded();
+			FlatNativeWindowsLibrary.isLoaded() &&
+			isDwmRoundedCornersSupported();
+	}
+
+	private static boolean dwmRoundedCornersSupported;
+	private static int dwmRoundedCornersScreenDevicesHashCode;
+
+	private static boolean isDwmRoundedCornersSupported() {
+		int screenDevicesHashCode = Arrays.hashCode( GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices() );
+		if( screenDevicesHashCode != dwmRoundedCornersScreenDevicesHashCode ) {
+			dwmRoundedCornersSupported = FlatNativeWindowsLibrary.isDwmRoundedCornersSupported();
+			dwmRoundedCornersScreenDevicesHashCode = screenDevicesHashCode;
+		}
+		return dwmRoundedCornersSupported;
 	}
 
 	private static boolean isMacOSBorderSupported() {
@@ -420,7 +434,7 @@ public class FlatPopupFactory
 			int cornerPreference = (borderCornerRadius <= 4)
 				? FlatNativeWindowsLibrary.DWMWCP_ROUNDSMALL  // 4px
 				: FlatNativeWindowsLibrary.DWMWCP_ROUND;      // 8px
-			FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, cornerPreference );
+			FlatNativeWindowsLibrary.dwmSetWindowCornerPreference( hwnd, cornerPreference );
 
 			// set border color
 			FlatNativeWindowsLibrary.dwmSetWindowAttributeCOLORREF( hwnd, FlatNativeWindowsLibrary.DWMWA_BORDER_COLOR, borderColor );
@@ -441,7 +455,7 @@ public class FlatPopupFactory
 			return;
 
 		// reset corner preference
-		FlatNativeWindowsLibrary.setWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
+		FlatNativeWindowsLibrary.dwmSetWindowCornerPreference( hwnd, FlatNativeWindowsLibrary.DWMWCP_DONOTROUND );
 	}
 
 	private static int getBorderCornerRadius( Component owner, Component contents ) {
