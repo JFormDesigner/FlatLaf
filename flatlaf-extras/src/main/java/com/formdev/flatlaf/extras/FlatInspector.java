@@ -46,6 +46,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -67,6 +69,7 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.MigLayoutVisualPadding;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -100,6 +103,8 @@ public class FlatInspector
 		InputEvent.SHIFT_DOWN_MASK |
 		InputEvent.ALT_DOWN_MASK |
 		InputEvent.META_DOWN_MASK;
+
+	private static List<InfoProvider> infoProviders;
 
 	private final JRootPane rootPane;
 	private final MouseMotionListener mouseMotionListener;
@@ -166,6 +171,38 @@ public class FlatInspector
 				}
 			}
 		}, AWTEvent.KEY_EVENT_MASK );
+	}
+
+	/**
+	 * Adds an info provider that can add rows to the UI inspector tooltip.
+	 * Info providers are used by all UI inspector instances.
+	 * <p>
+	 * Example:
+	 * <pre>{@code
+	 * FlatInspector.addInfoProvider( (c, rows) -> {
+	 *     if( c instanceof MyComponent )
+	 *         rows.add( "Some Value", ((MyComponent)c).getSomeValue() );
+	 * } );
+	 * }</pre>
+	 *
+	 * @since 3.8
+	 */
+	public static void addInfoProvider( InfoProvider provider ) {
+		if( infoProviders == null )
+			infoProviders = new ArrayList<>();
+		infoProviders.add( provider );
+	}
+
+	/**
+	 * Removes an info provider.
+	 *
+	 * @since 3.8
+	 */
+	public static void removeInfoProvider( InfoProvider provider ) {
+		if( infoProviders == null )
+			return;
+
+		infoProviders.remove( provider );
 	}
 
 	public FlatInspector( JRootPane rootPane ) {
@@ -443,7 +480,7 @@ public class FlatInspector
 			return;
 
 		JToolTip tip = new JToolTip();
-		tip.setTipText( buildToolTipText( c, parentLevel, showClassHierarchy ) );
+		tip.setTipText( buildToolTipText( c, parentLevel ) );
 		tip.putClientProperty( FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, true );
 
 		Point pt = new Point( x, y );
@@ -472,17 +509,14 @@ public class FlatInspector
 		popup.show();
 	}
 
-	private static String buildToolTipText( Component c, int parentLevel, boolean classHierarchy ) {
-		StringBuilder buf = new StringBuilder( 1500 );
-		buf.append( "<html><style>" );
-		buf.append( "td { padding: 0 10 0 0; }" );
-		buf.append( "</style><table>" );
+	private String buildToolTipText( Component c, int parentLevel ) {
+		Rows rows = new Rows();
 
-		appendRow( buf, "Class", toString( c.getClass(), classHierarchy ) );
-		appendRow( buf, "Size", c.getWidth() + ", " + c.getHeight() + "&nbsp;&nbsp; @ " + c.getX() + ", " + c.getY() );
+		rows.add( "Class", c.getClass() );
+		rows.add( "Size", c.getWidth() + ", " + c.getHeight() + "&nbsp;&nbsp; @ " + c.getX() + ", " + c.getY() );
 
 		if( c instanceof Container )
-			appendRow( buf, "Insets", toString( ((Container)c).getInsets() ) );
+			rows.add( "Insets", ((Container)c).getInsets() );
 
 		Insets margin = null;
 		if( c instanceof AbstractButton )
@@ -495,7 +529,7 @@ public class FlatInspector
 			margin = ((JToolBar) c).getMargin();
 
 		if( margin != null )
-			appendRow( buf, "Margin", toString( margin ) );
+			rows.add( "Margin", margin );
 
 		if( c instanceof JComponent ) {
 			Object value = ((JComponent)c).getClientProperty( MigLayoutVisualPadding.VISUAL_PADDING_PROPERTY );
@@ -503,22 +537,19 @@ public class FlatInspector
 				? new Insets( ((int[])value)[0], ((int[])value)[1], ((int[])value)[2], ((int[])value)[3] )
 				: (value instanceof Insets ? (Insets) value : null);
 			if( visualPadding != null )
-				appendRow( buf, "Mig visual padding", toString( visualPadding ) );
+				rows.add( "Mig visual padding", visualPadding );
 		}
 
-		Dimension prefSize = c.getPreferredSize();
-		Dimension minSize = c.getMinimumSize();
-		Dimension maxSize = c.getMaximumSize();
-		appendRow( buf, "Pref size", prefSize.width + ", " + prefSize.height );
-		appendRow( buf, "Min size", minSize.width + ", " + minSize.height );
-		appendRow( buf, "Max size", maxSize.width + ", " + maxSize.height );
+		rows.add( "Pref size", c.getPreferredSize() );
+		rows.add( "Min size", c.getMinimumSize() );
+		rows.add( "Max size", c.getMaximumSize() );
 
 		if( c instanceof JComponent )
-			appendRow( buf, "Border", toString( ((JComponent)c).getBorder(), classHierarchy ) );
+			rows.add( "Border", ((JComponent)c).getBorder() );
 
-		appendRow( buf, "Background", toString( c.getBackground() ) + (c.isBackgroundSet() ? "" : "  NOT SET") );
-		appendRow( buf, "Foreground", toString( c.getForeground() ) + (c.isForegroundSet() ? "" : "  NOT SET") );
-		appendRow( buf, "Font", toString( c.getFont() ) + (c.isFontSet() ? "" : "  NOT SET") );
+		rows.add( "Background", toString( c.getBackground() ) + (c.isBackgroundSet() ? "" : "  NOT SET") );
+		rows.add( "Foreground", toString( c.getForeground() ) + (c.isForegroundSet() ? "" : "  NOT SET") );
+		rows.add( "Font", toString( c.getFont() ) + (c.isFontSet() ? "" : "  NOT SET") );
 
 		if( c instanceof JComponent ) {
 			try {
@@ -533,7 +564,7 @@ public class FlatInspector
 					f.setAccessible( true );
 					ui = f.get( c );
 				}
-				appendRow( buf, "UI", (ui != null ? toString( ui.getClass(), classHierarchy ) : "null") );
+				rows.add( "UI", (ui != null ? ui.getClass() : "null") );
 			} catch( Exception ex ) {
 				// ignore
 			}
@@ -542,23 +573,43 @@ public class FlatInspector
 		if( c instanceof Container ) {
 			LayoutManager layout = ((Container)c).getLayout();
 			if( layout != null )
-				appendRow( buf, "Layout", toString( layout.getClass(), classHierarchy ) );
+				rows.add( "Layout", layout.getClass() );
 		}
 
-		appendRow( buf, "Enabled", String.valueOf( c.isEnabled() ) );
-		appendRow( buf, "Opaque", String.valueOf( c.isOpaque() )
+		rows.add( "Enabled", c.isEnabled() );
+		rows.add( "Opaque", String.valueOf( c.isOpaque() )
 			+ (c instanceof JComponent && FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") );
 		if( c instanceof AbstractButton )
-			appendRow( buf, "ContentAreaFilled", String.valueOf( ((AbstractButton)c).isContentAreaFilled() ) );
-		appendRow( buf, "Focusable", String.valueOf( c.isFocusable() ) );
-		appendRow( buf, "Left-to-right", String.valueOf( c.getComponentOrientation().isLeftToRight() ) );
-		appendRow( buf, "Parent", (c.getParent() != null ? toString( c.getParent().getClass(), classHierarchy ) : "null") );
+			rows.add( "ContentAreaFilled", ((AbstractButton)c).isContentAreaFilled() );
+		rows.add( "Focusable", c.isFocusable() );
+		rows.add( "Left-to-right", c.getComponentOrientation().isLeftToRight() );
+		rows.add( "Parent", (c.getParent() != null) ? c.getParent().getClass() : "null" );
 
 		if( c instanceof JComponent ) {
 			Object style = ((JComponent)c).getClientProperty( FlatClientProperties.STYLE );
 			if( style != null )
-				appendRow( buf, "FlatLaf Style", style.toString() );
+				rows.add( "FlatLaf Style", style );
 		}
+
+		// invoke info providers
+		if( infoProviders != null ) {
+			for( InfoProvider provider : infoProviders ) {
+				try {
+					provider.addInfo( c, rows );
+				} catch( Exception ex ) {
+					LoggingFacade.INSTANCE.logSevere( "FlatInspector: info provider failed", ex );
+				}
+			}
+		}
+
+		StringBuilder buf = new StringBuilder( 1500 );
+		buf.append( "<html><style>" );
+		buf.append( "td { padding: 0 10 0 0; }" );
+		buf.append( "</style><table>" );
+
+		// append rows
+		for( String[] row : rows.list )
+			appendRow( buf, row[0], row[1] );
 
 		// append parent level
 		buf.append( "<tr><td colspan=\"2\">" );
@@ -571,7 +622,7 @@ public class FlatInspector
 				? "press <b>Ctrl/Shift</b> to increase/decrease level"
 				: "press <b>Ctrl</b> key to inspect parent" )
 			.append( "; &nbsp;" )
-			.append( classHierarchy
+			.append( showClassHierarchy
 				? "press <b>Alt</b> key to hide class hierarchy"
 				: "press <b>Alt</b> key to show class hierarchy" )
 			.append( ')' );
@@ -588,6 +639,24 @@ public class FlatInspector
 			.append( ":</td><td>" )
 			.append( value )
 			.append( "</td></tr>" );
+	}
+
+	private static String toString( Object value, boolean classHierarchy ) {
+		if( value instanceof Class<?> )
+			return toString( (Class<?>) value, classHierarchy );
+		if( value instanceof Insets )
+			return toString( (Insets) value );
+		if( value instanceof Dimension )
+			return toString( (Dimension) value );
+		if( value instanceof Rectangle )
+			return toString( (Rectangle) value );
+		if( value instanceof Color )
+			return toString( (Color) value );
+		if( value instanceof Font )
+			return toString( (Font) value );
+		if( value instanceof Border )
+			return toString( (Border) value, classHierarchy );
+		return String.valueOf( value );
 	}
 
 	private static String toString( Class<?> cls, boolean classHierarchy ) {
@@ -629,6 +698,21 @@ public class FlatInspector
 
 		return insets.top + ", " + insets.left + ", " + insets.bottom + ", " + insets.right
 			+ (insets instanceof UIResource ? " UI" : "");
+	}
+
+	private static String toString( Dimension size ) {
+		if( size == null )
+			return "null";
+
+		return size.width + ", " + size.height
+			+ (size instanceof UIResource ? " UI" : "");
+	}
+
+	private static String toString( Rectangle r ) {
+		if( r == null )
+			return "null";
+
+		return r.x + ", " + r.y + ", " + r.width + ", " + r.height;
 	}
 
 	private static String toString( Color c ) {
@@ -694,5 +778,131 @@ public class FlatInspector
 			color = Color.GRAY;
 		return String.format( "<span color=\"#%06x\">%s</span>",
 			color.getRGB() & 0xffffff, text );
+	}
+
+	//---- interface InfoProvider ---------------------------------------------
+
+	/**
+	 * Provides additional information about a component,
+	 * which is shown in the UI inspector tooltip.
+	 *
+	 * @see FlatInspector#addInfoProvider(InfoProvider)
+	 * @since 3.8
+	 */
+	@FunctionalInterface
+	public interface InfoProvider
+	{
+		/**
+		 * Invoked when the tooltip is built for the given component.
+		 * Use {@link InfoRows#add(String, String)} to add rows to the tooltip.
+		 * Rows are added after the built-in rows.
+		 *
+		 * @param c the inspected component
+		 * @param rows used to add rows to the tooltip
+		 */
+		void addInfo( Component c, InfoRows rows );
+	}
+
+	//---- interface InfoRows -------------------------------------------------
+
+	/**
+	 * Used by {@link InfoProvider} to add rows to the UI inspector tooltip.
+	 *
+	 * @since 3.8
+	 */
+	public interface InfoRows
+	{
+		/**
+		 * Adds a row to the tooltip.
+		 * <p>
+		 * Note that the tooltip uses HTML. Key and value are inserted as is,
+		 * so they may contain HTML tags (e.g. {@code <b>}).
+		 * Characters {@code <}, {@code >} and {@code &} must be escaped if not used for HTML.
+		 * <p>
+		 * Uses {@link #toString(Object)} to convert the value to a String.
+		 *
+		 * @param key the key (shown in first column)
+		 * @param value the value (shown in second column)
+		 */
+		void add( String key, Object value );
+
+		/**
+		 * Inserts a row at the given index.
+		 * See {@link #add(String, Object)} for details about key and value.
+		 * <p>
+		 * Example: insert row after built-in "Class" row:
+		 * <pre>{@code
+		 * rows.add( rows.indexOf( "Class" ) + 1, "XML", xmlFile );
+		 * }</pre>
+		 *
+		 * @param index the index at which the row is inserted; append to end if out of bounds
+		 * @param key the key (shown in first column)
+		 * @param value the value (shown in second column)
+		 */
+		void add( int index, String key, Object value );
+
+		/**
+		 * Removes the row at the given index.
+		 * Out of bounds index is ignored.
+		 */
+		void remove( int index );
+
+		/**
+		 * Returns the index of the first row with the given key, or -1.
+		 */
+		int indexOf( String key );
+
+		/**
+		 * Converts the given value to a (HTML) String.
+		 * Has built-in converters for {@link Class}, {@link Insets}, {@link Dimension},
+		 * {@link Rectangle}, {@link Color}, {@link Font} and {@link Border}.
+		 */
+		String toString( Object value );
+	}
+
+	//---- class Rows ---------------------------------------------------------
+
+	private class Rows
+		implements InfoRows
+	{
+		final List<String[]> list = new ArrayList<>();
+
+		@Override
+		public void add( String key, Object value ) {
+			add( -1, key, value );
+		}
+
+		@Override
+		public void add( int index, String key, Object value ) {
+			// append if index is out of range
+			if( index < 0 || index > list.size() )
+				index = list.size();
+
+			list.add( index, new String[] { key, toString( value ) } );
+		}
+
+		@Override
+		public void remove( int index ) {
+			try {
+				list.remove( index );
+			} catch( IndexOutOfBoundsException ex ) {
+				// ignore
+			}
+		}
+
+		@Override
+		public int indexOf( String key ) {
+			int size = list.size();
+			for( int i = 0; i < size; i++ ) {
+				if( list.get( i )[0].equals( key ) )
+					return i;
+			}
+			return -1;
+		}
+
+		@Override
+		public String toString( Object value ) {
+			return FlatInspector.toString( value, showClassHierarchy );
+		}
 	}
 }

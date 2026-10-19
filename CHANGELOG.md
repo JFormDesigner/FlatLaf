@@ -22,6 +22,8 @@ FlatLaf Change Log
 - System File Chooser: Support selection mode `FILES_AND_DIRECTORIES` on macOS
   (in Open dialogs). On other platforms, it behaves like `FILES_ONLY`. (PR
   #1157)
+- Extras: UI Inspector: Added `FlatInspector.addInfoProvider()` to allow
+  applications to add custom rows to the UI inspector tooltip. (issue #1123)
 
 #### Fixed bugs
 
