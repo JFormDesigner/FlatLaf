@@ -448,86 +448,9 @@ public class FlatTableUI
 	public void paint( Graphics g, JComponent c ) {
 		FlatTableHeaderUI.fixDraggedAndResizingColumns( table.getTableHeader() );
 
-		boolean horizontalLines = table.getShowHorizontalLines();
-		boolean verticalLines = table.getShowVerticalLines();
-		if( horizontalLines || verticalLines ) {
-			// fix grid painting issues in BasicTableUI
-			//   - do not paint last vertical grid line if line is on right edge of scroll pane
-			//   - fix unstable grid line thickness when scaled at 125%, 150%, 175%, 225%, ...
-			//     which paints either 1px or 2px lines depending on location
-			//   - on Java 9+, fix wrong grid line thickness in dragged column
-
-			boolean hideLastVerticalLine = hideLastVerticalLine();
-			int tableWidth = table.getWidth();
-			JTableHeader header = table.getTableHeader();
-			boolean isDragging = (header != null && header.getDraggedColumn() != null);
-
-			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
-			double lineThickness = (1. / systemScaleFactor) * (int) systemScaleFactor;
-			double lineOffset = (1. - lineThickness) + 0.05; // adding 0.05 to fix line location in some cases
-
-			// Java 8 uses drawLine() to paint grid lines
-			// Java 9+ uses fillRect() to paint grid lines (except for dragged column)
-			g = new Graphics2DProxy( (Graphics2D) g ) {
-				@Override
-				public void drawLine( int x1, int y1, int x2, int y2 ) {
-					// do not paint last vertical line
-					if( hideLastVerticalLine && verticalLines &&
-						x1 == x2 && y1 == 0 && x1 == tableWidth - 1 &&
-						wasInvokedFromPaintGrid() )
-					  return;
-
-					// on Java 9+, fix wrong grid line thickness in dragged column
-					if( isDragging &&
-						SystemInfo.isJava_9_orLater &&
-						((horizontalLines && y1 == y2) || (verticalLines && x1 == x2)) &&
-						wasInvokedFromMethod( "paintDraggedArea" ) )
-					{
-						if( y1 == y2 ) {
-							// horizontal grid line
-							super.fill( new Rectangle2D.Double( x1, y1, x2 - x1 + 1, lineThickness ) );
-						} else if( x1 == x2 ) {
-							// vertical grid line
-							super.fill( new Rectangle2D.Double( x1, y1, lineThickness, y2 - y1 + 1 ) );
-						}
-						return;
-					}
-
-					super.drawLine( x1, y1, x2, y2 );
-				}
-
-				@Override
-				public void fillRect( int x, int y, int width, int height ) {
-					// do not paint last vertical line
-					if( hideLastVerticalLine && verticalLines &&
-						width == 1 && y == 0 && x == tableWidth - 1 &&
-						wasInvokedFromPaintGrid() )
-					  return;
-
-					// reduce line thickness to avoid unstable painted line thickness
-					if( lineThickness != 1 ) {
-						if( horizontalLines && height == 1 && wasInvokedFromPaintGrid() ) {
-							super.fill( new Rectangle2D.Double( x, y + lineOffset, width, lineThickness ) );
-							return;
-						}
-						if( verticalLines && width == 1 && y == 0 && wasInvokedFromPaintGrid() ) {
-							super.fill( new Rectangle2D.Double( x + lineOffset, y, lineThickness, height ) );
-							return;
-						}
-					}
-
-					super.fillRect( x, y, width, height );
-				}
-
-				private boolean wasInvokedFromPaintGrid() {
-					return wasInvokedFromMethod( "paintGrid" );
-				}
-
-				private boolean wasInvokedFromMethod( String methodName ) {
-					return StackUtils.wasInvokedFrom( BasicTableUI.class.getName(), methodName, 8 );
-				}
-			};
-		}
+		// fix grid painting issues
+		if( table.getShowHorizontalLines() || table.getShowVerticalLines() )
+			g = new FixGridPaintingGraphics( g );
 
 		// rounded selection or selection insets
 		if( (selectionArc > 0 || (selectionInsets != null && !FlatUIUtils.isInsetsEmpty( selectionInsets ))) && !isFileList( table ) )
@@ -798,6 +721,106 @@ public class FlatTableUI
 
 	static boolean isFileList( JTable table ) {
 		return Boolean.TRUE.equals( table.getClientProperty( "Table.isFileList" ) );
+	}
+
+	//---- class FixGridPaintingGraphics --------------------------------------
+
+	/**
+	 * fix grid line painting issues in BasicTableUI
+	 *   - do not paint last vertical grid line if line is on right edge of scroll pane
+	 *   - fix unstable grid line thickness when scaled at 125%, 150%, 175%, 225%, ...
+	 *     which paints either 1px or 2px lines depending on location
+	 *   - on Java 9+, fix wrong grid line thickness in dragged column
+	 *
+	 * Java 8 uses drawLine() to paint grid lines
+	 * Java 9+ uses fillRect() to paint grid lines (except for dragged column)
+	 */
+	private class FixGridPaintingGraphics
+		extends Graphics2DProxy
+	{
+		private final boolean horizontalLines;
+		private final boolean verticalLines;
+
+		private final boolean hideLastVerticalLine;
+		private final int tableWidth;
+		private final boolean isDragging;
+
+		private final double lineThickness;
+		private final double lineOffset;
+
+		FixGridPaintingGraphics( Graphics delegate ) {
+			super( (Graphics2D) delegate );
+
+			horizontalLines = table.getShowHorizontalLines();
+			verticalLines = table.getShowVerticalLines();
+
+			hideLastVerticalLine = hideLastVerticalLine();
+			tableWidth = table.getWidth();
+			JTableHeader header = table.getTableHeader();
+			isDragging = (header != null && header.getDraggedColumn() != null);
+
+			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) delegate );
+			lineThickness = (1. / systemScaleFactor) * (int) systemScaleFactor;
+			lineOffset = (1. - lineThickness) + 0.05; // adding 0.05 to fix line location in some cases
+		}
+
+		@Override
+		public void drawLine( int x1, int y1, int x2, int y2 ) {
+			// do not paint last vertical line
+			if( hideLastVerticalLine && verticalLines &&
+				x1 == x2 && y1 == 0 && x1 == tableWidth - 1 &&
+				wasInvokedFromPaintGrid() )
+			  return;
+
+			// on Java 9+, fix wrong grid line thickness in dragged column
+			if( isDragging &&
+				SystemInfo.isJava_9_orLater &&
+				((horizontalLines && y1 == y2) || (verticalLines && x1 == x2)) &&
+				wasInvokedFromMethod( "paintDraggedArea" ) )
+			{
+				if( y1 == y2 ) {
+					// horizontal grid line
+					super.fill( new Rectangle2D.Double( x1, y1, x2 - x1 + 1, lineThickness ) );
+				} else if( x1 == x2 ) {
+					// vertical grid line
+					super.fill( new Rectangle2D.Double( x1, y1, lineThickness, y2 - y1 + 1 ) );
+				}
+				return;
+			}
+
+			super.drawLine( x1, y1, x2, y2 );
+		}
+
+		@Override
+		public void fillRect( int x, int y, int width, int height ) {
+			// do not paint last vertical line
+			if( hideLastVerticalLine && verticalLines &&
+				width == 1 && y == 0 && x == tableWidth - 1 &&
+				wasInvokedFromPaintGrid() )
+			  return;
+
+			// reduce line thickness to avoid unstable painted line thickness
+			if( lineThickness != 1 ) {
+				if( horizontalLines && height == 1 && wasInvokedFromPaintGrid() ) {
+					super.fill( new Rectangle2D.Double( x, y + lineOffset, width, lineThickness ) );
+					return;
+				}
+				if( verticalLines && width == 1 && y == 0 && wasInvokedFromPaintGrid() ) {
+					super.fill( new Rectangle2D.Double( x + lineOffset, y, lineThickness, height ) );
+					return;
+				}
+			}
+
+			super.fillRect( x, y, width, height );
+		}
+
+		private boolean wasInvokedFromPaintGrid() {
+			return wasInvokedFromMethod( "paintGrid" );
+		}
+
+		private boolean wasInvokedFromMethod( String methodName ) {
+			return StackUtils.wasInvokedFrom( BasicTableUI.class.getName(), methodName, 8 );
+		}
 	}
 
 	//---- class RoundedSelectionGraphics -------------------------------------
