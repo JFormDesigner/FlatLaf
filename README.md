@@ -243,6 +243,8 @@ Applications using FlatLaf
   wrapper
 - [Linotte](https://github.com/cpc6128/LangageLinotte) - French programming
   language created to learn programming
+- [LogViewer](https://github.com/tibagni/LogViewer) - visual Android log and
+  bugreport analysis tool
 - [lsfusion platform](https://github.com/lsfusion/platform) - information
   systems development platform
 - [muCommander](https://github.com/mucommander/mucommander) - lightweight
