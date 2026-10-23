@@ -49,6 +49,9 @@ FlatLaf Change Log
   (e.g. `arc: 4`). (issue #1151)
 - TabbedPane: Titles of disabled tabs were not grayed out if title contains
   HTML. (issue #1143)
+- Table: Fixed gaps (in table background color) between cells and grid lines
+  when grid lines are shown and intercell spacing is 1 or 2, on Windows with
+  scale factors 125%, 150%, 175%, etc. (issue #581)
 - Make sure that `META-INF/MANIFEST.MF` is first jar entry, so that tools that
   use `JarInputStream` readers see `Multi-Release: true`. (issue #1139)
 - Windows 11: Fixed missing popup borders in VMs without 3D acceleration and in

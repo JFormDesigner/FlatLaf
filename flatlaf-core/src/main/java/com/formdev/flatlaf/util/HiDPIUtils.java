@@ -24,7 +24,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import javax.swing.JComponent;
 import javax.swing.RepaintManager;
@@ -37,6 +36,8 @@ import com.formdev.flatlaf.ui.StackUtils;
  */
 public class HiDPIUtils
 {
+	//---- painting -----------------------------------------------------------
+
 	public interface Painter {
 		void paint( Graphics2D g, int x, int y, int width, int height, double scaleFactor );
 	}
@@ -57,6 +58,39 @@ public class HiDPIUtils
 		// save original transform
 		AffineTransform t = g.getTransform();
 
+		ScaleTo1xResult r1x = scaleTo1xImpl( t, x, y, width, height );
+
+		// check whether scaled
+		if( r1x == null ) {
+			painter.paint( g, x, y, width, height, 1 );
+			return;
+		}
+
+		try {
+			// unscale graphics context to factor 1.0, keep rotation and move origin (to whole numbers)
+			AffineTransform t1x;
+			if( r1x.rotated ) {
+				t1x = new AffineTransform( t.getScaleX(), t.getShearY(),
+					t.getShearX(), t.getScaleY(), r1x.x, r1x.y );
+				t1x.scale( 1. / r1x.realScaleX, 1. / r1x.realScaleY );
+			} else
+				t1x = new AffineTransform( 1, 0, 0, 1, r1x.x, r1x.y );
+			g.setTransform( t1x );
+
+			// paint
+			painter.paint( g, 0, 0, r1x.width, r1x.height, r1x.realScaleX );
+		} finally {
+			// restore original transform
+			g.setTransform( t );
+		}
+	}
+
+	/**
+	 * Scales a rectangle in the same way as the JRE does in
+	 * sun.java2d.pipe.PixelToParallelogramConverter.fillRectangle(),
+	 * which is used by Graphics.fillRect().
+	 */
+	private static ScaleTo1xResult scaleTo1xImpl( AffineTransform t, int x, int y, int width, int height ) {
 		// get scale X/Y and shear X/Y
 		final double scaleX = t.getScaleX();
 		final double scaleY = t.getScaleY();
@@ -80,58 +114,55 @@ public class HiDPIUtils
 		}
 
 		// check whether scaled
-		if( realScaleX == 1 && realScaleY == 1 ) {
-			painter.paint( g, x, y, width, height, 1 );
-			return;
-		}
+		if( realScaleX == 1 && realScaleY == 1 )
+			return null;
 
 		// calculate x and y (this is equal to t.translate( x, y ))
 		double px = (x * scaleX) + (y * shearX) + t.getTranslateX();
 		double py = (y * scaleY) + (x * shearY) + t.getTranslateY();
 
 		// scale rectangle
-		Rectangle2D.Double scaledRect = scale( realScaleX, realScaleY, px, py, width, height );
+		double newX = normalize( px );
+		double newY = normalize( py );
+		double newWidth  = normalize( px + (width  * realScaleX) ) - newX;
+		double newHeight = normalize( py + (height * realScaleY) ) - newY;
 
-		try {
-			// unscale to factor 1.0, keep rotation and move origin (to whole numbers)
-			AffineTransform t1x;
-			if( rotated ) {
-				t1x = new AffineTransform( scaleX, shearY, shearX, scaleY,
-					Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) );
-				t1x.scale( 1. / realScaleX, 1. / realScaleY );
-			} else
-				t1x = new AffineTransform( 1, 0, 0, 1, Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) );
-			g.setTransform( t1x );
-
-			int swidth = (int) scaledRect.width;
-			int sheight = (int) scaledRect.height;
-
-			// paint
-			painter.paint( g, 0, 0, swidth, sheight, realScaleX );
-		} finally {
-			// restore original transform
-			g.setTransform( t );
-		}
+		ScaleTo1xResult r = new ScaleTo1xResult();
+		r.x = (int) Math.floor( newX );
+		r.y = (int) Math.floor( newY );
+		r.width = (int) newWidth;
+		r.height = (int) newHeight;
+		r.rotated = rotated;
+		r.realScaleX = realScaleX;
+		r.realScaleY = realScaleY;
+		return r;
 	}
 
 	/**
 	 * Scales a rectangle in the same way as the JRE does in
 	 * sun.java2d.pipe.PixelToParallelogramConverter.fillRectangle(),
 	 * which is used by Graphics.fillRect().
+	 *
+	 * @since 3.8
 	 */
-	private static Rectangle2D.Double scale( double scaleX, double scaleY, double px, double py, int width, int height ) {
-		double newX = normalize( px );
-		double newY = normalize( py );
-		double newWidth  = normalize( px + (width  * scaleX) ) - newX;
-		double newHeight = normalize( py + (height * scaleY) ) - newY;
-
-		return new Rectangle2D.Double( newX, newY, newWidth, newHeight );
+	public static Rectangle scaleTo1x( AffineTransform t, int x, int y, int width, int height ) {
+		ScaleTo1xResult scaledRect = scaleTo1xImpl( t, x, y, width, height );
+		return (scaledRect != null)
+			? new Rectangle( scaledRect.x, scaledRect.y, scaledRect.width, scaledRect.height )
+			: new Rectangle( x, y, width, height );
 	}
 
 	private static double normalize( double value ) {
 		return Math.floor( value + 0.25 ) + 0.25;
 	}
 
+	private static class ScaleTo1xResult {
+		int x, y, width, height;
+		boolean rotated;
+		double realScaleX, realScaleY;
+	}
+
+	//---- text Y correction --------------------------------------------------
 
 	private static Boolean useTextYCorrection;
 
@@ -341,6 +372,8 @@ public class HiDPIUtils
 			}
 		};
 	}
+
+	//---- repainting ---------------------------------------------------------
 
 	/**
 	 * Repaints the given component.

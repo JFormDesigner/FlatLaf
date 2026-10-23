@@ -310,7 +310,8 @@ public class FlatPaintingStringTest
 				// E.g. scaling following bounds by 150% results in different heights:
 				//   0,0, 10,15  -->  [x=0,y=0,width=15,height=22]
 				//   0,1, 10,15  -->  [x=0,y=1,width=15,height=23]
-				Rectangle r = scaleTo1x( scaleFactor, 0, yOffset, size.width, size.height );
+				AffineTransform t = new AffineTransform( scaleFactor, 0, 0, scaleFactor, 0, 0 );
+				Rectangle r = HiDPIUtils.scaleTo1x( t, 0, yOffset, size.width, size.height );
 				return new Dimension( r.width, r.height );
 			} else
 				return size;
@@ -379,29 +380,6 @@ public class FlatPaintingStringTest
 			AffineTransform t = g2.getTransform();
 			double textY = t.getTranslateY() + (y * t.getScaleY());
 			setToolTipText( textY + " + " + yCorrection + " = " + (textY + yCorrection) );
-		}
-
-		/**
-		 * Scales a rectangle in the same way as the JRE does in
-		 * sun.java2d.pipe.PixelToParallelogramConverter.fillRectangle(),
-		 * which is used by Graphics.fillRect().
-		 *
-		 * This is a copy of HiDPIUtils.scale()
-		 */
-		public static Rectangle scaleTo1x( double scaleFactor, int x, int y, int width, int height ) {
-			double px = (x * scaleFactor);
-			double py = (y * scaleFactor);
-
-			double newX = normalize( px );
-			double newY = normalize( py );
-			double newWidth  = normalize( px + (width * scaleFactor) ) - newX;
-			double newHeight = normalize( py + (height * scaleFactor) ) - newY;
-
-			return new Rectangle( (int) Math.floor( newX ), (int) Math.floor( newY ), (int) newWidth, (int) newHeight );
-		}
-
-		private static double normalize( double value ) {
-			return Math.floor( value + 0.25 ) + 0.25;
 		}
 	}
 }

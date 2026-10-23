@@ -835,6 +835,10 @@ public class FlatUIUtils
 		}
 	}
 
+	static final int
+		FLAG_EXTRA_HPIXEL = (1 << 24),	// increase width by 1 device pixel
+		FLAG_EXTRA_VPIXEL = (1 << 25);	// increase height by 1 device pixel
+
 	/**
 	 * Paints a selection.
 	 * <p>
@@ -860,6 +864,10 @@ public class FlatUIUtils
 				// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
 				HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 					(g2d, x2, y2, width2, height2, scaleFactor) -> {
+						if( (flags & FLAG_EXTRA_HPIXEL) != 0 && (insets == null || insets.right == 0) )
+							width2++;
+						if( (flags & FLAG_EXTRA_VPIXEL) != 0 && (insets == null || insets.bottom == 0) )
+							height2++;
 						paintRoundedSelectionImpl( g2d, x2, y2, width2, height2,
 							(float) (arcTopLeft * scaleFactor), (float) (arcTopRight * scaleFactor),
 							(float) (arcBottomLeft * scaleFactor), (float) (arcBottomRight * scaleFactor) );
