@@ -63,6 +63,16 @@ JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_get
 	return reinterpret_cast<jlong>( getWindowHandle( env, window ) );
 }
 
+extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_isScreenReaderActive
+	( JNIEnv* env, jclass cls )
+{
+	BOOL screenReader = FALSE;
+	if( !::SystemParametersInfo( SPI_GETSCREENREADER, 0, &screenReader, 0 ) )
+		return FALSE;
+	return screenReader ? TRUE : FALSE;
+}
+
 //---- Desktop Window Manager (DWM) -------------------------------------------
 
 extern "C"

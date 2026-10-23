@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -100,7 +101,8 @@ class MnemonicHandler
 	 * Special Alt key behavior on Windows.
 	 *
 	 * Press-and-release Alt key selects first menu (if available) and moves focus
-	 * temporary to menu bar. If menu bar has focus (some menu is selected),
+	 * temporary to menu bar. If a screen reader is running, the popup of the
+	 * first menu is also shown. If menu bar has focus (some menu is selected),
 	 * pressing Alt key unselects menu and moves focus back to permanent focus owner.
 	 */
 	private boolean processKeyEventOnWindows( KeyEvent e ) {
@@ -152,8 +154,14 @@ class MnemonicHandler
 					JMenu firstMenu = (menuBar != null) ? menuBar.getMenu( 0 ) : null;
 
 					// select first menu and show mnemonics
+					// (if a screen reader is running, also show popup of first menu,
+					// because otherwise the screen reader would not announce the menu bar)
 					if( firstMenu != null ) {
-						menuSelectionManager.setSelectedPath( new MenuElement[] { menuBar, firstMenu } );
+						boolean screenReaderActive = FlatNativeWindowsLibrary.isLoaded() &&
+							FlatNativeWindowsLibrary.isScreenReaderActive();
+						menuSelectionManager.setSelectedPath( screenReaderActive
+							? new MenuElement[] { menuBar, firstMenu, firstMenu.getPopupMenu() }
+							: new MenuElement[] { menuBar, firstMenu } );
 						showMnemonics( true, c );
 						mnemonicsShown = true;
 					}

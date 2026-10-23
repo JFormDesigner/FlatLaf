@@ -12,6 +12,9 @@ FlatLaf Change Log
   components. (PR #1142, issue #1095)
 - Publish Maven/Gradle BOM (Bill of Materials) to Maven Central. Artifact ID
   is `flatlaf-bom`. (issue #1146)
+- Menus: On Windows, when a screen reader (e.g. NVDA) is running, activating the
+  menu bar with `Alt` or `F10` keys now also shows the popup of the first menu.
+  Otherwise, the screen reader would not announce the menu bar. (issue #1093)
 - Slider: Added UI values `Slider.trackArc` and `Slider.thumbArc` to customize
   track and thumb corner diameter. (issue #1041)
 - SplitPane: Support placing one-touch buttons in the center or at the end of

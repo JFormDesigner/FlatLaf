@@ -365,7 +365,8 @@ public class FlatMenuBarUI
 
 	/**
 	 * Activates the menu bar and shows mnemonics.
-	 * On Windows, the popup of the first menu is not shown.
+	 * On Windows, the popup of the first menu is not shown,
+	 * unless a screen reader is running (otherwise it would not announce the menu bar).
 	 * On other platforms, the popup of the first menu is shown.
 	 */
 	private static class TakeFocusAction
@@ -380,12 +381,16 @@ public class FlatMenuBarUI
 			JMenuBar menuBar = (JMenuBar) e.getSource();
 			JMenu menu = menuBar.getMenu( 0 );
 			if( menu != null ) {
-				MenuSelectionManager.defaultManager().setSelectedPath( SystemInfo.isWindows
+				MenuSelectionManager.defaultManager().setSelectedPath( SystemInfo.isWindows && !isScreenReaderActive()
 					? new MenuElement[] { menuBar, menu }
 					: new MenuElement[] { menuBar, menu, menu.getPopupMenu() } );
 
 				FlatLaf.showMnemonics( menuBar );
 			}
+		}
+
+		private static boolean isScreenReaderActive() {
+			return FlatNativeWindowsLibrary.isLoaded() && FlatNativeWindowsLibrary.isScreenReaderActive();
 		}
 	}
 }

@@ -91,6 +91,14 @@ JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_get
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
+ * Method:    isScreenReaderActive
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeWindowsLibrary_isScreenReaderActive
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeWindowsLibrary
  * Method:    dwmSetWindowCornerPreference
  * Signature: (JI)Z
  */

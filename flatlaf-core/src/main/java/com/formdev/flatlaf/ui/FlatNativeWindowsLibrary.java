@@ -31,7 +31,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeWindowsLibrary
 {
-	private static int API_VERSION_WINDOWS = 1004;
+	private static int API_VERSION_WINDOWS = 1005;
 
 	private static long osBuildNumber = Long.MIN_VALUE;
 
@@ -79,6 +79,16 @@ public class FlatNativeWindowsLibrary
 	 * }</pre>
 	 */
 	public native static long getHWND( Window window );
+
+	/**
+	 * Checks whether a screen reader (e.g. NVDA, JAWS or Narrator) is running.
+	 * <p>
+	 * Invokes Win32 API method {@code SystemParametersInfo(SPI_GETSCREENREADER)}.
+	 * See https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow
+	 *
+	 * @since 3.8
+	 */
+	public native static boolean isScreenReaderActive();
 
 	/**
 	 * DWM_WINDOW_CORNER_PREFERENCE
