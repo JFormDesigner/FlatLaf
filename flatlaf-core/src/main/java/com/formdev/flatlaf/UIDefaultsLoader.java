@@ -690,17 +690,17 @@ class UIDefaultsLoader
 	{
 		if( !Character.isLetter( value.charAt( 0 ) ) ) {
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
-			List<String> parts = splitFunctionParams( value, ',' );
+			List<String> params = splitFunctionParams( value, ',' );
 			try {
 				Insets insets = parseInsets( value );
-				ColorUIResource lineColor = (parts.size() > 4 && !parts.get( 4 ).isEmpty())
-					? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
+				ColorUIResource lineColor = (params.size() > 4 && !params.get( 4 ).isEmpty())
+					? (ColorUIResource) parseColorOrFunction( resolver.apply( params.get( 4 ) ), resolver )
 					: null;
-				float lineThickness = (parts.size() > 5 && !parts.get( 5 ).isEmpty())
-					? parseFloat( parts.get( 5 ) )
+				float lineThickness = (params.size() > 5 && !params.get( 5 ).isEmpty())
+					? parseFloat( params.get( 5 ) )
 					: 1f;
-				int arc = (parts.size() > 6) && !parts.get( 6 ).isEmpty()
-					? parseInteger( parts.get( 6 ) )
+				int arc = (params.size() > 6) && !params.get( 6 ).isEmpty()
+					? parseInteger( params.get( 6 ) )
 					: -1;
 
 				return (LazyValue) t -> {
@@ -749,9 +749,12 @@ class UIDefaultsLoader
 					if( result != null )
 						return result;
 
+					String parmsString = value.endsWith( ")" )
+						? value.substring( value.indexOf( '(' ) + 1, value.length() - 1 )
+						: value.substring( value.indexOf( ',' ) + 1 );
 					LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + className
 						+ "': no constructor found for parameters '"
-						+ value.substring( value.indexOf( ',' + 1 ) ) + "'.", null );
+						+ parmsString + "'.", null );
 					return null;
 				} else
 					return cls.getDeclaredConstructor().newInstance();
@@ -932,6 +935,8 @@ class UIDefaultsLoader
 				case "contrast":		return parseColorContrast( params, resolver );
 				case "over":			return parseColorOver( params, resolver );
 			}
+		} catch( IndexOutOfBoundsException ex ) {
+			throw newMissingParametersException( value );
 		} finally {
 			parseColorDepth--;
 		}
@@ -1645,7 +1650,7 @@ class UIDefaultsLoader
 	}
 
 	private static Object invokeConstructorOrStaticMethod( Executable[] constructorsOrMethods,
-			List<String> parts, Function<String, String> resolver )
+			List<String> params, Function<String, String> resolver )
 		throws Exception
 	{
 		// order constructors/methods by parameter types:
@@ -1682,46 +1687,46 @@ class UIDefaultsLoader
 
 		// search for best constructor/method for given parameter values
 		for( Executable cm : constructorsOrMethods ) {
-			if( cm.getParameterCount() != parts.size() )
+			if( cm.getParameterCount() != params.size() )
 				continue;
 
-			Object[] params = parseMethodParams( cm.getParameterTypes(), parts, resolver );
-			if( params == null )
+			Object[] paramValues = parseMethodParams( cm.getParameterTypes(), params, resolver );
+			if( paramValues == null )
 				continue;
 
 			// invoke constructor or static method
 			if( cm instanceof Constructor )
-				return ((Constructor<?>)cm).newInstance( params );
+				return ((Constructor<?>)cm).newInstance( paramValues );
 			else
-				return ((Method)cm).invoke( null, params );
+				return ((Method)cm).invoke( null, paramValues );
 		}
 
 		return null;
 	}
 
-	private static Object[] parseMethodParams( Class<?>[] paramTypes, List<String> parts, Function<String, String> resolver ) {
-		Object[] params = new Object[paramTypes.length];
+	private static Object[] parseMethodParams( Class<?>[] paramTypes, List<String> params, Function<String, String> resolver ) {
+		Object[] paramValues = new Object[paramTypes.length];
 		try {
-			for( int i = 0; i < params.length; i++ ) {
+			for( int i = 0; i < paramValues.length; i++ ) {
 				Class<?> paramType = paramTypes[i];
-				String paramValue = parts.get( i );
+				String paramValue = params.get( i );
 				if( paramType == String.class )
-					params[i] = paramValue;
+					paramValues[i] = paramValue;
 				else if( paramType == boolean.class )
-					params[i] = parseBoolean( paramValue );
+					paramValues[i] = parseBoolean( paramValue );
 				else if( paramType == int.class )
-					params[i] = parseInteger( paramValue );
+					paramValues[i] = parseInteger( paramValue );
 				else if( paramType == float.class )
-					params[i] = parseFloat( paramValue );
+					paramValues[i] = parseFloat( paramValue );
 				else if( paramType == Color.class )
-					params[i] = parseColorOrFunction( resolver.apply( paramValue ), resolver );
+					paramValues[i] = parseColorOrFunction( resolver.apply( paramValue ), resolver );
 				else
 					return null; // unsupported parameter type
 			}
 		} catch( IllegalArgumentException ex ) {
 			return null; // failed to parse parameter for expected parameter type
 		}
-		return params;
+		return paramValues;
 	}
 
 	/**

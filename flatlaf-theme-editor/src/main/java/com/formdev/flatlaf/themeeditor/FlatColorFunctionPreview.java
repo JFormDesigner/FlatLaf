@@ -103,7 +103,7 @@ class FlatColorFunctionPreview
 			try {
 				parseColorFunctions( text, funNameStart, paramsStart, paramsEnd );
 				visible = true;
-			} catch( IllegalArgumentException ex ) {
+			} catch( IllegalArgumentException | IndexOutOfBoundsException ex ) {
 				// ignore
 			}
 

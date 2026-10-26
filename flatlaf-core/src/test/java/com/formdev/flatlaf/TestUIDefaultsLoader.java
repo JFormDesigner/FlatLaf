@@ -117,7 +117,7 @@ public class TestUIDefaultsLoader
 	}
 
 	private void assertBorderEquals( Border expected, String actualStyle ) {
-		Border actual = (Border) ((LazyValue)UIDefaultsLoader.parseValue( "dummyBorder", actualStyle, null )).createValue( null );
+		Border actual = (Border) parseBorder( actualStyle );
 		assertEquals( expected.getClass(), actual.getClass() );
 		if( expected instanceof FlatEmptyBorder )
 			assertEquals( ((FlatEmptyBorder)actual).getBorderInsets(), ((FlatEmptyBorder)expected).getBorderInsets() );
@@ -128,6 +128,12 @@ public class TestUIDefaultsLoader
 			assertEquals( a.getLineThickness(), e.getLineThickness() );
 			assertEquals( a.getArc(), e.getArc() );
 		}
+	}
+
+	private static Object parseBorder( String value ) {
+		Object v = UIDefaultsLoader.parseValue( "dummyBorder", value, null );
+		assertInstanceOf( LazyValue.class, v );
+		return ((LazyValue)v).createValue( null );
 	}
 
 	@Test
@@ -476,11 +482,11 @@ public class TestUIDefaultsLoader
 			assertTrue( false );
 	}
 
-	private Object parseColor( String value ) {
+	private static Object parseColor( String value ) {
 		return UIDefaultsLoader.parseValue( "dummyColor", value, null );
 	}
 
-	private Object parseColorLazy( String value, Color actual ) {
+	private static Object parseColorLazy( String value, Color actual ) {
 		UIManager.put( "dummyColor", actual );
 		Object v = UIDefaultsLoader.parseValue( "dummyColor", value, null );
 		assertInstanceOf( LazyValue.class, v );
@@ -525,12 +531,12 @@ public class TestUIDefaultsLoader
 
 	@Test
 	void parseInvalidBorders() {
-		assertThrows( new IllegalArgumentException( "invalid border '1,abc,3,4' (invalid insets '1,abc,3,4')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,abc,3,4", null ) );
-		assertThrows( new IllegalArgumentException( "invalid border '1,2,3' (invalid insets '1,2,3')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3", null ) );
-		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,,,' (invalid insets '1,2,3,,,')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,,,", null ) );
-		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f0' (invalid color '#f0')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f0", null ) );
-		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5abc' (invalid float '2.5abc')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f00,2.5abc", null ) );
-		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5,6abc' (invalid integer '6abc')" ), () -> UIDefaultsLoader.parseValue( "dummyBorder", "1,2,3,4,#f00,2.5,6abc", null ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,abc,3,4' (invalid insets '1,abc,3,4')" ), () -> parseBorder( "1,abc,3,4" ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3' (invalid insets '1,2,3')" ), () -> parseBorder( "1,2,3" ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,,,' (invalid insets '1,2,3,,,')" ), () -> parseBorder( "1,2,3,,," ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f0' (invalid color '#f0')" ), () -> parseBorder( "1,2,3,4,#f0" ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5abc' (invalid float '2.5abc')" ), () -> parseBorder( "1,2,3,4,#f00,2.5abc" ) );
+		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5,6abc' (invalid integer '6abc')" ), () -> parseBorder( "1,2,3,4,#f00,2.5,6abc" ) );
 	}
 
 	@Test
@@ -547,6 +553,36 @@ public class TestUIDefaultsLoader
 		assertThrows( new IllegalArgumentException( "invalid font 'bold +italic': can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic')" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "bold +italic", null ) );
 		assertThrows( new IllegalArgumentException( "invalid font '+bold -bold': can not use '+bold' and '-bold'" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "+bold -bold", null ) );
 		assertThrows( new IllegalArgumentException( "invalid font '+italic -italic': can not use '+italic' and '-italic'" ), () -> UIDefaultsLoader.parseValue( "dummyFont", "+italic -italic", null ) );
+	}
+
+	@Test
+	void parseInvalidColorFunctions() {
+		assertMissingParams( "dummyColor", "lighten()" );
+		assertMissingParams( "dummyColor", "lighten(#f00)" );
+		assertMissingParams( "dummyColor", "darken(#f00)" );
+		assertMissingParams( "dummyColor", "saturate(#f00)" );
+		assertMissingParams( "dummyColor", "desaturate(#f00)" );
+		assertMissingParams( "dummyColor", "fadein(#f00)" );
+		assertMissingParams( "dummyColor", "fadeout(#f00)" );
+		assertMissingParams( "dummyColor", "fade(#f00)" );
+		assertMissingParams( "dummyColor", "spin(#f00)" );
+		assertMissingParams( "dummyColor", "changeHue(#f00)" );
+		assertMissingParams( "dummyColor", "changeSaturation(#f00)" );
+		assertMissingParams( "dummyColor", "changeLightness(#f00)" );
+		assertMissingParams( "dummyColor", "changeAlpha(#f00)" );
+		assertMissingParams( "dummyColor", "mix(#f00)" );
+		assertMissingParams( "dummyColor", "tint()" );
+		assertMissingParams( "dummyColor", "shade()" );
+		assertMissingParams( "dummyColor", "contrast(#f00)" );
+		assertMissingParams( "dummyColor", "rgb(90)" );
+		assertMissingParams( "dummyColor", "rgba(90)" );
+		assertMissingParams( "dummyColor", "hsl(90)" );
+		assertMissingParams( "dummyColor", "hsla(90)" );
+	}
+
+	private void assertMissingParams( String key, String value ) {
+		assertThrows( new IllegalArgumentException( "missing parameters in function '" + value + "'" ),
+			() -> UIDefaultsLoader.parseValue( key, value, null ) );
 	}
 
 	private void assertThrows( Throwable expected, Executable executable ) {
