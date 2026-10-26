@@ -688,18 +688,18 @@ class UIDefaultsLoader
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
 		throws IllegalArgumentException
 	{
-		if( value.indexOf( ',' ) >= 0 ) {
+		if( !Character.isLetter( value.charAt( 0 ) ) ) {
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
 			try {
 				Insets insets = parseInsets( value );
-				ColorUIResource lineColor = (parts.size() >= 5 && !parts.get( 4 ).isEmpty())
+				ColorUIResource lineColor = (parts.size() > 4 && !parts.get( 4 ).isEmpty())
 					? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
 					: null;
-				float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty())
+				float lineThickness = (parts.size() > 5 && !parts.get( 5 ).isEmpty())
 					? parseFloat( parts.get( 5 ) )
 					: 1f;
-				int arc = (parts.size() >= 7) && !parts.get( 6 ).isEmpty()
+				int arc = (parts.size() > 6) && !parts.get( 6 ).isEmpty()
 					? parseInteger( parts.get( 6 ) )
 					: -1;
 
@@ -711,21 +711,41 @@ class UIDefaultsLoader
 			} catch( RuntimeException ex ) {
 				throw new IllegalArgumentException( "invalid border '" + value + "' (" + ex.getMessage() + ")" );
 			}
-		} else
+		} else {
+			// Syntax: className[(param1,param2,...)] or className[,param1,param2,...]
 			return parseInstance( value, resolver, addonClassLoaders );
+		}
 	}
 
 	private static Object parseInstance( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		return (LazyValue) t -> {
 			try {
-				if( value.indexOf( ',' ) >= 0 ) {
-					// Syntax: className,param1,param2,...
-					List<String> parts = splitFunctionParams( value, ',' );
-					String className = parts.get( 0 );
-					Class<?> cls = findClass( className, addonClassLoaders );
+				String className;
+				List<String> params;
 
+				if( value.endsWith( ")" ) ) {
+					// Syntax: className(param1,param2,...)
+					int paramsStart = value.indexOf( '(' );
+					if( paramsStart < 0 )
+						throw new IllegalArgumentException( "missing opening parenthesis in function '" + value + "'" );
+
+					className = StringUtils.substringTrimmed( value, 0, paramsStart );
+					params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+				} else if( value.indexOf( ',' ) >= 0 ) {
+					// Syntax: className,param1,param2,...
+					// (for compatibility)
+					params = splitFunctionParams( value, ',' );
+					className = params.remove( 0 );
+				} else {
+					className = value;
+					params = null;
+				}
+
+				Class<?> cls = findClass( className, addonClassLoaders );
+
+				if( params != null && !params.isEmpty() ) {
 					Constructor<?>[] constructors = cls.getDeclaredConstructors();
-					Object result = invokeConstructorOrStaticMethod( constructors, parts, resolver );
+					Object result = invokeConstructorOrStaticMethod( constructors, params, resolver );
 					if( result != null )
 						return result;
 
@@ -734,7 +754,7 @@ class UIDefaultsLoader
 						+ value.substring( value.indexOf( ',' + 1 ) ) + "'.", null );
 					return null;
 				} else
-					return findClass( value, addonClassLoaders ).getDeclaredConstructor().newInstance();
+					return cls.getDeclaredConstructor().newInstance();
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
@@ -1662,7 +1682,7 @@ class UIDefaultsLoader
 
 		// search for best constructor/method for given parameter values
 		for( Executable cm : constructorsOrMethods ) {
-			if( cm.getParameterCount() != parts.size() - 1 )
+			if( cm.getParameterCount() != parts.size() )
 				continue;
 
 			Object[] params = parseMethodParams( cm.getParameterTypes(), parts, resolver );
@@ -1684,7 +1704,7 @@ class UIDefaultsLoader
 		try {
 			for( int i = 0; i < params.length; i++ ) {
 				Class<?> paramType = paramTypes[i];
-				String paramValue = parts.get( i + 1 );
+				String paramValue = parts.get( i );
 				if( paramType == String.class )
 					params[i] = paramValue;
 				else if( paramType == boolean.class )

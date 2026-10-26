@@ -28,6 +28,9 @@ import java.awt.Insets;
 import java.util.Objects;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import org.junit.jupiter.api.Test;
@@ -102,6 +105,15 @@ public class TestUIDefaultsLoader
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 6 ), "1,2,3,4,#f00,2.5,6" );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 1, 6 ), "1,2,3,4,#f00,,6" );
 		assertBorderEquals( new FlatLineBorder( insets, null, 1, 6 ), "1,2,3,4,,,6" );
+		assertBorderEquals( new FlatLineBorder( insets, new Color( 0x800000 ), 1, -1 ), "1,2,3,4,darken(#f00,25%)" );
+
+		// instances with parameters
+		assertBorderEquals( new EmptyBorder( insets ), "javax.swing.border.EmptyBorder(1,2,3,4)" );
+		assertBorderEquals( new EmptyBorder( insets ), "javax.swing.border.EmptyBorder,1,2,3,4" );
+		assertBorderEquals( new LineBorder( Color.red, 2, true ), "javax.swing.border.LineBorder(#f00,2,true)" );
+		assertBorderEquals( new LineBorder( Color.red, 2, true ), "javax.swing.border.LineBorder,#f00,2,true" );
+		assertBorderEquals( new MatteBorder( insets, Color.red ), "javax.swing.border.MatteBorder(1,2,3,4,#f00)" );
+		assertBorderEquals( new MatteBorder( insets, Color.red ), "javax.swing.border.MatteBorder,1,2,3,4,#f00" );
 	}
 
 	private void assertBorderEquals( Border expected, String actualStyle ) {
@@ -188,7 +200,10 @@ public class TestUIDefaultsLoader
 	}
 
 	private void assertInstanceEquals( TestInstance expected, String params ) {
-		String value = TestInstance.class.getName() + (params != null ? "," + params : "");
+		String value = TestInstance.class.getName() + (params != null ? "(" + params + ")" : "()");
+		assertEquals( expected, ((LazyValue)UIDefaultsLoader.parseValue( "dummyIcon", value, null )).createValue( null ) );
+
+		value = TestInstance.class.getName() + (params != null ? "," + params : "");
 		assertEquals( expected, ((LazyValue)UIDefaultsLoader.parseValue( "dummyIcon", value, null )).createValue( null ) );
 	}
 
