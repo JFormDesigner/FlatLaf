@@ -149,6 +149,13 @@ class UIDefaultsLoader
 
 				return super.put( key, value );
 			}
+
+			@Override
+			public synchronized void putAll( Map<?, ?> t ) {
+				// necessary because super.putAll() does not invoke put() in Java 9+
+				for( Map.Entry<?, ?> e : t.entrySet() )
+					put( e.getKey(), e.getValue() );
+			}
 		};
 	}
 
