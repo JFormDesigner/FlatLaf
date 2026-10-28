@@ -27,6 +27,15 @@ FlatLaf Change Log
   #1157)
 - Extras: UI Inspector: Added `FlatInspector.addInfoProvider()` to allow
   applications to add custom rows to the UI inspector tooltip. (issue #1123)
+- Added `FlatMatteBorder`, which is similar to `MatteBorder` but supports HiDPI
+  scaling/painting. (issue #1114)
+- Borders in UI defaults and styles: Added border functions
+  `empty(top,left,bottom,right)`,
+  `line([top,left,bottom,right,][lineColor[,lineThickness[,arc]]])` and
+  `matte(top,left,bottom,right,matteColor)`. Multiple functions separated by
+  commas build a compound border (first function is outermost border), e.g.
+  `line(#f00), empty(4,8,4,8)`. Border class names with constructor parameters
+  (e.g. `com.myapp.MyBorder(1,0,0,0,#f00)`) now also works. (issue #1114)
 
 #### Fixed bugs
 

@@ -79,7 +79,7 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "contrast", TOKEN_FUNCTION );
 		tokenMap.put( "over", TOKEN_FUNCTION );
 
-		// function options
+		// color function options
 		tokenMap.put( "relative", Token.RESERVED_WORD );
 		tokenMap.put( "derived", Token.RESERVED_WORD );
 		tokenMap.put( "autoInverse", Token.RESERVED_WORD );
@@ -87,6 +87,11 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "rgb", Token.RESERVED_WORD );
 		tokenMap.put( "lrgb", Token.RESERVED_WORD );
 		tokenMap.put( "oklab", Token.RESERVED_WORD );
+
+		// border functions
+		tokenMap.put( "empty", TOKEN_FUNCTION );
+		tokenMap.put( "line", TOKEN_FUNCTION );
+		tokenMap.put( "matte", TOKEN_FUNCTION );
 	}
 
 	/**

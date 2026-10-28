@@ -28,15 +28,18 @@ import java.awt.Insets;
 import java.util.Objects;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.BorderUIResource.CompoundBorderUIResource;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatMatteBorder;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.ColorFunctions.Fade;
@@ -104,7 +107,7 @@ public class TestUIDefaultsLoader
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, -1 ), "1,2,3,4,#f00,2.5" );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 6 ), "1,2,3,4,#f00,2.5,6" );
 		assertBorderEquals( new FlatLineBorder( insets, Color.red, 1, 6 ), "1,2,3,4,#f00,,6" );
-		assertBorderEquals( new FlatLineBorder( insets, null, 1, 6 ), "1,2,3,4,,,6" );
+		assertBorderEquals( new FlatLineBorder( insets, null, 0, 6 ), "1,2,3,4,,,6" );
 		assertBorderEquals( new FlatLineBorder( insets, new Color( 0x800000 ), 1, -1 ), "1,2,3,4,darken(#f00,25%)" );
 
 		// instances with parameters
@@ -116,17 +119,73 @@ public class TestUIDefaultsLoader
 		assertBorderEquals( new MatteBorder( insets, Color.red ), "javax.swing.border.MatteBorder,1,2,3,4,#f00" );
 	}
 
+	@Test
+	void parseBorderFunctions() {
+		Insets insets = new Insets( 1,2,3,4 );
+
+		// empty border
+		assertBorderEquals( new FlatEmptyBorder( insets ), "empty(1,2,3,4)" );
+		assertBorderEquals( new FlatEmptyBorder( insets ), "empty( 1, 2, 3, 4 )" );
+
+		// line border
+		Insets insets0 = new Insets( 0,0,0,0 );
+		Insets insets1 = new Insets( 1,1,1,1 );
+		Insets insets3 = new Insets( 3,3,3,3 );
+		assertBorderEquals( new FlatLineBorder( insets1, Color.red ), "line(#f00)" );
+		assertBorderEquals( new FlatLineBorder( insets3, Color.red, 2.5f, -1 ), "line(#f00,2.5)" );
+		assertBorderEquals( new FlatLineBorder( insets3, Color.red, 2.5f, 6 ), "line(#f00,2.5,6)" );
+		assertBorderEquals( new FlatLineBorder( insets1, Color.red, 1, 6 ), "line(#f00,,6)" );
+		assertBorderEquals( new FlatLineBorder( insets0, null, 0, 6 ), "line(,,6)" );
+		assertBorderEquals( new FlatLineBorder( insets1, new Color( 0x800000 ), 1, -1 ), "line(darken(#f00,25%))" );
+
+		// line border with insets
+		assertBorderEquals( new FlatLineBorder( insets, Color.red ), "line(1,2,3,4,#f00)" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, -1 ), "line(1,2,3,4,#f00,2.5)" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 6 ), "line( 1, 2, 3, 4, #f00, 2.5, 6 )" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 1, 6 ), "line(1,2,3,4,#f00,,6)" );
+		assertBorderEquals( new FlatLineBorder( insets, null, 0, 6 ), "line(1,2,3,4,,,6)" );
+		assertBorderEquals( new FlatLineBorder( insets, new Color( 0x800000 ), 1, -1 ), "line(1,2,3,4,darken(#f00,25%))" );
+
+		// matte border
+		assertBorderEquals( new FlatMatteBorder( insets, Color.red ), "matte(1,2,3,4,#f00)" );
+		assertBorderEquals( new FlatMatteBorder( new Insets( 1,0,0,0 ), Color.red ), "matte(1,0,0,0,#f00)" );
+
+		// compound border
+		assertBorderEquals( new CompoundBorderUIResource(
+				new FlatLineBorder( insets1, Color.red ),
+				new FlatEmptyBorder( insets ) ),
+			"line(#f00), empty(1,2,3,4)" );
+		assertBorderEquals( new CompoundBorderUIResource(
+				new FlatMatteBorder( new Insets( 0,0,1,0 ), Color.red ),
+				new CompoundBorderUIResource(
+					new FlatEmptyBorder( insets ),
+					new FlatLineBorder( insets3, Color.blue, 2.5f, 6 ) ) ),
+			"matte(0,0,1,0,#f00), empty( 1, 2, 3, 4 ), line(darken(#00f,0%), 2.5, 6)" );
+	}
+
 	private void assertBorderEquals( Border expected, String actualStyle ) {
 		Border actual = (Border) parseBorder( actualStyle );
+		assertBorderEquals( expected, actual );
+	}
+
+	private void assertBorderEquals( Border expected, Border actual ) {
 		assertEquals( expected.getClass(), actual.getClass() );
 		if( expected instanceof FlatEmptyBorder )
-			assertEquals( ((FlatEmptyBorder)actual).getBorderInsets(), ((FlatEmptyBorder)expected).getBorderInsets() );
+			assertEquals( ((FlatEmptyBorder)expected).getBorderInsets(), ((FlatEmptyBorder)actual).getBorderInsets() );
 		if( expected instanceof FlatLineBorder ) {
-			FlatLineBorder a = (FlatLineBorder) actual;
 			FlatLineBorder e = (FlatLineBorder) expected;
-			assertEquals( a.getLineColor(), e.getLineColor() );
-			assertEquals( a.getLineThickness(), e.getLineThickness() );
-			assertEquals( a.getArc(), e.getArc() );
+			FlatLineBorder a = (FlatLineBorder) actual;
+			assertEquals( e.getLineColor(), a.getLineColor() );
+			assertEquals( e.getLineThickness(), a.getLineThickness() );
+			assertEquals( e.getArc(), a.getArc() );
+		}
+		if( expected instanceof FlatMatteBorder )
+			assertEquals( ((FlatMatteBorder)expected).getMatteColor(), ((FlatMatteBorder)actual).getMatteColor() );
+		if( expected instanceof CompoundBorder ) {
+			CompoundBorder e = (CompoundBorder) expected;
+			CompoundBorder a = (CompoundBorder) actual;
+			assertBorderEquals( e.getOutsideBorder(), a.getOutsideBorder() );
+			assertBorderEquals( e.getInsideBorder(), a.getInsideBorder() );
 		}
 	}
 
@@ -537,6 +596,28 @@ public class TestUIDefaultsLoader
 		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f0' (invalid color '#f0')" ), () -> parseBorder( "1,2,3,4,#f0" ) );
 		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5abc' (invalid float '2.5abc')" ), () -> parseBorder( "1,2,3,4,#f00,2.5abc" ) );
 		assertThrows( new IllegalArgumentException( "invalid border '1,2,3,4,#f00,2.5,6abc' (invalid integer '6abc')" ), () -> parseBorder( "1,2,3,4,#f00,2.5,6abc" ) );
+	}
+
+	@Test
+	void parseInvalidBorderFunctions() {
+		assertThrows( new IllegalArgumentException( "invalid border 'empty(1,abc,3,4)' (invalid insets '1,abc,3,4')" ), () -> parseBorder( "empty(1,abc,3,4)" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'empty(1,2,3)' (invalid insets '1,2,3')" ), () -> parseBorder( "empty(1,2,3)" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'empty(1,2,3,,,)' (invalid insets '1,2,3,,,')" ), () -> parseBorder( "empty(1,2,3,,,)" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'line(1,2,3,4,#f0)' (invalid color '#f0')" ), () -> parseBorder( "line(1,2,3,4,#f0)" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'line(1,2,3,4,#f00,2.5abc)' (invalid float '2.5abc')" ), () -> parseBorder( "line(1,2,3,4,#f00,2.5abc)" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'line(1,2,3,4,#f00,2.5,6abc)' (invalid integer '6abc')" ), () -> parseBorder( "line(1,2,3,4,#f00,2.5,6abc)" ) );
+
+		assertThrows( new IllegalArgumentException( "invalid border 'empty()' (missing parameters in function 'empty()')" ), () -> parseBorder( "empty()" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'line()' (missing parameters in function 'line()')" ), () -> parseBorder( "line()" ) );
+		assertThrows( new IllegalArgumentException( "invalid border 'matte()' (missing parameters in function 'matte()')" ), () -> parseBorder( "matte()" ) );
+
+		assertThrowsExactly( IllegalArgumentException.class, () -> parseBorder( "line(1,2,3,4)" ) );
+		assertThrowsExactly( IllegalArgumentException.class, () -> parseBorder( "line(1,2,3,#f00)" ) );
+		assertThrowsExactly( IllegalArgumentException.class, () -> parseBorder( "matte(1,2,3,4)" ) );
+		assertThrowsExactly( IllegalArgumentException.class, () -> parseBorder( "matte(1,2,3,x,#f00)" ) );
+
+		assertThrows( new IllegalArgumentException( "invalid border 'line(#f00), foo(1)' (unknown border function 'foo(1)')" ), () -> parseBorder( "line(#f00), foo(1)" ) );
+		assertThrowsExactly( IllegalArgumentException.class, () -> parseBorder( "line(#f00) empty(1,2,3,4)" ) );
 	}
 
 	@Test

@@ -504,6 +504,31 @@ class FlatCompletionProvider
 			addFunction( "over",
 				"foreground", colorParamDesc,
 				"background", colorParamDesc );
+
+			// border functions (multiple functions separated by spaces build a compound border)
+			addFunction( "empty",
+				"top", "top inset",
+				"left", "left inset",
+				"bottom", "bottom inset",
+				"right", "right inset" );
+			addFunction( "line",
+				"lineColor", colorParamDesc,
+				"lineThickness", OPTIONAL + "line thickness, default is 1",
+				"arc", OPTIONAL + "arc diameter of corners" );
+			addFunction( "line",
+				"top", "top inset",
+				"left", "left inset",
+				"bottom", "bottom inset",
+				"right", "right inset",
+				"lineColor", colorParamDesc,
+				"lineThickness", OPTIONAL + "line thickness, default is 1",
+				"arc", OPTIONAL + "arc diameter of corners" );
+			addFunction( "matte",
+				"top", "top line width",
+				"left", "left line width",
+				"bottom", "bottom line width",
+				"right", "right line width",
+				"matteColor", colorParamDesc );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

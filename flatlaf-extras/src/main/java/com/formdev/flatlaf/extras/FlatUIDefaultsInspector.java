@@ -50,6 +50,7 @@ import com.formdev.flatlaf.ui.FlatBorder;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatMarginBorder;
+import com.formdev.flatlaf.ui.FlatMatteBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
@@ -748,6 +749,11 @@ public class FlatUIDefaultsInspector
 						+ "  " + color2hex( lineBorder.getLineColor() )
 						+ "  " + lineBorder.getLineThickness()
 						+ "    " + border.getClass().getName();
+				} else if( border instanceof FlatMatteBorder ) {
+					FlatMatteBorder matteBorder = (FlatMatteBorder) border;
+					return valueAsString( matteBorder.getUnscaledBorderInsets(), null )
+						+ "  " + color2hex( matteBorder.getMatteColor() )
+						+ "    " + border.getClass().getName();
 				} else if( border instanceof EmptyBorder ) {
 					Insets insets = (border instanceof FlatEmptyBorder)
 						? ((FlatEmptyBorder)border).getUnscaledBorderInsets()
@@ -1027,6 +1033,8 @@ public class FlatUIDefaultsInspector
 				valueColor = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
 			else if( item.value instanceof FlatLineBorder )
 				valueColor = ((FlatLineBorder)item.value).getLineColor();
+			else if( item.value instanceof FlatMatteBorder )
+				valueColor = ((FlatMatteBorder)item.value).getMatteColor();
 
 			// reset background and foreground
 			if( valueColor == null ) {

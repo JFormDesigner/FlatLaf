@@ -54,11 +54,13 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
+import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatMatteBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -688,7 +690,37 @@ class UIDefaultsLoader
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
 		throws IllegalArgumentException
 	{
-		if( !Character.isLetter( value.charAt( 0 ) ) ) {
+		int paramsStart;
+		if( value.endsWith( ")" ) &&
+			(paramsStart = value.indexOf( '(' )) > 0 &&
+			Character.isLetter( value.charAt( 0 ) ) &&
+			value.lastIndexOf( '.', paramsStart ) < 0 ) // if it contains a dot before '(', then it is an instance
+		{
+			// border functions
+			// Syntax: function1(...)[, function2(...)[, ...[]
+			// (multiple functions build a compound border; first function is outermost border)
+			List<String> functions = splitFunctionParams( value, ',' );
+			try {
+				if( functions.size() == 1 )
+					return parseBorderFunction( functions.get( 0 ), resolver );
+
+				List<LazyValue> borders = new ArrayList<>( functions.size() );
+				for( String function : functions )
+					borders.add( parseBorderFunction( function, resolver ) );
+
+				// nest compound borders from inside to outside
+				// (e.g. "a b c" --> compound(a, compound(b, c)))
+				return (LazyValue) t -> {
+					int last = borders.size() - 1;
+					Border border = (Border) borders.get( last ).createValue( t );
+					for( int i = last - 1; i >= 0; i-- )
+						border = new BorderUIResource.CompoundBorderUIResource( (Border) borders.get( i ).createValue( t ), border );
+					return border;
+				};
+			} catch( RuntimeException ex ) {
+				throw new IllegalArgumentException( "invalid border '" + value + "' (" + ex.getMessage() + ")" );
+			}
+		} else if( !Character.isLetter( value.charAt( 0 ) ) ) {
 			// Syntax: top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> params = splitFunctionParams( value, ',' );
 			try {
@@ -698,7 +730,7 @@ class UIDefaultsLoader
 					: null;
 				float lineThickness = (params.size() > 5 && !params.get( 5 ).isEmpty())
 					? parseFloat( params.get( 5 ) )
-					: 1f;
+					: (lineColor != null ? 1f : 0);
 				int arc = (params.size() > 6) && !params.get( 6 ).isEmpty()
 					? parseInteger( params.get( 6 ) )
 					: -1;
@@ -715,6 +747,77 @@ class UIDefaultsLoader
 			// Syntax: className[(param1,param2,...)] or className[,param1,param2,...]
 			return parseInstance( value, resolver, addonClassLoaders );
 		}
+	}
+
+	private static LazyValue parseBorderFunction( String value, Function<String, String> resolver )
+		throws IllegalArgumentException
+	{
+		int paramsStart = value.indexOf( '(' );
+		if( paramsStart < 0 )
+			throw new IllegalArgumentException( "missing opening parenthesis in function '" + value + "'" );
+
+		String function = StringUtils.substringTrimmed( value, 0, paramsStart );
+		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+		if( params.isEmpty() )
+			throw newMissingParametersException( value );
+
+		switch( function ) {
+			case "empty":	return parseBorderEmpty( params );
+			case "line":	return parseBorderLine( params, resolver );
+			case "matte":	return parseBorderMatte( params, resolver );
+		}
+
+		throw new IllegalArgumentException( "unknown border function '" + value + "'" );
+	}
+
+	/**
+	 * Syntax: empty(top,left,bottom,right)
+	 */
+	private static LazyValue parseBorderEmpty( List<String> params )
+		throws IllegalArgumentException
+	{
+		Insets insets = parseInsets( params );
+		return (LazyValue) t -> new FlatEmptyBorder( insets );
+	}
+
+	/**
+	 * Syntax: line([top,left,bottom,right,][lineColor[,lineThickness[,arc]]])
+	 */
+	private static LazyValue parseBorderLine( List<String> params, Function<String, String> resolver )
+		throws IllegalArgumentException
+	{
+		boolean hasInsets = !params.get( 0 ).isEmpty() && Character.isDigit( params.get( 0 ).charAt( 0 ) );
+		int i = hasInsets ? 4 : 0; // index of lineColor
+		ColorUIResource lineColor = !params.get( i ).isEmpty()
+			? (ColorUIResource) parseColorOrFunction( resolver.apply( params.get( i ) ), resolver )
+			: null;
+		float lineThickness = (params.size() > i + 1 && !params.get( i + 1 ).isEmpty())
+			? parseFloat( params.get( i + 1 ) )
+			: (lineColor != null ? 1f : 0);
+		int arc = (params.size() > i + 2 && !params.get( i + 2 ).isEmpty())
+			? parseInteger( params.get( i + 2 ) )
+			: -1;
+
+		Insets insets;
+		if( hasInsets )
+			insets = parseInsets( params );
+		else {
+			// insets are equal to line thickness (rounded up)
+			int width = (int) Math.ceil( lineThickness );
+			insets = new Insets( width, width, width, width );
+		}
+		return (LazyValue) t -> new FlatLineBorder( insets, lineColor, lineThickness, arc );
+	}
+
+	/**
+	 * Syntax: matte(top,left,bottom,right,matteColor)
+	 */
+	private static LazyValue parseBorderMatte( List<String> params, Function<String, String> resolver )
+		throws IllegalArgumentException
+	{
+		Insets insets = parseInsets( params );
+		ColorUIResource matteColor = (ColorUIResource) parseColorOrFunction( resolver.apply( params.get( 4 ) ), resolver );
+		return (LazyValue) t -> new FlatMatteBorder( insets, matteColor );
 	}
 
 	private static Object parseInstance( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
@@ -798,6 +901,12 @@ class UIDefaultsLoader
 		throws IllegalArgumentException
 	{
 		List<String> numbers = StringUtils.split( value, ',', true, false );
+		return parseInsets( numbers );
+	}
+
+	private static Insets parseInsets( List<String> numbers )
+		throws IllegalArgumentException
+	{
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -805,7 +914,7 @@ class UIDefaultsLoader
 				Integer.parseInt( numbers.get( 2 ) ),
 				Integer.parseInt( numbers.get( 3 ) ) );
 		} catch( NumberFormatException | IndexOutOfBoundsException ex ) {
-			throw new IllegalArgumentException( "invalid insets '" + value + "'" );
+			throw new IllegalArgumentException( "invalid insets '" + String.join( ",", numbers ) + "'" );
 		}
 	}
 

@@ -169,7 +169,7 @@ public class FlatPanelUI
 	/** @since 3.5 */
 	public static void fillRoundedBackground( Graphics g, JComponent c, int arc ) {
 		if( arc < 0 ) {
-			Border border = c.getBorder();
+			Border border = FlatUIUtils.getOutsideBorder( c );
 			arc = ((border instanceof FlatLineBorder)
 				? ((FlatLineBorder)border).getArc()
 				: 0);

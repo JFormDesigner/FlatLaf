@@ -35,7 +35,7 @@ import javax.swing.plaf.ComponentUI;
  * The insets should be at least have line thickness (usually 1,1,1,1).
  * <p>
  * For {@link javax.swing.JPanel} and {@link javax.swing.JLabel}, this border
- * can be used paint rounded background (if line color is {@code null}) or
+ * can be used to paint rounded background (if line color is {@code null}) or
  * paint rounded line border with rounded background.
  *
  * @author Karl Tauber
