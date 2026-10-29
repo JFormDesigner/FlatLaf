@@ -476,7 +476,7 @@ class FlatColorFunctionPreview
 
 		color1Preview.setBackground( color1 );
 		newColorPreview.setBackground( newColor );
-		newColorPreview.setForeground( (ColorFunctions.luma( newColor ) * 100 < 43) ? Color.white : Color.black );
+		newColorPreview.setForeground( ColorFunctions.isDark( newColor ) ? Color.white : Color.black );
 		newColorPreview.setText( newText );
 
 		boolean hasColor2 = (color2 != null);

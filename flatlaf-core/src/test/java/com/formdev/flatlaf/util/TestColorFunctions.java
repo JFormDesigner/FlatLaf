@@ -18,6 +18,8 @@ package com.formdev.flatlaf.util;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import org.junit.jupiter.api.Test;
 
@@ -107,6 +109,21 @@ public class TestColorFunctions
 		assertEquals( 0.051269464f, ColorFunctions.luma( Color.darkGray ) );
 		assertEquals( 0.21586052f, ColorFunctions.luma( Color.gray ) );
 		assertEquals( 0.52711517f, ColorFunctions.luma( Color.lightGray ) );
+	}
+
+	@Test
+	void isDark() {
+		assertTrue( ColorFunctions.isDark( Color.black ) );
+		assertTrue( ColorFunctions.isDark( Color.darkGray ) );
+		assertTrue( ColorFunctions.isDark( Color.gray ) );
+		assertTrue( ColorFunctions.isDark( Color.red ) );
+		assertTrue( ColorFunctions.isDark( Color.blue ) );
+
+		assertFalse( ColorFunctions.isDark( Color.white ) );
+		assertFalse( ColorFunctions.isDark( Color.lightGray ) );
+		assertFalse( ColorFunctions.isDark( Color.green ) );
+		assertFalse( ColorFunctions.isDark( Color.yellow ) );
+		assertFalse( ColorFunctions.isDark( Color.cyan ) );
 	}
 
 	@Test

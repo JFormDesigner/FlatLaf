@@ -52,6 +52,7 @@ import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatMarginBorder;
 import com.formdev.flatlaf.ui.FlatMatteBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
@@ -1048,10 +1049,8 @@ public class FlatUIDefaultsInspector
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
 			// set foreground, if value has color
-			if( valueColor != null ) {
-				boolean isDark = new HSLColor( valueColor ).getLuminance() < 70 && valueColor.getAlpha() >= 128;
-				setForeground( isDark ? Color.white : Color.black );
-			}
+			if( valueColor != null )
+				setForeground( ColorFunctions.isDark( valueColor ) ? Color.white : Color.black );
 
 			// set icon
 			if( item.value instanceof Icon ) {

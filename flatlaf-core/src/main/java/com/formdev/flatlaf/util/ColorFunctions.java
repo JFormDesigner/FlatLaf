@@ -298,19 +298,23 @@ public class ColorFunctions
 	}
 
 	/**
-	 * Calculates the luma (perceptual brightness) of the given color.
+	 * Calculates the relative luminance of the given color, as defined in
+	 * <a href="https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef">WCAG 2.0</a>
+	 * (sRGB components are linearized, then weighted with Rec. 709 coefficients).
 	 * <p>
-	 * Uses SMPTE C / Rec. 709 coefficients, as recommended in
-	 * <a href="https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef">WCAG 2.0</a>.
+	 * Note: Despite the method name, this is not luma (which is computed from
+	 * gamma-encoded components) and is not perceptually uniform
+	 * (e.g. middle gray {@code #777777} has a luminance of about 0.18).
+	 * The alpha component is ignored.
 	 *
 	 * @param color a color
-	 * @return the luma (in range 0-1)
+	 * @return the relative luminance (in range 0-1)
 	 *
-	 * @see <a href="https://en.wikipedia.org/wiki/Luma_(video)">https://en.wikipedia.org/wiki/Luma_(video)</a>
+	 * @see <a href="https://en.wikipedia.org/wiki/Relative_luminance">https://en.wikipedia.org/wiki/Relative_luminance</a>
 	 * @since 2
 	 */
 	public static float luma( Color color ) {
-		// see https://en.wikipedia.org/wiki/Luma_(video)
+		// see https://en.wikipedia.org/wiki/Relative_luminance
 		// see https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
 		// see https://github.com/less/less.js/blob/master/packages/less/lib/less/tree/color.js
 		float r = gammaCorrection( color.getRed() / 255f );
@@ -323,6 +327,19 @@ public class ColorFunctions
 		return (value <= 0.03928f)
 			? value / 12.92f
 			: (float) Math.pow( (value + 0.055) / 1.055, 2.4 );
+	}
+
+	/**
+	 * Returns whether the given color is dark.
+	 * Uses {@link #luma(Color)} with a threshold of 43%
+	 * (same as default threshold of color function {@code contrast()} in properties files).
+	 *
+	 * @param color a color
+	 * @return {@code true} if the color is dark
+	 * @since 3.8
+	 */
+	public static boolean isDark( Color color ) {
+		return luma( color ) < 0.43f;
 	}
 
 	/**
