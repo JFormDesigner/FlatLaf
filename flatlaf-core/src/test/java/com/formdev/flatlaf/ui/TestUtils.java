@@ -18,16 +18,25 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Font;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 
@@ -115,5 +124,106 @@ public class TestUtils
 				tests.add( m.getName() );
 		}
 		return tests;
+	}
+
+	//---- log capture --------------------------------------------------------
+
+	// FlatLaf logs via LoggingFacade, which uses java.util.logging on Java 8
+	// and System.Logger on Java 9+ (which by default delegates to java.util.logging)
+	// keep a strong reference because java.util.logging references loggers only weakly
+	private static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
+	private static final List<LogRecord> logRecords = new ArrayList<>();
+	private static final Handler logHandler = new Handler() {
+		@Override
+		public void publish( LogRecord record ) {
+			synchronized( logRecords ) {
+				logRecords.add( record );
+			}
+		}
+
+		@Override public void flush() {}
+		@Override public void close() {}
+	};
+
+	/**
+	 * Starts capturing FlatLaf log records and disables console output.
+	 * Usually invoked from a {@code @BeforeAll} method.
+	 */
+	public static void setupLogCapture() {
+		clearLogCapture();
+		LOG.addHandler( logHandler );
+		LOG.setUseParentHandlers( false ); // no console output
+	}
+
+	/**
+	 * Stops capturing FlatLaf log records and enables console output.
+	 * Usually invoked from a {@code @AfterAll} method.
+	 */
+	public static void cleanupLogCapture() {
+		LOG.removeHandler( logHandler );
+		LOG.setUseParentHandlers( true );
+		clearLogCapture();
+	}
+
+	/**
+	 * Removes all captured log records.
+	 * Usually invoked from a {@code @BeforeEach} method.
+	 */
+	public static void clearLogCapture() {
+		synchronized( logRecords ) {
+			logRecords.clear();
+		}
+	}
+
+	/**
+	 * Asserts that there are no captured log records
+	 * (other than the ones already checked with {@link #assertLogged}).
+	 * Usually invoked from a {@code @AfterEach} method.
+	 */
+	public static void assertNoUnexpectedLog() {
+		synchronized( logRecords ) {
+			if( !logRecords.isEmpty() )
+				throw new AssertionFailedError( "unexpected log messages: " + logRecordsToString() );
+		}
+	}
+
+	/**
+	 * Asserts that given message was logged with level SEVERE and removes it from the log.
+	 */
+	public static void assertLogged( String expectedMessage ) {
+		assertLogged( expectedMessage, null );
+	}
+
+	/**
+	 * Asserts that given message was logged with level SEVERE and removes it from the log.
+	 * If expectedThrownMessage is not null, the logged exception must have that message.
+	 */
+	public static void assertLogged( String expectedMessage, String expectedThrownMessage ) {
+		synchronized( logRecords ) {
+			for( Iterator<LogRecord> it = logRecords.iterator(); it.hasNext(); ) {
+				LogRecord r = it.next();
+				if( r.getLevel() == Level.SEVERE && expectedMessage.equals( r.getMessage() ) ) {
+					if( expectedThrownMessage != null ) {
+						Throwable thrown = r.getThrown();
+						if( thrown == null )
+							throw new AssertionFailedError( "no exception logged with '" + expectedMessage + "'" );
+						if( !expectedThrownMessage.equals( thrown.getMessage() ) ) {
+							throw new AssertionFailedError( "wrong exception message logged with '" + expectedMessage + "'",
+								expectedThrownMessage, thrown.getMessage() );
+						}
+					}
+					it.remove();
+					return;
+				}
+			}
+			throw new AssertionFailedError( "not logged: '" + expectedMessage + "'; logged: " + logRecordsToString() );
+		}
+	}
+
+	private static String logRecordsToString() {
+		return logRecords.stream()
+			.map( r -> r.getLevel() + " " + r.getMessage() )
+			.collect( Collectors.toList() )
+			.toString();
 	}
 }
