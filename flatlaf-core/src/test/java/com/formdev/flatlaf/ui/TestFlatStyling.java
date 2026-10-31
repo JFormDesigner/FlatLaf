@@ -285,6 +285,14 @@ public class TestFlatStyling
 		assertEquals( 999, o.value2 );
 		assertFalse( o.valueStyled );
 		assertTrue( o.valueStyled2 );
+
+		// test whether flag field is found if object is a subclass
+		TestObject o2 = new TestObject() {};
+		FlatStylingSupport.parseAndApply( null, "value: 345", (key, value) -> {
+			return FlatStylingSupport.applyToAnnotatedObject( o2, key, value );
+		} );
+		assertEquals( 345, o2.value );
+		assertTrue( o2.valueStyled );
 	}
 
 	//---- class CustomIcon ---------------------------------------------------

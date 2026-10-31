@@ -26,6 +26,10 @@ dependencies {
 
 	// use compileOnly() because there are various SwingX libraries available on Maven Central
 	compileOnly( libs.swingx.all )
+
+	testImplementation( libs.swingx.all )
+	testImplementation( libs.junit )
+	testRuntimeOnly( libs.junit.launcher )
 }
 
 flatlafModuleInfo {
@@ -35,6 +39,13 @@ flatlafModuleInfo {
 java {
 	withSourcesJar()
 	withJavadocJar()
+}
+
+tasks {
+	test {
+		useJUnitPlatform()
+		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+	}
 }
 
 flatlafPublish {

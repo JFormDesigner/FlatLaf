@@ -592,7 +592,9 @@ public class FlatStylingSupport
 
 		String flagFieldName = styleable.flagFieldName();
 		try {
-			Field ff = obj.getClass().getDeclaredField( flagFieldName );
+			// flag field must be declared in same class as styleable field
+			// (obj may be an instance of a subclass)
+			Field ff = f.getDeclaringClass().getDeclaredField( flagFieldName );
 			checkValidField( ff );
 			try {
 				ff.setAccessible( true );
@@ -601,7 +603,7 @@ public class FlatStylingSupport
 				throw newFieldAccessFailed( ff, ex );
 			}
 		} catch( NoSuchFieldException ex ) {
-			throw new IllegalArgumentException( "flag field '" + obj.getClass().getName() + "." + flagFieldName + "' not found", ex );
+			throw new IllegalArgumentException( "flag field '" + f.getDeclaringClass().getName() + "." + flagFieldName + "' not found", ex );
 		}
 	}
 
@@ -752,7 +754,28 @@ public class FlatStylingSupport
 		}
 	}
 
-	static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
+	/**
+	 * Applies the given value to an annotated field of the given object,
+	 * or to the border of the given component (if it implements {@link StyleableObject}),
+	 * or to a property of the given component.
+	 * The field must be annotated with {@link Styleable}.
+	 * The component property must have public getter and setter methods.
+	 * <p>
+	 * If the border is shared ({@code borderShared.get()} returns {@code true}),
+	 * then the border is cloned and set to the component before applying the value,
+	 * and {@code borderShared} is set to {@code false}.
+	 *
+	 * @param obj the object
+	 * @param key the name of the field
+	 * @param value the new value
+	 * @param c the component
+	 * @param borderShared whether the border of the component is shared
+	 * @return the old value of the field
+	 * @throws UnknownStyleException if object, border and component do not have a field/property with given name
+	 * @throws IllegalArgumentException if value type does not fit to expected type
+	 * @since 3.8
+	 */
+	public static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
 		JComponent c, AtomicBoolean borderShared )
 			throws IllegalArgumentException
 	{
@@ -785,7 +808,20 @@ public class FlatStylingSupport
 		}
 	}
 
-	static PropertyChangeListener createPropertyChangeListener( JComponent c,
+	/**
+	 * Creates a property change listener that invokes the given {@code installStyle}
+	 * runnable, revalidates and repaints the given component
+	 * if client property {@link FlatClientProperties#STYLE} or
+	 * {@link FlatClientProperties#STYLE_CLASS} changes.
+	 * All property change events are first passed to the optional {@code superListener}.
+	 *
+	 * @param c the component
+	 * @param installStyle invoked when the style changes
+	 * @param superListener the property change listener of the superclass, or {@code null}
+	 * @return the property change listener
+	 * @since 3.8
+	 */
+	public static PropertyChangeListener createPropertyChangeListener( JComponent c,
 		Runnable installStyle, PropertyChangeListener superListener )
 	{
 		return e -> {
