@@ -22,6 +22,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -30,7 +32,11 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import org.jdesktop.swingx.plaf.basic.BasicHyperlinkUI;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatHTML;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -42,11 +48,22 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatHyperlinkUI
 	extends BasicHyperlinkUI
+	implements StyleableUI
 {
-	protected Color disabledText;
+	/** @since 3.8 */ @Styleable protected Color disabledText;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatHyperlinkUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle( (AbstractButton) c );
 	}
 
 	@Override
@@ -61,11 +78,61 @@ public class FlatHyperlinkUI
 		super.uninstallDefaults( b );
 
 		disabledText = null;
+
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installListeners( AbstractButton b ) {
+		super.installListeners( b );
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( b, () -> installStyle( b ), null );
+		b.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners( AbstractButton b ) {
+		super.uninstallListeners( b );
+
+		b.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
 	protected BasicButtonListener createButtonListener( AbstractButton b ) {
 		return new FlatHyperlinkListener( b );
+	}
+
+	/** @since 3.8 */
+	protected void installStyle( AbstractButton b ) {
+		try {
+			applyStyle( b, FlatStylingSupport.getResolvedStyle( b, "JXHyperlink" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( AbstractButton b, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( b, key, value ) );
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, b, key, value );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

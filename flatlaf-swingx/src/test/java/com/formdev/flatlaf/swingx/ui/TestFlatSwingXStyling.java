@@ -22,7 +22,10 @@ import java.awt.Insets;
 import java.util.Map;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.JXMonthView;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -94,5 +97,49 @@ public class TestFlatSwingXStyling
 		assertEquals( Color.class, infos.get( "buttonBackground" ) );
 		assertEquals( Color.class, infos.get( "borderColor" ) );
 		assertTrue( infos.keySet().containsAll( new FlatBorder().getStyleableInfos().keySet() ) );
+	}
+
+	@Test
+	void busyLabel() {
+		JXBusyLabel c = new JXBusyLabel();
+		FlatBusyLabelUI ui = (FlatBusyLabelUI) c.getUI();
+
+		Color defaultDisabledForeground = ui.disabledForeground;
+		c.putClientProperty( FlatClientProperties.STYLE, "disabledForeground: #f00; foreground: #0f0" );
+		assertEquals( Color.red, ui.disabledForeground );
+		assertEquals( Color.green, c.getForeground() );
+		assertEquals( Color.red, ui.getStyleableValue( c, "disabledForeground" ) );
+		assertEquals( Color.class, ui.getStyleableInfos( c ).get( "disabledForeground" ) );
+
+		c.putClientProperty( FlatClientProperties.STYLE, null );
+		assertEquals( defaultDisabledForeground, ui.disabledForeground );
+	}
+
+	@Test
+	void hyperlink() {
+		JXHyperlink c = new JXHyperlink();
+		FlatHyperlinkUI ui = (FlatHyperlinkUI) c.getUI();
+
+		Color defaultDisabledText = ui.disabledText;
+		c.putClientProperty( FlatClientProperties.STYLE, "disabledText: #f00; unclickedColor: #0f0; clickedColor: #00f" );
+		assertEquals( Color.red, ui.disabledText );
+		assertEquals( Color.green, c.getUnclickedColor() );
+		assertEquals( Color.blue, c.getClickedColor() );
+		assertEquals( Color.class, ui.getStyleableInfos( c ).get( "disabledText" ) );
+
+		c.putClientProperty( FlatClientProperties.STYLE, null );
+		assertEquals( defaultDisabledText, ui.disabledText );
+	}
+
+	@Test
+	void monthView() {
+		JXMonthView c = new JXMonthView();
+		FlatMonthViewUI ui = (FlatMonthViewUI) c.getUI();
+
+		c.putClientProperty( FlatClientProperties.STYLE, "todayColor: #f00; todayBackground: #0f0; boxPaddingX: 5" );
+		assertEquals( Color.red, ui.todayColor );
+		assertEquals( Color.green, c.getTodayBackground() );
+		assertEquals( 5, c.getBoxPaddingX() );
+		assertEquals( Color.class, ui.getStyleableInfos( c ).get( "todayColor" ) );
 	}
 }

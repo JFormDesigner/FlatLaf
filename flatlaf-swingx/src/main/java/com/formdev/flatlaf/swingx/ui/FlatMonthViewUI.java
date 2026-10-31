@@ -18,7 +18,9 @@ package com.formdev.flatlaf.swingx.ui;
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -31,17 +33,88 @@ import org.jdesktop.swingx.plaf.basic.CalendarRenderingHandler;
 import org.jdesktop.swingx.plaf.basic.CalendarState;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link org.jdesktop.swingx.JXMonthView}.
+ *
+ * @uiDefault JXMonthView.todayColor			Color
  *
  * @author Karl Tauber
  */
 public class FlatMonthViewUI
 	extends BasicMonthViewUI
+	implements StyleableUI
 {
+	/** @since 3.8 */ @Styleable protected Color todayColor;
+
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMonthViewUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		todayColor = UIManager.getColor( "JXMonthView.todayColor" );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		todayColor = null;
+
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		return FlatStylingSupport.createPropertyChangeListener( monthView, this::installStyle,
+			super.createPropertyChangeListener() );
+	}
+
+	/** @since 3.8 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( monthView, "JXMonthView" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, monthView, key, value );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override
@@ -51,11 +124,9 @@ public class FlatMonthViewUI
 
 	//---- class FlatRenderingHandler -----------------------------------------
 
-	private static class FlatRenderingHandler
+	private class FlatRenderingHandler
 		extends RenderingHandler
 	{
-		private final Color todayColor = UIManager.getColor( "JXMonthView.todayColor" );
-
 		@Override
 		public JComponent prepareRenderingComponent( JXMonthView monthView, Calendar calendar,
 			CalendarState dayState )
