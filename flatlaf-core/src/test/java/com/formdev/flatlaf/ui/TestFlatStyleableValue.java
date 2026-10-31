@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.awt.Component;
@@ -32,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.JTextComponent;
@@ -74,11 +76,16 @@ public class TestFlatStyleableValue
 
 	private Map<String, Class<?>> expectedStyleableInfos;
 	private final Set<String> testedKeys = new HashSet<>();
+	private long seed;
 
 	@BeforeEach
 	void beforeTest() {
 		expectedStyleableInfos = null;
 		testedKeys.clear();
+
+		// use system property 'flatlaf.test.seed' to reproduce a failed test
+		seed = Long.getLong( "flatlaf.test.seed", System.nanoTime() );
+		random.setSeed( seed );
 	}
 
 	@AfterEach
@@ -89,37 +96,48 @@ public class TestFlatStyleableValue
 		TestUtils.assertSetEquals( expectedStyleableInfos.keySet(), testedKeys, "untested keys" );
 	}
 
+	private Supplier<String> msg( String key ) {
+		return () -> "key '" + key + "' (flatlaf.test.seed=" + seed + ")";
+	}
+
 	private void testString( JComponent c, StyleableUI ui, String key, String value ) {
+		// make sure that the test value differs from the current value
+		// otherwise the test would also pass if applying the style does nothing
+		assertNotEquals( value, ui.getStyleableValue( c, key ), msg( key ) );
+
 		applyStyle( c, ui, String.format( "%s: %s", key, value ) );
-		assertEquals( value, ui.getStyleableValue( c, key ) );
+		assertEquals( value, ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
 	private void testBoolean( JComponent c, StyleableUI ui, String key ) {
+		// test both values because one of them is the current value
 		boolean value = random.nextBoolean();
-		applyStyle( c, ui, String.format( "%s: %s", key, value ) );
-		assertEquals( value, ui.getStyleableValue( c, key ) );
+		for( boolean v : new boolean[] { value, !value } ) {
+			applyStyle( c, ui, String.format( "%s: %s", key, v ) );
+			assertEquals( v, ui.getStyleableValue( c, key ), msg( key ) );
+		}
 		testedKeys.add( key );
 	}
 
 	private void testInteger( JComponent c, StyleableUI ui, String key ) {
 		int value = random.nextInt();
 		applyStyle( c, ui, String.format( "%s: %d", key, value ) );
-		assertEquals( value, ui.getStyleableValue( c, key ) );
+		assertEquals( value, ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
 	private void testFloat( JComponent c, StyleableUI ui, String key ) {
 		float value = Math.round( random.nextFloat() * 100f ) / 100f;
 		applyStyle( c, ui, String.format( Locale.ENGLISH, "%s: %f", key, value ) );
-		assertEquals( value, ui.getStyleableValue( c, key ) );
+		assertEquals( value, ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
 	private void testColor( JComponent c, StyleableUI ui, String key ) {
 		int rgb = random.nextInt() & 0xffffff;
 		applyStyle( c, ui, String.format( "%s: #%06x", key, rgb ) );
-		assertEquals( new Color( rgb ), ui.getStyleableValue( c, key ) );
+		assertEquals( new Color( rgb ), ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
@@ -129,7 +147,7 @@ public class TestFlatStyleableValue
 		int bottom = random.nextInt();
 		int right = random.nextInt();
 		applyStyle( c,ui, String.format( "%s: %d,%d,%d,%d", key, top, left, bottom, right ) );
-		assertEquals( new Insets( top, left, bottom, right ), ui.getStyleableValue( c, key ) );
+		assertEquals( new Insets( top, left, bottom, right ), ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
@@ -137,19 +155,23 @@ public class TestFlatStyleableValue
 		int width = random.nextInt();
 		int height = random.nextInt();
 		applyStyle( c,ui, String.format( "%s: %d,%d", key, width, height ) );
-		assertEquals( new Dimension( width, height ), ui.getStyleableValue( c, key ) );
+		assertEquals( new Dimension( width, height ), ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
 	private void testFont( JComponent c, StyleableUI ui, String key, String style, Font expectedFont ) {
+		assertNotEquals( expectedFont, ui.getStyleableValue( c, key ), msg( key ) );
+
 		applyStyle( c,ui, String.format( "%s: %s", key, style ) );
-		assertEquals( expectedFont, ui.getStyleableValue( c, key ) );
+		assertEquals( expectedFont, ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
 	private void testIcon( JComponent c, StyleableUI ui, String key, String classname, Icon expectedIcon ) {
+		assertNotEquals( expectedIcon, ui.getStyleableValue( c, key ), msg( key ) );
+
 		applyStyle( c,ui, String.format( "%s: %s", key, classname ) );
-		assertEquals( expectedIcon, ui.getStyleableValue( c, key ) );
+		assertEquals( expectedIcon, ui.getStyleableValue( c, key ), msg( key ) );
 		testedKeys.add( key );
 	}
 
@@ -222,11 +244,18 @@ public class TestFlatStyleableValue
 	private final Map<CacheKey, Method> methodCache = new HashMap<>();
 
 	private void testValueString( Object obj, String key, String value ) {
+		// make sure that the test value differs from the current value
+		// otherwise the test would also pass if applying the style does nothing
+		assertNotEquals( value, ((StyleableObject)obj).getStyleableValue( key ), msg( key ) );
+
 		testValue( obj, key, value );
 	}
 
 	private void testValueBoolean( Object obj, String key ) {
-		testValue( obj, key, random.nextBoolean() );
+		// test both values because one of them is the current value
+		boolean value = random.nextBoolean();
+		testValue( obj, key, value );
+		testValue( obj, key, !value );
 	}
 
 	private void testValueInteger( Object obj, String key ) {
@@ -256,7 +285,7 @@ public class TestFlatStyleableValue
 		sobj.applyStyleProperty( key, value );
 		Object actualValue = sobj.getStyleableValue( key );
 
-		assertEquals( value, actualValue );
+		assertEquals( value, actualValue, msg( key ) );
 
 		testedKeys.add( key );
 	}
@@ -379,8 +408,8 @@ public class TestFlatStyleableValue
 
 		testInteger( c, ui, "minimumWidth" );
 		testInteger( c, ui, "editorColumns" );
-		testString( c, ui, "buttonStyle", "auto" );
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "buttonStyle", "button" );
+		testString( c, ui, "arrowType", "triangle" );
 
 		testColor( c, ui, "editableBackground" );
 		testColor( c, ui, "focusedBackground" );
@@ -582,7 +611,7 @@ public class TestFlatStyleableValue
 	private void menuItem_arrowIcon( JComponent c, StyleableUI ui ) {
 		testFloat( c, ui, "icon.scale" );
 
-		testString( c, ui, "icon.arrowType", "chevron" );
+		testString( c, ui, "icon.arrowType", "triangle" );
 		testColor( c, ui, "icon.arrowColor" );
 		testColor( c, ui, "icon.disabledArrowColor" );
 		testColor( c, ui, "selectionForeground" );
@@ -623,7 +652,7 @@ public class TestFlatStyleableValue
 		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "arrowType", "triangle" );
 		testColor( c, ui, "scrollArrowColor" );
 		testColor( c, ui, "hoverScrollArrowBackground" );
 
@@ -790,7 +819,7 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "pressedThumbWithTrack" );
 
 		testBoolean( c, ui, "showButtons" );
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "arrowType", "triangle" );
 		testColor( c, ui, "buttonArrowColor" );
 		testColor( c, ui, "buttonDisabledArrowColor" );
 		testColor( c, ui, "hoverButtonBackground" );
@@ -858,8 +887,8 @@ public class TestFlatStyleableValue
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
 		testInteger( c, ui, "minimumWidth" );
-		testString( c, ui, "buttonStyle", "button" );
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "buttonStyle", "none" );
+		testString( c, ui, "arrowType", "triangle" );
 		testColor( c, ui, "disabledBackground" );
 		testColor( c, ui, "disabledForeground" );
 		testColor( c, ui, "focusedBackground" );
@@ -883,7 +912,7 @@ public class TestFlatStyleableValue
 		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 		expectedStyleableInfos = ui.getStyleableInfos( c );
 
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "arrowType", "triangle" );
 		testColor( c, ui, "draggingColor" );
 		testColor( c, ui, "hoverColor" );
 		testColor( c, ui, "pressedColor" );
@@ -892,7 +921,7 @@ public class TestFlatStyleableValue
 		testColor( c, ui, "oneTouchPressedArrowColor" );
 		testString( c, ui, "oneTouchButtonsPlacement", "center" );
 
-		testString( c, ui, "style", "grip" );
+		testString( c, ui, "style", "plain" );
 		testColor( c, ui, "gripColor" );
 		testInteger( c, ui, "gripDotCount" );
 		testInteger( c, ui, "gripDotSize" );
@@ -941,16 +970,16 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "rotateTabRuns" );
 
 		testString( c, ui, "tabType", "card" );
-		testString( c, ui, "tabsPopupPolicy", "asNeeded" );
+		testString( c, ui, "tabsPopupPolicy", "never" );
 		testString( c, ui, "scrollButtonsPolicy", "asNeeded" );
-		testString( c, ui, "scrollButtonsPlacement", "both" );
+		testString( c, ui, "scrollButtonsPlacement", "trailing" );
 
-		testString( c, ui, "tabAreaAlignment", "leading" );
-		testString( c, ui, "tabAlignment", "center" );
-		testString( c, ui, "tabWidthMode", "preferred" );
-		testString( c, ui, "tabRotation", "none" );
+		testString( c, ui, "tabAreaAlignment", "trailing" );
+		testString( c, ui, "tabAlignment", "leading" );
+		testString( c, ui, "tabWidthMode", "equal" );
+		testString( c, ui, "tabRotation", "auto" );
 
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "arrowType", "triangle" );
 		testInsets( c, ui, "buttonInsets" );
 		testInteger( c, ui, "buttonArc" );
 		testColor( c, ui, "buttonHoverBackground" );
@@ -1019,7 +1048,7 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "showTrailingVerticalLine" );
 
 		// FlatAscendingSortIcon and FlatDescendingSortIcon
-		testString( c, ui, "arrowType", "chevron" );
+		testString( c, ui, "arrowType", "triangle" );
 		testColor( c, ui, "sortIconColor" );
 	}
 
@@ -1141,7 +1170,7 @@ public class TestFlatStyleableValue
 		testBoolean( c, ui, "paintSelection" );
 
 		// icons
-		testString( c, ui, "icon.arrowType", "chevron" );
+		testString( c, ui, "icon.arrowType", "triangle" );
 		testColor( c, ui, "icon.expandedColor" );
 		testColor( c, ui, "icon.collapsedColor" );
 		testColor( c, ui, "icon.leafColor" );
@@ -1491,7 +1520,7 @@ public class TestFlatStyleableValue
 
 		testValueFloat( icon, "scale" );
 
-		testValueString( icon, "arrowType", "chevron" );
+		testValueString( icon, "arrowType", "triangle" );
 		testValueColor( icon, "arrowColor" );
 		testValueColor( icon, "disabledArrowColor" );
 		testValueColor( icon, "selectionForeground" );
