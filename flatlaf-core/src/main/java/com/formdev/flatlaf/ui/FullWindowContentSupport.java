@@ -144,7 +144,7 @@ class FullWindowContentSupport
 
 			@Override
 			public void componentResized( ComponentEvent e ) {
-				Window window = SwingUtilities.windowForComponent( rootPane );
+				Window window = FlatRootPaneUI.getParentWindow( rootPane );
 				if( window == null )
 					return;
 
@@ -171,9 +171,9 @@ class FullWindowContentSupport
 			return;
 
 		Rectangle bounds = null;
-		if( FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) ) {
+		if( isMacFullWindowContentEnabled( rootPane ) ) {
 			bounds = FlatNativeMacLibrary.isLoaded()
-				? FlatNativeMacLibrary.getWindowButtonsBounds( SwingUtilities.windowForComponent( rootPane ) )
+				? FlatNativeMacLibrary.getWindowButtonsBounds( FlatRootPaneUI.getParentWindow( rootPane ) )
 				: new Rectangle( 68, 28 ); // default size
 		}
 		rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, bounds );
@@ -184,6 +184,16 @@ class FullWindowContentSupport
 			return;
 
 		rootPane.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_BOUNDS, null );
+	}
+
+	static boolean isMacFullWindowContentEnabled( JRootPane rootPane ) {
+		if( !SystemInfo.isMacFullWindowContentSupported )
+			return false;
+
+		// check in same way as JDK, which also allows "true" (as string)
+		// https://github.com/openjdk/jdk/blob/6c8f70f22e1621f7cd32a03150bee0f602e1a699/src/java.desktop/macosx/classes/sun/lwawt/macosx/CPlatformWindow.java#L518-L520
+		Object value = rootPane.getClientProperty( "apple.awt.fullWindowContent" );
+		return (value != null && Boolean.parseBoolean( value.toString() ));
 	}
 
 	static void debugPaint( Graphics g, JComponent c ) {
@@ -225,11 +235,13 @@ class FullWindowContentSupport
 	}
 
 	/**
-	 * Returns whether there is a component at the given location that processes
+	 * Returns whether the given location should behave as title bar caption,
+	 * which is the case if there is no component at the location that processes
 	 * mouse events; checks {@link FlatClientProperties#COMPONENT_TITLE_BAR_CAPTION}
 	 * and {@link TitleBarCaptionHitTest} along the way.
 	 * <p>
-	 * Used by {@link FlatTitlePane} (Windows native window decorations).
+	 * Used by {@link FlatTitlePane} (Windows native window decorations)
+	 * and for macOS fullWindowContent mode.
 	 *
 	 * @param skip optional component that is skipped during traversal
 	 *             (used to skip {@code FlatTitlePane.mouseLayer})
@@ -314,15 +326,16 @@ class FullWindowContentSupport
 	// Swing content extends into it. To make components marked with
 	// JComponent.titleBarCaption act as window-draggable caption (even when they
 	// have mouse listeners), we register a per-window callback with the native
-	// library. The native side (MacTitleBarCaption.mm) intercepts left mouse
-	// down events in the title bar area before AWT dispatch and, on caption
-	// points, hands off to -[NSWindow performWindowDragWithEvent:].
+	// library. The native side (MacTitleBarCaption.mm) intercepts mouse events
+	// in the title bar area before AWT dispatch. On caption points, the events
+	// are not delivered to AWT and left mouse drags are handed off to
+	// -[NSWindow performWindowDragWithEvent:].
 
 	static void macInstallTitleBarCaption( JRootPane rootPane ) {
 		if( !SystemInfo.isMacFullWindowContentSupported || !FlatNativeMacLibrary.isLoaded() )
 			return;
 
-		Window window = SwingUtilities.getWindowAncestor( rootPane );
+		Window window = FlatRootPaneUI.getParentWindow( rootPane );
 		if( window == null || !window.isDisplayable() )
 			return;
 
@@ -334,12 +347,14 @@ class FullWindowContentSupport
 		if( !SystemInfo.isMacFullWindowContentSupported || !FlatNativeMacLibrary.isLoaded() )
 			return;
 
-		Window window = SwingUtilities.getWindowAncestor( rootPane );
+		Window window = FlatRootPaneUI.getParentWindow( rootPane );
 		if( window == null || !window.isDisplayable() )
 			return;
 
 		FlatNativeMacLibrary.removeFullWindowContentTitleBarCaption( window );
 	}
+
+	//---- class MacTitleBarCaptionCallback ----
 
 	private static class MacTitleBarCaptionCallback
 		implements FlatNativeMacLibrary.FullWindowContentTitleBarCaptionCallback

@@ -199,11 +199,8 @@ public class FlatRootPaneUI
 	protected void installListeners( JRootPane root ) {
 		super.installListeners( root );
 
-		if( SystemInfo.isMacFullWindowContentSupported ) {
+		if( SystemInfo.isMacFullWindowContentSupported )
 			macFullWindowContentListener = FullWindowContentSupport.macInstallListeners( root );
-			if( FlatClientProperties.clientPropertyBoolean( root, "apple.awt.fullWindowContent", false ) )
-				FullWindowContentSupport.macInstallTitleBarCaption( root );
-		}
 		macInstallWindowBackgroundListener( root );
 	}
 
@@ -213,7 +210,6 @@ public class FlatRootPaneUI
 
 		if( SystemInfo.isMacFullWindowContentSupported ) {
 			FullWindowContentSupport.macUninstallListeners( root, macFullWindowContentListener );
-			FullWindowContentSupport.macUninstallTitleBarCaption( root );
 			macFullWindowContentListener = null;
 		}
 		macUninstallWindowBackgroundListener( root );
@@ -352,11 +348,19 @@ public class FlatRootPaneUI
 
 		// update buttons bounds client property
 		FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
+
+		// install title bar caption
+		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+			FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
 	}
 
 	private void macUninstallFullWindowContentSupport() {
 		if( !SystemInfo.isMacOS )
 			return;
+
+		// uninstall title bar caption (even if switching to another FlatLaf theme)
+		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+			FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
 
 		// do not uninstall when switching to another FlatLaf theme
 		if( UIManager.getLookAndFeel() instanceof FlatLaf )
@@ -434,7 +438,7 @@ public class FlatRootPaneUI
 		}
 	}
 
-	private Window getParentWindow( JRootPane c ) {
+	static Window getParentWindow( JRootPane c ) {
 		// not using SwingUtilities.windowForComponent() or SwingUtilities.getWindowAncestor()
 		// here because root panes may be nested and used anywhere (e.g. in JInternalFrame)
 		// but we're only interested in the "root" root pane, which is a direct child of the window
@@ -534,19 +538,18 @@ public class FlatRootPaneUI
 				macUninstallWindowBackgroundListener( rootPane );
 				macInstallWindowBackgroundListener( rootPane );
 
+				// native window is going to be disposed --> release native resources
+				if( e.getOldValue() instanceof Window && FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+					FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
+
 				// FlatNativeMacLibrary.setWindowButtonsSpacing() and
 				// FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty()
 				// require a native window, but setting the client properties
 				// "apple.awt.fullWindowContent" or FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING
 				// is usually done before the native window is created
 				// --> try again when native window is created
-				if( e.getNewValue() instanceof Window ) {
+				if( e.getNewValue() instanceof Window )
 					macInstallFullWindowContentSupport();
-					// title bar caption support also requires a native window
-					if( SystemInfo.isMacFullWindowContentSupported &&
-						FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) )
-						FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
-				}
 				break;
 
 			case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING:
@@ -556,7 +559,8 @@ public class FlatRootPaneUI
 			case "apple.awt.fullWindowContent":
 				if( SystemInfo.isMacFullWindowContentSupported ) {
 					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
-					if( FlatClientProperties.clientPropertyBoolean( rootPane, "apple.awt.fullWindowContent", false ) )
+
+					if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
 						FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
 					else
 						FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );

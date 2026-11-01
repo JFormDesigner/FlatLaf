@@ -32,7 +32,7 @@
 
 	// title bar caption (MacTitleBarCaption.mm)
 	@property (nonatomic) jobject titleBarCaptionCallback;
-	@property (nonatomic) NSView* titleBarDragView;
+	@property (nonatomic, retain) NSView* titleBarDragView;
 @end
 
 

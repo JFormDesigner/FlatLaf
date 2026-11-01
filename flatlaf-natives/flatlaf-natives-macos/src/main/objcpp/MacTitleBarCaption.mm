@@ -24,20 +24,23 @@
 /**
  * Title bar drag delegation for fullWindowContent windows.
  *
- * A FlatTitleBarDragView is inserted as a sibling of the standard window
- * buttons inside NSTitlebarView, ordered below them. AppKit's normal
- * hit-testing therefore continues to route traffic-light and contentView
- * clicks correctly; only clicks on the bare title-bar background land on us.
+ * A FlatTitleBarDragView is kept as topmost subview of NSTitlebarView,
+ * because AppKit adds or re-inserts other subviews (e.g. the title text field
+ * when appearance changes, or NSToolbarView). Clicks on standard window buttons
+ * are passed through by -hitTest: and all other clicks in the title bar area
+ * land on us.
  *
- * On mouseDown we ask the registered Java callback whether the click is over
- * a caption region. If yes and the user starts dragging, we hand off via
+ * On mouse down we ask the registered Java callback whether the click is over
+ * a caption region. If yes, Swing does not see the click, and if the user starts
+ * dragging with the left button, we hand off via
  * -[NSWindow performWindowDragWithEvent:] so AppKit performs the drag with
- * native edge-snap, magnetic alignment, etc. Otherwise the click is
- * forwarded to the contentView and Swing sees it as normal.
+ * native edge-snap, magnetic alignment, etc. Otherwise the mouse events are
+ * forwarded to the contentView and Swing sees them as normal.
+ * Mouse wheel events are always forwarded.
  *
  * Mirrors the JetBrains Runtime AWTWindowDragView pattern.
  *
- * @since 3.7.2
+ * @since 3.8
  */
 
 
@@ -63,6 +66,7 @@ static bool ensureMethodIDs( JNIEnv* env ) {
 static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 	if( nsWindow == NULL || _jvm == NULL || _isTitleBarCaptionAtMethodID == NULL )
 		return false;
+
 	WindowData* windowData = getWindowData( nsWindow, false );
 	if( windowData == NULL || windowData.titleBarCaptionCallback == NULL )
 		return false;
@@ -89,7 +93,14 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 //---- class FlatTitleBarDragView ---------------------------------------------
 
 @interface FlatTitleBarDragView : NSView {
-	BOOL _captionTracking;
+	// whether mouse button was pressed on caption; if true, then the mouse events
+	// of this button are not forwarded to the contentView until the next press
+	BOOL _leftOnCaption;
+	BOOL _rightOnCaption;
+	BOOL _otherOnCaption;
+
+	// whether window was moved since left mouse button was pressed
+	BOOL _windowDragged;
 }
 @end
 
@@ -103,75 +114,136 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 
 	// claim every click in our bounds; forwarding to the contentView happens
 	// in the mouse handlers below. Returning nil would let NSTitlebarView treat
-	// the click as a background drag.
+	// the click as a background drag. The exception are the standard window
+	// buttons, which are below this view.
 	- (NSView*) hitTest:(NSPoint)pointInSuper {
 		NSPoint local = [self.superview convertPoint:pointInSuper toView:self];
-		return NSPointInRect( local, self.bounds ) ? self : nil;
+		if( !NSPointInRect( local, self.bounds ) )
+			return nil;
+
+		NSWindowButton buttonTypes[] = { NSWindowCloseButton, NSWindowMiniaturizeButton, NSWindowZoomButton };
+		for( NSWindowButton buttonType : buttonTypes ) {
+			NSButton* button = [self.window standardWindowButton:buttonType];
+			if( button != nil && !button.hidden &&
+				NSPointInRect( [button.superview convertPoint:pointInSuper fromView:self.superview], button.frame ) )
+			  return nil;
+		}
+		return self;
 	}
 
-	- (void) mouseDown:(NSEvent*)event {
-		NSWindow* w = self.window;
-		_captionTracking = isCaptionEvent( w, event );
+	- (void) viewWillMoveToWindow:(NSWindow*)newWindow {
+		NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+		if( self.window != nil )
+			[center removeObserver:self name:NSWindowDidUpdateNotification object:self.window];
+		if( newWindow != nil ) {
+			[center addObserver:self selector:@selector(windowDidUpdate:)
+				name:NSWindowDidUpdateNotification object:newWindow];
+		}
+	}
 
-		// always forward so Swing sees the click. If the user starts dragging
-		// a caption point, -mouseDragged: hands off to AppKit; otherwise the
-		// full click/release sequence reaches Swing as normal.
-		[w.contentView mouseDown:event];
+	// keep this view topmost
+	- (void) windowDidUpdate:(NSNotification*)notification {
+		NSView* parent = self.superview;
+		if( parent != nil && parent.subviews.lastObject != self )
+			[parent addSubview:self positioned:NSWindowAbove relativeTo:nil];
+	}
+
+	//---- left mouse button ----
+
+	- (void) mouseDown:(NSEvent*)event {
+		_leftOnCaption = isCaptionEvent( self.window, event );
+		_windowDragged = NO;
+
+		// same as on Windows, caption does not receive mouse pressed/released/clicked/dragged events
+		if( !_leftOnCaption )
+			[self.window.contentView mouseDown:event];
 	}
 
 	- (void) mouseDragged:(NSEvent*)event {
-		if( _captionTracking ) {
-			// performWindowDragWithEvent: is a synchronous modal loop; the
-			// next mouseDragged: cannot arrive until it returns, so a re-entry
-			// guard isn't needed
-			_captionTracking = NO;
-			NSWindow* w = self.window;
-			[w performWindowDragWithEvent:event];
-
-			// AppKit's modal loop ate the mouseUp, so the original mouseDown
-			// we forwarded never sees a release. Synthesize an off-screen
-			// mouseUp so Swing cancels the press without it counting as a
-			// click on the originally-pressed component.
-			NSEvent* synthMouseUp = [NSEvent mouseEventWithType:NSEventTypeLeftMouseUp
-				location:NSMakePoint( -1, -1 )
-				modifierFlags:event.modifierFlags
-				timestamp:[NSDate timeIntervalSinceReferenceDate]
-				windowNumber:event.windowNumber
-				context:nil
-				eventNumber:event.eventNumber
-				clickCount:0
-				pressure:0.0];
-			[w.contentView mouseUp:synthMouseUp];
+		if( !_leftOnCaption ) {
+			[self.window.contentView mouseDragged:event];
 			return;
 		}
-		[self.window.contentView mouseDragged:event];
+
+		if( !_windowDragged ) {
+			_windowDragged = YES;
+
+			// this is a synchronous modal loop, which also consumes the mouseUp
+			[self.window performWindowDragWithEvent:event];
+		}
 	}
 
 	- (void) mouseUp:(NSEvent*)event {
-		[self.window.contentView mouseUp:event];
-
-		if( !_captionTracking || event.clickCount != 2 ) {
-			_captionTracking = NO;
+		if( !_leftOnCaption ) {
+			[self.window.contentView mouseUp:event];
 			return;
 		}
-		_captionTracking = NO;
+
+		_leftOnCaption = NO;
+		if( _windowDragged || event.clickCount != 2 )
+			return;
 
 		// run the user's "double click on title bar" preference
 		NSWindow* w = self.window;
 		NSString* action = [[NSUserDefaults standardUserDefaults]
 			stringForKey:@"AppleActionOnDoubleClick"];
-		if( action == nil || [action caseInsensitiveCompare:@"Maximize"] == NSOrderedSame )
+		if( action == nil ||
+			[action caseInsensitiveCompare:@"Maximize"] == NSOrderedSame ||
+			[action caseInsensitiveCompare:@"Fill"] == NSOrderedSame )
 			[w zoom:nil];
 		else if( [action caseInsensitiveCompare:@"Minimize"] == NSOrderedSame )
 			[w miniaturize:nil];
+	}
+
+	//---- right mouse button ----
+
+	- (void) rightMouseDown:(NSEvent*)event {
+		_rightOnCaption = isCaptionEvent( self.window, event );
+		if( !_rightOnCaption )
+			[self.window.contentView rightMouseDown:event];
+	}
+
+	- (void) rightMouseDragged:(NSEvent*)event {
+		if( !_rightOnCaption )
+			[self.window.contentView rightMouseDragged:event];
+	}
+
+	- (void) rightMouseUp:(NSEvent*)event {
+		if( !_rightOnCaption )
+			[self.window.contentView rightMouseUp:event];
+		_rightOnCaption = NO;
+	}
+
+	//---- other mouse buttons ----
+
+	- (void) otherMouseDown:(NSEvent*)event {
+		_otherOnCaption = isCaptionEvent( self.window, event );
+		if( !_otherOnCaption )
+			[self.window.contentView otherMouseDown:event];
+	}
+
+	- (void) otherMouseDragged:(NSEvent*)event {
+		if( !_otherOnCaption )
+			[self.window.contentView otherMouseDragged:event];
+	}
+
+	- (void) otherMouseUp:(NSEvent*)event {
+		if( !_otherOnCaption )
+			[self.window.contentView otherMouseUp:event];
+		_otherOnCaption = NO;
+	}
+
+	//---- mouse wheel ----
+
+	- (void) scrollWheel:(NSEvent*)event {
+		[self.window.contentView scrollWheel:event];
 	}
 
 @end
 
 
 // Idempotent. Must be invoked on the main thread.
-static void attachTitleBarDragViewIfNeeded( NSWindow* nsWindow ) {
-	WindowData* windowData = getWindowData( nsWindow, true );
+static void attachTitleBarDragViewIfNeeded( NSWindow* nsWindow, WindowData* windowData ) {
 	if( windowData.titleBarDragView != nil ) {
 		// AppKit may have detached the view from outside our control
 		// (e.g. across a full-screen overlay swap). Re-attach if so.
@@ -188,23 +260,18 @@ static void attachTitleBarDragViewIfNeeded( NSWindow* nsWindow ) {
 		return;
 
 	FlatTitleBarDragView* dragView = [[FlatTitleBarDragView alloc] initWithFrame:titlebar.bounds];
-	dragView.translatesAutoresizingMaskIntoConstraints = NO;
-	// insert below the buttons so they hit-test first
-	[titlebar addSubview:dragView positioned:NSWindowBelow relativeTo:closeButton];
-	[NSLayoutConstraint activateConstraints:@[
-		[dragView.leadingAnchor constraintEqualToAnchor:titlebar.leadingAnchor],
-		[dragView.trailingAnchor constraintEqualToAnchor:titlebar.trailingAnchor],
-		[dragView.topAnchor constraintEqualToAnchor:titlebar.topAnchor],
-		[dragView.bottomAnchor constraintEqualToAnchor:titlebar.bottomAnchor]
-	]];
+	// using autoresizing mask because constraints would be lost when moving view to top
+	dragView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+	[titlebar addSubview:dragView positioned:NSWindowAbove relativeTo:nil];
 	windowData.titleBarDragView = dragView;
+	[dragView release];
 }
 
 // Must be invoked on the main thread.
-static void detachTitleBarDragView( NSWindow* nsWindow ) {
-	WindowData* windowData = getWindowData( nsWindow, false );
-	if( windowData == nil || windowData.titleBarDragView == nil )
+static void detachTitleBarDragView( WindowData* windowData ) {
+	if( windowData.titleBarDragView == nil )
 		return;
+
 	[windowData.titleBarDragView removeFromSuperview];
 	windowData.titleBarDragView = nil;
 }
@@ -214,6 +281,7 @@ static void detachTitleBarDragView( NSWindow* nsWindow ) {
 static void releaseGlobalRefOnMainThread( jobject ref ) {
 	if( ref == NULL || _jvm == NULL )
 		return;
+
 	JNIEnv* mainEnv;
 	if( _jvm->GetEnv( (void**) &mainEnv, JNI_VERSION_1_6 ) == JNI_OK )
 		mainEnv->DeleteGlobalRef( ref );
@@ -240,17 +308,17 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setu
 	if( globalCallback == NULL )
 		return FALSE;
 
+	WindowData* windowData = getWindowData( nsWindow, true );
+
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
-
-		WindowData* windowData = getWindowData( nsWindow, true );
 
 		// release previous callback (if any)
 		jobject previous = windowData.titleBarCaptionCallback;
 		windowData.titleBarCaptionCallback = globalCallback;
 		releaseGlobalRefOnMainThread( previous );
 
-		attachTitleBarDragViewIfNeeded( nsWindow );
+		attachTitleBarDragViewIfNeeded( nsWindow, windowData );
 
 		JNI_COCOA_CATCH()
 	}];
@@ -271,17 +339,18 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_remo
 	if( nsWindow == NULL )
 		return FALSE;
 
+	WindowData* windowData = getWindowData( nsWindow, false );
+	if( windowData == NULL || windowData.titleBarDragView == nil )
+		return FALSE;
+
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
 
-		WindowData* windowData = getWindowData( nsWindow, false );
-		if( windowData != NULL ) {
-			detachTitleBarDragView( nsWindow );
+		detachTitleBarDragView( windowData );
 
-			jobject previous = windowData.titleBarCaptionCallback;
-			windowData.titleBarCaptionCallback = NULL;
-			releaseGlobalRefOnMainThread( previous );
-		}
+		jobject previous = windowData.titleBarCaptionCallback;
+		windowData.titleBarCaptionCallback = NULL;
+		releaseGlobalRefOnMainThread( previous );
 
 		JNI_COCOA_CATCH()
 	}];
