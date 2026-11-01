@@ -79,6 +79,21 @@ import com.formdev.flatlaf.ui.FlatNativeWindowsLibrary;
  * (see {@link #setStateStore(StateStore)}), so that file dialogs open at previously
  * visited folder.
  *
+ * <h2>Appearance</h2>
+ *
+ * On <b>macOS</b> and <b>Linux</b>, the preferred appearance (light or dark) of the system file dialog
+ * can be controlled with UI property {@code SystemFileChooser.preferredAppearance}
+ * (e.g. {@code UIManager.put( "SystemFileChooser.preferredAppearance", "dark" )}).
+ * Possible values are:
+ * <ul>
+ *   <li>{@code "flatlaf"} (default) - prefer light or dark depending on current FlatLaf theme;
+ *       system appearance if current look and feel is not FlatLaf
+ *   <li>{@code "light"} - prefer light
+ *   <li>{@code "dark"} - prefer dark
+ *   <li>{@code "system"} - use operating system appearance
+ * </ul>
+ * On Windows, the system file dialog always uses the operating system appearance.
+ *
  * <h2>Limitations/incompatibilities compared to JFileChooser</h2>
  *
  * <ul>
@@ -895,6 +910,16 @@ public class SystemFileChooser
 		abstract String[] showSystemDialog( Window owner, SystemFileChooser fc );
 
 		int getLafDark() {
+			String appearance = UIManager.getString( "SystemFileChooser.preferredAppearance" );
+			if( appearance != null ) {
+				switch( appearance ) {
+					case "light":	return 0;
+					case "dark":	return 1;
+					case "system":	return -1;
+					case "flatlaf":	break;
+				}
+			}
+
 			LookAndFeel laf = UIManager.getLookAndFeel();
 			return (laf instanceof FlatLaf)
 				? (((FlatLaf)laf).isDark() ? 1 : 0)

@@ -22,9 +22,12 @@ FlatLaf Change Log
   (`leading`, `center` or `trailing`). (issue #1116)
 - Tree: Use selection foreground color for expanded, collapsed, leaf, closed and
   open icons of selected rows (if wide selection is enabled). (issue #925)
-- System File Chooser: Support selection mode `FILES_AND_DIRECTORIES` on macOS
-  (in Open dialogs). On other platforms, it behaves like `FILES_ONLY`. (PR
-  #1157)
+- System File Chooser:
+  - Support selection mode `FILES_AND_DIRECTORIES` on macOS (in Open dialogs).
+    On other platforms, it behaves like `FILES_ONLY`. (PR #1157)
+  - Added UI property `SystemFileChooser.preferredAppearance` to control
+    preferred appearance of system file dialog on macOS and Linux (`flatlaf`,
+    `light`, `dark` or `system`).
 - Extras: UI Inspector: Added `FlatInspector.addInfoProvider()` to allow
   applications to add custom rows to the UI inspector tooltip. (issue #1123)
 - Added `FlatMatteBorder`, which is similar to `MatteBorder` but supports HiDPI
