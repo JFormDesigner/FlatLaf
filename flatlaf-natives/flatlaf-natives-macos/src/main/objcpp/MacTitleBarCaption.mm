@@ -27,8 +27,8 @@
  * A FlatTitleBarDragView is kept as topmost subview of NSTitlebarView,
  * because AppKit adds or re-inserts other subviews (e.g. the title text field
  * when appearance changes, or NSToolbarView). Clicks on standard window buttons
- * are passed through by -hitTest: and all other clicks in the title bar area
- * land on us.
+ * and on the window resize border are passed through by -hitTest: and all other
+ * clicks in the title bar area land on us.
  *
  * On mouse down we ask the registered Java callback whether the click is over
  * a caption region. If yes, Swing does not see the click, and if the user starts
@@ -101,6 +101,9 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 
 	// whether window was moved since left mouse button was pressed
 	BOOL _windowDragged;
+
+	// whether -hitTest: is currently checking what is below this view
+	BOOL _inHitTest;
 }
 @end
 
@@ -114,21 +117,21 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 
 	// claim every click in our bounds; forwarding to the contentView happens
 	// in the mouse handlers below. Returning nil would let NSTitlebarView treat
-	// the click as a background drag. The exception are the standard window
-	// buttons, which are below this view.
+	// the click as a background drag. The exceptions are the standard window
+	// buttons and the window resize border, which AppKit must handle.
 	- (NSView*) hitTest:(NSPoint)pointInSuper {
 		NSPoint local = [self.superview convertPoint:pointInSuper toView:self];
-		if( !NSPointInRect( local, self.bounds ) )
+		if( _inHitTest || !NSPointInRect( local, self.bounds ) )
 			return nil;
 
-		NSWindowButton buttonTypes[] = { NSWindowCloseButton, NSWindowMiniaturizeButton, NSWindowZoomButton };
-		for( NSWindowButton buttonType : buttonTypes ) {
-			NSButton* button = [self.window standardWindowButton:buttonType];
-			if( button != nil && !button.hidden &&
-				NSPointInRect( [button.superview convertPoint:pointInSuper fromView:self.superview], button.frame ) )
-			  return nil;
-		}
-		return self;
+		// check what AppKit would hit without this view; the theme frame itself
+		// is hit in the window resize border (size depends on macOS version)
+		NSView* themeFrame = self.window.contentView.superview;
+		_inHitTest = YES;
+		NSView* hit = [themeFrame hitTest:[self.superview convertPoint:pointInSuper toView:nil]];
+		_inHitTest = NO;
+
+		return (hit == themeFrame || [hit isKindOfClass:[NSButton class]]) ? nil : self;
 	}
 
 	- (void) viewWillMoveToWindow:(NSWindow*)newWindow {
