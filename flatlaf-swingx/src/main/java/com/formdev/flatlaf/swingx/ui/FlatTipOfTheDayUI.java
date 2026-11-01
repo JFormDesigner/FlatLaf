@@ -20,16 +20,22 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.swingx.JXTipOfTheDay;
 import org.jdesktop.swingx.plaf.basic.BasicTipOfTheDayUI;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -40,13 +46,42 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTipOfTheDayUI
 	extends BasicTipOfTheDayUI
+	implements StyleableUI
 {
+	/** @since 3.8 */ @Styleable protected Insets tipAreaInsets;
+
+	private Border tipAreaBorder;
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTipOfTheDayUI( (JXTipOfTheDay) c );
 	}
 
 	public FlatTipOfTheDayUI( JXTipOfTheDay tipPane ) {
 		super( tipPane );
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		tipAreaInsets = UIManager.getInsets( "TipOfTheDay.tipAreaInsets" );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		tipAreaInsets = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -58,9 +93,18 @@ public class FlatTipOfTheDayUI
 
 		super.installComponents();
 
-		Insets tipAreaInsets = UIManager.getInsets( "TipOfTheDay.tipAreaInsets" );
-		if( tipAreaInsets != null )
-			tipArea.setBorder( FlatUIUtils.nonUIResource( new FlatEmptyBorder( tipAreaInsets ) ) );
+		tipAreaBorder = null;
+		updateTipAreaBorder();
+	}
+
+	private void updateTipAreaBorder() {
+		// replace only border installed by this class
+		if( tipArea == null || tipAreaInsets == null ||
+			(tipAreaBorder != null && tipArea.getBorder() != tipAreaBorder) )
+		  return;
+
+		tipAreaBorder = FlatUIUtils.nonUIResource( new FlatEmptyBorder( tipAreaInsets ) );
+		tipArea.setBorder( tipAreaBorder );
 	}
 
 	@Override
@@ -75,12 +119,44 @@ public class FlatTipOfTheDayUI
 	@Override
 	protected PropertyChangeListener createChangeListener() {
 		PropertyChangeListener superListener = super.createChangeListener();
-		return e -> {
+		return FlatStylingSupport.createPropertyChangeListener( tipPane, this::installStyle, e -> {
 			superListener.propertyChange( e );
 
 			if( "model".equals( e.getPropertyName() ) )
 				showCurrentTip();
-		};
+		} );
+	}
+
+	/** @since 3.8 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( tipPane, "JXTipOfTheDay" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		updateTipAreaBorder();
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, tipPane, key, value );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

@@ -17,21 +17,28 @@
 package com.formdev.flatlaf.swingx.ui;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
 import java.util.Map;
+import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXMonthView;
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.JXTipOfTheDay;
+import org.jdesktop.swingx.JXTitledPanel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.ui.FlatBorder;
+import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * @author Karl Tauber
@@ -141,5 +148,76 @@ public class TestFlatSwingXStyling
 		assertEquals( Color.green, c.getTodayBackground() );
 		assertEquals( 5, c.getBoxPaddingX() );
 		assertEquals( Color.class, ui.getStyleableInfos( c ).get( "todayColor" ) );
+	}
+
+	@Test
+	void taskPane() {
+		JXTaskPane c = new JXTaskPane();
+		FlatTaskPaneUI ui = (FlatTaskPaneUI) c.getUI();
+
+		// BasicTaskPaneUI fields
+		c.putClientProperty( FlatClientProperties.STYLE, "titleHeight: 30; roundHeight: 8" );
+		assertEquals( 30, ui.getStyleableValue( c, "titleHeight" ) );
+		assertEquals( 8, ui.getStyleableValue( c, "roundHeight" ) );
+
+		// pane border fields
+		Object defaultBorderColor = ui.getStyleableValue( c, "borderColor" );
+		c.putClientProperty( FlatClientProperties.STYLE,
+			"borderColor: #f00; titleForeground: #0f0; specialTitleBackground: #00f; specialTitleForeground: #ff0;"
+			+ "titleBackgroundGradientStart: #0ff; titleOver: #f0f; specialTitleOver: #fff" );
+		assertEquals( Color.red, ui.getStyleableValue( c, "borderColor" ) );
+		assertEquals( Color.green, ui.getStyleableValue( c, "titleForeground" ) );
+		assertEquals( Color.blue, ui.getStyleableValue( c, "specialTitleBackground" ) );
+		assertEquals( Color.yellow, ui.getStyleableValue( c, "specialTitleForeground" ) );
+		assertEquals( Color.cyan, ui.getStyleableValue( c, "titleBackgroundGradientStart" ) );
+		assertEquals( Color.magenta, ui.getStyleableValue( c, "titleOver" ) );
+		assertEquals( Color.white, ui.getStyleableValue( c, "specialTitleOver" ) );
+
+		c.putClientProperty( FlatClientProperties.STYLE, null );
+		assertEquals( defaultBorderColor, ui.getStyleableValue( c, "borderColor" ) );
+
+		Map<String, Class<?>> infos = ui.getStyleableInfos( c );
+		assertEquals( int.class, infos.get( "titleHeight" ) );
+		assertEquals( int.class, infos.get( "roundHeight" ) );
+		assertEquals( Color.class, infos.get( "borderColor" ) );
+		assertEquals( Color.class, infos.get( "specialTitleOver" ) );
+	}
+
+	@Test
+	void tipOfTheDay() {
+		JXTipOfTheDay c = new JXTipOfTheDay();
+		FlatTipOfTheDayUI ui = (FlatTipOfTheDayUI) c.getUI();
+
+		JComponent tipArea = (JComponent) ((BorderLayout)c.getLayout()).getLayoutComponent( BorderLayout.CENTER );
+
+		Insets defaultTipAreaInsets = ui.tipAreaInsets;
+		c.putClientProperty( FlatClientProperties.STYLE, "tipAreaInsets: 1,2,3,4; background: #f00" );
+		assertEquals( new Insets( 1, 2, 3, 4 ), ui.tipAreaInsets );
+		assertEquals( UIScale.scale( new Insets( 1, 2, 3, 4 ) ), tipArea.getInsets() );
+		assertEquals( Color.red, c.getBackground() );
+		assertEquals( Insets.class, ui.getStyleableInfos( c ).get( "tipAreaInsets" ) );
+
+		c.putClientProperty( FlatClientProperties.STYLE, null );
+		assertEquals( defaultTipAreaInsets, ui.tipAreaInsets );
+		assertEquals( UIScale.scale( defaultTipAreaInsets ), tipArea.getInsets() );
+	}
+
+	@Test
+	void titledPanel() {
+		JXTitledPanel c = new JXTitledPanel();
+		FlatTitledPanelUI ui = (FlatTitledPanelUI) c.getUI();
+
+		c.putClientProperty( FlatClientProperties.STYLE,
+			"titleBackground: #f00; borderColor: #0f0; captionInsets: 1,2,3,4; titleForeground: #00f" );
+		assertEquals( Color.red, ui.titleBackground );
+		assertEquals( Color.green, ui.borderColor );
+		assertEquals( new Insets( 1, 2, 3, 4 ), ui.captionInsets );
+		assertEquals( Color.blue, c.getTitleForeground() );
+		assertEquals( Color.green, ((FlatLineBorder)c.getBorder()).getLineColor() );
+
+		Map<String, Class<?>> infos = ui.getStyleableInfos( c );
+		assertEquals( Color.class, infos.get( "titleBackground" ) );
+		assertEquals( Color.class, infos.get( "borderColor" ) );
+		assertEquals( Insets.class, infos.get( "captionInsets" ) );
 	}
 }

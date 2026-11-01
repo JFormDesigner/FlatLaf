@@ -26,6 +26,9 @@ import java.awt.Insets;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -36,7 +39,12 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableObject;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -44,13 +52,25 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @author Karl Tauber
  */
+@StyleableField( cls=BasicTaskPaneUI.class, key="titleHeight" )
+@StyleableField( cls=BasicTaskPaneUI.class, key="roundHeight" )
 public class FlatTaskPaneUI
 	extends BasicTaskPaneUI
+	implements StyleableUI
 {
 	private Color background;
 
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTaskPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -95,8 +115,47 @@ public class FlatTaskPaneUI
 			background = null;
 		}
 
+		oldStyleValues = null;
 
 		super.uninstallUI( c );
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyListener() {
+		return FlatStylingSupport.createPropertyChangeListener( group, this::installStyle,
+			super.createPropertyListener() );
+	}
+
+	/** @since 3.8 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( group, "JXTaskPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		// pane border is created for each task pane, so it is never shared
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, group, new AtomicBoolean( false ) );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, group.getBorder() );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, group.getBorder(), key );
 	}
 
 	@Override
@@ -175,8 +234,16 @@ public class FlatTaskPaneUI
 
 	//---- class FlatPaneBorder -----------------------------------------------
 
+	@StyleableField( cls=PaneBorder.class, key="borderColor" )
+	@StyleableField( cls=PaneBorder.class, key="titleForeground" )
+	@StyleableField( cls=PaneBorder.class, key="specialTitleBackground" )
+	@StyleableField( cls=PaneBorder.class, key="specialTitleForeground" )
+	@StyleableField( cls=PaneBorder.class, key="titleBackgroundGradientStart" )
+	@StyleableField( cls=PaneBorder.class, key="titleOver" )
+	@StyleableField( cls=PaneBorder.class, key="specialTitleOver" )
 	private class FlatPaneBorder
 		extends PaneBorder
+		implements StyleableObject
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
