@@ -82,7 +82,7 @@ public class FlatDatePickerUI
 
 	private JButton popupButton;
 
-	private PropertyChangeListener propertyChangeListener;
+	private PropertyChangeListener stylePropertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 	private AtomicBoolean borderShared;
 
@@ -169,8 +169,8 @@ public class FlatDatePickerUI
 
 		// not overriding createPropertyChangeListener() because BasicDatePickerUI
 		// reuses its property change listener for popupButton and monthView
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( datePicker, this::installStyle, null );
-		datePicker.addPropertyChangeListener( propertyChangeListener );
+		stylePropertyChangeListener = FlatStylingSupport.createPropertyChangeListener( datePicker, this::installStyle, null );
+		datePicker.addPropertyChangeListener( stylePropertyChangeListener );
 
 		MigLayoutVisualPadding.install( datePicker );
 	}
@@ -179,8 +179,8 @@ public class FlatDatePickerUI
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		datePicker.removePropertyChangeListener( propertyChangeListener );
-		propertyChangeListener = null;
+		datePicker.removePropertyChangeListener( stylePropertyChangeListener );
+		stylePropertyChangeListener = null;
 
 		MigLayoutVisualPadding.uninstall( datePicker );
 	}
