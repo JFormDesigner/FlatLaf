@@ -45,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeMacLibrary
 {
-	private static int API_VERSION_MACOS = 2005;
+	private static int API_VERSION_MACOS = 2006;
 
 	/**
 	 * Checks whether native library is loaded/available.
@@ -81,6 +81,41 @@ public class FlatNativeMacLibrary
 	 * @since 3.8
 	 */
 	public native static boolean refreshScreenMenuBar();
+
+	/**
+	 * Registers a hit-test callback used to decide whether a mouse down event
+	 * in a fullWindowContent macOS window's title bar area should behave as caption
+	 * (left mouse drag moves the window) instead of being delivered to AWT.
+	 * <p>
+	 * The window must already use {@code apple.awt.fullWindowContent=true}.
+	 * Passing the same window twice replaces the previously registered callback.
+	 *
+	 * @since 3.8
+	 */
+	public native static boolean setupFullWindowContentTitleBarCaption( Window window, FullWindowContentTitleBarCaptionCallback callback );
+
+	/**
+	 * Removes the callback previously installed with
+	 * {@link #setupFullWindowContentTitleBarCaption(Window, FullWindowContentTitleBarCaptionCallback)}.
+	 *
+	 * @since 3.8
+	 */
+	public native static boolean removeFullWindowContentTitleBarCaption( Window window );
+
+	/** @since 3.8 */
+	public interface FullWindowContentTitleBarCaptionCallback {
+		/**
+		 * Invoked on the AppKit main thread (not the AWT event dispatching thread)
+		 * before the mouse event is dispatched to AWT.
+		 * It <b>must not</b> change any component property or layout because this could cause a dead lock.
+		 *
+		 * @param x x coordinate in AWT window coordinates (origin top-left)
+		 * @param y y coordinate in AWT window coordinates (origin top-left)
+		 * @return {@code true} if the location should behave as title bar caption
+		 *         (i.e. mouse events are not delivered to AWT and left mouse drag moves the window)
+		 */
+		boolean isTitleBarCaptionAt( int x, int y );
+	}
 
 
 	/** @since 3.7 */

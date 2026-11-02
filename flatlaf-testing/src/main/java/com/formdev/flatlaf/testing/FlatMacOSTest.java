@@ -57,6 +57,11 @@ public class FlatMacOSTest
 
 		placeholderPanel.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen" );
 		UIManager.put( "FlatLaf.debug.panel.showPlaceholders", true );
+
+		// the two buttons demonstrate caption=true vs caption=false side by
+		// side. Toggled via captionDemoCheckBox below.
+		captionTrueButton.putClientProperty( FlatClientProperties.COMPONENT_TITLE_BAR_CAPTION, true );
+		captionFalseButton.putClientProperty( FlatClientProperties.COMPONENT_TITLE_BAR_CAPTION, false );
 	}
 
 	@Override
@@ -130,6 +135,23 @@ public class FlatMacOSTest
 		FlatNativeMacLibrary.toggleWindowFullScreen( window );
 	}
 
+	private void captionDemoChanged() {
+		captionDemoButtonsPanel.setVisible( captionDemoCheckBox.isSelected() );
+	}
+
+	private void captionTrueClicked() {
+		captionTrueClickCount++;
+		captionTrueButton.setText( "caption=true (clicks: " + captionTrueClickCount + ")" );
+	}
+
+	private void captionFalseClicked() {
+		captionFalseClickCount++;
+		captionFalseButton.setText( "caption=false (clicks: " + captionFalseClickCount + ")" );
+	}
+
+	private int captionTrueClickCount;
+	private int captionFalseClickCount;
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel1 = new JPanel();
@@ -151,6 +173,10 @@ public class FlatMacOSTest
 		JLabel nativeButtonsBoundsLabel = new JLabel();
 		nativeButtonsBoundsField = new JLabel();
 		JButton toggleFullScreenButton = new JButton();
+		captionDemoButtonsPanel = new JPanel();
+		captionTrueButton = new JButton();
+		captionFalseButton = new JButton();
+		captionDemoCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new BorderLayout());
@@ -165,6 +191,23 @@ public class FlatMacOSTest
 				placeholderPanel.setLayout(new FlowLayout());
 			}
 			panel1.add(placeholderPanel, BorderLayout.WEST);
+
+			//======== captionDemoButtonsPanel ========
+			{
+				captionDemoButtonsPanel.setVisible(false);
+				captionDemoButtonsPanel.setLayout(new FlowLayout());
+
+				//---- captionTrueButton ----
+				captionTrueButton.setText("caption=true (clicks: 0)");
+				captionTrueButton.addActionListener(e -> captionTrueClicked());
+				captionDemoButtonsPanel.add(captionTrueButton);
+
+				//---- captionFalseButton ----
+				captionFalseButton.setText("caption=false (clicks: 0)");
+				captionFalseButton.addActionListener(e -> captionFalseClicked());
+				captionDemoButtonsPanel.add(captionFalseButton);
+			}
+			panel1.add(captionDemoButtonsPanel, BorderLayout.EAST);
 		}
 		add(panel1, BorderLayout.PAGE_START);
 
@@ -185,6 +228,7 @@ public class FlatMacOSTest
 				"[fill]" +
 				"[]" +
 				"[]para" +
+				"[]" +
 				"[]"));
 
 			//---- fullWindowContentCheckBox ----
@@ -262,6 +306,11 @@ public class FlatMacOSTest
 			toggleFullScreenButton.setText("Toggle Full Screen");
 			toggleFullScreenButton.addActionListener(e -> toggleFullScreen());
 			panel2.add(toggleFullScreenButton, "cell 0 6");
+
+			//---- captionDemoCheckBox ----
+			captionDemoCheckBox.setText("Show caption demo buttons");
+			captionDemoCheckBox.addActionListener(e -> captionDemoChanged());
+			panel2.add(captionDemoCheckBox, "cell 0 7 4 1");
 		}
 		add(panel2, BorderLayout.CENTER);
 
@@ -287,5 +336,9 @@ public class FlatMacOSTest
 	private JLabel buttonsSpacingHint;
 	private JLabel fullWindowContentButtonsBoundsField;
 	private JLabel nativeButtonsBoundsField;
+	private JPanel captionDemoButtonsPanel;
+	private JButton captionTrueButton;
+	private JButton captionFalseButton;
+	private JCheckBox captionDemoCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

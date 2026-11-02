@@ -19,31 +19,17 @@
 #import <jni.h>
 #import "JNIUtils.h"
 #import "JNFRunLoop.h"
+#import "MacWindowInternal.h"
 #import "com_formdev_flatlaf_ui_FlatNativeMacLibrary.h"
 
 /**
  * @author Karl Tauber
  */
 
-@interface WindowData : NSObject
-	// used when window is full screen
-	@property (nonatomic) int lastWindowButtonAreaWidth;
-	@property (nonatomic) int lastWindowTitleBarHeight;
-
-	// full screen observers
-	@property (nonatomic) id willEnterFullScreenObserver;
-	@property (nonatomic) id willExitFullScreenObserver;
-	@property (nonatomic) id didExitFullScreenObserver;
-@end
-
 @implementation WindowData
 @end
 
-// declare exported methods
-NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
-
 // declare internal methods
-static WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
 static void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden );
 static int getWindowButtonAreaWidth( NSWindow* nsWindow );
 static int getWindowTitleBarHeight( NSWindow* nsWindow );
@@ -81,7 +67,7 @@ NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
 	return (NSWindow *) jlong_to_ptr( env->GetLongField( platformWindow, ptrID ) );
 }
 
-static WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
+WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
 	static char key;
 	WindowData* windowData = objc_getAssociatedObject( nsWindow, &key );
 	if( windowData == NULL && allocate ) {

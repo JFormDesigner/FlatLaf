@@ -355,11 +355,19 @@ public class FlatRootPaneUI
 
 		// update buttons bounds client property
 		FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
+
+		// install title bar caption
+		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+			FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
 	}
 
 	private void macUninstallFullWindowContentSupport() {
 		if( !SystemInfo.isMacOS )
 			return;
+
+		// uninstall title bar caption (even if switching to another FlatLaf theme)
+		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+			FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
 
 		// do not uninstall when switching to another FlatLaf theme
 		if( UIManager.getLookAndFeel() instanceof FlatLaf )
@@ -481,7 +489,7 @@ public class FlatRootPaneUI
 		}
 	}
 
-	private Window getParentWindow( JRootPane c ) {
+	static Window getParentWindow( JRootPane c ) {
 		// not using SwingUtilities.windowForComponent() or SwingUtilities.getWindowAncestor()
 		// here because root panes may be nested and used anywhere (e.g. in JInternalFrame)
 		// but we're only interested in the "root" root pane, which is a direct child of the window
@@ -584,6 +592,10 @@ public class FlatRootPaneUI
 				macUninstallScreenMenuBarRefreshListener( rootPane );
 				macInstallScreenMenuBarRefreshListener( rootPane );
 
+				// native window is going to be disposed --> release native resources
+				if( e.getOldValue() instanceof Window && FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+					FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
+
 				// FlatNativeMacLibrary.setWindowButtonsSpacing() and
 				// FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty()
 				// require a native window, but setting the client properties
@@ -599,8 +611,14 @@ public class FlatRootPaneUI
 				break;
 
 			case "apple.awt.fullWindowContent":
-				if( SystemInfo.isMacFullWindowContentSupported )
+				if( SystemInfo.isMacFullWindowContentSupported ) {
 					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
+
+					if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+						FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
+					else
+						FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
+				}
 				break;
 		}
 	}

@@ -8,8 +8,15 @@ FlatLaf Change Log
 - Added support for [Oklab](https://bottosson.github.io/posts/oklab/) and linear sRGB
   color spaces to color functions `mix()`, `tint()` and `shade()`. (PR #1132, issue #1109)
 - Theme Editor: Added preview for color functions. (see PR #1132)
-- macOS: Add support for `Cmd+Backspace` and `Cmd+Delete` shortcuts to text
-  components. (PR #1142, issue #1095)
+- macOS:
+  - In
+    [full window content mode](https://www.formdev.com/flatlaf/macos/#full_window_content),
+    FlatLaf now automatically detects Swing components in title bar area that
+    process mouse events and excludes them from processing by macOS. Client
+    property `JComponent.titleBarCaption` now also works on macOS. (PR #1124,
+    issue #1011)
+  - Add support for `Cmd+Backspace` and `Cmd+Delete` shortcuts to text
+    components. (PR #1142, issue #1095)
 - Publish Maven/Gradle BOM (Bill of Materials) to Maven Central. Artifact ID
   is `flatlaf-bom`. (issue #1146)
 - Menus: On Windows, when a screen reader (e.g. NVDA) is running, activating the
