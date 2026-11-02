@@ -1,0 +1,157 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: Native Libraries Commit
+
+on:
+    workflow_dispatch:
+        inputs:
+            run-id:
+                description: 'Run ID of workflow "Native Libraries" (empty: latest successful run on selected branch)'
+                required: false
+                type: string
+            windows:
+                description: 'Commit Windows libraries'
+                default: false
+                type: boolean
+            macos:
+                description: 'Commit macOS libraries'
+                default: false
+                type: boolean
+            linux:
+                description: 'Commit Linux libraries'
+                default: false
+                type: boolean
+            message:
+                description: 'Commit message'
+                required: true
+                default: 'Native libraries updated'
+                type: string
+
+permissions:
+    contents: write
+    actions: read
+
+jobs:
+    Commit:
+        runs-on: ubuntu-latest
+
+        env:
+            GH_TOKEN: ${{ github.token }}
+            GH_REPO: ${{ github.repository }}
+
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  # commit history is necessary to compare with commit of workflow run,
+                  # but file contents of old commits are not
+                  fetch-depth: 0
+                  filter: blob:none
+                  # used for push; commits pushed with GITHUB_TOKEN do not trigger workflow CI
+                  # (requires fine-grained personal access token with permission "Contents: Read and write")
+                  token: ${{ secrets.NATIVES_COMMIT_TOKEN || github.token }}
+
+            - name: Check workflow run
+              env:
+                RUN_ID: ${{ inputs.run-id }}
+              run: |
+                if [ -z "$RUN_ID" ]; then
+                    RUN_ID=$(gh run list --workflow natives.yml --branch "$GITHUB_REF_NAME" --status success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+                    if [ -z "$RUN_ID" ]; then
+                        echo "::error::No successful run of natives.yml found on branch $GITHUB_REF_NAME"
+                        exit 1
+                    fi
+                fi
+
+                case "$RUN_ID" in
+                    *[!0-9]*)
+                        echo "::error::Invalid run ID: $RUN_ID"
+                        exit 1 ;;
+                esac
+
+                RUN_INFO=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" --jq '"\(.path) \(.conclusion) \(.head_sha)"')
+                read -r RUN_PATH RUN_CONCLUSION RUN_SHA <<< "$RUN_INFO"
+
+                if [ "$RUN_PATH" != ".github/workflows/natives.yml" ]; then
+                    echo "::error::Run $RUN_ID is not a run of natives.yml: $RUN_PATH"
+                    exit 1
+                fi
+                if [ "$RUN_CONCLUSION" != "success" ]; then
+                    echo "::error::Run $RUN_ID was not successful: $RUN_CONCLUSION"
+                    exit 1
+                fi
+                if ! git merge-base --is-ancestor "$RUN_SHA" HEAD; then
+                    echo "::error::Run $RUN_ID was built from commit $RUN_SHA, which is not part of branch $GITHUB_REF_NAME"
+                    exit 1
+                fi
+                if ! git diff --quiet "$RUN_SHA" HEAD -- flatlaf-natives; then
+                    echo "::error::flatlaf-natives has changed since commit $RUN_SHA of run $RUN_ID"
+                    exit 1
+                fi
+
+                echo "Using run $RUN_ID of commit $RUN_SHA"
+                echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+                echo "RUN_SHA=$RUN_SHA" >> $GITHUB_ENV
+
+            - name: Copy native libraries from artifacts
+              env:
+                WINDOWS: ${{ inputs.windows }}
+                MACOS: ${{ inputs.macos }}
+                LINUX: ${{ inputs.linux }}
+              run: |
+                DEST=flatlaf-core/src/main/resources/com/formdev/flatlaf/natives
+
+                # cp keeps the mode of existing files, which is lost in artifacts
+                copyNatives() {
+                    ARTIFACT=$1
+                    shift
+                    gh run download "$RUN_ID" --name "$ARTIFACT" --dir "$RUNNER_TEMP/$ARTIFACT"
+                    for FILE in "$@"; do
+                        cp "$RUNNER_TEMP/$ARTIFACT/$DEST/$FILE" "$DEST/$FILE"
+                    done
+                }
+
+                if [ "$WINDOWS" = "true" ]; then
+                    copyNatives FlatLaf-natives-build-artifacts-windows-latest \
+                        flatlaf-windows-arm64.dll flatlaf-windows-x86.dll flatlaf-windows-x86_64.dll
+                fi
+                if [ "$MACOS" = "true" ]; then
+                    copyNatives FlatLaf-natives-build-artifacts-macos-latest \
+                        libflatlaf-macos-arm64.dylib libflatlaf-macos-x86_64.dylib
+                fi
+                if [ "$LINUX" = "true" ]; then
+                    copyNatives FlatLaf-natives-build-artifacts-ubuntu-latest libflatlaf-linux-x86_64.so
+                    copyNatives FlatLaf-natives-build-artifacts-ubuntu-24.04-arm libflatlaf-linux-arm64.so
+                fi
+
+            - name: Commit and push
+              env:
+                MESSAGE: ${{ inputs.message }}
+              run: |
+                git add flatlaf-core/src/main/resources/com/formdev/flatlaf/natives
+
+                if git diff --cached --quiet; then
+                    echo "::error::Native libraries are unchanged, nothing to commit"
+                    exit 1
+                fi
+
+                # platforms with changed libraries
+                CHANGED=$(git diff --cached --name-only)
+                PLATFORMS=
+                addPlatform() {
+                    case "$CHANGED" in
+                        *"-$1-"*) PLATFORMS="${PLATFORMS:+$PLATFORMS, }$2" ;;
+                    esac
+                }
+                addPlatform windows Windows
+                addPlatform macos macOS
+                addPlatform linux Linux
+
+                # names of changed libraries
+                LIBRARIES=$(echo "$CHANGED" | sed 's|.*/|- |')
+                echo "::notice::"$(echo "$LIBRARIES" | sed 's|- | |' | tr '\n' ',')
+
+                git config user.name "$GITHUB_ACTOR"
+                git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
+                git commit -m "$MESSAGE ($PLATFORMS)" -m "$LIBRARIES" -m "Built by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN_ID from commit $RUN_SHA"
+                git show --stat --format=fuller HEAD
+                git push

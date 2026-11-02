@@ -12,6 +12,7 @@ on:
     paths-ignore:
       - '**.md'
       - '.*'
+      - '.github/workflows/natives-commit.yml'
       - '**/.settings/**'
       - 'flatlaf-core/svg/**'
       - 'flatlaf-natives/**'
