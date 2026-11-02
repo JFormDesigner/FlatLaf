@@ -334,31 +334,14 @@ public class FlatRootPaneUI
 		if( !SystemInfo.isMacOS )
 			return;
 
-		// set window buttons spacing
-		if( isMacButtonsSpacingSupported() && rootPane.isDisplayable() ) {
-			int buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT;
-			String value = (String) rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING );
-			if( value != null ) {
-				switch( value ) {
-					case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM:
-						buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_MEDIUM;
-						break;
-
-					case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE:
-						buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_LARGE;
-						break;
-				}
-			}
-
-			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), buttonsSpacing );
+		// install title bar caption and set window buttons spacing
+		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) ) {
+			FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
+			macSetWindowButtonsSpacing();
 		}
 
 		// update buttons bounds client property
 		FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
-
-		// install title bar caption
-		if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
-			FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
 	}
 
 	private void macUninstallFullWindowContentSupport() {
@@ -374,8 +357,7 @@ public class FlatRootPaneUI
 			return;
 
 		// reset window buttons spacing
-		if( isMacButtonsSpacingSupported() )
-			FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT );
+		macResetWindowButtonsSpacing();
 
 		// remove buttons bounds client property
 		FullWindowContentSupport.macUninstallFullWindowContentButtonsBoundsProperty( rootPane );
@@ -383,6 +365,34 @@ public class FlatRootPaneUI
 
 	private boolean isMacButtonsSpacingSupported() {
 		return SystemInfo.isMacOS && SystemInfo.isJava_17_orLater && FlatNativeMacLibrary.isLoaded();
+	}
+
+	private void macSetWindowButtonsSpacing() {
+		if( !isMacButtonsSpacingSupported() || !rootPane.isDisplayable() )
+			return;
+
+		int buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT;
+		String value = (String) rootPane.getClientProperty( FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING );
+		if( value != null ) {
+			switch( value ) {
+				case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_MEDIUM:
+					buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_MEDIUM;
+					break;
+
+				case FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE:
+					buttonsSpacing = FlatNativeMacLibrary.BUTTONS_SPACING_LARGE;
+					break;
+			}
+		}
+
+		FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), buttonsSpacing );
+	}
+
+	private void macResetWindowButtonsSpacing() {
+		if( !isMacButtonsSpacingSupported() )
+			return;
+
+		FlatNativeMacLibrary.setWindowButtonsSpacing( getParentWindow( rootPane ), FlatNativeMacLibrary.BUTTONS_SPACING_DEFAULT );
 	}
 
 	private void macSetWindowAppearance( JRootPane c ) {
@@ -612,12 +622,15 @@ public class FlatRootPaneUI
 
 			case "apple.awt.fullWindowContent":
 				if( SystemInfo.isMacFullWindowContentSupported ) {
-					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
-
-					if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) )
+					if( FullWindowContentSupport.isMacFullWindowContentEnabled( rootPane ) ) {
 						FullWindowContentSupport.macInstallTitleBarCaption( rootPane );
-					else
+						macSetWindowButtonsSpacing();
+					} else {
 						FullWindowContentSupport.macUninstallTitleBarCaption( rootPane );
+						macResetWindowButtonsSpacing();
+					}
+
+					FullWindowContentSupport.macUpdateFullWindowContentButtonsBoundsProperty( rootPane );
 				}
 				break;
 		}

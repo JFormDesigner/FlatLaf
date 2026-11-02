@@ -1486,8 +1486,8 @@ public interface FlatClientProperties
 
 	/**
 	 * Specifies the spacing around the macOS window close/minimize/zoom buttons.
-	 * Useful if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
-	 * is enabled.
+	 * Used only if <a href="https://www.formdev.com/flatlaf/macos/#full_window_content">full window content</a>
+	 * is enabled (client property {@code apple.awt.fullWindowContent}).
 	 * <p>
 	 * (requires macOS 10.14+ for "medium" spacing and macOS 11+ for "large" spacing, requires Java 17+)
 	 * <p>
