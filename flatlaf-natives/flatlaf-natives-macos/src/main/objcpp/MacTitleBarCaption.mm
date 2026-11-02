@@ -24,11 +24,12 @@
 /**
  * Title bar drag delegation for fullWindowContent windows.
  *
- * A FlatTitleBarDragView is kept as topmost subview of NSTitlebarView,
- * because AppKit adds or re-inserts other subviews (e.g. the title text field
- * when appearance changes, or NSToolbarView). Clicks on standard window buttons
- * and on the window resize border are passed through by -hitTest: and all other
- * clicks in the title bar area land on us.
+ * A FlatTitleBarDragView is kept directly below the standard window buttons
+ * in NSTitlebarView, so the buttons stay on top of it and work as usual.
+ * AppKit adds or re-inserts other subviews (e.g. the title text field when
+ * appearance changes, or NSToolbarView), which must stay below this view.
+ * Clicks on the window resize border are passed through by -hitTest: and all
+ * other clicks in the title bar area land on us.
  *
  * On mouse down we ask the registered Java callback whether the click is over
  * a caption region. If yes, Swing does not see the click, and if the user starts
@@ -114,8 +115,8 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 
 	// claim every click in our bounds; forwarding to the contentView happens
 	// in the mouse handlers below. Returning nil would let NSTitlebarView treat
-	// the click as a background drag. The exceptions are the standard window
-	// buttons and the window resize border, which AppKit must handle.
+	// the click as a background drag. The exception is the window resize border,
+	// which AppKit must handle. The standard window buttons are above this view.
 	- (NSView*) hitTest:(NSPoint)pointInSuper {
 		NSPoint local = [self.superview convertPoint:pointInSuper toView:self];
 		if( _inHitTest || !NSPointInRect( local, self.bounds ) )
@@ -128,7 +129,7 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 		NSView* hit = [themeFrame hitTest:[self.superview convertPoint:pointInSuper toView:nil]];
 		_inHitTest = NO;
 
-		return (hit == themeFrame || [hit isKindOfClass:[NSButton class]]) ? nil : self;
+		return (hit == themeFrame) ? nil : self;
 	}
 
 	- (void) viewWillMoveToWindow:(NSWindow*)newWindow {
@@ -141,11 +142,27 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 		}
 	}
 
-	// keep this view topmost
+	// keep this view directly below the standard window buttons
 	- (void) windowDidUpdate:(NSNotification*)notification {
 		NSView* parent = self.superview;
-		if( parent != nil && parent.subviews.lastObject != self )
-			[parent addSubview:self positioned:NSWindowAbove relativeTo:nil];
+		if( parent == nil )
+			return;
+
+		// find lowest window button; order of buttons is up to AppKit
+		NSArray<NSView*>* subviews = parent.subviews;
+		NSUInteger lowestIndex = NSNotFound;
+		const NSWindowButton types[] = { NSWindowCloseButton, NSWindowMiniaturizeButton, NSWindowZoomButton };
+		for( NSWindowButton type : types ) {
+			NSView* button = [self.window standardWindowButton:type];
+			NSUInteger index = (button != nil) ? [subviews indexOfObjectIdenticalTo:button] : NSNotFound;
+			if( index != NSNotFound && (lowestIndex == NSNotFound || index < lowestIndex) )
+				lowestIndex = index;
+		}
+		if( lowestIndex == NSNotFound )
+			return;
+
+		if( lowestIndex == 0 || subviews[lowestIndex - 1] != self )
+			[parent addSubview:self positioned:NSWindowBelow relativeTo:subviews[lowestIndex]];
 	}
 
 	//---- left mouse button ----
@@ -260,10 +277,11 @@ static void attachTitleBarDragViewIfNeeded( NSWindow* nsWindow, WindowData* wind
 		return;
 
 	FlatTitleBarDragView* dragView = [[FlatTitleBarDragView alloc] initWithFrame:titlebar.bounds];
-	// using autoresizing mask because constraints would be lost when moving view to top
+	// using autoresizing mask because constraints would be lost when moving view
 	dragView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-	[titlebar addSubview:dragView positioned:NSWindowAbove relativeTo:nil];
+	[titlebar addSubview:dragView positioned:NSWindowBelow relativeTo:closeButton];
 	windowData.titleBarDragView = dragView;
+	[dragView windowDidUpdate:nil];
 	[dragView release];
 }
 
