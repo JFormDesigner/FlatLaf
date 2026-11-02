@@ -52,11 +52,8 @@ static jmethodID _isTitleBarCaptionAtMethodID = NULL;
 static bool ensureMethodIDs( JNIEnv* env ) {
 	if( _isTitleBarCaptionAtMethodID != NULL )
 		return true;
-	jclass cls = findClass( env,
-		"com/formdev/flatlaf/ui/FlatNativeMacLibrary$FullWindowContentTitleBarCaptionCallback",
-		false );
-	if( cls == NULL )
-		return false;
+
+	jclass cls = findClass( env, "com/formdev/flatlaf/ui/FlatNativeMacLibrary$FullWindowContentTitleBarCaptionCallback", false );
 	_isTitleBarCaptionAtMethodID = getMethodID( env, cls, "isTitleBarCaptionAt", "(II)Z", false );
 	return _isTitleBarCaptionAtMethodID != NULL;
 }
@@ -279,17 +276,6 @@ static void detachTitleBarDragView( WindowData* windowData ) {
 	windowData.titleBarDragView = nil;
 }
 
-// Releases a JNI global ref using the JNIEnv attached to the current thread.
-// No-op if 'ref' or the cached JavaVM is NULL.
-static void releaseGlobalRefOnMainThread( jobject ref ) {
-	if( ref == NULL || _jvm == NULL )
-		return;
-
-	JNIEnv* mainEnv;
-	if( _jvm->GetEnv( (void**) &mainEnv, JNI_VERSION_1_6 ) == JNI_OK )
-		mainEnv->DeleteGlobalRef( ref );
-}
-
 
 extern "C"
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setupFullWindowContentTitleBarCaption
@@ -307,19 +293,13 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setu
 	if( !ensureMethodIDs( env ) )
 		return FALSE;
 
-	jobject globalCallback = env->NewGlobalRef( callback );
-	if( globalCallback == NULL )
-		return FALSE;
-
 	WindowData* windowData = getWindowData( nsWindow, true );
+
+	env->DeleteGlobalRef( windowData.titleBarCaptionCallback );
+	windowData.titleBarCaptionCallback = env->NewGlobalRef( callback );
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
-
-		// release previous callback (if any)
-		jobject previous = windowData.titleBarCaptionCallback;
-		windowData.titleBarCaptionCallback = globalCallback;
-		releaseGlobalRefOnMainThread( previous );
 
 		attachTitleBarDragViewIfNeeded( nsWindow, windowData );
 
@@ -343,17 +323,19 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_remo
 		return FALSE;
 
 	WindowData* windowData = getWindowData( nsWindow, false );
-	if( windowData == NULL || windowData.titleBarDragView == nil )
+	if( windowData == NULL )
+		return FALSE;
+
+	env->DeleteGlobalRef( windowData.titleBarCaptionCallback );
+	windowData.titleBarCaptionCallback = NULL;
+
+	if( windowData.titleBarDragView == nil )
 		return FALSE;
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
 
 		detachTitleBarDragView( windowData );
-
-		jobject previous = windowData.titleBarCaptionCallback;
-		windowData.titleBarCaptionCallback = NULL;
-		releaseGlobalRefOnMainThread( previous );
 
 		JNI_COCOA_CATCH()
 	}];
