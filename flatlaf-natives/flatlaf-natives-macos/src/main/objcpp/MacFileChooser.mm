@@ -31,6 +31,25 @@ static jobjectArray newJavaStringArray( JNIEnv* env, jsize count );
 static jobjectArray urlsToStringArray( JNIEnv* env, NSArray* urls );
 static NSArray* getDialogURLs( NSSavePanel* dialog );
 
+// edit commands that need a menu item in main menu bar to work in file dialog
+struct EditCommand {
+	NSString* keyEquivalent;
+	NSEventModifierFlags modifiers;
+	SEL action;
+};
+
+static const EditCommand EDIT_COMMANDS[] = {
+	{ @"x", NSEventModifierFlagCommand, @selector(cut:) },
+	{ @"c", NSEventModifierFlagCommand, @selector(copy:) },
+	{ @"v", NSEventModifierFlagCommand, @selector(paste:) },
+	{ @"a", NSEventModifierFlagCommand, @selector(selectAll:) },
+	{ @"z", NSEventModifierFlagCommand, @selector(undo:) },
+	{ @"z", NSEventModifierFlagCommand | NSEventModifierFlagShift, @selector(redo:) },
+};
+
+// tag of invisible menu items added to application menu
+static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
+
 //---- class FileChooserDelegate ----------------------------------------------
 
 @interface FileChooserDelegate : NSObject <NSOpenSavePanelDelegate, NSWindowDelegate> {
@@ -218,22 +237,26 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 		}
 
 
-		// "Select All (Cmd+A)" in file dialog requires that a menu item
-		// with "selectAll:" selector exists in main menu bar.
+		// Edit shortcuts (e.g. "Paste (Cmd+V)") in file dialog require that a menu item
+		// with corresponding selector (e.g. "paste:") exists in main menu bar.
 
-		// change action of (disabled) Swing "Select All" menu item (if exists) to "selectAll:"
-		NSMenuItem* swingSelectAllItem = [self findSelectAllMenuItem:mainMenu];
-		if( swingSelectAllItem != nil )
-			swingSelectAllItem.action = @selector(selectAll:);
-
-		// add invisible "Select All" menu item to application menu
-		NSMenuItem *selectAllItem = [[NSMenuItem alloc] initWithTitle:@""
-			action:@selector(selectAll:) keyEquivalent:@"a"];
-		selectAllItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-		selectAllItem.target = nil; // use responder chain
-		selectAllItem.view = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
 		NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
-		[appMenu addItem:selectAllItem];
+
+		for( const EditCommand& command : EDIT_COMMANDS ) {
+			// change action of (disabled) Swing menu item (if exists) to edit command selector
+			NSMenuItem* swingItem = [self findMenuItem:mainMenu :command.keyEquivalent :command.modifiers];
+			if( swingItem != nil )
+				swingItem.action = command.action;
+
+			// add invisible menu item to application menu
+			NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:@""
+				action:command.action keyEquivalent:command.keyEquivalent];
+			item.keyEquivalentModifierMask = command.modifiers;
+			item.target = nil; // use responder chain
+			item.tag = EDIT_COMMAND_MENU_ITEM_TAG;
+			item.view = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
+			[appMenu addItem:item];
+		}
 
 		JNI_COCOA_CATCH()
 	}
@@ -243,30 +266,32 @@ static NSArray* getDialogURLs( NSSavePanel* dialog );
 
 		NSMenu* mainMenu = [NSApp mainMenu];
 
-		// remove invisible "Select All" menu item from application menu
+		// remove invisible menu items from application menu
 		NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
-		int lastIndex = appMenu.numberOfItems - 1;
-		NSMenuItem* mi = [appMenu itemAtIndex:lastIndex];
-		if( mi.keyEquivalentModifierMask == NSEventModifierFlagCommand && [@"a" isEqual:mi.keyEquivalent] )
-			[appMenu removeItemAtIndex:lastIndex];
+		for( int i = appMenu.numberOfItems - 1; i >= 0; i-- ) {
+			if( [appMenu itemAtIndex:i].tag == EDIT_COMMAND_MENU_ITEM_TAG )
+				[appMenu removeItemAtIndex:i];
+		}
 
-		// restore Swing "Select All" action
-		NSMenuItem* swingSelectAllItem = [self findSelectAllMenuItem:mainMenu];
-		if( swingSelectAllItem != nil )
-			swingSelectAllItem.action = @selector(handleAction:);
+		// restore Swing actions
+		for( const EditCommand& command : EDIT_COMMANDS ) {
+			NSMenuItem* swingItem = [self findMenuItem:mainMenu :command.keyEquivalent :command.modifiers];
+			if( swingItem != nil )
+				swingItem.action = @selector(handleAction:);
+		}
 
 		JNI_COCOA_CATCH()
 	}
 
-	- (NSMenuItem*) findSelectAllMenuItem:(NSMenu *) menu {
+	- (NSMenuItem*) findMenuItem:(NSMenu *) menu :(NSString *) keyEquivalent :(NSEventModifierFlags) modifiers {
 		int count = [menu numberOfItems];
 		for( int i = 0; i < count; i++ ) {
 			NSMenuItem* mi = [menu itemAtIndex:i];
-			if( mi.keyEquivalentModifierMask == NSEventModifierFlagCommand && [@"a" isEqual:mi.keyEquivalent] )
+			if( mi.keyEquivalentModifierMask == modifiers && [keyEquivalent isEqual:mi.keyEquivalent] )
 				return mi;
 
 			if( mi.hasSubmenu ) {
-				NSMenuItem* mi2 = [self findSelectAllMenuItem:mi.submenu];
+				NSMenuItem* mi2 = [self findMenuItem:mi.submenu :keyEquivalent :modifiers];
 				if( mi2 != nil )
 					return mi2;
 			}

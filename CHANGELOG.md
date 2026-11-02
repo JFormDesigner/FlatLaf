@@ -58,6 +58,9 @@ FlatLaf Change Log
     from a drop handler while the system file dialog is open. (PR #1156)
   - On macOS and Linux, do not request light/dark appearance for system file
     dialog if current L&F is not FlatLaf (e.g. Aqua). (issue #1162)
+  - macOS: `Cmd+X` (**Cut**), `Cmd+C` (**Copy**), `Cmd+V` (**Paste**), `Cmd+Z`
+    (**Undo**) and `Cmd+Shift+Z` (**Redo**) did not work in text fields of file
+    dialog. (issue #1164)
 - ColorChooser: Do not use rounded border for color palette boxes. (issue #1150)
 - FileChooser:
   - Fixed selection painting in "Details" view when theme uses rounded
