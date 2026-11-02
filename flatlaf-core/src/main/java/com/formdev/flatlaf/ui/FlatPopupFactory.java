@@ -407,17 +407,23 @@ public class FlatPopupFactory
 		} else
 			borderColor = null; // use system default color
 
+		runWhenNativeWindowCreated( popupWindow, () -> {
+			setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+		} );
+	}
+
+	private static void runWhenNativeWindowCreated( Window popupWindow, Runnable runnable ) {
 		if( popupWindow.isDisplayable() ) {
 			// native window already created
-			setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+			runnable.run();
 		} else {
-			// native window not yet created --> add listener to set native border after window creation
+			// native window not yet created --> add listener to run after window creation
 			AtomicReference<HierarchyListener> l = new AtomicReference<>();
 			l.set( e -> {
 				if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
 					(e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0 )
 				{
-					setupRoundedBorderImpl( popupWindow, borderCornerRadius, borderWidth, borderColor );
+					runnable.run();
 					popupWindow.removeHierarchyListener( l.get() );
 				}
 			} );
@@ -626,6 +632,16 @@ public class FlatPopupFactory
 				// (e.g. macOS and Linux) when using dark theme
 				oldPopupWindowBackground = popupWindow.getBackground();
 				popupWindow.setBackground( contents.getBackground() );
+
+				// macOS may animate appearing of new windows, which makes the popup
+				// look "wobbly" because it is shown slightly smaller and blurred for a moment.
+				// The popup window is disposed in hideImpl(), so this occurs on each show.
+				if( SystemInfo.isMacOS && FlatNativeMacLibrary.isLoaded() ) {
+					Window window = popupWindow;
+					runWhenNativeWindowCreated( window, () -> {
+						FlatNativeMacLibrary.disableWindowAnimation( window );
+					} );
+				}
 			}
 		}
 

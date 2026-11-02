@@ -60,6 +60,14 @@ public class FlatNativeMacLibrary
 	/** @since 3.7.2 */ public native static boolean setWindowAppearance( Window window, String appearance );
 	public native static boolean setWindowRoundedBorder( Window window, float radius, float borderWidth, int borderColor );
 
+	/**
+	 * Disables the animation that macOS may play when the given window appears.
+	 * The native window must be already created.
+	 *
+	 * @since 3.8
+	 */
+	public native static boolean disableWindowAnimation( Window window );
+
 	/** @since 3.4 */
 	public static final int
 		BUTTONS_SPACING_DEFAULT = 0,

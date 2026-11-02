@@ -57,6 +57,14 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
+ * Method:    disableWindowAnimation
+ * Signature: (Ljava/awt/Window;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_disableWindowAnimation
+  (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatNativeMacLibrary
  * Method:    setWindowButtonsSpacing
  * Signature: (Ljava/awt/Window;I)Z
  */

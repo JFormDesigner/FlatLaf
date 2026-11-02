@@ -87,6 +87,8 @@ FlatLaf Change Log
   which also occurs without FlatLaf, when the menu bar is installed a bit "late"
   after application launch. FlatLaf now forces a redraw of the screen menu bar
   (requires FlatLaf native library). (PR #1154, issue #1153)
+- macOS 26: Disabled window animation of heavy weight popups, which made popup
+  menus and tooltips look "wobbly" when they appear. (issue #1161)
 - Native libraries: Fixed `IllegalArgumentException: URI has an authority component`
   trying to load native library when running application from a Windows network drive.
   (issue #1145)

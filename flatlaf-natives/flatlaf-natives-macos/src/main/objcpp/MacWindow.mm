@@ -153,6 +153,30 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 }
 
 extern "C"
+JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_disableWindowAnimation
+	( JNIEnv* env, jclass cls, jobject window )
+{
+	JNI_COCOA_ENTER()
+
+	NSWindow* nsWindow = getNSWindow( env, cls, window );
+	if( nsWindow == NULL )
+		return FALSE;
+
+	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		JNI_COCOA_TRY()
+
+		nsWindow.animationBehavior = NSWindowAnimationBehaviorNone;
+
+		JNI_COCOA_CATCH()
+	}];
+
+	return TRUE;
+
+	JNI_COCOA_EXIT()
+	return FALSE;
+}
+
+extern "C"
 JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setWindowButtonsSpacing
 	( JNIEnv* env, jclass cls, jobject window, jint buttonsSpacing )
 {
