@@ -12,7 +12,7 @@ on:
     paths-ignore:
       - '**.md'
       - '.*'
-      - '.github/workflows/natives-commit.yml'
+      - '.github/workflows/[a-bd-z]*.yml'
       - '**/.settings/**'
       - 'flatlaf-core/svg/**'
       - 'flatlaf-natives/**'
@@ -27,16 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: gradle/actions/wrapper-validation@v6
-
-      - name: Setup Java 21
-        uses: actions/setup-java@v6
-        with:
-          java-version: 21
-          distribution: temurin  # pre-installed on ubuntu-latest
-
-      - name: Cache Gradle
-        uses: ./.github/actions/cache-gradle
+      - name: Setup Java and Gradle
+        uses: ./.github/actions/setup-java-and-gradle
 
 
         # test against
@@ -103,14 +95,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java 21
-        uses: actions/setup-java@v6
-        with:
-          java-version: 21
-          distribution: temurin  # pre-installed on ubuntu-latest
-
-      - name: Cache Gradle
-        uses: ./.github/actions/cache-gradle
+      - name: Setup Java and Gradle
+        uses: ./.github/actions/setup-java-and-gradle
 
       - name: Release a new stable version to Maven Central and build demo and theme editor
         run: ./gradlew publishToSonatype closeSonatypeStagingRepository :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false

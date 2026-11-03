@@ -7,8 +7,10 @@ on:
     paths-ignore:
       - '**.md'
       - '.*'
+      - '.github/workflows/[a-oq-z]*.yml'
       - '**/.settings/**'
       - 'flatlaf-core/svg/**'
+      - 'flatlaf-natives/**'
       - 'flatlaf-testing/dumps/**'
       - 'flatlaf-testing/misc/**'
       - 'images/**'
@@ -21,14 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java 21
-        uses: actions/setup-java@v6
-        with:
-          java-version: 21
-          distribution: temurin  # pre-installed on ubuntu-latest
-
-      - name: Cache Gradle
-        uses: ./.github/actions/cache-gradle
+      - name: Setup Java and Gradle
+        uses: ./.github/actions/setup-java-and-gradle
 
       - name: Publish PR snapshot to Sonatype Central
         run: >

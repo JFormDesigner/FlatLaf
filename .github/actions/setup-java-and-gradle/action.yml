@@ -1,0 +1,20 @@
+# https://docs.github.com/en/actions/tutorials/create-actions/create-a-composite-action#creating-a-composite-action-within-the-same-repository
+
+# actions/checkout is not included because this action is part of the repository,
+# so the repository must be checked out before GitHub Actions can load this action
+
+name: 'Setup Java and Gradle'
+runs:
+  using: "composite"
+  steps:
+
+    - uses: gradle/actions/wrapper-validation@v6
+
+    - name: Setup Java 21
+      uses: actions/setup-java@v6
+      with:
+        java-version: 21
+        distribution: temurin  # pre-installed on ubuntu-latest
+
+    - name: Cache Gradle
+      uses: ./.github/actions/cache-gradle
