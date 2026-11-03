@@ -19,15 +19,22 @@ package com.formdev.flatlaf.swingx.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.plaf.basic.BasicBusyLabelUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatHTML;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 //TODO scale busy spinner
 
@@ -38,8 +45,11 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  */
 public class FlatBusyLabelUI
 	extends BasicBusyLabelUI
+	implements StyleableUI
 {
-	private Color disabledForeground;
+	/** @since 3.8 */ @Styleable protected Color disabledForeground;
+
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatBusyLabelUI( (JXBusyLabel) c );
@@ -47,6 +57,13 @@ public class FlatBusyLabelUI
 
 	public FlatBusyLabelUI( JXBusyLabel busyLabel ) {
 		super( busyLabel );
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle( (JLabel) c );
 	}
 
 	@Override
@@ -70,6 +87,8 @@ public class FlatBusyLabelUI
 		super.uninstallDefaults( c );
 
 		disabledForeground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -84,6 +103,48 @@ public class FlatBusyLabelUI
 	public void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
 		FlatHTML.propertyChange( e );
+
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				JLabel label = (JLabel) e.getSource();
+				installStyle( label );
+				label.revalidate();
+				HiDPIUtils.repaint( label );
+				break;
+		}
+	}
+
+	/** @since 3.8 */
+	protected void installStyle( JLabel c ) {
+		try {
+			applyStyle( c, FlatStylingSupport.getResolvedStyle( c, "JXBusyLabel" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( JLabel c, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( c, key, value ) );
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( JLabel c, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, key );
 	}
 
 	@Override

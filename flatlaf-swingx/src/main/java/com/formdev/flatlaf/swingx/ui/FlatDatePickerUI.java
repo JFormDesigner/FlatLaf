@@ -29,8 +29,11 @@ import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -46,8 +49,12 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.calendar.DatePickerFormatter.DatePickerFormatterUIResource;
 import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 import com.formdev.flatlaf.ui.FlatArrowButton;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.MigLayoutVisualPadding;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -57,22 +64,27 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatDatePickerUI
 	extends BasicDatePickerUI
+	implements StyleableUI
 {
-	protected Insets padding;
+	/** @since 3.8 */ @Styleable protected Insets padding;
 
-	protected String arrowType;
-	protected Color borderColor;
-	protected Color disabledBorderColor;
+	/** @since 3.8 */ @Styleable protected String arrowType;
+	/** @since 3.8 @Styleable */ protected Color borderColor;
+	/** @since 3.8 @Styleable */ protected Color disabledBorderColor;
 
-	protected Color disabledBackground;
+	/** @since 3.8 */ @Styleable protected Color disabledBackground;
 
-	protected Color buttonBackground;
-	protected Color buttonArrowColor;
-	protected Color buttonDisabledArrowColor;
-	protected Color buttonHoverArrowColor;
-	protected Color buttonPressedArrowColor;
+	/** @since 3.8 */ @Styleable protected Color buttonBackground;
+	/** @since 3.8 */ @Styleable protected Color buttonArrowColor;
+	/** @since 3.8 */ @Styleable protected Color buttonDisabledArrowColor;
+	/** @since 3.8 */ @Styleable protected Color buttonHoverArrowColor;
+	/** @since 3.8 */ @Styleable protected Color buttonPressedArrowColor;
 
 	private JButton popupButton;
+
+	private PropertyChangeListener stylePropertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatDatePickerUI();
@@ -115,6 +127,8 @@ public class FlatDatePickerUI
 				todayLink.setClickedColor( UIManager.getColor( "Hyperlink.visitedColor" ) );
 			}
 		}
+
+		installStyle();
 	}
 
 	@Override
@@ -142,6 +156,9 @@ public class FlatDatePickerUI
 		buttonHoverArrowColor = null;
 		buttonPressedArrowColor = null;
 
+		oldStyleValues = null;
+		borderShared = null;
+
 		if( datePicker.getBorder() instanceof UIResource )
 			datePicker.setBorder( null );
 	}
@@ -150,6 +167,11 @@ public class FlatDatePickerUI
 	protected void installListeners() {
 		super.installListeners();
 
+		// not overriding createPropertyChangeListener() because BasicDatePickerUI
+		// reuses its property change listener for popupButton and monthView
+		stylePropertyChangeListener = FlatStylingSupport.createPropertyChangeListener( datePicker, this::installStyle, null );
+		datePicker.addPropertyChangeListener( stylePropertyChangeListener );
+
 		MigLayoutVisualPadding.install( datePicker );
 	}
 
@@ -157,7 +179,56 @@ public class FlatDatePickerUI
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
+		datePicker.removePropertyChangeListener( stylePropertyChangeListener );
+		stylePropertyChangeListener = null;
+
 		MigLayoutVisualPadding.uninstall( datePicker );
+	}
+
+	/** @since 3.8 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( datePicker, "JXDatePicker" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 3.8 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( popupButton instanceof FlatArrowButton ) {
+			((FlatArrowButton)popupButton).updateStyle( arrowType, buttonArrowColor,
+				buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+		}
+	}
+
+	/** @since 3.8 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		Object oldValue = FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, datePicker, borderShared );
+
+		// the vertical line between value and arrow button uses the border colors
+		switch( key ) {
+			case "borderColor":			borderColor = (Color) value; break;
+			case "disabledBorderColor":	disabledBorderColor = (Color) value; break;
+		}
+
+		return oldValue;
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, datePicker.getBorder() );
+	}
+
+	/** @since 3.8 */
+	@Override
+	public Object getStyleableValue( JComponent c, String key ) {
+		return FlatStylingSupport.getAnnotatedStyleableValue( this, datePicker.getBorder(), key );
 	}
 
 	@Override

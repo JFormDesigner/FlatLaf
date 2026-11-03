@@ -35,6 +35,9 @@ FlatLaf Change Log
   - Added UI property `SystemFileChooser.preferredAppearance` to control
     preferred appearance of system file dialog on macOS and Linux (`flatlaf`,
     `light`, `dark` or `system`).
+- SwingX: Added styling support to `JXBusyLabel`, `JXDatePicker`, `JXHyperlink`,
+  `JXMonthView`, `JXTaskPane`, `JXTipOfTheDay` and `JXTitledPanel`. (PR #1166,
+  issue #1165)
 - Extras: UI Inspector: Added `FlatInspector.addInfoProvider()` to allow
   applications to add custom rows to the UI inspector tooltip. (issue #1123)
 - Added `FlatMatteBorder`, which is similar to `MatteBorder` but supports HiDPI

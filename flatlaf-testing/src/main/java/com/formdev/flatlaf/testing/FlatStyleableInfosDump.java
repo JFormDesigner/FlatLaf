@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
+import org.jdesktop.swingx.*;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.icons.*;
@@ -137,6 +138,15 @@ public class FlatStyleableInfosDump
 		map.put( "FlatSearchIcon", new FlatSearchIcon().getStyleableInfos() );
 		map.put( "FlatSearchWithHistoryIcon", new FlatSearchWithHistoryIcon().getStyleableInfos() );
 		map.put( "FlatTabbedPaneCloseIcon", new FlatTabbedPaneCloseIcon().getStyleableInfos() );
+
+		// SwingX components
+		map.put( "JXBusyLabel", FlatLaf.getStyleableInfos( new JXBusyLabel() ) );
+		map.put( "JXDatePicker", FlatLaf.getStyleableInfos( new JXDatePicker() ) );
+		map.put( "JXHyperlink", FlatLaf.getStyleableInfos( new JXHyperlink() ) );
+		map.put( "JXMonthView", FlatLaf.getStyleableInfos( new JXMonthView() ) );
+		map.put( "JXTaskPane", FlatLaf.getStyleableInfos( new JXTaskPane() ) );
+		map.put( "JXTipOfTheDay", FlatLaf.getStyleableInfos( new JXTipOfTheDay() ) );
+		map.put( "JXTitledPanel", FlatLaf.getStyleableInfos( new JXTitledPanel() ) );
 
 		return map;
 	}

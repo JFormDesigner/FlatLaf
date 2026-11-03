@@ -641,6 +641,7 @@ gripDotSize                                        int
 gripGap                                            int
 hoverColor                                         java.awt.Color
 oneTouchArrowColor                                 java.awt.Color
+oneTouchButtonsPlacement                           java.lang.String
 oneTouchHoverArrowColor                            java.awt.Color
 oneTouchPressedArrowColor                          java.awt.Color
 pressedColor                                       java.awt.Color
@@ -1280,5 +1281,77 @@ closePressedBackground                             java.awt.Color
 closePressedForeground                             java.awt.Color
 closeScale                                         float
 closeSize                                          java.awt.Dimension
+
+
+#---- JXBusyLabel ----
+
+disabledForeground                                 java.awt.Color
+
+
+#---- JXDatePicker ----
+
+arc                                                int
+arrowType                                          java.lang.String
+borderColor                                        java.awt.Color
+borderWidth                                        float
+buttonArrowColor                                   java.awt.Color
+buttonBackground                                   java.awt.Color
+buttonDisabledArrowColor                           java.awt.Color
+buttonHoverArrowColor                              java.awt.Color
+buttonPressedArrowColor                            java.awt.Color
+custom.borderColor                                 java.awt.Color
+disabledBackground                                 java.awt.Color
+disabledBorderColor                                java.awt.Color
+error.borderColor                                  java.awt.Color
+error.focusedBorderColor                           java.awt.Color
+focusColor                                         java.awt.Color
+focusedBorderColor                                 java.awt.Color
+focusWidth                                         int
+innerFocusWidth                                    float
+innerOutlineWidth                                  float
+outline                                            java.lang.String
+outlineColor                                       java.awt.Color
+outlineFocusedColor                                java.awt.Color
+padding                                            java.awt.Insets
+roundRect                                          java.lang.Boolean
+success.borderColor                                java.awt.Color
+success.focusedBorderColor                         java.awt.Color
+warning.borderColor                                java.awt.Color
+warning.focusedBorderColor                         java.awt.Color
+
+
+#---- JXHyperlink ----
+
+disabledText                                       java.awt.Color
+
+
+#---- JXMonthView ----
+
+todayColor                                         java.awt.Color
+
+
+#---- JXTaskPane ----
+
+borderColor                                        java.awt.Color
+roundHeight                                        int
+specialTitleBackground                             java.awt.Color
+specialTitleForeground                             java.awt.Color
+specialTitleOver                                   java.awt.Color
+titleBackgroundGradientStart                       java.awt.Color
+titleForeground                                    java.awt.Color
+titleHeight                                        int
+titleOver                                          java.awt.Color
+
+
+#---- JXTipOfTheDay ----
+
+tipAreaInsets                                      java.awt.Insets
+
+
+#---- JXTitledPanel ----
+
+borderColor                                        java.awt.Color
+captionInsets                                      java.awt.Insets
+titleBackground                                    java.awt.Color
 
 
