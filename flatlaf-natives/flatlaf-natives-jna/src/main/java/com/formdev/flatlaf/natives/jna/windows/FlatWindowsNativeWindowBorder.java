@@ -574,10 +574,10 @@ public class FlatWindowsNativeWindowBorder
 
 			// fill background
 			HDC hdc = new HDC( wParam.toPointer() );
-		    RECT rect = new RECT();
-		    User32.INSTANCE.GetClientRect( hwnd, rect );
-		    User32Ex.INSTANCE.FillRect( hdc, rect, background );
-		    return new LRESULT( 1 );
+			RECT rect = new RECT();
+			User32.INSTANCE.GetClientRect( hwnd, rect );
+			User32Ex.INSTANCE.FillRect( hdc, rect, background );
+			return new LRESULT( 1 );
 		}
 
 		/**

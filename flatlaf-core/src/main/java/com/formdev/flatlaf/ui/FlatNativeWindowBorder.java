@@ -320,9 +320,9 @@ public class FlatNativeWindowBorder
 
 			update();
 			installListeners();
-        }
+		}
 
-        void update() {
+		void update() {
 			colorizationAffectsBorders = isColorizationColorAffectsBorders();
 			activeColor = calculateActiveBorderColor();
 		}

@@ -1417,7 +1417,7 @@ class FlatThemeFileEditor
 
 			// not found
 			return -(low + 1);
-	    }
+		}
 	}
 
 	//---- class DirectoryComboBox --------------------------------------------

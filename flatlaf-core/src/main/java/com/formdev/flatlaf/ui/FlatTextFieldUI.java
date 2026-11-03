@@ -1046,7 +1046,7 @@ debug*/
 				if( lineStart >= 0 && lineStart < caretPosition )
 					textComponent.getDocument().remove( lineStart, caretPosition - lineStart );
 			} catch( BadLocationException ex ) {
-                UIManager.getLookAndFeel().provideErrorFeedback( textComponent );
+				UIManager.getLookAndFeel().provideErrorFeedback( textComponent );
 			}
 		}
 	}
@@ -1080,7 +1080,7 @@ debug*/
 				if( lineEnd >= 0 && lineEnd > caretPosition )
 					textComponent.getDocument().remove( caretPosition, lineEnd - caretPosition );
 			} catch( BadLocationException ex ) {
-                UIManager.getLookAndFeel().provideErrorFeedback( textComponent );
+				UIManager.getLookAndFeel().provideErrorFeedback( textComponent );
 			}
 		}
 	}

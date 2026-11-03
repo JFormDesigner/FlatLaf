@@ -74,9 +74,9 @@ public class FlatPaintingHiDPITest
 		double scaleX = Math.hypot( t.getScaleX(), t.getShearX() );
 		double scaleY = Math.hypot( t.getScaleY(), t.getShearY() );
 		if( t.getScaleX() < 0 )
-		    scaleX = -scaleX;
+			scaleX = -scaleX;
 		if( t.getScaleY() < 0 )
-		    scaleY = -scaleY;
+			scaleY = -scaleY;
 
 		double rotation = Math.atan2( t.getShearY(), t.getScaleY() );
 		double rotationDegrees = Math.toDegrees( rotation );

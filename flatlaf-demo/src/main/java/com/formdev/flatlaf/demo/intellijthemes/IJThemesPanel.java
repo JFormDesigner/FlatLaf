@@ -305,9 +305,9 @@ public class IJThemesPanel
 
 			try {
 				if( themeInfo.themeFile.getName().endsWith( ".properties" ) )
-				    FlatLaf.setup( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
+					FlatLaf.setup( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
 				else
-				    FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+					FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
 
 				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME_FILE, themeInfo.themeFile.getAbsolutePath() );
 			} catch( Exception ex ) {

@@ -1891,11 +1891,11 @@ public class SystemFileChooser
 
 	/**
 	 * A case-insensitive file filter which accepts file patterns containing
-     * the wildcard characters {@code *?} on Windows and Linux.
-     * <ul>
-     *   <li>{@code '*'} matches any sequence of characters.
-     *   <li>{@code '?'} matches any single character.
-     * </ul>
+	 * the wildcard characters {@code *?} on Windows and Linux.
+	 * <ul>
+	 *   <li>{@code '*'} matches any sequence of characters.
+	 *   <li>{@code '?'} matches any single character.
+	 * </ul>
 	 * Sample filters: {@code *.tar.gz} or {@code *_copy.txt}
 	 * <p>
 	 * <b>Warning</b>: This filter is <b>not supported on macOS</b>.

@@ -521,10 +521,10 @@ class FlatInputMaps
 			"shift HOME", "selectFirstExtendSelection",
 			"shift END", "selectLastExtendSelection",
 
-		    "meta A", "selectAll",
-		    "meta C", "copy",
-		    "meta V", "paste",
-		    "meta X", "cut",
+			"meta A", "selectAll",
+			"meta C", "copy",
+			"meta V", "paste",
+			"meta X", "cut",
 
 			// let parent scroll pane do the macOS typical scrolling without changing selection
 			"HOME", null,
@@ -532,7 +532,7 @@ class FlatInputMaps
 			"PAGE_UP", null,
 			"PAGE_DOWN", null,
 
-		    "ctrl LEFT", null,
+			"ctrl LEFT", null,
 			"ctrl RIGHT", null,
 			"ctrl KP_LEFT", null,
 			"ctrl KP_RIGHT", null,

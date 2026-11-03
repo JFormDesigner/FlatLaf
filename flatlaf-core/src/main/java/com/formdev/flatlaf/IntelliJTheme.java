@@ -75,10 +75,10 @@ public class IntelliJTheme
 	 */
 	public static boolean setup( InputStream in ) {
 		try {
-		    return FlatLaf.setup( createLaf( in ) );
+			return FlatLaf.setup( createLaf( in ) );
 		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load IntelliJ theme", ex );
-		    return false;
+			return false;
 		}
 	}
 
@@ -121,19 +121,19 @@ public class IntelliJTheme
 		throws IOException
 	{
 		Map<String, Object> json;
-	    try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 ) ) {
-	    		json = (Map<String, Object>) Json.parse( reader );
+		try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 ) ) {
+			json = (Map<String, Object>) Json.parse( reader );
 		} catch( ParseException ex ) {
 			throw new IOException( ex.getMessage(), ex );
 		}
 
-	    name = (String) json.get( "name" );
-	    dark = Boolean.parseBoolean( (String) json.get( "dark" ) );
-	    author = (String) json.get( "author" );
+		name = (String) json.get( "name" );
+		dark = Boolean.parseBoolean( (String) json.get( "dark" ) );
+		author = (String) json.get( "author" );
 
-	    jsonColors = (Map<String, String>) json.get( "colors" );
-	    jsonUI = (Map<String, Object>) json.get( "ui" );
-	    jsonIcons = (Map<String, Object>) json.get( "icons" );
+		jsonColors = (Map<String, String>) json.get( "colors" );
+		jsonUI = (Map<String, Object>) json.get( "ui" );
+		jsonIcons = (Map<String, Object>) json.get( "icons" );
 	}
 
 	private void applyProperties( Properties properties ) {

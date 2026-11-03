@@ -44,8 +44,8 @@ class IJThemesManager
 
 		// load themes.json
 		Map<String, Object> json;
-	    try( Reader reader = new InputStreamReader( getClass().getResourceAsStream( "themes.json" ), StandardCharsets.UTF_8 ) ) {
-	    		json = (Map<String, Object>) Json.parse( reader );
+		try( Reader reader = new InputStreamReader( getClass().getResourceAsStream( "themes.json" ), StandardCharsets.UTF_8 ) ) {
+			json = (Map<String, Object>) Json.parse( reader );
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( null, ex );
 			return;

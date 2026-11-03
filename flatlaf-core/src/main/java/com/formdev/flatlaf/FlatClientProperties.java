@@ -344,10 +344,10 @@ public interface FlatClientProperties
 	 * <pre>{@code
 	 * JPanel placeholder = new JPanel();
 	 * placeholder.putClientProperty( FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac" );
-     *
-     * JToolBar toolBar = new JToolBar();
-     * // add tool bar items
-     *
+	 *
+	 * JToolBar toolBar = new JToolBar();
+	 * // add tool bar items
+	 *
 	 * JPanel toolBarPanel = new JPanel( new BorderLayout() );
 	 * toolBarPanel.add( placeholder, BorderLayout.WEST );
 	 * toolBarPanel.add( toolBar, BorderLayout.CENTER );
@@ -1250,8 +1250,8 @@ public interface FlatClientProperties
 	 * <b>Limitations:</b>
 	 * For {@link JFormattedTextField} and {@link JSpinner} this behaves
 	 * as {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}.
-     * This is because of special behavior of {@link JFormattedTextField}
-     * that did not allow implementation of {@code "once"}.
+	 * This is because of special behavior of {@link JFormattedTextField}
+	 * that did not allow implementation of {@code "once"}.
 	 *
 	 * @see #SELECT_ALL_ON_FOCUS_POLICY
 	 */
