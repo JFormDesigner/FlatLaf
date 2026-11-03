@@ -1,0 +1,72 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Native Libraries Linux
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '[0-9]*'
+    paths:
+      - 'flatlaf-natives/flatlaf-natives-linux/**'
+      - '.github/workflows/natives-linux.yml'
+      - '.github/actions/cache-gradle/**'
+      - '.github/actions/setup-java-and-gradle/**'
+      - 'gradle/wrapper/gradle-wrapper.properties'
+      - '!**.md'
+      - '!**/.settings/**'
+
+jobs:
+  Natives:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            library: libflatlaf-linux-x86_64.so
+          - os: ubuntu-24.04-arm
+            library: libflatlaf-linux-arm64.so
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: apt update
+        run: sudo apt-get update
+
+      - name: install libxt-dev and libgtk-3-dev
+        run: sudo apt-get install libxt-dev libgtk-3-dev
+
+#     - name: Download libgtk-3.so for arm64
+#       if: matrix.os == 'ubuntu-latest'
+#       working-directory: flatlaf-natives/flatlaf-natives-linux/lib/aarch64
+#       run: |
+#         pwd
+#         ls -l /usr/lib/x86_64-linux-gnu/libgtk*
+#         wget --no-verbose https://ports.ubuntu.com/pool/main/g/gtk%2b3.0/libgtk-3-0_3.24.18-1ubuntu1_arm64.deb
+#         ls -l
+#         ar -x libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+#         tar -xvf data.tar.xz --wildcards --to-stdout "./usr/lib/aarch64-linux-gnu/libgtk-3.so.0.*" > libgtk-3.so
+#         rm libgtk-3-0_3.24.18-1ubuntu1_arm64.deb data.tar.xz
+#         ls -l
+
+#     - name: install g++-aarch64-linux-gnu
+#       if: matrix.os == 'ubuntu-latest'
+#       run: sudo apt-get install g++-aarch64-linux-gnu
+
+      - name: Setup Java and Gradle
+        uses: ./.github/actions/setup-java-and-gradle
+
+      - name: Build with Gradle
+        run: ./gradlew build-natives --no-daemon
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: FlatLaf-natives-build-artifacts-${{ matrix.os }}
+          path: |
+            flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/${{ matrix.library }}
+            flatlaf-natives/flatlaf-natives-*/build

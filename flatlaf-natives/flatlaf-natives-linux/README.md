@@ -14,7 +14,7 @@ pre-built native libraries are checked into Git at
 
 The native libraries were built on a GitHub server with the help of GitHub
 Actions. See:
-[Native Libraries](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives.yml)
+[Native Libraries Linux](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives-linux.yml)
 workflow. Then the produced Artifacts ZIP was downloaded and the native library
 checked into Git.
 

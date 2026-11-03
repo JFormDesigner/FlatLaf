@@ -16,7 +16,7 @@ pre-built DLLs are checked into Git at
 [flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/](https://github.com/JFormDesigner/FlatLaf/tree/main/flatlaf-core/src/main/resources/com/formdev/flatlaf/natives).
 
 The DLLs were built on a GitHub server with the help of GitHub Actions. See:
-[Native Libraries](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives.yml)
+[Native Libraries Windows](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives-windows.yml)
 workflow. Then the produced Artifacts ZIP was downloaded, signed DLLs with
 FormDev Software code signing certificate and committed the DLLs to Git.
 

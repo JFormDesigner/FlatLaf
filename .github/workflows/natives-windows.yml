@@ -1,0 +1,74 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Native Libraries Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '[0-9]*'
+    paths:
+      - 'flatlaf-natives/flatlaf-natives-windows/**'
+      - '.github/workflows/natives-windows.yml'
+      - '.github/actions/cache-gradle/**'
+      - '.github/actions/setup-java-and-gradle/**'
+      - 'gradle/wrapper/gradle-wrapper.properties'
+      - '!**.md'
+      - '!**/.settings/**'
+
+jobs:
+  Natives:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Java and Gradle
+        uses: ./.github/actions/setup-java-and-gradle
+
+      - name: Build with Gradle
+        # --no-daemon is necessary on Windows otherwise caching Gradle would fail with:
+        #   tar.exe: Couldn't open ~/.gradle/caches/modules-2/modules-2.lock: Permission denied
+        run: ./gradlew build-natives --no-daemon
+
+      - name: Upload unsigned Windows DLLs for signing by SignPath.org
+        if: github.repository == 'JFormDesigner/FlatLaf'
+        id: windows-unsigned
+        uses: actions/upload-artifact@v7
+        with:
+          name: FlatLaf-natives-windows-unsigned
+          path: flatlaf-natives/flatlaf-natives-windows/build/lib/main/release/**/*.dll
+
+      - name: Sign Windows DLLs using SignPath.org
+        if: github.repository == 'JFormDesigner/FlatLaf'
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: FlatLaf
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: windows-dlls
+          github-artifact-id: ${{ steps.windows-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: flatlaf-natives/flatlaf-natives-windows/build/lib/signed
+
+      - name: Copy signed Windows DLLs to flatlaf-core
+        if: github.repository == 'JFormDesigner/FlatLaf'
+        shell: bash
+        run: |
+          SRC=flatlaf-natives/flatlaf-natives-windows/build/lib/signed
+          DEST=flatlaf-core/src/main/resources/com/formdev/flatlaf/natives
+          cp $SRC/aarch64/flatlaf-natives-windows.dll $DEST/flatlaf-windows-arm64.dll
+          cp $SRC/x86/flatlaf-natives-windows.dll     $DEST/flatlaf-windows-x86.dll
+          cp $SRC/x86-64/flatlaf-natives-windows.dll  $DEST/flatlaf-windows-x86_64.dll
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: FlatLaf-natives-build-artifacts-windows-latest
+          path: |
+            flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/flatlaf-windows-*.dll
+            flatlaf-natives/flatlaf-natives-*/build
