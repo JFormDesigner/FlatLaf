@@ -561,6 +561,8 @@ public class TestFlatStyleableInfo
 			//---- icon ----
 
 			"icon.scale", float.class,
+			"icon.xOffset", float.class,
+			"icon.yOffset", float.class,
 
 			"icon.focusWidth", float.class,
 			"icon.focusColor", Color.class,
@@ -1280,6 +1282,8 @@ public class TestFlatStyleableInfo
 	private void flatCheckBoxIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
 			"scale", float.class,
+			"xOffset", float.class,
+			"yOffset", float.class,
 
 			"focusWidth", float.class,
 			"focusColor", Color.class,

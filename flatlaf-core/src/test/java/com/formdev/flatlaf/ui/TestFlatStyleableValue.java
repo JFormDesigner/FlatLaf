@@ -702,6 +702,8 @@ public class TestFlatStyleableValue
 		}
 
 		testFloat( b, ui, "icon.scale" );
+		testFloat( b, ui, "icon.xOffset" );
+		testFloat( b, ui, "icon.yOffset" );
 
 		testFloat( b, ui, "icon.focusWidth" );
 		testColor( b, ui, "icon.focusColor" );
@@ -1394,6 +1396,8 @@ public class TestFlatStyleableValue
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
 		testValueFloat( icon, "scale" );
+		testValueFloat( icon, "xOffset" );
+		testValueFloat( icon, "yOffset" );
 
 		testValueFloat( icon, "focusWidth" );
 		testValueColor( icon, "focusColor" );
