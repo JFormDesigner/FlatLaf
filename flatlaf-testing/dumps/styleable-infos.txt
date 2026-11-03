@@ -143,6 +143,8 @@ icon.scale                                         float
 icon.selectedBackground                            java.awt.Color
 icon.selectedBorderColor                           java.awt.Color
 icon.selectedBorderWidth                           float
+icon.xOffset                                       float
+icon.yOffset                                       float
 
 
 #---- JCheckBoxMenuItem ----
@@ -483,6 +485,8 @@ icon.scale                                         float
 icon.selectedBackground                            java.awt.Color
 icon.selectedBorderColor                           java.awt.Color
 icon.selectedBorderWidth                           float
+icon.xOffset                                       float
+icon.yOffset                                       float
 
 
 #---- JRadioButtonMenuItem ----
@@ -1142,6 +1146,8 @@ scale                                              float
 selectedBackground                                 java.awt.Color
 selectedBorderColor                                java.awt.Color
 selectedBorderWidth                                float
+xOffset                                            float
+yOffset                                            float
 
 
 #---- FlatCheckBoxMenuItemIcon ----
@@ -1241,6 +1247,8 @@ scale                                              float
 selectedBackground                                 java.awt.Color
 selectedBorderColor                                java.awt.Color
 selectedBorderWidth                                float
+xOffset                                            float
+yOffset                                            float
 
 
 #---- FlatRadioButtonMenuItemIcon ----

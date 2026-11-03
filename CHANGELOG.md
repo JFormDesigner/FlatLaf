@@ -29,6 +29,9 @@ FlatLaf Change Log
   (`leading`, `center` or `trailing`). (issue #1116)
 - Tree: Use selection foreground color for expanded, collapsed, leaf, closed and
   open icons of selected rows (if wide selection is enabled). (issue #925)
+- CheckBox and RadioButton: Support translating the icon via styles
+  `icon.xOffset` and `icon.yOffset` (e.g. to align a scaled icon with
+  `icon.scale`). (PR #1067)
 - System File Chooser:
   - Support selection mode `FILES_AND_DIRECTORIES` on macOS (in Open dialogs).
     On other platforms, it behaves like `FILES_ONLY`. (PR #1157)

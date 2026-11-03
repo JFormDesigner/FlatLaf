@@ -102,6 +102,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @author Karl Tauber
  */
 @StyleableField( cls=FlatAbstractIcon.class, key="scale" )
+@StyleableField( cls=FlatAbstractIcon.class, key="xOffset" )
+@StyleableField( cls=FlatAbstractIcon.class, key="yOffset" )
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 	implements StyleableObject
