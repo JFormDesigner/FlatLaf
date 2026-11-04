@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 3.7.2
+#Version 3.8
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -417,6 +417,9 @@ meth public void end()
 
 CLSS public com.formdev.flatlaf.util.ColorFunctions
 cons public init()
+fld public final static int LRGB = 1
+fld public final static int OKLAB = 2
+fld public final static int RGB = 0
 innr public abstract interface static ColorFunction
 innr public static Fade
 innr public static HSLChange
@@ -424,6 +427,7 @@ innr public static HSLIncreaseDecrease
 innr public static Mix
 innr public static Mix2
 meth public !varargs static java.awt.Color applyFunctions(java.awt.Color,com.formdev.flatlaf.util.ColorFunctions$ColorFunction[])
+meth public static boolean isDark(java.awt.Color)
 meth public static float clamp(float)
 meth public static float luma(java.awt.Color)
 meth public static java.awt.Color darken(java.awt.Color,float)
@@ -431,10 +435,13 @@ meth public static java.awt.Color desaturate(java.awt.Color,float)
 meth public static java.awt.Color fade(java.awt.Color,float)
 meth public static java.awt.Color lighten(java.awt.Color,float)
 meth public static java.awt.Color mix(java.awt.Color,java.awt.Color,float)
+meth public static java.awt.Color mix(java.awt.Color,java.awt.Color,float,int)
 meth public static java.awt.Color saturate(java.awt.Color,float)
 meth public static java.awt.Color shade(java.awt.Color,float)
+meth public static java.awt.Color shade(java.awt.Color,float,int)
 meth public static java.awt.Color spin(java.awt.Color,float)
 meth public static java.awt.Color tint(java.awt.Color,float)
+meth public static java.awt.Color tint(java.awt.Color,float,int)
 supr java.lang.Object
 
 CLSS public abstract interface static com.formdev.flatlaf.util.ColorFunctions$ColorFunction
@@ -487,7 +494,9 @@ supr java.lang.Object
 CLSS public static com.formdev.flatlaf.util.ColorFunctions$Mix2
  outer com.formdev.flatlaf.util.ColorFunctions
 cons public init(java.awt.Color,float)
+cons public init(java.awt.Color,float,int)
 fld public final float weight
+fld public final int method
 fld public final java.awt.Color color1
 intf com.formdev.flatlaf.util.ColorFunctions$ColorFunction
 meth public java.lang.String toString()
@@ -658,6 +667,7 @@ innr public abstract interface static Painter
 innr public static HiDPIRepaintManager
 meth public static float computeTextYCorrection(java.awt.Graphics2D)
 meth public static java.awt.Graphics2D createGraphicsTextYCorrection(java.awt.Graphics2D)
+meth public static java.awt.Rectangle scaleTo1x(java.awt.geom.AffineTransform,int,int,int,int)
 meth public static void addDirtyRegion(javax.swing.JComponent,int,int,int,int,com.formdev.flatlaf.util.HiDPIUtils$DirtyRegionCallback)
 meth public static void drawStringUnderlineCharAtWithYCorrection(javax.swing.JComponent,java.awt.Graphics2D,java.lang.String,int,int,int)
 meth public static void drawStringWithYCorrection(javax.swing.JComponent,java.awt.Graphics2D,java.lang.String,int,int)
@@ -669,6 +679,7 @@ meth public static void repaint(java.awt.Component,int,int,int,int)
 meth public static void repaint(java.awt.Component,java.awt.Rectangle)
 supr java.lang.Object
 hfds CORRECTION_INTER,CORRECTION_OPEN_SANS,CORRECTION_SEGOE_UI,CORRECTION_TAHOMA,SCALE_FACTORS,useDebugScaleFactor,useTextYCorrection
+hcls ScaleTo1xResult
 
 CLSS public abstract interface static com.formdev.flatlaf.util.HiDPIUtils$DirtyRegionCallback
  outer com.formdev.flatlaf.util.HiDPIUtils
@@ -779,6 +790,7 @@ cons public init(java.lang.String)
 fld public final static int APPROVE_OPTION = 0
 fld public final static int CANCEL_OPTION = 1
 fld public final static int DIRECTORIES_ONLY = 1
+fld public final static int FILES_AND_DIRECTORIES = 2
 fld public final static int FILES_ONLY = 0
 fld public final static int OPEN_DIALOG = 0
 fld public final static int SAVE_DIALOG = 1
