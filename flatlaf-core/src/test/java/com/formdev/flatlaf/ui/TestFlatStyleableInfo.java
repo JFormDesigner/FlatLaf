@@ -573,6 +573,7 @@ public class TestFlatStyleableInfo
 			"icon.indeterminateBorderWidth", float.class,
 			"icon.disabledIndeterminateBorderWidth", float.class,
 			"icon.arc", int.class,
+			"icon.backgroundOpaque", boolean.class,
 
 			// enabled
 			"icon.borderColor", Color.class,
@@ -1297,6 +1298,7 @@ public class TestFlatStyleableInfo
 			"indeterminateBorderWidth", float.class,
 			"disabledIndeterminateBorderWidth", float.class,
 			"arc", int.class,
+			"backgroundOpaque", boolean.class,
 
 			// enabled
 			"borderColor", Color.class,

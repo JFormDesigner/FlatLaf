@@ -52,6 +52,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.indeterminateBorderWidth			int or float	optional; defaults to CheckBox.icon.selectedBorderWidth
  * @uiDefault CheckBox.icon.disabledIndeterminateBorderWidth	int or float	optional; defaults to CheckBox.icon.disabledSelectedBorderWidth
  * @uiDefault CheckBox.arc								int
+ * @uiDefault CheckBox.icon.backgroundOpaque				boolean	optional; defaults to true; if false, translucent backgrounds show the underlying component instead of the normal icon background
  *
  * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
@@ -117,6 +118,7 @@ public class FlatCheckBoxIcon
 	/** @since 3.6 */ @Styleable protected float indeterminateBorderWidth = getUIFloat( "CheckBox.icon.indeterminateBorderWidth", Float.MIN_VALUE, style );
 	/** @since 3.6 */ @Styleable protected float disabledIndeterminateBorderWidth = getUIFloat( "CheckBox.icon.disabledIndeterminateBorderWidth", Float.MIN_VALUE, style );
 	@Styleable protected int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
+	/** @since 3.8.1 */ @Styleable protected boolean backgroundOpaque = FlatUIUtils.getUIBoolean( "CheckBox.icon.backgroundOpaque", true );
 
 	// enabled
 	@Styleable protected Color borderColor = getUIColor( "CheckBox.icon.borderColor", style );
@@ -231,7 +233,7 @@ public class FlatCheckBoxIcon
 		// paint background
 		Color baseBg = stateColor( indeterminate, indeterminateBackground, selected, selectedBackground, background );
 		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected, indeterminate ), baseBg );
-		if( bg.getAlpha() < 255 ) {
+		if( backgroundOpaque && bg.getAlpha() < 255 ) {
 			// fill background with default color before filling with non-opaque background
 			g.setColor( baseBg );
 			paintBackground( c, g, bw );
@@ -253,7 +255,10 @@ public class FlatCheckBoxIcon
 		// the outer focus border is painted outside of the icon
 		float wh = ICON_SIZE - 1 + (focusWidth * 2);
 		float arcwh = arc + (focusWidth * 2);
-		g.fill( new RoundRectangle2D.Float( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh ) );
+		if( backgroundOpaque )
+			g.fill( new RoundRectangle2D.Float( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh ) );
+		else
+			FlatUIUtils.paintOutline( g, -focusWidth + 1, -focusWidth, wh, wh, focusWidth, arcwh, arc );
 	}
 
 	protected void paintBorder( Component c, Graphics2D g, float borderWidth ) {
@@ -261,7 +266,10 @@ public class FlatCheckBoxIcon
 			return;
 
 		int arcwh = arc;
-		g.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
+		if( backgroundOpaque )
+			g.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
+		else
+			FlatUIUtils.paintOutline( g, 1, 0, 14, 14, borderWidth, arcwh, arcwh - borderWidth );
 	}
 
 	protected void paintBackground( Component c, Graphics2D g, float borderWidth ) {
