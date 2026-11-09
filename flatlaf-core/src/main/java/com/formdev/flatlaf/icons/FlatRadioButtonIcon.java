@@ -20,6 +20,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Icon for {@link javax.swing.JRadioButton}.
@@ -48,7 +49,10 @@ public class FlatRadioButtonIcon
 	protected void paintFocusBorder( Component c, Graphics2D g ) {
 		// the outer focus border is painted outside of the icon
 		float wh = ICON_SIZE + (focusWidth * 2);
-		g.fill( new Ellipse2D.Float( -focusWidth, -focusWidth, wh, wh ) );
+		if( backgroundOpaque )
+			g.fill( new Ellipse2D.Float( -focusWidth, -focusWidth, wh, wh ) );
+		else
+			FlatUIUtils.paintOutline( g, -focusWidth, -focusWidth, wh, wh, focusWidth, wh, ICON_SIZE );
 	}
 
 	@Override
@@ -56,7 +60,10 @@ public class FlatRadioButtonIcon
 		if( borderWidth == 0 )
 			return;
 
-		g.fillOval( 0, 0, 15, 15 );
+		if( backgroundOpaque )
+			g.fillOval( 0, 0, 15, 15 );
+		else
+			FlatUIUtils.paintOutline( g, 0, 0, 15, 15, borderWidth, 15, 15 - (borderWidth * 2) );
 	}
 
 	@Override

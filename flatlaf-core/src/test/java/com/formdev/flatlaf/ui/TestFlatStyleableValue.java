@@ -743,6 +743,7 @@ public class TestFlatStyleableValue
 		testFloat( b, ui, "icon.indeterminateBorderWidth" );
 		testFloat( b, ui, "icon.disabledIndeterminateBorderWidth" );
 		testInteger( b, ui, "icon.arc" );
+		testBoolean( b, ui, "icon.backgroundOpaque" );
 
 		// enabled
 		testColor( b, ui, "icon.borderColor" );
@@ -1440,6 +1441,7 @@ public class TestFlatStyleableValue
 		testValueFloat( icon, "indeterminateBorderWidth" );
 		testValueFloat( icon, "disabledIndeterminateBorderWidth" );
 		testValueInteger( icon, "arc" );
+		testValueBoolean( icon, "backgroundOpaque" );
 
 		// enabled
 		testValueColor( icon, "borderColor" );
