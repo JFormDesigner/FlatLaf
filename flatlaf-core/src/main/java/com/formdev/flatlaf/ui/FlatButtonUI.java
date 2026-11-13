@@ -185,6 +185,8 @@ public class FlatButtonUI
 	private boolean helpButtonIconShared = true;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
+	private Color styledBackground;
+	private Color styledForeground;
 	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -288,6 +290,8 @@ public class FlatButtonUI
 
 		oldStyleValues = null;
 		borderShared = null;
+		styledBackground = null;
+		styledForeground = null;
 
 		defaults_initialized = false;
 	}
@@ -381,10 +385,10 @@ public class FlatButtonUI
 			return ((StyleableObject)helpButtonIcon).applyStyleProperty( key, value );
 		}
 
-		// update internal values; otherwise isCustomBackground() and isCustomForeground() would return wrong results
+		// remember styled background/foreground to distinguish them from explicitly set colors
 		switch( key ) {
-			case "background":	background = (Color) value; break;
-			case "foreground":	foreground = (Color) value; break;
+			case "background":	styledBackground = (Color) value; break;
+			case "foreground":	styledForeground = (Color) value; break;
 		}
 
 		if( "iconTextGap".equals( key ) && value instanceof Integer )
@@ -702,7 +706,10 @@ public class FlatButtonUI
 		return buttonStateColor( c,
 			getBackgroundBase( c, def ),
 			disabledBackground,
-			isCustomBackground( c.getBackground() ) ? null : (def ? defaultFocusedBackground : focusedBackground),
+			isCustomBackground( c.getBackground() ) &&
+			!isStyledStateColor( c.getBackground(), styledBackground, def ? "default.focusedBackground" : "focusedBackground" )
+				? null
+				: (def ? defaultFocusedBackground : focusedBackground),
 			def ? defaultHoverBackground : hoverBackground,
 			def ? defaultPressedBackground : pressedBackground );
 	}
@@ -758,7 +765,7 @@ public class FlatButtonUI
 			return buttonStateColor( c,
 				toolBarButton
 					? (toolbarSelectedForeground != null ? toolbarSelectedForeground : fg)
-					: (isCustomForeground( fg ) ? fg : selectedForeground),
+					: (isCustomForeground( fg ) && !isStyledStateColor( fg, styledForeground, "selectedForeground" ) ? fg : selectedForeground),
 				toolBarButton
 					? (toolbarDisabledSelectedForeground != null ? toolbarDisabledSelectedForeground : disabledText)
 					: (disabledSelectedForeground != null ? disabledSelectedForeground : disabledText),
@@ -780,7 +787,10 @@ public class FlatButtonUI
 		return buttonStateColor( c,
 			getForegroundBase( c, def ),
 			disabledText,
-			isCustomForeground( fg ) ? null : (def ? defaultFocusedForeground : focusedForeground),
+			isCustomForeground( fg ) &&
+			!isStyledStateColor( fg, styledForeground, def ? "default.focusedForeground" : "focusedForeground" )
+				? null
+				: (def ? defaultFocusedForeground : focusedForeground),
 			def ? defaultHoverForeground : hoverForeground,
 			def ? defaultPressedForeground : pressedForeground );
 	}
@@ -797,6 +807,16 @@ public class FlatButtonUI
 
 	protected boolean isCustomForeground( Color fg ) {
 		return fg != foreground;
+	}
+
+	/**
+	 * Returns whether a state color (e.g. focusedBackground) should be used
+	 * although the button has a custom background/foreground.
+	 * This is the case if both the custom color and the state color are set via style.
+	 */
+	private boolean isStyledStateColor( Color customColor, Color styledColor, String stateKey ) {
+		return customColor == styledColor &&
+			oldStyleValues != null && oldStyleValues.containsKey( stateKey );
 	}
 
 	@Override
