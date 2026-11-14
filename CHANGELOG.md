@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 3.8.1-SNAPSHOT
+
+- Linux: Native libraries (since 3.7) required glibc 2.34 or later and failed to
+  load on older Linux distributions (e.g. RHEL 8, Debian 11, Ubuntu 20.04). Now
+  they require only glibc 2.17 (arm64) or 2.4 (x86_64). (issue #1170)
+
+
 ## 3.8
 
 #### New features and improvements
