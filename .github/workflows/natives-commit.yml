@@ -120,7 +120,7 @@ jobs:
           fi
           if [ "$LINUX" = "true" ]; then
               copyNatives "$LINUX_RUN_ID" FlatLaf-natives-build-artifacts-ubuntu-latest libflatlaf-linux-x86_64.so
-              copyNatives "$LINUX_RUN_ID" FlatLaf-natives-build-artifacts-ubuntu-24.04-arm libflatlaf-linux-arm64.so
+              copyNatives "$LINUX_RUN_ID" FlatLaf-natives-build-artifacts-ubuntu-26.04-arm libflatlaf-linux-arm64.so
           fi
 
       - name: Commit and push

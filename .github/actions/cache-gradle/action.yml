@@ -15,17 +15,27 @@ runs:
   using: "composite"
   steps:
 
+    # compute cache keys once (before the build) and store them in environment variables
+    # because the 'key' inputs of actions/cache are evaluated again in its post step (after the build),
+    # where hashFiles() may fail; e.g. when building in a container (as root),
+    # the runner on the host is not allowed to read some files created by the build
+    - name: Compute cache keys
+      shell: bash
+      run: |
+        echo "GRADLE_WRAPPER_CACHE_KEY=gradle-wrapper-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( 'gradle/wrapper/gradle-wrapper.properties' ) }}" >> "$GITHUB_ENV"
+        echo "GRADLE_CACHES_CACHE_KEY=gradle-caches-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( '**/*.gradle*', 'gradle/**', 'gradle.properties', 'buildSrc/src/**' ) }}" >> "$GITHUB_ENV"
+
     - name: Cache '.gradle/wrapper'
       uses: actions/cache@v6
       with:
-        key: gradle-wrapper-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( 'gradle/wrapper/gradle-wrapper.properties' ) }}
+        key: ${{ env.GRADLE_WRAPPER_CACHE_KEY }}
         path: |
           ~/.gradle/wrapper
 
     - name: Cache '.gradle/caches' and 'buildSrc/build'
       uses: actions/cache@v6
       with:
-        key: gradle-caches-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( '**/*.gradle*', 'gradle/**', 'gradle.properties', 'buildSrc/src/**' ) }}
+        key: ${{ env.GRADLE_CACHES_CACHE_KEY }}
         path: |
           ~/.gradle/caches
           buildSrc/build

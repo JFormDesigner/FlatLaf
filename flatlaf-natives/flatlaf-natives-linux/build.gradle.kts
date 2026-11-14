@@ -86,7 +86,9 @@ tasks {
 
 		compilerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-fvisibility=hidden" )
+				// G_DISABLE_CAST_CHECKS: GTK cast macros (e.g. GTK_WINDOW()) become plain C casts
+				//   (avoids runtime type checks, which increase library size if built with older GLib)
+				is Gcc, is Clang -> listOf( "-fvisibility=hidden", "-DG_DISABLE_CAST_CHECKS" )
 				else -> emptyList()
 			}
 		} )
@@ -152,6 +154,7 @@ tasks {
 				"-c",
 				"-fPIC",
 				"-fvisibility=hidden",
+				"-DG_DISABLE_CAST_CHECKS",
 				"-O3",
 				"-I", "${javaHome}/include",
 				"-I", "${javaHome}/include/linux",

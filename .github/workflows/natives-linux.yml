@@ -24,19 +24,35 @@ jobs:
         include:
           - os: ubuntu-latest
             library: libflatlaf-linux-x86_64.so
-          - os: ubuntu-24.04-arm
+          - os: ubuntu-26.04-arm
             library: libflatlaf-linux-arm64.so
 
     runs-on: ${{ matrix.os }}
 
+    # build in old Linux distribution to avoid dependencies to newer glibc versions
+    # (e.g. building directly on the runners (Ubuntu 24.04+ with glibc 2.39+)
+    # adds dependency to GLIBC_2.34 for dlopen(), which was moved from libdl to libc in glibc 2.34)
+    # Ubuntu 20.04 uses glibc 2.31
+    # https://github.com/JFormDesigner/FlatLaf/issues/1170
+    container: ubuntu:20.04
+
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
     steps:
+      - name: apt update
+        run: apt-get update
+
+      # git is required by actions/checkout (otherwise it downloads sources without .git)
+      - name: install build tools, libxt-dev and libgtk-3-dev
+        run: apt-get install --yes --no-install-recommends git ca-certificates build-essential libxt-dev libgtk-3-dev
+
       - uses: actions/checkout@v7
 
-      - name: apt update
-        run: sudo apt-get update
-
-      - name: install libxt-dev and libgtk-3-dev
-        run: sudo apt-get install libxt-dev libgtk-3-dev
+      # in container, HOME is /github/home, but Java uses home directory of root user (/root) for 'user.home'
+      # --> Gradle would use /root/.gradle, but actions/cache caches ~/.gradle (/github/home/.gradle)
+      - name: Set GRADLE_USER_HOME
+        run: echo "GRADLE_USER_HOME=$HOME/.gradle" >> "$GITHUB_ENV"
 
 #     - name: Download libgtk-3.so for arm64
 #       if: matrix.os == 'ubuntu-latest'
@@ -60,6 +76,18 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build-natives --no-daemon
+
+      - name: Check glibc version dependencies
+        env:
+          LIBRARY: flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/${{ matrix.library }}
+          MAX_GLIBC: '2.28'  # e.g. RHEL 8, Debian 10
+        run: |
+          readelf --version-info "$LIBRARY" | grep -o 'GLIBC_[0-9.]*' | sort -u -V
+          maxGlibc=$(readelf --version-info "$LIBRARY" | grep -o 'GLIBC_[0-9.]*' | sed 's/GLIBC_//' | sort -u -V | tail -n 1)
+          if [ "$(printf '%s\n%s\n' "$maxGlibc" "$MAX_GLIBC" | sort -V | tail -n 1)" != "$MAX_GLIBC" ]; then
+            echo "::error::$LIBRARY requires GLIBC_$maxGlibc, but max allowed is GLIBC_$MAX_GLIBC"
+            exit 1
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
