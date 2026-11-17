@@ -38,10 +38,6 @@ dependencies {
 	testRuntimeOnly( libs.junit.launcher )
 }
 
-flatlafModuleInfo {
-	dependsOn( ":flatlaf-core:jar" )
-}
-
 java {
 	withSourcesJar()
 	withJavadocJar()

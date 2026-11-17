@@ -26,10 +26,6 @@ dependencies {
 	implementation( libs.jsvg )
 }
 
-flatlafModuleInfo {
-	dependsOn( ":flatlaf-core:jar" )
-}
-
 java {
 	withSourcesJar()
 	withJavadocJar()

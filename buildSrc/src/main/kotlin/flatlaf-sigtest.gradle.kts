@@ -25,9 +25,9 @@
 
 import java.io.ByteArrayOutputStream
 
-open class SigtestExtension {
+abstract class SigtestExtension {
 	/** packages written to signature file and checked against signature file */
-	var packages: List<String> = emptyList()
+	abstract val packages: ListProperty<String>
 }
 
 val extension = project.extensions.create<SigtestExtension>( "flatlafSigtest" )
@@ -37,36 +37,13 @@ plugins {
 	java
 }
 
-val sigtest = configurations.create( "sigtest" )
-
 // version catalog accessor 'libs' is not available in precompiled script plugins
 val libs = project.extensions.getByType<VersionCatalogsExtension>().named( "libs" )
 
+val sigtest = configurations.register( "sigtest" )
+
 dependencies {
 	sigtest( libs.findLibrary( "sigtest" ).get() )
-}
-
-
-/**
- * Java launcher for sigtest, which requires Java 11+.
- * Use same Java version that runs Gradle (instead of default toolchain, which is usually Java 8).
- */
-fun sigtestJavaLauncher() = javaToolchains.launcherFor {
-	languageVersion = JavaLanguageVersion.current()
-}
-
-/**
- * Common arguments for com.sun.tdk.signaturetest.Setup and SignatureTest.
- */
-fun sigtestArgs( signatureFile: File, packages: List<String> ): List<String> {
-	val args = mutableListOf(
-		"-FileName", signatureFile.absolutePath,
-		"-ApiVersion", version.toString(),
-		"-BootCP", "8", // Java version
-		"-Classpath", tasks.jar.get().outputs.files.asPath )
-	for( pkg in packages )
-		args += listOf( "-PackageWithoutSubpackages", pkg )
-	return args
 }
 
 tasks {
@@ -76,15 +53,14 @@ tasks {
 
 	register<JavaExec>( "sigtestGenerate" ) {
 		group = "verification"
-		dependsOn( "jar" )
 
 		val signatureFile = layout.projectDirectory.file( "${project.name}-sigtest.txt" ).asFile
 
 		javaLauncher = sigtestJavaLauncher()
-		classpath = sigtest
+		classpath = files( sigtest )
 		mainClass = "com.sun.tdk.signaturetest.Setup"
 		args( "-static", "-ErrorAll", "-KeepFile" )
-		args( sigtestArgs( signatureFile, extension.packages ) )
+		argumentProviders.add( sigtestArgs( signatureFile ) )
 		isIgnoreExitValue = true
 
 		doFirst {
@@ -112,15 +88,14 @@ tasks {
 
 	register<JavaExec>( "sigtestCheck" ) {
 		group = "verification"
-		dependsOn( "jar" )
 
 		val signatureFile = layout.projectDirectory.file( "${project.name}-sigtest.txt" ).asFile
 
 		javaLauncher = sigtestJavaLauncher()
-		classpath = sigtest
+		classpath = files( sigtest )
 		mainClass = "com.sun.tdk.signaturetest.SignatureTest"
 		args( "-static", "-b", "-Mode", "bin" )
-		args( sigtestArgs( signatureFile, extension.packages ) )
+		argumentProviders.add( sigtestArgs( signatureFile ) )
 		isIgnoreExitValue = true
 
 		doFirst {
@@ -137,6 +112,42 @@ tasks {
 				logger.error( standardOutput.toString() )
 				throw GradleException( "Sigtest check failed (exit value $exitValue)" )
 			}
+		}
+	}
+}
+
+/**
+ * Java launcher for sigtest, which requires Java 11+.
+ * Use same Java version that runs Gradle (instead of default toolchain, which is usually Java 8).
+ */
+fun sigtestJavaLauncher() = javaToolchains.launcherFor {
+	languageVersion = JavaLanguageVersion.current()
+}
+
+/**
+ * Common arguments for com.sun.tdk.signaturetest.Setup and SignatureTest.
+ * Evaluated lazily (at execution time).
+ * Declaring the classpath as input also infers the task dependency on the jar task.
+ */
+fun sigtestArgs( signatureFile: File ): CommandLineArgumentProvider {
+	val apiVersion = provider { version.toString() }
+	val jarFiles = files( tasks.jar )
+	val packages = extension.packages
+	return object : CommandLineArgumentProvider {
+		@get:Internal val signatureFile = signatureFile
+		@get:Input val apiVersion = apiVersion
+		@get:Classpath val classpath = jarFiles
+		@get:Input val packages = packages
+
+		override fun asArguments(): Iterable<String> {
+			val args = mutableListOf(
+				"-FileName", signatureFile.absolutePath,
+				"-ApiVersion", apiVersion.get(),
+				"-BootCP", "8", // Java version
+				"-Classpath", classpath.asPath )
+			for( pkg in packages.get() )
+				args += listOf( "-PackageWithoutSubpackages", pkg )
+			return args
 		}
 	}
 }

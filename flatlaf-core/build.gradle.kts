@@ -59,23 +59,14 @@ tasks {
 
 	register<Zip>( "jarNoNatives" ) {
 		group = "build"
-		dependsOn( "jar" )
 
 		archiveBaseName = "flatlaf"
 		archiveClassifier = "no-natives"
 		archiveExtension = "jar"
 		destinationDirectory = layout.buildDirectory.dir( "libs" )
 
-		from( zipTree( jar.get().archiveFile.get().asFile ) )
+		from( zipTree( jar.flatMap { it.archiveFile } ) )
 		exclude( "com/formdev/flatlaf/natives/**" )
-	}
-
-	withType<AbstractPublishToMaven>().configureEach {
-		dependsOn( "jarNoNatives" )
-	}
-
-	withType<Sign>().configureEach {
-		dependsOn( "jarNoNatives" )
 	}
 
 	test {
@@ -102,7 +93,7 @@ flatlafPublish {
 
 	val natives = "src/main/resources/com/formdev/flatlaf/natives"
 	nativeArtifacts = listOf(
-		NativeArtifact( tasks.getByName( "jarNoNatives" ).outputs.files.asPath, "no-natives", "jar" ),
+		NativeArtifact( tasks.named( "jarNoNatives" ), "no-natives", "jar" ),
 
 		NativeArtifact( "${natives}/flatlaf-windows-x86.dll",       "windows-x86",    "dll" ),
 		NativeArtifact( "${natives}/flatlaf-windows-x86_64.dll",    "windows-x86_64", "dll" ),

@@ -15,7 +15,11 @@
  */
 
 
-open class NativeArtifact( val fileName: String, val classifier: String, val extension: String ) {}
+/**
+ * @param source file name (String, relative to project directory) or any other
+ *               notation supported by MavenPublication.artifact() (e.g. a task provider)
+ */
+open class NativeArtifact( val source: Any, val classifier: String, val extension: String ) {}
 
 open class PublishExtension {
 	var artifactId: String? = null
@@ -80,7 +84,8 @@ publishing {
 
 			afterEvaluate {
 				extension.nativeArtifacts?.forEach {
-					artifact( file( it.fileName ) ) {
+					val source = it.source
+					artifact( if( source is String ) file( source ) else source ) {
 						classifier = it.classifier
 						extension = it.extension
 					}

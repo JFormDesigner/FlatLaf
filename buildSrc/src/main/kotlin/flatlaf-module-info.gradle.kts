@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-open class ModuleInfoExtension {
-	var paths: ArrayList<String> = ArrayList()
-
-	fun dependsOn( vararg paths: String ) {
-		this.paths.addAll( paths )
-	}
-}
-
-val extension = project.extensions.create<ModuleInfoExtension>( "flatlafModuleInfo" )
-
-
 plugins {
 	java
 }
@@ -61,11 +50,12 @@ if( !exclude ) {
 			sourceCompatibility = "9"
 			targetCompatibility = "9"
 
-			dependsOn( extension.paths )
-
-			options.compilerArgs.add( "--module-path" )
-			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath
-				+ File.pathSeparator + configurations.compileClasspath.get().asPath )
+			// module path is resolved at execution time
+			val modulePath = files( configurations.runtimeClasspath, configurations.compileClasspath )
+			options.compilerArgumentProviders.add( object : CommandLineArgumentProvider {
+				@get:CompileClasspath val path = modulePath
+				override fun asArguments() = listOf( "--module-path", path.asPath )
+			} )
 
 			// if global toolchain is Java 8, then use Java 11 to build
 			if( java.toolchain.languageVersion.get().asInt() < 9 ) {

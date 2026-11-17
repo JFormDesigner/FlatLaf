@@ -25,10 +25,6 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 }
 
-flatlafModuleInfo {
-	dependsOn( ":flatlaf-core:jar" )
-}
-
 java {
 	withSourcesJar()
 	withJavadocJar()

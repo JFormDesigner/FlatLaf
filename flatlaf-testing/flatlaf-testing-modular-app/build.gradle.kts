@@ -26,12 +26,6 @@ dependencies {
 	implementation( project( ":flatlaf-fonts-inter" ) )
 }
 
-flatlafModuleInfo {
-	dependsOn( ":flatlaf-core:jar" )
-	dependsOn( ":flatlaf-extras:jar" )
-	dependsOn( ":flatlaf-fonts-inter:jar" )
-}
-
 interface InjectedOps {
 	@get:Inject val fs: FileSystemOperations
 }
@@ -43,8 +37,8 @@ tasks {
 		dependsOn( "build" )
 
 		// necessary for configuration cache
-		val jar = project.tasks["jar"].outputs.files
-		val runtimeJars = configurations.runtimeClasspath.get().files
+		val jar = project.tasks.jar.flatMap { it.archiveFile }
+		val runtimeJars: FileCollection = configurations.runtimeClasspath.get()
 		val injectedOps = project.objects.newInstance<InjectedOps>()
 
 		doLast {

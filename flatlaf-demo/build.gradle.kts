@@ -34,14 +34,7 @@ dependencies {
 
 tasks {
 	jar {
-		dependsOn( ":flatlaf-core:jar" )
-		dependsOn( ":flatlaf-extras:jar" )
-		dependsOn( ":flatlaf-fonts-inter:jar" )
-		dependsOn( ":flatlaf-fonts-jetbrains-mono:jar" )
-		dependsOn( ":flatlaf-fonts-roboto:jar" )
-		dependsOn( ":flatlaf-fonts-roboto-mono:jar" )
-		dependsOn( ":flatlaf-intellij-themes:jar" )
-//		dependsOn( ":flatlaf-natives-jna:jar" )
+		dependsOn( configurations.runtimeClasspath ) // builds jars of other projects
 
 		manifest.attributes(
 			"Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo",

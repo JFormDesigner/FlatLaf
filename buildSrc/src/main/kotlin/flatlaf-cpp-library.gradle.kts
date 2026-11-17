@@ -20,17 +20,17 @@ plugins {
 	`cpp-library`
 }
 
-library {
-	// disable debuggable for release builds to make shared libraries smaller
-	binaries.configureEach( CppSharedLibrary::class ) {
-		with( compileTask.get() ) {
-			if( name.contains( "Release" ) )
-				isDebuggable = false
-		}
-		with( linkTask.get() ) {
-			if( name.contains( "Release" ) )
-				debuggable = false
-		}
+// disable debuggable for release builds to make shared libraries smaller
+// (in afterEvaluate because the cpp-library plugin sets debuggable when configuring its tasks,
+// which would override configureEach actions that were added before the tasks were registered)
+afterEvaluate {
+	tasks.withType<CppCompile>().configureEach {
+		if( name.contains( "Release" ) )
+			isDebuggable = false
+	}
+	tasks.withType<LinkSharedLibrary>().configureEach {
+		if( name.contains( "Release" ) )
+			debuggable = false
 	}
 }
 

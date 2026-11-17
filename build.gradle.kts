@@ -124,9 +124,7 @@ allprojects {
 
 	tasks.register( "errorprone" ) {
 		group = "verification"
-		tasks.withType<JavaCompile>().forEach {
-			dependsOn( it )
-		}
+		dependsOn( tasks.withType<JavaCompile>() )
 	}
 
 	val useErrorProne = gradle.startParameter.taskNames.contains( "errorprone" )
