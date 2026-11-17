@@ -39,9 +39,8 @@ library {
 	)
 }
 
-var javaHome = System.getProperty( "java.home" )
-if( javaHome.endsWith( "jre" ) )
-	javaHome += "/.."
+// JDK used for JNI headers (see flatlaf-jni-headers plugin)
+val javaHome = flatlafJniHeaders.javaHome
 
 interface InjectedOps {
 	@get:Inject val fs: FileSystemOperations
@@ -53,7 +52,7 @@ tasks {
 		group = "build"
 		description = "Builds natives"
 
-		if( org.gradle.internal.os.OperatingSystem.current().isMacOsX() )
+		if( System.getProperty( "os.name" ).lowercase().startsWith( "mac" ) )
 			dependsOn( "linkReleaseArm64", "linkReleaseX86-64" )
 	}
 
@@ -64,8 +63,8 @@ tasks {
 		dependsOn( "jni-headers" )
 
 		includes.from(
-			"${javaHome}/include",
-			"${javaHome}/include/darwin"
+			javaHome.dir( "include" ),
+			javaHome.dir( "include/darwin" )
 		)
 
 		// compile Objective-C++ sources

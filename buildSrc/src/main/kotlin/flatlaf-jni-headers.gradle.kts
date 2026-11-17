@@ -14,11 +14,28 @@
  * limitations under the License.
  */
 
-open class JniHeadersExtension {
+// Java version of JDK used to build natives
+val jniJavaVersion = 17
+
+plugins {
+	id( "jvm-toolchains" )
+}
+
+abstract class JniHeadersExtension {
 	var headers: List<String> = emptyList()
+
+	/**
+	 * Home directory of the JDK used to build natives
+	 * (provides jni.h, jni_md.h, jawt.h and libjawt.so).
+	 * Independent of the JDK that runs Gradle.
+	 */
+	abstract val javaHome: DirectoryProperty
 }
 
 val extension = project.extensions.create<JniHeadersExtension>( "flatlafJniHeaders" )
+extension.javaHome.convention( javaToolchains
+	.compilerFor { languageVersion = JavaLanguageVersion.of( jniJavaVersion ) }
+	.map { it.metadata.installationPath } )
 
 
 tasks {

@@ -36,9 +36,8 @@ library {
 	)
 }
 
-var javaHome = System.getProperty( "java.home" )
-if( javaHome.endsWith( "jre" ) && !file( "${javaHome}/include" ).exists() )
-	javaHome += "/.."
+// JDK used for JNI headers and libjawt.so (see flatlaf-jni-headers plugin)
+val javaHome = flatlafJniHeaders.javaHome
 
 interface InjectedOps {
 	@get:Inject val fs: FileSystemOperations
@@ -50,7 +49,7 @@ tasks {
 		group = "build"
 		description = "Builds natives"
 
-		if( org.gradle.internal.os.OperatingSystem.current().isLinux ) {
+		if( System.getProperty( "os.name" ).lowercase().startsWith( "linux" ) ) {
 			val osArch = System.getProperty( "os.arch" )
 			if( osArch == "amd64" ) {
 				dependsOn( "linkReleaseX86-64" )
@@ -69,8 +68,8 @@ tasks {
 		dependsOn( "jni-headers" )
 
 		includes.from(
-			"${javaHome}/include",
-			"${javaHome}/include/linux",
+			javaHome.dir( "include" ),
+			javaHome.dir( "include/linux" ),
 
 			// for GTK
 			"/usr/include/gtk-3.0",
@@ -92,17 +91,6 @@ tasks {
 				else -> emptyList()
 			}
 		} )
-
-		doFirst {
-			// check required Java version
-			if( JavaVersion.current() < JavaVersion.VERSION_11 ) {
-				println()
-				println( "WARNING: Java 11 or later required to build Linux native library (running ${System.getProperty( "java.version" )})" )
-				println( "         Native library built with older Java versions throw following exception when running in Java 17+:" )
-				println( "         java.lang.UnsatisfiedLinkError: .../libjawt.so: version `SUNWprivate_1.1' not found" )
-				println()
-			}
-		}
 	}
 
 	withType<LinkSharedLibrary>().configureEach {
@@ -110,14 +98,10 @@ tasks {
 
 		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
 		val libraryName = if( name.contains( "X86-64" ) ) "libflatlaf-linux-x86_64.so" else "libflatlaf-linux-arm64.so"
-		val jawt = "jawt"
-		var jawtPath = "${javaHome}/lib"
-		if( JavaVersion.current() == JavaVersion.VERSION_1_8 )
-			jawtPath += "/amd64"
 
-		linkerArgs.addAll( toolChain.map {
-			when( it ) {
-				is Gcc, is Clang -> listOf( "-L${jawtPath}", "-l${jawt}", "-lgtk-3" )
+		linkerArgs.addAll( toolChain.zip( javaHome ) { tc, jdkHome ->
+			when( tc ) {
+				is Gcc, is Clang -> listOf( "-L${jdkHome.dir( "lib" )}", "-ljawt", "-lgtk-3" )
 				else -> emptyList()
 			}
 		} )
@@ -136,13 +120,16 @@ tasks {
 //		dump( linkedFile, true, injectedOps )
 	}
 
-	if( org.gradle.internal.os.OperatingSystem.current().isLinux &&
+	if( System.getProperty( "os.name" ).lowercase().startsWith( "linux" ) &&
 		System.getProperty( "os.arch" ) == "amd64" &&
 		file( "/usr/bin/aarch64-linux-gnu-gcc" ).exists() )
 	{
 		register<Exec>( "compileCrossAarch64Cpp" ) {
+			// generate and copy needed JNI headers
+			dependsOn( "jni-headers" )
+
 			val include = layout.projectDirectory.dir( "src/main/headers" )
-			val src = layout.projectDirectory.dir( "src/main/cpp" )
+			val sources = crossAarch64Sources()
 			workingDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
 
 			doFirst {
@@ -156,8 +143,6 @@ tasks {
 				"-fvisibility=hidden",
 				"-DG_DISABLE_CAST_CHECKS",
 				"-O3",
-				"-I", "${javaHome}/include",
-				"-I", "${javaHome}/include/linux",
 				"-I", "$include",
 
 				// for GTK
@@ -169,13 +154,15 @@ tasks {
 				"-I", "/usr/include/cairo",
 				"-I", "/usr/include/pango-1.0",
 				"-I", "/usr/include/harfbuzz",
-
-				"$src/ApiVersion.cpp",
-				"$src/GtkFileChooser.cpp",
-				"$src/GtkMessageDialog.cpp",
-				"$src/JNIUtils.cpp",
-				"$src/X11WmUtils.cpp",
 			)
+
+			// JDK include directories and all *.cpp files in src/main/cpp (resolved at execution time)
+			val jdkInclude = javaHome.dir( "include" )
+			argumentProviders.add( CommandLineArgumentProvider {
+				val jdkIncludeDir = jdkInclude.get().asFile
+				listOf( "-I", "$jdkIncludeDir", "-I", "$jdkIncludeDir/linux" ) +
+					sources.files.map { it.absolutePath }.sorted()
+			} )
 		}
 
 		register<Exec>( "linkCrossAarch64" ) {
@@ -185,28 +172,31 @@ tasks {
 			val libraryName = "libflatlaf-linux-arm64.so"
 			val outDir = file( layout.buildDirectory.dir( "lib/main/release/aarch64-cross" ) )
 			val objDir = file( layout.buildDirectory.dir( "obj/main/release/aarch64-cross" ) )
-
-			doFirst {
-				outDir.mkdirs()
-			}
-
-			commandLine = listOf(
-				"aarch64-linux-gnu-gcc",
-				"-shared",
-				"-Wl,-soname,$libraryName",
-				"-o", "$outDir/$libraryName",
-
-				"$objDir/ApiVersion.o",
-				"$objDir/GtkFileChooser.o",
-				"$objDir/GtkMessageDialog.o",
-				"$objDir/JNIUtils.o",
-				"$objDir/X11WmUtils.o",
-
+			val sources = crossAarch64Sources()
+			val libs = listOf(
 				"-lstdc++",
 				"-L${layout.projectDirectory}/lib/aarch64",
 				"-ljawt",
 				"-lgtk-3",
 			)
+
+			doFirst {
+				outDir.mkdirs()
+			}
+
+			executable = "aarch64-linux-gnu-gcc"
+			args(
+				"-shared",
+				"-Wl,-soname,$libraryName",
+				"-o", "$outDir/$libraryName",
+			)
+
+			// object files of all *.cpp files in src/main/cpp (resolved at execution time),
+			// derived from source files to ignore stale object files of removed sources;
+			// libraries must be specified after object files
+			argumentProviders.add( CommandLineArgumentProvider {
+				sources.files.map { "$objDir/${it.nameWithoutExtension}.o" }.sorted() + libs
+			} )
 
 			val injectedOps = project.objects.newInstance<InjectedOps>()
 
@@ -222,6 +212,11 @@ tasks {
 		}
 	}
 }
+
+/**
+ * All C++ source files compiled by cross compile tasks.
+ */
+fun crossAarch64Sources(): FileTree = fileTree( "src/main/cpp" ) { include( "*.cpp" ) }
 
 /*dump
 fun Task.dump( f: Any, disassemble: Boolean, injectedOps: InjectedOps ) {

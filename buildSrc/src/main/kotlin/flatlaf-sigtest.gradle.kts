@@ -55,6 +55,7 @@ tasks {
 		group = "verification"
 
 		val signatureFile = layout.projectDirectory.file( "${project.name}-sigtest.txt" ).asFile
+		outputs.file( signatureFile ).withPropertyName( "signatureFile" )
 
 		javaLauncher = sigtestJavaLauncher()
 		classpath = files( sigtest )
@@ -89,7 +90,17 @@ tasks {
 	register<JavaExec>( "sigtestCheck" ) {
 		group = "verification"
 
+		// if both tasks are run, check against the newly generated signature file
+		mustRunAfter( "sigtestGenerate" )
+
 		val signatureFile = layout.projectDirectory.file( "${project.name}-sigtest.txt" ).asFile
+		inputs.file( signatureFile )
+			.withPropertyName( "signatureFile" )
+			.withPathSensitivity( PathSensitivity.NONE )
+
+		// marker file written on success, which allows the task to be up-to-date
+		val markerFile = layout.buildDirectory.file( "sigtest/sigtestCheck-passed.txt" ).get().asFile
+		outputs.file( markerFile ).withPropertyName( "markerFile" )
 
 		javaLauncher = sigtestJavaLauncher()
 		classpath = files( sigtest )
@@ -112,6 +123,8 @@ tasks {
 				logger.error( standardOutput.toString() )
 				throw GradleException( "Sigtest check failed (exit value $exitValue)" )
 			}
+
+			markerFile.writeText( "passed\n" )
 		}
 	}
 }
@@ -134,6 +147,7 @@ fun sigtestArgs( signatureFile: File ): CommandLineArgumentProvider {
 	val jarFiles = files( tasks.jar )
 	val packages = extension.packages
 	return object : CommandLineArgumentProvider {
+		// declared as task output (sigtestGenerate) or input (sigtestCheck)
 		@get:Internal val signatureFile = signatureFile
 		@get:Input val apiVersion = apiVersion
 		@get:Classpath val classpath = jarFiles
