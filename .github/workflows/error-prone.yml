@@ -1,5 +1,4 @@
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
 name: Error Prone
 
@@ -28,8 +27,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java and Gradle
-        uses: ./.github/actions/setup-java-and-gradle
+      - name: Setup Java
+        uses: ./.github/actions/setup-java
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Check with Error Prone
         run: ./gradlew errorprone

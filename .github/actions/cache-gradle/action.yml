@@ -15,6 +15,8 @@ runs:
   using: "composite"
   steps:
 
+    - uses: gradle/actions/wrapper-validation@v6
+
     # compute cache keys once (before the build) and store them in environment variables
     # because the 'key' inputs of actions/cache are evaluated again in its post step (after the build),
     # where hashFiles() may fail; e.g. when building in a container (as root),

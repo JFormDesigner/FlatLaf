@@ -1,4 +1,4 @@
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
 name: PR Snapshots
 
@@ -23,8 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java and Gradle
-        uses: ./.github/actions/setup-java-and-gradle
+      - name: Setup Java
+        uses: ./.github/actions/setup-java
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Publish PR snapshot to Sonatype Central
         run: >

@@ -1,5 +1,4 @@
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
 name: CI
 
@@ -27,8 +26,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java and Gradle
-        uses: ./.github/actions/setup-java-and-gradle
+      - name: Setup Java
+        uses: ./.github/actions/setup-java
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
+
+      - name: List Java toolchains (and start-up Gradle daemon)
+        run: ./gradlew --quiet javaToolchains
 
 
         # test against
@@ -84,6 +89,10 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
 
+      - name: List Java toolchains
+        run: ./gradlew --quiet javaToolchains
+
+
   release:
     runs-on: ubuntu-latest
     needs: build
@@ -95,8 +104,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Java and Gradle
-        uses: ./.github/actions/setup-java-and-gradle
+      - name: Setup Java
+        uses: ./.github/actions/setup-java
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Release a new stable version to Maven Central and build demo and theme editor
         run: ./gradlew publishToSonatype closeSonatypeStagingRepository :flatlaf-demo:build :flatlaf-theme-editor:build -PskipFonts -Prelease -Dorg.gradle.parallel=false

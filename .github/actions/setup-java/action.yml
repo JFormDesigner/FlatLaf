@@ -1,0 +1,16 @@
+# https://docs.github.com/en/actions/tutorials/create-actions/create-a-composite-action#creating-a-composite-action-within-the-same-repository
+
+name: 'Setup Java'
+inputs:
+  java-version:
+    required: false
+    default: 21
+runs:
+  using: "composite"
+  steps:
+
+    - name: Setup Java ${{ inputs.java-version }}
+      uses: actions/setup-java@v6
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: temurin  # pre-installed on GitHub-hosted runners

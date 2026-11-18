@@ -1,5 +1,4 @@
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
 name: Native Libraries Linux
 
@@ -12,7 +11,7 @@ on:
       - 'flatlaf-natives/flatlaf-natives-linux/**'
       - '.github/workflows/natives-linux.yml'
       - '.github/actions/cache-gradle/**'
-      - '.github/actions/setup-java-and-gradle/**'
+      - '.github/actions/setup-java/**'
       - 'gradle/wrapper/gradle-wrapper.properties'
       - '!**.md'
       - '!**/.settings/**'
@@ -71,8 +70,13 @@ jobs:
 #       if: matrix.os == 'ubuntu-latest'
 #       run: sudo apt-get install g++-aarch64-linux-gnu
 
-      - name: Setup Java and Gradle
-        uses: ./.github/actions/setup-java-and-gradle
+      - name: Setup Java 17
+        uses: ./.github/actions/setup-java
+        with:
+          java-version: 17  # for JNI headers and libjawt.so (see flatlaf-jni-headers plugin)
+
+      - name: Cache Gradle
+        uses: ./.github/actions/cache-gradle
 
       - name: Build with Gradle
         run: ./gradlew build-natives --no-daemon
