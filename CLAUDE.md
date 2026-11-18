@@ -87,8 +87,8 @@ other modules).
 
 ## Code style
 
-- Source files are **ISO-8859-1 (latin1)** encoded, **tab** indentation, LF line
-  endings (see `.editorconfig`). Do not introduce UTF-8-only characters.
+- Source files are **UTF-8** encoded (without BOM), **tab** indentation, LF line
+  endings (see `.editorconfig`).
 - Spaces inside parentheses of method calls/declarations and control statements:
   `if( x != null )`, `foo( a, b )`, `void bar( int x ) {`. No space before `(`.
 - Every source file starts with the Apache 2.0 license header

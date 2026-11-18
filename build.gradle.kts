@@ -65,7 +65,7 @@ allprojects {
 			sourceCompatibility = "1.8"
 			targetCompatibility = "1.8"
 
-			options.encoding = "ISO-8859-1"
+			options.encoding = "UTF-8"
 			options.isDeprecation = false
 		}
 
@@ -91,6 +91,9 @@ allprojects {
 			options {
 				this as StandardJavadocDocletOptions
 
+				encoding = "UTF-8"
+				docEncoding = "UTF-8"
+				charSet = "UTF-8"
 				title = "${project.name} $version"
 				header = title
 				isUse = true
