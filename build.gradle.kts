@@ -41,10 +41,10 @@ extra["toolchainJavaVersion"] = toolchainJavaVersion
 // log version, Gradle and Java versions
 println()
 println( "-------------------------------------------------------------------------------" )
-println( "FlatLaf Version: ${version}" )
-println( "Gradle ${gradle.gradleVersion} at ${gradle.gradleHomeDir}" )
-println( "Java ${System.getProperty( "java.version" )}" )
-println( "Java toolchain ${toolchainJavaVersion}" )
+println( "FlatLaf  ${version}" )
+println( "Gradle   %-10s at %s".format( gradle.gradleVersion, gradle.gradleHomeDir ) )
+println( "in Java  %-10s at %s".format( System.getProperty( "java.version" ), System.getProperty( "java.home" ) ) )
+println( "Java toolchain  ${toolchainJavaVersion}" )
 println()
 
 
