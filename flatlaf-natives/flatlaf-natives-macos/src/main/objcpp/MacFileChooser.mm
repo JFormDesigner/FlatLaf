@@ -181,13 +181,14 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 		if( urls != NULL && urls.count > 1 ) {
 			if( _urlsSet == NULL ) {
 				// invoked for first selected file --> invoke callback
-				_urlsSet = [NSMutableSet setWithArray:urls];
+				// (retained because it is used across multiple validateURL invocations)
+				_urlsSet = [[NSMutableSet alloc] initWithArray:urls];
 				[_urlsSet removeObject:url];
 			} else {
 				// invoked for other selected files --> do not invoke callback
 				[_urlsSet removeObject:url];
 				if( _urlsSet.count == 0 )
-					_urlsSet = NULL;
+					[self clearURLsSet];
 				return true;
 			}
 		}
@@ -202,7 +203,7 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 		jclass cls = env->GetObjectClass( _callback );
 		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
 		if( approveID != NULL && !env->CallBooleanMethod( _callback, approveID, files, selectedFormatIndex, window ) ) {
-			_urlsSet = NULL;
+			[self clearURLsSet];
 			return false; // keep dialog open
 		}
 
@@ -210,6 +211,16 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 		JNI_COCOA_CATCH()
 
 		return true;
+	}
+
+	- (void) clearURLsSet {
+		[_urlsSet release];
+		_urlsSet = NULL;
+	}
+
+	- (void) dealloc {
+		[self clearURLsSet];
+		[super dealloc];
 	}
 
 	//---- NSWindowDelegate ----
@@ -305,7 +316,7 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 
 #define isOptionSet( option ) ((optionsSet & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
 #define isOptionClear( option ) ((optionsClear & com_formdev_flatlaf_ui_FlatNativeMacLibrary_ ## option) != 0)
-#define isOptionSetOrClear( option ) isOptionSet( option ) || isOptionClear( option )
+#define isOptionSetOrClear( option ) (isOptionSet( option ) || isOptionClear( option ))
 
 static jobjectArray newJavaStringArray( JNIEnv* env, jsize count ) {
 	jclass stringClass = env->FindClass( "java/lang/String" );
@@ -488,6 +499,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 	return urlsToStringArray( env, urls );
 
 	JNI_COCOA_EXIT()
+	return NULL;
 }
 
 static NSArray* getDialogURLs( NSSavePanel* dialog ) {

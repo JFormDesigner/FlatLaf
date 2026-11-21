@@ -87,4 +87,5 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showMess
 	return result;
 
 	JNI_COCOA_EXIT()
+	return -1;
 }

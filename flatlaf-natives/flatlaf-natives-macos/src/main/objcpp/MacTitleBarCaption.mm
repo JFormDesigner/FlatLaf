@@ -313,16 +313,25 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setu
 
 	WindowData* windowData = getWindowData( nsWindow, true );
 
-	env->DeleteGlobalRef( windowData.titleBarCaptionCallback );
-	windowData.titleBarCaptionCallback = env->NewGlobalRef( callback );
+	jobject newCallback = env->NewGlobalRef( callback );
+	jobject oldCallback = NULL;
+	jobject* pOldCallback = &oldCallback;
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
+
+		// swap callback on main thread, where isCaptionEvent() uses it,
+		// so that the old callback is no longer in use when deleting it below
+		*pOldCallback = windowData.titleBarCaptionCallback;
+		windowData.titleBarCaptionCallback = newCallback;
 
 		attachTitleBarDragViewIfNeeded( nsWindow, windowData );
 
 		JNI_COCOA_CATCH()
 	}];
+
+	if( oldCallback != NULL )
+		env->DeleteGlobalRef( oldCallback );
 
 	return TRUE;
 
@@ -344,21 +353,31 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_remo
 	if( windowData == NULL )
 		return FALSE;
 
-	env->DeleteGlobalRef( windowData.titleBarCaptionCallback );
-	windowData.titleBarCaptionCallback = NULL;
-
-	if( windowData.titleBarDragView == nil )
-		return FALSE;
+	jobject oldCallback = NULL;
+	jobject* pOldCallback = &oldCallback;
+	bool removed = false;
+	bool* pRemoved = &removed;
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
 
-		detachTitleBarDragView( windowData );
+		// clear callback on main thread, where isCaptionEvent() uses it,
+		// so that the old callback is no longer in use when deleting it below
+		*pOldCallback = windowData.titleBarCaptionCallback;
+		windowData.titleBarCaptionCallback = NULL;
+
+		if( windowData.titleBarDragView != nil ) {
+			detachTitleBarDragView( windowData );
+			*pRemoved = true;
+		}
 
 		JNI_COCOA_CATCH()
 	}];
 
-	return TRUE;
+	if( oldCallback != NULL )
+		env->DeleteGlobalRef( oldCallback );
+
+	return removed;
 
 	JNI_COCOA_EXIT()
 	return FALSE;
