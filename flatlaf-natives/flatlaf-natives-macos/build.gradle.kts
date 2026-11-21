@@ -92,7 +92,7 @@ tasks {
 
 		linkerArgs.addAll( toolChain.map {
 			when( it ) {
-				is Gcc, is Clang -> listOf( "-lobjc", "-framework", "Cocoa", "-mmacosx-version-min=$minOs" )
+				is Gcc, is Clang -> listOf( "-lobjc", "-framework", "Cocoa", "-mmacosx-version-min=$minOs", "-Wl,-x", "-Wl,-dead_strip" )
 				else -> emptyList()
 			}
 		} )
