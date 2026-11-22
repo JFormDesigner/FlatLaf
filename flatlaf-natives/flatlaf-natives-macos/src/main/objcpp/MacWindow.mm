@@ -26,14 +26,22 @@
  * @author Karl Tauber
  */
 
-@implementation WindowData
-@end
-
 // declare internal methods
+static void removeFullScreenObservers( WindowData* windowData );
 static void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden );
 static int getWindowButtonAreaWidth( NSWindow* nsWindow );
 static int getWindowTitleBarHeight( NSWindow* nsWindow );
 static bool isWindowFullScreen( NSWindow* nsWindow );
+
+
+@implementation WindowData
+	// invoked when the NSWindow is deallocated (which releases associated objects)
+	- (void) dealloc {
+		removeFullScreenObservers( self );
+		[_titleBarDragView release];
+		[super dealloc];
+	}
+@end
 
 
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window ) {
@@ -73,6 +81,7 @@ WindowData* getWindowData( NSWindow* nsWindow, bool allocate ) {
 	if( windowData == NULL && allocate ) {
 		windowData = [WindowData new];
 		objc_setAssociatedObject( nsWindow, &key, windowData, OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+		[windowData release]; // now owned by NSWindow
 	}
 	return windowData;
 }
@@ -237,13 +246,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 		// when window becomes full screen, it is necessary to hide the toolbar
 		// because it otherwise is shown non-transparent and hides Swing components
+		//
+		// Note: The observer blocks must not capture nsWindow or windowData
+		//       because the blocks are retained by the notification center,
+		//       and (with manual reference counting) copied blocks retain captured objects,
+		//       which would prevent deallocation of the NSWindow (and the WindowData).
+		//       Instead get the window from the notification.
+		//       The observers are removed when WindowData is deallocated.
 		NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
 		if( needsToolbar && windowData.willEnterFullScreenObserver == NULL ) {
 //			NSLog( @"add observers %@", nsWindow );
 			windowData.willEnterFullScreenObserver = [center addObserverForName:NSWindowWillEnterFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+					NSWindow* nsWindow = note.object;
+					WindowData* windowData = getWindowData( nsWindow, false );
 //					NSLog( @"enter full screen %@", nsWindow );
-					if( nsWindow.toolbar != NULL ) {
+					if( nsWindow.toolbar != NULL && windowData != NULL ) {
 						// remember button area width, which is used later when window exits full screen
 						// remembar title bar height so that "main" JToolBar keeps its height in full screen
 						windowData.lastWindowButtonAreaWidth = getWindowButtonAreaWidth( nsWindow );
@@ -256,6 +274,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 			windowData.willExitFullScreenObserver = [center addObserverForName:NSWindowWillExitFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+					NSWindow* nsWindow = note.object;
 //					NSLog( @"will exit  full screen %@", nsWindow );
 					if( nsWindow.toolbar != NULL )
 						setWindowButtonsHidden( nsWindow, true );
@@ -263,29 +282,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 			windowData.didExitFullScreenObserver = [center addObserverForName:NSWindowDidExitFullScreenNotification
 				object:nsWindow queue:nil usingBlock:^(NSNotification *note) {
+					NSWindow* nsWindow = note.object;
+					WindowData* windowData = getWindowData( nsWindow, false );
 //					NSLog( @"exit  full screen %@", nsWindow );
 					if( nsWindow.toolbar != NULL ) {
 						setWindowButtonsHidden( nsWindow, false );
 						nsWindow.toolbar.visible = YES;
 					}
 
-					windowData.lastWindowButtonAreaWidth = 0;
-					windowData.lastWindowTitleBarHeight = 0;
+					if( windowData != NULL ) {
+						windowData.lastWindowButtonAreaWidth = 0;
+						windowData.lastWindowTitleBarHeight = 0;
+					}
 				}];
 		} else if( !needsToolbar ) {
 //			NSLog( @"remove observers %@", nsWindow );
-			if( windowData.willEnterFullScreenObserver != NULL ) {
-				[center removeObserver:windowData.willEnterFullScreenObserver];
-				windowData.willEnterFullScreenObserver = nil;
-			}
-			if( windowData.willExitFullScreenObserver != NULL ) {
-				[center removeObserver:windowData.willExitFullScreenObserver];
-				windowData.willExitFullScreenObserver = nil;
-			}
-			if( windowData.didExitFullScreenObserver != NULL ) {
-				[center removeObserver:windowData.didExitFullScreenObserver];
-				windowData.didExitFullScreenObserver = nil;
-			}
+			removeFullScreenObservers( windowData );
 		}
 
 		JNI_COCOA_CATCH()
@@ -295,6 +307,22 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 
 	JNI_COCOA_EXIT()
 	return FALSE;
+}
+
+static void removeFullScreenObservers( WindowData* windowData ) {
+	NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+	if( windowData.willEnterFullScreenObserver != NULL ) {
+		[center removeObserver:windowData.willEnterFullScreenObserver];
+		windowData.willEnterFullScreenObserver = nil;
+	}
+	if( windowData.willExitFullScreenObserver != NULL ) {
+		[center removeObserver:windowData.willExitFullScreenObserver];
+		windowData.willExitFullScreenObserver = nil;
+	}
+	if( windowData.didExitFullScreenObserver != NULL ) {
+		[center removeObserver:windowData.didExitFullScreenObserver];
+		windowData.didExitFullScreenObserver = nil;
+	}
 }
 
 static void setWindowButtonsHidden( NSWindow* nsWindow, bool hidden ) {
