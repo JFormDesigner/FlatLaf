@@ -78,6 +78,7 @@ JNIEXPORT jint JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_showMess
 
 		// show alert
 		NSInteger response = [alert runModal];
+		[alert release];
 
 		// if no buttons added, which shows a single OK button, the response is 0 when clicking OK
 		// if buttons added, response is 1000+buttonIndex

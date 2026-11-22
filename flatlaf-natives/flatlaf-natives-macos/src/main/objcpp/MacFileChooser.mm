@@ -136,6 +136,11 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 
 		[_dialog setAccessoryView:accessoryView];
 
+		// now owned by superviews/dialog
+		[label release];
+		[popupButton release];
+		[accessoryView release];
+
 		// initial filter
 		[self selectFormatAtIndex:filterIndex];
 	}
@@ -276,8 +281,11 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 			item.keyEquivalentModifierMask = command.modifiers;
 			item.target = nil; // use responder chain
 			item.tag = EDIT_COMMAND_MENU_ITEM_TAG;
-			item.view = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
+			NSView* view = [[NSView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
+			item.view = view;
+			[view release]; // now owned by menu item
 			[appMenu addItem:item];
+			[item release]; // now owned by menu
 		}
 
 		JNI_COCOA_CATCH()
@@ -496,13 +504,15 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		[delegate release];
 
 		// return empty array if canceled
+		// (retained because the autorelease pool of the macOS thread may be drained
+		// before the array is used on the Java thread; released below)
 		if( response != NSModalResponseOK ) {
-			*purls = @[];
+			*purls = [[NSArray alloc] init];
 			return;
 		}
 
 		// get selected file(s)
-		*purls = getDialogURLs( dialog );
+		*purls = [getDialogURLs( dialog ) retain];
 
 		JNI_COCOA_CATCH()
 	}];
@@ -518,7 +528,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		return NULL;
 
 	// convert URLs to Java string array
-	return urlsToStringArray( env, urls );
+	jobjectArray result = urlsToStringArray( env, urls );
+	[urls release];
+	return result;
 
 	JNI_COCOA_EXIT()
 	return NULL;
@@ -526,11 +538,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 
 static NSArray* getDialogURLs( NSSavePanel* dialog ) {
 	if( [dialog isKindOfClass:[NSOpenPanel class]] )
-		return [[NSArray alloc] initWithArray: static_cast<NSOpenPanel*>(dialog).URLs];
+		return [[[NSArray alloc] initWithArray: static_cast<NSOpenPanel*>(dialog).URLs] autorelease];
 
 	NSURL* url = dialog.URL;
 	// use '[[NSArray alloc] initWithObject:url]' here because '@[url]' crashes on macOS 10.14
-	return (url != NULL) ? [[NSArray alloc] initWithObject:url] : @[];
+	return (url != NULL) ? [[[NSArray alloc] initWithObject:url] autorelease] : @[];
 }
 
 static jobjectArray urlsToStringArray( JNIEnv* env, NSArray* urls ) {

@@ -231,6 +231,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 				toolbar.visible = NO;
 		}
 		nsWindow.toolbar = toolbar;
+		[toolbar release]; // now owned by window (no-op if NULL)
 
 		if( isMacOS_11_orLater ) {
 			nsWindow.toolbarStyle = (buttonsSpacing == SPACING_LARGE)
