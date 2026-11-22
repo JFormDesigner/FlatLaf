@@ -74,7 +74,9 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 @implementation FileChooserDelegate
 
 	- (id) init {
-		_selectedFormatIndex = -1;
+		self = [super init];
+		if( self != nil )
+			_selectedFormatIndex = -1;
 		return self;
 	}
 
@@ -501,6 +503,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		// remember selected filter (passed to Java on Java thread)
 		*pSelectedFormatIndex = delegate.selectedFormatIndex;
 
+		// clear (non-retained) delegate reference before releasing delegate
+		// because the dialog may outlive the delegate (e.g. if the autorelease pool is drained later)
+		dialog.delegate = nil;
 		[delegate release];
 
 		// return empty array if canceled

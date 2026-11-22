@@ -481,7 +481,11 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_togg
 		return FALSE;
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:NO withBlock:^(){
+		JNI_COCOA_TRY()
+
 		[nsWindow toggleFullScreen:nil];
+
+		JNI_COCOA_CATCH()
 	}];
 
 	return TRUE;
