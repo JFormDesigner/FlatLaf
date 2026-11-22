@@ -390,8 +390,14 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 	NSString* nsDirectoryURL = JavaToNSString( env, directoryURL );
 	NSMutableArray* filters = initFilters( env, fileTypes );
 
+	// global reference to callback because it is invoked on macOS thread
+	// (local references are valid only on the Java thread)
+	jobject globalCallback = (callback != NULL) ? env->NewGlobalRef( callback ) : NULL;
+
 	NSArray* urls = NULL;
 	NSArray** purls = &urls;
+	jint selectedFormatIndex = -1;
+	jint* pSelectedFormatIndex = &selectedFormatIndex;
 
 	// show file dialog on macOS thread
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
@@ -464,8 +470,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		}
 
 		// initialize callback
-		if( callback != NULL )
-			[delegate initCallback :jvm :callback];
+		if( globalCallback != NULL )
+			[delegate initCallback :jvm :globalCallback];
 
 		// set file dialog delegate
 		dialog.delegate = delegate;
@@ -473,9 +479,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 		// show dialog
 		NSModalResponse response = [dialog runModal];
 
-		// return selected filter
-		jint selectedFormatIndex = delegate.selectedFormatIndex;
-		env->SetIntArrayRegion( retFileTypeIndex, 0, 1, &selectedFormatIndex );
+		// remember selected filter (passed to Java on Java thread)
+		*pSelectedFormatIndex = delegate.selectedFormatIndex;
 
 		[delegate release];
 
@@ -490,6 +495,12 @@ JNIEXPORT jobjectArray JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_
 
 		JNI_COCOA_CATCH()
 	}];
+
+	if( globalCallback != NULL )
+		env->DeleteGlobalRef( globalCallback );
+
+	// return selected filter
+	env->SetIntArrayRegion( retFileTypeIndex, 0, 1, &selectedFormatIndex );
 
 	// return null on failures
 	if( urls == NULL )

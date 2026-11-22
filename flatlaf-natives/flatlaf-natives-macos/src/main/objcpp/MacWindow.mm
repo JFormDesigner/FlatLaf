@@ -193,19 +193,21 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 	bool isMacOS_11_orLater = @available( macOS 11, * );
 	if( !isMacOS_11_orLater && buttonsSpacing == SPACING_LARGE )
 		buttonsSpacing = SPACING_MEDIUM;
-	int oldButtonsSpacing = (nsWindow.toolbar != NULL)
-		? ((isMacOS_11_orLater && nsWindow.toolbarStyle == NSWindowToolbarStyleUnified)
-			? SPACING_LARGE
-			: SPACING_MEDIUM)
-		: SPACING_DEFAULT;
-
-	if( buttonsSpacing == oldButtonsSpacing )
-		return TRUE;
-
-	WindowData* windowData = getWindowData( nsWindow, true );
 
 	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
 		JNI_COCOA_TRY()
+
+		// get current spacing (on macOS thread because AppKit is not thread-safe)
+		int oldButtonsSpacing = (nsWindow.toolbar != NULL)
+			? ((isMacOS_11_orLater && nsWindow.toolbarStyle == NSWindowToolbarStyleUnified)
+				? SPACING_LARGE
+				: SPACING_MEDIUM)
+			: SPACING_DEFAULT;
+
+		if( buttonsSpacing == oldButtonsSpacing )
+			return;
+
+		WindowData* windowData = getWindowData( nsWindow, true );
 
 //		NSLog( @"\n%@\n\n", [nsWindow.contentView.superview _subtreeDescription] );
 
@@ -320,27 +322,38 @@ JNIEXPORT jobject JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_getWi
 	if( nsWindow == NULL )
 		return NULL;
 
-	WindowData* windowData = getWindowData( nsWindow, false );
 	int width = 0;
 	int height = 0;
+	int* pWidth = &width;
+	int* pHeight = &height;
 
-	// get width
-	if( isWindowFullScreen( nsWindow ) ) {
-		// use zero if window is full screen because close/minimize/zoom buttons are hidden
-		width = 0;
-	} else if( windowData != NULL && windowData.lastWindowButtonAreaWidth > 0 ) {
-		// use remembered value if window is in transition from full screen to non-full screen
-		// because NSToolbar is not yet visible
-		width = windowData.lastWindowButtonAreaWidth;
-	} else
-		width = getWindowButtonAreaWidth( nsWindow );
+	// get width and height on macOS thread because AppKit is not thread-safe
+	// (and window data is modified on macOS thread)
+	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
+		JNI_COCOA_TRY()
 
-	// get height
-	if( windowData != NULL && windowData.lastWindowTitleBarHeight > 0 ) {
-		// use remembered value if window is full screen because NSToolbar is hidden
-		height = windowData.lastWindowTitleBarHeight;
-	} else
-		height = getWindowTitleBarHeight( nsWindow );
+		WindowData* windowData = getWindowData( nsWindow, false );
+
+		// get width
+		if( isWindowFullScreen( nsWindow ) ) {
+			// use zero if window is full screen because close/minimize/zoom buttons are hidden
+			*pWidth = 0;
+		} else if( windowData != NULL && windowData.lastWindowButtonAreaWidth > 0 ) {
+			// use remembered value if window is in transition from full screen to non-full screen
+			// because NSToolbar is not yet visible
+			*pWidth = windowData.lastWindowButtonAreaWidth;
+		} else
+			*pWidth = getWindowButtonAreaWidth( nsWindow );
+
+		// get height
+		if( windowData != NULL && windowData.lastWindowTitleBarHeight > 0 ) {
+			// use remembered value if window is full screen because NSToolbar is hidden
+			*pHeight = windowData.lastWindowTitleBarHeight;
+		} else
+			*pHeight = getWindowTitleBarHeight( nsWindow );
+
+		JNI_COCOA_CATCH()
+	}];
 
 	// initialize class and method ID (done only once because variables are static)
 	static jclass cls = findClass( env, "java/awt/Rectangle", true );
@@ -406,7 +419,18 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_isWi
 	if( nsWindow == NULL )
 		return FALSE;
 
-	return (jboolean) isWindowFullScreen( nsWindow );
+	// get full screen state on macOS thread because AppKit is not thread-safe
+	bool fullScreen = false;
+	bool* pFullScreen = &fullScreen;
+	[FlatJNFRunLoop performOnMainThreadWaiting:YES withBlock:^(){
+		JNI_COCOA_TRY()
+
+		*pFullScreen = isWindowFullScreen( nsWindow );
+
+		JNI_COCOA_CATCH()
+	}];
+
+	return (jboolean) fullScreen;
 
 	JNI_COCOA_EXIT()
 	return FALSE;
