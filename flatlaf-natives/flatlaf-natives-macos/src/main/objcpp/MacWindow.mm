@@ -38,6 +38,7 @@ static bool isWindowFullScreen( NSWindow* nsWindow );
 	// invoked when the NSWindow is deallocated (which releases associated objects)
 	- (void) dealloc {
 		removeFullScreenObservers( self );
+		deleteTitleBarCaptionCallback( self );
 		[_titleBarDragView release];
 		[super dealloc];
 	}

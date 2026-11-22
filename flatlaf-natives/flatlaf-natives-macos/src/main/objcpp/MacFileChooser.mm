@@ -195,14 +195,25 @@ static const NSInteger EDIT_COMMAND_MENU_ITEM_TAG = 0x464c4146;
 
 		JNI_THREAD_ENTER( _jvm, true )
 
-		jobjectArray files = urlsToStringArray( env, urls );
-		jint selectedFormatIndex = ((FileChooserDelegate*)((NSSavePanel*)sender).delegate).selectedFormatIndex;
-		jlong window = (jlong) sender;
+		// The AppKit thread is permanently attached to the JVM (by AWT) and there is
+		// no Java-to-native call frame, so local references created here would never be freed.
+		// Use a local frame to free them when done.
+		bool approved = true;
+		if( env->PushLocalFrame( 16 ) == JNI_OK ) {
+			jobjectArray files = urlsToStringArray( env, urls );
+			jint selectedFormatIndex = ((FileChooserDelegate*)((NSSavePanel*)sender).delegate).selectedFormatIndex;
+			jlong window = (jlong) sender;
 
-		// invoke callback: boolean approve( String[] files, long hwnd );
-		jclass cls = env->GetObjectClass( _callback );
-		jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
-		if( approveID != NULL && !env->CallBooleanMethod( _callback, approveID, files, selectedFormatIndex, window ) ) {
+			// invoke callback: boolean approve( String[] files, long hwnd );
+			jclass cls = env->GetObjectClass( _callback );
+			jmethodID approveID = env->GetMethodID( cls, "approve", "([Ljava/lang/String;IJ)Z" );
+			if( approveID != NULL && !env->CallBooleanMethod( _callback, approveID, files, selectedFormatIndex, window ) )
+				approved = false;
+
+			env->PopLocalFrame( NULL );
+		}
+
+		if( !approved ) {
 			[self clearURLsSet];
 			return false; // keep dialog open
 		}

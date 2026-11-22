@@ -39,3 +39,6 @@
 // defined in MacWindow.mm
 NSWindow* getNSWindow( JNIEnv* env, jclass cls, jobject window );
 WindowData* getWindowData( NSWindow* nsWindow, bool allocate );
+
+// defined in MacTitleBarCaption.mm
+void deleteTitleBarCaptionCallback( WindowData* windowData );

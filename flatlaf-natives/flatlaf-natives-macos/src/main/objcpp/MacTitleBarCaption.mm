@@ -59,6 +59,32 @@ static bool ensureMethodIDs( JNIEnv* env ) {
 	return _isTitleBarCaptionAtMethodID != NULL;
 }
 
+// Deletes the global reference to the Java callback (if any).
+// Invoked when WindowData is deallocated (when the NSWindow is deallocated)
+// without removeFullWindowContentTitleBarCaption() being invoked before.
+void deleteTitleBarCaptionCallback( WindowData* windowData ) {
+	jobject callback = windowData.titleBarCaptionCallback;
+	if( callback == NULL || _jvm == NULL )
+		return;
+
+	windowData.titleBarCaptionCallback = NULL;
+
+	// the current thread is usually the AppKit main thread, which is attached to the JVM
+	JNIEnv* env;
+	switch( _jvm->GetEnv( (void**) &env, JNI_VERSION_1_6 ) ) {
+		case JNI_OK:
+			env->DeleteGlobalRef( callback );
+			break;
+
+		case JNI_EDETACHED:
+			if( _jvm->AttachCurrentThread( (void**) &env, NULL ) == JNI_OK ) {
+				env->DeleteGlobalRef( callback );
+				_jvm->DetachCurrentThread();
+			}
+			break;
+	}
+}
+
 // Asks the registered Java callback whether the event location is over a
 // caption region. Always invoked on the AppKit main thread.
 static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
