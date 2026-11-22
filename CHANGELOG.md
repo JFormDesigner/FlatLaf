@@ -4,6 +4,11 @@ FlatLaf Change Log
 ## 3.8.1-SNAPSHOT
 
 - ScaledImageIcon: Support animated images (e.g. animated GIFs). (issue #1169)
+- macOS native library:
+  - Fixed possible crashes, JNI/AppKit threading issues and memory leaks.
+  - In full window content mode, double-clicking on title bar caption now
+    performs the action configured in system settings (e.g. "Fill" on macOS
+    15+), same as native title bars.
 - Linux: Native libraries (since 3.7) required glibc 2.34 or later and failed to
   load on older Linux distributions (e.g. RHEL 8, Debian 11, Ubuntu 20.04). Now
   they require only glibc 2.17 (arm64) or 2.4 (x86_64). (issue #1170)

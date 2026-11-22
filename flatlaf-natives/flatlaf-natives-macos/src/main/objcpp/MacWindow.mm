@@ -265,7 +265,7 @@ JNIEXPORT jboolean JNICALL Java_com_formdev_flatlaf_ui_FlatNativeMacLibrary_setW
 //					NSLog( @"enter full screen %@", nsWindow );
 					if( nsWindow.toolbar != NULL && windowData != NULL ) {
 						// remember button area width, which is used later when window exits full screen
-						// remembar title bar height so that "main" JToolBar keeps its height in full screen
+						// remember title bar height so that "main" JToolBar keeps its height in full screen
 						windowData.lastWindowButtonAreaWidth = getWindowButtonAreaWidth( nsWindow );
 						windowData.lastWindowTitleBarHeight = getWindowTitleBarHeight( nsWindow );
 //						NSLog( @"%d %d", windowData.lastWindowButtonAreaWidth, windowData.lastWindowTitleBarHeight );
@@ -423,7 +423,7 @@ static int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 	}
 
 	if( left == -1 || right == -1 )
-		return -1;
+		return 0;
 
 	// 'right' is the actual button area width (from left window edge)
 	// adding 'left' to add same empty space on right side as on left side
@@ -433,7 +433,7 @@ static int getWindowButtonAreaWidth( NSWindow* nsWindow ) {
 static int getWindowTitleBarHeight( NSWindow* nsWindow ) {
 	NSView* closeButton = [nsWindow standardWindowButton:NSWindowCloseButton];
 	if( closeButton == NULL )
-		return -1;
+		return 0;
 
 	NSView* titlebar = closeButton.superview;
 	return titlebar.bounds.size.height;
