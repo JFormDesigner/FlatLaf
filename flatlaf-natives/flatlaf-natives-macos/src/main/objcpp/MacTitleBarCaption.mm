@@ -15,6 +15,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <objc/message.h>
 #import <jni.h>
 #import "JNIUtils.h"
 #import "JNFRunLoop.h"
@@ -226,15 +227,40 @@ static bool isCaptionEvent( NSWindow* nsWindow, NSEvent* event ) {
 		if( _windowDragged || event.clickCount != 2 )
 			return;
 
-		// run the user's "double click on title bar" preference
+		// run the user's "double-click a window's title bar" preference
+
+		// let AppKit handle the double-click the same way as for native title bars;
+		// this supports all actions (Fill, Zoom, Minimize, Do Nothing),
+		// the default action (depends on macOS version) and legacy preferences
+		// (uses private method -[NSTitledFrame _handlePossibleDoubleClickForEvent:])
 		NSWindow* w = self.window;
-		NSString* action = [[NSUserDefaults standardUserDefaults]
-			stringForKey:@"AppleActionOnDoubleClick"];
-		if( action == nil ||
-			[action caseInsensitiveCompare:@"Maximize"] == NSOrderedSame ||
-			[action caseInsensitiveCompare:@"Fill"] == NSOrderedSame )
+		NSView* themeFrame = w.contentView.superview;
+		SEL handleDoubleClickSel = NSSelectorFromString( @"_handlePossibleDoubleClickForEvent:" );
+		if( [themeFrame respondsToSelector:handleDoubleClickSel] ) {
+			((BOOL (*)( id, SEL, NSEvent* )) objc_msgSend)( themeFrame, handleDoubleClickSel, event );
+			return;
+		}
+
+		// fallback if private method is not available
+		NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+		NSString* action = [defaults stringForKey:@"AppleActionOnDoubleClick"];
+		if( action == nil ) {
+			// legacy preference (older macOS versions)
+			if( [defaults boolForKey:@"AppleMiniaturizeOnDoubleClick"] )
+				[w miniaturize:nil];
+			else
+				[w zoom:nil];
+		} else if( [action caseInsensitiveCompare:@"Maximize"] == NSOrderedSame )
 			[w zoom:nil];
-		else if( [action caseInsensitiveCompare:@"Minimize"] == NSOrderedSame )
+		else if( [action caseInsensitiveCompare:@"Fill"] == NSOrderedSame ) {
+			// "Fill" (macOS 15+) fills the screen using window tiling
+			// (private method; same as menu item "Window > Fill")
+			SEL zoomFillSel = NSSelectorFromString( @"_zoomFill:" );
+			if( [w respondsToSelector:zoomFillSel] )
+				((void (*)( id, SEL, id )) objc_msgSend)( w, zoomFillSel, nil );
+			else
+				[w zoom:nil];
+		} else if( [action caseInsensitiveCompare:@"Minimize"] == NSOrderedSame )
 			[w miniaturize:nil];
 	}
 
