@@ -25,10 +25,7 @@ import java.awt.event.ActionEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.Preferences;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RecordableTextAction;
@@ -398,6 +395,7 @@ class FlatSyntaxTextAreaActions
 
 		@Override
 		public void actionPerformedImpl( ActionEvent e, RTextArea textArea ) {
+			Window window = SwingUtilities.windowForComponent((JComponent) e.getSource());
 			try {
 				// find current color at caret
 				int caretPosition = textArea.getCaretPosition();
@@ -419,7 +417,7 @@ class FlatSyntaxTextAreaActions
 				AtomicBoolean changed = new AtomicBoolean();
 
 				// show pipette color picker
-				Window window = SwingUtilities.windowForComponent( textArea );
+				window.setVisible( false );
 				FlatColorPipette.pick( window, true,
 					color -> {
 						// update editor immediately for live preview
@@ -447,9 +445,11 @@ class FlatSyntaxTextAreaActions
 								ex.printStackTrace();
 							}
 						}
+						window.setVisible( true );
 					} );
 			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException | UnsupportedOperationException | AWTException ex ) {
 				ex.printStackTrace();
+				window.setVisible( true );
 			}
 		}
 
