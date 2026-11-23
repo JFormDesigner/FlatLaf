@@ -100,8 +100,19 @@ tasks {
 		val injectedOps = project.objects.newInstance<InjectedOps>()
 
 		doLast {
+/*sign
 			// sign shared library
-//			injectedOps.e.exec { commandLine( "codesign", "-s", "FormDev Software GmbH", "--timestamp", "${linkedFile.asFile.get()}" ) }
+			val dylib = linkedFile.asFile.get()
+			println( "---- sign ----" )
+			injectedOps.e.exec { commandLine( "codesign",
+				"--sign", "Developer ID Application: ...",
+				"--force", "--options", "runtime", "--timestamp", "--verbose=4",
+				dylib ) }
+			println( "---- verify ----" )
+			injectedOps.e.exec { commandLine( "codesign", "--verify", "--strict", "--verbose=2", dylib ) }
+			println( "---- display ----" )
+			injectedOps.e.exec { commandLine( "codesign", "--display", "--verbose=4", dylib ) }
+sign*/
 
 			// copy shared library to flatlaf-core resources
 			injectedOps.fs.copy {

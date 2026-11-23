@@ -35,35 +35,75 @@ jobs:
         run: ./gradlew build-natives --no-daemon
 
       - name: Sign macOS natives
-        if: false # disabled
         env:
-          CERT_BASE64: ${{ secrets.CODE_SIGN_CERT_BASE64 }}
-          CERT_PASSWORD: ${{ secrets.CODE_SIGN_CERT_PASSWORD }}
-          CERT_IDENTITY: ${{ secrets.CODE_SIGN_CERT_IDENTITY }}
+          CERT_BASE64: ${{ secrets.MACOS_CODE_SIGN_CERT_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.MACOS_CODE_SIGN_CERT_PASSWORD }}
+          CERT_IDENTITY: ${{ secrets.MACOS_CODE_SIGN_CERT_IDENTITY }}
         run: |
-          # https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
+          # Signs dylibs with Apple "Developer ID Application" certificate.
+          #   MACOS_CODE_SIGN_CERT_BASE64   = base64 encoded .p12 (certificate + private key)
+          #   MACOS_CODE_SIGN_CERT_PASSWORD = password of .p12
+          #   MACOS_CODE_SIGN_CERT_IDENTITY = e.g. "Developer ID Application: Name (TEAMID)" or SHA-1 hash
+          # https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
+
+          if [ -z "$CERT_BASE64" ]; then
+              echo "::warning::Code signing skipped because secret MACOS_CODE_SIGN_CERT_BASE64 is not available"
+              exit 0
+          fi
+
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/cert.p12
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
-          KEYCHAIN_PASSWORD=$CERT_PASSWORD
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+          DYLIBS=(flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/libflatlaf-macos-*.dylib)
+
+          # cleanup on exit (also on failure)
+          cleanup() {
+              security delete-keychain "$KEYCHAIN_PATH" || true
+              rm -f "$CERTIFICATE_PATH" "$RUNNER_TEMP"/DeveloperID*.cer
+          }
+          trap cleanup EXIT
+
           # decode certificate
-          printenv CERT_BASE64 | base64 --decode > $CERTIFICATE_PATH
+          printenv CERT_BASE64 | base64 --decode > "$CERTIFICATE_PATH"
+
           # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          # set partition list (required for codesign)
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          # add keychain to keychain search list
-          security list-keychains -d user -s $KEYCHAIN_PATH
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # import certificate and private key to keychain
+          security import "$CERTIFICATE_PATH" -P "$CERT_PASSWORD" -f pkcs12 -k "$KEYCHAIN_PATH" -T /usr/bin/codesign
+
+          # import Apple Developer ID intermediate certificates (required to build certificate chain)
+          # https://www.apple.com/certificateauthority/
+          for CA in DeveloperIDG2CA DeveloperIDCA; do
+              curl -fsSL -o "$RUNNER_TEMP/$CA.cer" "https://www.apple.com/certificateauthority/$CA.cer"
+              security import "$RUNNER_TEMP/$CA.cer" -k "$KEYCHAIN_PATH" -T /usr/bin/codesign || true
+          done
+
+          # set partition list (allows codesign to access private key without UI prompt)
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" > /dev/null
+
+          # add keychain to (beginning of) keychain search list
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH"
+
           # sign code
-          codesign --sign "$CERT_IDENTITY" --force --verbose=4 --timestamp \
-            flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/libflatlaf-macos-*.dylib
-          codesign --display --verbose=4 flatlaf-core/src/main/resources/com/formdev/flatlaf/natives/libflatlaf-macos-*.dylib
-          # cleanup
-          security delete-keychain $KEYCHAIN_PATH
+          #   --options runtime  enables hardened runtime (required for notarization
+          #                      of apps that bundle FlatLaf, notary service also checks JARs)
+          #   --timestamp        secure timestamp (required for notarization)
+          codesign --sign "$CERT_IDENTITY" --keychain "$KEYCHAIN_PATH" \
+            --force --options runtime --timestamp --verbose=4 \
+            "${DYLIBS[@]}"
+
+          # verify
+          for DYLIB in "${DYLIBS[@]}"; do
+              codesign --verify --strict --verbose=2 "$DYLIB"
+              codesign --display --verbose=4 "$DYLIB" 2>&1
+              codesign --display --verbose=4 "$DYLIB" 2>&1 | grep -q "^Authority=Developer ID Application:" \
+                || { echo "::error::$DYLIB is not signed with a Developer ID Application certificate"; exit 1; }
+          done
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7

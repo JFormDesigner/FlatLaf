@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 - ScaledImageIcon: Support animated images (e.g. animated GIFs). (issue #1169)
 - macOS native library:
+  - Now digitally signed with Apple Developer ID certificate. This allows
+    notarization of macOS apps that bundle FlatLaf.
   - Fixed possible crashes, JNI/AppKit threading issues and memory leaks.
   - In full window content mode, double-clicking on title bar caption now
     performs the action configured in system settings (e.g. "Fill" on macOS
