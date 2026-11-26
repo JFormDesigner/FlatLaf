@@ -253,6 +253,8 @@ Applications using FlatLaf
   IDE for Pseudo-Assembler
 - ![New](images/new.svg) [Sierra](https://github.com/HTTP-RPC/Sierra) -
   declarative UI for Java
+- [WinGit](https://github.com/biblelamp/WinGit) - open-source desktop Git
+  client
 
 ### Electrical
 
